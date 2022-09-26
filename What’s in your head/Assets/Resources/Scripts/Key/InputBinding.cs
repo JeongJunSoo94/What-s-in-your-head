@@ -23,6 +23,17 @@ namespace JCW.InputBindings
         Dash,
         Jump,
     }
+    public class BindPair
+    {
+        public PlayerAction action;
+        public KeyCode code;
+
+        public BindPair(PlayerAction _action, KeyCode _code)
+        {
+            action = _action;
+            code = _code;
+        }
+    }
 
     [Serializable]
     public class SerializableInputBinding
@@ -43,23 +54,13 @@ namespace JCW.InputBindings
         }
     }
 
-    public class BindPair
-    {
-        public PlayerAction action;
-        public KeyCode code;
-
-        public BindPair(PlayerAction _action, KeyCode _code)
-        {
-            action = _action;
-            code = _code;
-        }
-    }
+    
 
     [Serializable]
     public class InputBinding
     {
         // 저장, 불러오기 시 폴더명, 파일명, 확장자, 고유번호
-        public string localDirectoryPath = "Settings"; // "Assets/Settings"
+        public string localDirectoryPath = "Resources/KeySetting"; // "Assets/Settings"
         public string fileName = "InputBindingPreset";
         public string extName = "txt";
         public string id = "001";
@@ -83,8 +84,8 @@ namespace JCW.InputBindings
                 bindingDict[pair.action] = pair.code;
             }
         }
-
-        // 새 바인딩 키 할당
+        /*
+         // 새 바인딩 키 할당
         public void ApplyNewBindings(InputBinding newBinding)
         {
             bindingDict = new Dictionary<PlayerAction, KeyCode>(newBinding.bindingDict);
@@ -98,7 +99,7 @@ namespace JCW.InputBindings
                 bindingDict[pair.action] = pair.code;
             }
         }
-
+        */
         // 바인드
         public void Bind(in PlayerAction action, in KeyCode code, bool allowOverlap = false)
         {
@@ -114,6 +115,7 @@ namespace JCW.InputBindings
             bindingDict[action] = code;
         }
 
+        // 바인딩 초기화
         public void ResetAll()
         {
             Bind(PlayerAction.MouseLeft, KeyCode.Mouse0);

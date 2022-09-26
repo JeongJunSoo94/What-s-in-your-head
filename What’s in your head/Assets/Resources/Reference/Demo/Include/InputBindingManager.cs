@@ -1,40 +1,61 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace JCW.InputBindings
+using System.Linq;
+
+// 날짜 : 2021-01-30 PM 7:58:41
+// 작성자 : Rito
+
+namespace Rito.InputBindings
 {
     public class InputBindingManager : MonoBehaviour
     {
-        private enum InputState
+        /***********************************************************************
+        *                               Enum Definition
+        ***********************************************************************/
+        #region .
+        private enum InputListening
         {
             None,
             Mouse,
             Keyboard
         }
 
-        public InputBinding _binding = new(false)
+        #endregion
+
+        /***********************************************************************
+        *                               Fields
+        ***********************************************************************/
+        #region .
+        public InputBinding _binding = new InputBinding(false)
         {
-            localDirectoryPath = @"Resources/KeySetting",
-            fileName = "InputBindingPreset",
+            localDirectoryPath = @"Rito\2. Study\2021_0129_Input Binding\Presets",
+            fileName = "BindingPreset",
             extName = "txt",
-            id = "001"
+            id = "1"
         };
 
+        public Button[] _presetButtons;
         public Button _saveButton;
+
         public GameObject _waitingInputGo;
         public Transform _verticalLayoutTr;
         public GameObject _bindingPairPrefab;
 
         private List<GameObject> _bindingPairGoList;
-        private Dictionary<PlayerAction, BindingPairUI> _bindingPairDict;
+        private Dictionary<UserAction, BindingPairUI> _bindingPairDict;
 
         private bool _isListening;
-        private PlayerAction _curKeyAction;
+        private UserAction _curKeyAction;
 
+        #endregion
+        /***********************************************************************
+        *                               Unity Callbacks
+        ***********************************************************************/
+        #region .
         private void Start()
         {
             Init();
@@ -57,7 +78,11 @@ namespace JCW.InputBindings
 
             _waitingInputGo.SetActive(_isListening);
         }
-
+        #endregion
+        /***********************************************************************
+        *                               Update Methods
+        ***********************************************************************/
+        #region .
 
         private bool ListenInput(out KeyCode code)
         {
@@ -77,21 +102,53 @@ namespace JCW.InputBindings
             return false;
         }
 
-
+        #endregion
+        /***********************************************************************
+        *                               Init Methods
+        ***********************************************************************/
+        #region .
         private void Init()
         {
             _isListening = false;
             _waitingInputGo.SetActive(false);
 
             _bindingPairGoList = new List<GameObject>();
-            _bindingPairDict = new Dictionary<PlayerAction, BindingPairUI>();
+            _bindingPairDict = new Dictionary<UserAction, BindingPairUI>();
         }
 
         private void InitButtonListeners()
         {
-            _saveButton.onClick.AddListener(() => {_binding.SaveToFile();});
+            for (int i = 0; i < _presetButtons.Length; i++)
+            {
+                Button curButton = _presetButtons[i];
+
+                int index = i + 1;
+                curButton.onClick.AddListener(() =>
+                {
+                    ResetAllPresetButtons();
+                    curButton.TryGetComponent(out Image image);
+                    if (image)
+                    {
+                        image.color = Color.green;
+                    }
+
+                    _binding.id = $"{index}";
+                    LoadPreset();
+                    LoadInputBindings();
+                });
+            }
+
+            _saveButton.onClick.AddListener(() =>
+            {
+                _binding.SaveToFile();
+            });
         }
 
+        #endregion
+        /***********************************************************************
+        *                               Methods
+        ***********************************************************************/
+        #region .
         private void LoadPreset()
         {
             if (_binding.LoadFromFile() == false)
@@ -145,7 +202,7 @@ namespace JCW.InputBindings
             }
         }
 
-        private void SetKeyBinding(PlayerAction action, KeyCode code)
+        private void SetKeyBinding(UserAction action, KeyCode code)
         {
             _binding.Bind(action, code);
             RefreshAllBindingUIs();
@@ -159,5 +216,19 @@ namespace JCW.InputBindings
                 _bindingPairDict[pair.Key].Deselect();
             }
         }
+
+        private void ResetAllPresetButtons()
+        {
+            for (int i = 0; i < _presetButtons.Length; i++)
+            {
+                _presetButtons[i].TryGetComponent(out Image image);
+                if (image)
+                {
+                    image.color = Color.white;
+                }
+            }
+        }
+
+        #endregion
     }
 }
