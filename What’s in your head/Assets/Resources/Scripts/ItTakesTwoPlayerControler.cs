@@ -26,10 +26,6 @@ public class ItTakesTwoPlayerControler : MonoBehaviour
     public int jumpcount = 0;
     public int dashcount = 0;
 
-    private void Awake()
-    {
-
-    }
 
     // Start is called before the first frame update
     void Start()
@@ -92,7 +88,7 @@ public class ItTakesTwoPlayerControler : MonoBehaviour
         dashVec = Vector3.zero;
         if (!isDash && !(dashcount > 0) && ItTakesTwoKeyManager.Instance.GetKeyDown(KeyName.LeftShift))
         {
-            StartCoroutine("CorDash");
+            StartCoroutine(nameof(CorDash));
         }
         dashVec = transform.forward.normalized * addSpeed;
     }
@@ -137,7 +133,7 @@ public class ItTakesTwoPlayerControler : MonoBehaviour
         bool rayCheck = false;
         for (int index = 0; index < raycastHits.Length; ++index)
         {
-            if (raycastHits[index].collider.tag == "Platform")
+            if (raycastHits[index].collider.CompareTag("Platform"))
             {
                 rayCheck = true;
             }
@@ -180,7 +176,7 @@ public class ItTakesTwoPlayerControler : MonoBehaviour
                 {
                     {
                         //dashcount = 1; 여기는 지면대시 >> 점프 >> 대시를 막는 코드라서 지움
-                        StopCoroutine("CorDash"); // 지면대시 >> 점프 >> 대시하면 처음 대시의 코루틴이 작동해서 공중대시가 빨리끝남
+                        StopCoroutine(nameof(CorDash)); // 지면대시 >> 점프 >> 대시하면 처음 대시의 코루틴이 작동해서 공중대시가 빨리끝남
                         addSpeed = 0.0f;
                         isDash = false;
                     }

@@ -8,6 +8,7 @@ using LitJson;
 
 namespace JCW.InputBindings
 {
+    // 플레이어의 행동
     public enum PlayerAction
     {
         MoveForward,
@@ -26,15 +27,14 @@ namespace JCW.InputBindings
     [Serializable]
     public class SerializableInputBinding
     {
+        // 플레이어의 행동과 키 쌍
         public BindPair[] bindPairs;
 
         // 생성자
         public SerializableInputBinding(InputBinding binding)
         {
-            int len = binding.Bindings.Count;
             int index = 0;
-
-            bindPairs = new BindPair[len];
+            bindPairs = new BindPair[binding.Bindings.Count];
 
             foreach (var pair in binding.Bindings)
             {
@@ -145,7 +145,7 @@ namespace JCW.InputBindings
                 string jsonString = File.ReadAllText(Application.dataPath + "/Resources/KeyInfo/KeyInputBindings.json");
                 Debug.Log(jsonString);
 
-                JsonData data = JsonMapper.ToObject(jsonString);
+                //JsonData data = JsonMapper.ToObject(jsonString);
 
                 return true;
             }

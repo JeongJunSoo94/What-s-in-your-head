@@ -14,7 +14,7 @@ public class ItTakesTwoKeyManager : MonoBehaviour
         {
             if (sInstance == null)
             {
-                GameObject newGameObject = new GameObject("KeyManager");
+                GameObject newGameObject = new("KeyManager");
                 sInstance = newGameObject.AddComponent<ItTakesTwoKeyManager>();
             }
             return sInstance;
@@ -38,12 +38,7 @@ public class ItTakesTwoKeyManager : MonoBehaviour
         public bool keyDown = false;
     }
 
-    public List<KeyInput> keyList= new List<KeyInput>();
-
-    void Start()
-    {
-        
-    }
+    public List<KeyInput> keyList= new();
 
     void KeyInit()
     {
