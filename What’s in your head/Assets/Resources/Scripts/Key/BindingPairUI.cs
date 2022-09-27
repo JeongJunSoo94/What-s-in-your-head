@@ -13,7 +13,12 @@ namespace JCW.InputBindings
         public Text actionLabel;
         public Text codeLabel;
         public Button codeButton;
-        public Image buttonImage;
+        private Image buttonImage;
+
+        private void Start()
+        {
+            buttonImage = codeButton.image;
+        }
 
         public void Select()
         {

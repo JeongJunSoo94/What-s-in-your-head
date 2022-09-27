@@ -1,5 +1,4 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -18,19 +17,18 @@ namespace JCW.InputBindings
 
         public InputBinding _binding = new(false)
         {
-            localDirectoryPath = @"Resources/KeySetting",
+            localDirectoryPath = @"Resources/KeyInfo/KeySetting",
             fileName = "InputBindingPreset",
             extName = "txt",
-            id = "001"
         };
 
         public Button _saveButton;
-        public GameObject _waitingInputGo;
+        public GameObject _waitingInputScreen;
         public Transform _verticalLayoutTr;
         public GameObject _bindingPairPrefab;
 
-        private List<GameObject> _bindingPairGoList;
-        private Dictionary<PlayerAction, BindingPairUI> _bindingPairDict;
+        private List<GameObject> _bindingKeyPairs;
+        private Dictionary<PlayerAction, BindingPairUI> _bindingKeyScripts;
 
         private bool _isListening;
         private PlayerAction _curKeyAction;
@@ -40,8 +38,8 @@ namespace JCW.InputBindings
             Init();
             InitButtonListeners();
 
-            LoadPreset();
-            LoadInputBindings();
+            LoadKeySetting();
+            LoadBindingUI();
         }
 
         private void Update()
@@ -55,7 +53,7 @@ namespace JCW.InputBindings
                 }
             }
 
-            _waitingInputGo.SetActive(_isListening);
+            _waitingInputScreen.SetActive(_isListening);
         }
 
 
@@ -81,10 +79,10 @@ namespace JCW.InputBindings
         private void Init()
         {
             _isListening = false;
-            _waitingInputGo.SetActive(false);
+            _waitingInputScreen.SetActive(false);
 
-            _bindingPairGoList = new List<GameObject>();
-            _bindingPairDict = new Dictionary<PlayerAction, BindingPairUI>();
+            _bindingKeyPairs = new List<GameObject>();
+            _bindingKeyScripts = new Dictionary<PlayerAction, BindingPairUI>();
         }
 
         private void InitButtonListeners()
@@ -92,7 +90,7 @@ namespace JCW.InputBindings
             _saveButton.onClick.AddListener(() => {_binding.SaveToFile();});
         }
 
-        private void LoadPreset()
+        private void LoadKeySetting()
         {
             if (_binding.LoadFromFile() == false)
             {
@@ -101,25 +99,26 @@ namespace JCW.InputBindings
             }
         }
 
-        private void LoadInputBindings()
+        private void LoadBindingUI()
         {
             int count = 0;
 
-            // 1. Reset
-            foreach (var go in _bindingPairGoList)
+            // 혹시 안에 데이터가 남아 있으면 싹 지우고 초기화
+            foreach (var go in _bindingKeyPairs)
             {
                 Destroy(go);
             }
-            _bindingPairDict.Clear();
-            _bindingPairGoList.Clear();
+            _bindingKeyScripts.Clear();
+            _bindingKeyPairs.Clear();
 
 
-            // 2. Load Pairs
             foreach (var pair in _binding.Bindings)
             {
                 var pairGo = Instantiate(_bindingPairPrefab, _verticalLayoutTr);
-                var pairUI = pairGo.GetComponent<BindingPairUI>();
 
+                // 스크립트 가져오기
+                var pairUI = pairGo.GetComponent<BindingPairUI>();
+                // 해당 스크립트에서 각 키 이름 및 키코드 표시
                 pairUI.InitLabels($"{pair.Key}", $"{pair.Value}");
                 pairUI.AddButtonListener(() =>
                 {
@@ -128,12 +127,12 @@ namespace JCW.InputBindings
                     _curKeyAction = pair.Key;
                 });
 
-                _bindingPairDict.Add(pair.Key, pairUI);
-                _bindingPairGoList.Add(pairGo);
+                _bindingKeyScripts.Add(pair.Key, pairUI);
+                _bindingKeyPairs.Add(pairGo);
                 count++;
             }
 
-            // Resize Vertical Layout Height
+            // 키 옵션 사이즈 조절
             _verticalLayoutTr.TryGetComponent(out RectTransform rt);
             if (rt)
             {
@@ -155,8 +154,8 @@ namespace JCW.InputBindings
         {
             foreach (var pair in _binding.Bindings)
             {
-                _bindingPairDict[pair.Key].SetCodeLabel($"{pair.Value}");
-                _bindingPairDict[pair.Key].Deselect();
+                _bindingKeyScripts[pair.Key].SetCodeLabel($"{pair.Value}");
+                _bindingKeyScripts[pair.Key].Deselect();
             }
         }
     }
