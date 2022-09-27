@@ -71,7 +71,7 @@ namespace JCW.InputBindings
     [Serializable]
     public class InputBinding
     {
-        private Dictionary<PlayerAction, KeyCode> bindingDict;
+        private readonly Dictionary<PlayerAction, KeyCode> bindingDict;
         public Dictionary<PlayerAction, KeyCode> Bindings => bindingDict;
 
         // »ý¼ºÀÚ =======================================================
