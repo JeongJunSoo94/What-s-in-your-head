@@ -10,20 +10,24 @@ namespace JCW.InputBindings
     // 플레이어의 행동
     public enum PlayerAction
     {
+        // 이동
         MoveForward,
         MoveBackward,
         MoveLeft,
         MoveRight,
 
-        MouseLeft,
-        MouseRight,
-
-        UseObject,
-
-        Crouch,
-        Dash,
         Jump,
+        Dash,
+        Crouch,
+        Swing,
+        ToggleRun,
 
+        Fire,
+        Aim,
+
+        Interaction,
+        Cancle,
+        FindPartner,
         Pause,
     }
 
@@ -42,6 +46,7 @@ namespace JCW.InputBindings
         }
     }
 
+    // 직렬화 가능한 버젼
     [Serializable]
     public class SerializableInputBinding
     {
@@ -62,16 +67,10 @@ namespace JCW.InputBindings
         }
     }
 
-    
-
+    // 직렬화는 못하지만 에디터에서 쓰기 좋은 딕셔너리.
     [Serializable]
     public class InputBinding
     {
-        // 저장, 불러오기 시 폴더명, 파일명, 확장자, 고유번호
-        public string localDirectoryPath = "Resources/KeyInfo/KeySetting"; // "Assets/Settings"
-        public string fileName = "InputBindingPreset";
-        public string extName = "txt";
-
         private Dictionary<PlayerAction, KeyCode> bindingDict;
         public Dictionary<PlayerAction, KeyCode> Bindings => bindingDict;
 
@@ -123,19 +122,24 @@ namespace JCW.InputBindings
         // 바인딩 초기화
         public void ResetAll()
         {
-            Bind(PlayerAction.MouseLeft, KeyCode.Mouse0);
-            Bind(PlayerAction.MouseRight, KeyCode.Mouse1);
-
             Bind(PlayerAction.MoveForward, KeyCode.W);
             Bind(PlayerAction.MoveBackward, KeyCode.S);
             Bind(PlayerAction.MoveLeft, KeyCode.A);
             Bind(PlayerAction.MoveRight, KeyCode.D);
 
-            Bind(PlayerAction.UseObject, KeyCode.E);
-
-            Bind(PlayerAction.Crouch, KeyCode.LeftControl);
-            Bind(PlayerAction.Dash, KeyCode.LeftShift);
             Bind(PlayerAction.Jump, KeyCode.Space);
+            Bind(PlayerAction.Dash, KeyCode.LeftShift);
+            Bind(PlayerAction.Crouch, KeyCode.LeftControl);
+            Bind(PlayerAction.Swing, KeyCode.F);
+            Bind(PlayerAction.ToggleRun, KeyCode.CapsLock);
+
+            Bind(PlayerAction.Fire, KeyCode.Mouse0);
+            Bind(PlayerAction.Aim, KeyCode.Mouse1);
+
+            Bind(PlayerAction.Interaction, KeyCode.E);
+            Bind(PlayerAction.Cancle, KeyCode.Q);
+            Bind(PlayerAction.FindPartner, KeyCode.Mouse2);
+
             Bind(PlayerAction.Pause, KeyCode.Escape);            
         }
 

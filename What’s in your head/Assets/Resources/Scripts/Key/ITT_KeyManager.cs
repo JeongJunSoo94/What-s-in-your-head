@@ -5,17 +5,18 @@ using UnityEngine;
 
 public enum KeyName { W, S, D, A, F, E, LeftShift, CapsLock, Space, Mouse0 }
 
-public class ItTakesTwoKeyManager : MonoBehaviour
+public class ITT_KeyManager : MonoBehaviour
 {
-    private static ItTakesTwoKeyManager sInstance;
-    public static ItTakesTwoKeyManager Instance
+    // ΩÃ±€≈Ê
+    private static ITT_KeyManager sInstance;
+    public static ITT_KeyManager Instance
     {
         get
         {
             if (sInstance == null)
             {
-                GameObject newGameObject = new("KeyManager");
-                sInstance = newGameObject.AddComponent<ItTakesTwoKeyManager>();
+                GameObject newGameObject = new("_ITT_KeyManager");
+                sInstance = newGameObject.AddComponent<ITT_KeyManager>();
             }
             return sInstance;
         }

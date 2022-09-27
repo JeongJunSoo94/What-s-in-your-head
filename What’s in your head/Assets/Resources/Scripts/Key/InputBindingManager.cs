@@ -8,21 +8,13 @@ namespace JCW.InputBindings
 {
     public class InputBindingManager : MonoBehaviour
     {
-        private enum InputState
-        {
-            None,
-            Mouse,
-            Keyboard
-        }
 
-        public InputBinding _binding = new(false)
-        {
-            localDirectoryPath = @"Resources/KeyInfo/KeySetting",
-            fileName = "InputBindingPreset",
-            extName = "txt",
-        };
+        public InputBinding _binding = new(false);
 
         public Button _saveButton;
+        public Button _resetButton;
+        public Button _backButton;
+        public GameObject _thisUI;
         public GameObject _waitingInputScreen;
         public Transform _verticalLayoutTr;
         public GameObject _bindingPairPrefab;
@@ -88,6 +80,13 @@ namespace JCW.InputBindings
         private void InitButtonListeners()
         {
             _saveButton.onClick.AddListener(() => {_binding.SaveToFile();});
+            _backButton.onClick.AddListener(() => { TurnOff(); });
+            _resetButton.onClick.AddListener(() => 
+            { 
+                _binding.ResetAll(); 
+                _binding.SaveToFile();
+                RefreshAllBindingUIs();
+            });
         }
 
         private void LoadKeySetting()
@@ -143,13 +142,14 @@ namespace JCW.InputBindings
                 );
             }
         }
-
+        // 키 수정
         private void SetKeyBinding(PlayerAction action, KeyCode code)
         {
             _binding.Bind(action, code);
             RefreshAllBindingUIs();
         }
 
+        // 화면에 보이는 바인딩 키 새로고침
         private void RefreshAllBindingUIs()
         {
             foreach (var pair in _binding.Bindings)
@@ -157,6 +157,11 @@ namespace JCW.InputBindings
                 _bindingKeyScripts[pair.Key].SetCodeLabel($"{pair.Value}");
                 _bindingKeyScripts[pair.Key].Deselect();
             }
+        }
+
+        private void TurnOff()
+        {
+            _thisUI.SetActive(false);
         }
     }
 }
