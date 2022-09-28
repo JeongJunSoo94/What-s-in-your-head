@@ -1,27 +1,27 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+
 namespace JJS
 {
-    public class ObjectMove : Task
+    public class AirJump : Task
     {
         private CharacterControlBT _obj;
-        public ObjectMove(CharacterControlBT obj)
+        public AirJump(CharacterControlBT obj)
         {
             _obj = obj;
         }
 
         public override NodeState Evaluate()
         {
-            Move();
+            Jump();
             return NodeState.SUCCESS;
         }
 
-        void Move()
+        void Jump()
         {
-            _obj.pRigidbody.velocity = _obj.direction + _obj.dashVec;
+            _obj.direction.y = _obj.airJumpPower;
         }
 
     }
 }
-

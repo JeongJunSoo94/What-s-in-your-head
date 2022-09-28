@@ -4,23 +4,38 @@ using UnityEngine;
 
 public class ItTakesTwoPlayerControler : MonoBehaviour
 {
+    public float slopeAngle = 0.0f;
+
+    [Range(0.01f, 2.0f)]
+    public float slopeCofacter = 0.1f;
+
+    [Range(0.01f, 2.0f)]
+    public float groundCheckMaxDistance = 0.1f;
+
     public float walkSpeed = 4.0f;
     public float runSpeed = 6.0f;
     public float dashSpeed = 4.0f;
     float addSpeed = 0.0f;
+    public float gravity = 9.8f;
+    public float terVelocity = 20f;
     public float dashTime = 0.5f;
-    public float JumpPower = 10.0f;
+    public float jumpPower = 10.0f;
     public float rotationSpeed = 360.0f;
 
     Rigidbody pRigidbody;
-    Camera pCamera;
-    RaycastHit[] raycastHits;
+    CapsuleCollider pCapsuleCollider;
+    Camera mCamera;
+    RaycastHit groundRaycastHit;
+    RaycastHit forwardRaycastHit;
 
     Vector3 direction;
     Vector3 dashVec = Vector3.zero;
 
     public bool onPlatform = true;
+    public bool isBlocked = false;
     public bool isJumping = false;
+    public bool jumpTrigger = false;
+    public float jumpTriggerTime = 0.1f;
     public bool isDash = false;
     public bool isAirDash = false;
     public int jumpcount = 0;
@@ -28,34 +43,94 @@ public class ItTakesTwoPlayerControler : MonoBehaviour
 
     private void Awake()
     {
-
+        // >> 게임매니저로 옮겨갈 것들
+        ItTakesTwoKeyManager.Instance.GetKeyDown(KeyName.W);
+        Application.targetFrameRate = 60;
+        // <<
     }
-
-    // Start is called before the first frame update
+    // Start 와 캐릭터 기본설정 초기화
+    #region
     void Start()
     {
-        ItTakesTwoKeyManager.Instance.GetKeyDown(KeyName.W);
-        pRigidbody = gameObject.GetComponent<Rigidbody>();
-        pCamera = Camera.main;
+        groundRaycastHit = new RaycastHit();
+        forwardRaycastHit = new RaycastHit();
+        mCamera = Camera.main;
+        RigidbodyInit();
+        CapsuleColliderInit();
+    }
+    void RigidbodyInit()
+    {
+        TryGetComponent<Rigidbody>(out pRigidbody);
+        if (pRigidbody == null)
+            pRigidbody = gameObject.AddComponent<Rigidbody>();
+        pRigidbody.constraints = RigidbodyConstraints.FreezeRotation;
+        pRigidbody.interpolation = RigidbodyInterpolation.Interpolate;
+        pRigidbody.collisionDetectionMode = CollisionDetectionMode.Continuous;
+        pRigidbody.useGravity = false;
     }
 
+    void CapsuleColliderInit()
+    {
+        TryGetComponent<CapsuleCollider>(out pCapsuleCollider);
+        if (pCapsuleCollider == null)
+            pCapsuleCollider = gameObject.AddComponent<CapsuleCollider>();
+        float top = -0.1f;
+        SkinnedMeshRenderer[] skinMashRenders = GetComponentsInChildren<SkinnedMeshRenderer>();
+        if (skinMashRenders.Length > 0)
+        {
+            foreach (var skinMashRender in skinMashRenders)
+            {
+                foreach (var vertex in skinMashRender.sharedMesh.vertices)
+                {
+                    if (top < vertex.y)
+                        top = vertex.y;
+                }
+            }
+        }
+        else
+        {
+            MeshFilter[] meshFilters = GetComponentsInChildren<MeshFilter>();
+            if (meshFilters.Length > 0)
+            {
+                foreach (var meshFilter in meshFilters)
+                {
+                    foreach (var vertex in meshFilter.mesh.vertices)
+                    {
+                        if (top < vertex.y)
+                            top = vertex.y;
+                    }
+                }
+            }
+        }
+        if (top < 0.0f)
+            Debug.Log("Cant find meshes");
+
+        pCapsuleCollider.center = Vector3.up * top / 2.0f;
+        pCapsuleCollider.height = top;
+        pCapsuleCollider.radius = top / 4.0f;
+        //float upperSphereCenter = pCapsuleCollider.height - pCapsuleCollider.radius;
+    }
+    #endregion
     void Update()
     {
-        Dash();
-        Jump();
+        RaycheckGround();
+        //RaycheckForward();
     }
 
     // Update is called once per frame
     void FixedUpdate()
     {
+        MoveVec();
+        JumpVec();
+        DashVec();
         Move();
     }
 
-    void Move()
+    void MoveVec()
     {
         float moveSpeed;
 
-        if (!isDash && ItTakesTwoKeyManager.Instance.GetKey(KeyName.CapsLock))
+        if (!isDash&& !isJumping && ItTakesTwoKeyManager.Instance.GetKey(KeyName.CapsLock))
         {
             moveSpeed = runSpeed;
         }
@@ -64,30 +139,41 @@ public class ItTakesTwoPlayerControler : MonoBehaviour
             moveSpeed = walkSpeed;
         }
 
-        direction = pCamera.transform.forward * ((ItTakesTwoKeyManager.Instance.GetKey(KeyName.W) ? 1:0) + (ItTakesTwoKeyManager.Instance.GetKey(KeyName.S) ? -1:0))
-            + pCamera.transform.right * ((ItTakesTwoKeyManager.Instance.GetKey(KeyName.D) ? 1 : 0) + (ItTakesTwoKeyManager.Instance.GetKey(KeyName.A) ? -1 : 0));
+        direction = mCamera.transform.forward * ((ItTakesTwoKeyManager.Instance.GetKey(KeyName.W) ? 1 : 0) + (ItTakesTwoKeyManager.Instance.GetKey(KeyName.S) ? -1 : 0))
+            + mCamera.transform.right * ((ItTakesTwoKeyManager.Instance.GetKey(KeyName.D) ? 1 : 0) + (ItTakesTwoKeyManager.Instance.GetKey(KeyName.A) ? -1 : 0));
         direction.y = 0;
         direction = direction.normalized;
 
-        Vector3 forward = Vector3.Slerp(transform.forward, direction, rotationSpeed * Time.deltaTime / Vector3.Angle(transform.forward, direction));
+        Vector3 forward = Vector3.Slerp(transform.forward, direction, rotationSpeed * Time.fixedDeltaTime / Vector3.Angle(transform.forward, direction));
         transform.LookAt(transform.position + forward);
 
         direction = forward * moveSpeed;
-        //(!onPlatform || isJumping) 으로 하면 점프후 대시를 할때 대시중 아래로 계속 떨어짐
-        //((onPlatform && !isJumping)) || (isDash && isJumping)) 으로 하면 점프후 대시할때 높이유지는 되지만 대시중 점프가 막힘 대시중 점프랑 점프중 대시를 다르게 구분할수 있게해야함
-        if ((onPlatform && !isJumping) || isAirDash) // 으로 하면 점프후 대시후 점프가 막힘 >>> 그래서 점프할때 isAirDash 상태면 isAirDash를 false 로 변경하니 해결
+        direction.y = pRigidbody.velocity.y;
+
+        if (jumpTrigger)
+        {
+            direction.y -= gravity * Time.fixedDeltaTime;
+        }
+        else if (onPlatform)
+        {
+            if (slopeAngle > -50f)
+                direction.y = moveSpeed * Mathf.Tan(slopeAngle * Mathf.PI / 180);
+            else
+                direction.y = 0;
+        }
+        else if (isAirDash)
         {
             direction.y = 0;
         }
         else
         {
-            direction.y = pRigidbody.velocity.y;
+            direction.y -= gravity * Time.fixedDeltaTime;
         }
-
-        pRigidbody.velocity = direction + dashVec;
+        if (direction.y < -terVelocity)
+            direction.y = -terVelocity;
     }
 
-    void Dash()
+    void DashVec()
     {
         dashVec = Vector3.zero;
         if (!isDash && !(dashcount > 0) && ItTakesTwoKeyManager.Instance.GetKeyDown(KeyName.LeftShift))
@@ -99,7 +185,7 @@ public class ItTakesTwoPlayerControler : MonoBehaviour
 
     IEnumerator CorDash()
     {
-        if(!onPlatform)
+        if (!onPlatform)
         {
             isAirDash = true;
         }
@@ -112,69 +198,77 @@ public class ItTakesTwoPlayerControler : MonoBehaviour
         addSpeed = 0.0f;
     }
 
-    void Jump()
+    void JumpVec()
     {
         if (ItTakesTwoKeyManager.Instance.GetKeyDown(KeyName.Space))
         {
-            if(isAirDash)
+            if (isAirDash)
             {
                 isAirDash = false;
             }
 
             if (!isJumping || jumpcount < 2)
             {
-                pRigidbody.velocity = new Vector3(pRigidbody.velocity.x, JumpPower, pRigidbody.velocity.z);
+                StartCoroutine("CorJump");
+                direction.y = jumpPower;
                 jumpcount++;
                 isJumping = true;
             }
         }
     }
 
-    bool RaycheckGround()
+    IEnumerator CorJump()
     {
-        raycastHits = Physics.SphereCastAll(transform.position, 0.15f, -transform.up,0.01f,LayerMask.NameToLayer("Platform")); 
-        Debug.Log("raycastHits.Length: " + raycastHits.Length);
-        bool rayCheck = false;
-        for (int index = 0; index < raycastHits.Length; ++index)
+        if (jumpTrigger)
         {
-            if (raycastHits[index].collider.tag == "Platform")
-            {
-                rayCheck = true;
-            }
+            yield return 0;
         }
-        Debug.Log("rayCheck: " + rayCheck);
-        return rayCheck;
-    }
-
-    private void OnCollisionEnter(Collision collision)
-    {
-        if (collision.gameObject.CompareTag("Platform"))
+        else
         {
-            if(RaycheckGround())
-            {
-                onPlatform = true;
-                isJumping = false;
-                jumpcount = 0;
-                dashcount = 0;
-                //pRigidbody.useGravity = false
-            }
+            jumpTrigger = true;
+            yield return new WaitForSeconds(jumpTriggerTime);
+            jumpTrigger = false;
         }
     }
 
-    private void OnCollisionStay(Collision collision)
+    void Move()
     {
-        dashcount = 0;
+        pRigidbody.velocity = direction + dashVec;
+        //Debug.Log("수직속도: " + pRigidbody.velocity.y);
     }
-
-    private void OnCollisionExit(Collision collision)
+    void RaycheckGround()
     {
-        if (collision.gameObject.CompareTag("Platform"))
+        bool rayChecked = Physics.SphereCast(transform.position + Vector3.up * pCapsuleCollider.radius, pCapsuleCollider.radius, Vector3.down, out groundRaycastHit, groundCheckMaxDistance);
+        //Debug.Log(groundRaycastHit.point);
+        //Debug.Log("rayCheck: " + rayChecked);
+        if (rayChecked)
         {
-            if(!RaycheckGround())
+            if (groundRaycastHit.collider.tag == "Platform")
+            {
+                rayChecked = true;
+                Vector3 HorVel = pRigidbody.velocity;
+                HorVel.y = 0;
+                slopeAngle = Vector3.Angle(HorVel, groundRaycastHit.normal) - 90f;
+            }
+            else
+            {
+                rayChecked = false;
+            }
+        }
+
+        if (rayChecked)
+        {
+            onPlatform = true;
+            isJumping = false;
+            jumpcount = 0;
+            dashcount = 0;
+        }
+        else
+        {
+            if (onPlatform)
             {
                 jumpcount = 1;
                 onPlatform = false;
-                //pRigidbody.useGravity = true;
 
                 if (isDash && isJumping)
                 {
@@ -187,5 +281,26 @@ public class ItTakesTwoPlayerControler : MonoBehaviour
                 }
             }
         }
+    }
+
+
+    void DrawGizmoUpdate()
+    {
+        if (onPlatform)
+        {
+            Gizmos.color = Color.blue;
+            Gizmos.DrawSphere(groundRaycastHit.point, 0.07f);
+        }
+
+        if (isBlocked)
+        {
+            Gizmos.color = Color.red;
+            Gizmos.DrawSphere(forwardRaycastHit.point, 0.07f);
+        }
+    }
+
+    private void OnDrawGizmos()
+    {
+        DrawGizmoUpdate();
     }
 }
