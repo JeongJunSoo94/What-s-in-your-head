@@ -163,7 +163,7 @@ namespace JCW.InputBindings
             if (rt)
             {
                 rt.sizeDelta = new Vector2(rt.sizeDelta.x,
-                    40 +
+                    10 +
                     count * 60 +
                     (count - 1) * 10
                 );
