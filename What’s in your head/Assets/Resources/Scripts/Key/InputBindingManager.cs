@@ -67,7 +67,6 @@ namespace JCW.InputBindings
             return false;
         }
 
-
         private void Init()
         {
             _isListening = false;
@@ -86,15 +85,18 @@ namespace JCW.InputBindings
                 _binding.ResetAll(); 
                 _binding.SaveToFile();
                 RefreshAllBindingUIs();
+                ITT_KeyManager.Instance.KeySet(_binding);
             });
         }
 
+        // 미리 설정한 키값들 파일에서 불러오기
         private void LoadKeySetting()
         {
             if (_binding.LoadFromFile() == false)
             {
                 _binding.ResetAll();
                 _binding.SaveToFile();
+                ITT_KeyManager.Instance.KeySet(_binding);
             }
         }
 
@@ -118,7 +120,7 @@ namespace JCW.InputBindings
                 // 스크립트 가져오기
                 var pairUI = pairGo.GetComponent<BindingPairUI>();
                 // 해당 스크립트에서 각 키 이름 및 키코드 표시
-                pairUI.InitLabels($"{pair.Key}", $"{pair.Value}");
+                pairUI.InitLabels($"{pair.Key}", $"{pair.Value.keyCode}");
                 pairUI.AddButtonListener(() =>
                 {
                     pairUI.Select();
@@ -154,11 +156,12 @@ namespace JCW.InputBindings
         {
             foreach (var pair in _binding.Bindings)
             {
-                _bindingKeyScripts[pair.Key].SetCodeLabel($"{pair.Value}");
+                _bindingKeyScripts[pair.Key].SetCodeLabel($"{pair.Value.keyCode}");
                 _bindingKeyScripts[pair.Key].Deselect();
             }
         }
 
+        // 현재 옵션 끄기
         private void TurnOff()
         {
             _thisUI.SetActive(false);

@@ -1,6 +1,8 @@
+using JCW.InputBindings;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+
 
 public class ItTakesTwoPlayerControler : MonoBehaviour
 {
@@ -30,7 +32,7 @@ public class ItTakesTwoPlayerControler : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        ITT_KeyManager.Instance.GetKeyDown(KeyName.W);
+        ITT_KeyManager.Instance.GetKeyDown(PlayerAction.MoveForward);
         pRigidbody = gameObject.GetComponent<Rigidbody>();
         pCamera = Camera.main;
     }
@@ -46,12 +48,11 @@ public class ItTakesTwoPlayerControler : MonoBehaviour
     {
         Move();
     }
-
     void Move()
     {
         float moveSpeed;
 
-        if (!isDash && ITT_KeyManager.Instance.GetKey(KeyName.CapsLock))
+        if (!isDash && ITT_KeyManager.Instance.GetKey(PlayerAction.ToggleRun))
         {
             moveSpeed = runSpeed;
         }
@@ -60,8 +61,8 @@ public class ItTakesTwoPlayerControler : MonoBehaviour
             moveSpeed = walkSpeed;
         }
 
-        direction = pCamera.transform.forward * ((ITT_KeyManager.Instance.GetKey(KeyName.W) ? 1:0) + (ITT_KeyManager.Instance.GetKey(KeyName.S) ? -1:0))
-            + pCamera.transform.right * ((ITT_KeyManager.Instance.GetKey(KeyName.D) ? 1 : 0) + (ITT_KeyManager.Instance.GetKey(KeyName.A) ? -1 : 0));
+        direction = pCamera.transform.forward * ((ITT_KeyManager.Instance.GetKey(PlayerAction.MoveForward) ? 1:0) + (ITT_KeyManager.Instance.GetKey(PlayerAction.MoveBackward) ? -1:0))
+            + pCamera.transform.right * ((ITT_KeyManager.Instance.GetKey(PlayerAction.MoveRight) ? 1 : 0) + (ITT_KeyManager.Instance.GetKey(PlayerAction.MoveLeft) ? -1 : 0));
         direction.y = 0;
         direction = direction.normalized;
 
@@ -86,7 +87,7 @@ public class ItTakesTwoPlayerControler : MonoBehaviour
     void Dash()
     {
         dashVec = Vector3.zero;
-        if (!isDash && !(dashcount > 0) && ITT_KeyManager.Instance.GetKeyDown(KeyName.LeftShift))
+        if (!isDash && !(dashcount > 0) && ITT_KeyManager.Instance.GetKeyDown(PlayerAction.Dash))
         {
             StartCoroutine(nameof(CorDash));
         }
@@ -110,7 +111,7 @@ public class ItTakesTwoPlayerControler : MonoBehaviour
 
     void Jump()
     {
-        if (ITT_KeyManager.Instance.GetKeyDown(KeyName.Space))
+        if (ITT_KeyManager.Instance.GetKeyDown(PlayerAction.Jump))
         {
             if(isAirDash)
             {

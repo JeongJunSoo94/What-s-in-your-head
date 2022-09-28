@@ -1,102 +1,80 @@
+using JCW.InputBindings;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-
-public enum KeyName { W, S, D, A, F, E, LeftShift, CapsLock, Space, Mouse0 }
-
-public class ITT_KeyManager : MonoBehaviour
+namespace JCW.InputBindings
 {
-    // 싱글톤
-    private static ITT_KeyManager sInstance;
-    public static ITT_KeyManager Instance
+    public class ITT_KeyManager : MonoBehaviour
     {
-        get
+        private Dictionary<PlayerAction, KeyState> curKeySet;
+
+        // 싱글톤
+        private static ITT_KeyManager sInstance;
+        public static ITT_KeyManager Instance
         {
-            if (sInstance == null)
+            get
             {
-                GameObject newGameObject = new("_ITT_KeyManager");
-                sInstance = newGameObject.AddComponent<ITT_KeyManager>();
+                if (sInstance == null)
+                {
+                    GameObject newGameObject = new("_ITT_KeyManager");
+                    sInstance = newGameObject.AddComponent<ITT_KeyManager>();
+                }
+                return sInstance;
             }
-            return sInstance;
-        }
-    }
-
-    private void Awake()
-    {
-        DontDestroyOnLoad(this.gameObject);
-        KeyInit();
-    }
-
-    public class KeyInput
-    {
-        public KeyInput(KeyCode keyCode)
-        {
-            this.keyCode = keyCode;
-        }
-        public KeyCode keyCode;
-        public bool keyOn = false;
-        public bool keyDown = false;
-    }
-
-    public List<KeyInput> keyList= new();
-
-    void KeyInit()
-    {
-        keyList.Add(new KeyInput(KeyCode.W));
-        keyList.Add(new KeyInput(KeyCode.S));
-        keyList.Add(new KeyInput(KeyCode.D));
-        keyList.Add(new KeyInput(KeyCode.A));
-        keyList.Add(new KeyInput(KeyCode.F));
-        keyList.Add(new KeyInput(KeyCode.E));
-        keyList.Add(new KeyInput(KeyCode.LeftShift));
-        keyList.Add(new KeyInput(KeyCode.CapsLock));
-        keyList.Add(new KeyInput(KeyCode.Space));
-        keyList.Add(new KeyInput(KeyCode.Mouse0));
-    }
-
-    void Update()
-    {
-        KeyManager();
-    }
-
-    void KeyManager()
-    {
-        for (int i =0;i< keyList.Count;i++ )
-        {
-            KeyInputCheck(Input.GetKey(keyList[i].keyCode), keyList[i]);
         }
 
-    }
-
-    void KeyInputCheck(bool getKey,KeyInput keyInput)
-    {
-        if (getKey)
+        private void Awake()
         {
-            if (!keyInput.keyOn)
+            DontDestroyOnLoad(this.gameObject);
+            KeyInit();
+        }
+
+        // 옵션에서 설정한 키로 키 매니저의 키 값을 변경.
+        public void KeySet(InputBinding _keySet)
+        {
+            curKeySet = _keySet.Bindings;
+        }
+
+        // 키 값 초기화
+        void KeyInit()
+        {
+            curKeySet = new InputBinding(true).Bindings;
+        }
+
+        void Update()
+        {
+            KeyManager();
+        }
+
+        void KeyManager()
+        {
+            foreach(PlayerAction act in curKeySet.Keys)
+                KeyInputCheck(Input.GetKey(curKeySet[act].keyCode), curKeySet[act]);
+        }
+
+        void KeyInputCheck(bool _isActiveKey, KeyState _keyState)
+        {
+            if (_isActiveKey)
             {
-                keyInput.keyDown = true;
+                _keyState.keyDown = _keyState.keyOn ? false : true;
+                _keyState.keyOn = true;
             }
             else
             {
-                keyInput.keyDown = false;
+                _keyState.keyOn = false;
+                _keyState.keyDown = false;
             }
-            keyInput.keyOn = true;
         }
-        else
+
+        public bool GetKey(PlayerAction actionCode)
         {
-            keyInput.keyOn = false;
-            keyInput.keyDown = false;
+            return curKeySet[actionCode].keyOn;
         }
-    }
 
-    public bool GetKey(KeyName keyCode)
-    {
-        return keyList[(int)keyCode].keyOn;
-    }
-
-    public bool GetKeyDown(KeyName keyCode)
-    {
-        return keyList[(int)keyCode].keyDown;
+        public bool GetKeyDown(PlayerAction actionCode)
+        {
+            return curKeySet[actionCode].keyDown;
+        }
     }
 }

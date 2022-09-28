@@ -31,6 +31,17 @@ namespace JCW.InputBindings
         Pause,
     }
 
+    public class KeyState
+    {
+        public KeyState(KeyCode keyCode)
+        {
+            this.keyCode = keyCode;
+        }
+        public KeyCode keyCode;
+        public bool keyOn = false;
+        public bool keyDown = false;
+    }
+
 
     // 플레이어의 행동과 키 쌍
     [Serializable]
@@ -58,7 +69,7 @@ namespace JCW.InputBindings
             bindPairs = new List<BindPair>();
             foreach (var pair in binding.Bindings)
             {
-                bindPairs.Add(new BindPair(pair.Key, pair.Value));
+                bindPairs.Add(new BindPair(pair.Key, pair.Value.keyCode));
             }
         }
         public SerializableInputBinding()
@@ -71,23 +82,24 @@ namespace JCW.InputBindings
     [Serializable]
     public class InputBinding
     {
-        private readonly Dictionary<PlayerAction, KeyCode> bindingDict;
-        public Dictionary<PlayerAction, KeyCode> Bindings => bindingDict;
+        private readonly Dictionary<PlayerAction, KeyState> bindingDict;
+        public Dictionary<PlayerAction, KeyState> Bindings => bindingDict;
 
         // 생성자 =======================================================
         public InputBinding(bool init = true)
         {
-            bindingDict = new Dictionary<PlayerAction, KeyCode>();
+            bindingDict = new Dictionary<PlayerAction, KeyState>();
             if (init)
                 ResetAll();
         }
         public InputBinding(SerializableInputBinding sib)
         {
             // sib의 키쌍을 현재 bindingDict에 저장
-            bindingDict = new Dictionary<PlayerAction, KeyCode>();
+            bindingDict = new Dictionary<PlayerAction, KeyState>();
+
             foreach (var pair in sib.bindPairs)
             {
-                bindingDict[pair.action] = pair.code;
+                bindingDict[pair.action].keyCode = pair.code;
             }
         }
         // =============================================================
@@ -96,27 +108,36 @@ namespace JCW.InputBindings
         public void ApplyNewBindings(SerializableInputBinding newBinding)
         {
             bindingDict.Clear();
+            int i = 0;
             foreach (var pair in newBinding.bindPairs)
             {
-                bindingDict[pair.action] = pair.code;
+                if(bindingDict.Count <=(int) PlayerAction.Pause)
+                    bindingDict.Add((PlayerAction)i++, new KeyState(pair.code));
+                else
+                    bindingDict[pair.action].keyCode = pair.code;
             }
         }
         
         // 바인드
-        public void Bind(in PlayerAction action, in KeyCode code, bool allowOverlap = false)
+        public void Bind(in PlayerAction action, in KeyCode code)
         {
-            if (!allowOverlap && bindingDict.ContainsValue(code))
+            if(bindingDict.Count <= (int)PlayerAction.Pause)
             {
-                var copyDict = new Dictionary<PlayerAction, KeyCode>(bindingDict);
-                foreach (var pair in copyDict)
-                {
-                    // 입력받은 키에 해당하는 값이 기존에 있으면 기존 값을 None으로
-                    if (pair.Value.Equals(code))
-                        bindingDict[pair.Key] = KeyCode.None;
-                }
+                bindingDict.Add(action, new KeyState(code));
             }
-            // 키 설정
-            bindingDict[action] = code;
+            else
+            {
+                for (int i = 0 ; i < bindingDict.Count ; ++i)
+                {
+                    if (bindingDict[(PlayerAction)i].keyCode == code)
+                    {
+                        bindingDict[(PlayerAction)i].keyCode = KeyCode.None;
+                    }
+                }
+
+                bindingDict[action].keyCode = code;
+            }
+            
         }
 
         // 바인딩 초기화
