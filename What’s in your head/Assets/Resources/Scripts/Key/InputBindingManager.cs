@@ -1,4 +1,5 @@
 using System;
+using System.IO;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -115,6 +116,9 @@ namespace JCW.InputBindings
         {
             if (_binding.LoadFromFile() == false)
             {
+                bool checkDir = Directory.Exists(Application.dataPath + "/Resources/KeyInfo/");
+                if (!checkDir)
+                    Directory.CreateDirectory(Application.dataPath + "/Resources/KeyInfo/");
                 _binding.ResetAll();
                 _binding.SaveToFile();
                 ITT_KeyManager.Instance.KeySet(_binding);

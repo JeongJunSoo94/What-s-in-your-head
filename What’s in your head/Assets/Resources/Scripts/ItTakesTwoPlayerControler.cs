@@ -43,6 +43,7 @@ public class ItTakesTwoPlayerControler : MonoBehaviour
 
     void Update()
     {
+        // 임시로 해놓음
         if (ITT_KeyManager.Instance.GetKeyDown(PlayerAction.Pause))
         {
             UI_BG.SetActive(!UI_BG.activeSelf);
