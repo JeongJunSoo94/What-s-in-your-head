@@ -8,7 +8,6 @@ namespace JCW.InputBindings
 {
     public class InputBindingManager : MonoBehaviour
     {
-
         public InputBinding _binding = new(false);
 
         public Button _saveButton;
@@ -24,6 +23,21 @@ namespace JCW.InputBindings
 
         private bool _isListening;
         private PlayerAction _curKeyAction;
+
+        // 싱글톤
+        private static InputBindingManager sInstance;
+        public static InputBindingManager Instance
+        {
+            get
+            {
+                if (sInstance == null)
+                {
+                    GameObject newGameObject = new("_InputBindingManager");
+                    sInstance = newGameObject.AddComponent<InputBindingManager>();
+                }
+                return sInstance;
+            }
+        }
 
         private void Start()
         {
@@ -79,7 +93,14 @@ namespace JCW.InputBindings
         private void InitButtonListeners()
         {
             _saveButton.onClick.AddListener(() => {_binding.SaveToFile();});
-            _backButton.onClick.AddListener(() => { TurnOff(); });
+            _backButton.onClick.AddListener(() => 
+            { 
+                // 뒤로가기 시, 파일에서 다시 로드 후 세팅.
+                _binding.LoadFromFile(); 
+                ITT_KeyManager.Instance.KeySet(_binding); 
+                RefreshAllBindingUIs(); TurnOff();
+                Time.timeScale = 1.0f;
+            });
             _resetButton.onClick.AddListener(() => 
             { 
                 _binding.ResetAll(); 

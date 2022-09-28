@@ -2,10 +2,12 @@ using JCW.InputBindings;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 
 public class ItTakesTwoPlayerControler : MonoBehaviour
 {
+    public GameObject UI_BG;
     public float walkSpeed = 4.0f;
     public float runSpeed = 6.0f;
     public float dashSpeed = 4.0f;
@@ -35,10 +37,20 @@ public class ItTakesTwoPlayerControler : MonoBehaviour
         ITT_KeyManager.Instance.GetKeyDown(PlayerAction.MoveForward);
         pRigidbody = gameObject.GetComponent<Rigidbody>();
         pCamera = Camera.main;
+        //SceneManager.LoadScene("KeySample");
+
     }
 
     void Update()
     {
+        if (ITT_KeyManager.Instance.GetKeyDown(PlayerAction.Pause))
+        {
+            UI_BG.SetActive(!UI_BG.activeSelf);
+            if (UI_BG.activeSelf)
+                Time.timeScale = 0.0f;
+            else
+                Time.timeScale = 1.0f;
+        }
         Dash();
         Jump();
     }
