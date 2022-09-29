@@ -28,12 +28,11 @@ public class SavePosition : MonoBehaviour
             position[0] = (double)_other.transform.position.x;
             position[1] = (double)_other.transform.position.y;
             position[2] = (double)_other.transform.position.z;
+
             rotation[0] = (double)_other.transform.rotation.x;
             rotation[1] = (double)_other.transform.rotation.y;
             rotation[2] = (double)_other.transform.rotation.z;
             rotation[3] = (double)_other.transform.rotation.w;
-
-
         }
     }
 
