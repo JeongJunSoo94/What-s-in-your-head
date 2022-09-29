@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using System.IO;
 
 
 public class ItTakesTwoPlayerControler : MonoBehaviour
@@ -30,6 +31,9 @@ public class ItTakesTwoPlayerControler : MonoBehaviour
     public int jumpcount = 0;
     public int dashcount = 0;
 
+    private int life = 3;
+    public int CPcount = 0;
+    
 
     // Start is called before the first frame update
     void Start()
@@ -37,7 +41,6 @@ public class ItTakesTwoPlayerControler : MonoBehaviour
         ITT_KeyManager.Instance.GetKeyDown(PlayerAction.MoveForward);
         pRigidbody = gameObject.GetComponent<Rigidbody>();
         pCamera = Camera.main;
-        //SceneManager.LoadScene("KeySample");
 
     }
 
@@ -54,6 +57,28 @@ public class ItTakesTwoPlayerControler : MonoBehaviour
         }
         Dash();
         Jump();
+
+        if (Input.GetKeyDown(KeyCode.G))
+        {
+            Debug.Log("현재 플레이어 목숨 : " + --life);
+            Resurrect();
+        }
+            
+    }
+    void Resurrect()
+    {
+        if (!File.Exists(Application.dataPath + "/Resources/CheckPointInfo/" +this.name + "TF" + (CPcount-1).ToString() + ".json"))
+        {
+            Debug.Log("체크포인트 불러오기 실패");
+            return;
+        }
+
+        string jsonString = File.ReadAllText(Application.dataPath + "/Resources/CheckPointInfo/" +this.name + "TF" + (CPcount-1).ToString() + ".json");
+        Debug.Log(jsonString);
+
+        SavePosition.PlayerInfo data = JsonUtility.FromJson<SavePosition.PlayerInfo>(jsonString);
+        this.transform.position = new Vector3((float)data.position[0], (float)data.position[1], (float)data.position[2]);
+        this.transform.rotation = new Quaternion((float)data.rotation[0], (float)data.rotation[1], (float)data.rotation[2], (float)data.rotation[3]);        
     }
 
     // Update is called once per frame

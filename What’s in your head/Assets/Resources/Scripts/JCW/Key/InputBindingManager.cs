@@ -116,8 +116,7 @@ namespace JCW.InputBindings
         {
             if (_binding.LoadFromFile() == false)
             {
-                bool checkDir = Directory.Exists(Application.dataPath + "/Resources/KeyInfo/");
-                if (!checkDir)
+                if (!Directory.Exists(Application.dataPath + "/Resources/KeyInfo/"))
                     Directory.CreateDirectory(Application.dataPath + "/Resources/KeyInfo/");
                 _binding.ResetAll();
                 _binding.SaveToFile();
