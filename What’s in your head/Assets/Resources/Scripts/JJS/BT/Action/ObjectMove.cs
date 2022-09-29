@@ -5,7 +5,7 @@ namespace JJS
 {
     public class ObjectMove : Task
     {
-        private CharacterControlBT _obj;
+        CharacterControlBT _obj;
         public ObjectMove(CharacterControlBT obj)
         {
             _obj = obj;

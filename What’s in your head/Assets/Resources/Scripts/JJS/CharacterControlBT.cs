@@ -28,7 +28,6 @@ namespace JJS
         public Rigidbody pRigidbody;
         public CapsuleCollider pCapsuleCollider;
         public Camera mCamera;
-        public RaycastHit groundRaycastHit;
         public RaycastHit forwardRaycastHit;
 
         public Vector3 direction;
@@ -61,7 +60,6 @@ namespace JJS
         #region
         void Start()
         {
-            groundRaycastHit = new RaycastHit();
             forwardRaycastHit = new RaycastHit();
             mCamera = Camera.main;
             RigidbodyInit();
@@ -125,7 +123,6 @@ namespace JJS
 
             Sequence action = new(new List<Task> { });
 
-
             InputHorizonMove inputHorizonMove = new InputHorizonMove(this);
             VerticalMove inputVerticalMove = new VerticalMove(this);
 
@@ -138,7 +135,6 @@ namespace JJS
             Selector moveAnim = new Selector(new List<Task> { playerWaitAnim, playerWalkAnim });
 
             Sequence horizonMove = new(new List<Task> { inputHorizonMove, playerRotate });//수평움직임
-
 
             AirJump Airjump = new AirJump(this);
             GroundJump groundJump = new GroundJump(this);
@@ -282,58 +278,59 @@ namespace JJS
         }
         void RaycheckGround()
         {
-            bool rayChecked = Physics.SphereCast(transform.position + Vector3.up * pCapsuleCollider.radius, pCapsuleCollider.radius, Vector3.down, out groundRaycastHit, groundCheckMaxDistance);
+            //bool rayChecked = Physics.SphereCast(transform.position + Vector3.up * pCapsuleCollider.radius, pCapsuleCollider.radius, Vector3.down, out groundRaycastHit, groundCheckMaxDistance);
             //Debug.Log(groundRaycastHit.point);
             //Debug.Log("rayCheck: " + rayChecked);
-            if (rayChecked)
-            {
-                if (groundRaycastHit.collider.tag == "Platform")
-                {
-                    rayChecked = true;
-                    Vector3 HorVel = pRigidbody.velocity;
-                    HorVel.y = 0;
-                    slopeAngle = Vector3.Angle(HorVel, groundRaycastHit.normal) - 90f;
-                }
-                else
-                {
-                    rayChecked = false;
-                }
-            }
 
-            if (rayChecked)
-            {
-                onPlatform = true;
-                isJumping = false;
-                jumpcount = 0;
-            }
-            else
-            {
-                if (onPlatform)
-                {
-                    jumpcount = 1;
-                    onPlatform = false;
+            //if (rayChecked)
+            //{
+            //    if (groundRaycastHit.collider.tag == "Platform")
+            //    {
+            //        rayChecked = true;
+            //        Vector3 HorVel = pRigidbody.velocity;
+            //        HorVel.y = 0;
+            //        slopeAngle = Vector3.Angle(HorVel, groundRaycastHit.normal) - 90f;
+            //    }
+            //    else
+            //    {
+            //        rayChecked = false;
+            //    }
+            //}
 
-                    if (isDash && isJumping)
-                    {
-                        {
-                            //dashcount = 1; 여기는 지면대시 >> 점프 >> 대시를 막는 코드라서 지움
-                            StopCoroutine("CorDash"); // 지면대시 >> 점프 >> 대시하면 처음 대시의 코루틴이 작동해서 공중대시가 빨리끝남
-                            addSpeed = 0.0f;
-                            isDash = false;
-                        }
-                    }
-                }
-            }
+            //if (rayChecked)
+            //{
+            //    onPlatform = true;
+            //    isJumping = false;
+            //    jumpcount = 0;
+            //}
+            //else
+            //{
+            //    if (onPlatform)
+            //    {
+            //        jumpcount = 1;
+            //        onPlatform = false;
+
+            //        if (isDash && isJumping)
+            //        {
+            //            {
+            //                //dashcount = 1; 여기는 지면대시 >> 점프 >> 대시를 막는 코드라서 지움
+            //                StopCoroutine("CorDash"); // 지면대시 >> 점프 >> 대시하면 처음 대시의 코루틴이 작동해서 공중대시가 빨리끝남
+            //                addSpeed = 0.0f;
+            //                isDash = false;
+            //            }
+            //        }
+            //    }
+            //}
         }
 
 
         void DrawGizmoUpdate()
         {
-            if (onPlatform)
-            {
-                Gizmos.color = Color.blue;
-                Gizmos.DrawSphere(groundRaycastHit.point, 0.07f);
-            }
+            //if (onPlatform)
+            //{
+            //    Gizmos.color = Color.blue;
+            //    Gizmos.DrawSphere(groundRaycastHit.point, 0.07f);
+            //}
 
             if (isBlocked)
             {
