@@ -22,7 +22,7 @@ public class PhotonManager : MonoBehaviourPunCallbacks
     //아이디 겹칠 때를 위한
     private string name_number = "";
 
-    [Header("DisconnectPanel")]
+    [Header("닉네임 입력칸")]
     //public GameObject DisconnectPanel;
     public InputField NicknameInput;
 
@@ -80,10 +80,12 @@ public class PhotonManager : MonoBehaviourPunCallbacks
         Debug.Log($"방 접속에 실패하여 방을 만듭니다. {returnCode}:{message}");
 
         // 룸의 속성 정의
-        RoomOptions roomOptions = new RoomOptions();
-        roomOptions.MaxPlayers = 20;    // 최대 접속자수, 포톤 무료는 20CCU이므로 20 초과로는 못한다.
-        roomOptions.IsOpen = true;      // 룸의 오픈 여부
-        roomOptions.IsVisible = true;   // 로비에서 룸 목록에 노출시킬지 여부
+        RoomOptions roomOptions = new()
+        {
+            MaxPlayers = 20,    // 최대 접속자수, 포톤 무료는 20CCU이므로 20 초과로는 못한다.
+            IsOpen = true,      // 룸의 오픈 여부
+            IsVisible = true   // 로비에서 룸 목록에 노출시킬지 여부
+        };
 
         // 룸 생성
         PhotonNetwork.CreateRoom("My Room", roomOptions);        
