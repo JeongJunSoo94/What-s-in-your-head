@@ -7,7 +7,8 @@ using LitJson;
 
 public class SavePosition : MonoBehaviour
 {
-    [SerializeField]    private int nthCheckPoint = 0;
+
+    [Header("CheckPoint Count")]  [SerializeField]    private int nthCheckPoint = 0;
     [SerializeField]    private GameObject player1 = null;
     [SerializeField]    private GameObject player2 = null;
 

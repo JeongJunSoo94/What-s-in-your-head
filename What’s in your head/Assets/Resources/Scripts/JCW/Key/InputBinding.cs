@@ -11,11 +11,11 @@ namespace JCW.InputBindings
     public enum PlayerAction
     {
         // 이동
-        MoveForward,        MoveBackward,        MoveLeft,        MoveRight,
-        Jump,        Dash,        Crouch,        Swing,        ToggleRun,
+        MoveForward,     MoveBackward,      MoveLeft,       MoveRight,
+        Jump,            Dash,              Crouch,         Swing,        ToggleRun,
         // 조작
-        Fire,        Aim,
-        Interaction,        Cancle,        FindPartner,        Pause,
+        Fire,            Aim,
+        Interaction,     Cancle,            FindPartner,    Pause,
     }
 
     public class KeyState
