@@ -160,6 +160,8 @@ public class ItTakesTwoPlayerControler : MonoBehaviour
                 direction.y = moveSpeed * Mathf.Tan(slopeAngle * Mathf.PI / 180);
             else
                 direction.y = 0;
+            if(slopeAngle < 0)
+                direction.y += addSpeed * Mathf.Tan(slopeAngle * Mathf.PI / 180);
         }
         else if (isAirDash)
         {

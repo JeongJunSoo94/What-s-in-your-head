@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class LocomotionSMB : StateMachineBehaviour
 {
-
     JJS.PlayerControllerWIYH player;
     JJS.CharacterController3D cC3D;
     // OnStateEnter is called when a transition starts and the state machine starts to evaluate this state
@@ -18,9 +17,13 @@ public class LocomotionSMB : StateMachineBehaviour
     override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
         player.InputMove();
+        player.InputRun();
+        player.InputJump();
+        player.Rotation();
+        animator.SetFloat("MoveX", cC3D.worldMoveDir.normalized.x * (player.isRun ? 2.0f : 1.0f));
+        animator.SetFloat("MoveZ", cC3D.worldMoveDir.normalized.z * (player.isRun ? 2.0f : 1.0f));
+        animator.SetTrigger("Jump");
 
-        animator.SetFloat("MoveX", cC3D.worldMoveDir.normalized.x);
-        animator.SetFloat("MoveZ", cC3D.worldMoveDir.normalized.z);
     }
 
     // OnStateExit is called when a transition ends and the state machine finishes evaluating this state

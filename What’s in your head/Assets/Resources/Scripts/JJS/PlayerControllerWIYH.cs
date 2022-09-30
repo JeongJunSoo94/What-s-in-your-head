@@ -8,10 +8,12 @@ namespace JJS
     {
         CharacterController3D charactercontrol;
 
+        public float runSpeed;
+        public float walkSpeed;
         public float moveSpeed;
         public float rotationSpeed;
 
-
+        public bool isRun;
 
         Animator m_animator;
 
@@ -26,23 +28,32 @@ namespace JJS
         void Start()
         {
             charactercontrol.moveSpeed = moveSpeed;
-            AnimatorInit();
         }
 
         // Update is called once per frame
         void Update()
         {
-            //InputMove();
-            InputJump();
+            Debug.Log("Update");
         }
 
         private void FixedUpdate()
         {
-            Rotation(charactercontrol.worldMoveDir.normalized);
+            Debug.Log("FixedUpdate");
         }
 
-        void AnimatorInit()
+        public void InputRun()
         {
+            Debug.Log("AnimationUpdate");
+            if (ItTakesTwoKeyManager.Instance.GetKey(KeyName.CapsLock))
+            {
+                charactercontrol.moveSpeed = runSpeed;
+                isRun = true;
+            }
+            else
+            {
+                charactercontrol.moveSpeed = walkSpeed;
+                isRun = false;
+            }
         }
 
         public void InputMove()
@@ -52,8 +63,13 @@ namespace JJS
 
             charactercontrol.worldMoveDir.y = 0;
         }
-
-        void InputJump()
+        public void TopViewInputMove()
+        {
+            charactercontrol.worldMoveDir.z = ((ItTakesTwoKeyManager.Instance.GetKey(KeyName.W) ? 1 : 0) + (ItTakesTwoKeyManager.Instance.GetKey(KeyName.S) ? -1 : 0));
+            charactercontrol.worldMoveDir.x = ((ItTakesTwoKeyManager.Instance.GetKey(KeyName.D) ? 1 : 0) + (ItTakesTwoKeyManager.Instance.GetKey(KeyName.A) ? -1 : 0));
+            charactercontrol.worldMoveDir.y = 0;
+        }
+        public void InputJump()
         {
             if (ItTakesTwoKeyManager.Instance.GetKeyDown(KeyName.Space))
             {
@@ -64,9 +80,9 @@ namespace JJS
             }
         }
 
-        void Rotation(Vector3 direction)
+        public void Rotation()
         {
-            Vector3 forward = Vector3.Slerp(transform.forward, direction, rotationSpeed * Time.fixedDeltaTime / Vector3.Angle(transform.forward, direction));
+            Vector3 forward = Vector3.Slerp(transform.forward, charactercontrol.worldMoveDir.normalized, rotationSpeed * Time.fixedDeltaTime / Vector3.Angle(transform.forward, charactercontrol.worldMoveDir.normalized));
             transform.LookAt(transform.position + forward);
         }
         
