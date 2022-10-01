@@ -67,7 +67,7 @@ public class PhotonManager : MonoBehaviourPunCallbacks
     {
         Debug.Log("서버와 연결 완료 !");
         PhotonNetwork.JoinLobby(); // 로비 입장 
-        SceneManager.LoadScene(SceneLobby);
+        PhotonNetwork.LoadLevel(SceneLobby);
     }    
 
     // 로비에 접속 후 호출되는 콜백 함수
@@ -78,6 +78,7 @@ public class PhotonManager : MonoBehaviourPunCallbacks
     }
 
     // 랜덤한 룸 입장이 실패했을 경우 호출되는 콜백 함수
+    /*
     public override void OnJoinRandomFailed(short returnCode, string message)
     {
         Debug.Log($"방 접속에 실패하여 방을 만듭니다. {returnCode}:{message}");
@@ -91,6 +92,7 @@ public class PhotonManager : MonoBehaviourPunCallbacks
         // 룸 생성
         PhotonNetwork.CreateRoom("My Room", roomOptions);        
     }
+    */
 
     // 룸 생성이 완료된 후 호출되는 콜백 함수
     public override void OnCreatedRoom()
@@ -99,12 +101,9 @@ public class PhotonManager : MonoBehaviourPunCallbacks
         Debug.Log($"방 이름 : {PhotonNetwork.CurrentRoom.Name}");
     }
 
-    
-
     // 룸에 입장한 후 호출되는 콜백 함수
     public override void OnJoinedRoom()
     {
-        //SceneManager.LoadScene(SceneRoom);
         PhotonNetwork.LoadLevel(SceneRoom);
         // 중복 닉네임 방지를 위한 추가 이름
         foreach (var player in PhotonNetwork.CurrentRoom.Players)

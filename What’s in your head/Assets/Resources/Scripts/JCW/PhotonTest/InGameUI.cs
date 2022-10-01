@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using Photon.Pun;
-using Photon.Realtime;
 
 [RequireComponent(typeof(PhotonView))]
 public class InGameUI : MonoBehaviourPunCallbacks
@@ -15,21 +14,6 @@ public class InGameUI : MonoBehaviourPunCallbacks
 
     private ScrollRect prev_ScrollRect = null;
 
-    /*
-    static public InGameUI Instance;
-    private void Awake()
-    {
-        if (Instance == null)
-        {
-            Instance = this;
-            DontDestroyOnLoad(this.gameObject);
-        }
-        else if (Instance != this)
-        {
-            Destroy(this.gameObject);
-        }
-    }
-    */
     void Start()
     {
         prev_ScrollRect = ChatUI.transform.GetChild(0).GetComponent<ScrollRect>();
