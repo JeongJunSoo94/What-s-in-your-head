@@ -11,7 +11,7 @@ namespace JJS
         CapsuleCollider m_Capsule;
 
         [Tooltip("지면으로 체크할 레이어 설정")]
-        public LayerMask groundLayerMask = LayerMask.NameToLayer("Platform");
+        public LayerMask groundLayerMask;
 
         [Range(0.1f, 10.0f), Tooltip("지면 감지 거리")]
         public float groundCheckDistance = 2.0f;
@@ -147,14 +147,14 @@ namespace JJS
         {
             //// 2. XZ 이동속도 계산
             //// 공중에서 전방이 막힌 경우 제한 (지상에서는 벽에 붙어서 이동할 수 있도록 허용)
-            //if (IsForwardBlocked && !IsGrounded)
-            //{
-            //    horizontalVelocity = Vector3.zero;
-            //}
-            //else // 이동 가능한 경우 : 지상 or 전방이 막히지 않음
-            //{
-            //    horizontalVelocity = worldMoveDir.normalized * moveSpeed;
-            //}
+            if (!IsGrounded)
+            {
+                horizontalVelocity = Vector3.zero;
+            }
+            else // 이동 가능한 경우 : 지상 or 전방이 막히지 않음
+            {
+                horizontalVelocity = worldMoveDir.normalized * moveSpeed;
+            }
         }
 
         private void UpdatePhysics()
