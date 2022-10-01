@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class MenuUI : MonoBehaviour
 {
-
     void PressQuit()
     {   
         #if UNITY_EDITOR

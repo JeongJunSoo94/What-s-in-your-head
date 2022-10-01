@@ -170,7 +170,7 @@ namespace JCW.InputBindings
             }    
 
             string jsonString = File.ReadAllText(Application.dataPath + "/Resources/KeyInfo/KeyInputBindings.json");
-            Debug.Log(jsonString);
+            Debug.Log("키 값 불러오기 성공");
 
             SerializableInputBinding data = JsonUtility.FromJson<SerializableInputBinding>(jsonString);
             ApplyNewBindings(data);

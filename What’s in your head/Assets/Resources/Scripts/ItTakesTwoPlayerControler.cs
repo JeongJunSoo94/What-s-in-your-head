@@ -4,11 +4,12 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using System.IO;
-
+using Photon.Pun;
 
 public class ItTakesTwoPlayerControler : MonoBehaviour
 {
-    public GameObject UI_BG;
+    [SerializeField]  private GameObject UI_BG;
+    private GameObject UI_instance;
     public float walkSpeed = 4.0f;
     public float runSpeed = 6.0f;
     public float dashSpeed = 4.0f;
@@ -38,6 +39,11 @@ public class ItTakesTwoPlayerControler : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        UI_instance = Instantiate(UI_BG, this.transform).transform.GetChild(0).gameObject;
+        if (!GetComponent<PhotonView>().IsMine)
+        {
+            GetComponentInChildren<Camera>().gameObject.SetActive(false);
+        }
         ITT_KeyManager.Instance.GetKeyDown(PlayerAction.MoveForward);
         pRigidbody = gameObject.GetComponent<Rigidbody>();
         pCamera = Camera.main;
@@ -49,8 +55,8 @@ public class ItTakesTwoPlayerControler : MonoBehaviour
         // 임시로 해놓음
         if (ITT_KeyManager.Instance.GetKeyDown(PlayerAction.Pause))
         {
-            UI_BG.SetActive(!UI_BG.activeSelf);
-            if (UI_BG.activeSelf)
+            UI_instance.SetActive(!UI_instance.activeSelf);
+            if (UI_instance.activeSelf)
                 Time.timeScale = 0.0f;
             else
                 Time.timeScale = 1.0f;

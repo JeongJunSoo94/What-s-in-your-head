@@ -12,7 +12,7 @@ public class LobbyUI : MonoBehaviourPunCallbacks
     [SerializeField] private GameObject CurrentNumberObj;
     [SerializeField] private GameObject TotalNumberObj;
     [SerializeField] private GameObject RoomNameObj;
-    [SerializeField] private GameObject WarningObj;
+    [SerializeField] public GameObject WarningObj;
     [SerializeField] private GameObject[] RoomList;
 
     private Text currentNumber;

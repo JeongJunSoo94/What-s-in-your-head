@@ -10,6 +10,9 @@ using Photon.Realtime;
 // MonoBehaviourPun : Callback 함수 같은것들을 오버라이드 할 수 없음
 public class PhotonManager : MonoBehaviourPunCallbacks
 {
+    [SerializeField]    private string SceneMenu;
+    [SerializeField]    private string SceneLobby;
+    [SerializeField]    private string SceneRoom;
     //싱글톤
     public static PhotonManager instance = null;
 
@@ -22,9 +25,10 @@ public class PhotonManager : MonoBehaviourPunCallbacks
     //아이디 겹칠 때를 위한
     private string name_number = "";
 
-    [Header("닉네임 입력칸")]
-    //public GameObject DisconnectPanel;
+    [Header("닉네임 입력")]
     public InputField NicknameInput;
+
+    [HideInInspector] public bool isFull = false;
 
     private void Awake()
     {
@@ -50,10 +54,10 @@ public class PhotonManager : MonoBehaviourPunCallbacks
         PhotonNetwork.GameVersion = version;
 
         // 포톤 서버와 통신 횟수 설정. 초당 30회
-        Debug.Log(PhotonNetwork.SendRate);
+        Debug.Log("서버와의 초당 통신 횟수 : " + PhotonNetwork.SendRate);
 
         // 유저 아이디 할당
-        PhotonNetwork.LocalPlayer.NickName = NicknameInput == null ? userID : NicknameInput.text;        
+        PhotonNetwork.LocalPlayer.NickName = NicknameInput == null ? userID + name_number : NicknameInput.text;        
         // 서버 접속
         PhotonNetwork.ConnectUsingSettings();
     }
@@ -62,9 +66,8 @@ public class PhotonManager : MonoBehaviourPunCallbacks
     public override void OnConnectedToMaster()
     {
         Debug.Log("서버와 연결 완료 !");
-        //Debug.Log($"PhotonNetwork.InLobby = {PhotonNetwork.InLobby}");
         PhotonNetwork.JoinLobby(); // 로비 입장 
-        SceneManager.LoadScene("PhotonLobby");
+        SceneManager.LoadScene(SceneLobby);
     }    
 
     // 로비에 접속 후 호출되는 콜백 함수
@@ -80,12 +83,10 @@ public class PhotonManager : MonoBehaviourPunCallbacks
         Debug.Log($"방 접속에 실패하여 방을 만듭니다. {returnCode}:{message}");
 
         // 룸의 속성 정의
-        RoomOptions roomOptions = new()
-        {
-            MaxPlayers = 20,    // 최대 접속자수, 포톤 무료는 20CCU이므로 20 초과로는 못한다.
-            IsOpen = true,      // 룸의 오픈 여부
-            IsVisible = true   // 로비에서 룸 목록에 노출시킬지 여부
-        };
+        RoomOptions roomOptions = new RoomOptions();
+        roomOptions.MaxPlayers = 2;    // 최대 접속자수, 포톤 무료는 20CCU이므로 20 초과로는 못한다.
+        roomOptions.IsOpen = true;      // 룸의 오픈 여부
+        roomOptions.IsVisible = true;   // 로비에서 룸 목록에 노출시킬지 여부
 
         // 룸 생성
         PhotonNetwork.CreateRoom("My Room", roomOptions);        
@@ -103,6 +104,7 @@ public class PhotonManager : MonoBehaviourPunCallbacks
     // 룸에 입장한 후 호출되는 콜백 함수
     public override void OnJoinedRoom()
     {
+        SceneManager.LoadScene(SceneRoom);
         // 중복 닉네임 방지를 위한 추가 이름
         foreach (var player in PhotonNetwork.CurrentRoom.Players)
         {
@@ -116,29 +118,38 @@ public class PhotonManager : MonoBehaviourPunCallbacks
                     name_number = (Convert.ToInt32(name_number) + 1).ToString();
             }
         }
-        PhotonNetwork.LocalPlayer.NickName = PhotonNetwork.LocalPlayer.NickName + name_number;
+        PhotonNetwork.LocalPlayer.NickName += name_number;
         string isMaster = PhotonNetwork.LocalPlayer.IsMasterClient ? "(방장)" : "";
-        Debug.Log(PhotonNetwork.LocalPlayer.NickName + "님" + isMaster + $" 방 입장 완료 : {PhotonNetwork.InRoom}");
+        Debug.Log(isMaster + PhotonNetwork.LocalPlayer.NickName + "님" + $" 방 입장 완료 : {PhotonNetwork.InRoom}");
         Debug.Log($"플레이어 수 : {PhotonNetwork.CurrentRoom.PlayerCount}");
 
         // 룸에 접속한 사용자 정보 확인
-        foreach (var player in PhotonNetwork.CurrentRoom.Players)
+        foreach(var player in PhotonNetwork.CurrentRoom.Players)
         {
             // $ => String.Format() : $"" 쌍따옴표 안에 있는 내용을 스트링으로 바꿔어주어라.            
             Debug.Log($"{player.Value.NickName}, {player.Value.ActorNumber}");
         }
-
-        SceneManager.LoadScene("PhotonLauncher");
+        StartCoroutine(nameof(MakeChar));
     }
 
     public override void OnJoinRoomFailed(short returnCode, string message)
     {
         Debug.Log($"방 접속에 실패했습니다. {returnCode}:{message}");
 
-        if(SceneManager.GetActiveScene().name == "PhotonLobby")
+        if(SceneManager.GetActiveScene().name == SceneLobby)
         {
             LobbyUI.instance.gameObject.SetActive(true);
+            LobbyUI.instance.WarningObj.SetActive(true);
+            LobbyUI.instance.WarningObj.transform.GetChild(1).gameObject.GetComponent<Text>().text = "접속할 수 없는 방입니다 !";
+
         }
+    }
+
+    IEnumerator MakeChar()
+    {
+        yield return new WaitForSeconds(0.2f);
+
+        PhotonNetwork.Instantiate("Prefabs/JCW/Photon/Player", Vector3.zero, Quaternion.identity);
     }
 
 }

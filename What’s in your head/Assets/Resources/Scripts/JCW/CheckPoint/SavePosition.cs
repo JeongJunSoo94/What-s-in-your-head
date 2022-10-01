@@ -9,11 +9,9 @@ public class SavePosition : MonoBehaviour
 {
 
     [Header("CheckPoint Count")]  [SerializeField]    private int nthCheckPoint = 0;
-    [SerializeField]    private GameObject player1 = null;
-    [SerializeField]    private GameObject player2 = null;
 
-    private ItTakesTwoPlayerControler player1_script = null;
-    private ItTakesTwoPlayerControler player2_script = null;
+    private ItTakesTwoPlayerControler player_script = null;
+    private bool firstContact = false;
 
     [Serializable]
     public class PlayerInfo
@@ -39,21 +37,16 @@ public class SavePosition : MonoBehaviour
 
     private void Start()
     {
-        player1_script = player1.GetComponent<ItTakesTwoPlayerControler>();
-        player2_script = player2.GetComponent<ItTakesTwoPlayerControler>();
     }
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Player"))
         {
-            if (player1 == other.gameObject && player1_script.CPcount == nthCheckPoint)
+            if (!firstContact)
+                player_script = other.gameObject.GetComponent<ItTakesTwoPlayerControler>();
+            if (player_script.CPcount == nthCheckPoint)
             {
-                ++player1_script.CPcount;
-                Check(other.gameObject);
-            }
-            else if (player2 == other && player2_script.CPcount == nthCheckPoint)
-            {
-                ++player2_script.CPcount;
+                ++player_script.CPcount;
                 Check(other.gameObject);
             }
         }
