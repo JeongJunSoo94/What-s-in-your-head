@@ -12,7 +12,7 @@ namespace JCW.InputBindings
     {
         // 이동
         MoveForward,     MoveBackward,      MoveLeft,       MoveRight,
-        Jump,            Dash,              Crouch,         Swing,        ToggleRun,
+        Jump,            Dash,              Swing,          ToggleRun,
         // 조작
         Fire,            Aim,
         Interaction,     Cancle,            FindPartner,    Pause,
@@ -137,7 +137,6 @@ namespace JCW.InputBindings
 
             Bind(PlayerAction.Jump, KeyCode.Space);
             Bind(PlayerAction.Dash, KeyCode.LeftShift);
-            Bind(PlayerAction.Crouch, KeyCode.LeftControl);
             Bind(PlayerAction.Swing, KeyCode.F);
             Bind(PlayerAction.ToggleRun, KeyCode.CapsLock);
 

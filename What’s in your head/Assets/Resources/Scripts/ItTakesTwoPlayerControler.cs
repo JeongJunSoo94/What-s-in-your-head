@@ -5,6 +5,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using System.IO;
 using Photon.Pun;
+using JCW.AudioCtrl;
 
 public class ItTakesTwoPlayerControler : MonoBehaviour
 {
@@ -69,7 +70,31 @@ public class ItTakesTwoPlayerControler : MonoBehaviour
             Debug.Log("현재 플레이어 목숨 : " + --life);
             Resurrect();
         }
-            
+        if (Input.GetKeyDown(KeyCode.Keypad1))
+        {
+            SoundManager.instance.PlayBGM("POP");
+        }
+        if (Input.GetKeyDown(KeyCode.Keypad2))
+        {
+            SoundManager.instance.PlayBGM("Tomboy");
+        }
+        if (Input.GetKeyDown(KeyCode.Keypad4))
+        {
+            SoundManager.instance.PlayEffect(SoundManager.instance.GetEffectClips("Explosion"));
+        }
+        if (Input.GetKeyDown(KeyCode.Keypad5))
+        {
+            SoundManager.instance.PlayEffect(SoundManager.instance.GetEffectClips("Fireball"));
+        }
+        if (Input.GetKeyDown(KeyCode.Keypad6))
+        {
+            SoundManager.instance.PlayEffect(SoundManager.instance.GetEffectClips("GetItem"));
+        }
+        if (Input.GetKeyDown(KeyCode.Keypad7))
+        {
+            SoundManager.instance.PlayEffect(SoundManager.instance.GetEffectClips("WaterBall"));
+        }
+
     }
     void Resurrect()
     {

@@ -58,7 +58,6 @@ namespace JCW.InputBindings
                 "MoveRight" => "오른쪽으로 이동",
                 "Jump" => "점프",
                 "Dash" => "대시",
-                "Crouch" => "내려찍기, 숙이기",
                 "Swing" => "스윙 / 글라인드 그래플",
                 "ToggleRun" => "질주 전환",
                 "Fire" => "기본 능력 / 발사",
