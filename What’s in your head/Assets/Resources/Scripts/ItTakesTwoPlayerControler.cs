@@ -7,9 +7,10 @@ using System.IO;
 using Photon.Pun;
 using JCW.AudioCtrl;
 
+[RequireComponent(typeof(PhotonView))]
 public class ItTakesTwoPlayerControler : MonoBehaviour
 {
-    [SerializeField]  private GameObject UI_BG;
+    [SerializeField]  private GameObject UI_BG;    
     private GameObject UI_instance;
     public float walkSpeed = 4.0f;
     public float runSpeed = 6.0f;
@@ -35,24 +36,33 @@ public class ItTakesTwoPlayerControler : MonoBehaviour
 
     private int life = 3;
     public int CPcount = 0;
-    
+
+    PhotonView photonView;
+    [SerializeField]  private GameObject vCam;
+
 
     // Start is called before the first frame update
     void Start()
     {
         UI_instance = Instantiate(UI_BG, this.transform).transform.GetChild(0).gameObject;
-        if (!GetComponent<PhotonView>().IsMine)
+        photonView = GetComponent<PhotonView>();
+        if (!photonView.IsMine)
         {
             GetComponentInChildren<Camera>().gameObject.SetActive(false);
+            vCam.SetActive(false);
         }
+        else
+            pCamera = Camera.main;
         ITT_KeyManager.Instance.GetKeyDown(PlayerAction.MoveForward);
         pRigidbody = gameObject.GetComponent<Rigidbody>();
-        pCamera = Camera.main;
+        //pCamera = Camera.main;
 
     }
 
     void Update()
     {
+        if (!photonView.IsMine)
+            return;
         // 임시로 해놓음
         if (ITT_KeyManager.Instance.GetKeyDown(PlayerAction.Pause))
         {
@@ -77,6 +87,10 @@ public class ItTakesTwoPlayerControler : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Keypad2))
         {
             SoundManager.instance.PlayBGM("Tomboy");
+        }
+        if (Input.GetKeyDown(KeyCode.Keypad3))
+        {
+            SoundManager.instance.PauseResumeBGM();
         }
         if (Input.GetKeyDown(KeyCode.Keypad4))
         {
@@ -115,7 +129,8 @@ public class ItTakesTwoPlayerControler : MonoBehaviour
     // Update is called once per frame
     void FixedUpdate()
     {
-        Move();
+        if(photonView.IsMine)
+            Move();
     }
     void Move()
     {

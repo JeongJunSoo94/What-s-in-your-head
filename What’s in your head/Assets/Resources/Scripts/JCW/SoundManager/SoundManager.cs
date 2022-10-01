@@ -2,6 +2,7 @@ using System.IO;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
+using Photon.Pun;
 
 namespace JCW.AudioCtrl
 {
@@ -11,16 +12,17 @@ namespace JCW.AudioCtrl
         Effect,
         End,
     }
-        
 
+    [PunRPC]
     public class SoundManager : MonoBehaviour
     {
         [Header("효과음 목록")] [SerializeField] List<AudioClip> prevAudioClips = new List<AudioClip>();
         // 오디오 재생기
         AudioSource[] audioSources = new AudioSource[(int)Sound.End];
-
         // 오디오 클립
         Dictionary<string, AudioClip> audioClips = new Dictionary<string, AudioClip>();
+
+        private bool isPause = false;
 
         // 싱글톤
         public static SoundManager instance = null;
@@ -47,7 +49,7 @@ namespace JCW.AudioCtrl
                 audioSources[i] = obj.AddComponent<AudioSource>();
                 obj.transform.parent = this.transform;
             }
-            audioSources[(int)Sound.BGM].loop = true;
+            audioSources[(int)Sound.BGM].loop = true;            
             SetUp();
         }
 
@@ -57,9 +59,37 @@ namespace JCW.AudioCtrl
             for (int i = 0 ; i<audioSources.Length ; ++i)
             {
                 audioSources[i].clip = null;
-                audioSources[i].Stop();
+                audioSources[i].Stop();                
             }
             audioClips.Clear();
+        }
+        
+        public void PauseResumeBGM()
+        {
+            if (isPause)
+            {
+                audioSources[(int)Sound.BGM].UnPause();
+                isPause = false;
+            }
+            else
+            {
+                audioSources[(int)Sound.BGM].Pause();
+                isPause = true;
+            }                
+        }
+
+        // 효과음 제거
+        public void DeleteEffectClip(string name)
+        {
+            string clipName = name;
+            if (!name.Contains("Sounds/EFFECT"))
+                clipName = $"Sounds/EFFECT/{name}";
+            if (audioClips.ContainsKey(clipName))
+                audioClips.Remove(clipName);
+            else
+                Debug.Log("삭제하려는 효과음이 존재하지 않습니다.");
+
+
         }
 
         public void SetUp()
@@ -80,7 +110,7 @@ namespace JCW.AudioCtrl
         }
 
         // 효과음 재생
-        public void PlayEffect(AudioClip audioClip, float pitch = 1.0f)
+        public void PlayEffect(AudioClip audioClip)
         {
             if (audioClip == null)
             {
@@ -88,12 +118,11 @@ namespace JCW.AudioCtrl
                 return;
             }
             Debug.Log("효과음을 재생합니다");
-            audioSources[(int)Sound.Effect].pitch = pitch;
             audioSources[(int)Sound.Effect].PlayOneShot(audioClip);
         }
 
         // 배경음 재생
-        public void PlayBGM(string path, float pitch = 1.0f)
+        public void PlayBGM(string path)
         {
             if (!path.Contains("Sounds/BGM"))
                 path = $"Sounds/BGM/{path}";
@@ -111,7 +140,6 @@ namespace JCW.AudioCtrl
             if (curAudio.isPlaying)
                 curAudio.Stop();
 
-            curAudio.pitch = pitch;
             curAudio.clip = audioClip;
             curAudio.Play();
         }

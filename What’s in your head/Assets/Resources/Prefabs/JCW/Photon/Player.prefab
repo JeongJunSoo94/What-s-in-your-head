@@ -139,10 +139,10 @@ GameObject:
   - component: {fileID: 1871643819189386897}
   - component: {fileID: 1871643819189386898}
   - component: {fileID: 1871643819189386899}
-  - component: {fileID: 1871643819189386925}
   - component: {fileID: 3459199263413225707}
   - component: {fileID: 6716114734432159207}
   - component: {fileID: 4971520027988178372}
+  - component: {fileID: 1871643819189386925}
   m_Layer: 10
   m_Name: Player
   m_TagString: Player
@@ -220,32 +220,6 @@ Rigidbody:
   m_Interpolate: 2
   m_Constraints: 112
   m_CollisionDetection: 1
---- !u!114 &1871643819189386925
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1871643819189386926}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3030ea3769495f94a99a68173cc3822c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  UI_BG: {fileID: 6691099522264816450, guid: 3326d0fcecb766743a15a14698aacb2f, type: 3}
-  walkSpeed: 5
-  runSpeed: 8
-  dashSpeed: 10
-  dashTime: 1.5
-  JumpPower: 20
-  rotationSpeed: 720
-  onPlatform: 1
-  isJumping: 0
-  isDash: 0
-  isAirDash: 0
-  jumpcount: 0
-  dashcount: 0
-  CPcount: 0
 --- !u!114 &3459199263413225707
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -302,6 +276,33 @@ MonoBehaviour:
   m_SynchronizeRotation: 1
   m_SynchronizeScale: 0
   m_UseLocal: 1
+--- !u!114 &1871643819189386925
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1871643819189386926}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3030ea3769495f94a99a68173cc3822c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  UI_BG: {fileID: 6691099522264816450, guid: 3326d0fcecb766743a15a14698aacb2f, type: 3}
+  walkSpeed: 5
+  runSpeed: 8
+  dashSpeed: 10
+  dashTime: 1.5
+  JumpPower: 20
+  rotationSpeed: 720
+  onPlatform: 1
+  isJumping: 0
+  isDash: 0
+  isAirDash: 0
+  jumpcount: 0
+  dashcount: 0
+  CPcount: 0
+  vCam: {fileID: 1871643819381787473}
 --- !u!1 &1871643819381787473
 GameObject:
   m_ObjectHideFlags: 0
@@ -669,7 +670,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1871643820281250877}
-  m_LocalRotation: {x: 0.30735844, y: -0.000000032746975, z: 0.000000010577054, w: 0.9515938}
+  m_LocalRotation: {x: 0.30735844, y: -0.00000003274697, z: 0.000000010577053, w: 0.9515938}
   m_LocalPosition: {x: 0, y: 3.3000002, z: -3}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -786,7 +787,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1871643820554454050}
-  m_LocalRotation: {x: 0.3073584, y: -0.000000016373487, z: 0.0000000052885256, w: 0.9515939}
+  m_LocalRotation: {x: 0.3073584, y: -0.000000016373484, z: 0.000000005288525, w: 0.9515939}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0

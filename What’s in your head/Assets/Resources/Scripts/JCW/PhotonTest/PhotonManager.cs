@@ -104,7 +104,8 @@ public class PhotonManager : MonoBehaviourPunCallbacks
     // 룸에 입장한 후 호출되는 콜백 함수
     public override void OnJoinedRoom()
     {
-        SceneManager.LoadScene(SceneRoom);
+        //SceneManager.LoadScene(SceneRoom);
+        PhotonNetwork.LoadLevel(SceneRoom);
         // 중복 닉네임 방지를 위한 추가 이름
         foreach (var player in PhotonNetwork.CurrentRoom.Players)
         {
@@ -147,7 +148,7 @@ public class PhotonManager : MonoBehaviourPunCallbacks
 
     IEnumerator MakeChar()
     {
-        yield return new WaitForSeconds(0.2f);
+        yield return new WaitForSeconds(0.3f);
 
         PhotonNetwork.Instantiate("Prefabs/JCW/Photon/Player", Vector3.zero, Quaternion.identity);
     }

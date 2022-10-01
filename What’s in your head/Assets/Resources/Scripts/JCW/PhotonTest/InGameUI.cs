@@ -5,6 +5,7 @@ using UnityEngine.UI;
 using Photon.Pun;
 using Photon.Realtime;
 
+[RequireComponent(typeof(PhotonView))]
 public class InGameUI : MonoBehaviourPunCallbacks
 {
     [SerializeField][Tooltip("Ã¤ÆÃ UI")] private GameObject ChatUI;
