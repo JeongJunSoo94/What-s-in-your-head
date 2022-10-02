@@ -1,6 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using JCW.InputBindings;
+
+
 namespace JJS
 {
     public class InputHorizonMove : Task
@@ -12,11 +15,11 @@ namespace JJS
         }
         public override NodeState Evaluate()
         {
-            if (ItTakesTwoKeyManager.Instance.GetKey(KeyName.W) || ItTakesTwoKeyManager.Instance.GetKey(KeyName.S)
-               || ItTakesTwoKeyManager.Instance.GetKey(KeyName.A) || ItTakesTwoKeyManager.Instance.GetKey(KeyName.D))
+            if (ITT_KeyManager.Instance.GetKeyDown(PlayerAction.MoveForward) || ITT_KeyManager.Instance.GetKeyDown(PlayerAction.MoveBackward)
+               || ITT_KeyManager.Instance.GetKeyDown(PlayerAction.MoveRight) || ITT_KeyManager.Instance.GetKeyDown(PlayerAction.MoveLeft))
             {
-                _obj.direction.z = (ItTakesTwoKeyManager.Instance.GetKey(KeyName.W) ? 1 : 0) + (ItTakesTwoKeyManager.Instance.GetKey(KeyName.S) ? -1 : 0);
-                _obj.direction.x = (ItTakesTwoKeyManager.Instance.GetKey(KeyName.D) ? 1 : 0) + (ItTakesTwoKeyManager.Instance.GetKey(KeyName.A) ? -1 : 0);
+                _obj.direction.z = ((ITT_KeyManager.Instance.GetKeyDown(PlayerAction.MoveForward) ? 1 : 0) + (ITT_KeyManager.Instance.GetKeyDown(PlayerAction.MoveBackward) ? -1 : 0));
+                _obj.direction.x = ((ITT_KeyManager.Instance.GetKeyDown(PlayerAction.MoveRight) ? 1 : 0) + (ITT_KeyManager.Instance.GetKeyDown(PlayerAction.MoveLeft) ? -1 : 0));
                 return NodeState.SUCCESS;
             }
             else

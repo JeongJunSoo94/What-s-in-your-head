@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using JCW.InputBindings;
 namespace JJS
 {
     public class CharacterControlBT : MonoBehaviour
@@ -51,8 +52,6 @@ namespace JJS
 
         private void Awake()
         {
-            // >> 게임매니저로 옮겨갈 것들
-            ItTakesTwoKeyManager.Instance.GetKeyDown(KeyName.W);
             Application.targetFrameRate = 60;
             // <<
         }
@@ -171,7 +170,7 @@ namespace JJS
         {
             float moveSpeed;
 
-            if (!isDash && !isJumping && ItTakesTwoKeyManager.Instance.GetKey(KeyName.CapsLock))
+            if (!isDash && !isJumping && ITT_KeyManager.Instance.GetKeyDown(PlayerAction.ToggleRun))
             {
                 moveSpeed = runSpeed;
             }
@@ -180,8 +179,8 @@ namespace JJS
                 moveSpeed = walkSpeed;
             }
 
-            direction = mCamera.transform.forward * ((ItTakesTwoKeyManager.Instance.GetKey(KeyName.W) ? 1 : 0) + (ItTakesTwoKeyManager.Instance.GetKey(KeyName.S) ? -1 : 0))
-                + mCamera.transform.right * ((ItTakesTwoKeyManager.Instance.GetKey(KeyName.D) ? 1 : 0) + (ItTakesTwoKeyManager.Instance.GetKey(KeyName.A) ? -1 : 0));
+            direction = mCamera.transform.forward * ((ITT_KeyManager.Instance.GetKeyDown(PlayerAction.MoveForward) ? 1 : 0) + (ITT_KeyManager.Instance.GetKeyDown(PlayerAction.MoveBackward) ? -1 : 0))
+                + mCamera.transform.right * ((ITT_KeyManager.Instance.GetKeyDown(PlayerAction.MoveRight) ? 1 : 0) + (ITT_KeyManager.Instance.GetKeyDown(PlayerAction.MoveLeft) ? -1 : 0));
             direction.y = 0;
             direction = direction.normalized;
 
@@ -217,7 +216,7 @@ namespace JJS
         void DashVec()
         {
             dashVec = Vector3.zero;
-            if (!isDash && ItTakesTwoKeyManager.Instance.GetKeyDown(KeyName.LeftShift))
+            if (!isDash && ITT_KeyManager.Instance.GetKeyDown(PlayerAction.Dash))
             {
                 StartCoroutine("CorDash");
             }
@@ -240,7 +239,7 @@ namespace JJS
 
         void JumpVec()
         {
-            if (ItTakesTwoKeyManager.Instance.GetKeyDown(KeyName.Space))
+            if (ITT_KeyManager.Instance.GetKeyDown(PlayerAction.Jump))
             {
                 if (isAirDash)
                 {

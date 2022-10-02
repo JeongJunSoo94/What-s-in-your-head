@@ -45,12 +45,12 @@ namespace JJS
 
         public void InputRun()
         {
-            if (ItTakesTwoKeyManager.Instance.GetKey(KeyName.CapsLock))
+            //if (ItTakesTwoKeyManager.Instance.GetKey(KeyName.CapsLock))
             {
                 charactercontrol.moveSpeed = runSpeed;
                 isRun = true;
             }
-            else
+            //else
             {
                 charactercontrol.moveSpeed = walkSpeed;
                 isRun = false;
@@ -67,8 +67,8 @@ namespace JJS
 
         public void InputMove()
         {
-            dir.z = ((ItTakesTwoKeyManager.Instance.GetKey(KeyName.W) ? 1 : 0) + (ItTakesTwoKeyManager.Instance.GetKey(KeyName.S) ? -1 : 0));
-            dir.x = ((ItTakesTwoKeyManager.Instance.GetKey(KeyName.D) ? 1 : 0) + (ItTakesTwoKeyManager.Instance.GetKey(KeyName.A) ? -1 : 0));
+            //dir.z = ((ItTakesTwoKeyManager.Instance.GetKey(KeyName.W) ? 1 : 0) + (ItTakesTwoKeyManager.Instance.GetKey(KeyName.S) ? -1 : 0));
+            //dir.x = ((ItTakesTwoKeyManager.Instance.GetKey(KeyName.D) ? 1 : 0) + (ItTakesTwoKeyManager.Instance.GetKey(KeyName.A) ? -1 : 0));
             if (dir.z != 0 || dir.x != 0)
             {
                 isMoved = true;
@@ -82,7 +82,7 @@ namespace JJS
 
         public void InputJump()
         {
-            if (ItTakesTwoKeyManager.Instance.GetKeyDown(KeyName.Space))
+            //if (ItTakesTwoKeyManager.Instance.GetKeyDown(KeyName.Space))
             {
                 //if (charactercontrol.curJumpCoolTime <= 0f)
                 {
