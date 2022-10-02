@@ -77,7 +77,7 @@ public class CharacterState3D : MonoBehaviour
             //lookVec.y = 0;
             //lookVec = lookVec.normalized;
             slopeAngle = Vector3.Angle(Vector3.up, groundRaycastHit.normal);
-            Debug.Log("slopeAngle " + slopeAngle);
+            //Debug.Log("slopeAngle " + slopeAngle);
             if (Mathf.Abs(slopeAngle) >= maxSlopeAngle)
             {
                 IsGrounded = false;

@@ -20,6 +20,8 @@ namespace JCW.AudioCtrl
         // 오디오 클립
         Dictionary<string, AudioClip> audioClips = new();
 
+        PhotonView photonView;
+
         private bool isPause = false;
 
         // 싱글톤
@@ -40,6 +42,7 @@ namespace JCW.AudioCtrl
         // Sound 종류에 해당하는 오브젝트들을 만들어주고, 사운드 매니저 오브젝트에 자식으로 달아준다.
         void Start()
         {
+            photonView = GetComponent<PhotonView>();
             string[] soundNames = System.Enum.GetNames(typeof(JCW.AudioCtrl.Sound));
             for (int i = 0 ; i<(int)Sound.End ; ++i)
             {
@@ -107,7 +110,14 @@ namespace JCW.AudioCtrl
 
             return audioClips[clipName];
         }
-
+        public void PlayEffect_RPC(AudioClip audioClip)
+        {
+            photonView.RPC("PlayEffect", RpcTarget.OthersBuffered, audioClip);
+        }
+        public void PlayBGM_RPC(string path)
+        {
+            photonView.RPC("PlayBGM", RpcTarget.OthersBuffered, path);
+        }
         [PunRPC]
         // 효과음 재생
         public void PlayEffect(AudioClip audioClip)

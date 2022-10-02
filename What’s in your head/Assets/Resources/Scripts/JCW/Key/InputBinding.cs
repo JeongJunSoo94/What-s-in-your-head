@@ -15,7 +15,9 @@ namespace JCW.InputBindings
         Jump,            Dash,              Swing,          ToggleRun,
         // 조작
         Fire,            Aim,
-        Interaction,     Cancle,            FindPartner,    Pause,
+        Interaction,     Cancle,            FindPartner,    Pause,      Chat,
+
+        END
     }
 
     public class KeyState
@@ -98,7 +100,7 @@ namespace JCW.InputBindings
             int i = 0;
             foreach (var pair in newBinding.bindPairs)
             {
-                if(bindingDict.Count <=(int) PlayerAction.Pause)
+                if(bindingDict.Count <=(int) PlayerAction.END)
                     bindingDict.Add((PlayerAction)i++, new KeyState(pair.code));
                 else
                     bindingDict[pair.action].keyCode = pair.code;
@@ -108,7 +110,7 @@ namespace JCW.InputBindings
         // 바인드
         public void Bind(in PlayerAction action, in KeyCode code)
         {
-            if(bindingDict.Count <= (int)PlayerAction.Pause)
+            if(bindingDict.Count <= (int)PlayerAction.END)
             {
                 bindingDict.Add(action, new KeyState(code));
             }
@@ -146,6 +148,7 @@ namespace JCW.InputBindings
             Bind(PlayerAction.Interaction, KeyCode.E);
             Bind(PlayerAction.Cancle, KeyCode.Q);
             Bind(PlayerAction.FindPartner, KeyCode.Mouse2);
+            Bind(PlayerAction.Chat, KeyCode.LeftControl);
 
             Bind(PlayerAction.Pause, KeyCode.Escape);            
         }

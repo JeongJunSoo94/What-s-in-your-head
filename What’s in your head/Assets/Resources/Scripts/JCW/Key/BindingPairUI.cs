@@ -63,6 +63,7 @@ namespace JCW.InputBindings
                 "Interaction" => "상호 작용",
                 "Cancle" => "취소",
                 "FindPartner" => "다른 플레이어 찾기",
+                "Chat" => "채팅창 열기 / 닫기",
                 "Pause" => "일시정지 / 옵션",
                 _ => actionText,
             };
