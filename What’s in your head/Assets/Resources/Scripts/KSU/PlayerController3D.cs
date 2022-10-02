@@ -197,23 +197,24 @@ public class PlayerController3D : MonoBehaviour
         }
         if (Input.GetKeyDown(KeyCode.Keypad3))
         {
-            SoundManager.instance.PauseResumeBGM();
+            SoundManager.instance.PauseResumeBGM_RPC();
         }
         if (Input.GetKeyDown(KeyCode.Keypad4))
         {
-            SoundManager.instance.PlayEffect_RPC(SoundManager.instance.GetEffectClips("Explosion"));
+            SoundManager.instance.PlayEffect_RPC("Explosion");
         }
         if (Input.GetKeyDown(KeyCode.Keypad5))
         {
-            SoundManager.instance.PlayEffect_RPC(SoundManager.instance.GetEffectClips("Fireball"));
+            //SoundManager.instance.PlayEffect_RPC(SoundManager.instance.GetEffectClips("Fireball"));
+            SoundManager.instance.PlayEffect_RPC("Fireball");
         }
         if (Input.GetKeyDown(KeyCode.Keypad6))
         {
-            SoundManager.instance.PlayEffect_RPC(SoundManager.instance.GetEffectClips("GetItem"));
+            SoundManager.instance.PlayEffect_RPC("GetItem");
         }
         if (Input.GetKeyDown(KeyCode.Keypad7))
         {
-            SoundManager.instance.PlayEffect_RPC(SoundManager.instance.GetEffectClips("WaterBall"));
+            SoundManager.instance.PlayEffect_RPC("WaterBall");
         }
     }
     public void InputPause()

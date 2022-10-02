@@ -64,6 +64,11 @@ namespace JCW.AudioCtrl
             }
             audioClips.Clear();
         }
+        public void PauseResumeBGM_RPC()
+        {
+            photonView.RPC("PauseResumeBGM", RpcTarget.OthersBuffered);
+            PauseResumeBGM();
+        }
 
         [PunRPC]
         public void PauseResumeBGM()
@@ -102,26 +107,17 @@ namespace JCW.AudioCtrl
             }
         }
 
-        public AudioClip GetEffectClips(string name)
+        public void PlayEffect_RPC(string path)
         {
-            string clipName = name;
-            if (!name.Contains("Sounds/EFFECT"))
-                clipName = $"Sounds/EFFECT/{name}";
-
-            return audioClips[clipName];
+            photonView.RPC("PlayEffect", RpcTarget.OthersBuffered, path);
+            PlayEffect(path);
         }
-        public void PlayEffect_RPC(AudioClip audioClip)
-        {
-            photonView.RPC("PlayEffect", RpcTarget.OthersBuffered, audioClip);
-        }
-        public void PlayBGM_RPC(string path)
-        {
-            photonView.RPC("PlayBGM", RpcTarget.OthersBuffered, path);
-        }
-        [PunRPC]
+       
         // 효과음 재생
-        public void PlayEffect(AudioClip audioClip)
+        [PunRPC]
+        public void PlayEffect(string path)
         {
+            AudioClip audioClip = GetEffectClips(path);
             if (audioClip == null)
             {
                 Debug.Log("NULL로 저장된 오디오 클립입니다");
@@ -131,6 +127,11 @@ namespace JCW.AudioCtrl
             audioSources[(int)Sound.Effect].PlayOneShot(audioClip);
         }
 
+        public void PlayBGM_RPC(string path)
+        {
+            photonView.RPC("PlayBGM", RpcTarget.OthersBuffered, path);
+            PlayBGM(path);
+        }
         // 배경음 재생
         [PunRPC]
         public void PlayBGM(string path)
@@ -155,6 +156,14 @@ namespace JCW.AudioCtrl
             curAudio.Play();
         }
 
+        public AudioClip GetEffectClips(string name)
+        {
+            string clipName = name;
+            if (!name.Contains("Sounds/EFFECT"))
+                clipName = $"Sounds/EFFECT/{name}";
+
+            return audioClips[clipName];
+        }
         void SetEffectAudioClip(string path)
         {
             if (!path.Contains("Sounds/EFFECT"))

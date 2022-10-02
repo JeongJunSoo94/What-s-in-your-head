@@ -110,7 +110,7 @@ namespace JCW.InputBindings
         // πŸ¿ŒµÂ
         public void Bind(in PlayerAction action, in KeyCode code)
         {
-            if(bindingDict.Count <= (int)PlayerAction.END)
+            if(bindingDict.Count < (int)PlayerAction.END)
             {
                 bindingDict.Add(action, new KeyState(code));
             }
