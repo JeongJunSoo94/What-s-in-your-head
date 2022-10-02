@@ -55,7 +55,12 @@ public class ItTakesTwoPlayerControler : MonoBehaviour
             pCamera = Camera.main;
         ITT_KeyManager.Instance.GetKeyDown(PlayerAction.MoveForward);
         pRigidbody = gameObject.GetComponent<Rigidbody>();
-        //pCamera = Camera.main;
+
+
+        if (WIYH_Manager.Instance.player1 == null)
+            WIYH_Manager.Instance.player1 = this.gameObject;
+        else if(WIYH_Manager.Instance.player2 == null)
+            WIYH_Manager.Instance.player2 = this.gameObject;
 
     }
 
@@ -73,41 +78,7 @@ public class ItTakesTwoPlayerControler : MonoBehaviour
                 Time.timeScale = 1.0f;
         }
         Dash();
-        Jump();
-
-        if (Input.GetKeyDown(KeyCode.G))
-        {
-            Debug.Log("현재 플레이어 목숨 : " + --life);
-            Resurrect();
-        }
-        if (Input.GetKeyDown(KeyCode.Keypad1))
-        {
-            SoundManager.instance.PlayBGM("POP");
-        }
-        if (Input.GetKeyDown(KeyCode.Keypad2))
-        {
-            SoundManager.instance.PlayBGM("Tomboy");
-        }
-        if (Input.GetKeyDown(KeyCode.Keypad3))
-        {
-            SoundManager.instance.PauseResumeBGM();
-        }
-        if (Input.GetKeyDown(KeyCode.Keypad4))
-        {
-            SoundManager.instance.PlayEffect(SoundManager.instance.GetEffectClips("Explosion"));
-        }
-        if (Input.GetKeyDown(KeyCode.Keypad5))
-        {
-            SoundManager.instance.PlayEffect(SoundManager.instance.GetEffectClips("Fireball"));
-        }
-        if (Input.GetKeyDown(KeyCode.Keypad6))
-        {
-            SoundManager.instance.PlayEffect(SoundManager.instance.GetEffectClips("GetItem"));
-        }
-        if (Input.GetKeyDown(KeyCode.Keypad7))
-        {
-            SoundManager.instance.PlayEffect(SoundManager.instance.GetEffectClips("WaterBall"));
-        }
+        Jump();        
 
     }
     void Resurrect()
@@ -122,8 +93,7 @@ public class ItTakesTwoPlayerControler : MonoBehaviour
         Debug.Log(jsonString);
 
         SavePosition.PlayerInfo data = JsonUtility.FromJson<SavePosition.PlayerInfo>(jsonString);
-        this.transform.position = new Vector3((float)data.position[0], (float)data.position[1], (float)data.position[2]);
-        this.transform.rotation = new Quaternion((float)data.rotation[0], (float)data.rotation[1], (float)data.rotation[2], (float)data.rotation[3]);        
+        transform.SetPositionAndRotation(new Vector3((float)data.position[0], (float)data.position[1], (float)data.position[2]), new Quaternion((float)data.rotation[0], (float)data.rotation[1], (float)data.rotation[2], (float)data.rotation[3]));        
     }
 
     // Update is called once per frame

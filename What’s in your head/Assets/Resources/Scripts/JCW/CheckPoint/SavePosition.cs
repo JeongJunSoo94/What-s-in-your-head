@@ -1,6 +1,4 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using System.IO;
 using LitJson;
@@ -10,7 +8,7 @@ public class SavePosition : MonoBehaviour
 
     [Header("CheckPoint Count")]  [SerializeField]    private int nthCheckPoint = 0;
 
-    private ItTakesTwoPlayerControler player_script = null;
+    private PlayerController3D player_script = null;
     private bool firstContact = false;
 
     [Serializable]
@@ -35,15 +33,15 @@ public class SavePosition : MonoBehaviour
         }
     }
 
-    private void Start()
-    {
-    }
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Player"))
         {
             if (!firstContact)
-                player_script = other.gameObject.GetComponent<ItTakesTwoPlayerControler>();
+            {
+                player_script = other.gameObject.GetComponent<PlayerController3D>();
+                firstContact = true;
+            }
             if (player_script.CPcount == nthCheckPoint)
             {
                 ++player_script.CPcount;
@@ -55,7 +53,7 @@ public class SavePosition : MonoBehaviour
     private void Check(GameObject other)
     {
         Debug.Log("체크포인트 접촉 : " + other.name);
-        PlayerInfo playerTF = new PlayerInfo(other);
+        PlayerInfo playerTF = new(other);
         JsonData infoJson = JsonMapper.ToJson(playerTF);
         if (!Directory.Exists(Application.dataPath + "/Resources/CheckPointInfo/"))
             Directory.CreateDirectory(Application.dataPath + "/Resources/CheckPointInfo/");

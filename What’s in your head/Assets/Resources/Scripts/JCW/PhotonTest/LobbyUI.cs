@@ -1,7 +1,5 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using Photon.Pun;
 using Photon.Realtime;
@@ -18,7 +16,7 @@ public class LobbyUI : MonoBehaviourPunCallbacks
     private Text currentNumber;
     private Text totalNumber;
 
-    private List<RoomInfo> curRoomList = new List<RoomInfo>();
+    private List<RoomInfo> curRoomList = new();
 
 
     //싱글톤
@@ -120,10 +118,12 @@ public class LobbyUI : MonoBehaviourPunCallbacks
         this.gameObject.SetActive(false);
 
         // 룸의 속성 정의
-        RoomOptions roomOptions = new RoomOptions();
-        roomOptions.MaxPlayers = 2;    // 최대 접속자수, 포톤 무료는 20CCU이므로 20 초과로는 못한다.
-        roomOptions.IsOpen = true;      // 룸의 오픈 여부
-        roomOptions.IsVisible = true;   // 로비에서 룸 목록에 노출시킬지 여부
+        RoomOptions roomOptions = new()
+        {
+            MaxPlayers = 2,    // 최대 접속자수, 포톤 무료는 20CCU이므로 20 초과로는 못한다.
+            IsOpen = true,      // 룸의 오픈 여부
+            IsVisible = true   // 로비에서 룸 목록에 노출시킬지 여부
+        };
 
         PhotonNetwork.CreateRoom(RoomNameObj.GetComponent<Text>().text, roomOptions);
     }

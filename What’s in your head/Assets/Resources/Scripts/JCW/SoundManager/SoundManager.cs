@@ -1,7 +1,5 @@
-using System.IO;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEditor;
 using Photon.Pun;
 
 namespace JCW.AudioCtrl
@@ -10,17 +8,17 @@ namespace JCW.AudioCtrl
     {
         BGM,
         Effect,
+        Sound3D,
         End,
     }
 
-    [PunRPC]
     public class SoundManager : MonoBehaviour
     {
-        [Header("효과음 목록")] [SerializeField] List<AudioClip> prevAudioClips = new List<AudioClip>();
+        [Header("효과음 목록")] [SerializeField] List<AudioClip> prevAudioClips = new();
         // 오디오 재생기
         AudioSource[] audioSources = new AudioSource[(int)Sound.End];
         // 오디오 클립
-        Dictionary<string, AudioClip> audioClips = new Dictionary<string, AudioClip>();
+        Dictionary<string, AudioClip> audioClips = new();
 
         private bool isPause = false;
 
@@ -45,7 +43,7 @@ namespace JCW.AudioCtrl
             string[] soundNames = System.Enum.GetNames(typeof(JCW.AudioCtrl.Sound));
             for (int i = 0 ; i<(int)Sound.End ; ++i)
             {
-                GameObject obj = new GameObject {name = soundNames[i] };
+                GameObject obj = new() { name = soundNames[i] };
                 audioSources[i] = obj.AddComponent<AudioSource>();
                 obj.transform.parent = this.transform;
             }
@@ -63,7 +61,8 @@ namespace JCW.AudioCtrl
             }
             audioClips.Clear();
         }
-        
+
+        [PunRPC]
         public void PauseResumeBGM()
         {
             if (isPause)
@@ -109,6 +108,7 @@ namespace JCW.AudioCtrl
             return audioClips[clipName];
         }
 
+        [PunRPC]
         // 효과음 재생
         public void PlayEffect(AudioClip audioClip)
         {
@@ -122,6 +122,7 @@ namespace JCW.AudioCtrl
         }
 
         // 배경음 재생
+        [PunRPC]
         public void PlayBGM(string path)
         {
             if (!path.Contains("Sounds/BGM"))

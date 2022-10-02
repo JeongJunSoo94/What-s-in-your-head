@@ -1,11 +1,9 @@
 using System;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using Photon.Pun;
-using Photon.Realtime;
 
 // MonoBehaviourPun : Callback 함수 같은것들을 오버라이드 할 수 없음
 public class PhotonManager : MonoBehaviourPunCallbacks
@@ -150,6 +148,7 @@ public class PhotonManager : MonoBehaviourPunCallbacks
         yield return new WaitForSeconds(0.3f);
 
         PhotonNetwork.Instantiate("Prefabs/JCW/Photon/Player", Vector3.zero, Quaternion.identity);
+        StopCoroutine(nameof(MakeChar));
     }
 
 }

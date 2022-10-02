@@ -57,7 +57,7 @@ namespace JCW.InputBindings
         {
             if (_isActiveKey)
             {
-                _keyState.keyDown = _keyState.keyOn ? false : true;
+                _keyState.keyDown = !_keyState.keyOn;
                 _keyState.keyOn = true;
             }
             else
