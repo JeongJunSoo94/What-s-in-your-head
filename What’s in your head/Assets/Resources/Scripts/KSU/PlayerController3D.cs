@@ -115,7 +115,9 @@ public class PlayerController3D : MonoBehaviour
         if (!photonView.IsMine)
             return;
         CheckState();
-        CheckKeyInput(); // 이건 animator의  fsm으로 한다고 했으나 여기에 모아서 사용해둠(fsm으로 이동 될 것들)
+        InputPause();
+        InputTest();
+        //CheckKeyInput(); // 이건 animator의  fsm으로 한다고 했으나 여기에 모아서 사용해둠(fsm으로 이동 될 것들)
     }
 
     private void FixedUpdate()
@@ -125,12 +127,12 @@ public class PlayerController3D : MonoBehaviour
         Rotation();
         Move();
     }
-    private void CheckState() 
+    private void CheckState()
     {
-        if(characterState.IsGrounded)
+        if (characterState.IsGrounded)
         {
             characterState.CheckGround(_capsuleCollider.radius);
-            if(!characterState.IsGrounded)
+            if (!characterState.IsGrounded)
             {
                 MakeinertiaVec();
             }
@@ -159,7 +161,7 @@ public class PlayerController3D : MonoBehaviour
     }
 
     public void InputRun()
-    {                
+    {
         if (ITT_KeyManager.Instance.GetKeyDown(PlayerAction.ToggleRun))
         {
             characterState.ToggleRun();
@@ -237,7 +239,7 @@ public class PlayerController3D : MonoBehaviour
 
     public void InputMove()
     {
-        moveDir = 
+        moveDir =
           _camera.transform.forward * ((ITT_KeyManager.Instance.GetKey(PlayerAction.MoveForward) ? 1 : 0) + (ITT_KeyManager.Instance.GetKey(PlayerAction.MoveBackward) ? -1 : 0))
         + _camera.transform.right * ((ITT_KeyManager.Instance.GetKey(PlayerAction.MoveRight) ? 1 : 0) + (ITT_KeyManager.Instance.GetKey(PlayerAction.MoveLeft) ? -1 : 0));
         moveDir.y = 0;
@@ -258,7 +260,7 @@ public class PlayerController3D : MonoBehaviour
         if (ITT_KeyManager.Instance.GetKeyDown(PlayerAction.Jump))
         {
             Debug.Log("Space Down");
-            if(characterState.IsGrounded)
+            if (characterState.IsGrounded)
             {
                 Debug.Log("Check IsGrounded");
                 if (!characterState.IsJumping)
@@ -274,7 +276,7 @@ public class PlayerController3D : MonoBehaviour
                 }
             }
 
-            if(!characterState.IsGrounded && !characterState.IsAirJumping)
+            if (!characterState.IsGrounded && !characterState.IsAirJumping)
             {
                 characterState.CheckAirJump();
                 if (characterState.IsAirJumping)
@@ -315,6 +317,15 @@ public class PlayerController3D : MonoBehaviour
             Vector3 forward = Vector3.Slerp(transform.forward, moveDir.normalized, rotationSpeed * Time.fixedDeltaTime / Vector3.Angle(transform.forward, moveDir.normalized));
             forward.y = 0;
             moveDir = forward;
+            transform.LookAt(transform.position + forward);
+        }
+    }
+    public void RotationAim()
+    {
+        if (!characterState.IsDashing && !characterState.IsAirDashing)
+        {
+            Vector3 forward = _camera.transform.forward.normalized;
+            forward.y = 0;
             transform.LookAt(transform.position + forward);
         }
     }

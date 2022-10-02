@@ -4,21 +4,23 @@ using UnityEngine;
 
 public class AimViewMoveSMB : StateMachineBehaviour
 {
-    JJS.PlayerControllerWIYH player;
-    JJS.CharacterController3D cC3D;
+    PlayerController3D player;
+    CharacterState3D cs3d;
     override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        player = animator.transform.gameObject.GetComponent<JJS.PlayerControllerWIYH>();
-        cC3D = animator.transform.gameObject.GetComponent<JJS.CharacterController3D>();
+        player = animator.transform.gameObject.GetComponent<PlayerController3D>();
+        cs3d = animator.transform.gameObject.GetComponent<CharacterState3D>();
     }
 
     override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
+        player.TopViewInputMove();
+        animator.SetFloat("MoveX", player.moveDir.normalized.x * (cs3d.isMove ? 1.0f : 0.0f));
+        animator.SetFloat("MoveZ", player.moveDir.normalized.z * (cs3d.isMove ? 1.0f : 0.0f));
         player.InputMove();
         player.InputRun();
         player.RotationAim();
-
-        animator.SetFloat("MoveX", player.dir.normalized.x* (player.isRun ? 2.0f:1.0f));
-        animator.SetFloat("MoveZ", player.dir.normalized.z * (player.isRun ? 2.0f : 1.0f));
+       
     }
+
 }
