@@ -32,9 +32,9 @@ public class PlayerController3D : MonoBehaviour
     [Tooltip("관성 속력")]
     public float inertiaSpeed = 0f;
     [Tooltip("공기 저항 속력")]
-    public float airDragSpeed = 9.8f;
+    public float airDragSpeed = 1f;
     [Tooltip("공중 이동 속력")]
-    public float airMoveSpeed = 2f;
+    public float airMoveSpeed = 1f;
     #endregion
 
     // 수직 Speed
@@ -46,7 +46,7 @@ public class PlayerController3D : MonoBehaviour
     [Range(-20f, 0f), Tooltip("중력")]
     public float gravity = -9.81f;
     public float curGravity; //지면 이동이나 공중 대시 중에는 0으로 만들어주고 특수한 경우엔 중력값이 변화할 수 있기 때문에
-    [Tooltip("종단속도")]
+    [Range(-20f, -1f), Tooltip("종단속도")]
     public float terminalSpeed;
     #endregion
 
@@ -136,6 +136,13 @@ public class PlayerController3D : MonoBehaviour
         moveDir = 
           _camera.transform.forward * ((ItTakesTwoKeyManager.Instance.GetKey(KeyName.W) ? 1 : 0) + (ItTakesTwoKeyManager.Instance.GetKey(KeyName.S) ? -1 : 0))
         + _camera.transform.right * ((ItTakesTwoKeyManager.Instance.GetKey(KeyName.D) ? 1 : 0) + (ItTakesTwoKeyManager.Instance.GetKey(KeyName.A) ? -1 : 0));
+        moveDir.y = 0;
+        moveDir = moveDir.normalized;
+
+        if (moveDir.magnitude > 0)
+            characterState.isMove = true;
+        else
+            characterState.isMove = false;
     }
     public void TopViewInputMove()
     {
@@ -146,12 +153,20 @@ public class PlayerController3D : MonoBehaviour
     {
         if (ItTakesTwoKeyManager.Instance.GetKeyDown(KeyName.Space))
         {
-            if(characterState.IsGrounded &&!characterState.IsJumping)
+            Debug.Log("Space Down");
+            if(characterState.IsGrounded)
             {
-                characterState.CheckJump();
-                if(characterState.IsJumping)
+                Debug.Log("Check IsGrounded");
+                if (!characterState.IsJumping)
                 {
-                    moveVec.y = jumpSpeed;
+                    Debug.Log("Check not IsJumping");
+                    characterState.CheckJump();
+                    if (characterState.IsJumping)
+                    {
+                        Debug.Log("Get Jump Power");
+                        moveVec.y = jumpSpeed;
+                        return;
+                    }
                 }
             }
 
@@ -199,7 +214,7 @@ public class PlayerController3D : MonoBehaviour
 
     private void Move()
     {
-        if (!characterState.IsGrounded || !characterState.CanJump)
+        if (!characterState.IsGrounded || characterState.IsJumping || !characterState.CanJump)
         {
             if (characterState.IsAirDashing) // 공중대시 중일 때
             {
@@ -212,6 +227,10 @@ public class PlayerController3D : MonoBehaviour
                     inertiaSpeed = 0;
 
                 moveVec = moveDir * airMoveSpeed + inertiaNormalVec * inertiaSpeed + Vector3.up * (moveVec.y + gravity * Time.fixedDeltaTime);
+                if (moveVec.y < terminalSpeed)
+                {
+                    moveVec.y = terminalSpeed;
+                }
             }
         }
         else
@@ -235,7 +254,7 @@ public class PlayerController3D : MonoBehaviour
                 moveVec = moveDir * moveSpeed;
             }
 
-            if (characterState.slopeAngle < 0) // 내리막길 이동시 경사각에 따른 수직속도 보정값
+            if (characterState.isMove && characterState.slopeAngle < 0) // 내리막길 이동시 경사각에 따른 수직속도 보정값
                 moveVec.y = characterState.slopeAngleCofacter * moveSpeed;
         }
 
