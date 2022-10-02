@@ -10,40 +10,52 @@ public class CharacterState3D : MonoBehaviour
     public LayerMask groundLayerMask;
     [Range(0.1f, 10.0f), Tooltip("지면 감지 거리")]
     public float groundCheckDistance = 2.0f;
-    [Range(0.0f, 0.1f), Tooltip("지면 인식 허용 거리")]
-    public float groundCheckThreshold = 0.01f;
+    [Range(0.0f, 1f), Tooltip("지면 인식 허용 거리")]
+    public float groundCheckThreshold = 0.2f;
 
     RaycastHit groundRaycastHit;
+    [Tooltip("캐릭터가 타고 올라갈 수 있는 최대 경사각")]
+    public float maxSlopeAngle = 40f;
+    [Tooltip("캐릭터가 바라보는 방향의 경사각")]
+    public float slopeAngle;
+    [Tooltip("slopeAngle만큼의 Y축 보정 인자")]
+    public float slopeAngleCofacter;
 
-    public float maxSlopeAngle = 40f; // 캐릭터가 타고 올라갈 수 있는 최대 경사각
-    public float slopeAngle; // 캐릭터가 바라보는 방향의 경사각
-    public float slopeAngleCofacter; // slopeAngle만큼의 보정 인자
-
-
-    public bool IsGrounded = false; // 지면 위 상태
+    [Tooltip("지면 위 상태")]
+    public bool IsGrounded = false;
     #endregion
 
     // 수평 이동 변수
     #region
+    [Tooltip("방향키 입력 상태")]
     public bool isMove;
+    [Tooltip("달리기 토글 ON/OFF 상태")]
     public bool isRun;
     #endregion
 
     // 점프 변수
     #region
+    [Tooltip("점프 쿨타임")]
     public float jumpCoolTime = 0.2f;
-
+    [Tooltip("점프 쿨이 돌았을 때 TRUE")]
     public bool CanJump = true;
+    [Tooltip("지면에서 점프한 상태")]
     public bool IsJumping = false;
+    [Tooltip("공중에서 점프한 상태")]
     public bool IsAirJumping = false;
     #endregion
 
     // 대시 변수
     #region
+    [Tooltip("지면에서 대시한 상태")]
     public bool IsDashing = false;
+    [Tooltip("공중에서 대시한 상태")]
     public bool IsAirDashing = false;
+    [Tooltip("공중에서 이전에 대시했던 상태")]
     public bool WasAirDashing = false;
+    [Tooltip("지면 대시 지속 시간")]
     public float dashTime = 1f;
+    [Tooltip("공중 대시 지속 시간")]
     public float airDashTime = 0.5f;
     #endregion
 
@@ -61,8 +73,8 @@ public class CharacterState3D : MonoBehaviour
 
         if (IsGrounded)
         {
-            slopeAngle = Vector3.Angle(groundRaycastHit.normal, transform.forward) - 90f;
-
+            slopeAngle = Vector3.Angle(Vector3.up, groundRaycastHit.normal);
+            Debug.Log("slopeAngle " + slopeAngle);
             if (Mathf.Abs(slopeAngle) >= maxSlopeAngle)
             {
                 IsGrounded = false;
@@ -70,14 +82,19 @@ public class CharacterState3D : MonoBehaviour
             }
             else
             {
-                slopeAngleCofacter = Mathf.Tan(slopeAngle);
-                if((transform.position - groundRaycastHit.point).y <= (groundCheckThreshold + Mathf.Abs(slopeAngleCofacter)))
+                float uSlopeAngleCofacter = Mathf.Tan(slopeAngle * Mathf.PI / 180);
+                float height = (transform.position - groundRaycastHit.point).y;
+
+                if (height <= (groundCheckThreshold + Mathf.Abs(uSlopeAngleCofacter)))
                 {
+                    slopeAngle = Vector3.Angle(transform.forward, groundRaycastHit.normal) - 90f;
+                    slopeAngleCofacter = Mathf.Tan(slopeAngle * Mathf.PI / 180);
                     ResetJump();
                     ResetAirDash();
                 }
                 else
                 {
+                    slopeAngleCofacter = 0f;
                     IsGrounded = false;
                     isRun = false;
                 }
@@ -114,7 +131,6 @@ public class CharacterState3D : MonoBehaviour
     #region
     public void ResetJump()
     {
-        CanJump = true;
         IsJumping = false;
         IsAirJumping = false;
     }
@@ -171,6 +187,7 @@ public class CharacterState3D : MonoBehaviour
         {
             StartCoroutine("StartDashTimer");
             IsAirDashing = true;
+            WasAirDashing = true;
         }
     }
     private IEnumerator StartDashTimer()

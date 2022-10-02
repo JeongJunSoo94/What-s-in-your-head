@@ -47,11 +47,12 @@ public class PlayerController3D : MonoBehaviour
     public float gravity = -9.81f;
     public float curGravity; //지면 이동이나 공중 대시 중에는 0으로 만들어주고 특수한 경우엔 중력값이 변화할 수 있기 때문에
     [Range(-20f, -1f), Tooltip("종단속도")]
-    public float terminalSpeed;
+    public float terminalSpeed = -10f;
     #endregion
 
     // 회전 Speed
     #region
+    [Tooltip("캐릭터 이동시 회전 속도")]
     public float rotationSpeed = 720f;
     #endregion
 
@@ -193,7 +194,7 @@ public class PlayerController3D : MonoBehaviour
                 }
             }
 
-            if (!characterState.IsGrounded && !characterState.IsAirDashing)
+            if (!characterState.IsGrounded && !characterState.WasAirDashing)
             {
                 characterState.CheckAirDash();
                 if (characterState.IsAirDashing)
@@ -206,15 +207,18 @@ public class PlayerController3D : MonoBehaviour
 
     public void Rotation()
     {
-        Vector3 forward = Vector3.Slerp(transform.forward, moveDir.normalized, rotationSpeed * Time.fixedDeltaTime / Vector3.Angle(transform.forward, moveDir.normalized));
-        forward.y = 0;
-        moveDir = forward;
-        transform.LookAt(transform.position + forward);
+        if(!characterState.IsDashing && !characterState.IsAirDashing)
+        {
+            Vector3 forward = Vector3.Slerp(transform.forward, moveDir.normalized, rotationSpeed * Time.fixedDeltaTime / Vector3.Angle(transform.forward, moveDir.normalized));
+            forward.y = 0;
+            moveDir = forward;
+            transform.LookAt(transform.position + forward);
+        }
     }
 
     private void Move()
     {
-        if (!characterState.IsGrounded || characterState.IsJumping || !characterState.CanJump)
+        if (!characterState.IsGrounded || !characterState.CanJump)
         {
             if (characterState.IsAirDashing) // 공중대시 중일 때
             {
@@ -254,7 +258,7 @@ public class PlayerController3D : MonoBehaviour
                 moveVec = moveDir * moveSpeed;
             }
 
-            if (characterState.isMove && characterState.slopeAngle < 0) // 내리막길 이동시 경사각에 따른 수직속도 보정값
+            if (characterState.isMove) // 내리막길 이동시 경사각에 따른 수직속도 보정값
                 moveVec.y = characterState.slopeAngleCofacter * moveSpeed;
         }
 
