@@ -28,6 +28,9 @@ namespace JCW.AudioCtrl
         public static SoundManager instance = null;
         private void Awake()
         {
+            photonView = GetComponent<PhotonView>();
+            //if (!photonView.IsMine)
+            //    Destroy(this.gameObject);
             if (instance==null)
             {
                 instance = this;
@@ -42,7 +45,7 @@ namespace JCW.AudioCtrl
         // Sound 종류에 해당하는 오브젝트들을 만들어주고, 사운드 매니저 오브젝트에 자식으로 달아준다.
         void Start()
         {
-            photonView = GetComponent<PhotonView>();
+            
             string[] soundNames = System.Enum.GetNames(typeof(JCW.AudioCtrl.Sound));
             for (int i = 0 ; i<(int)Sound.End ; ++i)
             {

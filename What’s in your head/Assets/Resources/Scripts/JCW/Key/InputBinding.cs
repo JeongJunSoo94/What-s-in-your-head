@@ -148,9 +148,10 @@ namespace JCW.InputBindings
             Bind(PlayerAction.Interaction, KeyCode.E);
             Bind(PlayerAction.Cancle, KeyCode.Q);
             Bind(PlayerAction.FindPartner, KeyCode.Mouse2);
-            Bind(PlayerAction.Chat, KeyCode.LeftControl);
+            Bind(PlayerAction.Pause, KeyCode.Escape);    
+            
+            Bind(PlayerAction.Chat, KeyCode.Quote);
 
-            Bind(PlayerAction.Pause, KeyCode.Escape);            
         }
 
         public void SaveToFile()

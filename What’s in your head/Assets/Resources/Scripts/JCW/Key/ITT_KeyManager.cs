@@ -1,5 +1,3 @@
-using JCW.InputBindings;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -17,7 +15,7 @@ namespace JCW.InputBindings
             {
                 if (sInstance == null)
                 {
-                    GameObject newGameObject = new("_ITT_KeyManager");
+                    GameObject newGameObject = new("_KeyManager");
                     sInstance = newGameObject.AddComponent<ITT_KeyManager>();
                 }
                 return sInstance;

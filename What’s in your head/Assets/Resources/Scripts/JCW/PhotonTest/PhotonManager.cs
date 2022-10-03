@@ -146,7 +146,8 @@ public class PhotonManager : MonoBehaviourPunCallbacks
     IEnumerator MakeChar()
     {
         yield return new WaitForSeconds(0.3f);
-
+                
+        PhotonNetwork.Instantiate("Prefabs/JCW/SoundManager/SoundManager", Vector3.zero, Quaternion.identity);
         PhotonNetwork.Instantiate("Prefabs/JCW/Photon/Player", Vector3.zero, Quaternion.identity);
         StopCoroutine(nameof(MakeChar));
     }

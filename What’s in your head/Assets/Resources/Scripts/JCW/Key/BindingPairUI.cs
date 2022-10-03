@@ -82,7 +82,7 @@ namespace JCW.InputBindings
                 "Plus" => "+",
                 "Minus" => "-",
                 "BackQuote" => "`",
-                "Colon" => "'",
+                "Quote" => "'",
                 "Semicolon" => ";",
                 "LeftBracket" => "[",
                 "RightBracket" => "]",

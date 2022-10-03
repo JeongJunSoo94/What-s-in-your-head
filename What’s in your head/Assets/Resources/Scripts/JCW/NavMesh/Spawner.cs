@@ -11,6 +11,8 @@ public class Spawner : MonoBehaviour
     Queue<GameObject> monsterQueue;
     /*[HideInInspector]*/   public int spawnCount = 0;
 
+    private Vector3 BasePos;
+
     void Start()
     {
         monsterQueue = new Queue<GameObject>();
@@ -25,9 +27,8 @@ public class Spawner : MonoBehaviour
 
     public void Despawn(GameObject monster)
     {
-        --spawnCount;
-        monster.transform.position = this.transform.position;
-        monster.SetActive(false);
+        --spawnCount;        
+        monster.SetActive(false);        
         monsterQueue.Enqueue(monster);
     }
     IEnumerator Spawn()
@@ -39,11 +40,12 @@ public class Spawner : MonoBehaviour
                 yield return new WaitForSeconds(spawnTime);
                 ++spawnCount;
                 monsterQueue.Dequeue().SetActive(true);
-                
+
             }
             else
                 yield return new WaitUntil(() => spawnCount < count);
         }
 
     }
+
 }

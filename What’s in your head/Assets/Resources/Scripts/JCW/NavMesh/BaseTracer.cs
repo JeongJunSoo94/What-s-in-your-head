@@ -5,32 +5,29 @@ using UnityEngine.AI;
 
 public class BaseTracer : MonoBehaviour
 {
-    private GameObject Base;
+    private Vector3 BasePos;
     private NavMeshAgent agent;
     private Spawner spawner;
 
-    void Start()
+    private void Awake()
     {
         spawner = this.transform.parent.gameObject.GetComponent<Spawner>();
-        agent = GetComponent<NavMeshAgent>();
-        Base = WIYH_Manager.Instance.base_main;
-        agent.SetDestination(Base.transform.position);        
+        agent = GetComponent<NavMeshAgent>();        
     }
-
-    private void FixedUpdate()
+    private void OnEnable()
     {
-        if(isActiveAndEnabled)
-            CalcDistTarget();
+        this.transform.position = this.transform.parent.position;
+        agent.ResetPath();
+        agent.SetDestination(BasePos);
+        BasePos = WIYH_Manager.Instance.base_main.transform.position;
     }
-
-    private void CalcDistTarget()
-    {        
-        if (agent.remainingDistance <= agent.stoppingDistance)
+    private void OnTriggerEnter(Collider other)
+    {
+        if(other.CompareTag("Finish"))
         {
-            Debug.Log("남은 거리 : " + agent.remainingDistance + " / 현 위치 : " + transform.position + " 목표 위치 : " + Base.transform.position);            
+            Debug.Log("도달");            
             spawner.Despawn(this.gameObject);
         }
-        return;
-
     }
+
 }
