@@ -10,10 +10,14 @@ public class CharacterState3D : MonoBehaviour
     public LayerMask groundLayerMask;
     [Range(0.1f, 10.0f), Tooltip("지면 감지 거리")]
     public float groundCheckDistance = 2.0f;
-    [Range(0.0f, 1f), Tooltip("지면 인식 허용 거리")]
-    public float groundCheckThreshold = 0.2f;
+    [Range(0.0f, 1f), Tooltip("지면 인식 허용 최소 거리")]
+    public float groundCheckThresholdMin = 0.1f;
+    [Range(0.0f, 1f), Tooltip("지면 인식 허용 최대 거리")]
+    public float groundCheckThresholdMax = 0.3f;
+    public float height = 0f;
 
     RaycastHit groundRaycastHit;
+    RaycastHit groundHit;
     [Tooltip("캐릭터가 타고 올라갈 수 있는 최대 경사각")]
     public float maxSlopeAngle = 40f;
     [Tooltip("캐릭터가 바라보는 방향의 경사각")]
@@ -69,24 +73,24 @@ public class CharacterState3D : MonoBehaviour
     #region
     public void CheckGround(float sphereRadius)
     {
-        IsGrounded = Physics.SphereCast(transform.position + Vector3.up * sphereRadius, sphereRadius, Vector3.down, out groundRaycastHit, groundCheckDistance, groundLayerMask, QueryTriggerInteraction.Ignore);
+        bool RayCheck = Physics.SphereCast(transform.position + Vector3.up * (sphereRadius + Physics.defaultContactOffset), (sphereRadius - Physics.defaultContactOffset), Vector3.down, out groundRaycastHit, sphereRadius + groundCheckDistance, groundLayerMask, QueryTriggerInteraction.Ignore);
 
-        if (IsGrounded)
+        if (RayCheck)
         {
             slopeAngle = Vector3.Angle(Vector3.up, groundRaycastHit.normal);
-            Debug.Log("slopeAngle " + slopeAngle);
             if (Mathf.Abs(slopeAngle) >= maxSlopeAngle)
             {
                 IsGrounded = false;
                 isRun = false;
+                Debug.Log("경사각 초과");
             }
             else
             {
                 float uSlopeAngleCofacter = Mathf.Tan(slopeAngle * Mathf.PI / 180);
-                float height = (transform.position - groundRaycastHit.point).y;
-
-                if (height <= (groundCheckThreshold + Mathf.Abs(uSlopeAngleCofacter)))
+                height = (transform.position - groundRaycastHit.point).y;
+                if (height <= (groundCheckThresholdMax + Mathf.Abs(uSlopeAngleCofacter)))
                 {
+                    IsGrounded = true;
                     slopeAngle = Vector3.Angle(transform.forward, groundRaycastHit.normal) - 90f;
                     slopeAngleCofacter = Mathf.Tan(slopeAngle * Mathf.PI / 180);
                     ResetJump();
@@ -94,13 +98,67 @@ public class CharacterState3D : MonoBehaviour
                 }
                 else
                 {
+                    Debug.Log("FALSE: " + height + " << 높이, 기준 >> " + (groundCheckThresholdMax + Mathf.Abs(uSlopeAngleCofacter)));
                     slopeAngleCofacter = 0f;
                     IsGrounded = false;
                     isRun = false;
                 }
             }
         }
+        else
+        {
+            IsGrounded = false;
+            Debug.Log("RayCheck 실패");
+        }
     }
+
+    //public void CheckGroundDistance(CapsuleCollider _capsuleCollider)
+    //{
+    //    // radius of the SphereCast
+    //    float radius = _capsuleCollider.radius * 0.9f;
+    //    var dist = 10f;
+    //    float colliderHeight = _capsuleCollider.height;
+    
+    //    // ray for RayCast
+    //    Ray ray2 = new Ray(transform.position + new Vector3(0, colliderHeight / 2, 0), Vector3.down);
+    
+    
+    //    // raycast for check the ground distance
+    //    if (Physics.Raycast(ray2, out groundHit, (colliderHeight / 2) + dist, groundLayerMask) && !groundHit.collider.isTrigger)
+    //        dist = transform.position.y - groundHit.point.y;
+    
+    
+    //    // sphere cast around the base of the capsule to check the ground distance
+    //    if (dist >= groundMinDistance)
+    //    {
+    //        Vector3 pos = transform.position + Vector3.up * (_capsuleCollider.radius);
+    //        Ray ray = new Ray(pos, -Vector3.up);
+    
+    
+    //        if (Physics.SphereCast(ray, radius, out groundHit, _capsuleCollider.radius + groundMaxDistance, groundLayerMask) && !groundHit.collider.isTrigger)
+    //        {
+    //            Physics.Linecast(groundHit.point + (Vector3.up * 0.1f), groundHit.point + Vector3.down * 0.15f, out groundHit, groundLayerMask);
+    //            float newDist = transform.position.y - groundHit.point.y;
+    
+    
+    //            if (dist > newDist) dist = newDist;
+    //        }
+    //    }
+    
+    
+    //    groundDistance = (float)System.Math.Round(dist, 2);
+
+    //    {
+
+    //        Physics.SphereCast(this.transform.position +
+    //            // here, to make the sphere start position higher by this offset
+    //            Vector3.up * (CharCollider.radius + Physics.defaultContactOffset),
+    //            // and here to make the sphere radius lower by this offset
+    //            CharCollider.radius - Physics.defaultContactOffset,
+    //            Vector3.down, out groundHitInfo, maxCheckHeight,
+    //                LayersHelper.LayerExceptEnemiesPlayerAndUI, QueryTriggerInteraction.Ignore);
+    //    }
+    //}
     #endregion
 
     //달리기 함수

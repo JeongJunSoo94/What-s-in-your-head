@@ -114,7 +114,17 @@ public class PlayerController3D : MonoBehaviour
     private void MakeinertiaVec() // 공중 진입 시 생기는 관성벡터
     {
         inertiaSpeed = moveSpeed;
-        inertiaNormalVec = moveDir.normalized;
+        if(characterState.IsDashing)
+        {
+            inertiaNormalVec = moveVec;
+            inertiaNormalVec.y = 0;
+            inertiaNormalVec = inertiaNormalVec.normalized;
+        }
+        else
+        {
+            inertiaNormalVec = moveDir.normalized;
+        }
+        
     }
     private void CheckKeyInput()
     {
@@ -211,8 +221,8 @@ public class PlayerController3D : MonoBehaviour
         {
             Vector3 forward = Vector3.Slerp(transform.forward, moveDir.normalized, rotationSpeed * Time.fixedDeltaTime / Vector3.Angle(transform.forward, moveDir.normalized));
             forward.y = 0;
-            moveDir = forward;
-            transform.LookAt(transform.position + forward);
+            //moveDir = forward;
+            transform.LookAt(transform.position + moveDir);
         }
     }
 
@@ -260,6 +270,9 @@ public class PlayerController3D : MonoBehaviour
 
             if (characterState.isMove) // 내리막길 이동시 경사각에 따른 수직속도 보정값
                 moveVec.y = characterState.slopeAngleCofacter * moveSpeed;
+
+            if (characterState.height <= characterState.groundCheckThresholdMax)
+                moveVec += Vector3.up * (gravity * 10f * Time.fixedDeltaTime);
         }
 
 
