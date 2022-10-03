@@ -165,14 +165,7 @@ public class CharacterState3D : MonoBehaviour
     #region
     public void  ToggleRun()
     {
-        if (isRun)
-        {
-            isRun = false;
-        }
-        else
-        {
-            isRun = true;
-        }
+        isRun = !isRun;
     }
 
     public void CheckMove(Vector3 vel)
