@@ -5,7 +5,7 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace JCW.InputBindings
+namespace JCW.Options.InputBindings
 {
     public class InputBindingManager : MonoBehaviour
     {
@@ -34,7 +34,7 @@ namespace JCW.InputBindings
                 if (sInstance == null)
                 {
                     GameObject newGameObject = new("_InputBindingManager");
-                    sInstance = newGameObject.AddComponent<InputBindingManager>();
+                    sInstance = newGameObject.AddComponent<InputBindingManager>();                    
                 }
                 return sInstance;
             }
@@ -49,39 +49,6 @@ namespace JCW.InputBindings
             LoadBindingUI();
         }
 
-        private void Update()
-        {
-            if (_isListening)
-            {
-                if (ListenInput(out var keyCode))
-                {
-                    SetKeyBinding(_curKeyAction, keyCode);
-                    _isListening = false;
-                }
-            }
-
-            _waitingInputScreen.SetActive(_isListening);
-        }
-
-
-        private bool ListenInput(out KeyCode code)
-        {
-            IEnumerable<KeyCode> keyCodeList =
-                Enum.GetValues(typeof(KeyCode)).Cast<KeyCode>();
-
-            foreach (var curCode in keyCodeList)
-            {
-                if (Input.GetKeyDown(curCode))
-                {
-                    code = curCode;
-                    return true;
-                }
-            }
-
-            code = KeyCode.None;
-            return false;
-        }
-
         private void Init()
         {
             _isListening = false;
@@ -93,7 +60,7 @@ namespace JCW.InputBindings
 
         private void InitButtonListeners()
         {
-            _saveButton.onClick.AddListener(() => {_binding.SaveToFile();});
+            _saveButton.onClick.AddListener(() => {_binding.SaveToFile();});            
             _backButton.onClick.AddListener(() => 
             { 
                 // 뒤로가기 시, 파일에서 다시 로드 후 세팅.
@@ -116,13 +83,44 @@ namespace JCW.InputBindings
         {
             if (_binding.LoadFromFile() == false)
             {
-                if (!Directory.Exists(Application.dataPath + "/Resources/KeyInfo/"))
-                    Directory.CreateDirectory(Application.dataPath + "/Resources/KeyInfo/");
+                if (!Directory.Exists(Application.dataPath + "/Resources/Options/"))
+                    Directory.CreateDirectory(Application.dataPath + "/Resources/Options/");
                 _binding.ResetAll();
                 _binding.SaveToFile();
                 ITT_KeyManager.Instance.KeySet(_binding);
             }
         }
+        private void Update()
+        {
+            if (_isListening)
+            {
+                if (ListenInput(out var keyCode))
+                {
+                    SetKeyBinding(_curKeyAction, keyCode);
+                    _isListening = false;
+                }
+            }
+            _waitingInputScreen.SetActive(_isListening);
+        }
+
+
+        private bool ListenInput(out KeyCode code)
+        {
+            IEnumerable<KeyCode> keyCodeList =
+                Enum.GetValues(typeof(KeyCode)).Cast<KeyCode>();
+
+            foreach (var curCode in keyCodeList)
+            {
+                if (Input.GetKeyDown(curCode))
+                {
+                    code = curCode;
+                    return true;
+                }
+            }
+            code = KeyCode.None;
+            return false;
+        }
+
 
         private void LoadBindingUI()
         {
@@ -139,7 +137,18 @@ namespace JCW.InputBindings
 
             foreach (var pair in _binding.Bindings)
             {
+                // Pause나 채팅키의 경우 숨기기
+                if (pair.Key == PlayerAction.Pause || pair.Key == PlayerAction.Chat)
+                    continue;
                 var pairGo = Instantiate(_bindingPairPrefab, _verticalLayoutTr);
+
+                // 마우스 왼쪽 / 오른쪽의 경우, 클릭 못하게 막기.
+                if(pair.Key == PlayerAction.Fire || pair.Key == PlayerAction.Aim)
+                {
+                    GameObject _buttonObj = pairGo.transform.GetChild(1).gameObject;
+                    //_buttonObj.GetComponent<Button>().interactable = false;
+                    _buttonObj.GetComponent<Image>().color = new Color(0, 0, 0, 255);
+                }
 
                 // 스크립트 가져오기
                 var pairUI = pairGo.GetComponent<BindingPairUI>();
@@ -147,7 +156,8 @@ namespace JCW.InputBindings
                 pairUI.InitLabels($"{pair.Key}", $"{pair.Value.keyCode}");
                 pairUI.AddButtonListener(() =>
                 {
-                    _isListening = true;
+                    if (pair.Key != PlayerAction.Fire && pair.Key != PlayerAction.Aim)
+                        _isListening = true;
                     _curKeyAction = pair.Key;
                 });
 
@@ -170,7 +180,17 @@ namespace JCW.InputBindings
         // 키 수정
         private void SetKeyBinding(PlayerAction action, KeyCode code)
         {
-            _binding.Bind(action, code);
+            switch(action)
+            {
+                case PlayerAction.Fire:
+                case PlayerAction.Aim:
+                case PlayerAction.Chat:
+                case PlayerAction.Pause:
+                    break;
+                default:
+                    _binding.Bind(action, code);
+                    break;
+            }            
             RefreshAllBindingUIs();
         }
 
@@ -179,8 +199,9 @@ namespace JCW.InputBindings
         {
             foreach (var pair in _binding.Bindings)
             {
-                _bindingKeyScripts[pair.Key].SetCodeLabel($"{pair.Value.keyCode}");
-                
+                if (pair.Key == PlayerAction.Pause || pair.Key == PlayerAction.Chat)
+                    continue;
+                _bindingKeyScripts[pair.Key].SetCodeLabel($"{pair.Value.keyCode}");                
             }
         }
 

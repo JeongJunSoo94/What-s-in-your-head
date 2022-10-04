@@ -1,14 +1,31 @@
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Events;
+using UnityEngine.EventSystems;
 
-namespace JCW.InputBindings
+namespace JCW.Options.InputBindings
 {
-    public class BindingPairUI : MonoBehaviour
+    public class BindingPairUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
     {
         public Text actionLabel;
         public Text codeLabel;
         public Button codeButton;
+
+        private Image highlight;
+
+        private readonly List<Color> BlackWhite = new();
+        private readonly List<Color> visInvis = new();
+
+        private void Awake()
+        {
+            BlackWhite.Add(new Color(0, 0, 0, 1));
+            BlackWhite.Add(new Color(1, 1, 1, 1));
+            visInvis.Add(new Color(1, 1, 1, 1));
+            visInvis.Add(new Color(1, 1, 1, 0));
+
+            highlight = gameObject.GetComponent<Image>();
+        }
 
         public void InitLabels(string actionText, string codeText)
         {
@@ -36,13 +53,10 @@ namespace JCW.InputBindings
                 "MoveRight" => "오른쪽으로 이동",
                 "Jump" => "점프",
                 "Dash" => "대시",
-                "Swing" => "스윙 / 글라인드 그래플",
-                "ToggleRun" => "질주 전환",
-                "Fire" => "기본 능력 / 발사",
-                "Aim" => "보조 능력 / 조준",
+                "ToggleRun" => "달리기 전환",
+                "Fire" => "능력 1",
+                "Aim" => "능력 2",
                 "Interaction" => "상호 작용",
-                "Cancle" => "취소",
-                "FindPartner" => "다른 플레이어 찾기",
                 "Chat" => "채팅창 열기 / 닫기",
                 "Pause" => "일시정지 / 옵션",
                 _ => actionText,
@@ -55,6 +69,7 @@ namespace JCW.InputBindings
             {
                 "None" => "",
                 "Return" => "Enter",
+                "CapsLock" => "Caps Lock",
                 "Comma" => ",",
                 "Period" => ".",
                 "Slash" => "/",
@@ -83,9 +98,9 @@ namespace JCW.InputBindings
                 "RightControl" => "오른쪽 Ctrl",
                 "LeftAlt" => "왼쪽 ALT",
                 "RightAlt" => "오른쪽 ALT",
-                "Mouse0" => "마우스 왼쪽 버튼",
-                "Mouse1" => "마우스 오른쪽 버튼",
-                "Mouse2" => "마우스 중앙 버튼",
+                "Mouse0" => "마우스 좌클릭",
+                "Mouse1" => "마우스 우클릭",
+                "Mouse2" => "마우스 휠 버튼",
                 "Escape" => "Esc",
                 "LeftArrow" => "←",
                 "RightArrow" => "→",
@@ -94,6 +109,18 @@ namespace JCW.InputBindings
                 _ => codeText,
             };
             return convertText;
+        }
+
+        public void OnPointerEnter(PointerEventData eventData)
+        {
+            highlight.color = visInvis[0];
+            actionLabel.color = BlackWhite[1];
+        }
+
+        public void OnPointerExit(PointerEventData eventData)
+        {
+            highlight.color = visInvis[1];
+            actionLabel.color = BlackWhite[0];
         }
     }
 }

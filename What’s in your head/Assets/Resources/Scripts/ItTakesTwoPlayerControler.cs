@@ -1,4 +1,4 @@
-using JCW.InputBindings;
+using JCW.Options.InputBindings;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -34,7 +34,7 @@ public class ItTakesTwoPlayerControler : MonoBehaviour
     public int jumpcount = 0;
     public int dashcount = 0;
 
-    private int life = 3;
+    private readonly int life = 3;
     public int CPcount = 0;
 
     PhotonView photonView;

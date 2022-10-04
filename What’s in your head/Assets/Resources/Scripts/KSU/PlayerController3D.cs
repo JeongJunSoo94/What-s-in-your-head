@@ -2,7 +2,7 @@ using System.Collections;
 using System.IO;
 using System.Collections.Generic;
 using UnityEngine;
-using JCW.InputBindings;
+using JCW.Options.InputBindings;
 using Photon.Pun;
 using JCW.AudioCtrl;
 using Cinemachine;
@@ -16,7 +16,7 @@ public class PlayerController3D : MonoBehaviour
 
     // 유니티 제공 Components
     #region
-    Animator _animator;
+    //Animator _animator;
     CapsuleCollider _capsuleCollider;
     Camera _camera;
     Rigidbody _rigidbody;
@@ -85,7 +85,7 @@ public class PlayerController3D : MonoBehaviour
     void Awake()
     {
         characterState = GetComponent<CharacterState3D>();
-        _animator = GetComponent<Animator>();
+        //_animator = GetComponent<Animator>();
         _capsuleCollider = GetComponent<CapsuleCollider>();
         _rigidbody = GetComponent<Rigidbody>();
         //_camera = Camera.main;

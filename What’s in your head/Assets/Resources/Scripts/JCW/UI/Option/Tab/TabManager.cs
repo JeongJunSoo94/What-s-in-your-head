@@ -3,9 +3,8 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class TabManager : MonoBehaviour, IPointerEnterHandler
+public class TabManager : MonoBehaviour//, IPointerEnterHandler
 {
-    //private readonly List<GameObject> tabs = new();
     private readonly Dictionary<GameObject, Button> tabs = new();
     public static TabManager Instance = null;
     private void Awake()
@@ -46,8 +45,8 @@ public class TabManager : MonoBehaviour, IPointerEnterHandler
         }       
     }
 
-    public void OnPointerEnter(PointerEventData eventData)
-    {
-        Debug.Log(eventData.pointerEnter);
-    }
+    //public void OnPointerEnter(PointerEventData eventData)
+    //{
+    //    Debug.Log(eventData.pointerEnter);
+    //}
 }
