@@ -82,7 +82,6 @@ public class CharacterState3D : MonoBehaviour
             {
                 IsGrounded = false;
                 isRun = false;
-                Debug.Log("경사각 초과");
             }
             else
             {
@@ -98,7 +97,6 @@ public class CharacterState3D : MonoBehaviour
                 }
                 else
                 {
-                    Debug.Log("FALSE: " + height + " << 높이, 기준 >> " + (groundCheckThresholdMax + Mathf.Abs(uSlopeAngleCofacter)));
                     slopeAngleCofacter = 0f;
                     IsGrounded = false;
                     isRun = false;
@@ -108,7 +106,6 @@ public class CharacterState3D : MonoBehaviour
         else
         {
             IsGrounded = false;
-            Debug.Log("RayCheck 실패");
         }
     }
 
