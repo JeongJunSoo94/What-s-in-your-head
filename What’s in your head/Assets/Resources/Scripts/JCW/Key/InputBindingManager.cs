@@ -147,7 +147,6 @@ namespace JCW.InputBindings
                 pairUI.InitLabels($"{pair.Key}", $"{pair.Value.keyCode}");
                 pairUI.AddButtonListener(() =>
                 {
-                    pairUI.Select();
                     _isListening = true;
                     _curKeyAction = pair.Key;
                 });
@@ -181,7 +180,7 @@ namespace JCW.InputBindings
             foreach (var pair in _binding.Bindings)
             {
                 _bindingKeyScripts[pair.Key].SetCodeLabel($"{pair.Value.keyCode}");
-                _bindingKeyScripts[pair.Key].Deselect();
+                
             }
         }
 

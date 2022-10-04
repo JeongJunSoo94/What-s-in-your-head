@@ -6,29 +6,9 @@ namespace JCW.InputBindings
 {
     public class BindingPairUI : MonoBehaviour
     {
-        public bool selected = false;
-
         public Text actionLabel;
         public Text codeLabel;
         public Button codeButton;
-        private Image buttonImage;
-
-        private void Start()
-        {
-            buttonImage = codeButton.image;
-        }
-
-        public void Select()
-        {
-            selected = true;
-            buttonImage.color = Color.green;
-        }
-
-        public void Deselect()
-        {
-            selected = false;
-            buttonImage.color = Color.white;
-        }
 
         public void InitLabels(string actionText, string codeText)
         {
