@@ -5,13 +5,11 @@ using UnityEngine;
 public class NormalViewSMB : StateMachineBehaviour
 {
     PlayerController3D player;
-    CharacterState3D cs3d;
     override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
         player = animator.transform.gameObject.GetComponent<PlayerController3D>();
-        cs3d = animator.transform.gameObject.GetComponent<CharacterState3D>();
-        cs3d.IsJumping = false;
-        animator.SetBool("isAirJump", false);
+        animator.SetBool("wasAirJump", false);
+
     }
 
     override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
@@ -20,37 +18,34 @@ public class NormalViewSMB : StateMachineBehaviour
         player.InputMove();
         player.InputJump();
         player.InputDash();
+        player.playerMouse.CheckLeftClick();
+        player.playerMouse.CheckRightClick();
         check(animator);
     }
     void check(Animator animator)
     {
-        animator.SetFloat("HorizonVelocity", (cs3d.isMove ? (cs3d.isRun ? 1.0f : 0.5f) : 0.0f));
-        if (!cs3d.IsGrounded)
+        animator.SetFloat("HorizonVelocity", (player.characterState.isMove ? (player.characterState.isRun ? 1.0f : 0.5f) : 0.0f));
+
+        if (!player.characterState.IsGrounded)
         {
             animator.SetBool("isAir", true);
+            if (!player.characterState.IsJumping)
+            {
+                animator.SetTrigger("JumpDown");
+                return;
+            }
         }
         else
         {
             animator.SetBool("isAir", false);
         }
-        if (!cs3d.isMove)
-        {
-            cs3d.isRun = false;
-        }
-        if (cs3d.IsJumping)
-        {
-            animator.SetBool("isJump", true);
-            return;
-        }
-        else
-        {
-            animator.SetBool("isJump", false);
-        }
 
-        if (cs3d.IsDashing)
+        if (!player.characterState.isMove)
         {
-            animator.SetBool("isDash", true);
-            return;
+            player.characterState.isRun = false;
         }
+        animator.SetBool("isJump", player.characterState.IsJumping);
+        animator.SetBool("isDash", player.characterState.IsDashing);
+        player.playerMouse.ableToLeft = true;
     }
 }

@@ -26,6 +26,9 @@ namespace JCW.AudioCtrl
         public static SoundManager instance = null;
         private void Awake()
         {
+            PhotonView photonView = GetComponent<PhotonView>();
+            if (!photonView.IsMine)
+                Destroy(this.gameObject);
             if (instance==null)
             {
                 instance = this;

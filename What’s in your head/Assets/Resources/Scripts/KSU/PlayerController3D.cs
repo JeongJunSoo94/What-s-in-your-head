@@ -10,7 +10,8 @@ public class PlayerController3D : MonoBehaviour
 {
     //  Scripts Components
     #region
-    CharacterState3D characterState;
+    public CharacterState3D characterState;
+    public PlayerMouseController playerMouse;
     #endregion
 
     // 유니티 제공 Components
@@ -54,7 +55,7 @@ public class PlayerController3D : MonoBehaviour
     public float airJumpSpeed = 6f;
     [Range(-20f, 0f), Tooltip("중력")]
     public float gravity = -9.81f;
-    public float curGravity; //지면 이동이나 공중 대시 중에는 0으로 만들어주고 특수한 경우엔 중력값이 변화할 수 있기 때문에
+    public float gravityCofactor = 0.8f; 
     [Range(-20f, -1f), Tooltip("종단속도")]
     public float terminalSpeed = -10f;
     #endregion
@@ -88,6 +89,7 @@ public class PlayerController3D : MonoBehaviour
         _animator = GetComponent<Animator>();
         _capsuleCollider = GetComponent<CapsuleCollider>();
         _rigidbody = GetComponent<Rigidbody>();
+        playerMouse = GetComponent<PlayerMouseController>();
         //_camera = Camera.main;
     }
     // Start is called before the first frame update
@@ -107,6 +109,7 @@ public class PlayerController3D : MonoBehaviour
             WIYH_Manager.Instance.player1 = this.gameObject;
         else if (WIYH_Manager.Instance.player2 == null)
             WIYH_Manager.Instance.player2 = this.gameObject;
+        ITT_KeyManager.Instance.GetKeyDown(PlayerAction.MoveBackward);
     }
 
     // Update is called once per frame
@@ -159,6 +162,8 @@ public class PlayerController3D : MonoBehaviour
         InputChat();
         InputTest();
     }
+
+
 
     public void InputRun()
     {
@@ -259,24 +264,39 @@ public class PlayerController3D : MonoBehaviour
     {
         if (ITT_KeyManager.Instance.GetKeyDown(PlayerAction.Jump))
         {
-            Debug.Log("Space Down");
-            if (characterState.IsGrounded)
+            //if (characterState.IsGrounded)
+            //{
+            //    if (!characterState.IsJumping)
+            //    {
+            //        characterState.CheckJump();
+            //        if (characterState.IsJumping)
+            //        {
+            //            moveVec.y = jumpSpeed;
+            //            return;
+            //        }
+            //    }
+            //}
+
+            if (!characterState.IsJumping)
             {
-                Debug.Log("Check IsGrounded");
-                if (!characterState.IsJumping)
+                characterState.CheckJump();
+                if (characterState.IsJumping)
                 {
-                    Debug.Log("Check not IsJumping");
-                    characterState.CheckJump();
-                    if (characterState.IsJumping)
-                    {
-                        Debug.Log("Get Jump Power");
-                        moveVec.y = jumpSpeed;
-                        return;
-                    }
+                    moveVec.y = jumpSpeed;
+                    return;
                 }
             }
 
-            if (!characterState.IsGrounded && !characterState.IsAirJumping)
+            //if (!characterState.IsGrounded && !characterState.IsAirJumping)
+            //{
+            //    characterState.CheckAirJump();
+            //    if (characterState.IsAirJumping)
+            //    {
+            //        moveVec.y = airJumpSpeed;
+            //    }
+            //}
+
+            if (!characterState.IsAirJumping)
             {
                 characterState.CheckAirJump();
                 if (characterState.IsAirJumping)
@@ -290,22 +310,24 @@ public class PlayerController3D : MonoBehaviour
     {
         if (ITT_KeyManager.Instance.GetKeyDown(PlayerAction.Dash))
         {
-            if (characterState.IsGrounded && !characterState.IsDashing)
+            //if (characterState.IsGrounded && !characterState.IsDashing)
+            //{
+            //    characterState.CheckDash();
+            //}
+
+            //if (!characterState.IsGrounded && !characterState.WasAirDashing)
+            //{
+            //    characterState.CheckAirDash();
+            //}
+
+            if (!characterState.IsDashing)
             {
                 characterState.CheckDash();
-                if (characterState.IsDashing)
-                {
-                    moveVec.y = jumpSpeed;
-                }
             }
 
-            if (!characterState.IsGrounded && !characterState.WasAirDashing)
+            if (!characterState.WasAirDashing)
             {
                 characterState.CheckAirDash();
-                if (characterState.IsAirDashing)
-                {
-                    moveVec.y = airJumpSpeed;
-                }
             }
         }
     }
@@ -374,8 +396,10 @@ public class PlayerController3D : MonoBehaviour
 
             if (characterState.isMove) // 내리막길 이동시 경사각에 따른 수직속도 보정값
                 moveVec.y = characterState.slopeAngleCofacter * moveSpeed;
-        }
 
+            if(characterState.height >= characterState.groundCheckThresholdMin)
+                moveVec += Vector3.up * (gravity* gravityCofactor * Time.fixedDeltaTime);
+        }
 
         _rigidbody.velocity = moveVec;
     }
