@@ -25,6 +25,7 @@ public class Discovery3D : MonoBehaviour
 
     public bool gizmoOn;
 
+    public bool targetOn;
     // Start is called before the first frame update
     void Start()
     {
@@ -34,7 +35,14 @@ public class Discovery3D : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        DiscoveryTargetBool3D();
+        if (DiscoveryTargetBool3D())
+        {
+            targetOn=true;
+        }
+        else
+        { 
+            targetOn = false;
+        }
     }
     void OnDrawGizmos()
     {   

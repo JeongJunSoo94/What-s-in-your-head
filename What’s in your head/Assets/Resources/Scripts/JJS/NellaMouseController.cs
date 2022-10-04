@@ -4,9 +4,11 @@ using UnityEngine;
 using JCW.InputBindings;
 public class NellaMouseController : PlayerMouseController
 {
-    public List<GameObject> hitObj;
-    private void Start()
+    public List<Discovery3D> hitObjs;
+
+    private void Update()
     {
+        TargetUpdate();
     }
 
     public override void CheckLeftClick()
@@ -59,17 +61,34 @@ public class NellaMouseController : PlayerMouseController
 
     public void OnEnableObject(int index)
     {
-        hitObj[index].SetActive(true);
+        hitObjs[index].gameObject.SetActive(true);
     }
 
     public void OnDisableObject(int index)
     {
-        hitObj[index].SetActive(false);
+        hitObjs[index].gameObject.SetActive(false);
     }
 
 
     public void AttackTime()
     {
-        ableToLeft= !ableToLeft;
+        ableToLeft = !ableToLeft;
+    }
+
+    void TargetUpdate()
+    {
+        for (int i = 0; i < hitObjs.Count; i++)
+        {
+            if (hitObjs[i].gameObject.activeSelf)
+            {
+                if (hitObjs[i].targetOn)
+                {
+                    for (int j = 0; j < hitObjs[i].HitColliders.Length; j++)
+                    {
+                        hitObjs[i].HitColliders[j].gameObject.SetActive(false);
+                    }
+                }
+            }
+        }
     }
 }
