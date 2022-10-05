@@ -5,11 +5,12 @@ using UnityEngine;
 public class NormalViewSMB : StateMachineBehaviour
 {
     PlayerController3D player;
+    
+
     override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
         player = animator.transform.gameObject.GetComponent<PlayerController3D>();
         animator.SetBool("wasAirJump", false);
-
     }
 
     override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)

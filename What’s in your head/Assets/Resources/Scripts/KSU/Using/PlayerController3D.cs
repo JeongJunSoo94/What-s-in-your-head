@@ -11,8 +11,8 @@ public class PlayerController3D : MonoBehaviour
 {
     //  Scripts Components
     #region    
-    [HideInInspector] public CharacterState3D characterState;
-    [HideInInspector] public PlayerMouseController playerMouse;
+    public CharacterState3D characterState;
+    public PlayerMouseController playerMouse;
     #endregion
 
     // 유니티 제공 Components
