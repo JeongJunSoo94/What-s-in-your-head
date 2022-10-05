@@ -2,50 +2,53 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Spawner : MonoBehaviour
+namespace JCW.Spawner
 {
-    [SerializeField] [Header("스폰 시간")] [Range(0.0f,10.0f)] private float spawnTime = 2.5f;
-    [SerializeField] [Header("스폰할 몬스터")] private GameObject tracer = null;
-    [SerializeField] [Header("최대 몬스터 수")] [Range(0,50)] private int count = 20;
-
-    Queue<GameObject> monsterQueue;
-    /*[HideInInspector]*/   public int spawnCount = 0;
-
-    private Vector3 BasePos;
-
-    void Start()
+    public class Spawner : MonoBehaviour
     {
-        monsterQueue = new Queue<GameObject>();
-        for (int i = 0 ; i<count ; ++i)
+        [SerializeField] [Header("스폰 시간")] [Range(0.0f, 10.0f)] private float spawnTime = 2.5f;
+        [SerializeField] [Header("스폰할 오브젝트")] private GameObject obj = null;
+        [SerializeField] [Header("최대 오브젝트 수")] [Range(0, 50)] private int count = 20;
+
+        Queue<GameObject> objQueue;
+        /*[HideInInspector]*/
+        public int spawnCount = 0;
+
+        private Vector3 BasePos;
+
+        void Start()
         {
-            GameObject spawned = Instantiate(tracer, this.transform);
-            spawned.SetActive(false);
-            monsterQueue.Enqueue(spawned);
-        }
-        StartCoroutine(nameof(Spawn));
-    }
-
-    public void Despawn(GameObject monster)
-    {
-        --spawnCount;        
-        monster.SetActive(false);        
-        monsterQueue.Enqueue(monster);
-    }
-    IEnumerator Spawn()
-    {
-        while (true)
-        {
-            if (spawnCount < count)
+            objQueue = new Queue<GameObject>();
+            for (int i = 0 ; i < count ; ++i)
             {
-                yield return new WaitForSeconds(spawnTime);
-                ++spawnCount;
-                monsterQueue.Dequeue().SetActive(true);
-
+                GameObject spawned = Instantiate(obj, this.transform);
+                spawned.SetActive(false);
+                objQueue.Enqueue(spawned);
             }
-            else
-                yield return new WaitUntil(() => spawnCount < count);
+            StartCoroutine(nameof(Spawn));
         }
 
-    }
+        public void Despawn(GameObject spawnObj)
+        {
+            --spawnCount;
+            spawnObj.SetActive(false);
+            objQueue.Enqueue(spawnObj);
+        }
+        IEnumerator Spawn()
+        {
+            while (true)
+            {
+                if (spawnCount < count)
+                {
+                    yield return new WaitForSeconds(spawnTime);
+                    ++spawnCount;
+                    objQueue.Dequeue().SetActive(true);
 
+                }
+                else
+                    yield return new WaitUntil(() => spawnCount < count);
+            }
+        }
+    }
 }
+

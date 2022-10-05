@@ -32,10 +32,33 @@ public class SelectFunc : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
         BlackWhite.Add(new Color(1, 1, 1, 1));
         visInvis.Add(new Color(1, 1, 1, 1));
         visInvis.Add(new Color(1, 1, 1, 0));
+
+        thisImg = this.gameObject.GetComponent<Image>();
+        thisImg.color = visInvis[1];
+
+        titleName = gameObject.transform.GetChild(0).gameObject.GetComponent<Text>();
+        leftButton = gameObject.transform.GetChild(1).gameObject.GetComponent<Button>();
+
+        rightButton = gameObject.transform.GetChild(3).gameObject.GetComponent<Button>();
     }
 
     private void OnEnable()
     {
+        if(funcTexts.Count > 1)
+        {
+            if (index == 0)
+            {
+                leftButton.interactable = false;
+                rightButton.interactable = true;
+            }
+            else if (index == funcTexts.Count - 1)
+            {
+                leftButton.interactable = true;
+                rightButton.interactable = false;
+            }
+        }
+        
+
         if (funcTexts.Count != 0 && func != null)
         {
             for (int i=0 ; i<funcTexts.Count ; ++i)
@@ -51,16 +74,7 @@ public class SelectFunc : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
 
 
     void Start()
-    {
-        thisImg = this.gameObject.GetComponent<Image>();
-        thisImg.color = visInvis[1];
-
-        titleName = gameObject.transform.GetChild(0).gameObject.GetComponent<Text>();
-        leftButton = gameObject.transform.GetChild(1).gameObject.GetComponent<Button>();
-        
-        rightButton = gameObject.transform.GetChild(3).gameObject.GetComponent<Button>();
-
-        
+    {   
         // 슬라이더가 아닐 때
         if (funcTexts.Count != 0)
         {

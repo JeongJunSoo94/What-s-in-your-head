@@ -120,10 +120,10 @@ namespace JCW.Options
             setValue.data.Clear();
         }
 
-        private void LoadFromFile()
+        private void LoadFromFile(bool init = false)
         {
-
-            if (!File.Exists(Application.dataPath + "/Resources/Options/OptionValues.json"))
+            string file = init ? "/Resources/Options/OptionValuesInit.json" : "/Resources/Options/OptionValues.json";
+            if (!File.Exists(Application.dataPath + file))
             {
                 Debug.Log("옵션 세팅값 불러오기 실패. 초기 데이터 저장");
                 SaveToFile(true);
@@ -132,7 +132,7 @@ namespace JCW.Options
             else
                 Debug.Log("옵션 세팅값 불러오기 성공");
 
-            string jsonString = File.ReadAllText(Application.dataPath + "/Resources/Options/OptionValues.json");
+            string jsonString = File.ReadAllText(Application.dataPath + file);
             
 
             setValue = new SerializableDatas();
@@ -156,14 +156,9 @@ namespace JCW.Options
                 {
                     GameObject funcObj = Setting.transform.GetChild(2).gameObject;
                     if (funcObj.name == "Function" && _value.data[index].isSlider == false)
-                    {
                         funcObj.GetComponent<Text>().text = int.Parse(_value.data[index].value) == 0 ? "끄기" : "켜기";
-                    }
                     else if (funcObj.name == "Slider" && _value.data[index].isSlider == true)
-                    {
-                        Debug.Log(_value.data[index].value);
                         funcObj.GetComponent<Slider>().value = float.Parse(_value.data[index].value);
-                    }
                     else
                         Debug.Log("에러에러에러");
 
