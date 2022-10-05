@@ -147,7 +147,9 @@ public class PlayerController3D : MonoBehaviour
     private void MakeinertiaVec() // 공중 진입 시 생기는 관성벡터
     {
         inertiaSpeed = moveSpeed;
-        inertiaNormalVec = moveDir.normalized;
+        inertiaNormalVec = _rigidbody.velocity;
+        inertiaNormalVec.y = 0;
+        inertiaNormalVec = inertiaNormalVec.normalized;
     }
     private void CheckKeyInput()
     {
@@ -231,7 +233,9 @@ public class PlayerController3D : MonoBehaviour
         if (moveDir.magnitude > 0)
             characterState.isMove = true;
         else
+        {
             characterState.isMove = false;
+        }
     }
 
     public void MoveStop()
@@ -368,11 +372,21 @@ public class PlayerController3D : MonoBehaviour
             {
                 if (characterState.isRun) // 달릴 때
                 {
-                    moveSpeed = runSpeed;
+                    moveSpeed += runSpeed * Time.fixedDeltaTime * 20f;
+                    if (moveSpeed > runSpeed)
+                        moveSpeed = runSpeed;
                 }
-                else // 달리기 중이 아닐 때
+                else if(characterState.isMove)// 달리기 중이 아닐 때
                 {
-                    moveSpeed = walkSpeed;
+                    moveSpeed += walkSpeed * Time.fixedDeltaTime * 20f;
+                    if (moveSpeed > walkSpeed)
+                        moveSpeed = walkSpeed;
+                }
+                else
+                {
+                    moveSpeed -= walkSpeed * Time.fixedDeltaTime;
+                    if (moveSpeed < 0)
+                        moveSpeed = 0f;
                 }
 
                 moveVec = moveDir * moveSpeed;
