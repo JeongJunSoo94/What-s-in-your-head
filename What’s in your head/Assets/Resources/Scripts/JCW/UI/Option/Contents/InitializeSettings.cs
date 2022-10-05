@@ -13,17 +13,13 @@ namespace JCW.Options
 
         private void Awake()
         {
+            
             initializeButton = this.gameObject.GetComponent<Button>();
-        }
-
-        void Start()
-        {
             initializeButton.onClick.AddListener(() =>
             {
                 InitializeValue();
             });
         }
-
 
         void InitializeValue()
         {
