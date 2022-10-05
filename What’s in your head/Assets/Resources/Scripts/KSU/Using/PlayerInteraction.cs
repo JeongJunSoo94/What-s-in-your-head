@@ -110,15 +110,15 @@ public class PlayerInteraction : MonoBehaviour
     //    //}
     //}
 
-    private void OnTriggerStay(Collider other)
-    {
-        if(other.tag == "RopeTrriger")
-        {
-            float distance = Vector3.Distance(other.transform.position, transform.position);
-            if(distance <= other.GetComponentInChildren<RopeAction>().detectingRange)
-            {
+    //private void OnTriggerStay(Collider other)
+    //{
+    //    if(other.tag == "RopeTrriger")
+    //    {
+    //        float distance = Vector3.Distance(other.transform.position, transform.position);
+    //        if(distance <= other.GetComponentInChildren<RopeAction>().detectingRange)
+    //        {
                 
-            }
-        }
-    }
+    //        }
+    //    }
+    //}
 }

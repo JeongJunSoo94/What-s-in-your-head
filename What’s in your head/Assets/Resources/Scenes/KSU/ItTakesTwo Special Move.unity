@@ -934,7 +934,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 297569681}
-  m_LocalRotation: {x: 0.28370404, y: 0.000000023333682, z: -0.0000000069035124, w: 0.9589119}
+  m_LocalRotation: {x: 0.28370404, y: -0.000000023333678, z: 0.0000000069035107, w: 0.9589119}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -2410,7 +2410,6 @@ GameObject:
   - component: {fileID: 576966031}
   - component: {fileID: 576966035}
   - component: {fileID: 576966034}
-  - component: {fileID: 576966033}
   - component: {fileID: 576966032}
   m_Layer: 0
   m_Name: Main Camera
@@ -2426,7 +2425,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 576966030}
-  m_LocalRotation: {x: 0.2837041, y: 0.000000036893788, z: -0.000000010915412, w: 0.95891196}
+  m_LocalRotation: {x: 0.2837041, y: -0.000000036893788, z: 0.000000010915412, w: 0.95891196}
   m_LocalPosition: {x: -5.81, y: 3.3, z: -3}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -2468,18 +2467,6 @@ MonoBehaviour:
   m_CameraActivatedEvent:
     m_PersistentCalls:
       m_Calls: []
---- !u!114 &576966033
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 576966030}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a79441f348de89743a2939f4d699eac1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!81 &576966034
 AudioListener:
   m_ObjectHideFlags: 0
@@ -7546,8 +7533,6 @@ GameObject:
   - component: {fileID: 1667118881}
   - component: {fileID: 1667118880}
   - component: {fileID: 1667118886}
-  - component: {fileID: 1667118888}
-  - component: {fileID: 1667118887}
   - component: {fileID: 1667118889}
   m_Layer: 31
   m_Name: Player
@@ -7623,71 +7608,6 @@ CapsuleCollider:
   m_Height: 1.6
   m_Direction: 1
   m_Center: {x: 0, y: 0.8, z: 0}
---- !u!114 &1667118887
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1667118877}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cb38f814e66bcae448b7c571772d40f7, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  groundLayerMask:
-    serializedVersion: 2
-    m_Bits: 64
-  groundCheckDistance: 2
-  groundCheckThresholdMin: 0.01
-  groundCheckThresholdMax: 0.25
-  height: 0
-  maxSlopeAngle: 40
-  slopeAngle: 0
-  slopeAngleCofacter: 0
-  IsGrounded: 0
-  isMove: 0
-  isRun: 0
-  jumpCoolTime: 0.2
-  CanJump: 1
-  IsJumping: 0
-  IsAirJumping: 0
-  IsDashing: 0
-  IsAirDashing: 0
-  WasAirDashing: 0
-  dashTime: 1
-  airDashTime: 0.5
-  outOfControllDuration: 0
---- !u!114 &1667118888
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1667118877}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bc211d98610e63a4fbe8b49ac4284401, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  moveSpeed: 0
-  walkSpeed: 4
-  runSpeed: 7
-  dashSpeed: 10
-  airDashSpeed: 8
-  inertiaSpeed: 0
-  airDragSpeed: 1
-  airMoveSpeed: 1
-  jumpSpeed: 10
-  airJumpSpeed: 6
-  gravity: -9.81
-  curGravity: 0
-  terminalSpeed: -10
-  rotationSpeed: 720
-  moveVec: {x: 0, y: 0, z: 0}
-  moveDir: {x: 0, y: 0, z: 0}
-  dashVec: {x: 0, y: 0, z: 0}
-  inertiaNormalVec: {x: 0, y: 0, z: 0}
 --- !u!114 &1667118889
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8687,7 +8607,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1938875751}
   - component: {fileID: 1938875750}
-  - component: {fileID: 1938875752}
   m_Layer: 0
   m_Name: Directional Light
   m_TagString: Untagged
@@ -8772,18 +8691,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 50, y: -30, z: 0}
---- !u!114 &1938875752
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1938875749}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 474bcb49853aa07438625e644c072ee6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!4 &1954288245 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2749693544959997214, guid: 275fadad02c30c24aa70858377f067b8, type: 3}
@@ -9386,10 +9293,6 @@ PrefabInstance:
     - target: {fileID: 2749693544959997208, guid: 275fadad02c30c24aa70858377f067b8, type: 3}
       propertyPath: m_Name
       value: RopeCenter
-      objectReference: {fileID: 0}
-    - target: {fileID: 2749693544959997213, guid: 275fadad02c30c24aa70858377f067b8, type: 3}
-      propertyPath: rope
-      value: 
       objectReference: {fileID: 0}
     - target: {fileID: 2749693544959997214, guid: 275fadad02c30c24aa70858377f067b8, type: 3}
       propertyPath: m_RootOrder
