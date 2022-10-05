@@ -2,16 +2,33 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
+using JCW.Spawner;
 
 public class BaseTracer : MonoBehaviour
 {
-    private GameObject Base;
+    private Vector3 BasePos;
     private NavMeshAgent agent;
-    
-    void Start()
+    private Spawner spawner;
+
+    private void Awake()
     {
-        agent = GetComponent<NavMeshAgent>();
-        Base = WIYH_Manager.Instance.base_main;
-        agent.SetDestination(Base.transform.position);
+        spawner = this.transform.parent.gameObject.GetComponent<Spawner>();
+        agent = GetComponent<NavMeshAgent>();        
     }
+    private void OnEnable()
+    {
+        this.transform.position = this.transform.parent.position;
+        agent.ResetPath();
+        agent.SetDestination(BasePos);
+        BasePos = WIYH_Manager.Instance.base_main.transform.position;
+    }
+    private void OnTriggerEnter(Collider other)
+    {
+        if(other.CompareTag("Finish"))
+        {
+            Debug.Log("µµ´Þ");            
+            spawner.Despawn(this.gameObject);
+        }
+    }
+
 }

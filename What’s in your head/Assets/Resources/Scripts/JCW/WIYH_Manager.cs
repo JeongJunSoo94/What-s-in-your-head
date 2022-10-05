@@ -14,15 +14,11 @@ public class WIYH_Manager : MonoBehaviour
         if (Instance == null)
         {
             Instance = this;
+            base_main = this.gameObject;
             DontDestroyOnLoad(this.gameObject);
         }
         else if(Instance != this)
             Destroy(this.gameObject);
-    }
-
-    private void Start()
-    {
-        base_main = this.gameObject;
     }
 
 }

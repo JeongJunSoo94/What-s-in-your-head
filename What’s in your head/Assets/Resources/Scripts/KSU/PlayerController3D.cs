@@ -2,9 +2,10 @@ using System.Collections;
 using System.IO;
 using System.Collections.Generic;
 using UnityEngine;
-using JCW.InputBindings;
+using JCW.Options.InputBindings;
 using Photon.Pun;
 using JCW.AudioCtrl;
+using Cinemachine;
 
 public class PlayerController3D : MonoBehaviour
 {
@@ -16,14 +17,13 @@ public class PlayerController3D : MonoBehaviour
 
     // 유니티 제공 Components
     #region
-    Animator _animator;
+    //Animator _animator;
     CapsuleCollider _capsuleCollider;
     Camera _camera;
     Rigidbody _rigidbody;
     [Header("키 설정")] [SerializeField] private GameObject UI_BG;
     private GameObject UI_instance;
     PhotonView photonView;
-    [Header("Virtual Camera")] [SerializeField] private GameObject vCam;
     #endregion
 
     // 수평 Speed
@@ -86,7 +86,7 @@ public class PlayerController3D : MonoBehaviour
     void Awake()
     {
         characterState = GetComponent<CharacterState3D>();
-        _animator = GetComponent<Animator>();
+        //_animator = GetComponent<Animator>();
         _capsuleCollider = GetComponent<CapsuleCollider>();
         _rigidbody = GetComponent<Rigidbody>();
         playerMouse = GetComponent<PlayerMouseController>();
@@ -95,15 +95,16 @@ public class PlayerController3D : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        UI_instance = Instantiate(UI_BG, this.transform).transform.GetChild(0).gameObject;
         photonView = GetComponent<PhotonView>();
         if (!photonView.IsMine)
-        {
+        {            
             GetComponentInChildren<Camera>().gameObject.SetActive(false);
-            vCam.SetActive(false);
+            GetComponentInChildren<CinemachineFreeLook>().gameObject.SetActive(false);
+            Destroy(this);
         }
         else
             _camera = Camera.main;
+        UI_instance = Instantiate(UI_BG, this.transform).transform.GetChild(0).gameObject;
 
         if (WIYH_Manager.Instance.player1 == null)
             WIYH_Manager.Instance.player1 = this.gameObject;
@@ -159,8 +160,7 @@ public class PlayerController3D : MonoBehaviour
         InputJump();
         InputDash();
         InputPause();
-        InputChat();
-        InputTest();
+        InputSoundTest();
     }
 
 
@@ -187,7 +187,7 @@ public class PlayerController3D : MonoBehaviour
         transform.SetPositionAndRotation(new Vector3((float)data.position[0], (float)data.position[1], (float)data.position[2]), new Quaternion((float)data.rotation[0], (float)data.rotation[1], (float)data.rotation[2], (float)data.rotation[3]));
     }
 
-    public void InputTest()
+    public void InputSoundTest()
     {
         if (Input.GetKeyDown(KeyCode.G))
         {
@@ -196,31 +196,32 @@ public class PlayerController3D : MonoBehaviour
         }
         if (Input.GetKeyDown(KeyCode.Keypad1))
         {
-            SoundManager.instance.PlayBGM("POP");
+            SoundManager.instance.PlayBGM_RPC("POP");
         }
         if (Input.GetKeyDown(KeyCode.Keypad2))
         {
-            SoundManager.instance.PlayBGM("Tomboy");
+            SoundManager.instance.PlayBGM_RPC("Tomboy");
         }
         if (Input.GetKeyDown(KeyCode.Keypad3))
         {
-            SoundManager.instance.PauseResumeBGM();
+            SoundManager.instance.PauseResumeBGM_RPC();
         }
         if (Input.GetKeyDown(KeyCode.Keypad4))
         {
-            SoundManager.instance.PlayEffect(SoundManager.instance.GetEffectClips("Explosion"));
+            SoundManager.instance.PlayEffect_RPC("Explosion");
         }
         if (Input.GetKeyDown(KeyCode.Keypad5))
         {
-            SoundManager.instance.PlayEffect(SoundManager.instance.GetEffectClips("Fireball"));
+            //SoundManager.instance.PlayEffect_RPC(SoundManager.instance.GetEffectClips("Fireball"));
+            SoundManager.instance.PlayEffect_RPC("Fireball");
         }
         if (Input.GetKeyDown(KeyCode.Keypad6))
         {
-            SoundManager.instance.PlayEffect(SoundManager.instance.GetEffectClips("GetItem"));
+            SoundManager.instance.PlayEffect_RPC("GetItem");
         }
         if (Input.GetKeyDown(KeyCode.Keypad7))
         {
-            SoundManager.instance.PlayEffect(SoundManager.instance.GetEffectClips("WaterBall"));
+            SoundManager.instance.PlayEffect_RPC("WaterBall");
         }
     }
     public void InputPause()
@@ -232,13 +233,6 @@ public class PlayerController3D : MonoBehaviour
                 Time.timeScale = 0.0f;
             else
                 Time.timeScale = 1.0f;
-        }
-    }
-    public void InputChat()
-    {
-        if (ITT_KeyManager.Instance.GetKeyDown(PlayerAction.ToggleRun))
-        {
-            characterState.ToggleRun();
         }
     }
 

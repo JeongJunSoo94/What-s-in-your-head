@@ -20,15 +20,17 @@ namespace JCW.AudioCtrl
         // 오디오 클립
         Dictionary<string, AudioClip> audioClips = new();
 
+        PhotonView photonView;
+
         private bool isPause = false;
 
         // 싱글톤
         public static SoundManager instance = null;
         private void Awake()
         {
-            PhotonView photonView = GetComponent<PhotonView>();
-            if (!photonView.IsMine)
-                Destroy(this.gameObject);
+            photonView = GetComponent<PhotonView>();
+            //if (!photonView.IsMine)
+            //    Destroy(this.gameObject);
             if (instance==null)
             {
                 instance = this;
@@ -43,6 +45,7 @@ namespace JCW.AudioCtrl
         // Sound 종류에 해당하는 오브젝트들을 만들어주고, 사운드 매니저 오브젝트에 자식으로 달아준다.
         void Start()
         {
+            
             string[] soundNames = System.Enum.GetNames(typeof(JCW.AudioCtrl.Sound));
             for (int i = 0 ; i<(int)Sound.End ; ++i)
             {
@@ -63,6 +66,11 @@ namespace JCW.AudioCtrl
                 audioSources[i].Stop();                
             }
             audioClips.Clear();
+        }
+        public void PauseResumeBGM_RPC()
+        {
+            photonView.RPC("PauseResumeBGM", RpcTarget.OthersBuffered);
+            PauseResumeBGM();
         }
 
         [PunRPC]
@@ -102,19 +110,17 @@ namespace JCW.AudioCtrl
             }
         }
 
-        public AudioClip GetEffectClips(string name)
+        public void PlayEffect_RPC(string path)
         {
-            string clipName = name;
-            if (!name.Contains("Sounds/EFFECT"))
-                clipName = $"Sounds/EFFECT/{name}";
-
-            return audioClips[clipName];
+            photonView.RPC("PlayEffect", RpcTarget.OthersBuffered, path);
+            PlayEffect(path);
         }
-
-        [PunRPC]
+       
         // 효과음 재생
-        public void PlayEffect(AudioClip audioClip)
+        [PunRPC]
+        public void PlayEffect(string path)
         {
+            AudioClip audioClip = GetEffectClips(path);
             if (audioClip == null)
             {
                 Debug.Log("NULL로 저장된 오디오 클립입니다");
@@ -124,6 +130,11 @@ namespace JCW.AudioCtrl
             audioSources[(int)Sound.Effect].PlayOneShot(audioClip);
         }
 
+        public void PlayBGM_RPC(string path)
+        {
+            photonView.RPC("PlayBGM", RpcTarget.OthersBuffered, path);
+            PlayBGM(path);
+        }
         // 배경음 재생
         [PunRPC]
         public void PlayBGM(string path)
@@ -148,6 +159,14 @@ namespace JCW.AudioCtrl
             curAudio.Play();
         }
 
+        public AudioClip GetEffectClips(string name)
+        {
+            string clipName = name;
+            if (!name.Contains("Sounds/EFFECT"))
+                clipName = $"Sounds/EFFECT/{name}";
+
+            return audioClips[clipName];
+        }
         void SetEffectAudioClip(string path)
         {
             if (!path.Contains("Sounds/EFFECT"))

@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 using Photon.Pun;
+using JCW.Options.InputBindings;
 
 [RequireComponent(typeof(PhotonView))]
 public class InGameUI : MonoBehaviourPunCallbacks
@@ -22,7 +23,7 @@ public class InGameUI : MonoBehaviourPunCallbacks
 
     void Update()
     {
-        if(Input.GetKeyDown(KeyCode.T))
+        if (ITT_KeyManager.Instance.GetKeyDown(PlayerAction.Chat))
         {
             if (ChatUI.activeSelf && !Chat.isFocused)
                 ChatUI.SetActive(false);

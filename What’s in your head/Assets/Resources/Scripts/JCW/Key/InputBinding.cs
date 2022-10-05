@@ -5,17 +5,19 @@ using UnityEngine;
 using System.IO;
 using LitJson;
 
-namespace JCW.InputBindings
+namespace JCW.Options.InputBindings
 {
     // 플레이어의 행동
     public enum PlayerAction
     {
         // 이동
         MoveForward,     MoveBackward,      MoveLeft,       MoveRight,
-        Jump,            Dash,              Swing,          ToggleRun,
+        Jump,            Dash,              ToggleRun,
         // 조작
-        Fire,            Aim,
-        Interaction,     Cancle,            FindPartner,    Pause,
+        Interaction,     Fire,            Aim,
+        Pause,             Chat,
+
+        END
     }
 
     public class KeyState
@@ -91,14 +93,14 @@ namespace JCW.InputBindings
         }
         // =============================================================
 
-         // 새 바인딩 키 할당
+         // 저장된 파일에서 가져온 키 할당
         public void ApplyNewBindings(SerializableInputBinding newBinding)
         {
             bindingDict.Clear();
             int i = 0;
             foreach (var pair in newBinding.bindPairs)
             {
-                if(bindingDict.Count <=(int) PlayerAction.Pause)
+                if(bindingDict.Count <=(int) PlayerAction.END)
                     bindingDict.Add((PlayerAction)i++, new KeyState(pair.code));
                 else
                     bindingDict[pair.action].keyCode = pair.code;
@@ -108,21 +110,30 @@ namespace JCW.InputBindings
         // 바인드
         public void Bind(in PlayerAction action, in KeyCode code)
         {
-            if(bindingDict.Count <= (int)PlayerAction.Pause)
+            if(bindingDict.Count < (int)PlayerAction.END)
             {
                 bindingDict.Add(action, new KeyState(code));
             }
             else
             {
-                for (int i = 0 ; i < bindingDict.Count ; ++i)
+                switch(code)
                 {
-                    if (bindingDict[(PlayerAction)i].keyCode == code)
-                    {
-                        bindingDict[(PlayerAction)i].keyCode = KeyCode.None;
-                    }
-                }
-
-                bindingDict[action].keyCode = code;
+                    case KeyCode.Mouse0:
+                    case KeyCode.Mouse1:
+                    case KeyCode.Escape:
+                    case KeyCode.Colon:
+                        break;
+                    default:
+                        for (int i = 0 ; i < bindingDict.Count ; ++i)
+                        {
+                            if (bindingDict[(PlayerAction)i].keyCode == code)
+                            {
+                                bindingDict[(PlayerAction)i].keyCode = KeyCode.None;
+                            }
+                        }
+                        bindingDict[action].keyCode = code;
+                        break;
+                }                
             }
             
         }
@@ -130,24 +141,29 @@ namespace JCW.InputBindings
         // 바인딩 초기화
         public void ResetAll()
         {
+            // 이동
             Bind(PlayerAction.MoveForward, KeyCode.W);
             Bind(PlayerAction.MoveBackward, KeyCode.S);
             Bind(PlayerAction.MoveLeft, KeyCode.A);
             Bind(PlayerAction.MoveRight, KeyCode.D);
 
+            // 점프 & 달리기
             Bind(PlayerAction.Jump, KeyCode.Space);
             Bind(PlayerAction.Dash, KeyCode.LeftShift);
-            Bind(PlayerAction.Swing, KeyCode.F);
             Bind(PlayerAction.ToggleRun, KeyCode.CapsLock);
 
+            // 상호작용
+            Bind(PlayerAction.Interaction, KeyCode.E);
+
+            // 마우스
             Bind(PlayerAction.Fire, KeyCode.Mouse0);
             Bind(PlayerAction.Aim, KeyCode.Mouse1);
 
-            Bind(PlayerAction.Interaction, KeyCode.E);
-            Bind(PlayerAction.Cancle, KeyCode.Q);
-            Bind(PlayerAction.FindPartner, KeyCode.Mouse2);
+            // 히든
+            Bind(PlayerAction.Pause, KeyCode.Escape);    
+            
+            Bind(PlayerAction.Chat, KeyCode.Quote);
 
-            Bind(PlayerAction.Pause, KeyCode.Escape);            
         }
 
         public void SaveToFile()
@@ -156,19 +172,19 @@ namespace JCW.InputBindings
             SerializableInputBinding sib = new(this);
             JsonData infoJson = JsonMapper.ToJson(sib);
 
-            File.WriteAllText(Application.dataPath + "/Resources/KeyInfo/KeyInputBindings.json", infoJson.ToString());
+            File.WriteAllText(Application.dataPath + "/Resources/Options/KeyInputBindings.json", infoJson.ToString());
 
         }
 
         public bool LoadFromFile()
         {
-            if(!File.Exists(Application.dataPath + "/Resources/KeyInfo/KeyInputBindings.json"))
+            if(!File.Exists(Application.dataPath + "/Resources/Options/KeyInputBindings.json"))
             {
                 Debug.Log("키 값 불러오기 실패");
                 return false;
             }    
 
-            string jsonString = File.ReadAllText(Application.dataPath + "/Resources/KeyInfo/KeyInputBindings.json");
+            string jsonString = File.ReadAllText(Application.dataPath + "/Resources/Options/KeyInputBindings.json");
             Debug.Log("키 값 불러오기 성공");
 
             SerializableInputBinding data = JsonUtility.FromJson<SerializableInputBinding>(jsonString);
