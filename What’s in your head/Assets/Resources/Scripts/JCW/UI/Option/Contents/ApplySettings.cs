@@ -64,14 +64,10 @@ namespace JCW.Options
             {
                 soundContents.Add(soundTab.transform.GetChild(i).gameObject, "Sound");
             }
-
-            //LoadFromFile();
-            //setValue.data.Clear();
         }
 
         private void OnEnable()
         {
-            Debug.Log("켜졌습니당");
             LoadFromFile();
             setValue.data.Clear();
         }

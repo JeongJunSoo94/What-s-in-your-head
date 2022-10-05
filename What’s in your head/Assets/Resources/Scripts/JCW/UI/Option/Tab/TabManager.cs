@@ -3,18 +3,14 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class TabManager : MonoBehaviour//, IPointerEnterHandler
+public class TabManager : MonoBehaviour
 {
     private readonly Dictionary<GameObject, Button> tabs = new();
     public static TabManager Instance = null;
     private void Awake()
     {
         if (Instance == null)
-        {
             Instance = this;
-            DontDestroyOnLoad(this);
-        }
-
         else if (Instance != this)
             Destroy(this.gameObject);
     }
@@ -26,8 +22,7 @@ public class TabManager : MonoBehaviour//, IPointerEnterHandler
             GameObject obj = this.transform.GetChild(i).gameObject;
             tabs.Add(obj, obj.GetComponent<Button>());
         }
-    }
-    
+    }   
 
     public void ClickTab(Button _button)
     {
@@ -44,9 +39,4 @@ public class TabManager : MonoBehaviour//, IPointerEnterHandler
             tabs[obj].gameObject.transform.GetChild(1).gameObject.SetActive(false);
         }       
     }
-
-    //public void OnPointerEnter(PointerEventData eventData)
-    //{
-    //    Debug.Log(eventData.pointerEnter);
-    //}
 }

@@ -6,7 +6,7 @@ using UnityEngine.EventSystems;
 
 namespace JCW.Options.InputBindings
 {
-    public class BindingPairUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
+    public class BindingPairUI : FontColorShift
     {
         public Text actionLabel;
         public Text codeLabel;
@@ -14,13 +14,12 @@ namespace JCW.Options.InputBindings
 
         private Image highlight;
 
-        private readonly List<Color> BlackWhite = new();
         private readonly List<Color> visInvis = new();
 
-        private void Awake()
+        override protected void Awake()
         {
-            BlackWhite.Add(new Color(0, 0, 0, 1));
-            BlackWhite.Add(new Color(1, 1, 1, 1));
+            textName = actionLabel;
+            Init();
             visInvis.Add(new Color(1, 1, 1, 1));
             visInvis.Add(new Color(1, 1, 1, 0));            
 
@@ -111,13 +110,13 @@ namespace JCW.Options.InputBindings
             return convertText;
         }
 
-        public void OnPointerEnter(PointerEventData eventData)
+        override public void OnPointerEnter(PointerEventData eventData)
         {
             highlight.color = visInvis[0];
             actionLabel.color = BlackWhite[1];
         }
 
-        public void OnPointerExit(PointerEventData eventData)
+        override public void OnPointerExit(PointerEventData eventData)
         {
             highlight.color = visInvis[1];
             actionLabel.color = BlackWhite[0];
