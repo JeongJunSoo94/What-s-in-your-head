@@ -14,7 +14,7 @@ namespace JCW.Options.InputBindings
         MoveForward,     MoveBackward,      MoveLeft,       MoveRight,
         Jump,            Dash,              ToggleRun,
         // ¡∂¿€
-        Interaction,     Fire,            Aim,
+        Interaction,       Fire,            Aim,
         Pause,             Chat,
 
         END

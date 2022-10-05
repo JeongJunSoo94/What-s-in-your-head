@@ -10,9 +10,9 @@ using Cinemachine;
 public class PlayerController3D : MonoBehaviour
 {
     //  Scripts Components
-    #region
-    public CharacterState3D characterState;
-    public PlayerMouseController playerMouse;
+    #region    
+    [HideInInspector] public CharacterState3D characterState;
+    [HideInInspector] public PlayerMouseController playerMouse;
     #endregion
 
     // 유니티 제공 Components
@@ -21,8 +21,7 @@ public class PlayerController3D : MonoBehaviour
     CapsuleCollider _capsuleCollider;
     Camera _camera;
     Rigidbody _rigidbody;
-    [Header("키 설정")] [SerializeField] private GameObject UI_BG;
-    private GameObject UI_instance;
+    //[Header("키 설정")] [SerializeField] private GameObject UI_BG;    
     PhotonView photonView;
     #endregion
 
@@ -103,8 +102,7 @@ public class PlayerController3D : MonoBehaviour
             Destroy(this);
         }
         else
-            _camera = Camera.main;
-        UI_instance = Instantiate(UI_BG, this.transform).transform.GetChild(0).gameObject;
+            _camera = Camera.main;        
 
         if (WIYH_Manager.Instance.player1 == null)
             WIYH_Manager.Instance.player1 = this.gameObject;
@@ -119,8 +117,6 @@ public class PlayerController3D : MonoBehaviour
         if (!photonView.IsMine)
             return;
         CheckState();
-        InputPause();
-        InputTest();
         //CheckKeyInput(); // 이건 animator의  fsm으로 한다고 했으나 여기에 모아서 사용해둠(fsm으로 이동 될 것들)
     }
 
@@ -159,7 +155,6 @@ public class PlayerController3D : MonoBehaviour
         InputMove();
         InputJump();
         InputDash();
-        InputPause();
         InputSoundTest();
     }
 
@@ -222,17 +217,6 @@ public class PlayerController3D : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Keypad7))
         {
             SoundManager.instance.PlayEffect_RPC("WaterBall");
-        }
-    }
-    public void InputPause()
-    {
-        if (ITT_KeyManager.Instance.GetKeyDown(PlayerAction.Pause))
-        {
-            UI_instance.SetActive(!UI_instance.activeSelf);
-            if (UI_instance.activeSelf)
-                Time.timeScale = 0.0f;
-            else
-                Time.timeScale = 1.0f;
         }
     }
 

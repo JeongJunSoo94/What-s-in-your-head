@@ -22,7 +22,7 @@ namespace JCW.Options.InputBindings
             BlackWhite.Add(new Color(0, 0, 0, 1));
             BlackWhite.Add(new Color(1, 1, 1, 1));
             visInvis.Add(new Color(1, 1, 1, 1));
-            visInvis.Add(new Color(1, 1, 1, 0));
+            visInvis.Add(new Color(1, 1, 1, 0));            
 
             highlight = gameObject.GetComponent<Image>();
         }

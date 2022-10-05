@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using JCW.InputBindings;
+using JCW.Options.InputBindings;
 public class NellaMouseController : PlayerMouseController
 {
     public List<Discovery3D> hitObjs;

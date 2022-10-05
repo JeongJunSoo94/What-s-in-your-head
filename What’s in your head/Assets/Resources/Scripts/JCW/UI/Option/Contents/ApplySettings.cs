@@ -44,9 +44,9 @@ namespace JCW.Options
         //private List<GameObject> camContents = new List<GameObject>();
         //private List<GameObject> soundContents = new List<GameObject>();
 
-        private Dictionary<GameObject, string> gameContents = new Dictionary<GameObject, string>();
-        private Dictionary<GameObject, string> camContents = new Dictionary<GameObject, string>();
-        private Dictionary<GameObject, string> soundContents = new Dictionary<GameObject, string>();
+        private readonly Dictionary<GameObject, string> gameContents = new Dictionary<GameObject, string>();
+        private readonly Dictionary<GameObject, string> camContents = new Dictionary<GameObject, string>();
+        private readonly Dictionary<GameObject, string> soundContents = new Dictionary<GameObject, string>();
 
         SerializableDatas setValue = new SerializableDatas();
 

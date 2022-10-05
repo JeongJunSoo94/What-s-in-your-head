@@ -40,7 +40,7 @@ public class PhotonManager : MonoBehaviourPunCallbacks
             Destroy(this.gameObject);
         }
 
-        Screen.SetResolution(1200, 880, false);
+        Screen.SetResolution(1920, 1080, true);
 
     }
 

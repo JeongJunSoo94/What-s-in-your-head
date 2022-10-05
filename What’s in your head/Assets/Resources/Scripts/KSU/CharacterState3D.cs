@@ -10,8 +10,21 @@ public class CharacterState3D : MonoBehaviour
     public LayerMask groundLayerMask;
     [Range(0.1f, 10.0f), Tooltip("지면 감지 거리")]
     public float groundCheckDistance = 2.0f;
+    //[Range(0.0f, 1f), Tooltip("지면 인식 허용 거리")]
+    //public float groundCheckThreshold = 0.2f;
+
+
+    //
     [Range(0.0f, 1f), Tooltip("지면 인식 허용 거리")]
-    public float groundCheckThreshold = 0.2f;
+    public float groundCheckThresholdMin = 0.1f;
+    [Range(0.0f, 1f), Tooltip("지면 인식 허용 거리")]
+    public float groundCheckThresholdMax = 0.3f;
+    public float height = 0f;
+
+    public bool RayCheck;
+    //
+
+
 
     RaycastHit groundRaycastHit;
     [Tooltip("캐릭터가 타고 올라갈 수 있는 최대 경사각")]
@@ -67,65 +80,102 @@ public class CharacterState3D : MonoBehaviour
 
     // 지면 체크 함수(지면 각도에 따라서 지면체크 거리 안에 안들어올 수 있기에 보정 필요)
     #region
+    //public void CheckGround(float sphereRadius)
+    //{
+    //    IsGrounded = Physics.SphereCast(transform.position + Vector3.up * sphereRadius, sphereRadius, Vector3.down, out groundRaycastHit, sphereRadius + groundCheckDistance, groundLayerMask, QueryTriggerInteraction.Ignore);
+
+    //    if (IsGrounded)
+    //    {
+    //        //Vector3 lookVec = transform.forward;
+    //        //lookVec.y = 0;
+    //        //lookVec = lookVec.normalized;
+    //        slopeAngle = Vector3.Angle(Vector3.up, groundRaycastHit.normal);
+    //        Debug.Log("slopeAngle " + slopeAngle);
+    //        if (Mathf.Abs(slopeAngle) >= maxSlopeAngle)
+    //        {
+    //            IsGrounded = false;
+    //            isRun = false;
+    //        }
+    //        else
+    //        {
+    //            float uSlopeAngleCofacter = Mathf.Tan(slopeAngle * Mathf.PI / 180);
+    //            float height = (transform.position - groundRaycastHit.point).y;
+    //            //Debug.Log(height + " " + (groundCheckThreshold + Mathf.Abs(uSlopeAngleCofacter)));
+    //            //if (height < Mathf.Epsilon)
+    //            //    height = 0.01f;
+
+    //            if (height <= (groundCheckThreshold + Mathf.Abs(uSlopeAngleCofacter)))
+    //            {
+    //                slopeAngle = Vector3.Angle(transform.forward, groundRaycastHit.normal) - 90f;
+    //                slopeAngleCofacter = Mathf.Tan(slopeAngle * Mathf.PI / 180);
+    //                ResetJump();
+    //                ResetAirDash();
+    //            }
+    //            else
+    //            {
+    //                slopeAngleCofacter = 0f;
+    //                IsGrounded = false;
+    //                isRun = false;
+    //            }
+    //        }
+    //    }
+    //}
+
     public void CheckGround(float sphereRadius)
     {
-        IsGrounded = Physics.SphereCast(transform.position + Vector3.up * sphereRadius, sphereRadius, Vector3.down, out groundRaycastHit, groundCheckDistance, groundLayerMask, QueryTriggerInteraction.Ignore);
+        RayCheck = Physics.SphereCast(transform.position + Vector3.up * (sphereRadius + Physics.defaultContactOffset), (sphereRadius - Physics.defaultContactOffset), Vector3.down, out groundRaycastHit, sphereRadius + groundCheckDistance, groundLayerMask, QueryTriggerInteraction.Ignore);
 
-        if (IsGrounded)
+        if (RayCheck)
         {
-            //Vector3 lookVec = transform.forward;
-            //lookVec.y = 0;
-            //lookVec = lookVec.normalized;
             slopeAngle = Vector3.Angle(Vector3.up, groundRaycastHit.normal);
-            //Debug.Log("slopeAngle " + slopeAngle);
             if (Mathf.Abs(slopeAngle) >= maxSlopeAngle)
             {
                 IsGrounded = false;
                 isRun = false;
+                //Debug.Log("경사각 초과");
             }
             else
             {
                 float uSlopeAngleCofacter = Mathf.Tan(slopeAngle * Mathf.PI / 180);
-                float height = (transform.position - groundRaycastHit.point).y;
-                //Debug.Log(height + " " + (groundCheckThreshold + Mathf.Abs(uSlopeAngleCofacter)));
-                //if (height < Mathf.Epsilon)
-                //    height = 0.01f;
-
-                if (height <= (groundCheckThreshold + Mathf.Abs(uSlopeAngleCofacter)))
+                height = (transform.position - groundRaycastHit.point).y;
+                if (height <= (groundCheckThresholdMax + Mathf.Abs(uSlopeAngleCofacter)))
                 {
+                    IsGrounded = true;
                     slopeAngle = Vector3.Angle(transform.forward, groundRaycastHit.normal) - 90f;
                     slopeAngleCofacter = Mathf.Tan(slopeAngle * Mathf.PI / 180);
-                    ResetJump();
-                    ResetAirDash();
+                    if (CanJump)
+                    {
+                        ResetJump();
+                        ResetAirDash();
+                    }
                 }
                 else
                 {
+                    //Debug.Log("FALSE: " + height + " << 높이, 기준 >> " + (groundCheckThresholdMax + Mathf.Abs(uSlopeAngleCofacter)));
                     slopeAngleCofacter = 0f;
                     IsGrounded = false;
                     isRun = false;
                 }
             }
         }
+        else
+        {
+            IsGrounded = false;
+            //Debug.Log("RayCheck 실패");
+        }
     }
     #endregion
 
     //달리기 함수
     #region
-    public void  ToggleRun()
+    public void ToggleRun()
     {
-        if (isRun)
-        {
-            isRun = false;
-        }
-        else
-        {
-            isRun = true;
-        }
+        isRun = !isRun;
     }
 
     public void CheckMove(Vector3 vel)
     {
-        if(isMove)
+        if (isMove)
         {
             if (!(vel.magnitude > 0))
                 isRun = false;
@@ -153,7 +203,7 @@ public class CharacterState3D : MonoBehaviour
         {
             // 점프 쿨타임이 돌아가기 시작, Jumping상태 true
             IsJumping = true;
-            StartCoroutine("JumpCool");
+            StartCoroutine(nameof(JumpCool));
         }
     }
     public void CheckAirJump()
@@ -163,7 +213,7 @@ public class CharacterState3D : MonoBehaviour
         {
             // 점프 쿨타임이 돌아가기 시작, AirJumping상태 true
             IsAirJumping = true;
-            StartCoroutine("JumpCool");
+            StartCoroutine(nameof(JumpCool));
         }
     }
     #endregion
@@ -181,7 +231,7 @@ public class CharacterState3D : MonoBehaviour
         // 지면 위 상태일 때, 대시 중이 아닐 때만
         if (IsGrounded && !IsDashing)
         {
-            StartCoroutine("StartDashTimer");
+            StartCoroutine(nameof(StartDashTimer));
             IsDashing = true;
         }
     }
@@ -191,7 +241,7 @@ public class CharacterState3D : MonoBehaviour
         // 공중 상태일 때, 공중 대시 중이 아닐 때만
         if (!IsGrounded && !IsAirDashing && !WasAirDashing)
         {
-            StartCoroutine("StartDashTimer");
+            StartCoroutine(nameof(StartDashTimer));
             IsAirDashing = true;
             WasAirDashing = true;
         }

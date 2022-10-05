@@ -11,10 +11,11 @@ public class PlayerTracer : MonoBehaviour
     void Start()
     {
         agent = GetComponent<NavMeshAgent>();
-        Players = new List<GameObject>();
-
-        Players.Add(WIYH_Manager.Instance.player1);
-        Players.Add(WIYH_Manager.Instance.player2);
+        Players = new List<GameObject>
+        {
+            WIYH_Manager.Instance.player1,
+            WIYH_Manager.Instance.player2
+        };
     }
 
     private void FixedUpdate()
