@@ -15,6 +15,12 @@ public class PlayerMouseController : MonoBehaviour
     {
         leftDown = false;
         rightDown = false;
+
+        leftOn = false;
+        rightOn = false;
+
+        ableToLeft = false;
+        ableToRight = false;
     }
 
     public virtual void CheckLeftClick()

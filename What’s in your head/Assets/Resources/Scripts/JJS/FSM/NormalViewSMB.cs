@@ -14,13 +14,18 @@ public class NormalViewSMB : StateMachineBehaviour
 
     override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
+        player.playerMouse.CheckLeftClick();
+        player.playerMouse.CheckRightClick();
         player.InputRun();
         player.InputMove();
         player.InputJump();
         player.InputDash();
-        player.playerMouse.CheckLeftClick();
-        player.playerMouse.CheckRightClick();
         check(animator);
+    }
+
+    public override void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
+    {
+        player.MoveStop();
     }
     void check(Animator animator)
     {

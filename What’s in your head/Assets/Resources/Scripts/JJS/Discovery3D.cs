@@ -4,45 +4,31 @@ using UnityEngine;
 
 public class Discovery3D : MonoBehaviour
 {
+    public bool gizmoOn;
+
+    [SerializeField]
+    [Range(0f, 50f)]
+    private float _discoveryRadius;
+
     [Range(0f, 180f)]
     [SerializeField] private float _viewAngle;
 
-    [SerializeField]
-    private float _discoveryRadius;
-
-    [Range(-180f, 0f)]
+    [Range(-180f, 180f)]
     [SerializeField] private float _viewDirection;
 
     [SerializeField] private LayerMask viewTargetMask;
 
-    //[SerializeField]
-    Collider[] hitColliders;
-
+    private Collider[] hitColliders;
     private RaycastHit[] rayHits;
     private Ray[] ray = new Ray[3];
 
     public Collider[] HitColliders { get { return hitColliders; } }
 
-    public bool gizmoOn;
+    public List<GameObject> targetObj;
 
-    public bool targetOn;
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
     void Update()
     {
-        if (DiscoveryTargetBool3D())
-        {
-            targetOn=true;
-        }
-        else
-        { 
-            targetOn = false;
-        }
+        DiscoveryTargetBool3D();
     }
     void OnDrawGizmos()
     {   
@@ -81,7 +67,10 @@ public class Discovery3D : MonoBehaviour
         Vector3 originPos = transform.position;
         int count = 0;
         hitColliders = Physics.OverlapSphere(transform.position, _discoveryRadius, viewTargetMask);
-
+        if (hitColliders.Length!=0)
+        {
+            targetObj.Clear();
+        }
         for (int index = 0; index < hitColliders.Length; index++)
         {
             if (hitColliders[index] != null)
@@ -99,6 +88,7 @@ public class Discovery3D : MonoBehaviour
                 {
                     count++;
                     {
+                        targetObj.Add(hitColliders[index].gameObject);
                         Debug.DrawLine(originPos, targetPos, Color.red);
                     }
                 }

@@ -255,6 +255,12 @@ public class PlayerController3D : MonoBehaviour
         else
             characterState.isMove = false;
     }
+
+    public void MoveStop()
+    {
+        moveDir = Vector3.zero;
+    }
+
     public void TopViewInputMove()
     {
         moveDir.z = ((ITT_KeyManager.Instance.GetKey(PlayerAction.MoveForward) ? 1 : 0) + (ITT_KeyManager.Instance.GetKey(PlayerAction.MoveBackward) ? -1 : 0));

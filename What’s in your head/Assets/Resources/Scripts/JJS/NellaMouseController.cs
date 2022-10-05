@@ -81,11 +81,13 @@ public class NellaMouseController : PlayerMouseController
         {
             if (hitObjs[i].gameObject.activeSelf)
             {
-                if (hitObjs[i].targetOn)
+                if (hitObjs[i].targetObj.Count!=0)
                 {
                     for (int j = 0; j < hitObjs[i].HitColliders.Length; j++)
                     {
                         hitObjs[i].HitColliders[j].gameObject.SetActive(false);
+                        //hitObjs[i].HitColliders[j].gameObject.SendMessage("");
+
                     }
                 }
             }
