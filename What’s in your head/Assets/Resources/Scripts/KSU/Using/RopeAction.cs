@@ -6,6 +6,9 @@ public class RopeAction : MonoBehaviour
 {
     public enum Direction { F, FR, R, FL, Default }
 
+    public float detectingRange = 10f;
+    public float ropeLength = 8f;
+
     public float rotationSpeed = 180f;
     public float swingSpeed = 30f;
     public Direction targetDirection = Direction.Default;
@@ -13,8 +16,7 @@ public class RopeAction : MonoBehaviour
     public float currentYRotation;
 
     public float swingAngle = 60f;
-
-    public GameObject rope;
+    GameObject rope;
 
     public bool isSwingForward = true;
     public bool isRotating = false;
@@ -38,6 +40,11 @@ public class RopeAction : MonoBehaviour
     {
         Swing();
         SetRotate();
+    }
+
+    void MakeRope()
+    {
+        rope = new GameObject(); // 로프 생성 해야함
     }
 
     void Swing()
