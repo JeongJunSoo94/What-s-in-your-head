@@ -2,7 +2,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using System.IO;
 
-namespace JCW.Options
+namespace JCW.UI.Options
 {
     public class InitializeSettings : MonoBehaviour
     {

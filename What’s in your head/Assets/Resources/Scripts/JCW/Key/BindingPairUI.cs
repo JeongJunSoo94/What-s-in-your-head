@@ -4,7 +4,7 @@ using UnityEngine.UI;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
 
-namespace JCW.Options.InputBindings
+namespace JCW.UI.Options.InputBindings
 {
     public class BindingPairUI : FontColorShift
     {

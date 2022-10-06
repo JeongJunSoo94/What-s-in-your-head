@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using JCW.Options.InputBindings;
+using JCW.UI.Options.InputBindings;
 
 
 namespace JJS

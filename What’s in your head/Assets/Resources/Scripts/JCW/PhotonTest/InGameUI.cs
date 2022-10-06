@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 using Photon.Pun;
-using JCW.Options.InputBindings;
+using JCW.UI.Options.InputBindings;
 
 [RequireComponent(typeof(PhotonView))]
 public class InGameUI : MonoBehaviourPunCallbacks

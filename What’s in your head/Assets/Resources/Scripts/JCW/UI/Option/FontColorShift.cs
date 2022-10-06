@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-namespace JCW.Options
+namespace JCW.UI.Options
 {
     public class FontColorShift : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
     {

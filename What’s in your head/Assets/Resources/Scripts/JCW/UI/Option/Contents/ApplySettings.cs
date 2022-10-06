@@ -7,7 +7,7 @@ using System;
 using System.IO;
 using LitJson;
 
-namespace JCW.Options
+namespace JCW.UI.Options
 {
     [Serializable]
     public class OptionData
@@ -39,10 +39,6 @@ namespace JCW.Options
         [SerializeField] private GameObject gameTab;
         [SerializeField] private GameObject camTab;
         [SerializeField] private GameObject soundTab;
-
-        //private List<GameObject> gameContents = new List<GameObject>();
-        //private List<GameObject> camContents = new List<GameObject>();
-        //private List<GameObject> soundContents = new List<GameObject>();
 
         private readonly Dictionary<GameObject, string> gameContents = new Dictionary<GameObject, string>();
         private readonly Dictionary<GameObject, string> camContents = new Dictionary<GameObject, string>();

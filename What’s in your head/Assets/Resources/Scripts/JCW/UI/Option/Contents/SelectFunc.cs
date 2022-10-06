@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 
-namespace JCW.Options
+namespace JCW.UI.Options
 {
     public class SelectFunc : FontColorShift
     {

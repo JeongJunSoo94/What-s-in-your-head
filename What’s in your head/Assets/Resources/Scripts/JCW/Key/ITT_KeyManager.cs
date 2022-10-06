@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace JCW.Options.InputBindings
+namespace JCW.UI.Options.InputBindings
 {
     public class ITT_KeyManager : MonoBehaviour
     {

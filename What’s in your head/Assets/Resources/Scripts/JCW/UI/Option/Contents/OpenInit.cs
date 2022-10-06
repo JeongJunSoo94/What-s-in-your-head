@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 
 
-namespace JCW.Options
+namespace JCW.UI.Options
 {
     public class OpenInit : MonoBehaviour
     {
