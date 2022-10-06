@@ -22,8 +22,9 @@ namespace JCW.UI
             {                
                 for (int i = 0 ; i<PhotonNetwork.PlayerList.Length ; ++i)
                 {
-                    if (PhotonNetwork.PlayerList[i].NickName==friendID.text)
-                    {
+                    if (PhotonNetwork.PlayerList[i].NickName==friendID.text
+                        && myID.text != friendID.text)
+                    {                        
                         failUI.SetActive(false);
                         passUI.SetActive(true);
                         mainUI.SendMessage("TryMakeRoom", friendID.text);
