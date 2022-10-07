@@ -9,19 +9,26 @@ public class AirDashSMB : StateMachineBehaviour
     override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
         player = animator.transform.gameObject.GetComponent<PlayerController3D>();
-        
+     
     }
 
     // OnStateUpdate is called on each Update frame between OnStateEnter and OnStateExit callbacks
     override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        player.InputMove();
-        player.InputJump();
-        check(animator);
+        if (player != null)
+        {
+            player.InputMove();
+            player.InputJump();
+            check(animator);
+        }
+       
     }
     override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        animator.SetBool("isAirDash", false);
+        if (player != null)
+        {
+            animator.SetBool("isAirDash", false);
+        }
     }
     void check(Animator animator)
     {

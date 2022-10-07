@@ -9,12 +9,19 @@ public class DashSMB : StateMachineBehaviour
     override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
         player = animator.transform.gameObject.GetComponent<PlayerController3D>();
+        if (player != null)
+        {
+            player.characterState.isRun = false;
+        }
     }
 
     // OnStateUpdate is called on each Update frame between OnStateEnter and OnStateExit callbacks
     override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        check(animator);
+        if (player != null)
+        {
+             check(animator);
+        }
     }
     void check(Animator animator)
     {

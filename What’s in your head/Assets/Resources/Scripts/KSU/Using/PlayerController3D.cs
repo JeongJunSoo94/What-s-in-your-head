@@ -96,13 +96,13 @@ public class PlayerController3D : MonoBehaviour
     {
         photonView = GetComponent<PhotonView>();
         if (!photonView.IsMine)
-        {            
+        {
             GetComponentInChildren<Camera>().gameObject.SetActive(false);
             GetComponentInChildren<CinemachineFreeLook>().gameObject.SetActive(false);
             Destroy(this);
         }
         else
-            _camera = Camera.main;        
+            _camera = Camera.main;
 
         if (WIYH_Manager.Instance.player1 == null)
             WIYH_Manager.Instance.player1 = this.gameObject;
