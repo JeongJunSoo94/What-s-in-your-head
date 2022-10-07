@@ -40,8 +40,6 @@ public class PlayerController3D : MonoBehaviour
     public float airDashSpeed = 8f;
     [Tooltip("관성 속력")]
     public float inertiaSpeed = 0f;
-    [Tooltip("공기 저항 속력")]
-    public float airDragSpeed = 1f;
     [Tooltip("공중 이동 속력")]
     public float airMoveSpeed = 1f;
     #endregion
@@ -124,7 +122,7 @@ public class PlayerController3D : MonoBehaviour
     {
         if (!photonView.IsMine)
             return;
-        Rotation();
+        TakeRotation();
         Move();
     }
     private void CheckState()
@@ -134,7 +132,9 @@ public class PlayerController3D : MonoBehaviour
             characterState.CheckGround(_capsuleCollider.radius);
             if (!characterState.IsGrounded)
             {
-                MakeinertiaVec();
+                Vector3 horVel = _rigidbody.velocity;
+                horVel.y = 0;
+                MakeinertiaVec(horVel.magnitude, moveDir);
             }
         }
         else
@@ -144,12 +144,10 @@ public class PlayerController3D : MonoBehaviour
         characterState.CheckMove(_rigidbody.velocity);
     }
 
-    private void MakeinertiaVec() // 공중 진입 시 생기는 관성벡터
+    private void MakeinertiaVec(float speed, Vector3 nomalVec) // 공중 진입 시 생기는 관성벡터
     {
-        inertiaSpeed = moveSpeed;
-        inertiaNormalVec = _rigidbody.velocity;
-        inertiaNormalVec.y = 0;
-        inertiaNormalVec = inertiaNormalVec.normalized;
+        inertiaSpeed = speed;
+        inertiaNormalVec = nomalVec;
     }
     private void CheckKeyInput()
     {
@@ -252,43 +250,35 @@ public class PlayerController3D : MonoBehaviour
     {
         if (ITT_KeyManager.Instance.GetKeyDown(PlayerAction.Jump))
         {
-            //if (characterState.IsGrounded)
-            //{
-            //    if (!characterState.IsJumping)
-            //    {
-            //        characterState.CheckJump();
-            //        if (characterState.IsJumping)
-            //        {
-            //            moveVec.y = jumpSpeed;
-            //            return;
-            //        }
-            //    }
-            //}
-
             if (!characterState.IsJumping)
             {
                 characterState.CheckJump();
                 if (characterState.IsJumping)
                 {
+                    Vector3 horVel = _rigidbody.velocity;
+                    horVel.y = 0;
+                    MakeinertiaVec(horVel.magnitude, moveDir);
                     moveVec.y = jumpSpeed;
                     return;
                 }
             }
-
-            //if (!characterState.IsGrounded && !characterState.IsAirJumping)
-            //{
-            //    characterState.CheckAirJump();
-            //    if (characterState.IsAirJumping)
-            //    {
-            //        moveVec.y = airJumpSpeed;
-            //    }
-            //}
 
             if (!characterState.IsAirJumping)
             {
                 characterState.CheckAirJump();
                 if (characterState.IsAirJumping)
                 {
+                    Rotate();
+                    if(characterState.isMove)
+                    {
+                        MakeinertiaVec(walkSpeed, moveDir);
+                    }
+                    else
+                    {
+                        Vector3 horVel = _rigidbody.velocity;
+                        horVel.y = 0;
+                        MakeinertiaVec(walkSpeed, horVel.normalized);
+                    }
                     moveVec.y = airJumpSpeed;
                 }
             }
@@ -298,16 +288,6 @@ public class PlayerController3D : MonoBehaviour
     {
         if (ITT_KeyManager.Instance.GetKeyDown(PlayerAction.Dash))
         {
-            //if (characterState.IsGrounded && !characterState.IsDashing)
-            //{
-            //    characterState.CheckDash();
-            //}
-
-            //if (!characterState.IsGrounded && !characterState.WasAirDashing)
-            //{
-            //    characterState.CheckAirDash();
-            //}
-
             if (!characterState.IsDashing)
             {
                 characterState.CheckDash();
@@ -316,21 +296,49 @@ public class PlayerController3D : MonoBehaviour
             if (!characterState.WasAirDashing)
             {
                 characterState.CheckAirDash();
+                Rotate();
+                if (characterState.isMove)
+                {
+                    MakeinertiaVec(walkSpeed, moveDir);
+                }
+                else
+                {
+                    Vector3 forward = transform.forward;
+                    forward.y = 0f;
+                    forward = forward.normalized;
+                    MakeinertiaVec(walkSpeed, forward);
+                }
             }
         }
     }
 
-    public void Rotation()
+    void  TakeRotation()
     {
-        if (!characterState.IsDashing && !characterState.IsAirDashing)
+        RotateSlerp();
+        //RotateAim();
+    }
+
+    public void Rotate()
+    {
+        transform.LookAt(transform.position + moveDir);
+    }
+
+    public void RotateSlerp()
+    {
+
+        if (characterState.IsGrounded && characterState.CanJump)
         {
-            Vector3 forward = Vector3.Slerp(transform.forward, moveDir.normalized, rotationSpeed * Time.fixedDeltaTime / Vector3.Angle(transform.forward, moveDir.normalized));
-            forward.y = 0;
-            moveDir = forward;
-            transform.LookAt(transform.position + forward);
+            if (!characterState.IsDashing)
+            {
+                Vector3 forward = Vector3.Slerp(transform.forward, moveDir.normalized, rotationSpeed * Time.fixedDeltaTime / Vector3.Angle(transform.forward, moveDir.normalized));
+                forward.y = 0;
+                moveDir = forward;
+                transform.LookAt(transform.position + forward);
+            }
         }
     }
-    public void RotationAim()
+
+    public void RotateAim()
     {
         if (!characterState.IsDashing && !characterState.IsAirDashing)
         {
@@ -350,11 +358,8 @@ public class PlayerController3D : MonoBehaviour
             }
             else
             {
-                inertiaSpeed -= airDragSpeed * Time.fixedDeltaTime;
-                if (inertiaSpeed < 0)
-                    inertiaSpeed = 0;
-
                 moveVec = moveDir * airMoveSpeed + inertiaNormalVec * inertiaSpeed + Vector3.up * (moveVec.y + gravity * Time.fixedDeltaTime);
+
                 if (moveVec.y < terminalSpeed)
                 {
                     moveVec.y = terminalSpeed;
@@ -384,7 +389,7 @@ public class PlayerController3D : MonoBehaviour
                 }
                 else
                 {
-                    moveSpeed -= walkSpeed * Time.fixedDeltaTime;
+                    moveSpeed -= runSpeed * Time.fixedDeltaTime * 20f;
                     if (moveSpeed < 0)
                         moveSpeed = 0f;
                 }

@@ -31,6 +31,7 @@ public class RopeAction : MonoBehaviour
     //{
     //    ItTakesTwoKeyManager.Instance.GetKey(KeyName.W);
     //    m_Camera = Camera.main;
+    //    MakeRope();
     //}
 
     //// Update is called once per frame
@@ -119,12 +120,22 @@ public class RopeAction : MonoBehaviour
 
     //void MakeForwardVec()
     //{
-    //    forwardVec =  m_Camera.transform.forward;
+    //    forwardVec = m_Camera.transform.forward;
     //    forwardVec.y = 0;
     //}
 
     //void SetRotate()
     //{
+    //    Vector3 forward = transform.forward;
+    //    forward.y = 0;
+    //    if(forwardVec != forward)
+    //    {
+    //        transform.LookAt(transform.position + forwardVec);
+    //        targetDirection = Direction.F;
+    //        currentAddYRotation = 0f;
+    //        targetAddYRotation = 0f;
+    //        isRotating = false;
+    //    }
 
     //    if (isRotating)
     //    {          
@@ -147,4 +158,6 @@ public class RopeAction : MonoBehaviour
     //        transform.rotation = Quaternion.Euler(currentYRotation);
     //    }
     //}
+
+    
 }

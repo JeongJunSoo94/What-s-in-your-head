@@ -74,7 +74,7 @@ public class CharacterState3D : MonoBehaviour
 
     //제어불가능 상태 변수
     #region
-    public bool IsOutOfControl { get; protected set; }
+    public bool IsOutOfControl = false;
     public float outOfControllDuration;
     #endregion
 
@@ -229,7 +229,7 @@ public class CharacterState3D : MonoBehaviour
     public void CheckDash()
     {
         // 지면 위 상태일 때, 대시 중이 아닐 때만
-        if (IsGrounded && !IsDashing)
+        if (IsGrounded)
         {
             StartCoroutine(nameof(StartDashTimer));
             IsDashing = true;
@@ -239,7 +239,7 @@ public class CharacterState3D : MonoBehaviour
     public void CheckAirDash()
     {
         // 공중 상태일 때, 공중 대시 중이 아닐 때만
-        if (!IsGrounded && !IsAirDashing && !WasAirDashing)
+        if (!IsGrounded && !IsAirDashing)
         {
             StartCoroutine(nameof(StartDashTimer));
             IsAirDashing = true;
