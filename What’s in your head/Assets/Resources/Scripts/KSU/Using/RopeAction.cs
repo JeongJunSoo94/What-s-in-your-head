@@ -7,10 +7,10 @@ public class RopeAction : MonoBehaviour
 {
     public GameObject player;
 
-    public enum Direction { F, FR, R, FL, Default }
+    public enum Direction { F, FR, R, BR, B, BL, L, FL, Default }
 
     public float detectingRange = 10f;
-    public float ropeLength = 8f;
+    public float ropeLength = 15f;
 
     public float rotationSpeed = 180f;
     public float swingSpeed = 30f;
@@ -25,22 +25,19 @@ public class RopeAction : MonoBehaviour
 
     public bool isSwingForward = true;
     public bool isRotating = false;
+    bool isRopeExisting = false;
 
-    Camera m_Camera;
-    Vector3 forwardVec = Vector3.zero;
-    public float currentFowardYRotation;
 
     // Start is called before the first frame update
     void Start()
     {
-        m_Camera = Camera.main;
         MakeRope();
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (!isRotating)
+        if(isRopeExisting)
         {
             InputKey();
         }
@@ -48,41 +45,49 @@ public class RopeAction : MonoBehaviour
 
     private void FixedUpdate()
     {
-        Swing();
-        MakeForwardVec();
-        SetRotate();
+        if(isRopeExisting)
+        {
+            Swing();
+            SetRotate();
+        }
     }
 
     void MakeRope()
     {
-        ropeAnchor = new GameObject("RopeAnchor");
+        ropeAnchor = new GameObject("RopeAnchor"); // swing 운동 축 생성
         ropeAnchor.transform.parent = this.transform;
         ropeAnchor.transform.localPosition = Vector3.zero;
-        rope = new GameObject("Rope"); // 로프 생성 해야함
+
+        rope = new GameObject("Rope");  // 플레이어가 매달릴 끝 생성
         rope.transform.parent = ropeAnchor.transform;
         Vector3 localPos = Vector3.zero;
-        localPos.y = -10f;
+        localPos.y = -ropeLength;
         rope.transform.localPosition = localPos;
-        player.GetComponent<PlayerController3D>().enabled = false;
+
+        player.GetComponent<PlayerController3D>().enabled = false; // 플레이어를 로프로 이동
         player.transform.position = rope.transform.position;
         player.transform.LookAt(player.transform.position + rope.transform.forward);
-        player.transform.parent = rope.transform;
+
+        player.transform.parent = rope.transform;  // 플레이어를 로프에 종속
+
         Vector3 localRot = Vector3.zero;
         localRot.x = -swingAngle;
-        rope.transform.rotation = Quaternion.Euler(localRot);
+        ropeAnchor.transform.localRotation = Quaternion.Euler(localRot);
 
+        isRopeExisting = true;
+    }
 
+    float FitInHalfDegree(float Angle)
+    {
+        return (Angle > 180) ? (Angle - 360f) : Angle;
     }
 
     void Swing()
     {
-        float rotationX = ropeAnchor.transform.localRotation.eulerAngles.x;
-        if (rotationX > 180)
-        {
-            rotationX = rotationX - 360f;
-        }
+        // -180 < rot X <= 180 사이로 고정 
+        float rotationX = FitInHalfDegree(ropeAnchor.transform.localRotation.eulerAngles.x);
 
-        if (isSwingForward)
+        if (isSwingForward) // 앞으로 갈지 뒤로갈지 결정
         {
             rotationX += swingSpeed * Time.fixedDeltaTime;
             if (rotationX > swingAngle)
@@ -99,32 +104,61 @@ public class RopeAction : MonoBehaviour
             }
         }
 
+        // rotation에 대입
         ropeAnchor.transform.localRotation = Quaternion.Euler(Vector3.right * rotationX);
     }
 
     void InputKey()
     {
+        if (isRotating)
+        {
+            return;
+        }
+
         bool F = ITT_KeyManager.Instance.GetKey(PlayerAction.MoveForward);
         bool B = ITT_KeyManager.Instance.GetKey(PlayerAction.MoveBackward);
         bool L = ITT_KeyManager.Instance.GetKey(PlayerAction.MoveLeft);
         bool R = ITT_KeyManager.Instance.GetKey(PlayerAction.MoveRight);
 
         Direction input = targetDirection;
-        if ((F && L) || (B && R))
+        
+        if(F)
         {
-            input = Direction.FL;
+            if(R)
+            {
+                input = Direction.FR;
+            }
+            else if(L)
+            {
+                input = Direction.FL;
+            }
+            else
+            {
+                input = Direction.F;
+            }
         }
-        else if ((F && R) || (B && L))
+        else if(B)
         {
-            input = Direction.FR;
+            if (R)
+            {
+                input = Direction.BR;
+            }
+            else if (L)
+            {
+                input = Direction.BL;
+            }
+            else
+            {
+                input = Direction.B;
+            }
         }
-        else if (F || B)
-        {
-            input = Direction.F;
-        }
-        else if (L || R)
+        else if(R)
         {
             input = Direction.R;
+        }
+        else if(L)
+        {
+            input = Direction.L;
         }
 
         if (input != targetDirection)
@@ -137,44 +171,53 @@ public class RopeAction : MonoBehaviour
         }
     }
 
-    void MakeForwardVec()
-    {
-        forwardVec = m_Camera.transform.forward;
-        forwardVec.y = 0;
-    }
-
     void SetRotate()
     {
-        Vector3 forward = transform.forward;
-        forward.y = 0;
-        if(forwardVec != forward)
-        {
-            transform.LookAt(transform.position + forwardVec);
-            targetDirection = Direction.F;
-            currentAddYRotation = 0f;
-            targetAddYRotation = 0f;
-            isRotating = false;
-        }
-
         if (isRotating)
         {          
+            // 목표 방향으로 도달하면 회전 멈춤
             if (Mathf.Abs(currentAddYRotation - targetAddYRotation) < 3f)
             {
                 isRotating = false;
                 return;
             }
 
+            //  목표 방향으로 시계, 반시계 중 가까운 방향으로 회전
             if (currentAddYRotation > targetAddYRotation)
             {
-                currentAddYRotation -= rotationSpeed * Time.fixedDeltaTime;
+                if ((currentAddYRotation - targetAddYRotation) > (targetAddYRotation + 360f - currentAddYRotation))
+                {
+                    currentAddYRotation += rotationSpeed * Time.fixedDeltaTime;
+                }
+                else
+                {
+                    currentAddYRotation -= rotationSpeed * Time.fixedDeltaTime;
+                }
             }
             else
             {
-                currentAddYRotation += rotationSpeed * Time.fixedDeltaTime;
+                if ((currentAddYRotation + 360f - targetAddYRotation) > (targetAddYRotation - currentAddYRotation))
+                {
+                    currentAddYRotation += rotationSpeed * Time.fixedDeltaTime;
+                }
+                else
+                {
+                    currentAddYRotation -= rotationSpeed * Time.fixedDeltaTime;
+                }
             }
-            Vector3 AddYRotation = Vector3.up * currentAddYRotation;
-            Vector3 currentYRotation = transform.rotation.eulerAngles + AddYRotation;
-            transform.rotation = Quaternion.Euler(currentYRotation);
+
+            // 0 <= Y rotation <= 360 사이로 고정
+            if (currentAddYRotation < 0)
+            {
+                currentAddYRotation += 360f;
+            }    
+            else if(currentAddYRotation > 360f)
+            {
+                currentAddYRotation -= 360f;
+            }
+
+            // rotation 변경
+            transform.rotation = Quaternion.Euler(Vector3.up * currentAddYRotation);
         }
     }
 

@@ -605,29 +605,33 @@ PrefabInstance:
       propertyPath: m_Name
       value: Player
       objectReference: {fileID: 0}
+    - target: {fileID: 1871643819189386926, guid: 4001a4a82e7cbc94fac2be2c5837ba02, type: 3}
+      propertyPath: m_Layer
+      value: 31
+      objectReference: {fileID: 0}
     - target: {fileID: 1871643820281250876, guid: 4001a4a82e7cbc94fac2be2c5837ba02, type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0.000000034303575
+      value: -0.000000034303575
       objectReference: {fileID: 0}
     - target: {fileID: 1871643820281250876, guid: 4001a4a82e7cbc94fac2be2c5837ba02, type: 3}
       propertyPath: m_LocalRotation.z
-      value: -0.0000000027391502
+      value: 0.0000000027391502
       objectReference: {fileID: 0}
     - target: {fileID: 1871643820557407393, guid: 4001a4a82e7cbc94fac2be2c5837ba02, type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0.000000016423723
+      value: -0.000000016423726
       objectReference: {fileID: 0}
     - target: {fileID: 1871643820557407393, guid: 4001a4a82e7cbc94fac2be2c5837ba02, type: 3}
       propertyPath: m_LocalRotation.z
-      value: 0.0000000051303872
+      value: -0.000000005130388
       objectReference: {fileID: 0}
     - target: {fileID: 1871643820678012481, guid: 4001a4a82e7cbc94fac2be2c5837ba02, type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0.000000017151786
+      value: -0.000000017151786
       objectReference: {fileID: 0}
     - target: {fileID: 1871643820678012481, guid: 4001a4a82e7cbc94fac2be2c5837ba02, type: 3}
       propertyPath: m_LocalRotation.z
-      value: -0.0000000013695751
+      value: 0.0000000013695751
       objectReference: {fileID: 0}
     - target: {fileID: 3459199263413225707, guid: 4001a4a82e7cbc94fac2be2c5837ba02, type: 3}
       propertyPath: sceneViewId
@@ -1002,11 +1006,6 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1032458885}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
---- !u!1 &1045144248 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 2749693544959997208, guid: 275fadad02c30c24aa70858377f067b8, type: 3}
-  m_PrefabInstance: {fileID: 1628127706}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1076199498
 GameObject:
   m_ObjectHideFlags: 0
@@ -1600,30 +1599,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 2749693544959997214, guid: 275fadad02c30c24aa70858377f067b8, type: 3}
   m_PrefabInstance: {fileID: 1628127706}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &1621308382
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1045144248}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ed9fae8c09db74141b058cb723cb5b57, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  player: {fileID: 908533701}
-  detectingRange: 10
-  ropeLength: 8
-  rotationSpeed: 180
-  swingSpeed: 30
-  targetDirection: 4
-  targetAddYRotation: 0
-  currentAddYRotation: 0
-  swingAngle: 60
-  isSwingForward: 1
-  isRotating: 0
-  currentFowardYRotation: 0
 --- !u!1001 &1628127706
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1631,6 +1606,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 923646749}
     m_Modifications:
+    - target: {fileID: 1621308382, guid: 275fadad02c30c24aa70858377f067b8, type: 3}
+      propertyPath: player
+      value: 
+      objectReference: {fileID: 908533701}
     - target: {fileID: 2749693544959997208, guid: 275fadad02c30c24aa70858377f067b8, type: 3}
       propertyPath: m_Name
       value: RopeCenter
