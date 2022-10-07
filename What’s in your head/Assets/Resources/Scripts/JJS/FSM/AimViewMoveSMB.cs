@@ -17,7 +17,7 @@ public class AimViewMoveSMB : StateMachineBehaviour
         animator.SetFloat("MoveZ", player.moveDir.normalized.z * (player.characterState.isMove ? 1.0f : 0.0f));
         player.InputMove();
         player.InputRun();
-        player.RotationAim();
+        player.RotateAim();
        
     }
 
