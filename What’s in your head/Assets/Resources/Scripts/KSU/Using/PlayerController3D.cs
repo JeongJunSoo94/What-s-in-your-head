@@ -82,11 +82,13 @@ public class PlayerController3D : MonoBehaviour
 
     void Awake()
     {
+        Cursor.lockState = CursorLockMode.Locked;
         characterState = GetComponent<CharacterState3D>();
         //_animator = GetComponent<Animator>();
         _capsuleCollider = GetComponent<CapsuleCollider>();
         _rigidbody = GetComponent<Rigidbody>();
         playerMouse = GetComponent<PlayerMouseController>();
+
         //_camera = Camera.main;
     }
     // Start is called before the first frame update
