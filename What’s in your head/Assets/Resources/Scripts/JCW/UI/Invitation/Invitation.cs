@@ -12,7 +12,6 @@ namespace JCW.UI
         [Header("초대자 ID 텍스트")] [SerializeField] private Text masterText;
         [Header("수락 버튼")] [SerializeField] private Button acceptButton;
         [Header("거절 버튼")] [SerializeField] private Button declineButton;
-        [Header("메인 메뉴 UI")] [SerializeField] GameObject mainUI = null;
         [Header("친구와 만났을 때 열릴 UI")][SerializeField] private GameObject readyObj = null;
 
         private string masterID = null;

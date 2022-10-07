@@ -12,7 +12,6 @@ namespace JCW.UI
         [Header("입력된 친구 ID")] [SerializeField] private InputField friendID = null;
         [Header("검색 버튼")] [SerializeField] private Button searchButton = null;
         [Header("뒤로가기 버튼")] [SerializeField] private Button backButton = null;
-        [Header("메인 메뉴 UI")] [SerializeField] GameObject mainUI = null;
         [Header("초대장 전송 성공")] [SerializeField] GameObject passUI = null;
         [Header("초대장 전송 실패")] [SerializeField] GameObject failUI = null;
 

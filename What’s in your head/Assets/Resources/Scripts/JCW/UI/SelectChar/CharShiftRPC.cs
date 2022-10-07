@@ -10,12 +10,14 @@ using Photon.Realtime;
 namespace JCW.UI
 {
     [RequireComponent(typeof(PhotonView))]
-    public class CharShifter : MonoBehaviour
+    public class CharShiftRPC : MonoBehaviour
     {
         [Header("기본 버튼 스프라이트")] [SerializeField] protected Sprite NellaDefaultSprite = null;
                                       [SerializeField] protected Sprite SteadyDefaultSprite = null;
+
         [Header("호버링 버튼 스프라이트")] [SerializeField] protected Sprite NellaOnButtonSprite = null;
                                        [SerializeField] protected Sprite SteadyOnButtonSprite = null;
+
         [Header("선택 버튼 스프라이트")] [SerializeField] protected Sprite NellaSelectSprite = null;
                                     [SerializeField] protected Sprite SteadySelectSprite = null;
         [Header("넬라/스테디 버튼")] [SerializeField] private Button NellaButton = null;
@@ -38,18 +40,6 @@ namespace JCW.UI
             SteadyButtonOwner = SteadyButton.gameObject.transform.GetChild(0).gameObject.GetComponent<Text>();
 
             photonView = this.gameObject.GetComponent<PhotonView>();
-
-            NellaButton.onClick.AddListener(() =>
-            {
-                //photonView.RPC("SelectSprite", RpcTarget.AllViaServer, PhotonNetwork.LocalPlayer.NickName, false, true);
-                SelectSprite(PhotonNetwork.LocalPlayer.NickName, false, true);
-            });
-
-            SteadyButton.onClick.AddListener(() =>
-            {
-                //photonView.RPC("SelectSprite", RpcTarget.AllViaServer, PhotonNetwork.LocalPlayer.NickName, false, false);
-                SelectSprite(PhotonNetwork.LocalPlayer.NickName, false, false);
-            });
         }
 
 
