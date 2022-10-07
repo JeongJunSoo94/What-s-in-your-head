@@ -827,7 +827,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &6477959932730636394
 RectTransform:
   m_ObjectHideFlags: 0
@@ -931,6 +931,7 @@ MonoBehaviour:
   myID: {fileID: 6477959933564058869}
   friendID: {fileID: 6477959932688679886}
   searchButton: {fileID: 6477959933263394749}
+  backButton: {fileID: 6477959933466931767}
   mainUI: {fileID: 0}
   passUI: {fileID: 2301790804247114014}
   failUI: {fileID: 5772552485376994457}
@@ -1278,30 +1279,6 @@ MonoBehaviour:
         m_TargetAssemblyTypeName: JCW.Options.ButtonShifter, Assembly-CSharp
         m_MethodName: SetDefaultSprite
         m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 6477959932730636374}
-        m_TargetAssemblyTypeName: JCW.UI.PlayUI, Assembly-CSharp
-        m_MethodName: GetOutOfRoom
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 6477959932730636373}
-        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
-        m_MethodName: SetActive
-        m_Mode: 6
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
