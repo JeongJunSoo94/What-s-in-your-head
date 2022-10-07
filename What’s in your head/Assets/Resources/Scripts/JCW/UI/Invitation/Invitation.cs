@@ -22,7 +22,7 @@ namespace JCW.UI
             // 현재 있는 로비 방을 나간 후, 방장 방에 접속
             acceptButton.onClick.AddListener(() =>
             {
-                mainUI.SendMessage("LetMasterMakeRoom", masterID);
+                PhotonManager.instance.gameObject.SendMessage("LetMasterMakeRoom", masterID);
                 PhotonNetwork.LeaveRoom();
                 StartCoroutine(nameof(WaitForRoom), masterID);
             });
@@ -41,10 +41,12 @@ namespace JCW.UI
         {
             while (PhotonNetwork.NetworkClientState.ToString() != ClientState.JoinedLobby.ToString())
             {
-                yield return new WaitForSeconds(0.05f);
-            }
-            PhotonNetwork.JoinOrCreateRoom(masterName, PhotonManager.instance.myRoomOptions, null);
+                yield return new WaitForSeconds(0.5f);
+            }            
+            
+            PhotonNetwork.JoinRoom(masterName, null);
             readyObj.SetActive(true);
+            this.gameObject.SetActive(false);
             yield return null;
         }
     }

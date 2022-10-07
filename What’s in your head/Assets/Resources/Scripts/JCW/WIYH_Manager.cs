@@ -6,7 +6,7 @@ public class WIYH_Manager : MonoBehaviour
 {
     [HideInInspector] public GameObject player1;
     [HideInInspector] public GameObject player2;
-    [HideInInspector] public GameObject base_main;
+    [HideInInspector] public GameObject base_main;    
 
     public static WIYH_Manager Instance = null;
     private void Awake()
@@ -14,7 +14,6 @@ public class WIYH_Manager : MonoBehaviour
         if (Instance == null)
         {
             Instance = this;
-            base_main = this.gameObject;
             DontDestroyOnLoad(this.gameObject);
         }
         else if(Instance != this)

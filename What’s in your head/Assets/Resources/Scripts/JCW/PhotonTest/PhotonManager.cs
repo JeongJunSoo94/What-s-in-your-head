@@ -13,6 +13,8 @@ namespace JCW.Network
     public class PhotonManager : MonoBehaviourPunCallbacks
     {
         [Header("ID 길이")] [SerializeField] [Range(1,8)] private uint LengthID = 6;
+        [Header("친구와 만났을 때 열릴 UI")] [SerializeField] private GameObject readyUI = null;
+        [Header("초대장")] [SerializeField] private GameObject InvitationUI;
         //버전 입력
         private readonly string version = "1.0";
 
@@ -104,6 +106,51 @@ namespace JCW.Network
                 Debug.Log($"ID : {player.Value.NickName}");
             }
             //StartCoroutine(nameof(MakeChar));
+        }
+
+        // 친구 검색창에서 돋보기 버튼 누르면 작동
+        public void TryMakeRoom(string friendName)
+        {
+            photonView.RPC("GetInvitation", RpcTarget.Others, friendName, PhotonNetwork.LocalPlayer.NickName);
+        }
+
+
+        // 초대장 받는 사람 기준의 함수.
+        [PunRPC]
+        void GetInvitation(string inviteeName, string masterName)
+        {
+            if (inviteeName == PhotonNetwork.LocalPlayer.NickName)
+            {
+                InvitationUI.SetActive(true);
+                InvitationUI.SendMessage("SetMasterName", masterName);
+            }
+        }
+
+        public void LetMasterMakeRoom(string masterName)
+        {
+            photonView.RPC("MakeRoom", RpcTarget.Others, masterName);
+        }
+
+        [PunRPC]
+        void MakeRoom(string masterName)
+        {
+            if (masterName == PhotonNetwork.LocalPlayer.NickName)
+            {
+                PhotonNetwork.LeaveRoom();
+                StartCoroutine(nameof(WaitForRoom), masterName);
+            }
+        }
+
+        IEnumerator WaitForRoom(string masterName)
+        {
+            while (PhotonNetwork.NetworkClientState.ToString() != ClientState.JoinedLobby.ToString())
+            {
+                yield return new WaitForSeconds(0.05f);
+            }
+            PhotonNetwork.JoinOrCreateRoom(masterName, PhotonManager.instance.myRoomOptions, null);
+            Debug.Log(masterName + "드디어 합석");
+            readyUI.SetActive(true);
+            yield return null;
         }
 
         IEnumerator MakeChar()

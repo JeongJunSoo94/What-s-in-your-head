@@ -17,9 +17,6 @@ namespace JCW.UI
         [Header("나타난 후 작동시킬 오브젝트들")][SerializeField] private List<GameObject> buttonObj = new();
         [Header("플레이 버튼 후 열릴 UI")][SerializeField] private GameObject playObj = null;
         [Header("옵션 버튼 후 열릴 UI")][SerializeField] private GameObject optionObj = null;
-        [Header("친구와 만났을 때 열릴 UI")][SerializeField] private GameObject readyObj = null;
-
-        [Header("초대장")][SerializeField]  private GameObject InvitationUI;
 
         private readonly List<Button> turningOnButtons = new();
         private readonly List<Text> buttonTexts = new();
@@ -27,13 +24,10 @@ namespace JCW.UI
 
         private int logoIndex = 0;
 
-        PhotonView photonView;
-
         Color transparentColor;
         
         private void Awake()
         {
-            photonView = PhotonManager.instance.myPhotonView;
             transparentColor = new Color(1, 1, 1, 0);
             Debug.Log("현재 투명도 : " + (transparentColor.a * 255f));
 
@@ -61,54 +55,7 @@ namespace JCW.UI
         private void Start()
         {
             StartCoroutine(nameof(Appear));
-        }
-
-        // 친구 검색창에서 돋보기 버튼 누르면 작동
-        public void TryMakeRoom(string friendName)
-        {
-            photonView.RPC("GetInvitation", RpcTarget.Others, friendName, PhotonNetwork.LocalPlayer.NickName);            
-        }
-
-
-        // 초대장 받는 사람 기준의 함수.
-        [PunRPC]
-        void GetInvitation(string inviteeName, string masterName)
-        {
-            if (inviteeName == PhotonNetwork.LocalPlayer.NickName)
-            {
-                InvitationUI.SetActive(true);
-                InvitationUI.SendMessage("SetMasterName", masterName);
-            }
-        }
-
-        public void LetMasterMakeRoom(string masterName)
-        {
-            photonView.RPC("MakeRoom", RpcTarget.Others, masterName);
-        }
-
-        [PunRPC]
-        void MakeRoom(string masterName)
-        {
-            if (masterName == PhotonNetwork.LocalPlayer.NickName)
-            {
-                PhotonNetwork.LeaveRoom();
-                StartCoroutine(nameof(WaitForRoom), masterName);             
-                //InvitationUI.SetActive(true);
-                //InvitationUI.SendMessage("SetMasterName", masterName);
-            }
-        }
-
-        IEnumerator WaitForRoom(string masterName)
-        {
-            while (PhotonNetwork.NetworkClientState.ToString() != ClientState.JoinedLobby.ToString())
-            {
-                yield return new WaitForSeconds(0.05f);
-            }
-            PhotonNetwork.JoinOrCreateRoom(masterName, PhotonManager.instance.myRoomOptions, null);
-            Debug.Log(masterName + "드디어 합석");
-            readyObj.SetActive(true);
-            yield return null;
-        }
+        }        
 
         IEnumerator Appear()
         {

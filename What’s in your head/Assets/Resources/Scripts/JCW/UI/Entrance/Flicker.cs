@@ -24,7 +24,7 @@ namespace JCW.UI
             {
                 mainMenu.SetActive(true);
                 PhotonManager.instance.Connect();
-                this.gameObject.SetActive(false);
+                Destroy(this.gameObject);
             }
 
         }

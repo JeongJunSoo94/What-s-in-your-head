@@ -13,8 +13,11 @@ namespace JCW.UI.Options
         {
             if (Instance == null)
                 Instance = this;
-            else if (Instance != this)
-                Destroy(this.gameObject);
+        }
+
+        private void OnEnable()
+        {
+            Instance = this;
         }
 
         private void Start()
