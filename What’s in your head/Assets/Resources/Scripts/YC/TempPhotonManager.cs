@@ -101,18 +101,16 @@ namespace YC.Photon
                 Debug.Log($"{player.Value.NickName}, {player.Value.ActorNumber}");
             }
 
-            // 캐릭터 출현 정보를 배열에 저장
 
-            // 캐릭터를 생성
 
 
             if (PhotonNetwork.CurrentRoom.PlayerCount == 1)
             {              
-                PhotonNetwork.Instantiate("Prefabs/YC/Player", Vector3.zero, Quaternion.identity);
+                PhotonNetwork.Instantiate("Prefabs/YC/Player", new Vector3 (-5, 0, 0), Quaternion.identity);
             }
             else if (PhotonNetwork.CurrentRoom.PlayerCount == 2)
             {
-                PhotonNetwork.Instantiate("Prefabs/YC/Player", Vector3.zero, Quaternion.identity);
+                PhotonNetwork.Instantiate("Prefabs/YC/Player", new Vector3(5, 0, 0), Quaternion.identity);
             }
         }
     }
