@@ -8,40 +8,40 @@ namespace JCW.UI.Options
 {
     public class SelectTab : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
     {
-        private GameObject _contents = null;
-        private GameObject _textObj = null;
-        private Text _text = null;
-        private Button _button = null;
+        private GameObject contents = null;
+        private GameObject textObj = null;
+        private Text text = null;
+        private Button button = null;
 
         private int textInitSize = 0;
 
         private void Awake()
         {
-            _button = this.gameObject.GetComponent<Button>();
-            _textObj = this.gameObject.transform.GetChild(0).gameObject;
-            _text = _textObj.GetComponent<Text>();
-            _contents = this.gameObject.transform.GetChild(1).gameObject;
+            button = this.gameObject.GetComponent<Button>();
+            textObj = this.gameObject.transform.GetChild(0).gameObject;
+            text = textObj.GetComponent<Text>();
+            contents = this.gameObject.transform.GetChild(1).gameObject;
         }
         void Start()
         {
-            textInitSize = _text.fontSize;
-            _button.onClick.AddListener(() =>
+            textInitSize = text.fontSize;
+            button.onClick.AddListener(() =>
             {
-                TabManager.Instance.ClickTab(_button);
-                _contents.SetActive(true);
+                TabManager.Instance.ClickTab(button);
+                contents.SetActive(true);
             });
         }
 
         // 마우스 포인터가 닿았을 때
         public void OnPointerEnter(PointerEventData eventData)
         {
-            if (eventData.pointerEnter == _textObj)
-                _text.fontSize = (int)(textInitSize * 1.2f);
+            if (eventData.pointerEnter == textObj)
+                text.fontSize = (int)(textInitSize * 1.2f);
         }
         // 마우스 포인터가 떨어졌을 때
         public void OnPointerExit(PointerEventData eventData)
         {
-            _text.fontSize = textInitSize;
+            text.fontSize = textInitSize;
         }
     }
 }

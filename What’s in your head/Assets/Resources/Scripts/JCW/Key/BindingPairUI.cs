@@ -14,15 +14,9 @@ namespace JCW.UI.Options.InputBindings
 
         private Image highlight;
 
-        private readonly List<Color> visInvis = new();
-
         override protected void Awake()
         {
             textName = actionLabel;
-            Init();
-            visInvis.Add(new Color(1, 1, 1, 1));
-            visInvis.Add(new Color(1, 1, 1, 0));            
-
             highlight = gameObject.GetComponent<Image>();
         }
 
@@ -110,16 +104,10 @@ namespace JCW.UI.Options.InputBindings
             return convertText;
         }
 
-        override public void OnPointerEnter(PointerEventData eventData)
+        override protected void InvertFont()
         {
-            highlight.color = visInvis[0];
-            actionLabel.color = BlackWhite[1];
-        }
-
-        override public void OnPointerExit(PointerEventData eventData)
-        {
-            highlight.color = visInvis[1];
-            actionLabel.color = BlackWhite[0];
+            SetVisibleInvert(highlight);
+            actionLabel.color = GetInvertColor(actionLabel.color);
         }
     }
 }

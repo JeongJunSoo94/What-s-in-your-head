@@ -35,7 +35,7 @@ namespace JCW.UI
 
         IEnumerator WaitForRoom(string masterName)
         {
-            while (PhotonNetwork.NetworkClientState.ToString() != ClientState.JoinedLobby.ToString()) 
+            while (PhotonNetwork.NetworkClientState != ClientState.JoinedLobby) 
             {
                 yield return new WaitForSeconds(0.5f); 
             }            

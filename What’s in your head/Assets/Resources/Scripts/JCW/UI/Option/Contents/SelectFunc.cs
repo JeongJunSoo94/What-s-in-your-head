@@ -5,151 +5,125 @@ using UnityEngine.UI;
 using UnityEngine.EventSystems;
 
 namespace JCW.UI.Options
-{
+{    
     public class SelectFunc : FontColorShift
     {
-        [Header("기능의 개수")] [SerializeField] private List<string> funcTexts;
+        protected enum funcChild { Name, Left, Func, Right };
 
+        [Header("기능의 개수")] [SerializeField] private List<string> funcTexts;
+        [Header("슬라이더일 경우 기본 세팅값")] [SerializeField] private int sliderDefaultValue = 20;
+
+        // 좌우버튼 및 UI에 보여지는 기능값
         private Button leftButton;
         private Button rightButton;
+        private GameObject funcValue;
+        
+        // 슬라이더 바를 쓰는 지
+        private bool isSlider;
 
-        private Text func;
-
-        private GameObject funcValueObj;
+        // 버튼에 의해 값이 변하는 핵심 기능
+        private Text functionName;
         private Slider slider;
 
+        private Text sliderValueOnUI;
+
+        // 버튼의 현재 위치
         private int index = 0;
 
-        private Image thisImg;
-
-        private readonly List<Color> visInvis = new();
+        private Image hoveringImg;
 
         override protected void Awake()
         {
-            textName = gameObject.transform.GetChild(0).gameObject.GetComponent<Text>();
-            Init();
-            visInvis.Add(new Color(1, 1, 1, 1));
-            visInvis.Add(new Color(1, 1, 1, 0));
+            textName = gameObject.transform.GetChild((int)funcChild.Name).gameObject.GetComponent<Text>();
+            leftButton = gameObject.transform.GetChild((int)funcChild.Left).gameObject.GetComponent<Button>();
+            rightButton = gameObject.transform.GetChild((int)funcChild.Right).gameObject.GetComponent<Button>();
+            funcValue = gameObject.transform.GetChild((int)funcChild.Func).gameObject;
 
-            thisImg = this.gameObject.GetComponent<Image>();
-            thisImg.color = visInvis[1];
+            isSlider = funcTexts.Count==0 ? true : false;
 
-            
-            leftButton = gameObject.transform.GetChild(1).gameObject.GetComponent<Button>();
-
-            rightButton = gameObject.transform.GetChild(3).gameObject.GetComponent<Button>();
+            hoveringImg = this.gameObject.GetComponent<Image>();
+            if (isSlider)
+            {
+                index = sliderDefaultValue;
+                slider = funcValue.GetComponent<Slider>();
+                sliderValueOnUI = slider.gameObject.transform.GetChild(0).gameObject.GetComponent<Text>();
+            }
+            else
+                functionName = funcValue.GetComponent<Text>();
         }
+
+        // 아마 문제인듯..?
 
         private void OnEnable()
         {
-            if (funcTexts.Count > 1)
+            if (!isSlider)
             {
-                if (index == 0)
-                {
-                    leftButton.interactable = false;
-                    rightButton.interactable = true;
-                }
-                else if (index == funcTexts.Count - 1)
-                {
-                    leftButton.interactable = true;
-                    rightButton.interactable = false;
-                }
+                index = funcTexts.FindIndex(func => func.Contains(functionName.text));
+                if (index == -1)
+                    index = 0;
             }
-
-
-            if (funcTexts.Count != 0 && func != null)
-            {
-                for (int i = 0 ; i<funcTexts.Count ; ++i)
-                {
-                    if (func.text == funcTexts[i])
-                    {
-                        index = i;
-                        return;
-                    }
-                }
-            }
+            else { slider.value = index/100f; }
         }
 
         void Start()
         {
             // 슬라이더가 아닐 때
-            if (funcTexts.Count != 0)
-            {
-                leftButton.interactable = false;
-                func = gameObject.transform.GetChild(2).gameObject.GetComponent<Text>();
-                Destroy(funcValueObj);
-            }
-            else
-            {
-                Destroy(func);
-                funcValueObj = gameObject.transform.GetChild(2).gameObject.transform.GetChild(0).gameObject;
-                slider = funcValueObj.transform.parent.gameObject.GetComponent<Slider>();
-            }
+            if (!isSlider) { leftButton.interactable = false; }
 
             // 왼쪽 버튼 입력 시
             leftButton.onClick.AddListener(() =>
             {
-                if (funcTexts.Count == 0)
+                if (isSlider)
                 {
                     slider.value -= 0.01f;
                     index = (int)(slider.value * 100);
-                    if (index == 0)
-                        leftButton.interactable = false;
-                    if (!rightButton.IsInteractable())
-                        rightButton.interactable = true;
                 }
-                else
-                {
-                    func.text = funcTexts[--index];
-                    if (index == 0)
-                        leftButton.interactable = false;
-                    if (!rightButton.IsInteractable())
-                        rightButton.interactable = true;
-                }
+                else { functionName.text = funcTexts[--index]; }
+
+                if (index == 0)                 leftButton.interactable = false;
+                if (!rightButton.interactable)  rightButton.interactable = true;
             });
 
             // 오른쪽 버튼 입력 시
             rightButton.onClick.AddListener(() =>
             {
-                if (funcTexts.Count == 0)
+                if (isSlider)
                 {
                     slider.value += 0.01f;
                     index = (int)(slider.value * 100);
-                    if (index == 100)
-                        rightButton.interactable = false;
-                    if (!leftButton.IsInteractable())
-                        leftButton.interactable = true;
                 }
-                else
-                {
-                    func.text = funcTexts[++index];
-                    if (index == funcTexts.Count - 1)
-                        rightButton.interactable = false;
-                    if (funcTexts.Count != 0 && !leftButton.IsInteractable())
-                        leftButton.interactable = true;
-                }
+                else { functionName.text = funcTexts[++index]; }
+
+                if (index == 100 || index == funcTexts.Count - 1)
+                    rightButton.interactable = false;
+                                
+                if (!leftButton.interactable)
+                    leftButton.interactable = true;
+
             });
         }
-
-        override public void OnPointerEnter(PointerEventData eventData)
+        private void FixedUpdate()
         {
-            thisImg.color = visInvis[0];
-            base.OnPointerEnter(eventData);
-            if (funcTexts.Count != 0)
-                func.color = BlackWhite[1];
-            else
-                funcValueObj.GetComponent<Text>().color = BlackWhite[1];
-
+            leftButton.interactable = index != 0;
+            rightButton.interactable = index != funcTexts.Count - 1 && index != 100;            
         }
 
-        override public void OnPointerExit(PointerEventData eventData)
+
+        // 값이 자꾸 1 낮아지는 현상이 있음.
+        private void Update()
         {
-            thisImg.color = visInvis[1];
-            base.OnPointerExit(eventData);
-            if (funcTexts.Count != 0)
-                func.color = BlackWhite[0];
+            if (isSlider)
+                index = (int)(100* slider.value);
+        }
+
+        override protected void InvertFont()
+        {
+            base.InvertFont();
+            SetVisibleInvert(hoveringImg);
+            if (!isSlider)
+                functionName.color = GetInvertColor(functionName.color);
             else
-                funcValueObj.GetComponent<Text>().color = BlackWhite[0];
+                sliderValueOnUI.color = GetInvertColor(sliderValueOnUI.color);
         }
     }
 }
