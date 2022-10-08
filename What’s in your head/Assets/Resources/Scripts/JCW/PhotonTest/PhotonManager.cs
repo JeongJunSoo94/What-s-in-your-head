@@ -84,7 +84,7 @@ namespace JCW.Network
         // 로비에 접속 후 호출되는 콜백 함수
         public override void OnJoinedLobby()
         {
-            Debug.Log($"로비 접속 성공 : {PhotonNetwork.InLobby}");
+            Debug.Log($"로비 접속 성공");
         }
 
         // 룸 생성이 완료된 후 호출되는 콜백 함수
@@ -148,7 +148,6 @@ namespace JCW.Network
                 yield return new WaitForSeconds(0.05f);
             }
             PhotonNetwork.JoinOrCreateRoom(masterName, PhotonManager.instance.myRoomOptions, null);
-            Debug.Log(masterName + "드디어 합석");
             readyUI.SetActive(true);
             yield return null;
         }

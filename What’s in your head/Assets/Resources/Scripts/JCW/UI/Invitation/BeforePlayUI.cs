@@ -18,12 +18,14 @@ namespace JCW.UI
         void Start()
         {
             myID.text = PhotonManager.instance.userID;
+
             backButton.onClick.AddListener(() =>
             {
                 if(PhotonNetwork.NetworkClientState.ToString() == ClientState.Joined.ToString())
                     PhotonNetwork.LeaveRoom();
                 this.gameObject.SetActive(false);
             });
+
             searchButton.onClick.AddListener(() =>
             {                       
                 for (int i = 0 ; i<PhotonNetwork.PlayerList.Length ; ++i)

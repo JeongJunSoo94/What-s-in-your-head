@@ -15,6 +15,7 @@ namespace JCW.UI
         [Header("기본 버튼 스프라이트")] [SerializeField] protected Sprite defaultSprite = null;
         [Header("호버링 버튼 스프라이트")] [SerializeField] protected Sprite onButtonSprite = null;
         [Header("선택 버튼 스프라이트")] [SerializeField] protected Sprite selectSprite = null;
+        private GameObject selectCharacter = null;
 
         private Image thisImg;
 
@@ -22,68 +23,147 @@ namespace JCW.UI
         private Text curButtonOwner;
         private Text otherButtonOwner;
 
+        // 각 버튼의 캐릭터 이름과 설명의 투명도를 바꾸기 위한 변수.
+        private Text charName;
+        private Text charDesc;
+
+        // 스테디 전용 컬러
+        private readonly List<Color> bwColors = new();
+
         private PhotonView photonView;
+
+        private readonly List<GameObject> ownPlayer = new();
 
 
         private void Awake()
         {
+            bwColors.Add(new Color(0, 0, 0, 1));
+            bwColors.Add(new Color(1, 1, 1, 1));
+
             thisImg = this.gameObject.GetComponent<Image>();
             photonView = this.gameObject.GetComponent<PhotonView>();
+
+            // 버튼을 누른 사람
             curButtonOwner = this.gameObject.transform.GetChild(0).gameObject.GetComponent<Text>();
             otherButtonOwner = otherObj.transform.GetChild(0).gameObject.GetComponent<Text>();
+
+            ownPlayer.Add(curButtonOwner.gameObject.transform.GetChild(0).gameObject);
+            ownPlayer.Add(curButtonOwner.gameObject.transform.GetChild(1).gameObject);
+
+            selectCharacter = this.gameObject.transform.GetChild(2).gameObject;
+
+            GameObject character = this.gameObject.transform.GetChild(3).gameObject;
+            charName = character.GetComponent<Text>();
+            charDesc = character.transform.GetChild(0).gameObject.GetComponent<Text>();
+
             this.gameObject.GetComponent<Button>().onClick.AddListener(() =>
             {
-                //photonView.RPC(nameof(SelectSprite), RpcTarget.AllViaServer, PhotonNetwork.LocalPlayer.NickName);
-                SelectSprite(PhotonNetwork.LocalPlayer.NickName);
+                photonView.RPC(nameof(SelectSprite), RpcTarget.AllViaServer, PhotonNetwork.LocalPlayer.NickName, PhotonNetwork.IsMasterClient);
+                //SelectSprite(PhotonNetwork.LocalPlayer.NickName);
             });
         }
 
         public void OnPointerEnter(PointerEventData eventData)
         {
-            //photonView.RPC(nameof(ChangeSprite), RpcTarget.AllViaServer, true);
-            ChangeSprite(true);
+            photonView.RPC(nameof(ChangeSprite), RpcTarget.AllViaServer, true, PhotonNetwork.IsMasterClient);
         }
 
         public void OnPointerExit(PointerEventData eventData)
         {
-            //photonView.RPC(nameof(ChangeSprite), RpcTarget.AllViaServer, false);
-            ChangeSprite(false);
+            photonView.RPC(nameof(ChangeSprite), RpcTarget.AllViaServer, false, PhotonNetwork.IsMasterClient);
         }
 
         [PunRPC]
-        public void ChangeSprite(bool isHovering)
+        public void ChangeSprite(bool isHovering, bool isMaster)
         {
             if (thisImg.sprite != selectSprite)
-                thisImg.sprite = isHovering ? onButtonSprite : defaultSprite;
+            {
+                if (isHovering)
+                {
+                    thisImg.sprite = onButtonSprite;
+                    SetVisible(charName);
+                    SetVisible(charDesc);
+                    if(isMaster)
+                        ownPlayer[0].SetActive(true);
+                    else
+                        ownPlayer[1].SetActive(true);
+                }
+                else
+                {
+                    if(!ownPlayer[0].activeSelf || !ownPlayer[1].activeSelf)
+                    {
+                        thisImg.sprite = defaultSprite;
+                        SetVisible(charName, false);
+                        SetVisible(charDesc, false);
+                    }
+                    if (isMaster)
+                        ownPlayer[0].SetActive(false);
+                    else
+                        ownPlayer[1].SetActive(false);
+                }
+            }            
         }
 
-        // PunRPC라서 다 같이 실행되는데, 서로 동시에 할당하려고 하는지 테스트 필요
-        // 또한 DeSelect를 따로 구분해서 Deselect를 부르는 RPC 코드도 필요
+
         [PunRPC]
-        public void SelectSprite(string playerName)
+        public void SelectSprite(string playerName, bool isMaster)
         {
             // 선택되지 않은 현재 버튼을 선택했을 때
             if (curButtonOwner.text == "")
             {
                 curButtonOwner.text = playerName;
                 thisImg.sprite = selectSprite;
+
+                ownPlayer[0].SetActive(false);
+                ownPlayer[1].SetActive(false);
+                selectCharacter.transform.GetChild(0).gameObject.GetComponent<Text>().text = isMaster ? "플레이어 1" : "플레이어2";
+                selectCharacter.SetActive(true);
+
+                // 스테디일 경우에만 폰트 하얀색으로 변경
+                if (this.gameObject.name.Contains("Steady"))
+                {
+                    charName.color = bwColors[1];
+                    charDesc.color = bwColors[1];
+                }
                 // 다른 버튼을 이미 선택했었을 때
                 if (otherButtonOwner.text == playerName)
-                    otherObj.SendMessage("DeSelectSprite");
+                    otherObj.SendMessage("DeSelectSprite", false);
             }
-            // 본인이 선택했던 넬라 버튼을 다시 눌렀을 때
+            // 본인이 선택했던 캐릭터 버튼을 다시 눌렀을 때
             else if (curButtonOwner.text == playerName)
             {
-                //photonView.RPC(nameof(DeSelectSprite), RpcTarget.AllViaServer);
                 DeSelectSprite();
+                if (isMaster)
+                    ownPlayer[0].SetActive(true);
+                else
+                    ownPlayer[1].SetActive(true);
             }
         }
 
+        public void DeSelectSprite(bool isDeactiveSelf = true)
+        {
+            photonView.RPC(nameof(DeSelectSpriteRPC), RpcTarget.AllViaServer, isDeactiveSelf);
+            selectCharacter.SetActive(false);
+        }
+
+
         [PunRPC]
-        public void DeSelectSprite()
+        public void DeSelectSpriteRPC(bool isDeactiveSelf)
         {
             curButtonOwner.text = "";
-            thisImg.sprite = defaultSprite;
+            thisImg.sprite = isDeactiveSelf ? onButtonSprite : defaultSprite;
+            if (this.gameObject.name.Contains("Steady"))
+            {
+                charName.color = bwColors[0];
+                charDesc.color = bwColors[0];
+            }
+        }
+
+        void SetVisible(Text _text ,bool isVisible = true)
+        {
+            Color setColor = _text.color;
+            setColor.a = isVisible ? 1 : 0;
+            _text.color = setColor;
         }
     }
 }

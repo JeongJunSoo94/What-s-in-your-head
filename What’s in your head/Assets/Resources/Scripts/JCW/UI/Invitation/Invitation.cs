@@ -25,10 +25,7 @@ namespace JCW.UI
                 PhotonNetwork.LeaveRoom();
                 StartCoroutine(nameof(WaitForRoom), masterID);
             });
-            declineButton.onClick.AddListener(() =>
-            {                
-                this.gameObject.SetActive(false);
-            });
+            declineButton.onClick.AddListener(() => {  this.gameObject.SetActive(false); });
         }
         void SetMasterName(string masterName)
         {
@@ -38,9 +35,9 @@ namespace JCW.UI
 
         IEnumerator WaitForRoom(string masterName)
         {
-            while (PhotonNetwork.NetworkClientState.ToString() != ClientState.JoinedLobby.ToString())
+            while (PhotonNetwork.NetworkClientState.ToString() != ClientState.JoinedLobby.ToString()) 
             {
-                yield return new WaitForSeconds(0.5f);
+                yield return new WaitForSeconds(0.5f); 
             }            
             
             PhotonNetwork.JoinRoom(masterName, null);
