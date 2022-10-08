@@ -17,9 +17,7 @@ namespace YC.Camera_
     public class CameraController : MonoBehaviour, IPunObservable
     {
 
-         
         // Photon 
-
         PhotonView pv;
 
         // Player
@@ -69,27 +67,24 @@ namespace YC.Camera_
         void Awake()
         {
             // Photon 
-            #region
             pv = GetComponent<PhotonView>();
             if (pv) pv.ObservedComponents.Add(this);
-            #endregion
 
             //Camera Components
-            #region 
             cinemachineBrain    = this.gameObject.transform.Find("Main Camera").GetComponent<CinemachineBrain>();
             mainCam             = this.gameObject.transform.Find("Main Camera").GetComponent<Camera>();
 
             camList     = new List<CinemachineVirtualCameraBase>();
+
             backCam     = this.gameObject.transform.Find("Cine_backCam").GetComponent<CinemachineVirtualCameraBase>();
             sholderCam  = this.gameObject.transform.Find("Cine_sholderCam").GetComponent<CinemachineVirtualCameraBase>();
             topCam      = GameObject.Find("Cine_topCam").GetComponent<CinemachineVirtualCameraBase>();
+
             camList.Add(backCam);
             camList.Add(sholderCam);
             camList.Add(topCam);
-            #endregion
 
             // Camera Variables
-            #region 
             curCam = new CamState();
             preCam = new CamState();
 
@@ -97,13 +92,12 @@ namespace YC.Camera_
             curCam_Clone = new CamState();
             blendingCam_Clone = new CamState();
 
-            #endregion
         }
 
         void Start()
-        {      
-            if(pv.IsMine)
-            {           
+        {
+            if (pv.IsMine)
+            {
                 curCam_Clone = CamState.back;
                 blendingCam_Clone = CamState.back;
                 OnOffCamera(camList[(int)curCam_Clone]);
@@ -113,6 +107,8 @@ namespace YC.Camera_
                 curCam = CamState.back;
                 OnOffCamera(camList[(int)curCam]);
             }
+
+            
         }
 
         void Update()

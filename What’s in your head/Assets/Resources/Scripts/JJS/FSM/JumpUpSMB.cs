@@ -9,16 +9,22 @@ public class JumpUpSMB : StateMachineBehaviour
     override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
         player = animator.transform.gameObject.GetComponent<PlayerController3D>();
+        if (player != null)
+        { 
         player.characterState.isRun = false;
+        }
     }
 
     // OnStateUpdate is called on each Update frame between OnStateEnter and OnStateExit callbacks
     override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
+        if (player != null)
+        { 
         player.InputMove();
         player.InputDash();
         player.InputJump();
         check(animator);
+        }
     }
     override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
