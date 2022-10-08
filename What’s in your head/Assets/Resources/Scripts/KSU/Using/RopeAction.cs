@@ -7,6 +7,7 @@ public class RopeAction : MonoBehaviour
 {
     public GameObject player;
 
+
     public enum Direction { F, FR, R, BR, B, BL, L, FL, Default }
 
     public float detectingRange = 10f;
@@ -20,7 +21,7 @@ public class RopeAction : MonoBehaviour
 
 
     public float swingAngle = 60f;
-    GameObject ropeAnchor;
+    [SerializeField] GameObject ropeAnchor;
     GameObject rope;
 
     public bool isSwingForward = true;
