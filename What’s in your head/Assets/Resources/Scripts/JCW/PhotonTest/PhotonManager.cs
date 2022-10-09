@@ -28,14 +28,13 @@ namespace JCW.Network
 
 
         //싱글톤
-        public static PhotonManager instance = null;
-
+        public static PhotonManager Instance = null;
 
         private void Awake()
         {
-            if (instance == null)
+            if (Instance == null)
             {
-                instance = this;
+                Instance = this;
                 myPhotonView = gameObject.GetComponent<PhotonView>();
                 myRoomOptions = new()
                 {
@@ -45,8 +44,9 @@ namespace JCW.Network
                 };
                 DontDestroyOnLoad(this.gameObject);
             }
-            else if (instance != this)
+            else if (Instance != this)
             {
+                Debug.Log("싱글톤에 어긋났으므로 삭제합니다");
                 Destroy(this.gameObject);
             }
 
@@ -110,6 +110,31 @@ namespace JCW.Network
             }
             //StartCoroutine(nameof(MakeChar));
         }
+        public void GamePause(string playerName)
+        {
+            myPhotonView.RPC(nameof(GamePauseRPC), RpcTarget.AllViaServer, playerName);
+        }
+
+        [PunRPC]
+        public void GamePauseRPC(string playerName)
+        {
+            GameManager.Instance.stopPlayerName = playerName;
+
+            // 여기에 PauseMenu를 띄우는 것 하기
+        }
+
+        public void ChangeStage()
+        {
+            myPhotonView.RPC(nameof(ChangeStageRPC), RpcTarget.AllViaServer);
+        }
+
+        [PunRPC]
+        public void ChangeStageRPC()
+        {
+            PhotonNetwork.LoadLevel(GameManager.Instance.currentStageIndex);
+            if(GameManager.Instance.currentStageIndex != 0)
+                StartCoroutine(nameof(MakeChar));
+        }
 
         // 친구 검색창에서 돋보기 버튼 누르면 작동
         public void TryMakeRoom(string friendName)
@@ -150,7 +175,7 @@ namespace JCW.Network
             {
                 yield return new WaitForSeconds(0.05f);
             }
-            PhotonNetwork.JoinOrCreateRoom(masterName, PhotonManager.instance.myRoomOptions, null);
+            PhotonNetwork.JoinOrCreateRoom(masterName, myRoomOptions, null);
             readyUI.SetActive(true);
             yield return null;
         }

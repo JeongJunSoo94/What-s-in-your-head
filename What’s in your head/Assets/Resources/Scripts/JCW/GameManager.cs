@@ -2,17 +2,21 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class WIYH_Manager : MonoBehaviour
+public class GameManager : MonoBehaviour
 {
     [HideInInspector] public GameObject player1;
     [HideInInspector] public GameObject player2;
-    [HideInInspector] public GameObject base_main;    
+    [HideInInspector] public GameObject base_main;
 
-    public static WIYH_Manager Instance = null;
+    public int currentStageIndex = 1;
+    public string stopPlayerName = "";
+
+    public static GameManager Instance = null;
     private void Awake()
     {
         if (Instance == null)
         {
+            currentStageIndex = 1;
             Instance = this;
             DontDestroyOnLoad(this.gameObject);
         }

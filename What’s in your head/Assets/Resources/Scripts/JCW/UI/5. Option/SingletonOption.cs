@@ -15,6 +15,15 @@ namespace JCW.UI.Options
             else if (Instance != this)
                 Destroy(this.gameObject);
         }
+
+        private void OnEnable()
+        {
+            /*
+            
+            추후 : 현재 게임 중이면 Background 이미지 꺼주고, 메인 메뉴에서의 옵션은 켜주기
+
+            */
+        }
     }
 }
 

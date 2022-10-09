@@ -8,16 +8,20 @@ namespace JCW.UI.Options
     {
 
         [Header("적용 버튼")][SerializeField] GameObject applyObj = null;
-
-        Button initializeButton = null;
+        [Header("초기화 버튼")][SerializeField] Button resetButton = null;
+        [Header("뒤로가기 버튼")][SerializeField] Button backButton = null;
 
         private void Awake()
         {
-            
-            initializeButton = this.gameObject.GetComponent<Button>();
-            initializeButton.onClick.AddListener(() =>
+            resetButton.onClick.AddListener(() =>
             {
                 InitializeValue();
+                this.gameObject.SetActive(false);
+            });
+
+            backButton.onClick.AddListener(() =>
+            {
+                this.gameObject.SetActive(false);
             });
         }
 

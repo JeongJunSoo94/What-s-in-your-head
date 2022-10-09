@@ -8,10 +8,11 @@ namespace JCW.UI.Options
 {    
     public class SelectFunc : FontColorShift
     {
-        protected enum funcChild { Name, Left, Func, Right };
+        protected enum FuncChild { Name, Left, Func, Right };
 
         [Header("기능의 개수")] [SerializeField] private List<string> funcTexts;
-        [Header("슬라이더일 경우 기본 세팅값")] [SerializeField] private int sliderDefaultValue = 20;
+        [Header("슬라이더 최솟값 / 최댓값")] [SerializeField] [Range(0, 100)] private int min = 0;
+                                        [SerializeField] [Range(0, 100)] private int max = 100;
 
         // 좌우버튼 및 UI에 보여지는 기능값
         private Button leftButton;
@@ -34,25 +35,24 @@ namespace JCW.UI.Options
 
         override protected void Awake()
         {
-            textName = gameObject.transform.GetChild((int)funcChild.Name).gameObject.GetComponent<Text>();
-            leftButton = gameObject.transform.GetChild((int)funcChild.Left).gameObject.GetComponent<Button>();
-            rightButton = gameObject.transform.GetChild((int)funcChild.Right).gameObject.GetComponent<Button>();
-            funcValue = gameObject.transform.GetChild((int)funcChild.Func).gameObject;
+            textName = gameObject.transform.GetChild((int)FuncChild.Name).gameObject.GetComponent<Text>();
+            leftButton = gameObject.transform.GetChild((int)FuncChild.Left).gameObject.GetComponent<Button>();
+            rightButton = gameObject.transform.GetChild((int)FuncChild.Right).gameObject.GetComponent<Button>();
+            funcValue = gameObject.transform.GetChild((int)FuncChild.Func).gameObject;
 
-            isSlider = funcTexts.Count==0 ? true : false;
+            isSlider = funcTexts.Count==0;
 
             hoveringImg = this.gameObject.GetComponent<Image>();
             if (isSlider)
             {
-                index = sliderDefaultValue;
                 slider = funcValue.GetComponent<Slider>();
+                slider.minValue = min;
+                slider.maxValue = max;
                 sliderValueOnUI = slider.gameObject.transform.GetChild(0).gameObject.GetComponent<Text>();
             }
             else
                 functionName = funcValue.GetComponent<Text>();
         }
-
-        // 아마 문제인듯..?
 
         private void OnEnable()
         {
@@ -62,7 +62,6 @@ namespace JCW.UI.Options
                 if (index == -1)
                     index = 0;
             }
-            else { slider.value = index/100f; }
         }
 
         void Start()
@@ -75,8 +74,8 @@ namespace JCW.UI.Options
             {
                 if (isSlider)
                 {
-                    slider.value -= 0.01f;
-                    index = (int)(slider.value * 100);
+                    slider.value -= 1;
+                    index = (int)(slider.value);
                 }
                 else { functionName.text = funcTexts[--index]; }
 
@@ -89,8 +88,8 @@ namespace JCW.UI.Options
             {
                 if (isSlider)
                 {
-                    slider.value += 0.01f;
-                    index = (int)(slider.value * 100);
+                    slider.value += 1;
+                    index = (int)(slider.value);
                 }
                 else { functionName.text = funcTexts[++index]; }
 
@@ -109,21 +108,23 @@ namespace JCW.UI.Options
         }
 
 
-        // 값이 자꾸 1 낮아지는 현상이 있음.
         private void Update()
         {
             if (isSlider)
-                index = (int)(100* slider.value);
+            {
+                index = (int)slider.value;
+                sliderValueOnUI.text = index.ToString();
+            }
         }
 
-        override protected void InvertFont()
+        override protected void InvertFont(bool isDefault = true)
         {
-            base.InvertFont();
-            SetVisibleInvert(hoveringImg);
+            base.InvertFont(isDefault);
+            hoveringImg.color = GetInvertVisible(hoveringImg.color, isDefault);
             if (!isSlider)
-                functionName.color = GetInvertColor(functionName.color);
+                functionName.color = textName.color;
             else
-                sliderValueOnUI.color = GetInvertColor(sliderValueOnUI.color);
+                sliderValueOnUI.color = textName.color;
         }
     }
 }

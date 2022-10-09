@@ -42,7 +42,8 @@ namespace JCW.UI.Options.InputBindings
 
         void Update()
         {
-            KeyManager();
+            if(Time.timeScale != 0.0f)
+                KeyManager();
         }
 
         void KeyManager()

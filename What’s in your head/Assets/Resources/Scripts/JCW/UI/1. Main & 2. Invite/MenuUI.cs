@@ -52,7 +52,6 @@ namespace JCW.UI
             // 버튼 작동 켜기
             for (int k = 0 ; k<buttonList.Count ; ++k)
             {
-                buttonList[k].transform.GetChild(0).gameObject.AddComponent<FontColorShift>();
                 buttonList[k].interactable = true;
             }
 

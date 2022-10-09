@@ -67,7 +67,6 @@ namespace JCW.UI.Options.InputBindings
                 _binding.LoadFromFile(); 
                 ITT_KeyManager.Instance.KeySet(_binding); 
                 RefreshAllBindingUIs(); TurnOff();
-                Time.timeScale = 1.0f;
             });
             _resetButton.onClick.AddListener(() => 
             { 

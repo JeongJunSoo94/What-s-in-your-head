@@ -104,10 +104,11 @@ namespace JCW.UI.Options.InputBindings
             return convertText;
         }
 
-        override protected void InvertFont()
+        override protected void InvertFont(bool isDefault = true)
         {
-            SetVisibleInvert(highlight);
-            actionLabel.color = GetInvertColor(actionLabel.color);
+            base.InvertFont(isDefault);
+            highlight.color = GetInvertVisible(highlight.color, isDefault);            
+            //actionLabel.color = GetInvertColor(actionLabel.color);
         }
     }
 }

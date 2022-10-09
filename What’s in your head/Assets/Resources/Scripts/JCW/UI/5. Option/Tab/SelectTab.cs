@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
@@ -8,7 +6,6 @@ namespace JCW.UI.Options
 {
     public class SelectTab : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
     {
-        private GameObject contents = null;
         private GameObject textObj = null;
         private Text text = null;
         private Button button = null;
@@ -20,7 +17,6 @@ namespace JCW.UI.Options
             button = this.gameObject.GetComponent<Button>();
             textObj = this.gameObject.transform.GetChild(0).gameObject;
             text = textObj.GetComponent<Text>();
-            contents = this.gameObject.transform.GetChild(1).gameObject;
         }
         void Start()
         {
@@ -28,7 +24,6 @@ namespace JCW.UI.Options
             button.onClick.AddListener(() =>
             {
                 TabManager.Instance.ClickTab(button);
-                contents.SetActive(true);
             });
         }
 

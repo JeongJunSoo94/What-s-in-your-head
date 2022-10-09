@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using Photon.Pun;
+using JCW.Network;
 
 namespace JCW.UI
 {
@@ -128,6 +129,8 @@ namespace JCW.UI
                 // 다른 버튼을 이미 선택했었을 때
                 if (otherButtonOwner.text == playerName)
                     otherObj.SendMessage("DeSelectSprite", false);
+                else if(otherButtonOwner.text != "")
+                    PhotonManager.Instance.ChangeStage();
             }
             // 본인이 선택했던 캐릭터 버튼을 다시 눌렀을 때
             else if (curButtonOwner.text == playerName)

@@ -36,15 +36,15 @@ namespace JCW.UI.Options
 
     public class ApplySettings : MonoBehaviour
     {
-        [SerializeField] private GameObject gameTab;
-        [SerializeField] private GameObject camTab;
-        [SerializeField] private GameObject soundTab;
+        [Header("게임 탭")][SerializeField] private GameObject gameTab;
+        [Header("카메라 탭")][SerializeField] private GameObject camTab;
+        [Header("사운드 탭")][SerializeField] private GameObject soundTab;
 
-        private readonly Dictionary<GameObject, string> gameContents = new Dictionary<GameObject, string>();
-        private readonly Dictionary<GameObject, string> camContents = new Dictionary<GameObject, string>();
-        private readonly Dictionary<GameObject, string> soundContents = new Dictionary<GameObject, string>();
+        private readonly Dictionary<GameObject, string> gameContents = new();
+        private readonly Dictionary<GameObject, string> camContents = new();
+        private readonly Dictionary<GameObject, string> soundContents = new();
 
-        SerializableDatas setValue = new SerializableDatas();
+        SerializableDatas setValue = new();
 
         private void Awake()
         {
@@ -94,6 +94,7 @@ namespace JCW.UI.Options
 
         private void SaveToFile(bool init = false)
         {
+            setValue.data.Clear();
             SetData(gameContents);
             SetData(camContents);
             SetData(soundContents);
@@ -101,6 +102,8 @@ namespace JCW.UI.Options
             Debug.Log("옵션 세팅값 저장");
 
             JsonData infoJson = JsonMapper.ToJson(setValue);
+
+            // 폴더 없으면 만들기
             if (!Directory.Exists(Application.dataPath + "/Resources/Options/"))
                 Directory.CreateDirectory(Application.dataPath + "/Resources/Options/");
                         
@@ -130,6 +133,8 @@ namespace JCW.UI.Options
             setValue = new SerializableDatas();
             setValue = JsonUtility.FromJson<SerializableDatas>(jsonString);
             GetData(setValue);
+            if (init)
+                SaveToFile();
 
         }
 
@@ -147,9 +152,9 @@ namespace JCW.UI.Options
                 if (_value.data[index].tabName == _tab.transform.parent.gameObject.name)
                 {
                     GameObject funcObj = Setting.transform.GetChild(2).gameObject;
-                    if (funcObj.name == "Function" && _value.data[index].isSlider == false)
+                    if (_value.data[index].isSlider == false)
                         funcObj.GetComponent<Text>().text = int.Parse(_value.data[index].value) == 0 ? "끄기" : "켜기";
-                    else if (funcObj.name == "Slider" && _value.data[index].isSlider == true)
+                    else if (_value.data[index].isSlider == true)
                         funcObj.GetComponent<Slider>().value = float.Parse(_value.data[index].value);
                     else
                         Debug.Log("에러에러에러");

@@ -17,7 +17,7 @@ namespace JCW.UI
 
         void Start()
         {
-            myID.text = PhotonManager.instance.userID;
+            myID.text = PhotonManager.Instance.userID;
 
             backButton.onClick.AddListener(() =>
             {
@@ -36,7 +36,7 @@ namespace JCW.UI
                         failUI.SetActive(false);
                         passUI.SetActive(false);
                         passUI.SetActive(true);
-                        PhotonManager.instance.gameObject.SendMessage("TryMakeRoom", friendID.text);
+                        PhotonManager.Instance.gameObject.SendMessage("TryMakeRoom", friendID.text);
                         friendID.text = "";
                         return;
                     }

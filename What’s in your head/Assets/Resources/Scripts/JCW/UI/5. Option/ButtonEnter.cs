@@ -51,7 +51,6 @@ namespace JCW.UI
 
             moveOnButton.onClick.AddListener(() =>
             {
-                photonView.RPC(nameof(CancleEnter), RpcTarget.AllViaServer);
                 photonView.RPC(nameof(MoveOn), RpcTarget.AllViaServer);                
             });
         }
@@ -79,7 +78,7 @@ namespace JCW.UI
                 && player2_Img.sprite == readySprite2)
                 moveOnButton.gameObject.SetActive(true);
             else
-                moveOnButton.gameObject.SetActive(false );
+                moveOnButton.gameObject.SetActive(false);
 
         }
         [PunRPC]
@@ -93,6 +92,7 @@ namespace JCW.UI
         [PunRPC]
         private void MoveOn()
         {
+            CancleEnter();
             charSelectUI.SetActive(true);
             moveOnButton.gameObject.SetActive(false);
         }

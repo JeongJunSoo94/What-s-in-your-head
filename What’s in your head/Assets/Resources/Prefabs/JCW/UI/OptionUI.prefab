@@ -842,7 +842,6 @@ GameObject:
   m_Component:
   - component: {fileID: 4739161333061534593}
   - component: {fileID: 4739161333061534595}
-  - component: {fileID: 4739161333061534592}
   m_Layer: 5
   m_Name: Slider
   m_TagString: Untagged
@@ -918,24 +917,12 @@ MonoBehaviour:
   m_HandleRect: {fileID: 4739161334689491902}
   m_Direction: 0
   m_MinValue: 0
-  m_MaxValue: 1
-  m_WholeNumbers: 0
-  m_Value: 0.5
+  m_MaxValue: 100
+  m_WholeNumbers: 1
+  m_Value: 50
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls: []
---- !u!114 &4739161333061534592
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4739161333061534598}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d640ff936e9901047896c61e1b114f9f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &4739161333108660665
 GameObject:
   m_ObjectHideFlags: 0
@@ -1172,10 +1159,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 329b9d7ca61a23f4196fdf8dba780f28, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  defaultColor: {r: 0, g: 0, b: 0, a: 1}
   funcTexts:
   - "\uB044\uAE30"
   - "\uCF1C\uAE30"
-  sliderDefaultValue: 0
+  min: 0
+  max: 100
 --- !u!1 &4739161333181769154
 GameObject:
   m_ObjectHideFlags: 0
@@ -1525,7 +1514,7 @@ Canvas:
   m_SortingBucketNormalizedSize: 0
   m_AdditionalShaderChannelsFlag: 0
   m_SortingLayerID: 0
-  m_SortingOrder: 3
+  m_SortingOrder: 9
   m_TargetDisplay: 0
 --- !u!114 &4739161333235217421
 MonoBehaviour:
@@ -1916,8 +1905,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 329b9d7ca61a23f4196fdf8dba780f28, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  defaultColor: {r: 0, g: 0, b: 0, a: 1}
   funcTexts: []
-  sliderDefaultValue: 20
+  min: 0
+  max: 100
 --- !u!1 &4739161333335910507
 GameObject:
   m_ObjectHideFlags: 0
@@ -2043,6 +2034,7 @@ GameObject:
   - component: {fileID: 4739161333351420277}
   - component: {fileID: 4739161333351420266}
   - component: {fileID: 4739161333351420267}
+  - component: {fileID: 1157341733849134561}
   m_Layer: 5
   m_Name: InitWarning
   m_TagString: Untagged
@@ -2091,7 +2083,7 @@ Canvas:
   m_SortingBucketNormalizedSize: 0
   m_AdditionalShaderChannelsFlag: 0
   m_SortingLayerID: 0
-  m_SortingOrder: 5
+  m_SortingOrder: 11
   m_TargetDisplay: 0
 --- !u!114 &4739161333351420266
 MonoBehaviour:
@@ -2133,6 +2125,21 @@ MonoBehaviour:
   m_BlockingMask:
     serializedVersion: 2
     m_Bits: 4294967295
+--- !u!114 &1157341733849134561
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4739161333351420265}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c30f5d7d402f2c7438639a89ea70a662, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  applyObj: {fileID: 4739161333738816809}
+  resetButton: {fileID: 4739161334156074928}
+  backButton: {fileID: 4739161333843250806}
 --- !u!1 &4739161333371563237
 GameObject:
   m_ObjectHideFlags: 0
@@ -2194,7 +2201,7 @@ Canvas:
   m_SortingBucketNormalizedSize: 0
   m_AdditionalShaderChannelsFlag: 0
   m_SortingLayerID: 0
-  m_SortingOrder: 4
+  m_SortingOrder: 10
   m_TargetDisplay: 0
 --- !u!114 &4739161333371563238
 MonoBehaviour:
@@ -3328,7 +3335,7 @@ Canvas:
   m_SortingBucketNormalizedSize: 0
   m_AdditionalShaderChannelsFlag: 0
   m_SortingLayerID: 0
-  m_SortingOrder: 2
+  m_SortingOrder: 8
   m_TargetDisplay: 0
 --- !u!114 &4739161333744968783
 MonoBehaviour:
@@ -3609,7 +3616,7 @@ Canvas:
   m_SortingBucketNormalizedSize: 0
   m_AdditionalShaderChannelsFlag: 0
   m_SortingLayerID: 0
-  m_SortingOrder: 3
+  m_SortingOrder: 9
   m_TargetDisplay: 0
 --- !u!114 &4739161333777285557
 MonoBehaviour:
@@ -3727,7 +3734,7 @@ Canvas:
   m_SortingBucketNormalizedSize: 0
   m_AdditionalShaderChannelsFlag: 0
   m_SortingLayerID: 0
-  m_SortingOrder: 4
+  m_SortingOrder: 10
   m_TargetDisplay: 0
 --- !u!114 &4739161333779416333
 MonoBehaviour:
@@ -3861,7 +3868,6 @@ GameObject:
   - component: {fileID: 4739161333843250800}
   - component: {fileID: 4739161333843250801}
   - component: {fileID: 4739161333843250806}
-  - component: {fileID: 4739161333843250803}
   - component: {fileID: 1613880128}
   m_Layer: 5
   m_Name: BackButton
@@ -3971,19 +3977,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 4739161333843250801}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
---- !u!114 &4739161333843250803
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4739161333843250804}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c8480e92d568d1147b260ab78ec43a3a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+      m_Calls:
+      - m_Target: {fileID: 1613880128}
+        m_TargetAssemblyTypeName: JCW.UI.Options.ImageShifter, Assembly-CSharp
+        m_MethodName: SetDefaultSprite
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1613880128
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4129,8 +4135,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 329b9d7ca61a23f4196fdf8dba780f28, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  defaultColor: {r: 0, g: 0, b: 0, a: 1}
   funcTexts: []
-  sliderDefaultValue: 50
+  min: 0
+  max: 100
 --- !u!1 &4739161333875239327
 GameObject:
   m_ObjectHideFlags: 0
@@ -4224,8 +4232,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 329b9d7ca61a23f4196fdf8dba780f28, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  defaultColor: {r: 0, g: 0, b: 0, a: 1}
   funcTexts: []
-  sliderDefaultValue: 20
+  min: 0
+  max: 100
 --- !u!1 &4739161333988997357
 GameObject:
   m_ObjectHideFlags: 0
@@ -4424,7 +4434,7 @@ Canvas:
   m_SortingBucketNormalizedSize: 0
   m_AdditionalShaderChannelsFlag: 0
   m_SortingLayerID: 0
-  m_SortingOrder: 3
+  m_SortingOrder: 9
   m_TargetDisplay: 0
 --- !u!114 &4739161333994914101
 MonoBehaviour:
@@ -4589,8 +4599,8 @@ RectTransform:
   m_Father: {fileID: 4739161333453005867}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.2, y: 0}
-  m_AnchorMax: {x: 0.2, y: 0}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 24, y: 10}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -4972,7 +4982,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &4739161334130082654
 RectTransform:
   m_ObjectHideFlags: 0
@@ -5014,7 +5024,7 @@ Canvas:
   m_SortingBucketNormalizedSize: 0
   m_AdditionalShaderChannelsFlag: 0
   m_SortingLayerID: 0
-  m_SortingOrder: 4
+  m_SortingOrder: 10
   m_TargetDisplay: 0
 --- !u!114 &4739161334130082648
 MonoBehaviour:
@@ -5177,8 +5187,6 @@ GameObject:
   - component: {fileID: 4739161334156074930}
   - component: {fileID: 4739161334156074931}
   - component: {fileID: 4739161334156074928}
-  - component: {fileID: 4739161334156074940}
-  - component: {fileID: 4739161334156074941}
   - component: {fileID: 2053699997}
   m_Layer: 5
   m_Name: ResetButton
@@ -5288,32 +5296,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 4739161334156074931}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
---- !u!114 &4739161334156074940
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4739161334156074934}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c30f5d7d402f2c7438639a89ea70a662, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  applyObj: {fileID: 4739161333738816809}
---- !u!114 &4739161334156074941
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4739161334156074934}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c8480e92d568d1147b260ab78ec43a3a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+      m_Calls:
+      - m_Target: {fileID: 2053699997}
+        m_TargetAssemblyTypeName: JCW.UI.Options.ImageShifter, Assembly-CSharp
+        m_MethodName: SetDefaultSprite
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &2053699997
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5649,7 +5644,7 @@ Canvas:
   m_SortingBucketNormalizedSize: 0
   m_AdditionalShaderChannelsFlag: 0
   m_SortingLayerID: 0
-  m_SortingOrder: 3
+  m_SortingOrder: 9
   m_TargetDisplay: 0
 --- !u!114 &4739161334200799810
 MonoBehaviour:
@@ -5819,8 +5814,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 329b9d7ca61a23f4196fdf8dba780f28, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  defaultColor: {r: 0, g: 0, b: 0, a: 1}
   funcTexts: []
-  sliderDefaultValue: 50
+  min: 0
+  max: 100
 --- !u!1 &4739161334253449386
 GameObject:
   m_ObjectHideFlags: 0
@@ -5831,7 +5828,6 @@ GameObject:
   m_Component:
   - component: {fileID: 4739161334253449397}
   - component: {fileID: 4739161334253449399}
-  - component: {fileID: 4739161334253449396}
   m_Layer: 5
   m_Name: Slider
   m_TagString: Untagged
@@ -5907,24 +5903,12 @@ MonoBehaviour:
   m_HandleRect: {fileID: 4739161333431644290}
   m_Direction: 0
   m_MinValue: 0
-  m_MaxValue: 1
-  m_WholeNumbers: 0
-  m_Value: 0.5
+  m_MaxValue: 100
+  m_WholeNumbers: 1
+  m_Value: 50
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls: []
---- !u!114 &4739161334253449396
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4739161334253449386}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d640ff936e9901047896c61e1b114f9f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &4739161334269708123
 GameObject:
   m_ObjectHideFlags: 0
@@ -6173,7 +6157,6 @@ GameObject:
   m_Component:
   - component: {fileID: 4739161334305774778}
   - component: {fileID: 4739161334305774788}
-  - component: {fileID: 4739161334305774789}
   m_Layer: 5
   m_Name: Slider
   m_TagString: Untagged
@@ -6249,24 +6232,12 @@ MonoBehaviour:
   m_HandleRect: {fileID: 4739161334486408700}
   m_Direction: 0
   m_MinValue: 0
-  m_MaxValue: 1
-  m_WholeNumbers: 0
-  m_Value: 0.2
+  m_MaxValue: 100
+  m_WholeNumbers: 1
+  m_Value: 20
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls: []
---- !u!114 &4739161334305774789
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4739161334305774779}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d640ff936e9901047896c61e1b114f9f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &4739161334363196833
 GameObject:
   m_ObjectHideFlags: 0
@@ -6360,8 +6331,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 329b9d7ca61a23f4196fdf8dba780f28, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  defaultColor: {r: 0, g: 0, b: 0, a: 1}
   funcTexts: []
-  sliderDefaultValue: 50
+  min: 0
+  max: 100
 --- !u!1 &4739161334366431992
 GameObject:
   m_ObjectHideFlags: 0
@@ -6656,10 +6629,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 329b9d7ca61a23f4196fdf8dba780f28, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  defaultColor: {r: 0, g: 0, b: 0, a: 1}
   funcTexts:
   - "\uB044\uAE30"
   - "\uCF1C\uAE30"
-  sliderDefaultValue: 0
+  min: 0
+  max: 100
 --- !u!1 &4739161334428758404
 GameObject:
   m_ObjectHideFlags: 0
@@ -7453,8 +7428,8 @@ RectTransform:
   m_Father: {fileID: 4739161333342435068}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.2, y: 0}
-  m_AnchorMax: {x: 0.2, y: 0}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 24, y: 10}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -7506,7 +7481,6 @@ GameObject:
   m_Component:
   - component: {fileID: 4739161334488199614}
   - component: {fileID: 4739161334488199608}
-  - component: {fileID: 4739161334488199609}
   m_Layer: 5
   m_Name: Slider
   m_TagString: Untagged
@@ -7582,24 +7556,12 @@ MonoBehaviour:
   m_HandleRect: {fileID: 4739161334057510280}
   m_Direction: 0
   m_MinValue: 0
-  m_MaxValue: 1
-  m_WholeNumbers: 0
-  m_Value: 0.2
+  m_MaxValue: 100
+  m_WholeNumbers: 1
+  m_Value: 20
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls: []
---- !u!114 &4739161334488199609
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4739161334488199615}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d640ff936e9901047896c61e1b114f9f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &4739161334523675006
 GameObject:
   m_ObjectHideFlags: 0
@@ -8290,6 +8252,7 @@ GameObject:
   - component: {fileID: 4739161334817802714}
   - component: {fileID: 4739161334817802715}
   - component: {fileID: 4739161334817802712}
+  - component: {fileID: 7523167460546296109}
   m_Layer: 5
   m_Name: OptionUI
   m_TagString: Untagged
@@ -8342,7 +8305,7 @@ Canvas:
   m_SortingBucketNormalizedSize: 0
   m_AdditionalShaderChannelsFlag: 0
   m_SortingLayerID: 0
-  m_SortingOrder: 1
+  m_SortingOrder: 7
   m_TargetDisplay: 0
 --- !u!114 &4739161334817802715
 MonoBehaviour:
@@ -8384,6 +8347,18 @@ MonoBehaviour:
   m_BlockingMask:
     serializedVersion: 2
     m_Bits: 4294967295
+--- !u!114 &7523167460546296109
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4739161334817802713}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 77549729d6efa8e429f2a6e59e69a2e3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &4739161334837433335
 GameObject:
   m_ObjectHideFlags: 0
@@ -8394,7 +8369,6 @@ GameObject:
   m_Component:
   - component: {fileID: 4739161334837433334}
   - component: {fileID: 4739161334837433328}
-  - component: {fileID: 4739161334837433329}
   m_Layer: 5
   m_Name: Slider
   m_TagString: Untagged
@@ -8470,24 +8444,12 @@ MonoBehaviour:
   m_HandleRect: {fileID: 4739161334460435569}
   m_Direction: 0
   m_MinValue: 0
-  m_MaxValue: 1
-  m_WholeNumbers: 0
-  m_Value: 0.5
+  m_MaxValue: 100
+  m_WholeNumbers: 1
+  m_Value: 50
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls: []
---- !u!114 &4739161334837433329
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4739161334837433335}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d640ff936e9901047896c61e1b114f9f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &4739161334855411720
 GameObject:
   m_ObjectHideFlags: 0
@@ -8702,10 +8664,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 329b9d7ca61a23f4196fdf8dba780f28, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  defaultColor: {r: 0, g: 0, b: 0, a: 1}
   funcTexts:
   - "\uB044\uAE30"
   - "\uCF1C\uAE30"
-  sliderDefaultValue: 0
+  min: 0
+  max: 100
 --- !u!1 &4739161334909570263
 GameObject:
   m_ObjectHideFlags: 0
@@ -8767,7 +8731,7 @@ Canvas:
   m_SortingBucketNormalizedSize: 0
   m_AdditionalShaderChannelsFlag: 0
   m_SortingLayerID: 0
-  m_SortingOrder: 4
+  m_SortingOrder: 10
   m_TargetDisplay: 0
 --- !u!114 &4739161334909570256
 MonoBehaviour:

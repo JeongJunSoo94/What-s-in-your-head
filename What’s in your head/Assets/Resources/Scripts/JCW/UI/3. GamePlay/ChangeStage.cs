@@ -11,15 +11,13 @@ public class ChangeStage : MonoBehaviour
     [Header("현재 스테이지 제목")] [SerializeField] private Text curStage;
     [Header("섹션 제목 리스트")] [SerializeField] private GameObject sections;
 
-    private int stageIndex = 0;
-
     private void Awake()
     {
         leftButton.onClick.AddListener(() =>
         {
-            if (stageIndex != 0)
+            if (GameManager.Instance.currentStageIndex != 0)
             {
-                curStage.text = stages[--stageIndex];
+                curStage.text = stages[--GameManager.Instance.currentStageIndex];
                 for (int i=0 ; i<3 ; ++i)
                 {
                     sections.transform.GetChild(i).gameObject.
@@ -27,15 +25,15 @@ public class ChangeStage : MonoBehaviour
                 }
                 rightButton.interactable = true;
             }
-            if (stageIndex == 0)
+            if (GameManager.Instance.currentStageIndex == 0)
                 leftButton.interactable = false;
 
         });
         rightButton.onClick.AddListener(() =>
         {
-            if (stageIndex != stages.Count-1)
+            if (GameManager.Instance.currentStageIndex != stages.Count-1)
             {
-                curStage.text = stages[++stageIndex];
+                curStage.text = stages[++GameManager.Instance.currentStageIndex];
                 for (int i = 0 ; i < 3 ; ++i)
                 {
                     sections.transform.GetChild(i).gameObject.
@@ -43,14 +41,8 @@ public class ChangeStage : MonoBehaviour
                 }
                 leftButton.interactable = true;
             }
-            if (stageIndex == stages.Count - 1)
+            if (GameManager.Instance.currentStageIndex == stages.Count - 1)
                 rightButton.interactable = false;
         });
-    }
-
-
-    void Update()
-    {
-        
     }
 }
