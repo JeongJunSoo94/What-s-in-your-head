@@ -8,7 +8,7 @@ public class NormalViewSMB : StateMachineBehaviour
     override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
         player = animator.transform.gameObject.GetComponent<PlayerController3D>();
-        if (player!=null)
+        if (player.enabled)
         {
             animator.SetBool("wasAirJump", false);
         }
@@ -17,7 +17,7 @@ public class NormalViewSMB : StateMachineBehaviour
 
     override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        if (player != null)
+        if (player.enabled)
         {
             player.playerMouse.CheckLeftClick();
             player.playerMouse.CheckRightClick();
@@ -31,7 +31,7 @@ public class NormalViewSMB : StateMachineBehaviour
 
     public override void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        if (player != null)
+        if (player.enabled)
         {
             player.MoveStop();
         }

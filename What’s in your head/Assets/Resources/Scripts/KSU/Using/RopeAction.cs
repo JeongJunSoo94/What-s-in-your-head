@@ -5,22 +5,23 @@ using JCW.Options.InputBindings;
 
 public class RopeAction : MonoBehaviour
 {
+    public enum Direction { F, FR, R, BR, B, BL, L, FL, Default }
+    
     public GameObject player;
 
+    public RopeSpawner spawner; 
 
-    public enum Direction { F, FR, R, BR, B, BL, L, FL, Default }
+    //public float detectingRange = 10f;
+    //public float ropeLength = 15f;
 
-    public float detectingRange = 10f;
-    public float ropeLength = 15f;
-
-    public float rotationSpeed = 180f;
-    public float swingSpeed = 30f;
+    //public float rotationSpeed = 180f;
+    //public float swingSpeed = 30f;
     public Direction targetDirection = Direction.Default;
     public float targetAddYRotation;
     public float currentAddYRotation;
 
 
-    public float swingAngle = 60f;
+    //public float swingAngle = 60f;
     [SerializeField] GameObject ropeAnchor;
     GameObject rope;
 
@@ -32,6 +33,7 @@ public class RopeAction : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        spawner = GetComponentInParent<RopeSpawner>();
         MakeRope();
     }
 
@@ -50,32 +52,56 @@ public class RopeAction : MonoBehaviour
         {
             Swing();
             SetRotate();
+            CalculateDistance();
         }
+    }
+
+    void SetStartPoints()
+    {
+
+    }
+
+    void FindStartPoints()
+    {
+
     }
 
     void MakeRope()
     {
-        ropeAnchor = new GameObject("RopeAnchor"); // swing 운동 축 생성
-        ropeAnchor.transform.parent = this.transform;
-        ropeAnchor.transform.localPosition = Vector3.zero;
-
+        ropeAnchor.transform.localScale = new Vector3(1, 1, 1) * (1f / spawner.transform.localScale.x);
         rope = new GameObject("Rope");  // 플레이어가 매달릴 끝 생성
         rope.transform.parent = ropeAnchor.transform;
         Vector3 localPos = Vector3.zero;
-        localPos.y = -ropeLength;
+        localPos.y = -spawner.ropeLength;
         rope.transform.localPosition = localPos;
-
         player.GetComponent<PlayerController3D>().enabled = false; // 플레이어를 로프로 이동
-        player.transform.position = rope.transform.position;
+        player.transform.parent = rope.transform;
+        player.transform.localPosition = Vector3.zero;
         player.transform.LookAt(player.transform.position + rope.transform.forward);
 
         player.transform.parent = rope.transform;  // 플레이어를 로프에 종속
 
         Vector3 localRot = Vector3.zero;
-        localRot.x = -swingAngle;
+        localRot.x = -spawner.swingAngle;
         ropeAnchor.transform.localRotation = Quaternion.Euler(localRot);
 
         isRopeExisting = true;
+    }
+
+    public void DestroyRope()
+    {
+        isRopeExisting = false;
+
+        player.transform.parent = null;
+
+        PlayerController3D playerController = player.GetComponent<PlayerController3D>();
+        Vector3 inertiaVec = player.transform.forward;
+        inertiaVec.y = 0;
+        player.transform.LookAt(player.transform.position + inertiaVec);
+        playerController.enabled = true;
+        playerController.MakeinertiaVec(playerController.walkSpeed, inertiaVec.normalized);
+        playerController.moveVec = Vector3.up * player.GetComponent<PlayerController3D>().jumpSpeed;
+        Destroy(this.gameObject);
     }
 
     float FitInHalfDegree(float Angle)
@@ -85,21 +111,22 @@ public class RopeAction : MonoBehaviour
 
     void Swing()
     {
+        player.transform.localPosition = Vector3.zero;
         // -180 < rot X <= 180 사이로 고정 
         float rotationX = FitInHalfDegree(ropeAnchor.transform.localRotation.eulerAngles.x);
 
         if (isSwingForward) // 앞으로 갈지 뒤로갈지 결정
         {
-            rotationX += swingSpeed * Time.fixedDeltaTime;
-            if (rotationX > swingAngle)
+            rotationX += spawner.swingSpeed * Time.fixedDeltaTime;
+            if (rotationX > spawner.swingAngle)
             {
                 isSwingForward = false;
             }
         }
         else
         {
-            rotationX -= swingSpeed * Time.fixedDeltaTime;
-            if (rotationX < -swingAngle)
+            rotationX -= spawner.swingSpeed * Time.fixedDeltaTime;
+            if (rotationX < -spawner.swingAngle)
             {
                 isSwingForward = true;
             }
@@ -177,7 +204,7 @@ public class RopeAction : MonoBehaviour
         if (isRotating)
         {          
             // 목표 방향으로 도달하면 회전 멈춤
-            if (Mathf.Abs(currentAddYRotation - targetAddYRotation) < 3f)
+            if (Mathf.Abs(currentAddYRotation - targetAddYRotation) < 5f)
             {
                 isRotating = false;
                 return;
@@ -188,22 +215,22 @@ public class RopeAction : MonoBehaviour
             {
                 if ((currentAddYRotation - targetAddYRotation) > (targetAddYRotation + 360f - currentAddYRotation))
                 {
-                    currentAddYRotation += rotationSpeed * Time.fixedDeltaTime;
+                    currentAddYRotation += spawner.rotationSpeed * Time.fixedDeltaTime;
                 }
                 else
                 {
-                    currentAddYRotation -= rotationSpeed * Time.fixedDeltaTime;
+                    currentAddYRotation -= spawner.rotationSpeed * Time.fixedDeltaTime;
                 }
             }
             else
             {
                 if ((currentAddYRotation + 360f - targetAddYRotation) > (targetAddYRotation - currentAddYRotation))
                 {
-                    currentAddYRotation += rotationSpeed * Time.fixedDeltaTime;
+                    currentAddYRotation += spawner.rotationSpeed * Time.fixedDeltaTime;
                 }
                 else
                 {
-                    currentAddYRotation -= rotationSpeed * Time.fixedDeltaTime;
+                    currentAddYRotation -= spawner.rotationSpeed * Time.fixedDeltaTime;
                 }
             }
 
@@ -222,5 +249,8 @@ public class RopeAction : MonoBehaviour
         }
     }
 
-    
+    void CalculateDistance()
+    {
+        Debug.Log(Vector3.Distance(player.transform.position, this.transform.position));
+    }
 }

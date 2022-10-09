@@ -95,11 +95,20 @@ public class PlayerController3D : MonoBehaviour
     void Start()
     {
         photonView = GetComponent<PhotonView>();
+        //if (!photonView.IsMine)
+        //{
+        //    GetComponentInChildren<Camera>().gameObject.SetActive(false);
+        //    GetComponentInChildren<CinemachineFreeLook>().gameObject.SetActive(false);
+        //    Destroy(this);
+        //}
+        //else
+        //    _camera = Camera.main;
+
         if (!photonView.IsMine)
         {
             GetComponentInChildren<Camera>().gameObject.SetActive(false);
             GetComponentInChildren<CinemachineFreeLook>().gameObject.SetActive(false);
-            Destroy(this);
+            this.enabled = false;
         }
         else
             _camera = Camera.main;
@@ -146,7 +155,7 @@ public class PlayerController3D : MonoBehaviour
         characterState.CheckMove(_rigidbody.velocity);
     }
 
-    private void MakeinertiaVec(float speed, Vector3 nomalVec) // 공중 진입 시 생기는 관성벡터
+    public void MakeinertiaVec(float speed, Vector3 nomalVec) // 공중 진입 시 생기는 관성벡터
     {
         inertiaSpeed = speed;
         inertiaNormalVec = nomalVec;
@@ -317,6 +326,7 @@ public class PlayerController3D : MonoBehaviour
     void  TakeRotation()
     {
         RotateSlerp();
+
         //RotateAim();
     }
 
@@ -407,5 +417,10 @@ public class PlayerController3D : MonoBehaviour
         }
 
         _rigidbody.velocity = moveVec;
+    }
+
+    private void OnDisable()
+    {
+        _rigidbody.velocity = Vector3.zero;
     }
 }

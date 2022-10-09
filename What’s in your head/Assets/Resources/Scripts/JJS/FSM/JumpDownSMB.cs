@@ -9,7 +9,7 @@ public class JumpDownSMB : StateMachineBehaviour
     override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
         player = animator.transform.gameObject.GetComponent<PlayerController3D>();
-        if (player != null)
+        if (player.enabled)
         {
             player.characterState.isRun = false;
         }
@@ -18,7 +18,7 @@ public class JumpDownSMB : StateMachineBehaviour
     // OnStateUpdate is called on each Update frame between OnStateEnter and OnStateExit callbacks
     override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        if (player != null)
+        if (player.enabled)
         {
             player.InputMove();
             player.InputDash();
@@ -36,7 +36,7 @@ public class JumpDownSMB : StateMachineBehaviour
         if (player.characterState.RayCheck)
         {
             float DistY = -(player.moveVec.y) / 10.0f;
-            Debug.Log(DistY);
+            //Debug.Log(DistY);
             if (DistY > 0.2f)
                 animator.SetFloat("DistY", DistY);
             //animator.SetFloat("DistY", DistY);

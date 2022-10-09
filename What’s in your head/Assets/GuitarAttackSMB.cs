@@ -11,7 +11,7 @@ public class GuitarAttackSMB : StateMachineBehaviour
     override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
         player = animator.transform.gameObject.GetComponent<PlayerController3D>();
-        if (player != null)
+        if (player.enabled)
         {
             onClick = false;
         }
@@ -20,7 +20,7 @@ public class GuitarAttackSMB : StateMachineBehaviour
     // OnStateUpdate is called on each Update frame between OnStateEnter and OnStateExit callbacks
     override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        if (player != null)
+        if (player.enabled)
         {
             player.playerMouse.CheckLeftDownClick();
             player.playerMouse.CheckLeftClick();
@@ -29,7 +29,7 @@ public class GuitarAttackSMB : StateMachineBehaviour
     }
     public override void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        if (player != null)
+        if (player.enabled)
         {
             animator.SetBool("isAttack1", false);
 

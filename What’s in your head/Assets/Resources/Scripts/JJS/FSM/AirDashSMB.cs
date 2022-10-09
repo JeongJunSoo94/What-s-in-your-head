@@ -15,7 +15,7 @@ public class AirDashSMB : StateMachineBehaviour
     // OnStateUpdate is called on each Update frame between OnStateEnter and OnStateExit callbacks
     override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        if (player != null)
+        if (player.enabled)
         {
             player.InputMove();
             player.InputJump();
@@ -25,7 +25,7 @@ public class AirDashSMB : StateMachineBehaviour
     }
     override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        if (player != null)
+        if (player.enabled)
         {
             animator.SetBool("isAirDash", false);
         }
