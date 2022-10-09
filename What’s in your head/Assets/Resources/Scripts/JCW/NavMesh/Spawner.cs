@@ -14,18 +14,42 @@ namespace JCW.Spawner
         /*[HideInInspector]*/
         public int spawnCount = 0;
 
-        private Vector3 BasePos;
+        public bool spawnType;
 
         void Start()
         {
+            SpawnInit();
+            if (spawnType)
+            {
+                RespawnCoroutine();
+            }
+        }
+        public void RespawnCoroutine()
+        {
+            StartCoroutine(nameof(Spawn));
+        }
+
+        public GameObject Respawn()
+        {
+            GameObject gameObject =null;
+            if (spawnCount < count)
+            {
+                ++spawnCount;
+                gameObject = objQueue.Dequeue();
+                gameObject.SetActive(true);
+            }
+            return gameObject;
+        }
+
+        public void SpawnInit()
+        {
             objQueue = new Queue<GameObject>();
-            for (int i = 0 ; i < count ; ++i)
+            for (int i = 0; i < count; ++i)
             {
                 GameObject spawned = Instantiate(obj, this.transform);
                 spawned.SetActive(false);
                 objQueue.Enqueue(spawned);
             }
-            StartCoroutine(nameof(Spawn));
         }
 
         public void Despawn(GameObject spawnObj)
@@ -43,7 +67,6 @@ namespace JCW.Spawner
                     yield return new WaitForSeconds(spawnTime);
                     ++spawnCount;
                     objQueue.Dequeue().SetActive(true);
-
                 }
                 else
                     yield return new WaitUntil(() => spawnCount < count);

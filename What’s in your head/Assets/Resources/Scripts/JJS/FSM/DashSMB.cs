@@ -5,7 +5,6 @@ using UnityEngine;
 public class DashSMB : StateMachineBehaviour
 {
     PlayerController3D player;
-    // OnStateEnter is called when a transition starts and the state machine starts to evaluate this state
     override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
         player = animator.transform.gameObject.GetComponent<PlayerController3D>();
