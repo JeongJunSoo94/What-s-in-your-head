@@ -30,9 +30,7 @@ public class RopeSpawner : MonoBehaviour
     void InitCollider()
     {
         interactingCollider.gameObject.transform.localScale = new Vector3(1, 1, 1) * interactableRange;
-        //SetRadius(interactingCollider, interactableRange);
         detectingCollider.gameObject.transform.localScale = new Vector3(1, 1, 1) * detectingRange;
-        //SetRadius(detectingCollider, detectingRange);
     }
 
     void SetRadius(SphereCollider collider, float range)
