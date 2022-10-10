@@ -36,6 +36,7 @@ namespace JJS
             }
             curve.range = bulletRange;
         }
+
     }
 }
 

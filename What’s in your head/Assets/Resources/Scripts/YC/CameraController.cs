@@ -285,5 +285,6 @@ namespace YC.Camera_
                 ///mainCam.fieldOfView = Mathf.Lerp(mainCam.fieldOfView, (float)stream.ReceiveNext(), 1f * lag);
             }
         }
+
     }
 }

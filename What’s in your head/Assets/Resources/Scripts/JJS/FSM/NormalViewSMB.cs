@@ -2,13 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class NormalViewSMB : StateMachineBehaviour
+public class NormalViewSMB : CharacterBaseSMB
 {
-    PlayerController3D player;
     override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        player = animator.transform.gameObject.GetComponent<PlayerController3D>();
-        if (player!=null)
+        if (GetPlayerController3D(animator) != null)
         {
             animator.SetBool("wasAirJump", false);
         }
@@ -17,33 +15,33 @@ public class NormalViewSMB : StateMachineBehaviour
 
     override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        if (player != null)
+        if (GetPlayerController3D(animator) != null)
         {
-            player.playerMouse.CheckLeftClick();
-            player.playerMouse.CheckRightClick();
-            player.InputRun();
-            player.InputMove();
-            player.InputJump();
-            player.InputDash();
+            GetPlayerController3D(animator).playerMouse.CheckLeftClick();
+            GetPlayerController3D(animator).playerMouse.CheckRightClick();
+            GetPlayerController3D(animator).InputRun();
+            GetPlayerController3D(animator).InputMove();
+            GetPlayerController3D(animator).InputJump();
+            GetPlayerController3D(animator).InputDash();
             check(animator);
         }
     }
 
     public override void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        if (player != null)
+        if (GetPlayerController3D(animator) != null)
         {
-            player.MoveStop();
+            GetPlayerController3D(animator).MoveStop();
         }
     }
     void check(Animator animator)
     {
-        animator.SetFloat("HorizonVelocity", (player.characterState.isMove ? (player.characterState.isRun ? 1.0f : 0.5f) : 0.0f));
+        animator.SetFloat("HorizonVelocity", (GetPlayerController3D(animator).characterState.isMove ? (GetPlayerController3D(animator).characterState.isRun ? 1.0f : 0.5f) : 0.0f));
 
-        if (!player.characterState.IsGrounded)
+        if (!GetPlayerController3D(animator).characterState.IsGrounded)
         {
             animator.SetBool("isAir", true);
-            if (!player.characterState.IsJumping)
+            if (!GetPlayerController3D(animator).characterState.IsJumping)
             {
                 animator.SetTrigger("JumpDown");
                 return;
@@ -54,12 +52,12 @@ public class NormalViewSMB : StateMachineBehaviour
             animator.SetBool("isAir", false);
         }
 
-        if (!player.characterState.isMove)
+        if (!GetPlayerController3D(animator).characterState.isMove)
         {
-            player.characterState.isRun = false;
+            GetPlayerController3D(animator).characterState.isRun = false;
         }
-        animator.SetBool("isJump", player.characterState.IsJumping);
-        animator.SetBool("isDash", player.characterState.IsDashing);
-        player.playerMouse.ableToLeft = true;
+        animator.SetBool("isJump", GetPlayerController3D(animator).characterState.IsJumping);
+        animator.SetBool("isDash", GetPlayerController3D(animator).characterState.IsDashing);
+        GetPlayerController3D(animator).playerMouse.ableToLeft = true;
     }
 }

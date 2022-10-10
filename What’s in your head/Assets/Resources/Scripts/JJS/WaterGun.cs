@@ -14,22 +14,23 @@ namespace JJS
         Spawner spawner;
 
         Ray ray;
-        public float shootMaxDistance;
-        public float shootCurDistance;
 
         Vector3 dir;
+        public float shootMaxDistance;
+        public float shootCurDistance;
+        public float curveHeight=1f;
+        public float curveWidth;
         private void Awake()
         {
             mainCamera = Camera.main;
             spawner = gameObject.GetComponent<Spawner>();
         }
-        // Start is called before the first frame update
+
         void Start()
         {
             bezierCurveOrbit = gameObject.GetComponent<BezierCurve>();
         }
 
-        // Update is called once per frame
         void Update()
         {
             ShootLine();
@@ -65,15 +66,30 @@ namespace JJS
         {
             RaycastHit hit;
             dir = mainCamera.transform.forward;
-            //Vector3 pos = Camera.main.ViewportToWorldPoint(new Vector3(0.5f, 0.5f, 0));
-            //pos = (pos - transform.position).normalized;
-            Debug.Log(transform.position);
+          
             if (Physics.Raycast(transform.position, dir, out hit, shootMaxDistance,-1,QueryTriggerInteraction.Ignore))
             {
                 shootCurDistance = Vector3.Distance(transform.position, hit.point);
                 bezierCurveOrbit.p1 = transform.position;
-                Vector3 direction = (transform.position - hit.point)*0.5f;
-                direction.y += 1f;
+
+                float Height = hit.point.y - transform.position.y;
+                Height /= shootMaxDistance;
+                float width = curveWidth;
+                if (Height > 0)
+                {
+                    width -= Height * 0.25f;
+                }
+                else
+                {
+                    width -= Height * 0.25f;
+                    Height *= -1f;
+                }
+
+                Debug.Log("width" + width);
+                Debug.Log("Height" + Height);
+                Vector3 direction = (transform.position - hit.point)* width;
+
+                direction.y += 1f+Height * curveHeight;
                 bezierCurveOrbit.p2 = hit.point + direction;
                 bezierCurveOrbit.p3 = hit.point;
                 bezierCurveOrbit.p4 = hit.point;
@@ -85,10 +101,27 @@ namespace JJS
                 bezierCurveOrbit.p1 = transform.position;
                 bezierCurveOrbit.p3 = maxPos;
                 bezierCurveOrbit.p4 = maxPos;
-                Vector3 direction = (transform.position - maxPos) * 0.5f;
-                direction.y += 1f;
+
+                float Height = maxPos.y - transform.position.y;
+                Height /= shootMaxDistance;
+                float width = curveWidth;
+                if (Height > 0)
+                {
+                    width -= Height*0.25f;
+                }
+                else 
+                {
+                    width -= Height * 0.25f;
+                    Height *= -1f;
+                }
+
+                Debug.Log("width" + width);
+                Debug.Log("Height" + Height);
+                Vector3 direction = (transform.position - maxPos) * width;
+                direction.y += 1f + Height * curveHeight;
                 bezierCurveOrbit.p2 = maxPos + direction;
             }
+
         }
     }
 }
