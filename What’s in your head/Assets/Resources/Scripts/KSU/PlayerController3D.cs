@@ -104,10 +104,10 @@ public class PlayerController3D : MonoBehaviour
         else
             _camera = Camera.main;        
 
-        if (GameManager.Instance.player1 == null)
-            GameManager.Instance.player1 = this.gameObject;
-        else if (GameManager.Instance.player2 == null)
-            GameManager.Instance.player2 = this.gameObject;
+        //  if (GameManager.Instance.player1 == null)
+        //      GameManager.Instance.player1 = this.gameObject;
+        //  else if (GameManager.Instance.player2 == null)
+        //      GameManager.Instance.player2 = this.gameObject;
         ITT_KeyManager.Instance.GetKeyDown(PlayerAction.MoveBackward);
     }
 

@@ -104,7 +104,7 @@ namespace JCW.UI.Options.InputBindings
             return convertText;
         }
 
-        override protected void InvertFont(bool isDefault = true)
+        override public void InvertFont(bool isDefault = true)
         {
             base.InvertFont(isDefault);
             highlight.color = GetInvertVisible(highlight.color, isDefault);            

@@ -26,7 +26,7 @@ namespace JCW.UI.Options
             InvertFont(false);
         }
 
-        virtual protected void InvertFont(bool isDefault = true)
+        virtual public void InvertFont(bool isDefault = true)
         {
             if(isDefault)
             {

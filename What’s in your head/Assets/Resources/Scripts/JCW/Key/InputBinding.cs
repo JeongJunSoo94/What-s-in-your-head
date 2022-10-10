@@ -76,7 +76,7 @@ namespace JCW.UI.Options.InputBindings
 
         // »ý¼ºÀÚ =======================================================
         public InputBinding(bool init = true)
-        {
+        {            
             bindingDict = new Dictionary<PlayerAction, KeyState>();
             if (init)
                 ResetAll();

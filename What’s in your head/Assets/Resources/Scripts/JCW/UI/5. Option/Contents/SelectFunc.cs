@@ -117,7 +117,7 @@ namespace JCW.UI.Options
             }
         }
 
-        override protected void InvertFont(bool isDefault = true)
+        override public void InvertFont(bool isDefault = true)
         {
             base.InvertFont(isDefault);
             hoveringImg.color = GetInvertVisible(hoveringImg.color, isDefault);

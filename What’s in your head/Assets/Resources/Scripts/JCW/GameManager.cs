@@ -10,6 +10,7 @@ public class GameManager : MonoBehaviour
 
     public int currentStageIndex = 1;
     public string stopPlayerName = "";
+    public bool isPlaying = false;
 
     public static GameManager Instance = null;
     private void Awake()
