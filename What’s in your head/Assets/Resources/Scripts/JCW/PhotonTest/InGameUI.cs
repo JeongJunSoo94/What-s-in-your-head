@@ -15,6 +15,7 @@ public class InGameUI : MonoBehaviourPunCallbacks
 
     void Start()
     {
+        Application.targetFrameRate = 60;
         prev_ScrollRect = ChatUI.transform.GetChild(0).GetComponent<ScrollRect>();
         nickName.GetComponent<Text>().text = PhotonNetwork.LocalPlayer.NickName;
         PhotonNetwork.IsMessageQueueRunning = true;
