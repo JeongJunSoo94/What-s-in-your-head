@@ -85,8 +85,6 @@ namespace JJS
                     Height *= -1f;
                 }
 
-                Debug.Log("width" + width);
-                Debug.Log("Height" + Height);
                 Vector3 direction = (transform.position - hit.point)* width;
 
                 direction.y += 1f+Height * curveHeight;
@@ -115,8 +113,6 @@ namespace JJS
                     Height *= -1f;
                 }
 
-                Debug.Log("width" + width);
-                Debug.Log("Height" + Height);
                 Vector3 direction = (transform.position - maxPos) * width;
                 direction.y += 1f + Height * curveHeight;
                 bezierCurveOrbit.p2 = maxPos + direction;
