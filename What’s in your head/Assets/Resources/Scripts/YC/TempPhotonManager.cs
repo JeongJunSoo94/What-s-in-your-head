@@ -106,11 +106,11 @@ namespace YC.Photon
 
             if (PhotonNetwork.CurrentRoom.PlayerCount == 1)
             {              
-                PhotonNetwork.Instantiate("Prefabs/YC/Nella", new Vector3 (-5, 0, 0), Quaternion.identity);
+                PhotonNetwork.Instantiate("Prefabs/YC/Nella", new Vector3 (-3, 0, 0), Quaternion.identity, 0);
             }
             else if (PhotonNetwork.CurrentRoom.PlayerCount == 2)
             {
-                PhotonNetwork.Instantiate("Prefabs/YC/Steady", new Vector3(5, 0, 0), Quaternion.identity);
+                PhotonNetwork.Instantiate("Prefabs/YC/Steady", new Vector3(3, 0, 0), Quaternion.identity, 0);
             }
         }
     }
