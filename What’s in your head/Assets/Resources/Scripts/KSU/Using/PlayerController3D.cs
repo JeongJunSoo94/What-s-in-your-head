@@ -316,7 +316,7 @@ public class PlayerController3D : MonoBehaviour
 
     void  TakeRotation()
     {
-        RotateSlerp();
+        //RotateSlerp();
         //RotateAim();
     }
 

@@ -20,6 +20,9 @@ namespace JJS
         public float shootCurDistance;
         public float curveHeight=1f;
         public float curveWidth;
+
+        public GameObject IK;
+        public GameObject Weapon;
         private void Awake()
         {
             mainCamera = Camera.main;
@@ -117,7 +120,8 @@ namespace JJS
                 direction.y += 1f + Height * curveHeight;
                 bezierCurveOrbit.p2 = maxPos + direction;
             }
-
+            IK.transform.position = bezierCurveOrbit.p4;
+            Weapon.transform.LookAt(bezierCurveOrbit.p4);
         }
     }
 }

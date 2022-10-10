@@ -34,6 +34,7 @@ public class NormalViewSMB : CharacterBaseSMB
             GetPlayerController3D(animator).MoveStop();
         }
     }
+
     void check(Animator animator)
     {
         animator.SetFloat("HorizonVelocity", (GetPlayerController3D(animator).characterState.isMove ? (GetPlayerController3D(animator).characterState.isRun ? 1.0f : 0.5f) : 0.0f));
@@ -59,5 +60,10 @@ public class NormalViewSMB : CharacterBaseSMB
         animator.SetBool("isJump", GetPlayerController3D(animator).characterState.IsJumping);
         animator.SetBool("isDash", GetPlayerController3D(animator).characterState.IsDashing);
         GetPlayerController3D(animator).playerMouse.ableToLeft = true;
+
+        if (GetPlayerController3D(animator).playerMouse.rightOn)
+        {
+            animator.SetBool("Aim",true);
+        }
     }
 }
