@@ -82,27 +82,36 @@ public class PlayerController3D : MonoBehaviour
 
     void Awake()
     {
-        Cursor.lockState = CursorLockMode.Locked;
+        // >> : YC
+        //Cursor.lockState = CursorLockMode.Locked;
+        // << :
+
         characterState = GetComponent<CharacterState3D>();
         //_animator = GetComponent<Animator>();
         _capsuleCollider = GetComponent<CapsuleCollider>();
         _rigidbody = GetComponent<Rigidbody>();
         playerMouse = GetComponent<PlayerMouseController>();
 
-        //_camera = Camera.main;
+        _camera = Camera.main;
     }
     // Start is called before the first frame update
     void Start()
     {
         photonView = GetComponent<PhotonView>();
-        if (!photonView.IsMine)
-        {
-            GetComponentInChildren<Camera>().gameObject.SetActive(false);
-            GetComponentInChildren<CinemachineFreeLook>().gameObject.SetActive(false);
-            Destroy(this);
-        }
-        else
-            _camera = Camera.main;
+
+        // >> : YC - 카메라 세팅은 CameraController.cs에서 하겠습니다. 아래 코드 진행시 분활 화면이 불가능합니다.
+        //if (!photonView.IsMine)
+        //{
+        //    GetComponentInChildren<Camera>().gameObject.SetActive(false);
+        //    GetComponentInChildren<CinemachineFreeLook>().gameObject.SetActive(false);
+        //    Destroy(this);
+        //}
+        //else
+        //    _camera = Camera.main;
+
+        if (!photonView.IsMine) Destroy(this);
+        // << : 
+
 
         if (WIYH_Manager.Instance.player1 == null)
             WIYH_Manager.Instance.player1 = this.gameObject;
@@ -383,7 +392,7 @@ public class PlayerController3D : MonoBehaviour
                     if (moveSpeed > runSpeed)
                         moveSpeed = runSpeed;
                 }
-                else if(characterState.isMove)// 달리기 중이 아닐 때
+                else if (characterState.isMove)// 달리기 중이 아닐 때
                 {
                     moveSpeed += walkSpeed * Time.fixedDeltaTime * 20f;
                     if (moveSpeed > walkSpeed)
@@ -402,10 +411,12 @@ public class PlayerController3D : MonoBehaviour
             if (characterState.isMove) // 내리막길 이동시 경사각에 따른 수직속도 보정값
                 moveVec.y = characterState.slopeAngleCofacter * moveSpeed;
 
-            if(characterState.height >= characterState.groundCheckThresholdMin)
-                moveVec += Vector3.up * (gravity* gravityCofactor * Time.fixedDeltaTime);
+            if (characterState.height >= characterState.groundCheckThresholdMin)
+                moveVec += Vector3.up * (gravity * gravityCofactor * Time.fixedDeltaTime);
         }
 
         _rigidbody.velocity = moveVec;
+
+       
     }
 }
