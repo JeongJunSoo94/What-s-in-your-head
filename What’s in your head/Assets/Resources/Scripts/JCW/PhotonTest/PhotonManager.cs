@@ -50,6 +50,10 @@ namespace JCW.Network
                 Destroy(this.gameObject);
             }
 
+            // << FOV를 위한 설정 
+            PhotonNetwork.SendRate = 60;
+            PhotonNetwork.SerializationRate = 30;
+
             Screen.SetResolution(width, height, isFullScreen);
         }
 

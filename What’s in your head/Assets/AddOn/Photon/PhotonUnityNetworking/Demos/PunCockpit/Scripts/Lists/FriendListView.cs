@@ -68,7 +68,7 @@ namespace Photon.Pun.Demo.Cockpit
             base.OnEnable();
 
             UpdateStatusText.text = string.Empty;
-			ContentFeedback.text = string.Empty;;
+			ContentFeedback.text = string.Empty;
         }
 
 

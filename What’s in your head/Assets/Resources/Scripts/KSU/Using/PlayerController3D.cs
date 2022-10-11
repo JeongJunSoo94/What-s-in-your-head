@@ -112,7 +112,6 @@ public class PlayerController3D : MonoBehaviour
         //}
         //else
         //    _camera = Camera.main;
-
         _camera = this.gameObject.GetComponent<CameraController>().mainCam;
 
         if (!photonView.IsMine) Destroy(this);

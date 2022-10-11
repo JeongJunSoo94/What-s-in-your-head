@@ -6332,7 +6332,7 @@ public class iTween : MonoBehaviour
 		Gizmos.color=color;
 		for (int i = 0; i < line.Length-1; i++) {
 			if(method == "gizmos"){
-				Gizmos.DrawLine(line[i], line[i+1]);;
+				Gizmos.DrawLine(line[i], line[i+1]);
 			}else if(method == "handles"){
 				Debug.LogError("iTween Error: Drawing a line with Handles is temporarily disabled because of compatability issues with Unity 2.6!");
 				//UnityEditor.Handles.DrawLine(line[i], line[i+1]);

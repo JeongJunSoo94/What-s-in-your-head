@@ -13,7 +13,7 @@ using System.Linq;
 
 using Cinemachine;
 
-using JCW.Options.InputBindings;
+using JCW.UI.Options.InputBindings;
 using YC.CameraManager_;
 
 namespace YC.Camera_
