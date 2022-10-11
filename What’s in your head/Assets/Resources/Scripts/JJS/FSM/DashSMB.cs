@@ -2,33 +2,31 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class DashSMB : StateMachineBehaviour
+public class DashSMB : CharacterBaseSMB
 {
-    PlayerController3D player;
     override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        player = animator.transform.gameObject.GetComponent<PlayerController3D>();
-        if (player != null)
+        if (GetPlayerController3D(animator) != null)
         {
-            player.characterState.isRun = false;
+            GetPlayerController3D(animator).characterState.isRun = false;
         }
     }
 
     // OnStateUpdate is called on each Update frame between OnStateEnter and OnStateExit callbacks
     override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        if (player != null)
+        if (GetPlayerController3D(animator) != null)
         {
              check(animator);
         }
     }
     void check(Animator animator)
     {
-        if (!player.characterState.IsGrounded)
+        if (!GetPlayerController3D(animator).characterState.IsGrounded)
         {
             animator.SetBool("isAir", true);
         }
-        if (!player.characterState.IsDashing)
+        if (!GetPlayerController3D(animator).characterState.IsDashing)
         {
             animator.SetBool("isDash", false);
         }

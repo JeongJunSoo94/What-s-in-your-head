@@ -28,125 +28,26 @@ public class IKController : MonoBehaviour
 
     public GameObject target;
 
+    PlayerController3D player;
+
     void Start()
     {
         animator = GetComponent<Animator>();
+        player = GetComponent<PlayerController3D>();
     }
 
-    void Update()
+    private void Update()
     {
-        //if (Input.GetKeyDown(KeyCode.Alpha1))
-        //{
-        //    selectWeight = 1;
-        //}
-        //if (Input.GetKeyDown(KeyCode.Alpha2))
-        //{
-        //    selectWeight = 2;
-        //}
-        //if (Input.GetKeyDown(KeyCode.Alpha3))
-        //{
-        //    selectWeight = 3;
-        //}
-        //if (Input.GetKeyDown(KeyCode.Alpha4))
-        //{
-        //    selectWeight = 4;
-        //}
-        //if (Input.GetKeyDown(KeyCode.Alpha5))
-        //{
-        //    selectWeight = 5;
-        //}
-        //if (Input.GetKeyDown(KeyCode.Alpha6))
-        //{
-        //    selectWeight = 6;
-        //}
+        
     }
 
     private void OnAnimatorIK(int layerIndex)
     {
-        SetLookAt();
-        //if (animator)
-        //{
-        //    if (rightHandFollowObj != null)
-        //    {
-        //        switch (selectWeight)
-        //        {
-        //            case 1:
-        //                SetPositionWeithgt();
-        //                break;
-        //            case 2:
-        //                SetRotationWeithgt();
-        //                break;
-        //            case 3:
-        //                SetEachWeight();
-        //                break;
-        //            case 4:
-        //                SetRotationAngle();
-        //                break;
-        //            case 5:
-        //                SetLookAtObj();
-        //                break;
-        //            case 6:
-        //                SetLegWeight();
-        //                break;
-        //        }
-        //    }
-        //}
+        if (player.characterState.aim)
+        {
+            SetLookAt();
+        }
     }
-
-    //void SetPositionWeithgt()//포지션 변경
-    //{
-    //    animator.SetIKPositionWeight(AvatarIKGoal.RightHand, posWeight);
-    //    animator.SetIKRotationWeight(AvatarIKGoal.RightHand, 0.0f);
-
-    //    animator.SetIKPosition(AvatarIKGoal.RightHand, rightHandFollowObj.position);
-    //    Quaternion handRotation = Quaternion.LookRotation(rightHandFollowObj.position - transform.position);
-    //    animator.SetIKRotation(AvatarIKGoal.RightHand, handRotation);
-    //}
-
-    //void SetRotationWeithgt()//손 회전
-    //{
-    //    animator.SetIKPositionWeight(AvatarIKGoal.RightHand, 0.0f);
-    //    animator.SetIKRotationWeight(AvatarIKGoal.RightHand, rotWeight);
-
-    //    animator.SetIKPosition(AvatarIKGoal.RightHand, rightHandFollowObj.position);
-    //    Quaternion handRotation = Quaternion.LookRotation(rightHandFollowObj.position - transform.position);
-    //    animator.SetIKRotation(AvatarIKGoal.RightHand, handRotation);
-    //}
-    //void SetEachWeight()//손 회전과 포지션이동
-    //{
-    //    animator.SetIKPositionWeight(AvatarIKGoal.RightHand, posWeight);
-    //    animator.SetIKRotationWeight(AvatarIKGoal.RightHand, rotWeight);
-
-    //    animator.SetIKPosition(AvatarIKGoal.RightHand, rightHandFollowObj.position);
-    //    Quaternion handRotation = Quaternion.LookRotation(rightHandFollowObj.position - transform.position);
-    //    animator.SetIKRotation(AvatarIKGoal.RightHand, handRotation);
-    //}
-
-    //private void SetRotationAngle()//손 고정에 팔이동
-    //{
-    //    animator.SetIKPositionWeight(AvatarIKGoal.RightHand, posWeight);
-    //    animator.SetIKRotationWeight(AvatarIKGoal.RightHand, rotWeight);
-
-    //    animator.SetIKPosition(AvatarIKGoal.RightHand, rightHandFollowObj.position);
-    //    Quaternion handRotation = Quaternion.Euler(xRot, yRot, zRot);
-    //    animator.SetIKRotation(AvatarIKGoal.RightHand, handRotation);
-    //}
-
-    //private void SetLookAtObj()//화면 봄
-    //{
-    //    animator.SetLookAtWeight(1);
-    //    animator.SetLookAtPosition(rightHandFollowObj.position);
-    //}
-
-    //private void SetLegWeight()//발 움직임
-    //{
-    //    animator.SetIKPositionWeight(AvatarIKGoal.RightFoot, posWeight);
-    //    animator.SetIKRotationWeight(AvatarIKGoal.RightFoot, 0.0f);
-
-    //    animator.SetIKPosition(AvatarIKGoal.RightFoot, rightHandFollowObj.position);
-    //    Quaternion handRotation = Quaternion.LookRotation(rightHandFollowObj.position - transform.position);
-    //    animator.SetIKRotation(AvatarIKGoal.RightFoot, handRotation);
-    //}
 
     void SetLookAt()
     {
@@ -166,7 +67,6 @@ public class IKController : MonoBehaviour
         animator.SetIKPosition(AvatarIKGoal.LeftHand, leftHandFollowObj.position);
         handRotation = Quaternion.LookRotation(leftHandFollowObj.position - transform.position);
         animator.SetIKRotation(AvatarIKGoal.LeftHand, handRotation);
-        //animator.SetBoneLocalRotation(HumanBodyBones.Spine, Quaternion.LookRotation(target.transform.position - transform.position));//Quaternion.Euler(xRot, yRot, zRot));
 
     }
 }

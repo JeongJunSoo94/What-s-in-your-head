@@ -1,28 +1,18 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
-public class AimSMB : StateMachineBehaviour
+using JCW.Options.InputBindings;
+public class AimSMB : CharacterBaseSMB
 {
-    PlayerController3D player;
     override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        player = animator.transform.gameObject.GetComponent<PlayerController3D>();
-        if (player != null)
-        {
-            player.characterState.isRun = false;
-        }
     }
 
     // OnStateUpdate is called on each Update frame between OnStateEnter and OnStateExit callbacks
     override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        if (player != null)
+        if (GetPlayerController3D(animator) != null)
         {
-            player.playerMouse.CheckLeftDownClick();
-            player.playerMouse.CheckLeftClick();
-            player.InputMove();
-            player.RotateAim();
             check(animator);
         }
     }
@@ -34,29 +24,15 @@ public class AimSMB : StateMachineBehaviour
 
     void check(Animator animator)
     {
-        if (!player.characterState.IsGrounded)
+        if (GetPlayerController3D(animator).characterState.aim)
         {
-            animator.SetBool("isAir", true);
-            if (!player.characterState.IsJumping)
+            GetPlayerController3D(animator).playerMouse.CheckLeftClick(false);
+            GetPlayerController3D(animator).playerMouse.CheckRightClick(true);
+            if (ITT_KeyManager.Instance.GetKey(PlayerAction.Fire))
             {
-                animator.SetTrigger("JumpDown");
-                return;
+                animator.SetBool("AimAttack", true);
             }
         }
-        else
-        {
-            animator.SetBool("isAir", false);
-        }
-
-        if (!player.characterState.isMove)
-        {
-            player.characterState.isRun = false;
-        }
-        animator.SetBool("isJump", player.characterState.IsJumping);
-        animator.SetBool("isDash", player.characterState.IsDashing);
-        player.playerMouse.ableToLeft = true;
-
-        
     }
 
     // OnStateMove is called right after Animator.OnAnimatorMove()

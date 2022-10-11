@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using JCW.Options.InputBindings;
 public class NormalViewSMB : CharacterBaseSMB
 {
     override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
@@ -9,6 +9,7 @@ public class NormalViewSMB : CharacterBaseSMB
         if (GetPlayerController3D(animator) != null)
         {
             animator.SetBool("wasAirJump", false);
+            GetPlayerController3D(animator).characterState.aim = false;
         }
 
     }
@@ -17,8 +18,6 @@ public class NormalViewSMB : CharacterBaseSMB
     {
         if (GetPlayerController3D(animator) != null)
         {
-            GetPlayerController3D(animator).playerMouse.CheckLeftClick();
-            GetPlayerController3D(animator).playerMouse.CheckRightClick();
             GetPlayerController3D(animator).InputRun();
             GetPlayerController3D(animator).InputMove();
             GetPlayerController3D(animator).InputJump();
@@ -61,7 +60,7 @@ public class NormalViewSMB : CharacterBaseSMB
         animator.SetBool("isDash", GetPlayerController3D(animator).characterState.IsDashing);
         GetPlayerController3D(animator).playerMouse.ableToLeft = true;
 
-        if (GetPlayerController3D(animator).playerMouse.rightOn)
+        if (ITT_KeyManager.Instance.GetKey(PlayerAction.Aim))
         {
             animator.SetBool("Aim",true);
         }

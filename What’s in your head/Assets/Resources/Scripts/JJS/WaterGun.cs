@@ -23,6 +23,7 @@ namespace JJS
 
         public GameObject IK;
         public GameObject Weapon;
+        public Transform pos;
         private void Awake()
         {
             mainCamera = Camera.main;
@@ -67,6 +68,7 @@ namespace JJS
 
         void ShootLine()
         {
+            transform.position = pos.position;
             RaycastHit hit;
             dir = mainCamera.transform.forward;
           
@@ -90,7 +92,7 @@ namespace JJS
 
                 Vector3 direction = (transform.position - hit.point)* width;
 
-                direction.y += 1f+Height * curveHeight;
+                direction.y += (1-width) + Height * curveHeight;
                 bezierCurveOrbit.p2 = hit.point + direction;
                 bezierCurveOrbit.p3 = hit.point;
                 bezierCurveOrbit.p4 = hit.point;
@@ -121,6 +123,7 @@ namespace JJS
                 bezierCurveOrbit.p2 = maxPos + direction;
             }
             IK.transform.position = bezierCurveOrbit.p4;
+
             Weapon.transform.LookAt(bezierCurveOrbit.p4);
         }
     }

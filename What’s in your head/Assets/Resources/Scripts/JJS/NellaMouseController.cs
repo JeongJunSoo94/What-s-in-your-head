@@ -8,58 +8,23 @@ namespace JJS
     {
         public List<Discovery3D> hitObjs;
 
+        public GameObject leftWeapon;
+        public GameObject rightWeapon;
         public WaterGun gun;
         private void Update()
         {
             TargetUpdate();
         }
 
-        public override void CheckLeftClick()
+
+        public override void CheckLeftClick(bool enable)
         {
-            if (ITT_KeyManager.Instance.GetKey(PlayerAction.Fire))
-            {
-                leftOn = true;
-            }
-            else
-            {
-                leftOn = false;
-            }
+            leftWeapon.SetActive(enable);
         }
 
-        public override void CheckRightClick()
+        public override void CheckRightClick(bool enable)
         {
-            if (ITT_KeyManager.Instance.GetKey(PlayerAction.Aim))
-            {
-                rightOn = true;
-            }
-            else
-            {
-                rightOn = false;
-            }
-        }
-
-        public override void CheckLeftDownClick()
-        {
-            if (ITT_KeyManager.Instance.GetKeyDown(PlayerAction.Fire))
-            {
-                leftDown = true;
-            }
-            else
-            {
-                leftDown = false;
-            }
-        }
-
-        public override void CheckRightDownClick()
-        {
-            if (ITT_KeyManager.Instance.GetKeyDown(PlayerAction.Aim))
-            {
-                rightDown = true;
-            }
-            else
-            {
-                rightDown = false;
-            }
+            rightWeapon.SetActive(enable);
         }
 
         public void Shoot()
