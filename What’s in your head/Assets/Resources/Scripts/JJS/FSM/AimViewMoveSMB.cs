@@ -15,11 +15,15 @@ public class AimViewMoveSMB : CharacterBaseSMB
 
     override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        GetPlayerController3D(animator).AimViewInputMove();
-        animator.SetFloat("MoveX", GetPlayerController3D(animator).moveDir.normalized.x * (GetPlayerController3D(animator).characterState.isMove ? 1.0f : 0.0f));
-        animator.SetFloat("MoveZ", GetPlayerController3D(animator).moveDir.normalized.z * (GetPlayerController3D(animator).characterState.isMove ? 1.0f : 0.0f));
-        GetPlayerController3D(animator).InputMove();
-        check(animator);
+        if (GetPlayerController3D(animator) != null)
+        {
+            GetPlayerController3D(animator).AimViewInputMove();
+            animator.SetFloat("MoveX", GetPlayerController3D(animator).moveDir.normalized.x * (GetPlayerController3D(animator).characterState.isMove ? 1.0f : 0.0f));
+            animator.SetFloat("MoveZ", GetPlayerController3D(animator).moveDir.normalized.z * (GetPlayerController3D(animator).characterState.isMove ? 1.0f : 0.0f));
+            GetPlayerController3D(animator).InputMove();
+            check(animator);
+        }
+
     }
 
     public override void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
