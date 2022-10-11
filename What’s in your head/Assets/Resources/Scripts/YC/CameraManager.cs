@@ -9,7 +9,6 @@ namespace YC.CameraManager_
         enum Cameras { Left, Right };
   
         public Camera[] cameras;
-
         [Header("Right Camera Rect : Increase")]
         [SerializeField] bool toggle1;
         [Header("Left Camera Rect : Increase")]

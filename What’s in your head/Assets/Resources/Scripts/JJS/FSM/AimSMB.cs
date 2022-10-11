@@ -24,6 +24,7 @@ public class AimSMB : StateMachineBehaviour
             player.InputMove();
             player.RotateAim();
             check(animator);
+
         }
     }
 

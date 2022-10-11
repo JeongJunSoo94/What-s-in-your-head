@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using JCW.Spawner;
 
+using YC.Camera_;
+
 namespace JJS
 {
     public class WaterGun : MonoBehaviour
@@ -22,12 +24,13 @@ namespace JJS
         public float curveWidth;
         private void Awake()
         {
-            mainCamera = Camera.main;
+            //mainCamera = Camera.main;
             spawner = gameObject.GetComponent<Spawner>();
         }
 
         void Start()
         {
+            mainCamera = this.gameObject.transform.parent.GetComponent<CameraController>().mainCam;
             bezierCurveOrbit = gameObject.GetComponent<BezierCurve>();
         }
 
