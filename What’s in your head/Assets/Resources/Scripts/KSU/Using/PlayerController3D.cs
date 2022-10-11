@@ -8,6 +8,7 @@ using JCW.AudioCtrl;
 using Cinemachine;
 
 using YC.Camera_;
+using YC.Camera_Single;
 
 public class PlayerController3D : MonoBehaviour
 {
@@ -113,7 +114,8 @@ public class PlayerController3D : MonoBehaviour
         //else
         //    _camera = Camera.main;
 
-        _camera = this.gameObject.GetComponent<CameraController>().mainCam;
+        _camera = this.gameObject.GetComponent<CameraController_Single>().mainCam; // 싱글용
+        //_camera = this.gameObject.GetComponent<CameraController>().mainCam; // 멀티용
 
         if (!photonView.IsMine) Destroy(this);
         // << : 

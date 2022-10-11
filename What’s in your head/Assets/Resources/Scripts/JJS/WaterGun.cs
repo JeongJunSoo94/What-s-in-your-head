@@ -4,6 +4,7 @@ using UnityEngine;
 using JCW.Spawner;
 
 using YC.Camera_;
+using YC.Camera_Single;
 
 namespace JJS
 {
@@ -34,7 +35,9 @@ namespace JJS
 
         void Start()
         {
-            mainCamera = this.gameObject.transform.parent.GetComponent<CameraController>().mainCam;
+            mainCamera = this.gameObject.transform.parent.GetComponent<CameraController_Single>().mainCam; // 싱글용
+            //mainCamera = this.gameObject.transform.parent.GetComponent<CameraController>().mainCam; // 멀티용
+
             bezierCurveOrbit = gameObject.GetComponent<BezierCurve>();
         }
 
