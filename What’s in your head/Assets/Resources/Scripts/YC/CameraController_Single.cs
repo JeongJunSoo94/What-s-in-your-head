@@ -356,6 +356,10 @@ namespace YC.Camera_Single
             cinemachineBrain = mainCam.GetComponent<CinemachineBrain>();
             CameraManager.Instance.cameras[0] = mainCam;
 
+            //gameObject.transform.GetChild(16).gameObject.SetActive(true);
+            gameObject.transform.GetChild(16).gameObject.GetComponent<Canvas>().worldCamera = mainCam;
+            gameObject.transform.GetChild(16).gameObject.GetComponent<Canvas>().planeDistance = 1;
+
             return mainCam;
         }
 

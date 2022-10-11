@@ -9832,7 +9832,7 @@ GameObject:
   - component: {fileID: 3651909477236715226}
   - component: {fileID: 6382344829343981166}
   - component: {fileID: 3668210543066399831}
-  m_Layer: 0
+  m_Layer: 31
   m_Name: Steady
   m_TagString: Steady
   m_Icon: {fileID: 0}
@@ -9867,6 +9867,7 @@ Transform:
   - {fileID: 275058229334635260}
   - {fileID: 4368448365594491217}
   - {fileID: 7464488517175004005}
+  - {fileID: 4001207251782858804}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -9916,7 +9917,14 @@ Animator:
   m_ApplyRootMotion: 0
   m_LinearVelocityBlending: 0
   m_StabilizeFeet: 0
-  m_WarningMessage: 
+  m_WarningMessage: "\nBinding warning: Some generic clip(s) animate transforms that
+    are already bound by a Humanoid avatar. These transforms can only be changed
+    by Humanoid clips.\n\tTransform 'J_L_HairFront_00'\n\tTransform 'J_L_HairSide_00'\n\tTransform
+    'J_R_HairSide_00'\n\tTransform 'J_L_HairFront_00'\n\tTransform 'J_L_HairSide_00'\n\tTransform
+    'J_R_HairSide_00'\n\tTransform 'J_L_HairFront_00'\n\tTransform 'J_L_HairSide_00'\n\tTransform
+    'J_R_HairSide_00'\n\tFrom animation clip 'WAIT00'\n\tFrom animation clip 'WALK00_F'\n\tFrom
+    animation clip 'RUN00_F'\n\tFrom animation clip 'JUMPSTAY'\n\tFrom animation
+    clip 'JUMPDOWN'\n\tFrom animation clip 'JUMPSTAY'\n\tFrom animation clip 'JUMPUP'"
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
@@ -11317,6 +11325,108 @@ Transform:
 GameObject:
   m_CorrespondingSourceObject: {fileID: 100000, guid: a8d53702db3c4f24db9805f2662d6c37, type: 3}
   m_PrefabInstance: {fileID: 4485230282152438790}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1001 &5163256030364998811
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 8513244663813963552}
+    m_Modifications:
+    - target: {fileID: 8079658715394303151, guid: 1dd92b00e0d648d499f29f725d094d0f, type: 3}
+      propertyPath: m_Pivot.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8079658715394303151, guid: 1dd92b00e0d648d499f29f725d094d0f, type: 3}
+      propertyPath: m_Pivot.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8079658715394303151, guid: 1dd92b00e0d648d499f29f725d094d0f, type: 3}
+      propertyPath: m_RootOrder
+      value: 16
+      objectReference: {fileID: 0}
+    - target: {fileID: 8079658715394303151, guid: 1dd92b00e0d648d499f29f725d094d0f, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8079658715394303151, guid: 1dd92b00e0d648d499f29f725d094d0f, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8079658715394303151, guid: 1dd92b00e0d648d499f29f725d094d0f, type: 3}
+      propertyPath: m_AnchorMin.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8079658715394303151, guid: 1dd92b00e0d648d499f29f725d094d0f, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8079658715394303151, guid: 1dd92b00e0d648d499f29f725d094d0f, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8079658715394303151, guid: 1dd92b00e0d648d499f29f725d094d0f, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8079658715394303151, guid: 1dd92b00e0d648d499f29f725d094d0f, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8079658715394303151, guid: 1dd92b00e0d648d499f29f725d094d0f, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8079658715394303151, guid: 1dd92b00e0d648d499f29f725d094d0f, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8079658715394303151, guid: 1dd92b00e0d648d499f29f725d094d0f, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8079658715394303151, guid: 1dd92b00e0d648d499f29f725d094d0f, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8079658715394303151, guid: 1dd92b00e0d648d499f29f725d094d0f, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8079658715394303151, guid: 1dd92b00e0d648d499f29f725d094d0f, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8079658715394303151, guid: 1dd92b00e0d648d499f29f725d094d0f, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8079658715394303151, guid: 1dd92b00e0d648d499f29f725d094d0f, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8079658715394303151, guid: 1dd92b00e0d648d499f29f725d094d0f, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8079658715394303151, guid: 1dd92b00e0d648d499f29f725d094d0f, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8079658715394303151, guid: 1dd92b00e0d648d499f29f725d094d0f, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8079658715394303155, guid: 1dd92b00e0d648d499f29f725d094d0f, type: 3}
+      propertyPath: m_Name
+      value: ReviveUI
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 1dd92b00e0d648d499f29f725d094d0f, type: 3}
+--- !u!224 &4001207251782858804 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 8079658715394303151, guid: 1dd92b00e0d648d499f29f725d094d0f, type: 3}
+  m_PrefabInstance: {fileID: 5163256030364998811}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &8515872689042893958
 PrefabInstance:
