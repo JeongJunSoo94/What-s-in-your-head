@@ -252,7 +252,7 @@ public class PlayerController3D : MonoBehaviour
         moveDir = Vector3.zero;
     }
 
-    public void TopViewInputMove()
+    public void AimViewInputMove()
     {
         moveDir.z = ((ITT_KeyManager.Instance.GetKey(PlayerAction.MoveForward) ? 1 : 0) + (ITT_KeyManager.Instance.GetKey(PlayerAction.MoveBackward) ? -1 : 0));
         moveDir.x = ((ITT_KeyManager.Instance.GetKey(PlayerAction.MoveRight) ? 1 : 0) + (ITT_KeyManager.Instance.GetKey(PlayerAction.MoveLeft) ? -1 : 0));
@@ -325,8 +325,14 @@ public class PlayerController3D : MonoBehaviour
 
     void  TakeRotation()
     {
-        RotateSlerp();
-        //RotateAim();
+        if (characterState.aim)
+        {
+            RotateAim();
+        }
+        else
+        {
+            RotateSlerp();
+        }
     }
 
     public void Rotate()

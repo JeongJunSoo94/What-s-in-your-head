@@ -2,14 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class AirJumpSMB : StateMachineBehaviour
+public class AirJumpSMB : CharacterBaseSMB
 {
-    PlayerController3D player;
-    // OnStateEnter is called when a transition starts and the state machine starts to evaluate this state
     override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        player = animator.transform.gameObject.GetComponent<PlayerController3D>();
-        if (player != null)
+        if (GetPlayerController3D(animator) != null)
         {
             animator.SetBool("wasAirJump", true);
         }
@@ -18,27 +15,27 @@ public class AirJumpSMB : StateMachineBehaviour
     // OnStateUpdate is called on each Update frame between OnStateEnter and OnStateExit callbacks
     override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        if (player != null)
+        if (GetPlayerController3D(animator) != null)
         {
-            player.InputMove();
-            player.InputDash();
+            GetPlayerController3D(animator).InputMove();
+            GetPlayerController3D(animator).InputDash();
             check(animator);
         }
     }
     override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        if (player != null)
+        if (GetPlayerController3D(animator) != null)
         {
             animator.SetBool("isAirJump", false);
         }
     }
     void check(Animator animator)
     {
-        if (player.characterState.IsGrounded)
+        if (GetPlayerController3D(animator).characterState.IsGrounded)
         {
             animator.SetBool("isAir", false);
         }
-        if (player.characterState.IsAirDashing)
+        if (GetPlayerController3D(animator).characterState.IsAirDashing)
         {
             animator.SetBool("isAirDash", true);
             return;

@@ -1,17 +1,15 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
-public class GuitarAttackSMB : StateMachineBehaviour
+using JCW.Options.InputBindings;
+public class GuitarAttackSMB : CharacterBaseSMB
 {
-    PlayerController3D player;
     public int index;
     bool onClick;
     // OnStateEnter is called when a transition starts and the state machine starts to evaluate this state
     override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        player = animator.transform.gameObject.GetComponent<PlayerController3D>();
-        if (player != null)
+        if (GetPlayerController3D(animator) != null)
         {
             onClick = false;
         }
@@ -20,16 +18,14 @@ public class GuitarAttackSMB : StateMachineBehaviour
     // OnStateUpdate is called on each Update frame between OnStateEnter and OnStateExit callbacks
     override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        if (player != null)
+        if (GetPlayerController3D(animator) != null)
         {
-            player.playerMouse.CheckLeftDownClick();
-            player.playerMouse.CheckLeftClick();
             Check(animator);
         }
     }
     public override void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        if (player != null)
+        if (GetPlayerController3D(animator) != null)
         {
             animator.SetBool("isAttack1", false);
 
@@ -40,7 +36,7 @@ public class GuitarAttackSMB : StateMachineBehaviour
     {
         if (!onClick)
         {
-            if (player.playerMouse.leftOn)
+            if (ITT_KeyManager.Instance.GetKey(PlayerAction.Fire))
             {
                 switch (index)
                 {
@@ -64,10 +60,11 @@ public class GuitarAttackSMB : StateMachineBehaviour
             }
         }
        
-        if (player.playerMouse.ableToLeft)
+        if (GetPlayerController3D(animator).playerMouse.ableToLeft)
         {
-            if (player.playerMouse.leftDown)
+            if (ITT_KeyManager.Instance.GetKeyDown(PlayerAction.Fire))
             {
+                GetPlayerController3D(animator).playerMouse.CheckLeftClick(true);
                 onClick = true;
                 switch (index)
                 {
