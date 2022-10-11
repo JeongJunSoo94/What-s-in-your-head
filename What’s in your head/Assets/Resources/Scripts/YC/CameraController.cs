@@ -358,7 +358,7 @@ namespace YC.Camera_
             {
                 mainCam = GameObject.FindGameObjectWithTag("NellaCamera").GetComponent<Camera>();
 
-                if (mainCam) Debug.Log("OK");
+                if (mainCam) Debug.Log("Nella OK");
                 else Debug.Log("NULL");
 
                 cinemachineBrain = mainCam.GetComponent<CinemachineBrain>();
@@ -369,7 +369,7 @@ namespace YC.Camera_
             {
                 mainCam = GameObject.FindGameObjectWithTag("SteadyCamera").GetComponent<Camera>();
 
-                if (mainCam) Debug.Log("OK");
+                if (mainCam) Debug.Log("Steady OK");
                 else Debug.Log("NULL");
 
                 cinemachineBrain = mainCam.GetComponent<CinemachineBrain>();
