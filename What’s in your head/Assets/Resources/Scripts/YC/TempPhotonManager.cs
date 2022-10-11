@@ -10,6 +10,12 @@ using Photon.Pun;
 using Photon.Realtime;
 using System.Linq;
 
+using YC.CameraManager_;
+using YC.Camera_;
+using Cinemachine;
+
+
+
 namespace YC.Photon
 {
     public class TempPhotonManager : MonoBehaviourPunCallbacks
@@ -103,14 +109,40 @@ namespace YC.Photon
 
 
 
+            // 포톤 네트워크를 통해 PhotonNetwork.Instantiate한 오브젝트의 MonoBehaviour. Start()함수는 실행되지 않는다.
+            // 따라서 OnEnable 과 OnDisable 을 반드시 구현 해 주어야 합니다.
+            // https://doc.photonengine.com/ko-kr/pun/current/gameplay/instantiation
+
+
+
 
             if (PhotonNetwork.CurrentRoom.PlayerCount == 1)
             {              
-                PhotonNetwork.Instantiate("Prefabs/YC/Nella", new Vector3 (-3, 0, 0), Quaternion.identity, 0);
+                GameObject Inst = PhotonNetwork.Instantiate("Prefabs/YC/Nella", new Vector3 (-5, 0, -5), Quaternion.identity, 0);
+
+                //CameraManager.Instance.cameras[0] = GameObject.FindGameObjectWithTag("NellaCamera").GetComponent<Camera>();
+
+                //CameraManager.Instance.cameras[0] = 
+                //    PhotonNetwork.Instantiate("Prefabs/YC/MainCamera_Nella", new Vector3(0, 0, 0), Quaternion.identity, 0).GetComponent<Camera>();
+
+                //Inst.GetComponent<CameraController>().mainCam = CameraManager.Instance.cameras[0];
+                //Inst.GetComponent<CameraController>().cinemachineBrain = CameraManager.Instance.cameras[0].GetComponent<CinemachineBrain>();
+
+                PhotonNetwork.Instantiate("Prefabs/YC/MainCamera_Nella", new Vector3(0, 0, 0), Quaternion.identity, 0).GetComponent<Camera>();
             }
             else if (PhotonNetwork.CurrentRoom.PlayerCount == 2)
             {
-                PhotonNetwork.Instantiate("Prefabs/YC/Steady", new Vector3(3, 0, 0), Quaternion.identity, 0);
+                GameObject Inst = PhotonNetwork.Instantiate("Prefabs/YC/Steady", new Vector3(5, 0, -5), Quaternion.identity, 0);
+
+                //CameraManager.Instance.cameras[1] = GameObject.FindGameObjectWithTag("SteadyCamera").GetComponent<Camera>();
+
+                //CameraManager.Instance.cameras[1] = 
+                //    PhotonNetwork.Instantiate("Prefabs/YC/MainCamera_Steady", new Vector3(0, 0, 0), Quaternion.identity, 0).GetComponent<Camera>();
+
+                //Inst.GetComponent<CameraController>().mainCam = CameraManager.Instance.cameras[1];
+                //Inst.GetComponent<CameraController>().cinemachineBrain = CameraManager.Instance.cameras[1].GetComponent<CinemachineBrain>();
+
+                PhotonNetwork.Instantiate("Prefabs/YC/MainCamera_Steady", new Vector3(0, 0, 0), Quaternion.identity, 0).GetComponent<Camera>();
             }
         }
     }

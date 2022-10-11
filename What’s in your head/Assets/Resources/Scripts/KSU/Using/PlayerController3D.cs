@@ -7,6 +7,8 @@ using Photon.Pun;
 using JCW.AudioCtrl;
 using Cinemachine;
 
+using YC.Camera_;
+
 public class PlayerController3D : MonoBehaviour
 {
     //  Scripts Components
@@ -92,7 +94,9 @@ public class PlayerController3D : MonoBehaviour
         _rigidbody = GetComponent<Rigidbody>();
         playerMouse = GetComponent<PlayerMouseController>();
 
-        _camera = Camera.main;
+        // >> :
+        //_camera = Camera.main;
+        // << :
     }
     // Start is called before the first frame update
     void Start()
@@ -108,6 +112,8 @@ public class PlayerController3D : MonoBehaviour
         //}
         //else
         //    _camera = Camera.main;
+
+        _camera = this.gameObject.GetComponent<CameraController>().mainCam;
 
         if (!photonView.IsMine) Destroy(this);
         // << : 

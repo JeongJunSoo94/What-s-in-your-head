@@ -14,6 +14,7 @@ public class AimSMB : CharacterBaseSMB
         if (GetPlayerController3D(animator) != null)
         {
             check(animator);
+
         }
     }
 
