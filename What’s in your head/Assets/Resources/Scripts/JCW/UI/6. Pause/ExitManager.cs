@@ -19,7 +19,7 @@ namespace JCW.UI
         {
             mainMenu.onClick.AddListener(() =>
             {
-                GameManager.Instance.currentStageIndex = 0;
+                GameManager.Instance.curStageIndex = 0;
                 PhotonManager.Instance.ChangeStage();
             });
             exitMenu.onClick.AddListener(() =>

@@ -19,7 +19,7 @@ namespace JCW.UI
             loadMenu.onClick.AddListener(() =>
             {
                 Debug.Log("아직 미구현");
-                GameManager.Instance.currentStageIndex = 0;
+                GameManager.Instance.curStageIndex = 0;
                 PhotonManager.Instance.ChangeStage();
             });
             backMenu.onClick.AddListener(() =>

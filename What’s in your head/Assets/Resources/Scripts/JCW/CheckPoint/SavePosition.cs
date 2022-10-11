@@ -55,9 +55,11 @@ public class SavePosition : MonoBehaviour
         Debug.Log("체크포인트 접촉 : " + other.name);
         PlayerInfo playerTF = new(other);
         JsonData infoJson = JsonMapper.ToJson(playerTF);
-        if (!Directory.Exists(Application.dataPath + "/Resources/CheckPointInfo/"))
-            Directory.CreateDirectory(Application.dataPath + "/Resources/CheckPointInfo/");
-        File.WriteAllText(Application.dataPath + "/Resources/CheckPointInfo/" +other.name + "TF" +nthCheckPoint +".json", infoJson.ToString());
+
+        int curStage = GameManager.Instance.curStageIndex;
+        if (!Directory.Exists(Application.dataPath + "/Resources/CheckPointInfo/Stage" + curStage + "/"))
+            Directory.CreateDirectory(Application.dataPath + "/Resources/CheckPointInfo/Stage" + curStage + "/");
+        File.WriteAllText(Application.dataPath + "/Resources/CheckPointInfo/Stage" + curStage + "/" + "Player" +nthCheckPoint +".json", infoJson.ToString());
         Debug.Log("체크포인트 저장");
     }
 }

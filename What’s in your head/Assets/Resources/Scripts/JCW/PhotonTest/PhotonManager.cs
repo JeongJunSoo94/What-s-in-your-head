@@ -13,7 +13,7 @@ namespace JCW.Network
     public class PhotonManager : MonoBehaviourPunCallbacks
     {
         [Header("ID 길이")] [SerializeField] [Range(1,8)] private uint LengthID = 6;
-        [Header("친구와 만났을 때 열릴 UI")] [SerializeField] private GameObject readyUI = null;
+        [Header("친구와 만났을 때 열릴 UI")] [SerializeField] private GameObject readyUI = null;      
         [Header("초대장")] [SerializeField] private GameObject InvitationUI;
         [Header("해상도")] [SerializeField] private int width = 1920;
                             [SerializeField] private int height = 1080;
@@ -52,6 +52,7 @@ namespace JCW.Network
 
             Screen.SetResolution(width, height, isFullScreen);
         }
+
         public void Connect()
         {
             // 같은 룸의 유저들에게 자동으로 씬을 로딩
@@ -110,19 +111,6 @@ namespace JCW.Network
             }
             //StartCoroutine(nameof(MakeChar));
         }
-        public void GamePause(string playerName)
-        {
-            myPhotonView.RPC(nameof(GamePauseRPC), RpcTarget.AllViaServer, playerName);
-        }
-
-        [PunRPC]
-        public void GamePauseRPC(string playerName)
-        {
-            GameManager.Instance.stopPlayerName = playerName;
-
-            // 여기에 PauseMenu를 띄우는 것 하기
-        }
-
         public void ChangeStage()
         {
             myPhotonView.RPC(nameof(ChangeStageRPC), RpcTarget.AllViaServer);
@@ -131,8 +119,8 @@ namespace JCW.Network
         [PunRPC]
         public void ChangeStageRPC()
         {
-            PhotonNetwork.LoadLevel(GameManager.Instance.currentStageIndex);
-            if(GameManager.Instance.currentStageIndex != 0)
+            PhotonNetwork.LoadLevel(GameManager.Instance.curStageIndex);
+            if (GameManager.Instance.curStageIndex != 0)
                 StartCoroutine(nameof(MakeChar));
         }
 
@@ -183,6 +171,15 @@ namespace JCW.Network
         IEnumerator MakeChar()
         {
             yield return new WaitForSeconds(0.3f);
+
+            // 넬라인 지 아닌지 판단해서 캐릭터 생성해주면 됨
+            // 현재 자신이 마스터인지 아닌지와 어떤 캐릭터를 선택했는지가 담겨있음.
+
+            //if(GameManager.Instance.characterOwner[PhotonNetwork.IsMasterClient]) 
+            //      넬라 생성
+            //else
+            //      스테디 생성
+
 
             PhotonNetwork.Instantiate("Prefabs/JCW/SoundManager/SoundManager", Vector3.zero, Quaternion.identity);
             PhotonNetwork.Instantiate("Prefabs/JCW/Photon/Player", Vector3.zero, Quaternion.identity);

@@ -15,10 +15,12 @@ namespace JCW.AudioCtrl
     public class SoundManager : MonoBehaviour
     {
         [Header("효과음 목록")] [SerializeField] List<AudioClip> prevAudioClips = new();
+
         // 오디오 재생기
-        AudioSource[] audioSources = new AudioSource[(int)Sound.End];
+        readonly AudioSource[] audioSources = new AudioSource[(int)Sound.End];
+
         // 오디오 클립
-        Dictionary<string, AudioClip> audioClips = new();
+        readonly Dictionary<string, AudioClip> audioClips = new();
 
         PhotonView photonView;
 
@@ -41,19 +43,18 @@ namespace JCW.AudioCtrl
         }
 
         // Sound 종류에 해당하는 오브젝트들을 만들어주고, 사운드 매니저 오브젝트에 자식으로 달아준다.
-        void Start()
-        {            
+        private void OnEnable()
+        {
             string[] soundNames = System.Enum.GetNames(typeof(JCW.AudioCtrl.Sound));
-            for (int i = 0 ; i<(int)Sound.End ; ++i)
+            for (int i = 0 ; i < (int)Sound.End ; ++i)
             {
                 GameObject obj = new() { name = soundNames[i] };
                 audioSources[i] = obj.AddComponent<AudioSource>();
                 obj.transform.parent = this.transform;
             }
-            audioSources[(int)Sound.BGM].loop = true;            
+            audioSources[(int)Sound.BGM].loop = true;
             SetUp();
         }
-
         // 비우기
         public void Clear()
         {

@@ -117,6 +117,8 @@ public class PlayerController3D : MonoBehaviour
         if (!photonView.IsMine)
             return;
         CheckState();
+        if (Input.GetKeyDown(KeyCode.G))
+            Resurrect();
         //CheckKeyInput(); // 이건 animator의  fsm으로 한다고 했으나 여기에 모아서 사용해둠(fsm으로 이동 될 것들)
     }
 
@@ -169,13 +171,14 @@ public class PlayerController3D : MonoBehaviour
     }
     void Resurrect()
     {
-        if (!File.Exists(Application.dataPath + "/Resources/CheckPointInfo/" + this.name + "TF" + (CPcount - 1).ToString() + ".json"))
+        int curStage = GameManager.Instance.curStageIndex;
+        if (!File.Exists(Application.dataPath + "/Resources/CheckPointInfo/Stage" + curStage + "/" + "Player" + (CPcount - 1).ToString() + ".json"))
         {
             Debug.Log("체크포인트 불러오기 실패");
             return;
         }
 
-        string jsonString = File.ReadAllText(Application.dataPath + "/Resources/CheckPointInfo/" + this.name + "TF" + (CPcount - 1).ToString() + ".json");
+        string jsonString = File.ReadAllText(Application.dataPath + "/Resources/CheckPointInfo/Stage" + curStage + "/" + "Player" + (CPcount - 1).ToString() + ".json");
         Debug.Log(jsonString);
 
         SavePosition.PlayerInfo data = JsonUtility.FromJson<SavePosition.PlayerInfo>(jsonString);

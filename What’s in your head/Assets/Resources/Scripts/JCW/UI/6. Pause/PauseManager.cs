@@ -27,27 +27,17 @@ namespace JCW.UI
             else if (Instance != this)
                 Destroy(this.gameObject);
 
-            if (GameManager.Instance.stopPlayerName == PhotonNetwork.LocalPlayer.NickName)
+            buttonList[(int)PauseMenu.Resume].onClick.AddListener(() =>
             {
-                buttonList[(int)PauseMenu.Resume].onClick.AddListener(() =>
-                {
-                    this.gameObject.SetActive(false);
-                });
-            }            
+                this.gameObject.SetActive(false);
+            });
+
             buttonList[(int)PauseMenu.Checkpoint].onClick.AddListener(() =>
             {
                 checkPointUI.SetActive(true);
             });
             buttonList[(int)PauseMenu.Option].onClick.AddListener(() => { optionUI.SetActive(true); });
             buttonList[(int)PauseMenu.Exit].onClick.AddListener(() =>  { exitUI.SetActive(true);   });
-        }
-        private void OnEnable()
-        {
-            Time.timeScale = 0.0f;
-        }
-        private void OnDisable()
-        {
-            Time.timeScale = 1.0f;
         }
     }
 }

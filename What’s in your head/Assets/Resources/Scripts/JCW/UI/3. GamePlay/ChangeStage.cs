@@ -15,9 +15,9 @@ public class ChangeStage : MonoBehaviour
     {
         leftButton.onClick.AddListener(() =>
         {
-            if (GameManager.Instance.currentStageIndex != 0)
+            if (GameManager.Instance.curStageIndex != 0)
             {
-                curStage.text = stages[--GameManager.Instance.currentStageIndex];
+                curStage.text = stages[--GameManager.Instance.curStageIndex];
                 for (int i=0 ; i<3 ; ++i)
                 {
                     sections.transform.GetChild(i).gameObject.
@@ -25,15 +25,15 @@ public class ChangeStage : MonoBehaviour
                 }
                 rightButton.interactable = true;
             }
-            if (GameManager.Instance.currentStageIndex == 0)
+            if (GameManager.Instance.curStageIndex == 0)
                 leftButton.interactable = false;
 
         });
         rightButton.onClick.AddListener(() =>
         {
-            if (GameManager.Instance.currentStageIndex != stages.Count-1)
+            if (GameManager.Instance.curStageIndex != stages.Count-1)
             {
-                curStage.text = stages[++GameManager.Instance.currentStageIndex];
+                curStage.text = stages[++GameManager.Instance.curStageIndex];
                 for (int i = 0 ; i < 3 ; ++i)
                 {
                     sections.transform.GetChild(i).gameObject.
@@ -41,7 +41,7 @@ public class ChangeStage : MonoBehaviour
                 }
                 leftButton.interactable = true;
             }
-            if (GameManager.Instance.currentStageIndex == stages.Count - 1)
+            if (GameManager.Instance.curStageIndex == stages.Count - 1)
                 rightButton.interactable = false;
         });
     }

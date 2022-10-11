@@ -35,11 +35,16 @@ namespace JCW.UI
 
         private readonly List<GameObject> ownPlayer = new();
 
+        private bool isNella = false;
+
 
         private void Awake()
         {
             bwColors.Add(new Color(0, 0, 0, 1));
             bwColors.Add(new Color(1, 1, 1, 1));
+
+            if (this.gameObject.name.Contains("Nella"))
+                isNella = true;
 
             thisImg = this.gameObject.GetComponent<Image>();
             photonView = this.gameObject.GetComponent<PhotonView>();
@@ -60,7 +65,6 @@ namespace JCW.UI
             this.gameObject.GetComponent<Button>().onClick.AddListener(() =>
             {
                 photonView.RPC(nameof(SelectSprite), RpcTarget.AllViaServer, PhotonNetwork.LocalPlayer.NickName, PhotonNetwork.IsMasterClient);
-                //SelectSprite(PhotonNetwork.LocalPlayer.NickName);
             });
         }
 
@@ -108,10 +112,13 @@ namespace JCW.UI
 
         [PunRPC]
         public void SelectSprite(string playerName, bool isMaster)
-        {
+        {            
             // 선택되지 않은 현재 버튼을 선택했을 때
             if (curButtonOwner.text == "")
             {
+                if (GameManager.Instance.characterOwner.ContainsKey(isMaster))
+                    GameManager.Instance.characterOwner.Remove(isMaster);
+                GameManager.Instance.characterOwner.Add(isMaster, isNella);
                 curButtonOwner.text = playerName;
                 thisImg.sprite = selectSprite;
 
@@ -121,20 +128,31 @@ namespace JCW.UI
                 selectCharacter.SetActive(true);
 
                 // 스테디일 경우에만 폰트 하얀색으로 변경
-                if (this.gameObject.name.Contains("Steady"))
+                if (!isNella)
                 {
                     charName.color = bwColors[1];
                     charDesc.color = bwColors[1];
                 }
                 // 다른 버튼을 이미 선택했었을 때
                 if (otherButtonOwner.text == playerName)
+                {
                     otherObj.SendMessage("DeSelectSprite", false);
-                else if(otherButtonOwner.text != "")
+                }
+                else if (otherButtonOwner.text != "")
+                {
+                    foreach (bool ism in GameManager.Instance.characterOwner.Keys)
+                    {
+                        string player = ism ? "플레이어 1" : "플레이어 2";
+                        string character = GameManager.Instance.characterOwner[ism] ? "넬라" : "스테디";
+                        Debug.Log(player + " : " + character);
+                    }
                     PhotonManager.Instance.ChangeStage();
+                }
             }
             // 본인이 선택했던 캐릭터 버튼을 다시 눌렀을 때
             else if (curButtonOwner.text == playerName)
             {
+                GameManager.Instance.characterOwner.Remove(isMaster);
                 DeSelectSprite();
                 if (isMaster)
                     ownPlayer[0].SetActive(true);
@@ -152,10 +170,10 @@ namespace JCW.UI
 
         [PunRPC]
         public void DeSelectSpriteRPC(bool isDeactiveSelf)
-        {
+        {            
             curButtonOwner.text = "";
             thisImg.sprite = isDeactiveSelf ? onButtonSprite : defaultSprite;
-            if (this.gameObject.name.Contains("Steady"))
+            if (!isNella)
             {
                 charName.color = bwColors[0];
                 charDesc.color = bwColors[0];
