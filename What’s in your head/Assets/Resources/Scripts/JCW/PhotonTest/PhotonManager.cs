@@ -179,14 +179,22 @@ namespace JCW.Network
             // 넬라인 지 아닌지 판단해서 캐릭터 생성해주면 됨
             // 현재 자신이 마스터인지 아닌지와 어떤 캐릭터를 선택했는지가 담겨있음.
 
-            //if(GameManager.Instance.characterOwner[PhotonNetwork.IsMasterClient]) 
-            //      넬라 생성
-            //else
-            //      스테디 생성
+            if (GameManager.Instance.characterOwner[PhotonNetwork.IsMasterClient])
+            {
+                Debug.Log("넬라 생성");
+                PhotonNetwork.Instantiate("Prefabs/YC/Nella", new Vector3(-5, 0, -5), Quaternion.identity);
+                PhotonNetwork.Instantiate("Prefabs/YC/MainCamera_Nella", new Vector3(0, 0, 0), Quaternion.identity, 0);
+            }
+            else
+            {
+                Debug.Log("스테디 생성");
+                PhotonNetwork.Instantiate("Prefabs/YC/Steady", new Vector3(5, 0, -5), Quaternion.identity);
+                PhotonNetwork.Instantiate("Prefabs/YC/MainCamera_Steady", new Vector3(0, 0, 0), Quaternion.identity, 0);
+            }
 
 
             PhotonNetwork.Instantiate("Prefabs/JCW/SoundManager/SoundManager", Vector3.zero, Quaternion.identity);
-            PhotonNetwork.Instantiate("Prefabs/JCW/Photon/Player", Vector3.zero, Quaternion.identity);
+            //PhotonNetwork.Instantiate("Prefabs/JCW/Photon/Player", Vector3.zero, Quaternion.identity);
             StopCoroutine(nameof(MakeChar));
         }
     }

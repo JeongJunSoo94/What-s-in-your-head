@@ -5,6 +5,7 @@ using JCW.Spawner;
 
 using YC.Camera_;
 using YC.Camera_Single;
+using Photon.Pun;
 
 namespace JJS
 {
@@ -35,7 +36,12 @@ namespace JJS
 
         void Start()
         {
-            mainCamera = this.gameObject.transform.parent.GetComponent<CameraController_Single>().mainCam; // ½Ì±Û¿ë
+            if (PhotonNetwork.NetworkClientState == Photon.Realtime.ClientState.Joined)
+                mainCamera = this.gameObject.transform.parent.GetComponent<CameraController>().mainCam; // ¸ÖÆ¼¿ë
+            else
+                mainCamera = this.gameObject.transform.parent.GetComponent<CameraController_Single>().mainCam; // ½Ì±Û¿ë
+
+            //mainCamera = this.gameObject.transform.parent.GetComponent<CameraController_Single>().mainCam; // ½Ì±Û¿ë
             //mainCamera = this.gameObject.transform.parent.GetComponent<CameraController>().mainCam; // ¸ÖÆ¼¿ë
 
             bezierCurveOrbit = gameObject.GetComponent<BezierCurve>();

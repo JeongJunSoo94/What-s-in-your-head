@@ -2,7 +2,7 @@ using System.Collections;
 using System.IO;
 using System.Collections.Generic;
 using UnityEngine;
-using JCW.Options.InputBindings;
+using JCW.UI.Options.InputBindings;
 using Photon.Pun;
 using JCW.AudioCtrl;
 using Cinemachine;
@@ -98,10 +98,10 @@ public class PlayerController3D : MonoBehaviour
         // >> :
         //_camera = Camera.main;
         // << :
-    }
-    // Start is called before the first frame update
-    void Start()
-    {
+
+
+        //====================================================
+
         photonView = GetComponent<PhotonView>();
 
         // >> : YC - 카메라 세팅은 CameraController.cs에서 하겠습니다. 아래 코드 진행시 분활 화면이 불가능합니다.
@@ -114,18 +114,27 @@ public class PlayerController3D : MonoBehaviour
         //else
         //    _camera = Camera.main;
 
-        _camera = this.gameObject.GetComponent<CameraController_Single>().mainCam; // 싱글용
-        //_camera = this.gameObject.GetComponent<CameraController>().mainCam; // 멀티용
+        if (PhotonNetwork.NetworkClientState == Photon.Realtime.ClientState.Joined)
+            _camera = this.gameObject.GetComponent<CameraController>().mainCam; // 멀티용
+        else
+            _camera = this.gameObject.GetComponent<CameraController_Single>().mainCam; // 싱글용
+
+        if (_camera == null)
+            Debug.Log("카메라 NULL");
+
+
+
 
         if (!photonView.IsMine) Destroy(this);
         // << : 
 
 
-        if (WIYH_Manager.Instance.player1 == null)
-            WIYH_Manager.Instance.player1 = this.gameObject;
-        else if (WIYH_Manager.Instance.player2 == null)
-            WIYH_Manager.Instance.player2 = this.gameObject;
         ITT_KeyManager.Instance.GetKeyDown(PlayerAction.MoveBackward);
+    }
+    // Start is called before the first frame update
+    void Start()
+    {
+        
     }
 
     // Update is called once per frame

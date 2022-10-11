@@ -79,10 +79,6 @@ namespace YC.Camera_
             pv = GetComponent<PhotonView>();
             if (pv) pv.ObservedComponents.Add(this);
 
-
-           
-           
-
             //Camera Components
             // << :
             //mainCam             = this.gameObject.transform.Find("Main Camera").GetComponent<Camera>();
@@ -115,12 +111,7 @@ namespace YC.Camera_
             curCam_Clone = new CamState();
             blendingCam_Clone = new CamState();
 
-            
-            
-        }
-
-        void Start()
-        {
+            // =====================================================
 
             if (!pv.IsMine)
             {
@@ -140,6 +131,10 @@ namespace YC.Camera_
             if (this.gameObject.name == "Nella(Clone)")
             {
                 mainCam = GameObject.FindGameObjectWithTag("NellaCamera").GetComponent<Camera>();
+
+                if (mainCam) Debug.Log("OK");
+                else Debug.Log("NULL");
+
                 cinemachineBrain = mainCam.GetComponent<CinemachineBrain>();
                 CameraManager.Instance.cameras[0] = mainCam;
 
@@ -147,11 +142,18 @@ namespace YC.Camera_
             else if (this.gameObject.name == "Steady(Clone)")
             {
                 mainCam = GameObject.FindGameObjectWithTag("SteadyCamera").GetComponent<Camera>();
+
+                if (mainCam) Debug.Log("OK");
+                else Debug.Log("NULL");
+
                 cinemachineBrain = mainCam.GetComponent<CinemachineBrain>();
                 CameraManager.Instance.cameras[1] = mainCam;
             }
 
+        }
 
+        void Start()
+        {
             // >> :
             //if (this.gameObject.name == "Nella(Clone)") CameraManager.Instance.cameras[0] = mainCam;
             //else if (this.gameObject.name == "Steady(Clone)") CameraManager.Instance.cameras[1] = mainCam;

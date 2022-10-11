@@ -30,15 +30,10 @@ public class IKController : MonoBehaviour
 
     PlayerController3D player;
 
-    void Start()
+    private void Awake()
     {
         animator = GetComponent<Animator>();
         player = GetComponent<PlayerController3D>();
-    }
-
-    private void Update()
-    {
-        
     }
 
     private void OnAnimatorIK(int layerIndex)
