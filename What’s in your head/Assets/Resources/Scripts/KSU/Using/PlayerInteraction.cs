@@ -166,7 +166,7 @@ public class PlayerInteraction : MonoBehaviour
                 {
                     value.SetActive(true);
                     float amount = 1f - (hit.distance - spawner.interactableRange) / (spawner.detectingRange - spawner.interactableRange);
-                    if (!isRailReady || isRidingRope)
+                    if (!isRailReady && !isRidingRope)
                     {
                         if (hit.distance < spawner.interactableRange)
                         {
@@ -278,7 +278,20 @@ public class PlayerInteraction : MonoBehaviour
             if (JCW.UI.Options.InputBindings.ITT_KeyManager.Instance.GetKeyDown(JCW.UI.Options.InputBindings.PlayerAction.Interaction))
             {
                 isRidingRope = false;
-                float jumpPower = minDistObj.GetComponentInChildren<RopeAction>().InAvtivateRope();
+                float jumpPower = 1f;
+                switch(this.gameObject.tag)
+                {
+                    case "Nella":
+                        {
+                            jumpPower = minDistObj.GetComponent<RopeSpawner>().NellaRopeAction.GetComponent<RopeAction>().InAvtivateRope();
+                        }
+                        break;
+                    case "Steady":
+                        {
+                            jumpPower = minDistObj.GetComponent<RopeSpawner>().SteadyRopeAction.GetComponent<RopeAction>().InAvtivateRope();
+                        }
+                        break;
+                }
 
                 PlayerController3D playerController = GetComponent<PlayerController3D>();
                 Vector3 inertiaVec = transform.forward;

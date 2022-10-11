@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1935054327}
   m_Layer: 5
-  m_Name: Rope
+  m_Name: NellaRope
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -110,6 +110,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 7375169984744954682}
+  - {fileID: 1914259842798975918}
   m_Father: {fileID: 1942133735139718139}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -188,13 +189,77 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3d54e5f945b03114ca01660d2a991e79, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ropeAction: {fileID: 7375169984744954684}
+  NellaRopeAction: {fileID: 7375169984744954684}
+  SteadyRopeAction: {fileID: 8792440004115613563}
   detectingRange: 25
   interactableRange: 10
   ropeLength: 7.5
   rotationSpeed: 180
   swingSpeed: 60
   swingAngle: 60
+--- !u!1 &1958133118479907314
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1632872189339496985}
+  m_Layer: 5
+  m_Name: SteadyRopeAnchor
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1632872189339496985
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1958133118479907314}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 5511093131758322861}
+  m_Father: {fileID: 1914259842798975918}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &2854868412701149466
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5511093131758322861}
+  m_Layer: 5
+  m_Name: SteadyRope
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5511093131758322861
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2854868412701149466}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1632872189339496985}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &3495474043969104932
 GameObject:
   m_ObjectHideFlags: 0
@@ -205,7 +270,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1818466361812678145}
   m_Layer: 5
-  m_Name: RopeAnchor
+  m_Name: NellaRopeAnchor
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -238,7 +303,7 @@ GameObject:
   - component: {fileID: 7375169984744954682}
   - component: {fileID: 4643494559492201978}
   m_Layer: 5
-  m_Name: RopeCenter
+  m_Name: NellaRopeCenter
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -275,6 +340,62 @@ MonoBehaviour:
   spawner: {fileID: 1942133735771814187}
   ropeAnchor: {fileID: 3495474043969104932}
   rope: {fileID: 1935054326}
+  player: {fileID: 0}
+  targetDirection: 8
+  rotationX: 0
+  targetAddYRotation: 0
+  currentAddYRotation: 0
+  rotationTolerance: 10
+  isSwingForward: 1
+  isRotating: 0
+--- !u!1 &8792440004115613563
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1914259842798975918}
+  - component: {fileID: 263484494846693329}
+  m_Layer: 5
+  m_Name: SteadyRopeCenter
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
+--- !u!4 &1914259842798975918
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8792440004115613563}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 1632872189339496985}
+  m_Father: {fileID: 1942133735771814184}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &263484494846693329
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8792440004115613563}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ed9fae8c09db74141b058cb723cb5b57, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  spawner: {fileID: 1942133735771814187}
+  ropeAnchor: {fileID: 1958133118479907314}
+  rope: {fileID: 2854868412701149466}
   player: {fileID: 0}
   targetDirection: 8
   rotationX: 0

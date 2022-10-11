@@ -7,7 +7,7 @@ public class RopeAction : MonoBehaviour
 {
     public enum Direction { F, FR, R, BR, B, BL, L, FL, Default }
     
-    public RopeSpawner spawner; 
+    public RopeSpawner spawner;
     [SerializeField] GameObject ropeAnchor;
     [SerializeField] GameObject rope;
     public GameObject player;
@@ -85,14 +85,13 @@ public class RopeAction : MonoBehaviour
 
     void MakeRope()
     {
-        FindStartPoints();
         ropeAnchor.transform.localScale = new Vector3(1, 1, 1) * (1f / spawner.transform.localScale.x);
         Vector3 localPos = Vector3.zero;
         localPos.y = -spawner.ropeLength;
 
         rope.transform.localPosition = localPos;
         player.GetComponent<PlayerController3D>().enabled = false;
-        FindStartPoints();
+        FindStartPoints();////////////////////////////////////////////////////////////////////////
         Vector3 localRot = Vector3.zero;
         localRot.x = startXAngle;
         ropeAnchor.transform.localRotation = Quaternion.Euler(localRot);
@@ -123,7 +122,7 @@ public class RopeAction : MonoBehaviour
     {
         isRopeExisting = false;
         player.transform.parent = null;
-        this.gameObject.SetActive(true);
+        this.gameObject.SetActive(false);
         return -rotationX / spawner.swingAngle;
     }
 

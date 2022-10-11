@@ -6,7 +6,8 @@ public class RopeSpawner : MonoBehaviour
 {
     //public List<GameObject> playerList;
 
-    [SerializeField] GameObject ropeAction;
+    public GameObject NellaRopeAction;
+    public GameObject SteadyRopeAction;
 
     public float detectingRange = 30f;
     public float interactableRange = 20f;
@@ -31,8 +32,21 @@ public class RopeSpawner : MonoBehaviour
 
     public void StartRopeAction(GameObject player)
     {
-        ropeAction.GetComponent<RopeAction>().player = player;
-        ropeAction.SetActive(true);
+        switch(player.tag)
+        {
+            case "Nella":
+                {
+                    NellaRopeAction.GetComponent<RopeAction>().player = player;
+                    NellaRopeAction.SetActive(true);
+                }
+                break;
+            case "Steady":
+                {
+                    SteadyRopeAction.GetComponent<RopeAction>().player = player;
+                    SteadyRopeAction.SetActive(true);
+                }
+                break;
+        }
         //GameObject obj = Instantiate<GameObject>(ropeAction, transform);
         //obj.GetComponent<RopeAction>().spawner = this;
         //obj.GetComponent<RopeAction>().player = player;
