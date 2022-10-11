@@ -1,4 +1,4 @@
-using JCW.Options.InputBindings;
+using JCW.UI.Options.InputBindings;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -57,10 +57,10 @@ public class ItTakesTwoPlayerControler : MonoBehaviour
         pRigidbody = gameObject.GetComponent<Rigidbody>();
 
 
-        if (WIYH_Manager.Instance.player1 == null)
-            WIYH_Manager.Instance.player1 = this.gameObject;
-        else if(WIYH_Manager.Instance.player2 == null)
-            WIYH_Manager.Instance.player2 = this.gameObject;
+        if (GameManager.Instance.player1 == null)
+            GameManager.Instance.player1 = this.gameObject;
+        else if(GameManager.Instance.player2 == null)
+            GameManager.Instance.player2 = this.gameObject;
 
     }
 

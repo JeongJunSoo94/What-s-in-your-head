@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace JCW.Options.InputBindings
+namespace JCW.UI.Options.InputBindings
 {
     public class ITT_KeyManager : MonoBehaviour
     {
@@ -42,7 +42,8 @@ namespace JCW.Options.InputBindings
 
         void Update()
         {
-            KeyManager();
+            if(Time.timeScale != 0.0f)
+                KeyManager();
         }
 
         void KeyManager()

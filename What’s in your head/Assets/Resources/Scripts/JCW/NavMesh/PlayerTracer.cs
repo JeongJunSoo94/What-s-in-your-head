@@ -13,8 +13,8 @@ public class PlayerTracer : MonoBehaviour
         agent = GetComponent<NavMeshAgent>();
         Players = new List<GameObject>
         {
-            WIYH_Manager.Instance.player1,
-            WIYH_Manager.Instance.player2
+            GameManager.Instance.player1,
+            GameManager.Instance.player2
         };
     }
 
