@@ -145,7 +145,7 @@ public class PlayerInteraction : MonoBehaviour
     {
         float halfUIRadius = UIRadius / 2f;
         float minDist = 500f;
-        minDistObj = null;
+        //minDistObj = null;
 
         if(detectedRopeSpawners.Count > 0)
         {
@@ -200,12 +200,12 @@ public class PlayerInteraction : MonoBehaviour
                     {
                         case "Nella":
                             {
-                                xScreenMax = (Screen.width - halfUIRadius) * mainCamera.rect.width;
+                                xScreenMax = Screen.width * mainCamera.rect.width - halfUIRadius;
                             }
                             break;
                         case "Steady":
                             {
-                                xScreenMin = halfUIRadius + (Screen.width - halfUIRadius) * mainCamera.rect.width;
+                                xScreenMin = halfUIRadius + Screen.width* mainCamera.rect.width;
                             }
                             break;
                     }
@@ -278,7 +278,7 @@ public class PlayerInteraction : MonoBehaviour
             if (JCW.UI.Options.InputBindings.ITT_KeyManager.Instance.GetKeyDown(JCW.UI.Options.InputBindings.PlayerAction.Interaction))
             {
                 isRidingRope = false;
-                float jumpPower = minDistObj.GetComponentInChildren<RopeAction>().DestroyRope();
+                float jumpPower = minDistObj.GetComponentInChildren<RopeAction>().InAvtivateRope();
 
                 PlayerController3D playerController = GetComponent<PlayerController3D>();
                 Vector3 inertiaVec = transform.forward;
@@ -299,7 +299,6 @@ public class PlayerInteraction : MonoBehaviour
                 {
                     if (JCW.UI.Options.InputBindings.ITT_KeyManager.Instance.GetKeyDown(JCW.UI.Options.InputBindings.PlayerAction.Interaction))
                     {
-                        isRidingRope = true;
                         minDistObj.GetComponentInChildren<RopeSpawner>().StartRopeAction(this.gameObject);
                     }
                 }

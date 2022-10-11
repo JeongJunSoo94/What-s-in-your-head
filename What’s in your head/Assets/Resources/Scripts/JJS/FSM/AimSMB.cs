@@ -11,7 +11,7 @@ public class AimSMB : CharacterBaseSMB
     // OnStateUpdate is called on each Update frame between OnStateEnter and OnStateExit callbacks
     override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        if (GetPlayerController3D(animator) != null)
+        if (GetPlayerController3D(animator).enabled)
         {
             check(animator);
 

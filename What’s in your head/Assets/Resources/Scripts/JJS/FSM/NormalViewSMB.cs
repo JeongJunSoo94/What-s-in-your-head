@@ -6,7 +6,7 @@ public class NormalViewSMB : CharacterBaseSMB
 {
     override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        if (GetPlayerController3D(animator) != null)
+        if (GetPlayerController3D(animator).enabled)
         {
             animator.SetBool("wasAirJump", false);
             GetPlayerController3D(animator).characterState.aim = false;
@@ -16,7 +16,7 @@ public class NormalViewSMB : CharacterBaseSMB
 
     override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        if (GetPlayerController3D(animator) != null)
+        if (GetPlayerController3D(animator).enabled)
         {
             GetPlayerController3D(animator).InputRun();
             GetPlayerController3D(animator).InputMove();
@@ -28,7 +28,7 @@ public class NormalViewSMB : CharacterBaseSMB
 
     public override void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        if (GetPlayerController3D(animator) != null)
+        if (GetPlayerController3D(animator).enabled)
         {
             GetPlayerController3D(animator).MoveStop();
         }

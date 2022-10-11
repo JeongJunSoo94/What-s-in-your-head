@@ -11,7 +11,7 @@ public class AimAttack : CharacterBaseSMB
 
     override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        if (GetPlayerController3D(animator) != null)
+        if (GetPlayerController3D(animator).enabled)
         {
             GetPlayerController3D(animator).InputMove();
             GetPlayerController3D(animator).RotateAim();

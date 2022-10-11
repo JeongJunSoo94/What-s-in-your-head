@@ -31,9 +31,11 @@ public class RopeSpawner : MonoBehaviour
 
     public void StartRopeAction(GameObject player)
     {
-        GameObject obj = Instantiate<GameObject>(ropeAction, transform);
-        obj.GetComponent<RopeAction>().spawner = this;
-        obj.GetComponent<RopeAction>().player = player;
+        ropeAction.GetComponent<RopeAction>().player = player;
+        ropeAction.SetActive(true);
+        //GameObject obj = Instantiate<GameObject>(ropeAction, transform);
+        //obj.GetComponent<RopeAction>().spawner = this;
+        //obj.GetComponent<RopeAction>().player = player;
     }
     private void OnDrawGizmos()
     {

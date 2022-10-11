@@ -9,7 +9,7 @@ public class RopeAction : MonoBehaviour
     
     public RopeSpawner spawner; 
     [SerializeField] GameObject ropeAnchor;
-    GameObject rope;
+    [SerializeField] GameObject rope;
     public GameObject player;
 
     float startXAngle = 0f;
@@ -33,7 +33,6 @@ public class RopeAction : MonoBehaviour
     void Start()
     {
         spawner = GetComponentInParent<RopeSpawner>();
-        MakeRope();
     }
 
     void Update()
@@ -88,8 +87,6 @@ public class RopeAction : MonoBehaviour
     {
         FindStartPoints();
         ropeAnchor.transform.localScale = new Vector3(1, 1, 1) * (1f / spawner.transform.localScale.x);
-        rope = new GameObject("Rope");  // 플레이어가 매달릴 끝 생성
-        rope.transform.parent = ropeAnchor.transform;
         Vector3 localPos = Vector3.zero;
         localPos.y = -spawner.ropeLength;
 
@@ -105,7 +102,7 @@ public class RopeAction : MonoBehaviour
 
     void MovePlayerToRope()
     {
-        player.transform.position = Vector3.MoveTowards(player.transform.position, rope.transform.position, Time.fixedDeltaTime * 4f);
+        player.transform.position = Vector3.MoveTowards(player.transform.position, rope.transform.position, Time.fixedDeltaTime);
         if (Vector3.Distance(player.transform.position, rope.transform.position) < 1f)
         {
             isReadyToRide = false;
@@ -122,11 +119,11 @@ public class RopeAction : MonoBehaviour
         isRopeExisting = true;
     }
 
-    public float DestroyRope()
+    public float InAvtivateRope()
     {
         isRopeExisting = false;
         player.transform.parent = null;
-        Destroy(this.gameObject);
+        this.gameObject.SetActive(true);
         return -rotationX / spawner.swingAngle;
     }
 
@@ -286,5 +283,10 @@ public class RopeAction : MonoBehaviour
     void CalculateDistance()
     {
         Debug.Log(Vector3.Distance(player.transform.position, this.transform.position));
+    }
+
+    private void OnEnable()
+    {
+        MakeRope();
     }
 }

@@ -125,7 +125,7 @@ public class PlayerController3D : MonoBehaviour
 
 
 
-        if (!photonView.IsMine) Destroy(this);
+        if (!photonView.IsMine) this.enabled = false;
         // << : 
 
 
