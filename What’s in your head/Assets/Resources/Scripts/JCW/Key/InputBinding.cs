@@ -5,7 +5,7 @@ using UnityEngine;
 using System.IO;
 using LitJson;
 
-namespace JCW.Options.InputBindings
+namespace JCW.UI.Options.InputBindings
 {
     // 플레이어의 행동
     public enum PlayerAction

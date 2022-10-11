@@ -16,6 +16,9 @@ public class PlayerInteraction : MonoBehaviour
     public float rangeDistance = 5f;
     public LayerMask targetLayer;
     public Ray ray;
+    LayerMask layerFilter;
+    //downhillLayer = (1 << LayerMask.NameToLayer("downhill") + (1 << LayerMask.NameToLayer("uphill")));
+    //downhillLayer = (-1) - (1 << LayerMask.NameToLayer("downhill"));
     RaycastHit _raycastHit;
     public Vector3 hVision;
 
@@ -56,9 +59,10 @@ public class PlayerInteraction : MonoBehaviour
 
 
     // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
         mainCamera = Camera.main;
+        layerFilter = ((-1) - (1 << LayerMask.NameToLayer("Player")) - (1 << LayerMask.NameToLayer("Water")));
         //ray = Camera.main.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0f));
     }
 
@@ -74,7 +78,8 @@ public class PlayerInteraction : MonoBehaviour
 
     private void FixedUpdate()
     {
-        //UITest();
+        //DetectObjects();
+        //RenderInteractingUI();
     }
 
     void SearchRail()
@@ -130,6 +135,7 @@ public class PlayerInteraction : MonoBehaviour
     {
         float halfUIRadius = UIRadius / 2f;
         float minDist = 500f;
+        minDistObj = null;
 
         if(detectedRopeSpawners.Count > 0)
         {
@@ -140,7 +146,7 @@ public class PlayerInteraction : MonoBehaviour
                 GameObject value = interactableObj.Value;
                 RopeSpawner spawner = key.GetComponentInChildren<RopeSpawner>();
 
-                Physics.Raycast(transform.position, (key.transform.position - transform.position), out hit, spawner.detectingRange * 1.1f);
+                Physics.Raycast(transform.position, (key.transform.position - transform.position), out hit, spawner.detectingRange * 1.5f, layerFilter, QueryTriggerInteraction.Ignore);
 
                 if (key.gameObject != hit.transform.gameObject)
                 {
@@ -149,7 +155,7 @@ public class PlayerInteraction : MonoBehaviour
                 else
                 {
                     value.SetActive(true);
-                    float amount = (hit.distance - spawner.interactableRange) / (spawner.detectingRange - spawner.interactableRange);
+                    float amount = 1f - (hit.distance - spawner.interactableRange) / (spawner.detectingRange - spawner.interactableRange);
                     if (!isRailReady || isRidingRope)
                     {
                         if (hit.distance < spawner.interactableRange)
@@ -166,7 +172,7 @@ public class PlayerInteraction : MonoBehaviour
                         }
                     }
 
-                    if (!(amount > 0))
+                    if (amount > 1f)
                     {
                         amount = 1f;
                     }
@@ -206,7 +212,7 @@ public class PlayerInteraction : MonoBehaviour
     {
         if (isRidingRope)
         {
-            if (JCW.Options.InputBindings.ITT_KeyManager.Instance.GetKeyDown(JCW.Options.InputBindings.PlayerAction.Interaction))
+            if (JCW.UI.Options.InputBindings.ITT_KeyManager.Instance.GetKeyDown(JCW.UI.Options.InputBindings.PlayerAction.Interaction))
             {
                 isRidingRope = false;
                 float jumpPower = minDistObj.GetComponentInChildren<RopeAction>().DestroyRope();
@@ -216,9 +222,9 @@ public class PlayerInteraction : MonoBehaviour
                 Debug.Log("jumpPower: " + jumpPower);
                 inertiaVec.y = 0;
                 transform.LookAt(transform.position + inertiaVec);
-                playerController.enabled = true;
                 playerController.MakeinertiaVec(playerController.walkSpeed, inertiaVec.normalized);
                 playerController.moveVec = Vector3.up * playerController.jumpSpeed * jumpPower;
+                playerController.enabled = true;
             }
 
         }
@@ -226,10 +232,13 @@ public class PlayerInteraction : MonoBehaviour
         {
             if(!isRailReady)
             {
-                if (JCW.Options.InputBindings.ITT_KeyManager.Instance.GetKeyDown(JCW.Options.InputBindings.PlayerAction.Interaction))
+                if(minDistObj != null)
                 {
-                    isRidingRope = true;
-                    minDistObj.GetComponentInChildren<RopeSpawner>().StartRopeAction(this.gameObject);
+                    if (JCW.UI.Options.InputBindings.ITT_KeyManager.Instance.GetKeyDown(JCW.UI.Options.InputBindings.PlayerAction.Interaction))
+                    {
+                        isRidingRope = true;
+                        minDistObj.GetComponentInChildren<RopeSpawner>().StartRopeAction(this.gameObject);
+                    }
                 }
             }
         }

@@ -10,7 +10,7 @@ using UnityEngine;
 using Photon.Pun;
 using Cinemachine;
 
-using JCW.Options.InputBindings;
+using JCW.UI.Options.InputBindings;
 
 namespace YC.Camera_
 {

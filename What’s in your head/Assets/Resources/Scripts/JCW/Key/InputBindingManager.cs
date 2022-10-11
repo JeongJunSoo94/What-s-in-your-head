@@ -5,7 +5,7 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace JCW.Options.InputBindings
+namespace JCW.UI.Options.InputBindings
 {
     public class InputBindingManager : MonoBehaviour
     {

@@ -2,7 +2,7 @@ using System.Collections;
 using System.IO;
 using System.Collections.Generic;
 using UnityEngine;
-using JCW.Options.InputBindings;
+using JCW.UI.Options.InputBindings;
 using Photon.Pun;
 using JCW.AudioCtrl;
 using Cinemachine;

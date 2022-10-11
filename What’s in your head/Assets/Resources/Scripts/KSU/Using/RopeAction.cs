@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using JCW.Options.InputBindings;
+using JCW.UI.Options.InputBindings;
 
 public class RopeAction : MonoBehaviour
 {
@@ -30,14 +30,12 @@ public class RopeAction : MonoBehaviour
 
 
 
-    // Start is called before the first frame update
     void Start()
     {
         spawner = GetComponentInParent<RopeSpawner>();
         MakeRope();
     }
 
-    // Update is called once per frame
     void Update()
     {
         if(isRopeExisting)
