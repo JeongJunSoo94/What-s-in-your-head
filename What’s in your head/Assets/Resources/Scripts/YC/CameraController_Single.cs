@@ -114,14 +114,8 @@ namespace YC.Camera_Single
             curCam_Clone = new CamState();
             blendingCam_Clone = new CamState();
 
-            mainCam = GameObject.FindGameObjectWithTag("NellaCamera").GetComponent<Camera>();
-            cinemachineBrain = mainCam.GetComponent<CinemachineBrain>();
-            CameraManager.Instance.cameras[0] = mainCam;
-            
-        }
 
-        void Start()
-        {
+            FindCamera();
 
             if (!pv.IsMine)
             {
@@ -136,11 +130,10 @@ namespace YC.Camera_Single
                 OnOffCamera(camList[(int)curCam]);
             }
 
+        }
 
-
-            
-
-
+        void Start()
+        {
             // >> :
             //if (this.gameObject.name == "Nella(Clone)") CameraManager.Instance.cameras[0] = mainCam;
             //else if (this.gameObject.name == "Steady(Clone)") CameraManager.Instance.cameras[1] = mainCam;
@@ -355,6 +348,15 @@ namespace YC.Camera_Single
                 originCurVirtualCam_YAxis = (float)stream.ReceiveNext();
                 originCurCam_Pos = (Vector3)stream.ReceiveNext();         
             }
+        }
+
+        public Camera FindCamera()
+        {
+            mainCam = GameObject.FindGameObjectWithTag("NellaCamera").GetComponent<Camera>();
+            cinemachineBrain = mainCam.GetComponent<CinemachineBrain>();
+            CameraManager.Instance.cameras[0] = mainCam;
+
+            return mainCam;
         }
 
     }

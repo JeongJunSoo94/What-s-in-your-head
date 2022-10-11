@@ -182,14 +182,14 @@ namespace JCW.Network
             if (GameManager.Instance.characterOwner[PhotonNetwork.IsMasterClient])
             {
                 Debug.Log("넬라 생성");
-                PhotonNetwork.Instantiate("Prefabs/YC/Nella", new Vector3(-5, 0, -5), Quaternion.identity);
                 PhotonNetwork.Instantiate("Prefabs/YC/MainCamera_Nella", new Vector3(0, 0, 0), Quaternion.identity, 0);
+                PhotonNetwork.Instantiate("Prefabs/YC/Nella", new Vector3(-5, 0, -5), Quaternion.identity);
             }
             else
             {
                 Debug.Log("스테디 생성");
-                PhotonNetwork.Instantiate("Prefabs/YC/Steady", new Vector3(5, 0, -5), Quaternion.identity);
                 PhotonNetwork.Instantiate("Prefabs/YC/MainCamera_Steady", new Vector3(0, 0, 0), Quaternion.identity, 0);
+                PhotonNetwork.Instantiate("Prefabs/YC/Steady", new Vector3(5, 0, -5), Quaternion.identity);
             }
 
 

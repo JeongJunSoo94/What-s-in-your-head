@@ -115,9 +115,9 @@ public class PlayerController3D : MonoBehaviour
         //    _camera = Camera.main;
 
         if (PhotonNetwork.NetworkClientState == Photon.Realtime.ClientState.Joined)
-            _camera = this.gameObject.GetComponent<CameraController>().mainCam; // 멀티용
+            _camera = this.gameObject.GetComponent<CameraController>().FindCamera(); // 멀티용
         else
-            _camera = this.gameObject.GetComponent<CameraController_Single>().mainCam; // 싱글용
+            _camera = this.gameObject.GetComponent<CameraController_Single>().FindCamera(); // 싱글용
 
         if (_camera == null)
             Debug.Log("카메라 NULL");

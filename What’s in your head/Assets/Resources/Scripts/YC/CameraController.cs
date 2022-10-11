@@ -127,28 +127,9 @@ namespace YC.Camera_
             }
 
 
+            FindCamera();
 
-            if (this.gameObject.name == "Nella(Clone)")
-            {
-                mainCam = GameObject.FindGameObjectWithTag("NellaCamera").GetComponent<Camera>();
 
-                if (mainCam) Debug.Log("OK");
-                else Debug.Log("NULL");
-
-                cinemachineBrain = mainCam.GetComponent<CinemachineBrain>();
-                CameraManager.Instance.cameras[0] = mainCam;
-
-            }
-            else if (this.gameObject.name == "Steady(Clone)")
-            {
-                mainCam = GameObject.FindGameObjectWithTag("SteadyCamera").GetComponent<Camera>();
-
-                if (mainCam) Debug.Log("OK");
-                else Debug.Log("NULL");
-
-                cinemachineBrain = mainCam.GetComponent<CinemachineBrain>();
-                CameraManager.Instance.cameras[1] = mainCam;
-            }
 
         }
 
@@ -368,6 +349,34 @@ namespace YC.Camera_
                 originCurVirtualCam_YAxis = (float)stream.ReceiveNext();
                 originCurCam_Pos = (Vector3)stream.ReceiveNext();         
             }
+        }
+
+
+        public Camera FindCamera()
+        {
+            if (this.gameObject.name == "Nella(Clone)")
+            {
+                mainCam = GameObject.FindGameObjectWithTag("NellaCamera").GetComponent<Camera>();
+
+                if (mainCam) Debug.Log("OK");
+                else Debug.Log("NULL");
+
+                cinemachineBrain = mainCam.GetComponent<CinemachineBrain>();
+                CameraManager.Instance.cameras[0] = mainCam;
+
+            }
+            else if (this.gameObject.name == "Steady(Clone)")
+            {
+                mainCam = GameObject.FindGameObjectWithTag("SteadyCamera").GetComponent<Camera>();
+
+                if (mainCam) Debug.Log("OK");
+                else Debug.Log("NULL");
+
+                cinemachineBrain = mainCam.GetComponent<CinemachineBrain>();
+                CameraManager.Instance.cameras[1] = mainCam;
+            }
+
+            return mainCam;
         }
 
     }
