@@ -376,6 +376,10 @@ namespace YC.Camera_
                 CameraManager.Instance.cameras[1] = mainCam;
             }
 
+            gameObject.transform.GetChild(16).gameObject.SetActive(true);
+            gameObject.transform.GetChild(16).gameObject.GetComponent<Canvas>().worldCamera = mainCam;
+
+
             return mainCam;
         }
 
