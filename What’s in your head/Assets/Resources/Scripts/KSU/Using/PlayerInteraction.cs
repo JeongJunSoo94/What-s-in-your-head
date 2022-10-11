@@ -299,6 +299,7 @@ public class PlayerInteraction : MonoBehaviour
                 {
                     if (JCW.UI.Options.InputBindings.ITT_KeyManager.Instance.GetKeyDown(JCW.UI.Options.InputBindings.PlayerAction.Interaction))
                     {
+                        isRidingRope = true;
                         minDistObj.GetComponentInChildren<RopeSpawner>().StartRopeAction(this.gameObject);
                     }
                 }
