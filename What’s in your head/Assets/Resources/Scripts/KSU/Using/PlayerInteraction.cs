@@ -1,7 +1,11 @@
+using Photon.Pun;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+
+using YC.Camera_;
+using YC.Camera_Single;
 
 public class PlayerInteraction : MonoBehaviour
 {
@@ -47,7 +51,6 @@ public class PlayerInteraction : MonoBehaviour
     
 
     GameObject minDistObj = null;
-    GameObject minDistUI = null;
 
 
     /// <summary>
@@ -61,7 +64,14 @@ public class PlayerInteraction : MonoBehaviour
     // Start is called before the first frame update
     void Awake()
     {
-        mainCamera = Camera.main;
+        if (PhotonNetwork.NetworkClientState == Photon.Realtime.ClientState.Joined)
+            mainCamera = this.gameObject.GetComponent<CameraController>().FindCamera(); // 멀티용
+        else
+            mainCamera = this.gameObject.GetComponent<CameraController_Single>().FindCamera(); // 싱글용
+
+        if (mainCamera == null)
+            Debug.Log("카메라 NULL");
+
         layerFilter = ((-1) - (1 << LayerMask.NameToLayer("Player")) - (1 << LayerMask.NameToLayer("Water")));
         //ray = Camera.main.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0f));
     }
@@ -180,7 +190,27 @@ public class PlayerInteraction : MonoBehaviour
                     value.GetComponentsInChildren<Image>()[1].fillAmount = amount;
 
                     Vector3 screenPos = mainCamera.WorldToScreenPoint(key.transform.position);
-                    screenPos.y = ConfineInRange(screenPos.y, halfUIRadius, Screen.height - halfUIRadius);
+
+                    float yScreenMin = halfUIRadius;
+                    float yScreenMax = Screen.height - halfUIRadius;
+                    float xScreenMin = halfUIRadius;
+                    float xScreenMax = Screen.width - halfUIRadius;
+
+                    switch(this.gameObject.tag)
+                    {
+                        case "Nella":
+                            {
+                                xScreenMax = (Screen.width - halfUIRadius) * mainCamera.rect.width;
+                            }
+                            break;
+                        case "Steady":
+                            {
+                                xScreenMin = halfUIRadius + (Screen.width - halfUIRadius) * mainCamera.rect.width;
+                            }
+                            break;
+                    }
+
+                    screenPos.y = ConfineInRange(screenPos.y, yScreenMin, yScreenMax);
 
                     if (screenPos.z < 0)
                     {
@@ -188,19 +218,52 @@ public class PlayerInteraction : MonoBehaviour
                         screenPos.x = -screenPos.x;
                     }
 
-                    screenPos.x = ConfineInRange(screenPos.x, halfUIRadius, Screen.width - halfUIRadius);
-                    RectTransform rect = value.GetComponent<RectTransform>();
+                    screenPos.x = ConfineInRange(screenPos.x, xScreenMin, xScreenMax);
+                    RectTransform[] rects = value.GetComponentsInChildren<RectTransform>();
 
-                    if (screenPos.x == halfUIRadius || screenPos.y == halfUIRadius || screenPos.x == (Screen.width - halfUIRadius) || screenPos.y == (Screen.height - halfUIRadius))
+                    if (screenPos.x == xScreenMin || screenPos.y == yScreenMin || screenPos.x == xScreenMax || screenPos.y == yScreenMax)
                     {
                         float resizedHalfUIRaidus = halfUIRadius * 0.8f;
-                        rect.sizeDelta = new Vector2(resizedHalfUIRaidus, resizedHalfUIRaidus) * 2f;
-                        screenPos.x = ConfineInRange(screenPos.x, resizedHalfUIRaidus, Screen.width - resizedHalfUIRaidus);
-                        screenPos.y = ConfineInRange(screenPos.y, resizedHalfUIRaidus, Screen.height - resizedHalfUIRaidus);
+                        for(int i =0; i<rects.Length;++i)
+                        {
+                            rects[i].sizeDelta = new Vector2(resizedHalfUIRaidus, resizedHalfUIRaidus) * 2f;
+                            if (i != 0)
+                            {
+                                rects[i].localPosition = Vector3.zero;
+                            }
+                        }
+
+                        yScreenMin = resizedHalfUIRaidus;
+                        yScreenMax = Screen.height - resizedHalfUIRaidus;
+
+                        switch (this.gameObject.tag)
+                        {
+                            case "Nella":
+                                {
+                                    xScreenMax = Screen.width * mainCamera.rect.width - resizedHalfUIRaidus;
+                                }
+                                break;
+                            case "Steady":
+                                {
+                                    xScreenMin = resizedHalfUIRaidus + Screen.width * mainCamera.rect.width;
+                                }
+                                break;
+                        }
+
+                        screenPos.x = ConfineInRange(screenPos.x, xScreenMin, xScreenMax);
+                        screenPos.y = ConfineInRange(screenPos.y, yScreenMin, yScreenMax);
                     }
                     else
                     {
-                        rect.sizeDelta = new Vector2(UIRadius, UIRadius);
+                        for (int i = 0; i < rects.Length; ++i)
+                        {
+                            rects[i].sizeDelta = new Vector2(UIRadius, UIRadius);
+                            if(i != 0)
+                            {
+                                rects[i].localPosition = Vector3.zero;
+                            }
+                        }
+                        
                     }
                     value.transform.position = screenPos;
                 }

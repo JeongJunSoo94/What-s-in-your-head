@@ -172,7 +172,7 @@ public class PlayerController3D : MonoBehaviour
         characterState.CheckMove(_rigidbody.velocity);
     }
 
-    private void MakeinertiaVec(float speed, Vector3 nomalVec) // 공중 진입 시 생기는 관성벡터
+    public void MakeinertiaVec(float speed, Vector3 nomalVec) // 공중 진입 시 생기는 관성벡터
     {
         inertiaSpeed = speed;
         inertiaNormalVec = nomalVec;

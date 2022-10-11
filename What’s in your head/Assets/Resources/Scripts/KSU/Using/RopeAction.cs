@@ -138,7 +138,7 @@ public class RopeAction : MonoBehaviour
     void Swing()
     {
         Debug.Log("vel: " + player.GetComponent<Rigidbody>().velocity);
-        player.transform.localPosition = new Vector3(0.1f, 0.1f, 0.1f);
+        player.transform.localPosition = new Vector3(0.0f, 0.0f, 0.0f);
         // -180 < rot X <= 180 사이로 고정 
         rotationX = FitInHalfDegree(ropeAnchor.transform.localRotation.eulerAngles.x);
 
