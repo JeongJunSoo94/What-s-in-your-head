@@ -1,61 +1,72 @@
+using System.Collections;
 using Photon.Pun;
 using UnityEngine;
+using UnityEngine.UI;
+using UnityEngine.Video;
 using YC.Camera_;
 
 namespace JCW.UI.InGame
 {
     public class TargetIndicator : MonoBehaviour
     {
-        public float OutOfSightOffset = 5f;
         [Header("감지 범위 수치")] [SerializeField] [Range(0, 100)] float range;
         [Header("UI")] [SerializeField] GameObject detectUI;
         [Header("타겟 오브젝트")] [SerializeField] GameObject target;
-        //[Header("그려질 캔버스 트랜스폼")] [SerializeField] private RectTransform canvasRect;
-        [Header("이미지 트랜스폼")] [SerializeField] private RectTransform imgTransform;
+        [Header("이미지 트랜스폼")] [SerializeField] RectTransform imgTransform;
+        [Header("클립 플레이어")] [SerializeField] VideoPlayer videoPlayer;
 
-        private RectTransform canvasRect;
+        private RectTransform canvasSize;
         private Camera mainCamera;
+        
+                
         bool isDetected = false;
-        Rect cameraPos;
-        Rect relativeCamPos;
+        Rect screenSize;
+
+        // 화면에서 벗어나지 못하게 하는 오프셋 값
+        private float screenLimitOffset;
+
+        // 화면 안에 있을 때와 벗어났을 떄의 이미지 크기
+        Vector3 initImgScale;
+        Vector3 outOfSightImgScale;
+
+
 
         private void Awake()
         {
-            canvasRect = detectUI.GetComponent<RectTransform>();
+            canvasSize = detectUI.GetComponent<RectTransform>();
             transform.localScale = new Vector3(range, range, range);
-            //canvas = canvasRect.gameObject.GetComponent<Canvas>();
+            screenLimitOffset = imgTransform.rect.width * 0.4f;
+            outOfSightImgScale = imgTransform.localScale * 0.8f;
+            initImgScale = imgTransform.localScale;
+            
         }
         private void Update()
         {
             if (!isDetected)
                 return;
+
+            // 타겟의 위치를 메인카메라의 스크린 좌표로 변경
             Vector3 indicatorPosition = mainCamera.WorldToScreenPoint(target.transform.position);
 
 
-            // 앞에 있고, x가 화면 너비 안에 들어올 때 , y가 화면 높이 안에 들어올 떄
+            // 타겟이 카메라 앞에 있을 때
             if (indicatorPosition.z >= 0f)
             {
-                if (indicatorPosition.x <= relativeCamPos.width &&
-                    indicatorPosition.y <= relativeCamPos.height &&
-                    indicatorPosition.x >= 0f && indicatorPosition.y >= 0f)
+                // 타겟이 화면 안에 들어올 때
+                if (indicatorPosition.x <= screenSize.width && indicatorPosition.x >= 0f
+                   && indicatorPosition.y <= screenSize.height && indicatorPosition.y >= 0f)
                 {
-                    //Set z to zero since it's not needed and only causes issues (too far away from Camera to be shown!)
+                    imgTransform.localScale = initImgScale;
                     indicatorPosition.z = 0f;
                 }
                 else
-                {
-                    //In case the target is in front of the ship, but out of sight
-                    indicatorPosition = OutOfRangeindicatorPositionB(indicatorPosition);
-                }
+                    indicatorPosition = OutOfRange(indicatorPosition);
             }
             else
             {
                 // 화면 뒤에 있을 때, 위치 뒤집어지는 것을 막기 위한 설정
                 indicatorPosition *= -1f;
-
-                //Set indicatorposition and set targetIndicator to outOfSight form.
-                indicatorPosition = OutOfRangeindicatorPositionB(indicatorPosition);
-
+                indicatorPosition = OutOfRange(indicatorPosition);
             }
 
             imgTransform.position = indicatorPosition;
@@ -63,39 +74,39 @@ namespace JCW.UI.InGame
 
 
 
-
-        private Vector3 OutOfRangeindicatorPositionB(Vector3 indicatorPosition)
+        // 카메라 범위를 벗어났을 때를 위한 설정
+        private Vector3 OutOfRange(Vector3 indicatorPosition)
         {
-            // 카메라 범위를 벗어났을 때를 위한 설정
+            imgTransform.localScale = outOfSightImgScale;
             indicatorPosition.z = 0f;
 
-            //Calculate Center of Canvas and subtract from the indicator position to have indicatorCoordinates from the Canvas Center instead the bottom left!
-            Vector3 canvasCenter = new Vector3(relativeCamPos.width / 2f, relativeCamPos.height / 2f, 0f);
+            // 현재 카메라 화면의 중심 위치 잡기
+            Vector3 canvasCenter = new Vector3(screenSize.width / 2f, screenSize.height / 2f, 0f);
+
+            // UI 위치-> 화면 중심 벡터
             indicatorPosition -= canvasCenter;
 
-            //Calculate if Vector to target intersects (first) with y border of canvas rect or if Vector intersects (first) with x border:
-            //This is required to see which border needs to be set to the max value and at which border the indicator needs to be moved (up & down or left & right)
-            float divX = (relativeCamPos.width / 2f - OutOfSightOffset) / Mathf.Abs(indicatorPosition.x);
-            float divY = (relativeCamPos.height / 2f - OutOfSightOffset) / Mathf.Abs(indicatorPosition.y);
+            // 화면 범위 제한
+            float divX = (screenSize.width / 2f - screenLimitOffset) / Mathf.Abs(indicatorPosition.x);
+            float divY = (screenSize.height / 2f - screenLimitOffset) / Mathf.Abs(indicatorPosition.y);
 
-            //In case it intersects with x border first, put the x-one to the border and adjust the y-one accordingly (Trigonometry)
+            // x 좌표가 먼저 테두리에 닿았을 때
             if (divX < divY)
             {
+                // x축에 대한 각도
                 float angle = Vector3.SignedAngle(Vector3.right, indicatorPosition, Vector3.forward);
-                indicatorPosition.x = Mathf.Sign(indicatorPosition.x) * (relativeCamPos.width * 0.5f - OutOfSightOffset);
+                indicatorPosition.x = Mathf.Sign(indicatorPosition.x) * (screenSize.width * 0.5f - screenLimitOffset);
                 indicatorPosition.y = Mathf.Tan(Mathf.Deg2Rad * angle) * indicatorPosition.x;
             }
-
-            //In case it intersects with y border first, put the y-one to the border and adjust the x-one accordingly (Trigonometry)
             else
             {
+                // y축에 대한 각도
                 float angle = Vector3.SignedAngle(Vector3.up, indicatorPosition, Vector3.forward);
 
-                indicatorPosition.y = Mathf.Sign(indicatorPosition.y) * (relativeCamPos.height / 2f - OutOfSightOffset);
+                indicatorPosition.y = Mathf.Sign(indicatorPosition.y) * (screenSize.height / 2f - screenLimitOffset);
                 indicatorPosition.x = -Mathf.Tan(Mathf.Deg2Rad * angle) * indicatorPosition.y;
             }
 
-            //Change the indicator Position back to the actual imgTransform coordinate system and return indicatorPosition
             indicatorPosition += canvasCenter;
             return indicatorPosition;
         }
@@ -104,19 +115,14 @@ namespace JCW.UI.InGame
         {
             if (other.CompareTag("Nella") || other.CompareTag("Steady"))
             {
+                // 자기꺼일때만 켜기
                 if (other.gameObject.GetComponent<PhotonView>().IsMine)
                 {
-                    isDetected = true;
-                    mainCamera = other.gameObject.GetComponent<CameraController>().FindCamera();                    
-                    //canvas.planeDistance = 1;
-                    cameraPos = mainCamera.rect;
-
-                    relativeCamPos = new(canvasRect.rect.width * cameraPos.x,
-                                                canvasRect.rect.height * cameraPos.y,
-                                                canvasRect.rect.width * cameraPos.width,
-                                                canvasRect.rect.height * cameraPos.height);
-
                     detectUI.SetActive(true);
+                    isDetected = true;
+                    mainCamera = other.gameObject.GetComponent<CameraController>().FindCamera();
+                    videoPlayer.targetCamera = mainCamera;
+                    Init();
                 }
             }
         }
@@ -126,5 +132,15 @@ namespace JCW.UI.InGame
             isDetected = false;
             detectUI.SetActive(false);
         }
+
+        void Init()
+        {
+            Rect cameraPos = mainCamera.rect;
+            screenSize = new(canvasSize.rect.width  * cameraPos.x,
+                             canvasSize.rect.height * cameraPos.y,
+                             canvasSize.rect.width  * cameraPos.width,
+                             canvasSize.rect.height * cameraPos.height);
+        }
+        
     }
 }
