@@ -171,7 +171,6 @@ public class RopeAction : MonoBehaviour
 
         rope.transform.localPosition = localPos;
         player.GetComponent<PlayerController3D>().enabled = false;
-        FindStartPoints();////////////////////////////////////////////////////////////////////////
         Vector3 localRot = Vector3.zero;
         localRot.x = startXAngle;
         ropeAnchor.transform.localRotation = Quaternion.Euler(localRot);
@@ -192,6 +191,7 @@ public class RopeAction : MonoBehaviour
 
             isRopeExisting = true;
             isRotatingToDefault = true;
+            player.GetComponent<Rigidbody>().velocity = Vector3.zero;
             player.GetComponent<PlayerInteractionState>().isMoveToRope = false;
         }
     }
@@ -213,6 +213,13 @@ public class RopeAction : MonoBehaviour
         isRopeExisting = false;
         player.transform.parent = null;
         this.gameObject.SetActive(false);
+        if(!isSwingForward)
+        {
+            if(rotationX > 0)
+            {
+                return rotationX / spawner.swingAngle;
+            }
+        }
         return -rotationX / spawner.swingAngle;
     }
 
@@ -223,8 +230,8 @@ public class RopeAction : MonoBehaviour
 
     void Swing()
     {
-        player.GetComponent<Rigidbody>().velocity = Vector3.zero;
-        //player.transform.localPosition = Vector3.zero;
+        //player.GetComponent<Rigidbody>().velocity = Vector3.zero;
+        player.transform.localPosition = Vector3.zero;
 
         // -180 < rot X <= 180 사이로 고정 
         rotationX = FitInHalfDegree(ropeAnchor.transform.localRotation.eulerAngles.x);
@@ -313,7 +320,7 @@ public class RopeAction : MonoBehaviour
 
     void SetRotationDefault()
     {
-        player.GetComponent<Rigidbody>().velocity = Vector3.zero;
+        //player.GetComponent<Rigidbody>().velocity = Vector3.zero;
         // 목표 방향으로 도달하면 회전 멈춤
         if ((Mathf.Abs(currentAddYRotationDefault - targetAddYRotationDefault) < rotationTolerance) || (Mathf.Abs(currentAddYRotationDefault - targetAddYRotationDefault) > (360f - rotationTolerance)))
         {
@@ -355,7 +362,7 @@ public class RopeAction : MonoBehaviour
     {
         if (isRotating)
         {
-            player.GetComponent<Rigidbody>().velocity = Vector3.zero;
+            //player.GetComponent<Rigidbody>().velocity = Vector3.zero;
             // 목표 방향으로 도달하면 회전 멈춤
             if (Mathf.Abs(currentAddYRotation - targetAddYRotation) < rotationTolerance)
             {

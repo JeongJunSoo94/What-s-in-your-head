@@ -50,7 +50,7 @@ public class PlayerInteraction : MonoBehaviour
     Vector3 endLeft;
     Vector3 endRight;
 
-    GameObject minDistObj = null;
+    public GameObject minDistObj = null;
 
 
     /// <summary>
@@ -232,7 +232,7 @@ public class PlayerInteraction : MonoBehaviour
                 {
                     value.SetActive(true);
                     float amount = 1f - (hit.distance - spawner.interactableRange) / (spawner.detectingRange - spawner.interactableRange);
-                    if (!isRailReady && !isRidingRope)
+                    if (!isRailReady && !interactionState.isRidingRope)
                     {
                         if (hit.distance < spawner.interactableRange)
                         {
@@ -377,7 +377,7 @@ public class PlayerInteraction : MonoBehaviour
 
     void RenderInteractingUI()
     {
-        if(minDistObj != null)
+        if(minDistObj != null && !interactionState.isRidingRope)
         {
             RaycastHit hit;
             RopeSpawner spawner = minDistObj.GetComponentInChildren<RopeSpawner>();
