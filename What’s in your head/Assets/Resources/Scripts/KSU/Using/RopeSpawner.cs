@@ -51,6 +51,24 @@ public class RopeSpawner : MonoBehaviour
         //obj.GetComponent<RopeAction>().spawner = this;
         //obj.GetComponent<RopeAction>().player = player;
     }
+
+    public float EndRopeAction(GameObject player)
+    {
+        switch (player.tag)
+        {
+
+            case "Nella":
+                {
+                    return NellaRopeAction.GetComponent<RopeAction>().DeacvtivateRope(player);
+                }
+            case "Steady":
+                {
+                    return SteadyRopeAction.GetComponent<RopeAction>().DeacvtivateRope(player);
+                }
+            default:
+                return 0f;
+        }
+    }
     private void OnDrawGizmos()
     {
         Gizmos.DrawLine(transform.position, transform.forward * 5f);

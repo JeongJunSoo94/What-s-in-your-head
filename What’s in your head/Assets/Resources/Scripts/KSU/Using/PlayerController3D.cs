@@ -23,7 +23,7 @@ public class PlayerController3D : MonoBehaviour
     //Animator _animator;
     CapsuleCollider _capsuleCollider;
     Camera _camera;
-    Rigidbody _rigidbody;
+    public Rigidbody _rigidbody;
     //[Header("Å° ¼³Á¤")] [SerializeField] private GameObject UI_BG;    
     PhotonView photonView;
     #endregion

@@ -13,22 +13,28 @@ public class PlayerInteraction : MonoBehaviour
     public Dictionary<GameObject, GameObject> interactableRopeSpawners = new Dictionary<GameObject, GameObject>();
 
     Camera mainCamera;
+    PlayerController3D playerController;
+    PlayerInteractionState interactionState;
 
     public float UIRadius = 100f;
 
     public float rangeRadius = 5f;
     public float rangeDistance = 5f;
+
+    public float escapingRopeSpeed = 6f;
+    public float escapingRoDelayTime = 1f;
+
     public LayerMask targetLayer;
     public Ray ray;
     LayerMask layerFilter;
-    //downhillLayer = (1 << LayerMask.NameToLayer("downhill") + (1 << LayerMask.NameToLayer("uphill")));
-    //downhillLayer = (-1) - (1 << LayerMask.NameToLayer("downhill"));
     RaycastHit _raycastHit;
     public Vector3 hVision;
 
     public bool isRailFounded = false;
     public bool isRailReady = false;
-    bool isRidingRope = false;
+    public bool isRidingRope = false;
+
+
 
     Vector3 right;
 
@@ -43,12 +49,6 @@ public class PlayerInteraction : MonoBehaviour
     Vector3 endDown;
     Vector3 endLeft;
     Vector3 endRight;
-
-
-    //public List<GameObject> detectedRopeSpawners;
-    //public List<GameObject> interactableRopeSpawners;
-
-    
 
     GameObject minDistObj = null;
 
@@ -71,7 +71,8 @@ public class PlayerInteraction : MonoBehaviour
 
         if (mainCamera == null)
             Debug.Log("Ä«¸Þ¶ó NULL");
-
+        playerController = GetComponent<PlayerController3D>();
+        interactionState = GetComponent<PlayerInteractionState>();
         layerFilter = ((-1) - (1 << LayerMask.NameToLayer("Player")) - (1 << LayerMask.NameToLayer("Water")));
         //ray = Camera.main.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0f));
     }
@@ -81,13 +82,15 @@ public class PlayerInteraction : MonoBehaviour
     {
         //SearchRail();
         DetectObjects();
+        InputInteract();
+        //RideOnOffRope();
         RenderInteractingUI();
-        RideOnOffRope();
         //UIRender();
     }
 
     private void FixedUpdate()
     {
+        //RideOnOffRope();
         //DetectObjects();
         //RenderInteractingUI();
     }
@@ -116,6 +119,69 @@ public class PlayerInteraction : MonoBehaviour
         endDown = endCenter - Vector3.up * rangeRadius;
         endLeft = endCenter - right * rangeRadius;
         endRight = endCenter + right * rangeRadius;
+    }
+    
+    void InputInteract()
+    {
+        if(JCW.UI.Options.InputBindings.ITT_KeyManager.Instance.GetKeyDown(JCW.UI.Options.InputBindings.PlayerAction.Interaction))
+        {
+            if(!interactionState.isRidingRope && !interactionState.isRidingRail)
+            {
+                if (interactionState.isRailReady)
+                {
+
+                }
+                else
+                {
+                    if (minDistObj != null)
+                    {
+                        interactionState.isRidingRope = true;
+                        interactionState.isMoveToRope = true;
+                        GetComponent<Rigidbody>().velocity = Vector3.zero;
+                        minDistObj.GetComponentInChildren<RopeSpawner>().StartRopeAction(this.gameObject);
+                    }
+                }
+            }
+            else
+            {
+                if (interactionState.isRidingRail)
+                {
+                    if (interactionState.isMoveToRail)
+                    {
+
+                    }
+                }
+
+                if (interactionState.isRidingRope)
+                {
+                    if (!interactionState.isMoveFromRope && !interactionState.isMoveToRope)
+                    {
+                        StartCoroutine("DelayEscape");
+                        float jumpPower = 1f;
+                        jumpPower = minDistObj.GetComponentInChildren<RopeSpawner>().EndRopeAction(this.gameObject);
+
+                        Vector3 inertiaVec = transform.forward;
+                        inertiaVec.y = 0;
+
+                        transform.LookAt(transform.position + inertiaVec);
+                        playerController.MakeinertiaVec(escapingRopeSpeed, inertiaVec.normalized);
+                        playerController.moveVec = Vector3.up * playerController.jumpSpeed * jumpPower;
+                        playerController.enabled = true;
+                    }
+                }
+            }
+
+            
+        }
+    }
+
+
+    IEnumerator DelayEscape()
+    {
+        interactionState.isMoveFromRope = true;
+        yield return new WaitForSeconds(1f);
+        interactionState.isMoveFromRope = false;
+        interactionState.isRidingRope = false;
     }
     
     public GameObject SearchWithSphereCast()
@@ -279,19 +345,8 @@ public class PlayerInteraction : MonoBehaviour
             {
                 isRidingRope = false;
                 float jumpPower = 1f;
-                switch(this.gameObject.tag)
-                {
-                    case "Nella":
-                        {
-                            jumpPower = minDistObj.GetComponent<RopeSpawner>().NellaRopeAction.GetComponent<RopeAction>().InAvtivateRope();
-                        }
-                        break;
-                    case "Steady":
-                        {
-                            jumpPower = minDistObj.GetComponent<RopeSpawner>().SteadyRopeAction.GetComponent<RopeAction>().InAvtivateRope();
-                        }
-                        break;
-                }
+
+                jumpPower = minDistObj.GetComponentInChildren<RopeSpawner>().EndRopeAction(this.gameObject);
 
                 PlayerController3D playerController = GetComponent<PlayerController3D>();
                 Vector3 inertiaVec = transform.forward;
@@ -312,7 +367,6 @@ public class PlayerInteraction : MonoBehaviour
                 {
                     if (JCW.UI.Options.InputBindings.ITT_KeyManager.Instance.GetKeyDown(JCW.UI.Options.InputBindings.PlayerAction.Interaction))
                     {
-                        isRidingRope = true;
                         minDistObj.GetComponentInChildren<RopeSpawner>().StartRopeAction(this.gameObject);
                     }
                 }
@@ -325,7 +379,24 @@ public class PlayerInteraction : MonoBehaviour
     {
         if(minDistObj != null)
         {
-            detectedRopeSpawners.GetValueOrDefault(minDistObj).GetComponentsInChildren<Image>()[1].sprite = interactingImage;
+            RaycastHit hit;
+            RopeSpawner spawner = minDistObj.GetComponentInChildren<RopeSpawner>();
+
+            Physics.Raycast(transform.position, (minDistObj.transform.position - transform.position), out hit, spawner.detectingRange * 1.5f, layerFilter, QueryTriggerInteraction.Ignore);
+
+            if (!(hit.distance < spawner.interactableRange))
+            {
+                detectedRopeSpawners.GetValueOrDefault(minDistObj).GetComponentsInChildren<Image>()[1].sprite = gaugeImage;
+                minDistObj = null;
+            }
+            else
+            {
+                GameObject minDistUI = detectedRopeSpawners.GetValueOrDefault(minDistObj);
+                if (minDistUI != null)
+                {
+                    detectedRopeSpawners.GetValueOrDefault(minDistObj).GetComponentsInChildren<Image>()[1].sprite = interactingImage;
+                }
+            }
         }
     }
 
