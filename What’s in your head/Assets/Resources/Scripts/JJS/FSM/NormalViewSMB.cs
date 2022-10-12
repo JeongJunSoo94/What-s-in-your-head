@@ -6,6 +6,8 @@ public class NormalViewSMB : CharacterBaseSMB
 {
     override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
+        GetPlayerController3D(animator).playerMouse.CheckLeftClick(0);
+        GetPlayerController3D(animator).playerMouse.CheckRightClick(0);
         if (GetPlayerController3D(animator).enabled)
         {
             animator.SetBool("wasAirJump", false);
@@ -58,7 +60,12 @@ public class NormalViewSMB : CharacterBaseSMB
         }
         animator.SetBool("isJump", GetPlayerController3D(animator).characterState.IsJumping);
         animator.SetBool("isDash", GetPlayerController3D(animator).characterState.IsDashing);
-        GetPlayerController3D(animator).playerMouse.ableToLeft = true;
+
+        if (ITT_KeyManager.Instance.GetKey(PlayerAction.Fire))
+        { 
+            animator.SetBool("isAttack1", true);
+            return;
+        }
 
         if (ITT_KeyManager.Instance.GetKey(PlayerAction.Aim))
         {

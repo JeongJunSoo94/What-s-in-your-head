@@ -7,6 +7,7 @@ public class AimViewMoveSMB : CharacterBaseSMB
     override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
         animator.SetLayerWeight(1, 1);
+        GetPlayerController3D(animator).playerMouse.CheckRightClick(1);
         if (GetPlayerController3D(animator).enabled)
         {
             GetPlayerController3D(animator).characterState.aim = true;
@@ -29,9 +30,10 @@ public class AimViewMoveSMB : CharacterBaseSMB
     public override void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
         animator.SetLayerWeight(1, 0);
+
         if (GetPlayerController3D(animator).enabled)
         {
-            GetPlayerController3D(animator).playerMouse.CheckRightClick(false);
+            GetPlayerController3D(animator).playerMouse.CheckRightClick(0);
             GetPlayerController3D(animator).characterState.aim = false;
         }
     }

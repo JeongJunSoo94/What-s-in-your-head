@@ -12,11 +12,11 @@ public class PlayerMouseController : MonoBehaviour
         ableToRight = false;
     }
 
-    public virtual void CheckLeftClick(bool enable)
+    public virtual void CheckLeftClick(int enable)
     {
     }
 
-    public virtual void CheckRightClick(bool enable)
+    public virtual void CheckRightClick(int enable)
     {
     }
 }

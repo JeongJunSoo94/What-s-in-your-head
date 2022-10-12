@@ -17,14 +17,14 @@ namespace JJS
         }
 
 
-        public override void CheckLeftClick(bool enable)
+        public override void CheckLeftClick(int enable)
         {
-            leftWeapon.SetActive(enable);
+            leftWeapon.SetActive(enable == 1);
         }
 
-        public override void CheckRightClick(bool enable)
+        public override void CheckRightClick(int enable)
         {
-            rightWeapon.SetActive(enable);
+            rightWeapon.SetActive(enable == 1);
         }
 
         public void Shoot()

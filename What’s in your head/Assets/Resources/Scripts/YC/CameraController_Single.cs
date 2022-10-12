@@ -71,7 +71,7 @@ namespace YC.Camera_Single
 
 
         //
-
+        PlayerController3D player;
 
         void Awake()
         {
@@ -129,7 +129,7 @@ namespace YC.Camera_Single
                 preCam = CamState.back;
                 OnOffCamera(camList[(int)curCam]);
             }
-
+            player = GetComponent<PlayerController3D>();
         }
 
         void Start()
@@ -197,7 +197,7 @@ namespace YC.Camera_Single
         {
             if (curCam == CamState.back) 
             {
-                if(ITT_KeyManager.Instance.GetKey(PlayerAction.Aim)) // back View -> sholder View
+                if(player.characterState.aim) // back View -> sholder View
                 {
                     AxisState temp = backCam.GetComponent<CinemachineFreeLook>().m_XAxis;
 
@@ -217,7 +217,7 @@ namespace YC.Camera_Single
             }
             else if (curCam == CamState.sholder)
             {
-                if(!ITT_KeyManager.Instance.GetKey(PlayerAction.Aim)) // sholder View -> back View
+                if(!player.characterState.aim) // sholder View -> back View
                 {
                     AxisState temp = sholderCam.GetComponent<CinemachineFreeLook>().m_XAxis;
 
