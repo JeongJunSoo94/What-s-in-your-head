@@ -86,7 +86,7 @@ public class PlayerController3D : MonoBehaviour
     void Awake()
     {
         // >> : YC
-        //Cursor.lockState = CursorLockMode.Locked;
+        Cursor.lockState = CursorLockMode.Locked;
         // << :
 
         characterState = GetComponent<CharacterState3D>();

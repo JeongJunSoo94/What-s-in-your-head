@@ -70,8 +70,13 @@ namespace YC.Camera_Single
         public float sholderCameraSensitivity = 20;
 
 
-        //
         PlayerController3D player;
+
+        float sholderViewMaxY;
+        [SerializeField] float sholderAxisY_MaxUp;
+        [SerializeField] float sholderAxisY_MaxDown;
+
+
 
         void Awake()
         {
@@ -80,8 +85,8 @@ namespace YC.Camera_Single
             if (pv) pv.ObservedComponents.Add(this);
 
 
-           
-           
+
+
 
             //Camera Components
             // << :
@@ -92,14 +97,14 @@ namespace YC.Camera_Single
             camList = new List<CinemachineVirtualCameraBase>();
 
             // 리스트 인덱스 순서랑 Enum 순서 맞춰줘야 한다.
-            backCam     = this.gameObject.transform.Find("Cine_backCam").GetComponent<CinemachineVirtualCameraBase>();
-            wideCam     = this.gameObject.transform.Find("Cine_wideCam").GetComponent<CinemachineVirtualCameraBase>();
-            sholderCam  = this.gameObject.transform.Find("Cine_sholderCam").GetComponent<CinemachineVirtualCameraBase>();
-            topCam      = GameObject.Find("Cine_topCam").GetComponent<CinemachineVirtualCameraBase>();
-            wallCam     = this.gameObject.transform.Find("Cine_wallCam").GetComponent<CinemachineVirtualCameraBase>();
-   
+            backCam = this.gameObject.transform.Find("Cine_backCam").GetComponent<CinemachineVirtualCameraBase>();
+            wideCam = this.gameObject.transform.Find("Cine_wideCam").GetComponent<CinemachineVirtualCameraBase>();
+            sholderCam = this.gameObject.transform.Find("Cine_sholderCam").GetComponent<CinemachineVirtualCameraBase>();
+            topCam = GameObject.Find("Cine_topCam").GetComponent<CinemachineVirtualCameraBase>();
+            wallCam = this.gameObject.transform.Find("Cine_wallCam").GetComponent<CinemachineVirtualCameraBase>();
 
-           
+
+
             camList.Add(backCam);
             camList.Add(wideCam);
             camList.Add(sholderCam);
@@ -113,6 +118,10 @@ namespace YC.Camera_Single
 
             curCam_Clone = new CamState();
             blendingCam_Clone = new CamState();
+
+            // << : 
+            sholderViewMaxY = sholderCam.GetComponent<CinemachineFreeLook>().m_YAxis.m_MaxValue;
+            // >> :
 
 
             FindCamera();
@@ -129,27 +138,8 @@ namespace YC.Camera_Single
                 preCam = CamState.back;
                 OnOffCamera(camList[(int)curCam]);
             }
-            player = GetComponent<PlayerController3D>();
-        }
 
-        void Start()
-        {
-            // >> :
-            //if (this.gameObject.name == "Nella(Clone)") CameraManager.Instance.cameras[0] = mainCam;
-            //else if (this.gameObject.name == "Steady(Clone)") CameraManager.Instance.cameras[1] = mainCam;
-            // << :
-
-            // >> :
-            //if (this.gameObject.name == "Nella(Clone)")
-            //{
-
-            //    CameraManager.Instance.cameras[0] = mainCam;
-            //}
-            //else if (this.gameObject.name == "Steady(Clone)")
-            //{
-            //    CameraManager.Instance.cameras[1] = mainCam;
-            //}
-            // << :
+            player = this.gameObject.GetComponent<PlayerController3D>();
 
         }
 
@@ -166,38 +156,52 @@ namespace YC.Camera_Single
                 SetCamera();
 
                 SetAimYAxis();
-            }    
+            }
         }
-       
+
         void SetAimYAxis() // sholder View에서 YAxis Limit 설정
         {
-            if(curCam == CamState.sholder)
+            if (curCam == CamState.sholder)
             {
                 AxisState axisY = camList[(int)curCam].GetComponent<CinemachineFreeLook>().m_YAxis;
 
-                if (axisY.Value < 0.2f)
+                if (axisY.Value < sholderAxisY_MaxUp)
                 {
-                    axisY.Value = 0.2f;
-                    axisY.m_InputAxisValue = 0;
+                    // axisY.m_InputAxisValue : 커서 위(1) ~ 아래(0)
+                    // axisY.Value : 커서 위(-) ~ 아래 (+)
+
+                    if (axisY.m_InputAxisValue > 0)
+                    {
+                        axisY.m_MaxSpeed = 0;
+                    }
+                    else if (axisY.m_InputAxisValue < 0)
+                    {
+                        axisY.m_MaxSpeed = sholderViewMaxY;
+                    }
                 }
 
-                if (axisY.Value > 0.8f)
+                if (axisY.Value > sholderAxisY_MaxDown)
                 {
-                    axisY.Value = 0.8f;
-                    axisY.m_InputAxisValue = 0;
+                    if (axisY.m_InputAxisValue > 0)
+                    {
+                        axisY.m_MaxSpeed = sholderViewMaxY;
+                    }
+                    else if (axisY.m_InputAxisValue < 0)
+                    {
+                        axisY.m_MaxSpeed = 0;
+                    }
                 }
 
                 camList[(int)curCam].GetComponent<CinemachineFreeLook>().m_YAxis = axisY;
-
-                //Debug.Log("Debug - CameraController : " + camList[(int)curCam].GetComponent<CinemachineFreeLook>().m_YAxis.Value);
+                Debug.Log("Debug - CameraController : " + camList[(int)curCam].GetComponent<CinemachineFreeLook>().m_YAxis.Value);
             }
         }
 
         void SetCamera() // 플레이어 스테이트에 맞게 카메라 세팅 
         {
-            if (curCam == CamState.back) 
+            if (curCam == CamState.back)
             {
-                if(player.characterState.aim) // back View -> sholder View
+                if (player.characterState.aim) // back View -> sholder View
                 {
                     AxisState temp = backCam.GetComponent<CinemachineFreeLook>().m_XAxis;
 
@@ -208,7 +212,7 @@ namespace YC.Camera_Single
 
                     sholderCam.GetComponent<CinemachineFreeLook>().m_XAxis = temp;
                 }
-                else if(Input.GetKeyDown(KeyCode.Alpha1)) // back View -> Top View
+                else if (Input.GetKeyDown(KeyCode.Alpha1)) // back View -> Top View
                 {
                     preCam = curCam;
                     curCam = CamState.top;
@@ -217,7 +221,7 @@ namespace YC.Camera_Single
             }
             else if (curCam == CamState.sholder)
             {
-                if(!player.characterState.aim) // sholder View -> back View
+                if (!player.characterState.aim) // sholder View -> back View
                 {
                     AxisState temp = sholderCam.GetComponent<CinemachineFreeLook>().m_XAxis;
 
@@ -229,16 +233,16 @@ namespace YC.Camera_Single
                     backCam.GetComponent<CinemachineFreeLook>().m_XAxis = temp;
                 }
             }
-            else if(curCam == CamState.top)
+            else if (curCam == CamState.top)
             {
-                if(Input.GetKeyDown(KeyCode.Alpha1)) // Top View -> back View
+                if (Input.GetKeyDown(KeyCode.Alpha1)) // Top View -> back View
                 {
                     preCam = curCam;
                     curCam = CamState.back;
                     OnOffCamera(backCam);
                 }
             }
-        } 
+        }
 
         void CheckStartBlend_Clone() // Clone의 블렌드 시작 시점에 true : 다만 blend 100% 이전에 회귀시 버그 수정 필요
         {
@@ -255,13 +259,13 @@ namespace YC.Camera_Single
             }
             else isBlending_Clone = false;
         }
-        
+
         void SetCameraBlned_Clone() // Clone의 Cinemachine Brain과 Photon을 상황에 맞게 On Off
         {
 
             if (isActiveCB_Clone && !isActiveBT_Clone) // 1회 호출 : Cinemachine Brain On & Blending Taeget Off
             {
-                if(curCam_Clone == CamState.back || curCam_Clone == CamState.wide || curCam_Clone == CamState.sholder)
+                if (curCam_Clone == CamState.back || curCam_Clone == CamState.wide || curCam_Clone == CamState.sholder)
                 {
                     camList[(int)blendingCam_Clone].GetComponent<CinemachineFreeLook>().m_XAxis.Value
                                 = originCurVirtualCam_XAxis;
@@ -301,7 +305,7 @@ namespace YC.Camera_Single
             {
                 cinemachineBrain.enabled = true;
             }
-            else if(cinemachineBrain.IsBlending)
+            else if (cinemachineBrain.IsBlending)
             {
                 cinemachineBrain.enabled = true;
             }
@@ -325,7 +329,7 @@ namespace YC.Camera_Single
                 cam.enabled = false;
             }
         }
-      
+
         public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info) // Photon 
         {
             if (stream.IsWriting)
@@ -346,15 +350,33 @@ namespace YC.Camera_Single
                 originPreVirtualCam_YAxis = (float)stream.ReceiveNext();
                 originCurVirtualCam_XAxis = (float)stream.ReceiveNext();
                 originCurVirtualCam_YAxis = (float)stream.ReceiveNext();
-                originCurCam_Pos = (Vector3)stream.ReceiveNext();         
+                originCurCam_Pos = (Vector3)stream.ReceiveNext();
             }
         }
 
         public Camera FindCamera()
         {
-            mainCam = GameObject.FindGameObjectWithTag("NellaCamera").GetComponent<Camera>();
-            cinemachineBrain = mainCam.GetComponent<CinemachineBrain>();
-            CameraManager.Instance.cameras[0] = mainCam;
+            if (this.gameObject.CompareTag("Nella"))
+            {
+                mainCam = GameObject.FindGameObjectWithTag("NellaCamera").GetComponent<Camera>();
+
+                if (mainCam) Debug.Log("OK");
+                else Debug.Log("NULL");
+
+                cinemachineBrain = mainCam.GetComponent<CinemachineBrain>();
+                CameraManager.Instance.cameras[0] = mainCam;
+
+            }
+            else if (this.gameObject.CompareTag("Steady"))
+            {
+                mainCam = GameObject.FindGameObjectWithTag("SteadyCamera").GetComponent<Camera>();
+
+                if (mainCam) Debug.Log("OK");
+                else Debug.Log("NULL");
+
+                cinemachineBrain = mainCam.GetComponent<CinemachineBrain>();
+                CameraManager.Instance.cameras[1] = mainCam;
+            }
 
             return mainCam;
         }

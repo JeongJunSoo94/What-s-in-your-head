@@ -31,6 +31,7 @@ public class GuitarAttackSMB : CharacterBaseSMB
         {
             animator.SetBool("isAttack1", false);
 
+            animator.SetBool("isAttack2", false);
             animator.SetBool("isAttack3", false);
         }
     }
@@ -43,7 +44,7 @@ public class GuitarAttackSMB : CharacterBaseSMB
                 switch (index)
                 {
                     case 0:
-                        animator.SetBool("isAttack1", true);
+                        animator.SetBool("isAttack1", true); 
                         break;
                     case 1:
                         animator.SetBool("isAttack2", true);
