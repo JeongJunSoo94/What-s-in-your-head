@@ -236,13 +236,14 @@ GameObject:
   m_Component:
   - component: {fileID: 116719293}
   - component: {fileID: 116719296}
+  - component: {fileID: 116719297}
   m_Layer: 0
   m_Name: MapObj_ContaminatedTree
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &116719293
 Transform:
   m_ObjectHideFlags: 0
@@ -276,6 +277,18 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!114 &116719297
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 116719292}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5b465d0251cac74d8bea1ced59f83b3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &154811127
 GameObject:
   m_ObjectHideFlags: 3
@@ -713,13 +726,14 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 397447392}
+  - component: {fileID: 397447393}
   m_Layer: 0
   m_Name: MapObj_Bush
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &397447392
 Transform:
   m_ObjectHideFlags: 0
@@ -735,6 +749,18 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 20
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &397447393
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 397447389}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: da20c2694e6845c489b2b97f0124b26b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &432947504
 GameObject:
   m_ObjectHideFlags: 0
@@ -842,13 +868,14 @@ GameObject:
   m_Component:
   - component: {fileID: 469577088}
   - component: {fileID: 469577089}
+  - component: {fileID: 469577090}
   m_Layer: 0
   m_Name: MapObj_StemPlant_Rope
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &469577088
 Transform:
   m_ObjectHideFlags: 0
@@ -882,6 +909,18 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!114 &469577090
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 469577086}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b787494395f9c934aba1e5aa4a94b228, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &493664526
 GameObject:
   m_ObjectHideFlags: 0
@@ -898,7 +937,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &493664527
 Transform:
   m_ObjectHideFlags: 0
@@ -1632,13 +1671,14 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 817315017}
+  - component: {fileID: 817315018}
   m_Layer: 0
   m_Name: MapObj_Hook
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &817315017
 Transform:
   m_ObjectHideFlags: 0
@@ -1655,6 +1695,18 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 15
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &817315018
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 817315016}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3d42b3ef9989868499167fd9d633a818, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &944969992
 GameObject:
   m_ObjectHideFlags: 0
@@ -1987,8 +2039,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1097944639}
-  - component: {fileID: 1097944640}
   - component: {fileID: 1097944641}
+  - component: {fileID: 1097944642}
   m_Layer: 0
   m_Name: MapObj_StemPlant_Rail
   m_TagString: Untagged
@@ -2013,18 +2065,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 21
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1097944640
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1097944638}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d8608b13153010247b7d6c20f251a1a5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!54 &1097944641
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -2041,6 +2081,18 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!114 &1097944642
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1097944638}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b787494395f9c934aba1e5aa4a94b228, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1175298790
 GameObject:
   m_ObjectHideFlags: 0
@@ -2198,13 +2250,14 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1285103323}
+  - component: {fileID: 1285103324}
   m_Layer: 0
   m_Name: MapObj_Vine
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1285103323
 Transform:
   m_ObjectHideFlags: 0
@@ -2222,6 +2275,20 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 17
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1285103324
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1285103322}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cecc7ca788c5893488084890c8ea21b6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  rotSpeed: 50
+  testToggle: 0
 --- !u!1 &1341039335
 GameObject:
   m_ObjectHideFlags: 0
