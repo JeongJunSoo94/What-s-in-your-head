@@ -128,7 +128,7 @@ public class PlayerController3D : MonoBehaviour
         if (!photonView.IsMine) this.enabled = false;
         // << : 
 
-
+        Application.targetFrameRate = 120;
         ITT_KeyManager.Instance.GetKeyDown(PlayerAction.MoveBackward);
     }
     // Start is called before the first frame update

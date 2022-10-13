@@ -28,14 +28,15 @@ public class RailAction : MonoBehaviour
         {
             for (int i = 1; i < track.m_Waypoints.Length; i++)
             {
-                Vector3 start = track.m_Waypoints[i - 1].position;
-                Vector3 end = track.m_Waypoints[i].position;
+                Vector3 offset = transform.position;
+                Vector3 start = track.m_Waypoints[i - 1].position + offset;
+                Vector3 end = track.m_Waypoints[i].position + offset;
                 float length = Vector3.Distance(start, end);
 
                 GameObject obj = Instantiate(box, ((start + end) / 2), Quaternion.Euler(Vector3.zero));
                 obj.layer = LayerMask.NameToLayer("Interactable");
                 obj.transform.parent = gameObject.transform;
-                obj.transform.localScale = new Vector3(1, 1, length);
+                obj.transform.localScale = new Vector3(0.1f, 0.1f, length);
                 obj.transform.LookAt(end);
                 obj.AddComponent<BoxCollider>();
             }
