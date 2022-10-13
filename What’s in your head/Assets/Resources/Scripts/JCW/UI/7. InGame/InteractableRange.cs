@@ -32,9 +32,16 @@ namespace JCW.UI.InGame
         private void Awake()
         {
             transform.localScale = new Vector3(range, range, range);
+
+            // 정식으로 사용할 때엔 아래 코드 쓸것
             //isNella = GameManager.Instance.characterOwner[PhotonNetwork.IsMasterClient];
+
+            // 임시
             isNella = true;
         }
+
+        // 지금은 임시로 트리거 Enter/Exit으로 하고 있지만
+        // 정식으로 사용할 때엔 플레이어가 레이를 쏴서 거리에 따라 온 오프 시켜야함.
         private void OnTriggerEnter(Collider other)
         {
             ConvertVideo(true);
@@ -45,7 +52,7 @@ namespace JCW.UI.InGame
             ConvertVideo(false);
         }
 
-        void ConvertVideo(bool isActive = false)
+        public void ConvertVideo(bool isActive = false)
         {
 
             // 이미지를 잠깐 꺼주고 동영상 켜주기

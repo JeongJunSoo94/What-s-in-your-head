@@ -25,7 +25,7 @@ namespace JCW.UI.InGame
         // 화면에서 벗어나지 못하게 하는 오프셋 값
         private float screenLimitOffset;
 
-        // 화면 안에 있을 때와 벗어났을 떄의 이미지 크기
+        // 화면 안에 있을 때와 벗어났을 때의 이미지 크기
         Vector3 initImgScale;
         Vector3 outOfSightImgScale;
 
@@ -95,7 +95,7 @@ namespace JCW.UI.InGame
             {
                 // x축에 대한 각도
                 float angle = Vector3.SignedAngle(Vector3.right, indicatorPosition, Vector3.forward);
-                indicatorPosition.x = Mathf.Sign(indicatorPosition.x) * (screenSize.width * 0.5f - screenLimitOffset);
+                indicatorPosition.x = Mathf.Sign(indicatorPosition.x) * (screenSize.width / 2f - screenLimitOffset);
                 indicatorPosition.y = Mathf.Tan(Mathf.Deg2Rad * angle) * indicatorPosition.x;
             }
             else
@@ -107,10 +107,14 @@ namespace JCW.UI.InGame
                 indicatorPosition.x = -Mathf.Tan(Mathf.Deg2Rad * angle) * indicatorPosition.y;
             }
 
+            // 원상복귀
             indicatorPosition += canvasCenter;
             return indicatorPosition;
         }
 
+
+        // 지금은 임시로 트리거 Enter/Exit으로 하고 있지만
+        // 정식으로 사용할 때엔 플레이어가 레이를 쏴서 거리에 따라 온 오프 시켜야함.
         private void OnTriggerEnter(Collider other)
         {
             if (other.CompareTag("Nella") || other.CompareTag("Steady"))
@@ -118,11 +122,9 @@ namespace JCW.UI.InGame
                 // 자기꺼일때만 켜기
                 if (other.gameObject.GetComponent<PhotonView>().IsMine)
                 {
-                    detectUI.SetActive(true);
-                    isDetected = true;
-                    mainCamera = other.gameObject.GetComponent<CameraController>().FindCamera();
-                    videoPlayer.targetCamera = mainCamera;
-                    Init();
+                    // 여기서는 바로 켜주는걸로 되어있지만, 정식으로 사용할 때엔 플레이어가 레이를 쏘도록 함수를 써야할 듯.
+                    // other.gameObject.SendMessage("레이 쏘는 함수", 매개변수-오브젝트);
+                    Detected(other.gameObject);
                 }
             }
         }
@@ -131,6 +133,15 @@ namespace JCW.UI.InGame
         {
             isDetected = false;
             detectUI.SetActive(false);
+        }
+
+        public void Detected(GameObject player)
+        {
+            detectUI.SetActive(true);
+            isDetected = true;
+            mainCamera = player.GetComponent<CameraController>().FindCamera();
+            videoPlayer.targetCamera = mainCamera;
+            Init();
         }
 
         void Init()
