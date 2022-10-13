@@ -28,6 +28,7 @@ public class AimSMB : CharacterBaseSMB
     {
         if (GetPlayerController3D(animator).characterState.aim)
         {
+            //GetPlayerController3D(animator).RotateAim();
             if (ITT_KeyManager.Instance.GetKey(PlayerAction.Fire))
             {
                 animator.SetBool("AimAttack", true);

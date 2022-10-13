@@ -87,6 +87,7 @@ public class PlayerController3D : MonoBehaviour
     {
         // >> : YC
         Cursor.lockState = CursorLockMode.Locked;
+        Application.targetFrameRate = 120;
         // << :
 
         characterState = GetComponent<CharacterState3D>();
@@ -340,7 +341,7 @@ public class PlayerController3D : MonoBehaviour
         }
     }
 
-    void  TakeRotation()
+    public void  TakeRotation()
     {
         if (characterState.aim)
         {

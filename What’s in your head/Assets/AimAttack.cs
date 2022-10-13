@@ -13,8 +13,6 @@ public class AimAttack : CharacterBaseSMB
     {
         if (GetPlayerController3D(animator).enabled)
         {
-            GetPlayerController3D(animator).InputMove();
-            GetPlayerController3D(animator).RotateAim();
             check(animator);
         }
     }

@@ -193,7 +193,7 @@ namespace YC.Camera_Single
                 }
 
                 camList[(int)curCam].GetComponent<CinemachineFreeLook>().m_YAxis = axisY;
-                Debug.Log("Debug - CameraController : " + camList[(int)curCam].GetComponent<CinemachineFreeLook>().m_YAxis.Value);
+                //Debug.Log("Debug - CameraController : " + camList[(int)curCam].GetComponent<CinemachineFreeLook>().m_YAxis.Value);
             }
         }
 

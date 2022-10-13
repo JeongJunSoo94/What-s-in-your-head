@@ -24,6 +24,7 @@ public class NormalViewSMB : CharacterBaseSMB
             GetPlayerController3D(animator).InputMove();
             GetPlayerController3D(animator).InputJump();
             GetPlayerController3D(animator).InputDash();
+            
             check(animator);
         }
     }

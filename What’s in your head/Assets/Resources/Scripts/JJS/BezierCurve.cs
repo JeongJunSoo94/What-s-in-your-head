@@ -16,11 +16,11 @@ namespace JJS
         public Vector3 p4;
 
         public bool on;
+
         private void Start()
         {
-            targetObj =this.gameObject;
+            targetObj = this.gameObject;
         }
-
         void Update()
         {
             if(on)
