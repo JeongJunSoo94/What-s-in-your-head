@@ -57,6 +57,8 @@ namespace KSU
         [SerializeField] GameObject rayOrigin;
         public GameObject minDistObj = null;
         public GameObject hookableTarget;
+        public GameObject railStartObject;
+        public Vector3 railStartPosiotion = Vector3.zero;
 
 
 
@@ -135,9 +137,9 @@ namespace KSU
             {
                 if (!interactionState.isRidingRope && !interactionState.isRidingRail)
                 {
-                    if (interactionState.isRailReady)
+                    if (interactionState.isRailFounded)
                     {
-
+                        railStartObject.transform.parent.gameObject.GetComponent<RailAction>().RideOnRail(railStartPosiotion, railStartObject, this.gameObject);
                     }
                     else
                     {
@@ -246,11 +248,13 @@ namespace KSU
                     _raycastHit = hit;
                 }
 
-                switch(hit.collider.tag)
+                switch(_raycastHit.collider.tag)
                 {
                     case "Rail":
                         interactionState.isRailFounded = true;
                         interactionState.isHookableObjectFounded = false;
+                        railStartPosiotion = _raycastHit.point;
+                        railStartObject = _raycastHit.collider.gameObject;
                         break;
                     default:
                         interactionState.isRailFounded = false;
