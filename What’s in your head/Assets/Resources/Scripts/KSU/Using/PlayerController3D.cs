@@ -21,9 +21,9 @@ public class PlayerController3D : MonoBehaviour
     // 유니티 제공 Components
     #region
     //Animator _animator;
-    CapsuleCollider _capsuleCollider;
-    Camera _camera;
-    public Rigidbody _rigidbody;
+    CapsuleCollider playerCapsuleCollider;
+    public Camera mainCamera;
+    public Rigidbody playerRigidbody;
     //[Header("키 설정")] [SerializeField] private GameObject UI_BG;    
     PhotonView photonView;
     #endregion
@@ -91,8 +91,8 @@ public class PlayerController3D : MonoBehaviour
 
         characterState = GetComponent<CharacterState3D>();
         //_animator = GetComponent<Animator>();
-        _capsuleCollider = GetComponent<CapsuleCollider>();
-        _rigidbody = GetComponent<Rigidbody>();
+        playerCapsuleCollider = GetComponent<CapsuleCollider>();
+        playerRigidbody = GetComponent<Rigidbody>();
         playerMouse = GetComponent<PlayerMouseController>();
 
         // >> :
@@ -115,11 +115,11 @@ public class PlayerController3D : MonoBehaviour
         //    _camera = Camera.main;
 
         if (PhotonNetwork.NetworkClientState == Photon.Realtime.ClientState.Joined)
-            _camera = this.gameObject.GetComponent<CameraController>().FindCamera(); // 멀티용
+            mainCamera = this.gameObject.GetComponent<CameraController>().FindCamera(); // 멀티용
         else
-            _camera = this.gameObject.GetComponent<CameraController_Single>().FindCamera(); // 싱글용
+            mainCamera = this.gameObject.GetComponent<CameraController_Single>().FindCamera(); // 싱글용
 
-        if (_camera == null)
+        if (mainCamera == null)
             Debug.Log("카메라 NULL");
 
 
@@ -157,19 +157,19 @@ public class PlayerController3D : MonoBehaviour
     {
         if (characterState.IsGrounded)
         {
-            characterState.CheckGround(_capsuleCollider.radius);
+            characterState.CheckGround(playerCapsuleCollider.radius);
             if (!characterState.IsGrounded)
             {
-                Vector3 horVel = _rigidbody.velocity;
+                Vector3 horVel = playerRigidbody.velocity;
                 horVel.y = 0;
                 MakeinertiaVec(horVel.magnitude, moveDir);
             }
         }
         else
         {
-            characterState.CheckGround(_capsuleCollider.radius);
+            characterState.CheckGround(playerCapsuleCollider.radius);
         }
-        characterState.CheckMove(_rigidbody.velocity);
+        characterState.CheckMove(playerRigidbody.velocity);
     }
 
     public void MakeinertiaVec(float speed, Vector3 nomalVec) // 공중 진입 시 생기는 관성벡터
@@ -251,8 +251,8 @@ public class PlayerController3D : MonoBehaviour
     public void InputMove()
     {
         moveDir =
-          _camera.transform.forward * ((ITT_KeyManager.Instance.GetKey(PlayerAction.MoveForward) ? 1 : 0) + (ITT_KeyManager.Instance.GetKey(PlayerAction.MoveBackward) ? -1 : 0))
-        + _camera.transform.right * ((ITT_KeyManager.Instance.GetKey(PlayerAction.MoveRight) ? 1 : 0) + (ITT_KeyManager.Instance.GetKey(PlayerAction.MoveLeft) ? -1 : 0));
+          mainCamera.transform.forward * ((ITT_KeyManager.Instance.GetKey(PlayerAction.MoveForward) ? 1 : 0) + (ITT_KeyManager.Instance.GetKey(PlayerAction.MoveBackward) ? -1 : 0))
+        + mainCamera.transform.right * ((ITT_KeyManager.Instance.GetKey(PlayerAction.MoveRight) ? 1 : 0) + (ITT_KeyManager.Instance.GetKey(PlayerAction.MoveLeft) ? -1 : 0));
         moveDir.y = 0;
         moveDir = moveDir.normalized;
 
@@ -283,7 +283,7 @@ public class PlayerController3D : MonoBehaviour
                 characterState.CheckJump();
                 if (characterState.IsJumping)
                 {
-                    Vector3 horVel = _rigidbody.velocity;
+                    Vector3 horVel = playerRigidbody.velocity;
                     horVel.y = 0;
                     MakeinertiaVec(horVel.magnitude, moveDir);
                     moveVec.y = jumpSpeed;
@@ -303,7 +303,7 @@ public class PlayerController3D : MonoBehaviour
                     }
                     else
                     {
-                        Vector3 horVel = _rigidbody.velocity;
+                        Vector3 horVel = playerRigidbody.velocity;
                         horVel.y = 0;
                         MakeinertiaVec(walkSpeed, horVel.normalized);
                     }
@@ -376,7 +376,7 @@ public class PlayerController3D : MonoBehaviour
     {
         if (!characterState.IsDashing && !characterState.IsAirDashing)
         {
-            Vector3 forward = _camera.transform.forward.normalized;
+            Vector3 forward = mainCamera.transform.forward.normalized;
             forward.y = 0;
             transform.LookAt(transform.position + forward);
         }
@@ -438,7 +438,7 @@ public class PlayerController3D : MonoBehaviour
                 moveVec += Vector3.up * (gravity * gravityCofactor * Time.fixedDeltaTime);
         }
 
-        _rigidbody.velocity = moveVec;
+        playerRigidbody.velocity = moveVec;
 
        
     }

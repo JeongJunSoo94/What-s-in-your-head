@@ -7,213 +7,158 @@ using Cinemachine.Utility;
 using YC.Camera_;
 using YC.Camera_Single;
 
-public class RailAction : MonoBehaviour
+namespace KSU
 {
-    //Camera mainCamera;
-
-    public GameObject Nella;
-    public GameObject Steady;
-
-    public GameObject NellaCart;
-    public GameObject SteadyCart;
-
-    public float NellaDestiation;
-    public float SteadyDestiation;
-
-    public bool isNellaCartActive = false;
-    public bool isSteadyCartActive = false;
-
-    Cinemachine.CinemachineSmoothPath track;
-    public GameObject box;
-
-    public float railSpeed = 4f;
-    public float escapingRailSpeed = 4f;
-
-    
-    void Awake()
+    public class RailAction : MonoBehaviour
     {
-        track = GetComponent<Cinemachine.CinemachineSmoothPath>();
+        PlayerController3D playerController;
+        CharacterState3D playerState;
+        PlayerInteractionState interactionState;
 
-        //if (PhotonNetwork.NetworkClientState == Photon.Realtime.ClientState.Joined)
-        //    mainCamera = this.gameObject.GetComponent<CameraController>().FindCamera(); // 멀티용
-        //else
-        //    mainCamera = this.gameObject.GetComponent<CameraController_Single>().FindCamera(); // 싱글용
-    }
+        Camera mainCamera;
+        [SerializeField] GameObject rayOrigin;
+        public Ray ray;
+        RaycastHit _raycastHit;
+        LayerMask layerFilterForRail;
+        LayerMask layerForRail;
 
-    // Update is called once per frame
-    void Update()
-    {
-        CheckCarts();
-    }
+        public float rangeRadius = 5f;
+        public float rangeDistance = 5f;
 
-    private void OnEnable()
-    {
-        MakeCollider();
-    }
+        public GameObject currentRail;
+        public GameObject railStartObject;
+        public Vector3 railStartPosiotion = Vector3.zero;
 
-    void MakeCollider()
-    {
-        if (track.m_Waypoints.Length > 1)
+        public float escapingRopeSpeed = 6f;
+        public float escapingRoDelayTime = 1f;
+
+
+
+        /// <summary> Gizmo
+        Vector3 startCenter;
+        Vector3 startUp;
+        Vector3 startDown;
+        Vector3 startLeft;
+        Vector3 startRight;
+
+        public Vector3 hVision;
+
+        Vector3 endCenter;
+        Vector3 endUp;
+        Vector3 endDown;
+        Vector3 endLeft;
+        Vector3 endRight;
+        /// </summary>
+
+        void Awake()
         {
-            for (int i = 1; i < track.m_Waypoints.Length; i++)
-            {
-                Vector3 offset = transform.position;
-                Vector3 start = track.m_Waypoints[i - 1].position + offset;
-                Vector3 end = track.m_Waypoints[i].position + offset;
-                float length = Vector3.Distance(start, end);
+            playerController = GetComponent<PlayerController3D>();
+            playerState = GetComponent<CharacterState3D>();
+            interactionState = GetComponent<PlayerInteractionState>();
+            mainCamera = playerController.mainCamera;
+            layerForRail = ((1) + (1 << LayerMask.NameToLayer("Interactable")));
+            layerFilterForRail = ((-1) - (1 << LayerMask.NameToLayer("Player")));
+        }
 
-                GameObject obj = Instantiate(box, ((start + end) / 2), Quaternion.Euler(Vector3.zero));
-                obj.name = (i-1).ToString();
-                obj.layer = LayerMask.NameToLayer("Interactable");
-                obj.transform.parent = gameObject.transform;
-                obj.transform.localScale = new Vector3(0.1f, 0.1f, length);
-                obj.transform.LookAt(end);
+        void SearchRail()
+        {
+            if (interactionState.isRailDetected)
+            {
+                MakeGizmoVecs();
+                SearchWithSphereCast();
             }
         }
-    }
 
-    public void RideOnRail(Vector3 startPos, GameObject startObj, GameObject player)
-    {
-        SetDestination(player ,CreateCart(startPos, startObj, player));
-    }
-
-    void SetDestination(GameObject player, Cinemachine.CinemachineDollyCart cartSetUp)
-    {
-        if (Vector3.Angle(cartSetUp.gameObject.transform.forward, player.transform.forward) > 90f)
+        public void SearchWithSphereCast()
         {
-            cartSetUp.m_Speed = -railSpeed;
-            switch (player.tag)
+            //ray = mainCamera.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0f));
+
+            bool isRayChecked = Physics.SphereCast(rayOrigin.transform.position, rangeRadius, mainCamera.transform.forward, out _raycastHit, rangeDistance, layerForRail, QueryTriggerInteraction.Ignore);
+
+
+            if (isRayChecked)
             {
-                case "Nella":
-                    {
-                        NellaDestiation = 0.01f;
-                        player.transform.parent = NellaCart.transform;
-                        player.transform.localPosition = Vector3.zero;
-                    }
-                    break;
-                case "Steady":
-                    {
-                        SteadyDestiation = 0.01f;
-                        player.transform.parent = SteadyCart.transform;
-                        player.transform.localPosition = Vector3.zero;
-                    }
-                    break;
-            }
-            player.transform.localPosition = Vector3.zero;
-            player.transform.localRotation = Quaternion.Euler(new Vector3(0, 180, 0));
-        }
-        else
-        {
-            cartSetUp.m_Speed = railSpeed;
-            switch (player.tag)
-            {
-                case "Nella":
-                    {
-                        NellaDestiation = (track.m_Waypoints.Length - 1.01f);
-                        player.transform.parent = NellaCart.transform;
-                    }
-                    break;
-                case "Steady":
-                    {
-                        SteadyDestiation = (track.m_Waypoints.Length - 1.01f);
-                        player.transform.parent = SteadyCart.transform;
-                        player.transform.localPosition = Vector3.zero;
-                    }
-                    break;
-            }
-            player.transform.localPosition = Vector3.zero;
-            player.transform.localRotation = Quaternion.Euler(new Vector3(0, 0, 0));
-        }
-        cartSetUp.gameObject.SetActive(true);
-        isNellaCartActive = true;
-    }
-
-    Cinemachine.CinemachineDollyCart CreateCart(Vector3 startPos, GameObject startObj, GameObject player)
-    {
-        if(track.m_Waypoints.Length > 0)
-        {
-            int startIndex = int.Parse(startObj.name);
-            GameObject cart = null;
-            player.GetComponent<PlayerController3D>().enabled = false;
-            switch (player.tag)
-            {
-                case "Nella":
-                    Nella = player;
-                    cart = NellaCart;
-                    break;
-                case "Steady":
-                    Steady = player;
-                    cart = SteadyCart;
-                    break;
-            }
-            float totalLength = Vector3.Distance(track.m_Waypoints[startIndex].position, track.m_Waypoints[startIndex + 1].position);
-            float startLength = Vector3.Distance(track.m_Waypoints[startIndex].position, startPos);
-            float rate = startLength / totalLength;
-
-            Cinemachine.CinemachineDollyCart cartSetUp = cart.GetComponent<Cinemachine.CinemachineDollyCart>();
-            cartSetUp.m_Position = startIndex + rate;
-
-
-            return cartSetUp;
-        }
-
-        return null;
-    }
-
-    void CheckCarts()
-    {
-        if(isNellaCartActive)
-        {
-            if(Mathf.Abs(NellaCart.GetComponent<Cinemachine.CinemachineDollyCart>().m_Position - NellaDestiation) < 0.2f)
-            {
-                EscapeRail(Nella);
-            }    
-        }
-
-        if(isSteadyCartActive)
-        {
-            if (Mathf.Abs(SteadyCart.GetComponent<Cinemachine.CinemachineDollyCart>().m_Position - SteadyDestiation) < 0.2f)
-            {
-                EscapeRail(Steady);
-            }
-        }
-    }
-
-    public void EscapeRail(GameObject player)
-    {
-        player.transform.parent = null;
-        float cartForward = 0f;
-        switch (player.tag)
-        {
-            case "Nella":
+                RaycastHit hit;
+                isRayChecked = Physics.Raycast(rayOrigin.transform.position, mainCamera.transform.forward, out hit, rangeDistance, layerFilterForRail, QueryTriggerInteraction.Ignore);
+                if (isRayChecked)
                 {
-                    NellaCart.SetActive(false);
-                    isNellaCartActive = false;
-                    if (NellaDestiation > 1f)
-                        cartForward = 1f;
-                    else
-                        cartForward = -1f;
+                    if (hit.collider.tag == "Rail")
+                    {
+                        interactionState.isRailFounded = true;
+                        _raycastHit = hit;
+                        railStartPosiotion = _raycastHit.point;
+                        railStartObject = _raycastHit.collider.gameObject;
+                        return;
+                    }
                 }
-                break;
-            case "Steady":
+
+                Vector3 direction = (_raycastHit.point - rayOrigin.transform.position).normalized;
+                isRayChecked = Physics.Raycast(rayOrigin.transform.position, direction, out hit, rangeDistance, layerFilterForRail, QueryTriggerInteraction.Ignore);
+
+                if (isRayChecked)
                 {
-                    SteadyCart.SetActive(false);
-                    isSteadyCartActive = false;
-                    if (SteadyDestiation > 1f)
-                        cartForward = 1f;
-                    else
-                        cartForward = -1f;
+                    if (hit.collider.tag == "Rail")
+                    {
+                        interactionState.isRailFounded = true;
+                        _raycastHit = hit;
+                        railStartPosiotion = _raycastHit.point;
+                        railStartObject = _raycastHit.collider.gameObject;
+                        return;
+                    }
                 }
-                break;
+            }
+            interactionState.isRailFounded = false;
+            return;
         }
-        PlayerController3D playerController = player.GetComponent<PlayerController3D>();
 
-        Vector3 inertiaVec = transform.forward * cartForward;
-        inertiaVec.y = 0;
+        public void StartRailAction()
+        {
+            playerState.IsAirJumping = false;
+            playerState.WasAirDashing = false;
+            playerState.IsGrounded = false;
+            railStartObject.transform.parent.gameObject.GetComponent<Rail>().RideOnRail(railStartPosiotion, railStartObject, this.gameObject);
+        }
 
-        transform.LookAt(transform.position + inertiaVec);
-        playerController.MakeinertiaVec(escapingRailSpeed, inertiaVec.normalized);
-        playerController.moveVec = Vector3.up * playerController.jumpSpeed;
-        playerController.enabled = true;
+        public void EscapeRailAction()
+        {
+            currentRail.GetComponent<Rail>().EscapeRail(this.gameObject);
+        }
+
+
+        void MakeGizmoVecs()
+        {
+            hVision = mainCamera.transform.forward;
+
+            startCenter = rayOrigin.transform.position;
+            startUp = startCenter + mainCamera.transform.up * rangeRadius;
+            startDown = startCenter - mainCamera.transform.up * rangeRadius;
+            startLeft = startCenter - mainCamera.transform.right * rangeRadius;
+            startRight = startCenter + mainCamera.transform.right * rangeRadius;
+
+            endCenter = startCenter + hVision * rangeDistance;
+            endUp = endCenter + mainCamera.transform.up * rangeRadius;
+            endDown = endCenter - mainCamera.transform.up * rangeRadius;
+            endLeft = endCenter - mainCamera.transform.right * rangeRadius;
+            endRight = endCenter + mainCamera.transform.right * rangeRadius;
+        }
+
+        private void OnDrawGizmos()
+        {
+            if (interactionState.isRailFounded)
+            {
+                Gizmos.color = Color.red;
+                Gizmos.DrawSphere(_raycastHit.point, 1f);
+            }
+
+            {
+                Gizmos.DrawLine(startUp, endUp);
+                Gizmos.DrawLine(startDown, endDown);
+                Gizmos.DrawLine(startRight, endRight);
+                Gizmos.DrawLine(startLeft, endLeft);
+
+                Gizmos.DrawWireSphere(startCenter, rangeRadius);
+                Gizmos.DrawWireSphere(endCenter, rangeRadius);
+            }
+        }
     }
 }

@@ -1451,6 +1451,23 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c9999e565a6f7b5459d30c90bb752be4, type: 3}
+--- !u!1 &1439142222 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7375169984744954684, guid: c9999e565a6f7b5459d30c90bb752be4, type: 3}
+  m_PrefabInstance: {fileID: 1439142221}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1439142223
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1439142222}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0ce79e8d3559ccb40a5e787289046dce, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1475807358
 GameObject:
   m_ObjectHideFlags: 0
@@ -13383,7 +13400,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8513244663525801196}
-  m_LocalRotation: {x: 0.25492924, y: -0.00000001860171, z: 0.000000004904154, w: 0.9669597}
+  m_LocalRotation: {x: 0.25492924, y: 0.000000018601712, z: -0.0000000049041544, w: 0.9669597}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -13978,14 +13995,15 @@ MonoBehaviour:
   rangeDistance: 5
   escapingRopeSpeed: 6
   escapingRoDelayTime: 1
-  targetLayer:
-    serializedVersion: 2
-    m_Bits: 1073741824
   hVision: {x: 0, y: 0, z: 0}
   isRailFounded: 0
   isRailReady: 0
   isRidingRope: 0
+  rayOrigin: {fileID: 0}
   minDistObj: {fileID: 0}
+  hookableTarget: {fileID: 0}
+  railStartObject: {fileID: 0}
+  railStartPosiotion: {x: 0, y: 0, z: 0}
   UI: {fileID: 2031036862}
   detectingUI: {fileID: 2625316103411003090, guid: df301cc81a78db845b9532e92dfd9c64, type: 3}
   gaugeImage: {fileID: 21300000, guid: a7a40c5b9e5e9ae4dae337f44719fe14, type: 3}
@@ -14009,6 +14027,8 @@ MonoBehaviour:
   isRailReady: 0
   isRidingRail: 0
   isMoveToRail: 0
+  isHookableObjectFounded: 0
+  isRidingHookingRope: 0
 --- !u!114 &8513244665028162384
 MonoBehaviour:
   m_ObjectHideFlags: 3

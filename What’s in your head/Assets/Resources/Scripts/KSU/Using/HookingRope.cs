@@ -2,17 +2,31 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+using JCW.UI.Options.InputBindings;
 namespace KSU
 {
     public class HookingRope : MonoBehaviour
     {
-        PlayerInteractionState interactionState;
+        SteadyInteractionState steadyInteractionState;
         PlayerController3D playerController;
         CharacterState3D playerState;
         Rigidbody playerRigidbody;
 
         public float grappleSpeed = 10f;
-        public float escapeGrapplePower = 10f; 
+        public float escapeGrapplePower = 10f;
+
+        Camera mainCamera;
+        [SerializeField] GameObject rayOrigin;
+        public Ray ray;
+        RaycastHit _raycastHit;
+        LayerMask layerFilterForGrapple;
+        LayerMask layerForGrapple;
+
+        public float rangeRadius = 5f;
+        public float rangeDistance = 5f;
+
+        public GameObject hookableTarget;
+
         Vector3 grappleVec;
         Vector3 targetPosition;
 
@@ -21,32 +35,79 @@ namespace KSU
         {
             playerController = GetComponent<PlayerController3D>();
             playerState = GetComponent<CharacterState3D>();
-            interactionState = GetComponent<PlayerInteractionState>();
+            steadyInteractionState = GetComponent<SteadyInteractionState>();
             playerRigidbody = GetComponent<Rigidbody>();
+            mainCamera = playerController.mainCamera;
+
+            layerForGrapple = ((1) + (1 << LayerMask.NameToLayer("Interactable")));
+            layerFilterForGrapple = ((-1) - (1 << LayerMask.NameToLayer("Player")) - (1 << LayerMask.NameToLayer("Rail")) - (1 << LayerMask.NameToLayer("Interactable")));
         }
 
-        // Update is called once per frame
         void Update()
         {
             MoveToTarget();
+        }
+        // 스테디 전용 스킬 클래스로
+        //void HookOrEscape()
+        //{
+        //    if (steadyInteractionState.isHookableObjectFounded)
+        //    {
+        //        if (steadyInteractionState.isRidingHookingRope)
+        //        {
+        //            if (ITT_KeyManager.Instance.GetKeyDown(PlayerAction.Jump))
+        //            {
+        //                EscapeMoving();
+        //            }
+        //        }
+        //        else
+        //        {
+        //            if (ITT_KeyManager.Instance.GetKeyDown(PlayerAction.Fire))
+        //            {
+        //                Hook(hookableTarget);
+        //            }
+        //        }
+        //    }
+        //}
+
+        public void SearchGrapplingObject()
+        {
+            //ray = mainCamera.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0f));
+
+            bool rayChecked = Physics.SphereCast(rayOrigin.transform.position, rangeRadius, mainCamera.transform.forward, out _raycastHit, rangeDistance, layerForGrapple, QueryTriggerInteraction.Ignore);
+
+            if (rayChecked)
+            {
+                RaycastHit hit;
+                Vector3 direction = (_raycastHit.collider.gameObject.transform.position - rayOrigin.transform.position).normalized;
+                rayChecked = Physics.Raycast(rayOrigin.transform.position, mainCamera.transform.forward, out hit, rangeDistance, layerFilterForGrapple, QueryTriggerInteraction.Ignore);
+                if (_raycastHit.collider.tag == "GrapplingObject")
+                {
+                    hookableTarget = _raycastHit.collider.gameObject;
+                    steadyInteractionState.isGrapplingObjectFounded = true;
+                    return;
+                }
+            }
+
+            steadyInteractionState.isGrapplingObjectFounded = false;
         }
 
         public void Hook(GameObject targetObj)
         {
             playerController.enabled = false;
             playerState.IsAirJumping = false;
+            playerState.WasAirDashing = false;
             playerState.IsGrounded = false;
             targetPosition = targetObj.GetComponent<HookableObject>().GetOffsetPosition();
             grappleVec = (targetPosition - transform.position).normalized * grappleSpeed;
             Vector3 lookVec = grappleVec;
             lookVec.y = 0;
             transform.LookAt(transform.position + lookVec);
-            interactionState.isRidingHookingRope = true;
+            steadyInteractionState.isRidingHookingRope = true;
         }
 
         void MoveToTarget()
         {
-            if(interactionState.isRidingHookingRope)
+            if(steadyInteractionState.isRidingHookingRope)
             {
                 if (Vector3.Distance(transform.position, targetPosition) < 2f)
                 {
@@ -58,7 +119,7 @@ namespace KSU
 
         public void EscapeMoving()
         {
-            interactionState.isRidingHookingRope = false;
+            steadyInteractionState.isRidingHookingRope = false;
             
             Vector3 inertiaVec = grappleVec;
             float jumpPower = inertiaVec.y;

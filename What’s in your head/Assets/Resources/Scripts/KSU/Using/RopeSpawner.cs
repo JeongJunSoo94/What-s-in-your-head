@@ -38,13 +38,13 @@ namespace KSU
             {
                 case "Nella":
                     {
-                        NellaRopeAction.GetComponent<RopeAction>().player = player;
+                        NellaRopeAction.GetComponent<Rope>().player = player;
                         NellaRopeAction.SetActive(true);
                     }
                     break;
                 case "Steady":
                     {
-                        SteadyRopeAction.GetComponent<RopeAction>().player = player;
+                        SteadyRopeAction.GetComponent<Rope>().player = player;
                         SteadyRopeAction.SetActive(true);
                     }
                     break;
@@ -61,11 +61,11 @@ namespace KSU
 
                 case "Nella":
                     {
-                        return NellaRopeAction.GetComponent<RopeAction>().DeacvtivateRope(player);
+                        return NellaRopeAction.GetComponent<Rope>().DeacvtivateRope(player);
                     }
                 case "Steady":
                     {
-                        return SteadyRopeAction.GetComponent<RopeAction>().DeacvtivateRope(player);
+                        return SteadyRopeAction.GetComponent<Rope>().DeacvtivateRope(player);
                     }
                 default:
                     return 0f;
