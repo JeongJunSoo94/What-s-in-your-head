@@ -12,12 +12,19 @@ namespace KSU
         CharacterState3D playerState;
         PlayerInteractionState interactionState;
 
+        LayerMask layerFilterForRope;
+
         public GameObject currentRope;
         public GameObject minDistRope;
         public List<GameObject> detectedRopeSpawners = new List<GameObject>();
 
         public float escapingRopeSpeed = 6f;
         public float escapingRopeDelayTime = 1f;
+
+        private void Awake()
+        {
+            layerFilterForRope = ((-1) - (1 << LayerMask.NameToLayer("Player")));
+        }
 
         void FindInteractableRope()
         {
@@ -64,6 +71,7 @@ namespace KSU
                 //        }
                 //    }
                 //}
+            }
         }
 
         public void RideRope()
