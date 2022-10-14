@@ -11,7 +11,7 @@ namespace JCW.UI.InGame
     {
         [Header("감지 범위 수치")] [SerializeField] [Range(0, 100)] float range;
         [Header("UI")] [SerializeField] GameObject detectUI;
-        [Header("타겟 오브젝트")] [SerializeField] GameObject target;
+        [Header("타겟 오브젝트의 위치")] [SerializeField] Transform target;
         [Header("이미지 트랜스폼")] [SerializeField] RectTransform imgTransform;
         [Header("클립 플레이어")] [SerializeField] VideoPlayer videoPlayer;
 
@@ -46,15 +46,15 @@ namespace JCW.UI.InGame
                 return;
 
             // 타겟의 위치를 메인카메라의 스크린 좌표로 변경
-            Vector3 indicatorPosition = mainCamera.WorldToScreenPoint(target.transform.position);
+            Vector3 indicatorPosition = mainCamera.WorldToScreenPoint(target.position);
 
 
             // 타겟이 카메라 앞에 있을 때
             if (indicatorPosition.z >= 0f)
             {
                 // 타겟이 화면 안에 들어올 때
-                if (indicatorPosition.x <= screenSize.width && indicatorPosition.x >= 0f
-                   && indicatorPosition.y <= screenSize.height && indicatorPosition.y >= 0f)
+                if (indicatorPosition.x <= screenSize.x + screenSize.width && indicatorPosition.x >= screenSize.x
+                   && indicatorPosition.y <= screenSize.y + screenSize.height && indicatorPosition.y >= screenSize.y)
                 {
                     imgTransform.localScale = initImgScale;
                     indicatorPosition.z = 0f;
@@ -81,7 +81,7 @@ namespace JCW.UI.InGame
             indicatorPosition.z = 0f;
 
             // 현재 카메라 화면의 중심 위치 잡기
-            Vector3 canvasCenter = new Vector3(screenSize.width / 2f, screenSize.height / 2f, 0f);
+            Vector3 canvasCenter = new Vector3((screenSize.x + screenSize.width / 2f), (screenSize.y + screenSize.height / 2f), 0f);            
 
             // UI 위치-> 화면 중심 벡터
             indicatorPosition -= canvasCenter;
@@ -124,7 +124,7 @@ namespace JCW.UI.InGame
                 {
                     // 여기서는 바로 켜주는걸로 되어있지만, 정식으로 사용할 때엔 플레이어가 레이를 쏘도록 함수를 써야할 듯.
                     // other.gameObject.SendMessage("레이 쏘는 함수", 매개변수-오브젝트);
-                    Detected(other.gameObject);
+                    Detect(other.gameObject);
                 }
             }
         }
@@ -135,7 +135,7 @@ namespace JCW.UI.InGame
             detectUI.SetActive(false);
         }
 
-        public void Detected(GameObject player)
+        public void Detect(GameObject player)
         {
             detectUI.SetActive(true);
             isDetected = true;
@@ -146,11 +146,13 @@ namespace JCW.UI.InGame
 
         void Init()
         {
+            Debug.Log(mainCamera.rect);
             Rect cameraPos = mainCamera.rect;
             screenSize = new(canvasSize.rect.width  * cameraPos.x,
                              canvasSize.rect.height * cameraPos.y,
                              canvasSize.rect.width  * cameraPos.width,
                              canvasSize.rect.height * cameraPos.height);
+            Debug.Log(screenSize);
         }
         
     }
