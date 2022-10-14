@@ -14,9 +14,13 @@ namespace JCW.UI.InGame
         [Header("타겟 오브젝트의 위치")] [SerializeField] Transform target;
         [Header("이미지 트랜스폼")] [SerializeField] RectTransform imgTransform;
         [Header("클립 플레이어")] [SerializeField] VideoPlayer videoPlayer;
+        [Header("넬라 / 스테디 - 감지 스프라이트")] [SerializeField] Sprite nellaSprite;
+                                                [SerializeField] Sprite steadySprite;
 
         private RectTransform canvasSize;
         private Camera mainCamera;
+
+        Image detectSprite;
         
                 
         bool isDetected = false;
@@ -38,7 +42,9 @@ namespace JCW.UI.InGame
             screenLimitOffset = imgTransform.rect.width * 0.4f;
             outOfSightImgScale = imgTransform.localScale * 0.8f;
             initImgScale = imgTransform.localScale;
-            
+            detectSprite = imgTransform.gameObject.GetComponent<Image>();
+
+
         }
         private void Update()
         {
@@ -124,24 +130,38 @@ namespace JCW.UI.InGame
                 {
                     // 여기서는 바로 켜주는걸로 되어있지만, 정식으로 사용할 때엔 플레이어가 레이를 쏘도록 함수를 써야할 듯.
                     // other.gameObject.SendMessage("레이 쏘는 함수", 매개변수-오브젝트);
-                    Detect(other.gameObject);
+                    DetectOn(other.gameObject, other.tag);
                 }
             }
         }
 
         private void OnTriggerExit(Collider other)
         {
-            isDetected = false;
-            detectUI.SetActive(false);
+            if (other.CompareTag("Nella") || other.CompareTag("Steady"))
+            {
+                // 자기꺼일때만 켜기
+                if (other.gameObject.GetComponent<PhotonView>().IsMine)
+                {
+                    DetectOff(other.gameObject, other.tag);
+                }
+            }
         }
 
-        public void Detect(GameObject player)
+        public void DetectOn(GameObject player, string tag)
         {
             detectUI.SetActive(true);
+            //detectSprite.sprite = GameManager.Instance.characterOwner[PhotonNetwork.IsMasterClient] ? nellaSprite : steadySprite;
+            detectSprite.sprite = tag == "Nella" ? nellaSprite : steadySprite;
             isDetected = true;
             mainCamera = player.GetComponent<CameraController>().FindCamera();
             videoPlayer.targetCamera = mainCamera;
             Init();
+        }
+
+        public void DetectOff(GameObject player, string tag)
+        {
+            isDetected = false;
+            detectUI.SetActive(false);
         }
 
         void Init()

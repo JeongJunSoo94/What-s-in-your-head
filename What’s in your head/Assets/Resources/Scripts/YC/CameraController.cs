@@ -376,6 +376,7 @@ namespace YC.Camera_
                 CameraManager.Instance.cameras[1] = mainCam;
             }
 
+            // 여기 mainCam을 ReviveUI에 넣어줄 수 있어야함.
 
             return mainCam;
         }
