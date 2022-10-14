@@ -175,13 +175,16 @@ public class PlayerInteraction : MonoBehaviour
                                 minDist = hit.distance;
                                 if(minDistObj != null)
                                 {
+                                    // 스프라이트 변경
                                     detectedRopeSpawners.GetValueOrDefault(minDistObj).GetComponentsInChildren<Image>()[1].sprite = gaugeImage;
                                 }
                                 minDistObj = key;
                             }
                         }
                     }
-
+                    
+                    // UI 화면에 띄워주기
+                     
                     if (amount > 1f)
                     {
                         amount = 1f;
@@ -318,7 +321,6 @@ public class PlayerInteraction : MonoBehaviour
 
     void UIRender()
     {
-
         Camera mainCamera = Camera.main;
 
         foreach(var ropeSpawner in detectedRopeSpawners)

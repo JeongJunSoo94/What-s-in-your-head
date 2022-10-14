@@ -358,7 +358,7 @@ namespace YC.Camera_
             {
                 mainCam = GameObject.FindGameObjectWithTag("NellaCamera").GetComponent<Camera>();
 
-                if (mainCam) Debug.Log("OK");
+                if (mainCam) Debug.Log("Nella OK");
                 else Debug.Log("NULL");
 
                 cinemachineBrain = mainCam.GetComponent<CinemachineBrain>();
@@ -369,12 +369,17 @@ namespace YC.Camera_
             {
                 mainCam = GameObject.FindGameObjectWithTag("SteadyCamera").GetComponent<Camera>();
 
-                if (mainCam) Debug.Log("OK");
+                if (mainCam) Debug.Log("Steady OK");
                 else Debug.Log("NULL");
 
                 cinemachineBrain = mainCam.GetComponent<CinemachineBrain>();
                 CameraManager.Instance.cameras[1] = mainCam;
             }
+
+            //gameObject.transform.GetChild(16).gameObject.SetActive(true);
+            gameObject.transform.GetChild(16).gameObject.GetComponent<Canvas>().worldCamera = mainCam;
+            gameObject.transform.GetChild(16).gameObject.GetComponent<Canvas>().planeDistance = 1;
+
 
             return mainCam;
         }
