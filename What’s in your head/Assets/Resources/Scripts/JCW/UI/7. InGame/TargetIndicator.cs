@@ -146,13 +146,11 @@ namespace JCW.UI.InGame
 
         void Init()
         {
-            Debug.Log(mainCamera.rect);
             Rect cameraPos = mainCamera.rect;
             screenSize = new(canvasSize.rect.width  * cameraPos.x,
                              canvasSize.rect.height * cameraPos.y,
                              canvasSize.rect.width  * cameraPos.width,
                              canvasSize.rect.height * cameraPos.height);
-            Debug.Log(screenSize);
         }
         
     }

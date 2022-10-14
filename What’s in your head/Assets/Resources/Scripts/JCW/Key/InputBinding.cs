@@ -14,7 +14,7 @@ namespace JCW.UI.Options.InputBindings
         MoveForward,     MoveBackward,      MoveLeft,       MoveRight,
         Jump,            Dash,              ToggleRun,
         // 조작
-        Interaction,       Fire,            Aim,
+        Interaction,       Swap,            Fire,            Aim,
         Pause,             Chat,
 
         END
@@ -122,6 +122,7 @@ namespace JCW.UI.Options.InputBindings
                     case KeyCode.Mouse1:
                     case KeyCode.Escape:
                     case KeyCode.Colon:
+                    case KeyCode.Tab:
                         break;
                     default:
                         for (int i = 0 ; i < bindingDict.Count ; ++i)
@@ -154,6 +155,7 @@ namespace JCW.UI.Options.InputBindings
 
             // 상호작용
             Bind(PlayerAction.Interaction, KeyCode.E);
+            Bind(PlayerAction.Swap, KeyCode.Tab);
 
             // 마우스
             Bind(PlayerAction.Fire, KeyCode.Mouse0);

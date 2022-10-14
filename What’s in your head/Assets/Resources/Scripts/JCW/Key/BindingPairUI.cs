@@ -47,9 +47,10 @@ namespace JCW.UI.Options.InputBindings
                 "Jump" => "점프",
                 "Dash" => "대시",
                 "ToggleRun" => "달리기 전환",
-                "Fire" => "능력 1",
-                "Aim" => "능력 2",
+                "Fire" => "능력 사용",
+                "Aim" => "조준",
                 "Interaction" => "상호 작용",
+                "Swap" => "무기 변경",
                 "Chat" => "채팅창 열기 / 닫기",
                 "Pause" => "일시정지 / 옵션",
                 _ => actionText,
@@ -99,6 +100,7 @@ namespace JCW.UI.Options.InputBindings
                 "RightArrow" => "→",
                 "UpArrow" => "↑",
                 "DownArrow" => "↓",
+                "Tab" => "TAB",
                 _ => codeText,
             };
             return convertText;
@@ -107,8 +109,7 @@ namespace JCW.UI.Options.InputBindings
         override public void InvertFont(bool isDefault = true)
         {
             base.InvertFont(isDefault);
-            highlight.color = GetInvertVisible(highlight.color, isDefault);            
-            //actionLabel.color = GetInvertColor(actionLabel.color);
+            highlight.color = GetInvertVisible(highlight.color, isDefault);    
         }
     }
 }
