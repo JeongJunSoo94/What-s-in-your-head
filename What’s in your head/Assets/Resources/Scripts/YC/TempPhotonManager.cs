@@ -127,7 +127,7 @@ namespace YC.Photon
             if (PhotonNetwork.CurrentRoom.PlayerCount == 1)
             {              
                 PhotonNetwork.Instantiate("Prefabs/YC/MainCamera_Nella", new Vector3(0, 0, 0), Quaternion.identity, 0);
-                GameObject Inst = PhotonNetwork.Instantiate("Prefabs/YC/Nella", new Vector3 (-5, 0, -5), Quaternion.identity, 0);
+                GameObject Inst = PhotonNetwork.Instantiate("Prefabs/JCW/NellaJJS", new Vector3 (-5, 0, -5), Quaternion.identity, 0);
 
                 //CameraManager.Instance.cameras[0] = GameObject.FindGameObjectWithTag("NellaCamera").GetComponent<Camera>();
 

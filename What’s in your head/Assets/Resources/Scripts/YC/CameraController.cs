@@ -354,7 +354,7 @@ namespace YC.Camera_
 
         public Camera FindCamera()
         {
-            if (this.gameObject.name == "Nella(Clone)")
+            if (this.gameObject.CompareTag("Nella"))
             {
                 mainCam = GameObject.FindGameObjectWithTag("NellaCamera").GetComponent<Camera>();
 
@@ -365,7 +365,7 @@ namespace YC.Camera_
                 CameraManager.Instance.cameras[0] = mainCam;
 
             }
-            else if (this.gameObject.name == "Steady(Clone)")
+            else if (this.gameObject.CompareTag("Steady"))
             {
                 mainCam = GameObject.FindGameObjectWithTag("SteadyCamera").GetComponent<Camera>();
 
@@ -375,10 +375,6 @@ namespace YC.Camera_
                 cinemachineBrain = mainCam.GetComponent<CinemachineBrain>();
                 CameraManager.Instance.cameras[1] = mainCam;
             }
-
-            //gameObject.transform.GetChild(16).gameObject.SetActive(true);
-            gameObject.transform.GetChild(16).gameObject.GetComponent<Canvas>().worldCamera = mainCam;
-            gameObject.transform.GetChild(16).gameObject.GetComponent<Canvas>().planeDistance = 1;
 
 
             return mainCam;

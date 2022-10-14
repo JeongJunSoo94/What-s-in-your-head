@@ -121,7 +121,7 @@ namespace JJS.Weapon
                 bezierCurveOrbit.p2 = maxPos + direction;
             }
             Weapon.transform.LookAt(bezierCurveOrbit.p4);
-            Debug.Log(Weapon.transform.forward);
+            //Debug.Log(Weapon.transform.forward);
             IK.transform.position = bezierCurveOrbit.p4;
         
         }

@@ -4310,10 +4310,10 @@ GameObject:
   - component: {fileID: 5302662052065781397}
   - component: {fileID: 2640009511603170201}
   - component: {fileID: 4425137711558646714}
-  - component: {fileID: 6948550986710143185}
+  - component: {fileID: 9070039888132479780}
   - component: {fileID: 8427972402891252904}
-  - component: {fileID: 6781922161992669097}
   - component: {fileID: 2658558600888254740}
+  - component: {fileID: 6781922161992669097}
   - component: {fileID: 5681726794903581088}
   m_Layer: 0
   m_Name: NellaJJS
@@ -4425,7 +4425,7 @@ MonoBehaviour:
   ObservedComponents:
   - {fileID: 2640009511603170201}
   - {fileID: 4425137711558646714}
-  - {fileID: 6948550986710143185}
+  - {fileID: 9070039888132479780}
   sceneViewId: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0
@@ -4513,7 +4513,7 @@ MonoBehaviour:
   m_SynchronizeRotation: 1
   m_SynchronizeScale: 0
   m_UseLocal: 1
---- !u!114 &6948550986710143185
+--- !u!114 &9070039888132479780
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -4522,7 +4522,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 6948550986710143184}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 12083cc7331a01a4ba471273427f0d9d, type: 3}
+  m_Script: {fileID: 11500000, guid: 01450141376a61547b3c67c308a86438, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   mainCam: {fileID: 0}
@@ -4533,8 +4533,6 @@ MonoBehaviour:
   blendingCam_Clone: 0
   defaultCameraSensitivity: 20
   sholderCameraSensitivity: 20
-  sholderAxisY_MaxUp: 0.3
-  sholderAxisY_MaxDown: 0.5
 --- !u!114 &8427972402891252904
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4567,27 +4565,6 @@ MonoBehaviour:
   dashVec: {x: 0, y: 0, z: 0}
   inertiaNormalVec: {x: 0, y: 0, z: 0}
   CPcount: 0
---- !u!114 &6781922161992669097
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6948550986710143184}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 63cf26e97a25e2947b5a019e6d64a706, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  ableToLeft: 0
-  ableToRight: 0
-  hitObjs:
-  - {fileID: 704147709444024601}
-  - {fileID: 8186255440665194150}
-  - {fileID: 555384094724294249}
-  leftWeapon: {fileID: 2915400752079193448}
-  rightWeapon: {fileID: 2915400751720887691}
-  gun: {fileID: 2350009369711900857}
 --- !u!114 &2658558600888254740
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4626,6 +4603,27 @@ MonoBehaviour:
   IsOutOfControl: 0
   outOfControllDuration: 0
   aim: 0
+--- !u!114 &6781922161992669097
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6948550986710143184}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 63cf26e97a25e2947b5a019e6d64a706, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ableToLeft: 0
+  ableToRight: 0
+  hitObjs:
+  - {fileID: 704147709444024601}
+  - {fileID: 8186255440665194150}
+  - {fileID: 555384094724294249}
+  leftWeapon: {fileID: 2915400752079193448}
+  rightWeapon: {fileID: 2915400751720887691}
+  gun: {fileID: 2350009369711900857}
 --- !u!114 &5681726794903581088
 MonoBehaviour:
   m_ObjectHideFlags: 0
