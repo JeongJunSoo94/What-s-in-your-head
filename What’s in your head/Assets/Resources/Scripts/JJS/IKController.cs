@@ -36,6 +36,7 @@ public class IKController : MonoBehaviour
         player = GetComponent<PlayerController3D>();
     }
 
+
     private void OnAnimatorIK(int layerIndex)
     {
         if (player.characterState.aim)

@@ -275,6 +275,7 @@ public class PlayerController3D : MonoBehaviour
         moveDir.z = ((ITT_KeyManager.Instance.GetKey(PlayerAction.MoveForward) ? 1 : 0) + (ITT_KeyManager.Instance.GetKey(PlayerAction.MoveBackward) ? -1 : 0));
         moveDir.x = ((ITT_KeyManager.Instance.GetKey(PlayerAction.MoveRight) ? 1 : 0) + (ITT_KeyManager.Instance.GetKey(PlayerAction.MoveLeft) ? -1 : 0));
     }
+
     public void InputJump()
     {
         if (ITT_KeyManager.Instance.GetKeyDown(PlayerAction.Jump))

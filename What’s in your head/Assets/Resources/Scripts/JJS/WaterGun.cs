@@ -120,9 +120,10 @@ namespace JJS.Weapon
                 direction.y += 1f + Height * curveHeight;
                 bezierCurveOrbit.p2 = maxPos + direction;
             }
-            IK.transform.position = bezierCurveOrbit.p4;
-
             Weapon.transform.LookAt(bezierCurveOrbit.p4);
+            Debug.Log(Weapon.transform.forward);
+            IK.transform.position = bezierCurveOrbit.p4;
+        
         }
     }
 }
