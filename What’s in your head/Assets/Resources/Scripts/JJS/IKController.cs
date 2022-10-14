@@ -54,10 +54,19 @@ public class IKController : MonoBehaviour
         animator.SetIKRotationWeight(AvatarIKGoal.RightHand, rotWeight);
 
         animator.SetIKPosition(AvatarIKGoal.RightHand, rightHandFollowObj.position);
-        Quaternion handRotation = Quaternion.LookRotation(rightHandFollowObj.position - transform.position);
+
+        Transform rotation = animator.GetBoneTransform(HumanBodyBones.RightHand);
+        Quaternion handRotation = Quaternion.LookRotation(hitpos.position- rightHandFollowObj.position, rotation.forward*-1);
+        animator.SetIKRotation(AvatarIKGoal.RightHand, handRotation);
+        //Debug.Log (rotation);
+        //rotation = Quaternion.LookRotation(rotation.eulerAngles + new Vector3(0,90,0));
+
+        //animator.SetIKRotation(AvatarIKGoal.RightHand, rotation);
+        //Quaternion rotY = Quaternion.Euler(0, handRotation.y, 0);
+        //Quaternion rotZ = Quaternion.Euler(0, 0, handRotation.z);
         //Quaternion handRotation = Quaternion.Euler(xRot, yRot, zRot);
-        //animator.SetIKRotation(AvatarIKGoal.RightHand, handRotation);
-        animator.SetBoneLocalRotation(HumanBodyBones.RightHand, handRotation);
+    
+        //animator.SetBoneLocalRotation(HumanBodyBones.RightHand, rotation);
 
 
         animator.SetIKPositionWeight(AvatarIKGoal.LeftHand, posWeight);

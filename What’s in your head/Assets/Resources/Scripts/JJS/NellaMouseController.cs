@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
 using YC.Camera_;
 using YC.Camera_Single;
 using Photon.Pun;
@@ -12,8 +11,6 @@ namespace JJS
     {
         public List<Discovery3D> hitObjs;
 
-        public GameObject leftWeapon;
-        public GameObject rightWeapon;
         public WaterGun gun;
 
         private void Awake()
@@ -30,14 +27,12 @@ namespace JJS
         }
 
 
-        public override void CheckLeftClick(int enable)
+        public override void SetWeaponEnable(int weaponIndex,bool enable)
         {
-            leftWeapon.SetActive(enable == 1);
-        }
-
-        public override void CheckRightClick(int enable)
-        {
-            rightWeapon.SetActive(enable == 1);
+            if (Weapon.Length != 0)
+            {
+                Weapon[weaponIndex].SetActive(enable);
+            }
         }
 
         public void Shoot()
@@ -54,7 +49,6 @@ namespace JJS
         {
             hitObjs[index].gameObject.SetActive(false);
         }
-
 
         public void AttackTime()
         {

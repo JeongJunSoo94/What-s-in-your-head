@@ -9,8 +9,6 @@ namespace JJS
 {
     public class SteadyMouseController : PlayerMouseController
     {
-        public GameObject leftWeapon;
-        public GameObject rightWeapon;
         public MagnifyingGlass glass;
         private void Awake()
         {
@@ -20,15 +18,7 @@ namespace JJS
                 glass.mainCamera = this.gameObject.transform.GetComponent<CameraController_Single>().FindCamera(); // ½Ì±Û¿ë
 
         }
-        public override void CheckLeftClick(int enable)
-        {
-            leftWeapon.SetActive(enable == 1);
-        }
 
-        public override void CheckRightClick(int enable)
-        {
-            rightWeapon.SetActive(enable == 1);
-        }
     }
 
 }

@@ -2,15 +2,19 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CharacterBaseSMB : StateMachineBehaviour
+namespace JJS.CharacterSMB
 {
-    PlayerController3D player;
-    public PlayerController3D GetPlayerController3D(Animator animator)
+    public class CharacterBaseSMB : StateMachineBehaviour
     {
-        if (player == null)
+        PlayerController3D player;
+        public PlayerController3D GetPlayerController3D(Animator animator)
         {
-            player = animator.gameObject.GetComponent<PlayerController3D>();
+            if (player == null)
+            {
+                player = animator.gameObject.GetComponent<PlayerController3D>();
+            }
+            return player;
         }
-        return player;
     }
+
 }
