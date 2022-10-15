@@ -13,8 +13,8 @@ namespace JCW.UI
         private enum MenuSelect { Play, Option, Exit};
         
 
-        [Header("몇 초 후 등장")][SerializeField] private float startTime = 1.0f;
-        [Header("몇 초에 걸쳐 등장")][SerializeField] private float appearingTime = 0.5f;
+        [Header("로고 시작 시간")][SerializeField] private float startTime = 1.0f;
+        [Header("로고 작동 유예 시간")][SerializeField] private float appearingTime = 0.5f;
         [Header("서서히 나타날 로고")][SerializeField] private Image titleLogo;
         [Header("서서히 나타날 버튼들")][SerializeField] private List<Button> buttonList;
         [Header("플레이 버튼 후 열릴 UI")][SerializeField] private GameObject playObj;
@@ -26,6 +26,7 @@ namespace JCW.UI
         
         private void Awake()
         {
+            titleLogo = transform.GetChild(2).gameObject.GetComponent<Image>();
             for (int i = 0 ; i<buttonList.Count ; ++i)
             {
                 buttonTexts.Add(buttonList[i].transform.GetChild(0).GetComponent<Text>());
@@ -53,18 +54,19 @@ namespace JCW.UI
             for (int k = 0 ; k<buttonList.Count ; ++k)
             {
                 buttonList[k].interactable = true;
+                buttonList[k].gameObject.transform.GetChild(0).gameObject.GetComponent<FontColorShift>().enabled = true;
             }
 
             buttonList[(int)MenuSelect.Play].onClick.AddListener(() => 
             { 
                 playObj.SetActive(true);
-                RoomOptions temp_RO = new()
+                RoomOptions lobbyOptions = new()
                 {
                     MaxPlayers = 20,    // 최대 접속자수, 포톤 무료는 20CCU이므로 20 초과로는 못한다.
                     IsOpen = true,      // 룸의 오픈 여부
                     IsVisible = false,   // 로비에서 룸 목록에 노출시킬지 여부  
                 };
-                PhotonNetwork.JoinOrCreateRoom("Lobby", temp_RO, null);
+                PhotonNetwork.JoinOrCreateRoom("Lobby", lobbyOptions, null);
             });
 
             buttonList[(int)MenuSelect.Option].onClick.AddListener(() => { optionObj.SetActive(true); });

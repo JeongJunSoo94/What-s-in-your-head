@@ -11,9 +11,10 @@ namespace JCW.UI.Options
         protected Outline outline = null;
 
         virtual protected void Awake()
-        {            
+        {
             textName = this.gameObject.GetComponent<Text>();
             outline = this.gameObject.GetComponent<Outline>();
+            this.enabled = false;
         }
 
         virtual public void OnPointerEnter(PointerEventData eventData)

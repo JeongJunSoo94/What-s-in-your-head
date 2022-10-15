@@ -200,7 +200,6 @@ namespace JCW.UI.Options.InputBindings
                 if (pair.Key == PlayerAction.Pause || pair.Key == PlayerAction.Chat)
                     continue;
                 _bindingKeyScripts[pair.Key].SetCodeLabel($"{pair.Value.keyCode}");
-                Debug.Log(pair.Value.keyCode);
             }
         }
 
