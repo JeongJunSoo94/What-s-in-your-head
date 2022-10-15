@@ -55,8 +55,8 @@ public class IKController : MonoBehaviour
 
         animator.SetIKPosition(AvatarIKGoal.RightHand, rightHandFollowObj.position);
 
-        Transform rotation = animator.GetBoneTransform(HumanBodyBones.RightHand);
-        Quaternion handRotation = Quaternion.LookRotation(hitpos.position- rightHandFollowObj.position, rotation.forward*-1);
+        Transform rightHandTransform = animator.GetBoneTransform(HumanBodyBones.RightHand);
+        Quaternion handRotation = Quaternion.LookRotation(hitpos.position- rightHandFollowObj.position, rightHandTransform.forward*-1);
         animator.SetIKRotation(AvatarIKGoal.RightHand, handRotation);
         //Debug.Log (rotation);
         //rotation = Quaternion.LookRotation(rotation.eulerAngles + new Vector3(0,90,0));
@@ -65,17 +65,25 @@ public class IKController : MonoBehaviour
         //Quaternion rotY = Quaternion.Euler(0, handRotation.y, 0);
         //Quaternion rotZ = Quaternion.Euler(0, 0, handRotation.z);
         //Quaternion handRotation = Quaternion.Euler(xRot, yRot, zRot);
-    
+
         //animator.SetBoneLocalRotation(HumanBodyBones.RightHand, rotation);
-
-
         animator.SetIKPositionWeight(AvatarIKGoal.LeftHand, posWeight);
         animator.SetIKRotationWeight(AvatarIKGoal.LeftHand, rotWeight);
 
         animator.SetIKPosition(AvatarIKGoal.LeftHand, leftHandFollowObj.position);
-        handRotation = Quaternion.LookRotation(leftHandFollowObj.position - transform.position);
+        Debug.Log("leftHandFollowObj" + leftHandFollowObj.position);
+        
+        Transform leftHandTransform = animator.GetBoneTransform(HumanBodyBones.LeftHand);
+        Debug.Log("leftHandTransform" + leftHandTransform.position);
+
+        //animator.SetBoneLocalRotation(HumanBodyBones.LeftHand, handRotation);
+
+
+        //handRotation = Quaternion.LookRotation(leftHandFollowObj.position - transform.position);
+
+        //handRotation = Quaternion.LookRotation(hitpos.position - leftHandFollowObj.position, rotation.forward * -1);
         //animator.SetIKRotation(AvatarIKGoal.LeftHand, handRotation);
-        animator.SetBoneLocalRotation(HumanBodyBones.LeftHand, handRotation);
+        //animator.SetIKRotation(AvatarIKGoal.LeftHand, handRotation);
 
     }
 }

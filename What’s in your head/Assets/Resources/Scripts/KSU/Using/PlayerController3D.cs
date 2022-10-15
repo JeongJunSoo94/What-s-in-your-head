@@ -130,7 +130,7 @@ public class PlayerController3D : MonoBehaviour
         // << : 
 
 
-        ITT_KeyManager.Instance.GetKeyDown(PlayerAction.MoveBackward);
+        KeyManager.Instance.GetKeyDown(PlayerAction.MoveBackward);
     }
     // Start is called before the first frame update
     void Start()
@@ -191,7 +191,7 @@ public class PlayerController3D : MonoBehaviour
 
     public void InputRun()
     {
-        if (ITT_KeyManager.Instance.GetKeyDown(PlayerAction.ToggleRun))
+        if (KeyManager.Instance.GetKeyDown(PlayerAction.ToggleRun))
         {
             characterState.ToggleRun();
         }
@@ -252,8 +252,8 @@ public class PlayerController3D : MonoBehaviour
     public void InputMove()
     {
         moveDir =
-          _camera.transform.forward * ((ITT_KeyManager.Instance.GetKey(PlayerAction.MoveForward) ? 1 : 0) + (ITT_KeyManager.Instance.GetKey(PlayerAction.MoveBackward) ? -1 : 0))
-        + _camera.transform.right * ((ITT_KeyManager.Instance.GetKey(PlayerAction.MoveRight) ? 1 : 0) + (ITT_KeyManager.Instance.GetKey(PlayerAction.MoveLeft) ? -1 : 0));
+          _camera.transform.forward * ((KeyManager.Instance.GetKey(PlayerAction.MoveForward) ? 1 : 0) + (KeyManager.Instance.GetKey(PlayerAction.MoveBackward) ? -1 : 0))
+        + _camera.transform.right * ((KeyManager.Instance.GetKey(PlayerAction.MoveRight) ? 1 : 0) + (KeyManager.Instance.GetKey(PlayerAction.MoveLeft) ? -1 : 0));
         moveDir.y = 0;
         moveDir = moveDir.normalized;
 
@@ -272,13 +272,13 @@ public class PlayerController3D : MonoBehaviour
 
     public void AimViewInputMove()
     {
-        moveDir.z = ((ITT_KeyManager.Instance.GetKey(PlayerAction.MoveForward) ? 1 : 0) + (ITT_KeyManager.Instance.GetKey(PlayerAction.MoveBackward) ? -1 : 0));
-        moveDir.x = ((ITT_KeyManager.Instance.GetKey(PlayerAction.MoveRight) ? 1 : 0) + (ITT_KeyManager.Instance.GetKey(PlayerAction.MoveLeft) ? -1 : 0));
+        moveDir.z = ((KeyManager.Instance.GetKey(PlayerAction.MoveForward) ? 1 : 0) + (KeyManager.Instance.GetKey(PlayerAction.MoveBackward) ? -1 : 0));
+        moveDir.x = ((KeyManager.Instance.GetKey(PlayerAction.MoveRight) ? 1 : 0) + (KeyManager.Instance.GetKey(PlayerAction.MoveLeft) ? -1 : 0));
     }
 
     public void InputJump()
     {
-        if (ITT_KeyManager.Instance.GetKeyDown(PlayerAction.Jump))
+        if (KeyManager.Instance.GetKeyDown(PlayerAction.Jump))
         {
             if (!characterState.IsJumping)
             {
@@ -316,7 +316,7 @@ public class PlayerController3D : MonoBehaviour
     }
     public void InputDash()
     {
-        if (ITT_KeyManager.Instance.GetKeyDown(PlayerAction.Dash))
+        if (KeyManager.Instance.GetKeyDown(PlayerAction.Dash))
         {
             if (!characterState.IsDashing)
             {

@@ -41,7 +41,7 @@ namespace JJS
         {
             if (!onClick)
             {
-                if (ITT_KeyManager.Instance.GetKey(PlayerAction.Fire))
+                if (KeyManager.Instance.GetKey(PlayerAction.Fire))
                 {
                     switch (index)
                     {
@@ -65,7 +65,7 @@ namespace JJS
             }
 
             {
-                if (ITT_KeyManager.Instance.GetKeyDown(PlayerAction.Fire))
+                if (KeyManager.Instance.GetKeyDown(PlayerAction.Fire))
                 {
                     onClick = true;
                     switch (index)

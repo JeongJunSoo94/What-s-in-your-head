@@ -3,20 +3,20 @@ using UnityEngine;
 
 namespace JCW.UI.Options.InputBindings
 {
-    public class ITT_KeyManager : MonoBehaviour
+    public class KeyManager : MonoBehaviour
     {
         private Dictionary<PlayerAction, KeyState> curKeySet;
 
         // ΩÃ±€≈Ê
-        private static ITT_KeyManager sInstance;
-        public static ITT_KeyManager Instance
+        private static KeyManager sInstance;
+        public static KeyManager Instance
         {
             get
             {
                 if (sInstance == null)
                 {
                     GameObject newGameObject = new("_KeyManager");
-                    sInstance = newGameObject.AddComponent<ITT_KeyManager>();
+                    sInstance = newGameObject.AddComponent<KeyManager>();
                 }
                 return sInstance;
             }
@@ -43,10 +43,10 @@ namespace JCW.UI.Options.InputBindings
         void Update()
         {
             if(Time.timeScale != 0.0f)
-                KeyManager();
+                KeyInputManager();
         }
 
-        void KeyManager()
+        void KeyInputManager()
         {
             foreach(PlayerAction act in curKeySet.Keys)
                 KeyInputCheck(Input.GetKey(curKeySet[act].keyCode), curKeySet[act]);

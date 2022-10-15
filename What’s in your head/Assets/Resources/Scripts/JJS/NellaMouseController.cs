@@ -26,6 +26,10 @@ namespace JJS
             TargetUpdate();
         }
 
+        public override void AimUpdate(int type=0)
+        {
+            gun.ShootLine(type);
+        }
 
         public override void SetWeaponEnable(int weaponIndex,bool enable)
         {

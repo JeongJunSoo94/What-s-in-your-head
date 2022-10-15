@@ -15,10 +15,10 @@ namespace JJS
         // OnStateUpdate is called on each Update frame between OnStateEnter and OnStateExit callbacks
         override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
         {
+            WeaponCheck(animator);
             if (GetPlayerController3D(animator).enabled)
             {
                 check(animator);
-
             }
         }
 
@@ -27,15 +27,40 @@ namespace JJS
 
         }
 
+        void WeaponCheck(Animator animator)
+        {
+            if (GetPlayerController3D(animator).playerMouse.GetUseWeapon() == 1)
+            {
+                if (animator.GetLayerWeight(1) == 0&& GetPlayerController3D(animator).characterState.aim)
+                {
+                    animator.SetLayerWeight(1, 1);
+                }
+            }
+            else
+            {
+                if (animator.GetLayerWeight(1) == 1)
+                {
+                    animator.SetLayerWeight(1, 0);
+                }
+            }
+        }
+
         void check(Animator animator)
         {
-            if (GetPlayerController3D(animator).characterState.aim)
+
+            if (GetPlayerController3D(animator).playerMouse.GetUseWeapon() == 1)
             {
-                //GetPlayerController3D(animator).RotateAim();
-                if (ITT_KeyManager.Instance.GetKey(PlayerAction.Fire))
+                if (GetPlayerController3D(animator).characterState.aim)
                 {
-                    animator.SetBool("AimAttack", true);
+                    if (KeyManager.Instance.GetKey(PlayerAction.Fire))
+                    {
+                        animator.SetBool("AimAttack", true);
+                    }
                 }
+                //if (KeyManager.Instance.GetKey(PlayerAction.Fire))
+                //{
+                //    animator.SetBool("AimAttack", true);
+                //}
             }
         }
 

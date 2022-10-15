@@ -24,7 +24,7 @@ public class InGameUI : MonoBehaviourPunCallbacks
 
     void Update()
     {
-        if (ITT_KeyManager.Instance.GetKeyDown(PlayerAction.Chat))
+        if (KeyManager.Instance.GetKeyDown(PlayerAction.Chat))
         {
             if (ChatUI.activeSelf && !Chat.isFocused)
                 ChatUI.SetActive(false);

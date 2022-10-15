@@ -170,7 +170,7 @@ namespace JJS
         {
             float moveSpeed;
 
-            if (!isDash && !isJumping && ITT_KeyManager.Instance.GetKeyDown(PlayerAction.ToggleRun))
+            if (!isDash && !isJumping && KeyManager.Instance.GetKeyDown(PlayerAction.ToggleRun))
             {
                 moveSpeed = runSpeed;
             }
@@ -179,8 +179,8 @@ namespace JJS
                 moveSpeed = walkSpeed;
             }
 
-            direction = mCamera.transform.forward * ((ITT_KeyManager.Instance.GetKeyDown(PlayerAction.MoveForward) ? 1 : 0) + (ITT_KeyManager.Instance.GetKeyDown(PlayerAction.MoveBackward) ? -1 : 0))
-                + mCamera.transform.right * ((ITT_KeyManager.Instance.GetKeyDown(PlayerAction.MoveRight) ? 1 : 0) + (ITT_KeyManager.Instance.GetKeyDown(PlayerAction.MoveLeft) ? -1 : 0));
+            direction = mCamera.transform.forward * ((KeyManager.Instance.GetKeyDown(PlayerAction.MoveForward) ? 1 : 0) + (KeyManager.Instance.GetKeyDown(PlayerAction.MoveBackward) ? -1 : 0))
+                + mCamera.transform.right * ((KeyManager.Instance.GetKeyDown(PlayerAction.MoveRight) ? 1 : 0) + (KeyManager.Instance.GetKeyDown(PlayerAction.MoveLeft) ? -1 : 0));
             direction.y = 0;
             direction = direction.normalized;
 
@@ -216,7 +216,7 @@ namespace JJS
         void DashVec()
         {
             dashVec = Vector3.zero;
-            if (!isDash && ITT_KeyManager.Instance.GetKeyDown(PlayerAction.Dash))
+            if (!isDash && KeyManager.Instance.GetKeyDown(PlayerAction.Dash))
             {
                 StartCoroutine("CorDash");
             }
@@ -239,7 +239,7 @@ namespace JJS
 
         void JumpVec()
         {
-            if (ITT_KeyManager.Instance.GetKeyDown(PlayerAction.Jump))
+            if (KeyManager.Instance.GetKeyDown(PlayerAction.Jump))
             {
                 if (isAirDash)
                 {

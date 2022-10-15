@@ -25,7 +25,9 @@ namespace JJS.Weapon
         public float curveHeight=1f;
         public float curveWidth;
 
-        public GameObject IK;
+        public GameObject targetIK;
+        public GameObject hitPos;
+
         public GameObject Weapon;
         public GameObject startPos;
         private void Awake()
@@ -36,7 +38,6 @@ namespace JJS.Weapon
         }
         void FixedUpdate()
         {
-            ShootLine();
         }
 
         public void Shoot()
@@ -59,17 +60,24 @@ namespace JJS.Weapon
 
         void OnDrawGizmosRay()
         {
-            ray.origin = startPos.transform.position;
+            ray.origin = transform.position;
             ray.direction = dir;
 
             Debug.DrawRay(ray.origin, ray.direction * shootCurDistance, Color.red);
         }
 
-        void ShootLine()
+        public void ShootLine(int type=0)
         {
             RaycastHit hit;
-            dir = mainCamera.transform.forward;
-          
+            if (type == 0)
+            {
+                dir = transform.forward;
+            }
+            else if (type == 1)
+            {
+                dir = mainCamera.transform.forward;
+            }
+           
             if (Physics.Raycast(startPos.transform.position, dir, out hit, shootMaxDistance,-1,QueryTriggerInteraction.Ignore))
             {
                 shootCurDistance = Vector3.Distance(startPos.transform.position, hit.point);
@@ -120,9 +128,31 @@ namespace JJS.Weapon
                 direction.y += 1f + Height * curveHeight;
                 bezierCurveOrbit.p2 = maxPos + direction;
             }
-            Weapon.transform.LookAt(bezierCurveOrbit.p4);
-            IK.transform.position = bezierCurveOrbit.p4;
-        
+
+            switch (type)
+            {
+                case 0:
+                    {
+                        Weapon.transform.LookAt(bezierCurveOrbit.p4);
+                        hitPos.transform.position = bezierCurveOrbit.p4;
+                        targetIK.transform.LookAt(bezierCurveOrbit.p4);
+                    }
+                    break;
+                case 1:
+                    {
+                        Weapon.transform.LookAt(bezierCurveOrbit.p4);
+                        hitPos.transform.position = bezierCurveOrbit.p4;
+                        targetIK.transform.LookAt(bezierCurveOrbit.p4);
+                    }
+                    break;
+                case 2:
+                    {
+                        Weapon.transform.LookAt(bezierCurveOrbit.p4);
+                        hitPos.transform.position = bezierCurveOrbit.p4;
+                        targetIK.transform.LookAt(bezierCurveOrbit.p4);
+                    }
+                    break;
+            }
         }
     }
 }

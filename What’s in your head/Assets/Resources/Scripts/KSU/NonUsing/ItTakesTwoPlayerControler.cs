@@ -53,7 +53,7 @@ public class ItTakesTwoPlayerControler : MonoBehaviour
         }
         else
             pCamera = Camera.main;
-        ITT_KeyManager.Instance.GetKeyDown(PlayerAction.MoveForward);
+        KeyManager.Instance.GetKeyDown(PlayerAction.MoveForward);
         pRigidbody = gameObject.GetComponent<Rigidbody>();
 
 
@@ -69,7 +69,7 @@ public class ItTakesTwoPlayerControler : MonoBehaviour
         if (!photonView.IsMine)
             return;
         // 임시로 해놓음
-        if (ITT_KeyManager.Instance.GetKeyDown(PlayerAction.Pause))
+        if (KeyManager.Instance.GetKeyDown(PlayerAction.Pause))
         {
             UI_instance.SetActive(!UI_instance.activeSelf);
             if (UI_instance.activeSelf)
@@ -106,7 +106,7 @@ public class ItTakesTwoPlayerControler : MonoBehaviour
     {
         float moveSpeed;
 
-        if (!isDash && ITT_KeyManager.Instance.GetKey(PlayerAction.ToggleRun))
+        if (!isDash && KeyManager.Instance.GetKey(PlayerAction.ToggleRun))
         {
             moveSpeed = runSpeed;
         }
@@ -115,8 +115,8 @@ public class ItTakesTwoPlayerControler : MonoBehaviour
             moveSpeed = walkSpeed;
         }
 
-        direction = pCamera.transform.forward * ((ITT_KeyManager.Instance.GetKey(PlayerAction.MoveForward) ? 1:0) + (ITT_KeyManager.Instance.GetKey(PlayerAction.MoveBackward) ? -1:0))
-            + pCamera.transform.right * ((ITT_KeyManager.Instance.GetKey(PlayerAction.MoveRight) ? 1 : 0) + (ITT_KeyManager.Instance.GetKey(PlayerAction.MoveLeft) ? -1 : 0));
+        direction = pCamera.transform.forward * ((KeyManager.Instance.GetKey(PlayerAction.MoveForward) ? 1:0) + (KeyManager.Instance.GetKey(PlayerAction.MoveBackward) ? -1:0))
+            + pCamera.transform.right * ((KeyManager.Instance.GetKey(PlayerAction.MoveRight) ? 1 : 0) + (KeyManager.Instance.GetKey(PlayerAction.MoveLeft) ? -1 : 0));
         direction.y = 0;
         direction = direction.normalized;
 
@@ -141,7 +141,7 @@ public class ItTakesTwoPlayerControler : MonoBehaviour
     void Dash()
     {
         dashVec = Vector3.zero;
-        if (!isDash && !(dashcount > 0) && ITT_KeyManager.Instance.GetKeyDown(PlayerAction.Dash))
+        if (!isDash && !(dashcount > 0) && KeyManager.Instance.GetKeyDown(PlayerAction.Dash))
         {
             StartCoroutine(nameof(CorDash));
         }
@@ -165,7 +165,7 @@ public class ItTakesTwoPlayerControler : MonoBehaviour
 
     void Jump()
     {
-        if (ITT_KeyManager.Instance.GetKeyDown(PlayerAction.Jump))
+        if (KeyManager.Instance.GetKeyDown(PlayerAction.Jump))
         {
             if(isAirDash)
             {

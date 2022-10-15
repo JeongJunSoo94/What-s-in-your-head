@@ -9,7 +9,6 @@ namespace JJS
     {
         override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
         {
-            animator.SetLayerWeight(1, 1);
             if (GetPlayerController3D(animator).enabled)
             {
                 GetPlayerController3D(animator).characterState.aim = true;
@@ -18,6 +17,7 @@ namespace JJS
 
         override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
         {
+            GetPlayerController3D(animator).playerMouse.AimUpdate(1);
             if (GetPlayerController3D(animator).enabled)
             {
                 GetPlayerController3D(animator).AimViewInputMove();
@@ -31,7 +31,6 @@ namespace JJS
 
         public override void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
         {
-            animator.SetLayerWeight(1, 0);
             if (GetPlayerController3D(animator).enabled)
             {
                 GetPlayerController3D(animator).characterState.aim = false;
@@ -39,7 +38,7 @@ namespace JJS
         }
         void check(Animator animator)
         {
-            if (!ITT_KeyManager.Instance.GetKey(PlayerAction.Aim))
+            if (!KeyManager.Instance.GetKey(PlayerAction.Aim))
             {
                 animator.SetBool("Aim", false);
             }

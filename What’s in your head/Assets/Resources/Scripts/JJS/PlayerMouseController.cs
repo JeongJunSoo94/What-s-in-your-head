@@ -34,6 +34,11 @@ public class PlayerMouseController : MonoBehaviour
         return -1;
     }
 
+    public virtual void AimUpdate(int type = 0)
+    {
+        
+    }
+
     public virtual void WeaponSwap()
     {
         if (Weapon.Length != 0)
