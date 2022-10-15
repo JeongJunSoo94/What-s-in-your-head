@@ -24,7 +24,10 @@ namespace KSU
         public bool isSteadyCartActive = false;
 
         Cinemachine.CinemachineSmoothPath track;
-        public GameObject box;
+        public GameObject railCollider;
+
+        public float detectionRangeRadius = 10f;
+        public float detectionRangeLength = 2f;
 
         public float railSpeed = 4f;
         public float escapingRailSpeed = 4f;
@@ -57,12 +60,14 @@ namespace KSU
                     Vector3 end = track.m_Waypoints[i].position + offset;
                     float length = Vector3.Distance(start, end);
 
-                    GameObject obj = Instantiate(box, ((start + end) / 2), Quaternion.Euler(Vector3.zero));
+                    GameObject obj = Instantiate(railCollider, ((start + end) / 2), Quaternion.Euler(Vector3.zero));
                     obj.name = (i - 1).ToString();
-                    obj.layer = LayerMask.NameToLayer("Interactable");
+                    obj.layer = LayerMask.NameToLayer("Rail");
+                    obj.tag = "Rail";
                     obj.transform.parent = gameObject.transform;
                     obj.transform.localScale = new Vector3(0.1f, 0.1f, length);
                     obj.transform.LookAt(end);
+                    obj.GetComponentsInChildren<CapsuleCollider>()[1].gameObject.transform.localScale = new Vector3(detectionRangeRadius * 10f, detectionRangeLength *  1f, detectionRangeRadius * 10f);
                 }
             }
         }

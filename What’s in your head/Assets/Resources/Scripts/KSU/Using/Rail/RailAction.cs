@@ -55,14 +55,22 @@ namespace KSU
             playerController = GetComponent<PlayerController3D>();
             playerState = GetComponent<CharacterState3D>();
             interactionState = GetComponent<PlayerInteractionState>();
-            mainCamera = playerController.mainCamera;
-            layerForRail = ((1) + (1 << LayerMask.NameToLayer("Interactable")));
+            if (PhotonNetwork.NetworkClientState == Photon.Realtime.ClientState.Joined)
+                mainCamera = this.gameObject.GetComponent<CameraController>().FindCamera(); // 멀티용
+            else
+                mainCamera = this.gameObject.GetComponent<CameraController_Single>().FindCamera(); // 싱글용
+            layerForRail = ((1) + (1 << LayerMask.NameToLayer("Rail")));
             layerFilterForRail = ((-1) - (1 << LayerMask.NameToLayer("Player")));
+        }
+
+        private void Update()
+        {
+            SearchRail();
         }
 
         void SearchRail()
         {
-            if (interactionState.isRailDetected)
+            if (interactionState.railTriggerDetectionNum > 0)
             {
                 MakeGizmoVecs();
                 SearchWithSphereCast();
@@ -124,6 +132,20 @@ namespace KSU
             currentRail.GetComponent<Rail>().EscapeRail(this.gameObject);
         }
 
+        private void OnTriggerEnter(Collider other)
+        {
+            if (other.CompareTag("Rail"))
+            {
+                interactionState.railTriggerDetectionNum++;
+            }
+        }
+        private void OnTriggerExit(Collider other)
+        {
+            if (other.CompareTag("Rail"))
+            {
+                interactionState.railTriggerDetectionNum--;
+            }
+        }
 
         void MakeGizmoVecs()
         {

@@ -10,10 +10,10 @@ GameObject:
   m_Component:
   - component: {fileID: 2171217851142091427}
   - component: {fileID: 2171217851142091426}
-  - component: {fileID: 5417279541833892981}
-  m_Layer: 5
+  - component: {fileID: 494040412}
+  m_Layer: 9
   m_Name: Rail
-  m_TagString: Untagged
+  m_TagString: Rail
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -56,7 +56,31 @@ MonoBehaviour:
   m_Waypoints:
   - position: {x: 1, y: 0, z: 0}
     roll: 0
---- !u!114 &5417279541833892981
+  - position: {x: 9.327729, y: 0, z: 0}
+    roll: 0
+  - position: {x: 9.153022, y: 0, z: 4.9139495}
+    roll: 0
+  - position: {x: -4.2821493, y: -1.9862194, z: 5.1622677}
+    roll: 0
+  - position: {x: 3, y: 8.539381, z: 2.0850973}
+    roll: 0
+  - position: {x: 4.4446964, y: 6.677326, z: 12.79029}
+    roll: 0
+  - position: {x: 4, y: 9.118208, z: 22.057507}
+    roll: 0
+  - position: {x: 5, y: -1.8479774, z: 13.166703}
+    roll: 0
+  - position: {x: 6, y: 13.502693, z: 1.6640673}
+    roll: 0
+  - position: {x: 10.202678, y: 11.073639, z: -4.6729183}
+    roll: 0
+  - position: {x: 13.419013, y: 15.1572, z: -15.33935}
+    roll: 0
+  - position: {x: 11.127457, y: 8.863318, z: -9.365885}
+    roll: 0
+  - position: {x: 7, y: 0, z: -1}
+    roll: 0
+--- !u!114 &494040412
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -65,12 +89,21 @@ MonoBehaviour:
   m_GameObject: {fileID: 2171217851142091424}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cbbcf1fce5f3fb7419efc97b38b925f8, type: 3}
+  m_Script: {fileID: 11500000, guid: 917ac7d7eed93ac4baa09fcad1963bc1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Nella: {fileID: 0}
+  Steady: {fileID: 0}
   NellaCart: {fileID: 323630097384402990}
   SteadyCart: {fileID: 6471237027952138470}
-  box: {fileID: 6362902148480056207, guid: 441f3ee9795852546821e983296ba6eb, type: 3}
+  NellaDestiation: 0
+  SteadyDestiation: 0
+  isNellaCartActive: 0
+  isSteadyCartActive: 0
+  collider: {fileID: 6362902148480056207, guid: 441f3ee9795852546821e983296ba6eb, type: 3}
+  detectionRange: 10
+  railSpeed: 4
+  escapingRailSpeed: 4
 --- !u!1001 &3140090384022468389
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -125,6 +158,14 @@ PrefabInstance:
     - target: {fileID: 8240923605151936451, guid: 747f37b2465f7904c9730dea0b7823fe, type: 3}
       propertyPath: m_Name
       value: SteadyCart
+      objectReference: {fileID: 0}
+    - target: {fileID: 8240923605151936451, guid: 747f37b2465f7904c9730dea0b7823fe, type: 3}
+      propertyPath: m_Layer
+      value: 9
+      objectReference: {fileID: 0}
+    - target: {fileID: 8240923605151936451, guid: 747f37b2465f7904c9730dea0b7823fe, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8240923605151936477, guid: 747f37b2465f7904c9730dea0b7823fe, type: 3}
       propertyPath: m_Path
@@ -196,6 +237,14 @@ PrefabInstance:
     - target: {fileID: 8240923605151936451, guid: d242cfb722ee3764eb02e55bcf17616e, type: 3}
       propertyPath: m_Name
       value: NellaCart
+      objectReference: {fileID: 0}
+    - target: {fileID: 8240923605151936451, guid: d242cfb722ee3764eb02e55bcf17616e, type: 3}
+      propertyPath: m_Layer
+      value: 9
+      objectReference: {fileID: 0}
+    - target: {fileID: 8240923605151936451, guid: d242cfb722ee3764eb02e55bcf17616e, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8240923605151936477, guid: d242cfb722ee3764eb02e55bcf17616e, type: 3}
       propertyPath: m_Path

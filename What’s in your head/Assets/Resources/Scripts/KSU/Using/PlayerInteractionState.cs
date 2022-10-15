@@ -10,7 +10,7 @@ namespace KSU
         public bool isMoveToRope = false;
         public bool isMoveFromRope = false;
 
-        public bool isRailDetected = false;
+        public int railTriggerDetectionNum = 0;
         public bool isRailFounded = false;
         public bool isRailReady = false;
         public bool isRidingRail = false;

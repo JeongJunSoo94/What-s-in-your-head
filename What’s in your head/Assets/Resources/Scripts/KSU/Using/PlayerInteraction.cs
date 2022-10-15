@@ -11,15 +11,15 @@ namespace KSU
 {
     public class PlayerInteraction : MonoBehaviour
     {
-        public Dictionary<GameObject, GameObject> detectedRopeSpawners = new Dictionary<GameObject, GameObject>();
+        //public Dictionary<GameObject, GameObject> detectedRopeSpawners = new Dictionary<GameObject, GameObject>();
         //public Dictionary<GameObject, GameObject> interactableRopeSpawners = new Dictionary<GameObject, GameObject>();
 
-        Camera mainCamera;
-        PlayerController3D playerController;
-        CharacterState3D playerState;
+        //Camera mainCamera;
+        //PlayerController3D playerController;
+        //CharacterState3D playerState;
         PlayerInteractionState interactionState;
 
-        HookingRope grappleAction;
+        //HookingRope grappleAction;
         RailAction railAction;
         RopeAction ropeAction;
 
@@ -48,7 +48,7 @@ namespace KSU
 
         //[SerializeField] GameObject rayOrigin;
         //public GameObject minDistRope = null;
-        public GameObject hookableTarget;
+        //public GameObject hookableTarget;
 
         /// <summary>
         public GameObject UI;
@@ -61,15 +61,11 @@ namespace KSU
         // Start is called before the first frame update
         void Awake()
         {
-            
-
-
-
-            playerController = GetComponent<PlayerController3D>();
-            playerState = GetComponent<CharacterState3D>();
+            //playerController = GetComponent<PlayerController3D>();
+            //playerState = GetComponent<CharacterState3D>();
             interactionState = GetComponent<PlayerInteractionState>();
             
-            grappleAction = GetComponent<HookingRope>();
+            //grappleAction = GetComponent<HookingRope>();
             railAction = GetComponent<RailAction>();
             ropeAction = GetComponent<RopeAction>();
 
@@ -94,7 +90,7 @@ namespace KSU
                     }
                     else
                     {
-                        if (ropeAction.minDistRope != null)
+                        if (ropeAction.interactableRope != null)
                         {
                             ropeAction.RideRope();
                         }
@@ -104,9 +100,9 @@ namespace KSU
                 {
                     if (interactionState.isRidingRail)
                     {
-                        if (interactionState.isMoveToRail)
+                        if (!interactionState.isMoveToRail)
                         {
-
+                            railAction.EscapeRailAction();
                         }
                     }
 
@@ -116,6 +112,23 @@ namespace KSU
                         {
                             ropeAction.EscapeRope();
                         }
+                    }
+                }
+            }
+            if(ITT_KeyManager.Instance.GetKeyDown(PlayerAction.Jump))
+            {
+                if (interactionState.isRidingRail)
+                {
+                    if (!interactionState.isMoveToRail)
+                    {
+                        railAction.EscapeRailAction();
+                    }
+                }
+                else if (interactionState.isRidingRope)
+                {
+                    if (!interactionState.isMoveFromRope && !interactionState.isMoveToRope)
+                    {
+                        ropeAction.EscapeRope();
                     }
                 }
             }

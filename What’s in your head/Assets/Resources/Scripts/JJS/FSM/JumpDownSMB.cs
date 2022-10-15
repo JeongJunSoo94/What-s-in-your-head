@@ -33,7 +33,7 @@ public class JumpDownSMB : CharacterBaseSMB
         if (GetPlayerController3D(animator).characterState.RayCheck)
         {
             float DistY = -(GetPlayerController3D(animator).moveVec.y) / 10.0f;
-            Debug.Log(DistY);
+            //Debug.Log(DistY);
             if (DistY > 0.2f)
                 animator.SetFloat("DistY", DistY);
             //animator.SetFloat("DistY", DistY);
