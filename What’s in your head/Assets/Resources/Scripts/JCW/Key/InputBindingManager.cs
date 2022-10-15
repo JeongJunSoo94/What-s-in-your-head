@@ -65,7 +65,7 @@ namespace JCW.UI.Options.InputBindings
             { 
                 // 뒤로가기 시, 파일에서 다시 로드 후 세팅.
                 _binding.LoadFromFile(); 
-                ITT_KeyManager.Instance.KeySet(_binding); 
+                KeyManager.Instance.KeySet(_binding); 
                 RefreshAllBindingUIs(); TurnOff();
             });
             _resetButton.onClick.AddListener(() => 
@@ -73,7 +73,7 @@ namespace JCW.UI.Options.InputBindings
                 _binding.ResetAll(); 
                 _binding.SaveToFile();
                 RefreshAllBindingUIs();
-                ITT_KeyManager.Instance.KeySet(_binding);
+                KeyManager.Instance.KeySet(_binding);
             });
         }
 
@@ -86,7 +86,7 @@ namespace JCW.UI.Options.InputBindings
                     Directory.CreateDirectory(Application.dataPath + "/Resources/Options/");
                 _binding.ResetAll();
                 _binding.SaveToFile();
-                ITT_KeyManager.Instance.KeySet(_binding);
+                KeyManager.Instance.KeySet(_binding);
             }
         }
         private void Update()
@@ -145,7 +145,6 @@ namespace JCW.UI.Options.InputBindings
                 if(pair.Key == PlayerAction.Fire || pair.Key == PlayerAction.Aim)
                 {
                     GameObject _buttonObj = pairGo.transform.GetChild(1).gameObject;
-                    //_buttonObj.GetComponent<Button>().interactable = false;
                     _buttonObj.GetComponent<Image>().color = new Color(0, 0, 0, 255);
                 }
 
@@ -200,7 +199,8 @@ namespace JCW.UI.Options.InputBindings
             {
                 if (pair.Key == PlayerAction.Pause || pair.Key == PlayerAction.Chat)
                     continue;
-                _bindingKeyScripts[pair.Key].SetCodeLabel($"{pair.Value.keyCode}");                
+                _bindingKeyScripts[pair.Key].SetCodeLabel($"{pair.Value.keyCode}");
+                Debug.Log(pair.Value.keyCode);
             }
         }
 

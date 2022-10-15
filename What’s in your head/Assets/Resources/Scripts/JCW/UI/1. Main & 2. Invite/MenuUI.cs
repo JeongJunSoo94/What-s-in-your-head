@@ -22,7 +22,7 @@ namespace JCW.UI
 
         private readonly List<Text> buttonTexts = new();
 
-        Color transparentColor = new Color(1,1,1,0);
+        Color transparentColor = new(1,1,1,0);
         
         private void Awake()
         {

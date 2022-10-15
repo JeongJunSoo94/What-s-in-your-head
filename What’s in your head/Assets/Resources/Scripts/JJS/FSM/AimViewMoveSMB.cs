@@ -38,7 +38,7 @@ public class AimViewMoveSMB : CharacterBaseSMB
     }
     void check(Animator animator)
     {
-        if (!ITT_KeyManager.Instance.GetKey(PlayerAction.Aim))
+        if (!KeyManager.Instance.GetKey(PlayerAction.Aim))
         {
             animator.SetBool("Aim", false);
         }

@@ -37,7 +37,7 @@ namespace JCW.UI.InGame
             //isNella = GameManager.Instance.characterOwner[PhotonNetwork.IsMasterClient];
 
             // 임시
-            isNella = false;
+            isNella = true;
         }
 
         // 지금은 임시로 트리거 Enter/Exit으로 하고 있지만

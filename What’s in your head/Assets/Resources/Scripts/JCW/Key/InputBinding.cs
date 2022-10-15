@@ -122,7 +122,6 @@ namespace JCW.UI.Options.InputBindings
                     case KeyCode.Mouse1:
                     case KeyCode.Escape:
                     case KeyCode.Colon:
-                    case KeyCode.Tab:
                         break;
                     default:
                         for (int i = 0 ; i < bindingDict.Count ; ++i)

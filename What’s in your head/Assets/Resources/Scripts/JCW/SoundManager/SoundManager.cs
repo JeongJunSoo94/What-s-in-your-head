@@ -27,19 +27,24 @@ namespace JCW.AudioCtrl
         private bool isPause = false;
 
         // 싱글톤
-        public static SoundManager instance = null;
+        private static SoundManager sInstance;
+        public static SoundManager Instance
+        {
+            get
+            {
+                if (sInstance == null)
+                {
+                    GameObject newGameObject = new("_SoundManager");
+                    sInstance = newGameObject.AddComponent<SoundManager>();
+                }
+                return sInstance;
+            }
+        }
+
         private void Awake()
         {
             photonView = GetComponent<PhotonView>();
-            if (instance==null)
-            {
-                instance = this;
-                DontDestroyOnLoad(this.gameObject);
-            }
-            else if (instance != this)
-            {
-                Destroy(this.gameObject);                
-            }
+            DontDestroyOnLoad(this.gameObject);
         }
 
         // Sound 종류에 해당하는 오브젝트들을 만들어주고, 사운드 매니저 오브젝트에 자식으로 달아준다.

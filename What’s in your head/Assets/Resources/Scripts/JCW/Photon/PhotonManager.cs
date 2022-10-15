@@ -14,8 +14,8 @@ namespace JCW.Network
     {
         [Header("ID 길이")] [SerializeField] [Range(1,8)] private uint LengthID = 6;
         [Header("친구와 만났을 때 열릴 UI")] [SerializeField] private GameObject readyUI = null;      
-        [Header("초대장")] [SerializeField] private GameObject InvitationUI;
-        [Header("해상도")] [SerializeField] private int width = 1920;
+        [Header("초대장")]   [SerializeField] private GameObject InvitationUI;
+        [Header("해상도")]   [SerializeField] private int width = 1920;
                             [SerializeField] private int height = 1080;
                             [SerializeField] private bool isFullScreen = true;
         //버전 입력

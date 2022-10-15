@@ -21,7 +21,7 @@ namespace YC.Photon
     public class TempPhotonManager : MonoBehaviourPunCallbacks
     {
         // 버전 입력
-        private readonly string version = "1.0f";
+        private readonly string version = "1.1f";
 
         // 사용자 아이디 입력
         private string userId = "Mary";

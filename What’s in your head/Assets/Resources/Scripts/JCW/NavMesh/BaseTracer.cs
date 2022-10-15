@@ -20,7 +20,7 @@ public class BaseTracer : MonoBehaviour
         this.transform.position = this.transform.parent.position;
         agent.ResetPath();
         agent.SetDestination(BasePos);
-        BasePos = GameManager.Instance.base_main.transform.position;
+        //BasePos = GameManager.Instance.base_main.transform.position;
     }
     private void OnTriggerEnter(Collider other)
     {

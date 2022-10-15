@@ -58,6 +58,8 @@ namespace JCW.Spawner
             spawnObj.SetActive(false);
             objQueue.Enqueue(spawnObj);
         }
+
+
         IEnumerator Spawn()
         {
             while (true)

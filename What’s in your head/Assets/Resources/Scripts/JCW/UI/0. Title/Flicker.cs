@@ -9,14 +9,20 @@ namespace JCW.UI
     {
         [Tooltip("'버튼을 입력하시오' 문구의 깜빡이는 속도를 조절하는 변수입니다.")]
         [Header("깜빡이는 속도")] [Range(0.0f,2.0f)] [SerializeField] float flickSecond = 0.5f;
-        [Header("깜빡거릴 오브젝트")] [SerializeField] GameObject flickObj;
         [Header("메인메뉴 오브젝트")] [SerializeField] GameObject mainMenu;
-        
-        Image img;
+
+        //깜빡거릴 오브젝트
+        GameObject flickObj;
+
+        Image flickImg;
+        private void Awake()
+        {
+            flickObj = transform.GetChild(2).gameObject;
+        }
 
         void Start()
         {
-            img = flickObj.GetComponent<Image>();
+            flickImg = flickObj.GetComponent<Image>();
             StartCoroutine(nameof(Flick));
         }
 
@@ -36,11 +42,9 @@ namespace JCW.UI
             while (true)
             {
                 yield return new WaitForSeconds(flickSecond);
-                img.enabled = !img.enabled;
+                flickImg.enabled = !flickImg.enabled;
             }
-
         }
-
     }
 }
 

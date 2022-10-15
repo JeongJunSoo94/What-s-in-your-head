@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 namespace JCW.UI
 {
-    public class ComeAndGo : MonoBehaviour
+    public class InviteFriend : MonoBehaviour
     {
         [Header("사라지기 시작하는 시간")][SerializeField] private float startTime = 3.0f;
         [Header("사라지기 전 유예 시간")][SerializeField] private float disappearingTime = 1f;

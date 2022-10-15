@@ -62,13 +62,13 @@ public class NormalViewSMB : CharacterBaseSMB
         animator.SetBool("isJump", GetPlayerController3D(animator).characterState.IsJumping);
         animator.SetBool("isDash", GetPlayerController3D(animator).characterState.IsDashing);
 
-        if (ITT_KeyManager.Instance.GetKey(PlayerAction.Fire))
+        if (KeyManager.Instance.GetKey(PlayerAction.Fire))
         { 
             animator.SetBool("isAttack1", true);
             return;
         }
 
-        if (ITT_KeyManager.Instance.GetKey(PlayerAction.Aim))
+        if (KeyManager.Instance.GetKey(PlayerAction.Aim))
         {
             animator.SetBool("Aim",true);
         }
