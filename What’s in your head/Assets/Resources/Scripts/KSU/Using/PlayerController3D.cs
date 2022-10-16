@@ -9,7 +9,7 @@ using Cinemachine;
 
 using YC.Camera_;
 using YC.Camera_Single;
-
+using JJS;
 public class PlayerController3D : MonoBehaviour
 {
     //  Scripts Components
@@ -348,6 +348,10 @@ public class PlayerController3D : MonoBehaviour
         {
             RotateAim();
         }
+        else if (characterState.top)
+        {
+            RotateTop();
+        }
         else
         {
             RotateSlerp();
@@ -381,6 +385,16 @@ public class PlayerController3D : MonoBehaviour
             Vector3 forward = _camera.transform.forward.normalized;
             forward.y = 0;
             transform.LookAt(transform.position + forward);
+        }
+    }
+
+    public void RotateTop()
+    {
+        if (!characterState.IsDashing && !characterState.IsAirDashing)
+        {
+            Vector3 forward = playerMouse.point.transform.position;
+            forward.y = 0;
+            transform.LookAt(forward);
         }
     }
 

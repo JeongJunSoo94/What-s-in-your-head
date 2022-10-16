@@ -7,8 +7,11 @@ namespace JJS
     public class Bullet : MonoBehaviour
     {
         float bulletRange;
+        public float speed= 1f;
         public BezierCurve curve;
         public Spawner spawner;
+
+        public Vector3 vecDistance;
         private void Awake()
         {
             spawner = this.transform.parent.gameObject.GetComponent<Spawner>();
@@ -21,13 +24,14 @@ namespace JJS
         private void OnEnable()
         {
             bulletRange = 0f;
+            vecDistance = curve.p1 - curve.p4;
         }
 
         void Update()
         {
             if (bulletRange < 1f)
             {
-                bulletRange += Time.deltaTime;
+                bulletRange += speed * Time.deltaTime;
             }
             else
             {

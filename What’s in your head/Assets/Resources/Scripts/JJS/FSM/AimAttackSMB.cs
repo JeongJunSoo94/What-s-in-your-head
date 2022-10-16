@@ -5,7 +5,7 @@ using JCW.UI.Options.InputBindings;
 using JJS.CharacterSMB;
 namespace JJS
 {
-    public class AimAttack : CharacterBaseSMB
+    public class AimAttackSMB : CharacterBaseSMB
     {
         override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
         {
@@ -15,11 +15,22 @@ namespace JJS
         {
             if (GetPlayerController3D(animator).enabled)
             {
+              
                 check(animator);
             }
         }
         void check(Animator animator)
         {
+            GetPlayerController3D(animator).playerMouse.ik.enableIK = true;
+            animator.SetLayerWeight(1, 1);
+            if (GetPlayerController3D(animator).characterState.top)
+            { 
+                GetPlayerController3D(animator).playerMouse.AimUpdate(2);
+            }
+            if (!KeyManager.Instance.GetKey(PlayerAction.Fire))
+            {
+                animator.SetBool("AimAttack", false);
+            }
             //if (!GetPlayerController3D(animator).characterState.IsGrounded)
             //{
             //    animator.SetBool("isAir", true);
@@ -41,10 +52,6 @@ namespace JJS
 
             //GetPlayerController3D(animator).playerMouse.ableToLeft = true;
 
-            if (!KeyManager.Instance.GetKey(PlayerAction.Fire))
-            {
-                animator.SetBool("AimAttack", false);
-            }
         }
 
         // OnStateExit is called when a transition ends and the state machine finishes evaluating this state

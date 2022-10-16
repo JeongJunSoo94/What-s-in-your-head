@@ -59,6 +59,23 @@ namespace JJS
         }
         void check(Animator animator)
         {
+            GetPlayerController3D(animator).playerMouse.ik.enableIK = false;
+            if (Input.GetKeyDown(KeyCode.Alpha1))
+            {
+                GetPlayerController3D(animator).characterState.top = !GetPlayerController3D(animator).characterState.top;
+            }
+            if (GetPlayerController3D(animator).characterState.top)
+            {
+                Cursor.lockState = CursorLockMode.Confined;
+                GetPlayerController3D(animator).playerMouse.TopViewUpdate();
+               
+            }
+            else
+            {
+                Cursor.lockState = CursorLockMode.Locked;
+            }
+
+
             animator.SetFloat("HorizonVelocity", (GetPlayerController3D(animator).characterState.isMove ? (GetPlayerController3D(animator).characterState.isRun ? 1.0f : 0.5f) : 0.0f));
 
             if (!GetPlayerController3D(animator).characterState.IsGrounded)
@@ -74,8 +91,6 @@ namespace JJS
             {
                 animator.SetBool("isAir", false);
             }
-
-           
 
             if (!GetPlayerController3D(animator).characterState.isMove)
             {
@@ -93,7 +108,7 @@ namespace JJS
                 }
             }
          
-            if (KeyManager.Instance.GetKey(PlayerAction.Aim))
+            if (GetPlayerController3D(animator).playerMouse.GetUseWeapon() == 1&& !GetPlayerController3D(animator).characterState.top && KeyManager.Instance.GetKey(PlayerAction.Aim))
             {
                 animator.SetBool("Aim", true);
             }

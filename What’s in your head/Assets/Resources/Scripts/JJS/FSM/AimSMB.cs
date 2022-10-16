@@ -47,10 +47,9 @@ namespace JJS
 
         void check(Animator animator)
         {
-
             if (GetPlayerController3D(animator).playerMouse.GetUseWeapon() == 1)
             {
-                if (GetPlayerController3D(animator).characterState.aim)
+                if (GetPlayerController3D(animator).characterState.aim|| GetPlayerController3D(animator).characterState.top)
                 {
                     if (KeyManager.Instance.GetKey(PlayerAction.Fire))
                     {

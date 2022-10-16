@@ -18,6 +18,7 @@ namespace JJS
         override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
         {
             GetPlayerController3D(animator).playerMouse.AimUpdate(1);
+            GetPlayerController3D(animator).playerMouse.ik.enableIK = true;
             if (GetPlayerController3D(animator).enabled)
             {
                 GetPlayerController3D(animator).AimViewInputMove();
