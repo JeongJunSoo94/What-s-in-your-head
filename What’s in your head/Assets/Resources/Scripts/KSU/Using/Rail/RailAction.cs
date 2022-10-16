@@ -55,6 +55,7 @@ namespace KSU
             playerController = GetComponent<PlayerController3D>();
             playerState = GetComponent<CharacterState3D>();
             interactionState = GetComponent<PlayerInteractionState>();
+
             if (PhotonNetwork.NetworkClientState == Photon.Realtime.ClientState.Joined)
                 mainCamera = this.gameObject.GetComponent<CameraController>().FindCamera(); // ¸ÖÆ¼¿ë
             else
@@ -70,27 +71,34 @@ namespace KSU
 
         void SearchRail()
         {
-            if (interactionState.railTriggerDetectionNum > 0)
-            {
-                MakeGizmoVecs();
-                SearchWithSphereCast();
-            }
+            //if (interactionState.railTriggerDetectionNum > 0)
+            //{
+            //    MakeGizmoVecs();
+            //    SearchWithSphereCast();
+            //}
+
+            MakeGizmoVecs();
+            SearchWithSphereCast();
         }
 
         public void SearchWithSphereCast()
         {
             //ray = mainCamera.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0f));
 
-            bool isRayChecked = Physics.SphereCast(rayOrigin.transform.position, rangeRadius, mainCamera.transform.forward, out _raycastHit, rangeDistance, layerForRail, QueryTriggerInteraction.Ignore);
-
-
+            bool isRayChecked = Physics.SphereCast(rayOrigin.transform.position, rangeRadius, mainCamera.transform.forward, out _raycastHit, rangeDistance, LayerMask.NameToLayer("Rail"), QueryTriggerInteraction.Ignore);
+            
+            Debug.Log("1 RayChecked : " + isRayChecked);
             if (isRayChecked)
             {
+                Debug.Log("1 hit! : " + _raycastHit.collider.tag);
                 RaycastHit hit;
-                isRayChecked = Physics.Raycast(rayOrigin.transform.position, mainCamera.transform.forward, out hit, rangeDistance, layerFilterForRail, QueryTriggerInteraction.Ignore);
+                isRayChecked = Physics.Raycast(rayOrigin.transform.position, mainCamera.transform.forward, out hit, (rangeDistance + rangeRadius) , layerFilterForRail, QueryTriggerInteraction.Ignore);
+
+                Debug.Log("2 RayChecked : " + isRayChecked);
                 if (isRayChecked)
                 {
-                    if (hit.collider.tag == "Rail")
+                    Debug.Log("2 hit! : " + _raycastHit.collider.tag);
+                    if (hit.collider.CompareTag("Rail"))
                     {
                         interactionState.isRailFounded = true;
                         _raycastHit = hit;
@@ -100,11 +108,13 @@ namespace KSU
                     }
                 }
 
-                Vector3 direction = (_raycastHit.point - rayOrigin.transform.position).normalized;
-                isRayChecked = Physics.Raycast(rayOrigin.transform.position, direction, out hit, rangeDistance, layerFilterForRail, QueryTriggerInteraction.Ignore);
+                Vector3 direction = Vector3.MoveTowards(rayOrigin.transform.position, _raycastHit.point, 1f);
 
+                isRayChecked = Physics.Raycast(rayOrigin.transform.position, direction, out hit, (rangeDistance + rangeRadius), layerFilterForRail, QueryTriggerInteraction.Ignore);
+                Debug.Log("3 RayChecked : " + isRayChecked);
                 if (isRayChecked)
                 {
+                    Debug.Log("3 hit! : " + _raycastHit.collider.tag);
                     if (hit.collider.tag == "Rail")
                     {
                         interactionState.isRailFounded = true;
@@ -115,6 +125,8 @@ namespace KSU
                     }
                 }
             }
+
+            Debug.Log("Not Found : " + false);
             interactionState.isRailFounded = false;
             return;
         }
@@ -132,20 +144,20 @@ namespace KSU
             currentRail.GetComponent<Rail>().EscapeRail(this.gameObject);
         }
 
-        private void OnTriggerEnter(Collider other)
-        {
-            if (other.CompareTag("Rail"))
-            {
-                interactionState.railTriggerDetectionNum++;
-            }
-        }
-        private void OnTriggerExit(Collider other)
-        {
-            if (other.CompareTag("Rail"))
-            {
-                interactionState.railTriggerDetectionNum--;
-            }
-        }
+        //private void OnTriggerEnter(Collider other)
+        //{
+        //    if (other.CompareTag("Rail"))
+        //    {
+        //        interactionState.railTriggerDetectionNum++;
+        //    }
+        //}
+        //private void OnTriggerExit(Collider other)
+        //{
+        //    if (other.CompareTag("Rail"))
+        //    {
+        //        interactionState.railTriggerDetectionNum--;
+        //    }
+        //}
 
         void MakeGizmoVecs()
         {
@@ -166,21 +178,19 @@ namespace KSU
 
         private void OnDrawGizmos()
         {
-            if (interactionState.isRailFounded)
+            if (_raycastHit.point != null)
             {
                 Gizmos.color = Color.red;
                 Gizmos.DrawSphere(_raycastHit.point, 1f);
             }
 
-            {
-                Gizmos.DrawLine(startUp, endUp);
-                Gizmos.DrawLine(startDown, endDown);
-                Gizmos.DrawLine(startRight, endRight);
-                Gizmos.DrawLine(startLeft, endLeft);
+            Gizmos.DrawLine(startUp, endUp);
+            Gizmos.DrawLine(startDown, endDown);
+            Gizmos.DrawLine(startRight, endRight);
+            Gizmos.DrawLine(startLeft, endLeft);
 
-                Gizmos.DrawWireSphere(startCenter, rangeRadius);
-                Gizmos.DrawWireSphere(endCenter, rangeRadius);
-            }
+            Gizmos.DrawWireSphere(startCenter, rangeRadius);
+            Gizmos.DrawWireSphere(endCenter, rangeRadius);
         }
     }
 }

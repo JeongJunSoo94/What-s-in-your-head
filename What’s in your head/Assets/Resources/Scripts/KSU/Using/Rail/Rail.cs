@@ -67,7 +67,7 @@ namespace KSU
                     obj.transform.parent = gameObject.transform;
                     obj.transform.localScale = new Vector3(0.1f, 0.1f, length);
                     obj.transform.LookAt(end);
-                    obj.GetComponentsInChildren<CapsuleCollider>()[1].gameObject.transform.localScale = new Vector3(detectionRangeRadius * 10f, detectionRangeLength *  1f, detectionRangeRadius * 10f);
+                    //obj.GetComponentsInChildren<CapsuleCollider>()[1].gameObject.transform.localScale = new Vector3(detectionRangeRadius * 10f, detectionRangeLength * 1f, detectionRangeRadius * 10f);
                 }
             }
         }
@@ -215,16 +215,6 @@ namespace KSU
             playerController.MakeinertiaVec(escapingRailSpeed, inertiaVec.normalized);
             playerController.moveVec = Vector3.up * playerController.jumpSpeed / 2f;
             playerController.enabled = true;
-        }
-
-        private void OnTriggerEnter(Collider other)
-        {
-            
-        }
-
-        private void OnTriggerExit(Collider other)
-        {
-            
         }
     }
 }
