@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using Photon.Pun;
 using JCW.Network;
+using Photon.Realtime;
 
 namespace JCW.UI
 {
@@ -34,7 +35,7 @@ namespace JCW.UI
 
             backButton.onClick.AddListener(() =>
             {
-                photonView.RPC(nameof(SetEnter), RpcTarget.AllViaServer, PhotonNetwork.IsMasterClient, true);
+                photonView.RPC(nameof(CancleEnter), RpcTarget.AllViaServer);
                 photonView.RPC(nameof(Leave), RpcTarget.AllViaServer);
             });
 
@@ -101,7 +102,25 @@ namespace JCW.UI
         private void Leave()
         {
             PhotonNetwork.LeaveRoom();
+            StartCoroutine(nameof(WaitForRoom));
+            
+        }
+
+        IEnumerator WaitForRoom()
+        {
+            while (PhotonNetwork.NetworkClientState.ToString() != ClientState.JoinedLobby.ToString())
+            {
+                yield return new WaitForSeconds(0.05f);
+            }
+            RoomOptions lobbyOptions = new()
+            {
+                MaxPlayers = 20,    // 최대 접속자수, 포톤 무료는 20CCU이므로 20 초과로는 못한다.
+                IsOpen = true,      // 룸의 오픈 여부
+                IsVisible = false,   // 로비에서 룸 목록에 노출시킬지 여부  
+            };
+            PhotonNetwork.JoinOrCreateRoom("Lobby", lobbyOptions, null);
             this.gameObject.SetActive(false);
+            yield break;
         }
     }
 }

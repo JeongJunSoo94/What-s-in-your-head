@@ -7,10 +7,12 @@ using UnityEngine;
 
 namespace JCW.Object
 {
-    //[RequireComponent(typeof(PhotonView))]
     public class HostField : MonoBehaviour
     {
-        [Header("주위 필드 감염 소요 시간")] [SerializeField] [Range(0, 13)] float infectTime;
+        [Header("다음 감염시킬 필드 찾는 시간")] [SerializeField] [Range(0, 13)] float infectTime = 5f;
+        [Header("게이지 총량 (기본 100)")] [SerializeField] [Range(0,100)] float maxHP = 100f;
+        [Header("게이지 회복 속도 (기본 초당 1)")] [SerializeField] [Range(0,10)] float healingSpeed = 1f;
+        [Header("물총에 닿을 시 받는 데미지 (기본 10)")] [SerializeField] [Range(0,100)] float damage = 10;
 
         bool isPurified = false;
         int myIndex;
@@ -21,20 +23,25 @@ namespace JCW.Object
         List<int> nextTargetOffset;
         Transform parentObj;
 
+        // 오염된 필드 스포너가 가지는 인덱스 최대치
         int maxLimit;
+
         int convertIndex;
 
         bool isStart = false;
 
+        // 오염된 필드 스포너로 하여금 간접 실행
         MakeHostField mediator;
+
+        float curHP;
 
 
         private void Awake()
         {
+            curHP = maxHP;
             parentObj = transform.parent.gameObject.transform;
             mediator = transform.parent.gameObject.GetComponent<MakeHostField>();
-            int N = transform.parent.gameObject.GetComponent<ContaminationFieldSetting>().count;
-            convertIndex = 2 * N - 1;
+            convertIndex = transform.parent.gameObject.GetComponent<ContaminationFieldSetting>().count;
             nextTargetOffset = new() { 2, -2, 2 * convertIndex, -2 * convertIndex };
         }
 
@@ -50,11 +57,14 @@ namespace JCW.Object
             if (!isStart)
                 return;
             if (isPurified)
+            {
+                Debug.Log("정화되었음");
                 this.gameObject.SetActive(false);
+            }
             else if (nextTargetOffset.Count != 0)
             {
                 if (PhotonNetwork.IsMasterClient)
-                {
+                {                    
                     elapsedTime += Time.deltaTime;
                     if (elapsedTime > infectTime)
                     {
@@ -78,51 +88,65 @@ namespace JCW.Object
                     }
                 }
             }
+            curHP = curHP >= maxHP ? maxHP : curHP+Time.deltaTime*healingSpeed;
         }
 
         public void SetIndex(int index)
         {
-            maxLimit = transform.parent.gameObject.transform.childCount - 1;
-            myIndex = index;
-            if ((myIndex - 1) % (convertIndex * 2) == 0)        nextTargetOffset.Remove(-2);
-            else if ((myIndex + 1) % (convertIndex * 2) == 0)   nextTargetOffset.Remove(2);
+            if (!isPurified)
+            {
+                maxLimit = transform.parent.gameObject.transform.childCount - 1;
+                myIndex = index;
+                //Debug.Log(convertIndex);
+                if ((myIndex - 1) % (convertIndex * 2) == 0)      nextTargetOffset.Remove(-2);
+                else if ((myIndex + 1) % (convertIndex * 2) == 0) nextTargetOffset.Remove(2);
 
-            if (myIndex < 2 * convertIndex)                      nextTargetOffset.Remove(-2 * convertIndex);
-            else if (myIndex + 2 * convertIndex > maxLimit)     nextTargetOffset.Remove(2 * convertIndex);
+                if (myIndex < 2 * convertIndex)                  nextTargetOffset.Remove(-2 * convertIndex);
+                else if (myIndex + 2 * convertIndex > maxLimit)  nextTargetOffset.Remove(2 * convertIndex);
+            }
         }
 
         public void DeleteHost(int hostIndex)
         {
-            nextTargetOffset.Remove(hostIndex - myIndex);
-            isStart = true;
+            if (!isPurified)
+            {
+                nextTargetOffset.Remove(hostIndex - myIndex);
+                isStart = true;
+            }            
 
         }
 
-        public void SetStart()
+        public void SetStart(int index)
         {
-            isStart = true;
+            if (!isPurified)
+            {
+                SetIndex(index);
+                isStart = true;
+            }
+            
         }
 
         public void SetPurified()
         {
             isPurified = true;
+            this.enabled = false;
             mediator.SetPurified(myIndex);
         }
 
-        private void OnCollisionEnter(Collision collision)
+        private void OnTriggerEnter(Collider other)
         {
-            switch (collision.gameObject.tag)
+            switch (other.gameObject.tag)
             {
                 case "Nella":
                 case "Steady":
-                    Debug.Log(collision.gameObject.name + " 사망");
+                    other.gameObject.GetComponent<PlayerController3D>().Resurrect();
                     break;
-                case "물총":
-                    SetPurified();
+                case "NellaWater":                    
+                    curHP-=damage;
+                    if(curHP <= 0)
+                        SetPurified();
                     break;
             }
-
         }
     }
-
 }

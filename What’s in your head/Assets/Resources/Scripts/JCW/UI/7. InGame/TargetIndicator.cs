@@ -65,7 +65,7 @@ namespace JCW.UI.InGame
             //isNella = GameManager.Instance.characterOwner[PhotonNetwork.IsMasterClient];
 
             // 임시
-            isNella = false;
+            isNella = true;
         }
         protected void Update()
         {
@@ -120,16 +120,19 @@ namespace JCW.UI.InGame
             // x 좌표가 먼저 테두리에 닿았을 때
             if (divX < divY)
             {
-                // x축에 대한 각도
+                // z축을 기준으로 x축에서부터 UI까지의 각도
                 float angle = Vector3.SignedAngle(Vector3.right, indicatorPosition, Vector3.forward);
+
+                // 화면 최대 범위에 x값 위치.
                 indicatorPosition.x = Mathf.Sign(indicatorPosition.x) * (screenSize.width / 2f - screenLimitOffset);
                 indicatorPosition.y = Mathf.Tan(Mathf.Deg2Rad * angle) * indicatorPosition.x;
             }
             else
             {
-                // y축에 대한 각도
+                // z축을 기준으로 y축에서부터 UI까지의 각도
                 float angle = Vector3.SignedAngle(Vector3.up, indicatorPosition, Vector3.forward);
 
+                // 화면 최대 범위에 y값 위치.
                 indicatorPosition.y = Mathf.Sign(indicatorPosition.y) * (screenSize.height / 2f - screenLimitOffset);
                 indicatorPosition.x = -Mathf.Tan(Mathf.Deg2Rad * angle) * indicatorPosition.y;
             }

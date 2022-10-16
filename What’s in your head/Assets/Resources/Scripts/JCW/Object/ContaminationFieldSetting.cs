@@ -9,7 +9,7 @@ namespace JCW.Object
     public class ContaminationFieldSetting : MonoBehaviour
     {
         [Header("===========시작 전===========")]
-        [Header("(2N-1)x(2N-1) 필드")][SerializeField][Range(2,10)] public int count;
+        [Header("N x N 필드 (2~20)")][SerializeField][Range(2,20)] public int count;
         [Header("오염 필드")][SerializeField] GameObject hostField;
         [Header("전염 되는 필드")][SerializeField] GameObject carrierField;
         [Header("생성 시키기")] public bool create = true;
@@ -32,13 +32,13 @@ namespace JCW.Object
                     DestroyImmediate(transform.GetChild(k).gameObject);
                 }
                 Vector3 transformParent = this.transform.position;
-                for (int i = 0 ; i<2 * count -1 ; ++i)
+                for (int i = 0 ; i<count ; ++i)
                 {
-                    for (int j = 0 ; j< 2 * count - 1 ; ++j)
+                    for (int j = 0 ; j<count ; ++j)
                     {                        
-                        Vector3 curTransform = new Vector3(transformParent.x - (count-1)*gap + j*gap,
+                        Vector3 curTransform = new Vector3(transformParent.x - (count/2)*gap + j*gap,
                                                             transformParent.y, 
-                                                            transformParent.z + (count-1)*gap - i*gap);
+                                                            transformParent.z + (count/2)*gap - i*gap);
 
                         Instantiate(carrierField, curTransform, this.transform.rotation, this.transform).SetActive(true);
                         Instantiate(hostField, curTransform, this.transform.rotation, this.transform).SetActive(false);

@@ -117,14 +117,18 @@ namespace JCW.Network
         }
         public void ChangeStage()
         {
-            myPhotonView.RPC(nameof(ChangeStageRPC), RpcTarget.AllViaServer);
+            PhotonNetwork.LoadLevel(++GameManager.Instance.curStageIndex);
+            if (GameManager.Instance.curStageIndex == 1)
+                StartCoroutine(nameof(MakeChar));
+            //if(PhotonNetwork.IsMasterClient)
+            //myPhotonView.RPC(nameof(ChangeStageRPC), RpcTarget.AllViaServer);
         }
 
         [PunRPC]
         public void ChangeStageRPC()
         {
-            PhotonNetwork.LoadLevel(GameManager.Instance.curStageIndex);
-            if (GameManager.Instance.curStageIndex != 0)
+            PhotonNetwork.LoadLevel(++GameManager.Instance.curStageIndex);
+            if (GameManager.Instance.curStageIndex == 1)
                 StartCoroutine(nameof(MakeChar));
         }
 
@@ -178,18 +182,17 @@ namespace JCW.Network
 
             // 넬라인 지 아닌지 판단해서 캐릭터 생성해주면 됨
             // 현재 자신이 마스터인지 아닌지와 어떤 캐릭터를 선택했는지가 담겨있음.
-            Debug.Log("마스터인가? : " + PhotonNetwork.IsMasterClient + " / 택한 캐릭 : " + GameManager.Instance.characterOwner[PhotonNetwork.IsMasterClient]);
             if (GameManager.Instance.characterOwner[PhotonNetwork.IsMasterClient])
             {
                 Debug.Log("넬라 생성");
                 PhotonNetwork.Instantiate("Prefabs/YC/MainCamera_Nella", new Vector3(0, 0, 0), Quaternion.identity, 0);
-                PhotonNetwork.Instantiate("Prefabs/JCW/NellaJCW", new Vector3(-5, 0, -5), Quaternion.identity);
+                PhotonNetwork.Instantiate("Prefabs/JCW/NellaJCW", new Vector3(-10, 0, -5), Quaternion.identity);
             }
             else
             {
                 Debug.Log("스테디 생성");
                 PhotonNetwork.Instantiate("Prefabs/YC/MainCamera_Steady", new Vector3(0, 0, 0), Quaternion.identity, 0);
-                PhotonNetwork.Instantiate("Prefabs/JCW/SteadyJCW", new Vector3(5, 0, -5), Quaternion.identity);
+                PhotonNetwork.Instantiate("Prefabs/JCW/SteadyJCW", new Vector3(10, 0, -5), Quaternion.identity);
             }
 
 

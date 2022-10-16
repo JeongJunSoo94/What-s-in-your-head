@@ -9,6 +9,7 @@ using Cinemachine;
 
 using YC.Camera_;
 using YC.Camera_Single;
+using JCW.Object;
 
 public class PlayerController3D : MonoBehaviour
 {
@@ -79,7 +80,7 @@ public class PlayerController3D : MonoBehaviour
     #endregion
 
     // 체크카운트 - JCW
-    public int CPcount = 0;
+    public int nextSection = 0;
     private int life = 3;
 
 
@@ -132,11 +133,7 @@ public class PlayerController3D : MonoBehaviour
 
         KeyManager.Instance.GetKeyDown(PlayerAction.MoveBackward);
     }
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+
 
     // Update is called once per frame
     void Update()
@@ -144,6 +141,8 @@ public class PlayerController3D : MonoBehaviour
         if (!photonView.IsMine)
             return;
         CheckState();
+
+        InputSoundTest();
         //CheckKeyInput(); // 이건 animator의  fsm으로 한다고 했으나 여기에 모아서 사용해둠(fsm으로 이동 될 것들)
     }
 
@@ -196,16 +195,18 @@ public class PlayerController3D : MonoBehaviour
             characterState.ToggleRun();
         }
     }
-    void Resurrect()
+    public void Resurrect()
     {
-        if (!File.Exists(Application.dataPath + "/Resources/CheckPointInfo/" + this.name + "TF" + (CPcount - 1).ToString() + ".json"))
+        if (!File.Exists(Application.dataPath + "/Resources/CheckPointInfo/Stage" + 
+            GameManager.Instance.curStageIndex + "/Section" + GameManager.Instance.curSection + ".json"))
         {
+            Debug.Log(GameManager.Instance.curSection);
             Debug.Log("체크포인트 불러오기 실패");
             return;
         }
 
-        string jsonString = File.ReadAllText(Application.dataPath + "/Resources/CheckPointInfo/" + this.name + "TF" + (CPcount - 1).ToString() + ".json");
-        Debug.Log(jsonString);
+        string jsonString = File.ReadAllText(Application.dataPath + "/Resources/CheckPointInfo/Stage" + 
+            GameManager.Instance.curStageIndex + "/Section" + GameManager.Instance.curSection + ".json");
 
         SavePosition.PlayerInfo data = JsonUtility.FromJson<SavePosition.PlayerInfo>(jsonString);
         transform.SetPositionAndRotation(new Vector3((float)data.position[0], (float)data.position[1], (float)data.position[2]), new Quaternion((float)data.rotation[0], (float)data.rotation[1], (float)data.rotation[2], (float)data.rotation[3]));

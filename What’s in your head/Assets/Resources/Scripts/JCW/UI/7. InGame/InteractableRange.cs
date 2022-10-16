@@ -34,10 +34,10 @@ namespace JCW.UI.InGame
             transform.localScale = new Vector3(range, range, range);
 
             // 정식으로 사용할 때엔 아래 코드 쓸것
-            //isNella = GameManager.Instance.characterOwner[PhotonNetwork.IsMasterClient];
+            isNella = GameManager.Instance.characterOwner[PhotonNetwork.IsMasterClient];
 
             // 임시
-            isNella = true;
+            //isNella = true;
         }
 
         // 지금은 임시로 트리거 Enter/Exit으로 하고 있지만
@@ -92,7 +92,7 @@ namespace JCW.UI.InGame
             sourceImage.enabled = true;
 
 
-            yield return null;
+            yield break;
         }
     }
 }

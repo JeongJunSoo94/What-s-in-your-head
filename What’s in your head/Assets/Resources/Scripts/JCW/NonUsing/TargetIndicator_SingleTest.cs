@@ -87,9 +87,9 @@ namespace JCW.UI.InGame
             indicatorPosition.z = 0f;
 
             // 현재 카메라 화면의 중심 위치 잡기
-            Vector3 canvasCenter = new Vector3((screenSize.x + screenSize.width / 2f), (screenSize.y + screenSize.height / 2f), 0f);            
+            Vector3 canvasCenter = new((screenSize.x + screenSize.width / 2f), (screenSize.y + screenSize.height / 2f), 0f);            
 
-            // UI 위치-> 화면 중심 벡터
+            // 화면 중심 벡터-> UI 위치 벡터
             indicatorPosition -= canvasCenter;
 
             // 화면 범위 제한

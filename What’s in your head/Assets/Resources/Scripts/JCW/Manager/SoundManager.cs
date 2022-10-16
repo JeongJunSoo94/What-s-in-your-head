@@ -11,7 +11,8 @@ namespace JCW.AudioCtrl
         Sound3D,
         End,
     }
-
+    
+    [RequireComponent(typeof(PhotonView))]
     public class SoundManager : MonoBehaviour
     {
         [Header("효과음 목록")] [SerializeField] List<AudioClip> prevAudioClips = new();
@@ -26,25 +27,17 @@ namespace JCW.AudioCtrl
 
         private bool isPause = false;
 
-        // 싱글톤
-        private static SoundManager sInstance;
-        public static SoundManager Instance
-        {
-            get
-            {
-                if (sInstance == null)
-                {
-                    GameObject newGameObject = new("_SoundManager");
-                    sInstance = newGameObject.AddComponent<SoundManager>();
-                }
-                return sInstance;
-            }
-        }
-
+        public static SoundManager Instance;
         private void Awake()
         {
+            if (Instance==null)
+            {
+                Instance = this;
+                DontDestroyOnLoad(this.gameObject);
+            }
+            else
+                Destroy(this.gameObject);
             photonView = GetComponent<PhotonView>();
-            DontDestroyOnLoad(this.gameObject);
         }
 
         // Sound 종류에 해당하는 오브젝트들을 만들어주고, 사운드 매니저 오브젝트에 자식으로 달아준다.
@@ -72,8 +65,7 @@ namespace JCW.AudioCtrl
         }
         public void PauseResumeBGM_RPC()
         {
-            photonView.RPC("PauseResumeBGM", RpcTarget.OthersBuffered);
-            PauseResumeBGM();
+            photonView.RPC("PauseResumeBGM", RpcTarget.AllViaServer);
         }
 
         [PunRPC]
@@ -115,8 +107,7 @@ namespace JCW.AudioCtrl
 
         public void PlayEffect_RPC(string path)
         {
-            photonView.RPC("PlayEffect", RpcTarget.OthersBuffered, path);
-            PlayEffect(path);
+            photonView.RPC("PlayEffect", RpcTarget.AllViaServer, path);
         }
        
         // 효과음 재생
@@ -135,8 +126,7 @@ namespace JCW.AudioCtrl
 
         public void PlayBGM_RPC(string path)
         {
-            photonView.RPC("PlayBGM", RpcTarget.OthersBuffered, path);
-            PlayBGM(path);
+            photonView.RPC("PlayBGM", RpcTarget.AllViaServer, path);
         }
         // 배경음 재생
         [PunRPC]
