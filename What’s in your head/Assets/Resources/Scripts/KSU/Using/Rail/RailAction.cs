@@ -16,11 +16,11 @@ namespace KSU
         PlayerInteractionState interactionState;
 
         Camera mainCamera;
-        [SerializeField] GameObject rayOrigin;
+        [SerializeField] GameObject lookAtObj;
         public Ray ray;
         RaycastHit _raycastHit;
-        LayerMask layerFilterForRail;
-        LayerMask layerForRail;
+        public LayerMask layerFilterForRail;
+        public LayerMask layerForRail;
 
         public float rangeRadius = 5f;
         public float rangeDistance = 5f;
@@ -41,6 +41,11 @@ namespace KSU
         Vector3 startLeft;
         Vector3 startRight;
 
+        Vector3 startUps;
+        Vector3 startDowns;
+        Vector3 startLefts;
+        Vector3 startRights;
+
         public Vector3 hVision;
 
         Vector3 endCenter;
@@ -48,6 +53,11 @@ namespace KSU
         Vector3 endDown;
         Vector3 endLeft;
         Vector3 endRight;
+
+        Vector3 endUps;
+        Vector3 endDowns;
+        Vector3 endLefts;
+        Vector3 endRights;
         /// </summary>
 
         void Awake()
@@ -60,8 +70,8 @@ namespace KSU
                 mainCamera = this.gameObject.GetComponent<CameraController>().FindCamera(); // 멀티용
             else
                 mainCamera = this.gameObject.GetComponent<CameraController_Single>().FindCamera(); // 싱글용
-            layerForRail = ((1) + (1 << LayerMask.NameToLayer("Rail")));
-            layerFilterForRail = ((-1) - (1 << LayerMask.NameToLayer("Player")));
+            //layerForRail = ((1) + (1 << LayerMask.NameToLayer("Rail")));
+            //layerFilterForRail = ((-1) - (1 << LayerMask.NameToLayer("Player")));
         }
 
         private void Update()
@@ -71,28 +81,29 @@ namespace KSU
 
         void SearchRail()
         {
-            //if (interactionState.railTriggerDetectionNum > 0)
-            //{
-            //    MakeGizmoVecs();
-            //    SearchWithSphereCast();
-            //}
-
-            MakeGizmoVecs();
-            SearchWithSphereCast();
+            if (interactionState.railTriggerDetectionNum > 0)
+            {
+                MakeGizmoVecs();
+                SearchWithSphereCast();
+            }
         }
 
         public void SearchWithSphereCast()
         {
             //ray = mainCamera.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0f));
-
-            bool isRayChecked = Physics.SphereCast(rayOrigin.transform.position, rangeRadius, mainCamera.transform.forward, out _raycastHit, rangeDistance, LayerMask.NameToLayer("Rail"), QueryTriggerInteraction.Ignore);
+            Vector3 cameraForwardXZ = mainCamera.transform.forward;
+            cameraForwardXZ.y = 0;
+            Vector3 rayOrigin = (lookAtObj.transform.position - cameraForwardXZ);
+            Vector3 rayEnd = (lookAtObj.transform.position + mainCamera.transform.forward * (rangeDistance + rangeRadius * 2f));
+            Vector3 direction = (rayEnd - rayOrigin).normalized;
+            bool isRayChecked = Physics.SphereCast(rayOrigin, rangeRadius, direction, out _raycastHit, rangeDistance, layerForRail, QueryTriggerInteraction.Ignore);
             
             Debug.Log("1 RayChecked : " + isRayChecked);
             if (isRayChecked)
             {
                 Debug.Log("1 hit! : " + _raycastHit.collider.tag);
                 RaycastHit hit;
-                isRayChecked = Physics.Raycast(rayOrigin.transform.position, mainCamera.transform.forward, out hit, (rangeDistance + rangeRadius) , layerFilterForRail, QueryTriggerInteraction.Ignore);
+                isRayChecked = Physics.SphereCast(rayOrigin, 1f, direction, out hit, (rangeDistance + rangeRadius * 2f) , layerFilterForRail, QueryTriggerInteraction.Ignore);
 
                 Debug.Log("2 RayChecked : " + isRayChecked);
                 if (isRayChecked)
@@ -108,9 +119,9 @@ namespace KSU
                     }
                 }
 
-                Vector3 direction = Vector3.MoveTowards(rayOrigin.transform.position, _raycastHit.point, 1f);
+                direction = (_raycastHit.point - rayOrigin).normalized;
 
-                isRayChecked = Physics.Raycast(rayOrigin.transform.position, direction, out hit, (rangeDistance + rangeRadius), layerFilterForRail, QueryTriggerInteraction.Ignore);
+                isRayChecked = Physics.Raycast(rayOrigin, direction, out hit, (rangeDistance + rangeRadius * 2f), layerFilterForRail, QueryTriggerInteraction.Ignore);
                 Debug.Log("3 RayChecked : " + isRayChecked);
                 if (isRayChecked)
                 {
@@ -119,6 +130,25 @@ namespace KSU
                     {
                         interactionState.isRailFounded = true;
                         _raycastHit = hit;
+                        railStartPosiotion = _raycastHit.point;
+                        railStartObject = _raycastHit.collider.gameObject;
+                        return;
+                    }
+                }
+            }
+            else
+            {
+                rayOrigin = (lookAtObj.transform.position + cameraForwardXZ * 2f);
+                direction = -cameraForwardXZ.normalized;
+
+                isRayChecked = Physics.SphereCast(rayOrigin, rangeRadius, direction, out _raycastHit, rangeRadius * 2f, layerFilterForRail, QueryTriggerInteraction.Ignore);
+
+                if (isRayChecked)
+                {
+                    Debug.Log("4 hit! : " + _raycastHit.collider.tag);
+                    if (_raycastHit.collider.tag == "Rail")
+                    {
+                        interactionState.isRailFounded = true;
                         railStartPosiotion = _raycastHit.point;
                         railStartObject = _raycastHit.collider.gameObject;
                         return;
@@ -141,35 +171,46 @@ namespace KSU
 
         public void EscapeRailAction()
         {
+            playerState.IsGrounded = false;
             currentRail.GetComponent<Rail>().EscapeRail(this.gameObject);
         }
 
-        //private void OnTriggerEnter(Collider other)
-        //{
-        //    if (other.CompareTag("Rail"))
-        //    {
-        //        interactionState.railTriggerDetectionNum++;
-        //    }
-        //}
-        //private void OnTriggerExit(Collider other)
-        //{
-        //    if (other.CompareTag("Rail"))
-        //    {
-        //        interactionState.railTriggerDetectionNum--;
-        //    }
-        //}
+        private void OnTriggerEnter(Collider other)
+        {
+            if (other.CompareTag("Rail"))
+            {
+                interactionState.railTriggerDetectionNum++;
+            }
+        }
+        private void OnTriggerExit(Collider other)
+        {
+            if (other.CompareTag("Rail"))
+            {
+                interactionState.railTriggerDetectionNum--;
+            }
+        }
 
         void MakeGizmoVecs()
         {
             hVision = mainCamera.transform.forward;
 
-            startCenter = rayOrigin.transform.position;
+            startCenter = lookAtObj.transform.position;
+            startUps = startCenter + mainCamera.transform.up;
+            startDowns = startCenter - mainCamera.transform.up;
+            startLefts = startCenter - mainCamera.transform.right;
+            startRights = startCenter + mainCamera.transform.right;
+
             startUp = startCenter + mainCamera.transform.up * rangeRadius;
             startDown = startCenter - mainCamera.transform.up * rangeRadius;
             startLeft = startCenter - mainCamera.transform.right * rangeRadius;
             startRight = startCenter + mainCamera.transform.right * rangeRadius;
 
             endCenter = startCenter + hVision * rangeDistance;
+            endUps = endCenter + mainCamera.transform.up;
+            endDowns = endCenter - mainCamera.transform.up;
+            endLefts = endCenter - mainCamera.transform.right;
+            endRights = endCenter + mainCamera.transform.right;
+
             endUp = endCenter + mainCamera.transform.up * rangeRadius;
             endDown = endCenter - mainCamera.transform.up * rangeRadius;
             endLeft = endCenter - mainCamera.transform.right * rangeRadius;
@@ -191,6 +232,14 @@ namespace KSU
 
             Gizmos.DrawWireSphere(startCenter, rangeRadius);
             Gizmos.DrawWireSphere(endCenter, rangeRadius);
+
+            Gizmos.DrawLine(startUps, endUps);
+            Gizmos.DrawLine(startDowns, endDowns);
+            Gizmos.DrawLine(startRights, endRights);
+            Gizmos.DrawLine(startLefts, endLefts);
+
+            Gizmos.DrawWireSphere(startCenter, 1f);
+            Gizmos.DrawWireSphere(endCenter, 1f);
         }
     }
 }

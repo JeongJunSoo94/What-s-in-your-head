@@ -67,7 +67,7 @@ namespace KSU
                     obj.transform.parent = gameObject.transform;
                     obj.transform.localScale = new Vector3(0.1f, 0.1f, length);
                     obj.transform.LookAt(end);
-                    //obj.GetComponentsInChildren<CapsuleCollider>()[1].gameObject.transform.localScale = new Vector3(detectionRangeRadius * 10f, detectionRangeLength * 1f, detectionRangeRadius * 10f);
+                    obj.GetComponentsInChildren<CapsuleCollider>()[1].gameObject.transform.localScale = new Vector3(detectionRangeRadius * 10f, detectionRangeLength * 1f, detectionRangeRadius * 10f);
                 }
             }
         }
@@ -79,8 +79,8 @@ namespace KSU
 
         void SetDestination(GameObject player, Cinemachine.CinemachineDollyCart cartSetUp)
         {
-            Vector3 playerLookVec = cartSetUp.gameObject.transform.position - player.transform.position;
-            if (Vector3.Angle(cartSetUp.gameObject.transform.forward, playerLookVec) > 90f)
+            Vector3 playerVec = cartSetUp.gameObject.transform.position - player.transform.position;
+            if (Vector3.Angle(cartSetUp.gameObject.transform.forward, playerVec) > 90f)
             {
                 cartSetUp.m_Speed = -railSpeed;
                 switch (player.tag)

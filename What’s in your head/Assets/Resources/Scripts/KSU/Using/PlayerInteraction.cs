@@ -102,7 +102,7 @@ namespace KSU
                     {
                         if (!interactionState.isMoveToRail)
                         {
-                            railAction.EscapeRailAction();
+                            //railAction.EscapeRailAction();
                         }
                     }
 
@@ -128,7 +128,7 @@ namespace KSU
                 {
                     if (!interactionState.isMoveFromRope && !interactionState.isMoveToRope)
                     {
-                        ropeAction.EscapeRope();
+                        //ropeAction.EscapeRope();
                     }
                 }
             }
