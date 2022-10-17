@@ -5,6 +5,7 @@ using YC.Camera_;
 using YC.Camera_Single;
 using Photon.Pun;
 using JJS.Weapon;
+
 namespace JJS
 {
     public class NellaMouseController : PlayerMouseController
@@ -25,8 +26,8 @@ namespace JJS
                 gun.mainCamera = this.gameObject.transform.GetComponent<CameraController_Single>().FindCamera(); // ½Ì±Û¿ë
                 cameraMain = this.gameObject.transform.GetComponent<CameraController_Single>().FindCamera(); // ½Ì±Û¿ë
             }
-        
         }
+
         private void Update()
         {
             TargetUpdate();
@@ -36,8 +37,6 @@ namespace JJS
         {
             gun.ShootLine(type);
         }
-
-
 
         public override void SetWeaponEnable(int weaponIndex,bool enable)
         {
