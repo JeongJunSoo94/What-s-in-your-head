@@ -7,15 +7,15 @@ using YC.Camera_;
 using YC.Camera_Single;
 using Photon.Pun;
 
-namespace JJS
+namespace JJS.Weapon
 {
     public class WaterGun : MonoBehaviour
     {
-        BezierCurve bezierCurveOrbit;
+        public BezierCurve bezierCurveOrbit;
 
-        Camera mainCamera;
+        public Camera mainCamera;
 
-        Spawner spawner;
+        public Spawner spawner;
 
         Ray ray;
 
@@ -27,27 +27,14 @@ namespace JJS
 
         public GameObject IK;
         public GameObject Weapon;
-        public Transform pos;
+        public GameObject startPos;
         private void Awake()
         {
-            //mainCamera = Camera.main;
+            bezierCurveOrbit = gameObject.GetComponent<BezierCurve>();
+            bezierCurveOrbit.targetObj = startPos;
             spawner = gameObject.GetComponent<Spawner>();
         }
-
-        void Start()
-        {
-            if (PhotonNetwork.NetworkClientState == Photon.Realtime.ClientState.Joined)
-                mainCamera = this.gameObject.transform.parent.GetComponent<CameraController>().mainCam; // 멀티용
-            else
-                mainCamera = this.gameObject.transform.parent.GetComponent<CameraController_Single>().mainCam; // 싱글용
-
-            //mainCamera = this.gameObject.transform.parent.GetComponent<CameraController_Single>().mainCam; // 싱글용
-            //mainCamera = this.gameObject.transform.parent.GetComponent<CameraController>().mainCam; // 멀티용
-
-            bezierCurveOrbit = gameObject.GetComponent<BezierCurve>();
-        }
-
-        void Update()
+        void FixedUpdate()
         {
             ShootLine();
         }
@@ -72,7 +59,7 @@ namespace JJS
 
         void OnDrawGizmosRay()
         {
-            ray.origin = transform.position;
+            ray.origin = startPos.transform.position;
             ray.direction = dir;
 
             Debug.DrawRay(ray.origin, ray.direction * shootCurDistance, Color.red);
@@ -80,16 +67,15 @@ namespace JJS
 
         void ShootLine()
         {
-            transform.position = pos.position;
             RaycastHit hit;
             dir = mainCamera.transform.forward;
           
-            if (Physics.Raycast(transform.position, dir, out hit, shootMaxDistance,-1,QueryTriggerInteraction.Ignore))
+            if (Physics.Raycast(startPos.transform.position, dir, out hit, shootMaxDistance,-1,QueryTriggerInteraction.Ignore))
             {
-                shootCurDistance = Vector3.Distance(transform.position, hit.point);
-                bezierCurveOrbit.p1 = transform.position;
+                shootCurDistance = Vector3.Distance(startPos.transform.position, hit.point);
+                bezierCurveOrbit.p1 = startPos.transform.position;
 
-                float Height = hit.point.y - transform.position.y;
+                float Height = hit.point.y - startPos.transform.position.y;
                 Height /= shootMaxDistance;
                 float width = curveWidth;
                 if (Height > 0)
@@ -102,7 +88,7 @@ namespace JJS
                     Height *= -1f;
                 }
 
-                Vector3 direction = (transform.position - hit.point)* width;
+                Vector3 direction = (startPos.transform.position - hit.point)* width;
 
                 direction.y += (1-width) + Height * curveHeight;
                 bezierCurveOrbit.p2 = hit.point + direction;
@@ -111,13 +97,13 @@ namespace JJS
             }
             else
             {
-                Vector3 maxPos = transform.position + dir * shootMaxDistance;
-                shootCurDistance = Vector3.Distance(transform.position, maxPos);
-                bezierCurveOrbit.p1 = transform.position;
+                Vector3 maxPos = startPos.transform.position + dir * shootMaxDistance;
+                shootCurDistance = Vector3.Distance(startPos.transform.position, maxPos);
+                bezierCurveOrbit.p1 = startPos.transform.position;
                 bezierCurveOrbit.p3 = maxPos;
                 bezierCurveOrbit.p4 = maxPos;
 
-                float Height = maxPos.y - transform.position.y;
+                float Height = maxPos.y - startPos.transform.position.y;
                 Height /= shootMaxDistance;
                 float width = curveWidth;
                 if (Height > 0)
@@ -130,13 +116,14 @@ namespace JJS
                     Height *= -1f;
                 }
 
-                Vector3 direction = (transform.position - maxPos) * width;
+                Vector3 direction = (startPos.transform.position - maxPos) * width;
                 direction.y += 1f + Height * curveHeight;
                 bezierCurveOrbit.p2 = maxPos + direction;
             }
-            IK.transform.position = bezierCurveOrbit.p4;
-
             Weapon.transform.LookAt(bezierCurveOrbit.p4);
+            //Debug.Log(Weapon.transform.forward);
+            IK.transform.position = bezierCurveOrbit.p4;
+        
         }
     }
 }

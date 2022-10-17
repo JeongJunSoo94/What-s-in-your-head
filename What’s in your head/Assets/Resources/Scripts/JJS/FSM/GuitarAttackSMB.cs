@@ -9,9 +9,11 @@ public class GuitarAttackSMB : CharacterBaseSMB
     // OnStateEnter is called when a transition starts and the state machine starts to evaluate this state
     override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
+        GetPlayerController3D(animator).playerMouse.CheckLeftClick(1);
         if (GetPlayerController3D(animator).enabled)
         {
             onClick = false;
+
         }
     }
 
@@ -29,6 +31,7 @@ public class GuitarAttackSMB : CharacterBaseSMB
         {
             animator.SetBool("isAttack1", false);
 
+            animator.SetBool("isAttack2", false);
             animator.SetBool("isAttack3", false);
         }
     }
@@ -41,8 +44,7 @@ public class GuitarAttackSMB : CharacterBaseSMB
                 switch (index)
                 {
                     case 0:
-                        animator.SetBool("isAttack1", true);
-                        animator.SetTrigger("Attack");
+                        animator.SetBool("isAttack1", true); 
                         break;
                     case 1:
                         animator.SetBool("isAttack2", true);
@@ -59,18 +61,15 @@ public class GuitarAttackSMB : CharacterBaseSMB
                 animator.SetBool("isAttack3", false);
             }
         }
-       
-        if (GetPlayerController3D(animator).playerMouse.ableToLeft)
+        
         {
             if (ITT_KeyManager.Instance.GetKeyDown(PlayerAction.Fire))
             {
-                GetPlayerController3D(animator).playerMouse.CheckLeftClick(true);
                 onClick = true;
                 switch (index)
                 {
                     case 0:
                         animator.SetBool("isAttack1", true);
-                        animator.SetTrigger("Attack");
                         break;
                     case 1:
                         animator.SetBool("isAttack2", true);

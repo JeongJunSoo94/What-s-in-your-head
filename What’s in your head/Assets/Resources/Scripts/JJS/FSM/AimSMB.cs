@@ -6,6 +6,7 @@ public class AimSMB : CharacterBaseSMB
 {
     override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
+ 
     }
 
     // OnStateUpdate is called on each Update frame between OnStateEnter and OnStateExit callbacks
@@ -27,8 +28,7 @@ public class AimSMB : CharacterBaseSMB
     {
         if (GetPlayerController3D(animator).characterState.aim)
         {
-            GetPlayerController3D(animator).playerMouse.CheckLeftClick(false);
-            GetPlayerController3D(animator).playerMouse.CheckRightClick(true);
+            //GetPlayerController3D(animator).RotateAim();
             if (ITT_KeyManager.Instance.GetKey(PlayerAction.Fire))
             {
                 animator.SetBool("AimAttack", true);
@@ -43,8 +43,7 @@ public class AimSMB : CharacterBaseSMB
     //}
 
     // OnStateIK is called right after Animator.OnAnimatorIK()
-    //override public void OnStateIK(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
-    //{
-    //    // Implement code that sets up animation IK (inverse kinematics)
-    //}
+    override public void OnStateIK(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
+    {
+    }
 }
