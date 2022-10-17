@@ -11,6 +11,7 @@ namespace KSU
         public GameObject NellaRopeAction;
         public GameObject SteadyRopeAction;
 
+        [Header("UI 콜라이더")] [SerializeField] private GameObject UIObj;
         [Header("탐지 가능 거리")] public float detectingRange = 30f;
         [Header("상호 작용 가능 거리")] public float interactableRange = 20f;
 
@@ -24,12 +25,8 @@ namespace KSU
         // Start is called before the first frame update
         void Start()
         {
-            InitCollider();
-        }
-
-        void InitCollider()
-        {
             transform.localScale = new Vector3(1, 1, 1) * (detectingRange * 2f);
+            UIObj.SendMessage("SetInteractableRange", interactableRange);
         }
 
         public void StartRopeAction(GameObject player, float moveToRopeSpeed)
@@ -51,9 +48,6 @@ namespace KSU
                     }
                     break;
             }
-            //GameObject obj = Instantiate<GameObject>(ropeAction, transform);
-            //obj.GetComponent<RopeAction>().spawner = this;
-            //obj.GetComponent<RopeAction>().player = player;
         }
 
         public float EndRopeAction(GameObject player)

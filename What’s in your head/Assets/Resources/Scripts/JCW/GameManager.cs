@@ -9,6 +9,8 @@ public class GameManager : MonoBehaviour
     [HideInInspector] public Dictionary<bool, bool> characterOwner = new();
 
     [HideInInspector] public int curStageIndex = 0;
+    [HideInInspector] public bool isAlive;
+
     private int _curSection = 0;
     public int curSection { get { return _curSection; } private set { _curSection = value; } }
 

@@ -5,12 +5,14 @@ using UnityEngine.UI;
 using UnityEngine.Video;
 using YC.Camera_;
 
+using KSU;
+
 namespace JCW.UI.InGame
 {
+    
     public class TargetIndicator : MonoBehaviour
     {
-        [Header("감지 범위 수치")] [SerializeField] [Range(0, 100)] float range;
-        [Header("상호작용 가능 범위 수치")] [SerializeField] [Range(0, 100)] float interactableRange;
+        
         [Header("UI")] [SerializeField] GameObject detectUI;
         [Header("타겟 오브젝트의 위치")] [SerializeField] Transform target;
         [Header("이미지 트랜스폼")] [SerializeField] RectTransform imgTransform;
@@ -31,6 +33,11 @@ namespace JCW.UI.InGame
         private RectTransform canvasSize;
         private Camera mainCamera;
 
+        // 감지 범위 & 상호작용 가능 범위
+        float detectRange;
+        float interactableRange;
+
+        // 상호작용 가능 시 스프라이트
         Image interactiveSprite;
 
 
@@ -54,26 +61,27 @@ namespace JCW.UI.InGame
 
         private void Awake()
         {
+            // 기존에 설정된 스프라이트 크기만큼 범위 조절
+            imgTransform.sizeDelta = new Vector2(nella_DetectSprite.bounds.size.x, nella_DetectSprite.bounds.size.y);            
+            interactiveSprite = imgTransform.gameObject.GetComponent<Image>();
+            interactiveSprite.sprite = nella_DetectSprite;
+
             canvasSize = detectUI.GetComponent<RectTransform>();
-            transform.localScale = new Vector3(range, range, range);
             screenLimitOffset = imgTransform.rect.width * 0.4f;
             outOfSightImgScale = imgTransform.localScale * 0.8f;
             initImgScale = imgTransform.localScale;
-            interactiveSprite = imgTransform.gameObject.GetComponent<Image>();
 
             // 정식으로 사용할 때엔 아래 코드 쓸것
             //isNella = GameManager.Instance.characterOwner[PhotonNetwork.IsMasterClient];
 
             // 임시
             isNella = true;
-
-            Debug.Log("타겟 지시기 시작");
         }
         protected void Update()
         {
             if (!isActive)
                 return;
-
+            detectRange = transform.lossyScale.x / 2f;
             // 타겟의 위치를 메인카메라의 스크린 좌표로 변경
             Vector3 indicatorPosition = mainCamera.WorldToScreenPoint(target.position);
 
@@ -86,6 +94,7 @@ namespace JCW.UI.InGame
                    && indicatorPosition.y <= screenSize.y + screenSize.height && indicatorPosition.y >= screenSize.y)
                 {
                     imgTransform.localScale = initImgScale;
+                    gauge.transform.localScale = initImgScale;
                     indicatorPosition.z = 0f;
                 }
                 else
@@ -98,7 +107,8 @@ namespace JCW.UI.InGame
                 indicatorPosition = OutOfRange(indicatorPosition);
             }
 
-            imgTransform.position = indicatorPosition;
+            imgTransform.position = indicatorPosition;            
+            gauge.transform.position = indicatorPosition;
         }
 
 
@@ -107,6 +117,7 @@ namespace JCW.UI.InGame
         protected Vector3 OutOfRange(Vector3 indicatorPosition)
         {
             imgTransform.localScale = outOfSightImgScale;
+            gauge.transform.localScale = outOfSightImgScale;
             indicatorPosition.z = 0f;
 
             // 현재 카메라 화면의 중심 위치 잡기
@@ -144,10 +155,10 @@ namespace JCW.UI.InGame
             return indicatorPosition;
         }
 
-        public void SetUI(bool _isActive, bool _isSetOn, float _dist, Camera _cam)
+        public void SetUI(Obj_Info objInfo, Camera _cam)
         {
-            detectUI.SetActive(_isActive);
-            isActive = _isActive;
+            detectUI.SetActive(objInfo.isUIActive);
+            isActive = objInfo.isUIActive;
 
             if (isActive)
             {
@@ -155,21 +166,22 @@ namespace JCW.UI.InGame
                 mainCamera = videoPlayer.targetCamera;
                 SetSreenInfo();
                 // 상호작용 범위 밖->안 & 안->밖 들어갔을 때만 애니메이션 재생과 함께 스프라이트 변경
-                if (isInteractable != _isSetOn)
+                if (isInteractable != objInfo.isInteractable)
                 {
-                    isInteractable = _isSetOn;
-                    ConvertVideo(_isSetOn);
+                    isInteractable = objInfo.isInteractable;
+                    ConvertVideo(objInfo.isInteractable);
                 }
-                
-                if(!isInteractable)
+
+                if (!isInteractable)
                 {
                     // 거리에 따라 게이지 줄어들게 끔 해주기
                     // 1 - (_dist-상호작용 범위)/(감지범위 - 상호작용 범위) == FillValue에 넣어줌.
-                    gauge.fillAmount = 1 - (_dist - interactableRange) / (range - interactableRange);
+                    gauge.fillAmount = 1 - (objInfo.distance - interactableRange) / (detectRange - interactableRange);
                 }
             }
         }
 
+        // 레일용
         public void SetUI(bool _isActive, bool _isSetOn, Vector3 _pos, Camera _cam)
         {
             detectUI.SetActive(_isActive);
@@ -190,6 +202,11 @@ namespace JCW.UI.InGame
                     ConvertVideo(_isSetOn);
                 }
             }
+        }
+
+        public void SetInteractableRange(float _range)
+        {
+            interactableRange = _range;
         }
 
         public void ConvertVideo(bool _isSetOn)
@@ -225,6 +242,7 @@ namespace JCW.UI.InGame
             yield return null;
         }
 
+        // 스크린 사이즈
         void SetSreenInfo()
         {
             Rect cameraPos = mainCamera.rect;
