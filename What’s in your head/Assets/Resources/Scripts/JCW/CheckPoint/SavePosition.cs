@@ -2,64 +2,74 @@ using System;
 using UnityEngine;
 using System.IO;
 using LitJson;
+using Photon.Pun;
 
-public class SavePosition : MonoBehaviour
+namespace JCW.Object
 {
-
-    [Header("CheckPoint Count")]  [SerializeField]    private int nthCheckPoint = 0;
-
-    private PlayerController3D player_script = null;
-    private bool firstContact = false;
-
-    [Serializable]
-    public class PlayerInfo
-    {        
-        public double[] position;
-        public double[] rotation;
-
-        public PlayerInfo(GameObject _other)
-        {
-            position = new double[3];
-            rotation = new double[4];
-
-            position[0] = (double)_other.transform.position.x;
-            position[1] = (double)_other.transform.position.y;
-            position[2] = (double)_other.transform.position.z;
-
-            rotation[0] = (double)_other.transform.rotation.x;
-            rotation[1] = (double)_other.transform.rotation.y;
-            rotation[2] = (double)_other.transform.rotation.z;
-            rotation[3] = (double)_other.transform.rotation.w;
-        }
-    }
-
-    private void OnTriggerEnter(Collider other)
+    [RequireComponent(typeof(PhotonView))]
+    public class SavePosition : MonoBehaviour, IPunObservable
     {
-        if (other.CompareTag("Player"))
+        private bool firstContact = false;
+
+        [Serializable]
+        public class PlayerInfo
         {
-            if (!firstContact)
+            public double[] position;
+            public double[] rotation;
+
+            public PlayerInfo(GameObject _other)
             {
-                player_script = other.gameObject.GetComponent<PlayerController3D>();
-                firstContact = true;
+                position = new double[3] { (double)_other.transform.position.x, (double)_other.transform.position.y, (double)_other.transform.position.z };
+                rotation = new double[4] { (double)_other.transform.rotation.x, (double)_other.transform.rotation.y, (double)_other.transform.rotation.z, (double)_other.transform.rotation.w };
             }
-            if (player_script.CPcount == nthCheckPoint)
+
+            public PlayerInfo(Vector3 _pos, Quaternion _rot)
             {
-                ++player_script.CPcount;
-                Check(other.gameObject);
+                position = new double[3] { (double)_pos.x, (double)_pos.y, (double)_pos.z };
+                rotation = new double[4] { (double)_rot.x, (double)_rot.y, (double)_rot.z, (double)_rot.w };
             }
         }
-    }
 
-    private void Check(GameObject other)
-    {
-        Debug.Log("체크포인트 접촉 : " + other.name);
-        PlayerInfo playerTF = new(other);
-        JsonData infoJson = JsonMapper.ToJson(playerTF);
+        private void OnTriggerEnter(Collider other)
+        {
+            if (other.CompareTag("Nella") || other.CompareTag("Steady"))
+            {
+                if (!firstContact)
+                {
+                    firstContact = true;
+                    Vector3 pos = other.gameObject.transform.position;
+                    Quaternion rot = other.gameObject.transform.rotation;
+                    GetComponent<PhotonView>().RPC(nameof(Check), RpcTarget.AllViaServer, pos, rot);
+                }
+            }
+        }
+        [PunRPC]
+        private void Check(Vector3 pos, Quaternion rot)
+        {
+            GameManager.Instance.SectionUP();
+            Debug.Log("체크포인트 접촉 : " + GameManager.Instance.curSection);
+            PlayerInfo playerTF = new(pos, rot);
+            JsonData infoJson = JsonMapper.ToJson(playerTF);
 
-        int curStage = GameManager.Instance.curStageIndex;
-        if (!Directory.Exists(Application.dataPath + "/Resources/CheckPointInfo/Stage" + curStage + "/"))
-            Directory.CreateDirectory(Application.dataPath + "/Resources/CheckPointInfo/Stage" + curStage + "/");
-        File.WriteAllText(Application.dataPath + "/Resources/CheckPointInfo/Stage" + curStage + "/" + "Player" +nthCheckPoint +".json", infoJson.ToString());
-        Debug.Log("체크포인트 저장");
+            int curStage = GameManager.Instance.curStageIndex;
+            if (!Directory.Exists(Application.dataPath + "/Resources/CheckPointInfo/Stage" + curStage + "/"))
+                Directory.CreateDirectory(Application.dataPath + "/Resources/CheckPointInfo/Stage" + curStage + "/");
+            File.WriteAllText(Application.dataPath + "/Resources/CheckPointInfo/Stage" + curStage + "/Section" +GameManager.Instance.curSection +".json", infoJson.ToString());
+            Debug.Log("체크포인트 저장");
+            Destroy(this);
+        }
+
+        public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
+        {
+            if (stream.IsWriting)
+            {
+                stream.SendNext(firstContact);
+            }
+            else
+            {
+                this.firstContact = (bool)stream.ReceiveNext();
+            }
+        }
     }
 }
+

@@ -39,7 +39,7 @@ public class AimAttack : CharacterBaseSMB
 
         //GetPlayerController3D(animator).playerMouse.ableToLeft = true;
 
-        if (!ITT_KeyManager.Instance.GetKey(PlayerAction.Fire))
+        if (!KeyManager.Instance.GetKey(PlayerAction.Fire))
         {
             animator.SetBool("AimAttack", false);
         }

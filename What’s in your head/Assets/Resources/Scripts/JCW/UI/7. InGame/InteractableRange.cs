@@ -1,5 +1,5 @@
-using System.Collections;
 using Photon.Pun;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Video;
@@ -34,27 +34,36 @@ namespace JCW.UI.InGame
             transform.localScale = new Vector3(range, range, range);
 
             // 정식으로 사용할 때엔 아래 코드 쓸것
-            //isNella = GameManager.Instance.characterOwner[PhotonNetwork.IsMasterClient];
+            isNella = GameManager.Instance.characterOwner[PhotonNetwork.IsMasterClient];
 
             // 임시
-            isNella = true;
+            //isNella = true;
         }
 
         // 지금은 임시로 트리거 Enter/Exit으로 하고 있지만
         // 정식으로 사용할 때엔 플레이어가 레이를 쏴서 거리에 따라 온 오프 시켜야함.
         private void OnTriggerEnter(Collider other)
         {
-            ConvertVideo(true);
+            if(other.gameObject.CompareTag("Nella") || other.gameObject.CompareTag("Steady"))
+            {
+                if (other.gameObject.GetComponent<PhotonView>().IsMine)
+                    ConvertVideo(true);
+            }
+            
         }
 
         private void OnTriggerExit(Collider other)
         {
-            ConvertVideo(false);
+            if (other.gameObject.CompareTag("Nella") || other.gameObject.CompareTag("Steady"))
+            {
+                Debug.Log("IsMine : " + other.gameObject.GetComponent<PhotonView>().IsMine);
+                if (other.gameObject.GetComponent<PhotonView>().IsMine)
+                    ConvertVideo(false);
+            }
         }
 
         public void ConvertVideo(bool isActive = false)
-        {
-
+        {            
             // 이미지를 잠깐 꺼주고 동영상 켜주기
             sourceImage.enabled = false;
             videoPlayer.gameObject.GetComponent<RawImage>().enabled = true;
@@ -83,7 +92,7 @@ namespace JCW.UI.InGame
             sourceImage.enabled = true;
 
 
-            yield return null;
+            yield break;
         }
     }
 }

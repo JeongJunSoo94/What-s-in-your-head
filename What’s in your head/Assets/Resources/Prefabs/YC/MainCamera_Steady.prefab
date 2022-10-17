@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 1067724183930872769}
   - component: {fileID: 6424008171644480728}
   - component: {fileID: -669544199793649530}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: MainCamera_Steady
   m_TagString: SteadyCamera
   m_Icon: {fileID: 0}
@@ -62,13 +62,13 @@ Camera:
     height: 1
   near clip plane: 0.1
   far clip plane: 5000
-  field of view: 60
+  field of view: 40
   orthographic: 0
   orthographic size: 5
   m_Depth: 0
   m_CullingMask:
     serializedVersion: 2
-    m_Bits: 3221291127
+    m_Bits: 2098047
   m_RenderingPath: -1
   m_TargetTexture: {fileID: 0}
   m_TargetDisplay: 0
@@ -87,7 +87,7 @@ AudioListener:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4894812727458717816}
-  m_Enabled: 0
+  m_Enabled: 1
 --- !u!114 &4894812727458717798
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -104,8 +104,8 @@ MonoBehaviour:
   m_ShowCameraFrustum: 1
   m_IgnoreTimeScale: 0
   m_WorldUpOverride: {fileID: 0}
-  m_UpdateMethod: 2
-  m_BlendUpdateMethod: 1
+  m_UpdateMethod: 0
+  m_BlendUpdateMethod: 0
   m_DefaultBlend:
     m_Style: 1
     m_Time: 1

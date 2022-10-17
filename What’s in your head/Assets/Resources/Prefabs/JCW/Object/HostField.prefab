@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 8741737042354965515}
   m_Layer: 0
   m_Name: HostField
-  m_TagString: Untagged
+  m_TagString: ContaminationField
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -93,7 +93,7 @@ BoxCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1097004686809977119}
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
@@ -111,3 +111,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   infectTime: 2
+  maxHP: 100
+  healingSpeed: 1
+  damage: 10

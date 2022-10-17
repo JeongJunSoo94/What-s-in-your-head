@@ -21,7 +21,7 @@ public class ChangeStage : MonoBehaviour
                 for (int i=0 ; i<3 ; ++i)
                 {
                     sections.transform.GetChild(i).gameObject.
-                    transform.GetChild(0).gameObject.GetComponent<Text>().text = curStage.text + " " + (i + 1).ToString();
+                        transform.GetChild(0).gameObject.GetComponent<Text>().text = curStage.text + " " + (i + 1).ToString();
                 }
                 rightButton.interactable = true;
             }
@@ -37,7 +37,7 @@ public class ChangeStage : MonoBehaviour
                 for (int i = 0 ; i < 3 ; ++i)
                 {
                     sections.transform.GetChild(i).gameObject.
-                    transform.GetChild(0).gameObject.GetComponent<Text>().text = curStage.text + " " + (i + 1).ToString();
+                        transform.GetChild(0).gameObject.GetComponent<Text>().text = curStage.text + " " + (i + 1).ToString();
                 }
                 leftButton.interactable = true;
             }

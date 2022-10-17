@@ -23,6 +23,7 @@ namespace JJS
             bulletRange = 0f;
         }
 
+        // >> : 찬, 총알 발사 관련 수정 
         void Update()
         {
             if (bulletRange < 1f)
@@ -36,7 +37,19 @@ namespace JJS
             }
             curve.range = bulletRange;
         }
+        // << :
+
+        private void OnTriggerEnter(Collider other)
+        {
+            if (other.gameObject.CompareTag("ContaminationField"))
+            {
+                Debug.Log("나가라");
+                other.gameObject.SendMessage("GetDamaged");
+            }
+
+            Debug.Log(other.gameObject.name);
+            spawner.Despawn(this.gameObject);
+        }
 
     }
 }
-

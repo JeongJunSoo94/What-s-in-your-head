@@ -29,13 +29,16 @@ namespace JCW.Spawner
             StartCoroutine(nameof(Spawn));
         }
 
-        public GameObject Respawn()
+        public GameObject Respawn(Vector3 pos)
         {
-            GameObject gameObject =null;
+            GameObject gameObject = null;
+
+
             if (spawnCount < count)
             {
                 ++spawnCount;
                 gameObject = objQueue.Dequeue();
+                gameObject.transform.position = pos;
                 gameObject.SetActive(true);
             }
             return gameObject;
@@ -44,7 +47,7 @@ namespace JCW.Spawner
         public void SpawnInit()
         {
             objQueue = new Queue<GameObject>();
-            for (int i = 0; i < count; ++i)
+            for (int i = 0 ; i < count ; ++i)
             {
                 GameObject spawned = Instantiate(obj, this.transform);
                 spawned.SetActive(false);
@@ -74,4 +77,3 @@ namespace JCW.Spawner
         }
     }
 }
-

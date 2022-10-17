@@ -198,7 +198,7 @@ namespace YC.Camera_
         {
             if (curCam == CamState.back) 
             {
-                if(ITT_KeyManager.Instance.GetKey(PlayerAction.Aim)) // back View -> sholder View
+                if(KeyManager.Instance.GetKey(PlayerAction.Aim)) // back View -> sholder View
                 {
                     AxisState temp = backCam.GetComponent<CinemachineFreeLook>().m_XAxis;
 
@@ -218,7 +218,7 @@ namespace YC.Camera_
             }
             else if (curCam == CamState.sholder)
             {
-                if(!ITT_KeyManager.Instance.GetKey(PlayerAction.Aim)) // sholder View -> back View
+                if(!KeyManager.Instance.GetKey(PlayerAction.Aim)) // sholder View -> back View
                 {
                     AxisState temp = sholderCam.GetComponent<CinemachineFreeLook>().m_XAxis;
 
@@ -376,6 +376,7 @@ namespace YC.Camera_
                 CameraManager.Instance.cameras[1] = mainCam;
             }
 
+            // 여기 mainCam을 ReviveUI에 넣어줄 수 있어야함.
 
             return mainCam;
         }

@@ -9,7 +9,6 @@ namespace JCW.UI
     [RequireComponent(typeof(PhotonView))]
     public class LeaveRoom : MonoBehaviour
     {
-        //[Header("나갔을 때 뜰 UI")] [SerializeField] private GameObject msgUI;
         [Header("뒤로가기 버튼")] [SerializeField] private Button backButton;
         [Header("넬라/스테디 버튼 누른 플레이어")] [SerializeField] private GameObject nellaButtonOwner;
                                                 [SerializeField] private GameObject steadyButtonOwner;
