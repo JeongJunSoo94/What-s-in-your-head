@@ -141,12 +141,15 @@ namespace JCW.Object
                 case "Steady":
                     other.gameObject.GetComponent<PlayerController3D>().Resurrect();
                     break;
-                case "NellaWater":                    
-                    curHP-=damage;
-                    if(curHP <= 0)
-                        SetPurified();
-                    break;
             }
+        }
+
+        public void GetDamaged()
+        {
+            curHP -= damage;
+            Debug.Log(curHP);
+            if (curHP <= 0)
+                SetPurified();
         }
     }
 }
