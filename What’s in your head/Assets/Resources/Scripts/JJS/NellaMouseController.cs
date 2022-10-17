@@ -1,43 +1,49 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
 using YC.Camera_;
 using YC.Camera_Single;
 using Photon.Pun;
 using JJS.Weapon;
+
 namespace JJS
 {
     public class NellaMouseController : PlayerMouseController
     {
         public List<Discovery3D> hitObjs;
 
-        public GameObject leftWeapon;
-        public GameObject rightWeapon;
         public WaterGun gun;
 
         private void Awake()
         {
             if (PhotonNetwork.NetworkClientState == Photon.Realtime.ClientState.Joined)
+            {
                 gun.mainCamera = this.gameObject.transform.GetComponent<CameraController>().FindCamera(); // 멀티용
+                cameraMain = this.gameObject.transform.GetComponent<CameraController>().FindCamera(); // 멀티용
+            }
             else
+            {
                 gun.mainCamera = this.gameObject.transform.GetComponent<CameraController_Single>().FindCamera(); // 싱글용
-        
+                cameraMain = this.gameObject.transform.GetComponent<CameraController_Single>().FindCamera(); // 싱글용
+            }
         }
+
         private void Update()
         {
             TargetUpdate();
         }
 
-
-        public override void CheckLeftClick(int enable)
+        public override void AimUpdate(int type=0)
         {
-            leftWeapon.SetActive(enable == 1);
+            gun.ShootLine(type);
         }
 
-        public override void CheckRightClick(int enable)
+        public override void SetWeaponEnable(int weaponIndex,bool enable)
         {
-            rightWeapon.SetActive(enable == 1);
+            if (Weapon.Length != 0)
+            {
+                Weapon[weaponIndex].SetActive(enable);
+            }
         }
 
         public void Shoot()
@@ -54,7 +60,6 @@ namespace JJS
         {
             hitObjs[index].gameObject.SetActive(false);
         }
-
 
         public void AttackTime()
         {

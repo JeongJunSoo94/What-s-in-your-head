@@ -78,7 +78,8 @@ public class CharacterState3D : MonoBehaviour
     public float outOfControllDuration;
     #endregion
 
-    public bool aim=false;
+    public bool aim = false;
+    public bool top = false;
 
     // 지면 체크 함수(지면 각도에 따라서 지면체크 거리 안에 안들어올 수 있기에 보정 필요)
     #region
