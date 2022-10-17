@@ -26,10 +26,10 @@ namespace JJS.Weapon
 
         void Start()
         {
-            if (PhotonNetwork.NetworkClientState == Photon.Realtime.ClientState.Joined)
-                mainCamera = this.gameObject.transform.parent.GetComponent<CameraController>().mainCam; // 멀티용
-            else
-                mainCamera = this.gameObject.transform.parent.GetComponent<CameraController_Single>().mainCam; // 싱글용
+            //if (PhotonNetwork.NetworkClientState == Photon.Realtime.ClientState.Joined)
+            //    mainCamera = this.gameObject.transform.parent.GetComponent<CameraController>().mainCam; // 멀티용
+            //else
+            //    mainCamera = this.gameObject.transform.parent.GetComponent<CameraController_Single>().mainCam; // 싱글용
 
             //mainCamera = this.gameObject.transform.parent.GetComponent<CameraController_Single>().mainCam; // 싱글용
             //mainCamera = this.gameObject.transform.parent.GetComponent<CameraController>().mainCam; // 멀티용
