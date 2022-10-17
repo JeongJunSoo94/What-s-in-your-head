@@ -9,6 +9,7 @@ namespace JJS.Weapon
 {
     public class MagnifyingGlass : MonoBehaviour
     {
+        public ParticleSystem particle;
         public Camera mainCamera;
 
         Ray ray;
@@ -16,10 +17,20 @@ namespace JJS.Weapon
         Vector3 dir;
         public float maxDistance;
         public float curDistance;
+        public float curveHeight = 1f;
+        public float curveWidth;
 
-        public GameObject IK;
-        public GameObject Weapon;
+        public GameObject targetIK;
+        public GameObject gunDirection;
+        public GameObject hitPos;
+        public GameObject mousePoint;
+
+        public GameObject weapon;
         public GameObject startPos;
+
+        public GameObject hitBox;
+
+        public LayerMask layer;
         private void Awake()
         {
         }
@@ -27,12 +38,13 @@ namespace JJS.Weapon
         void Start()
         {
             if (PhotonNetwork.NetworkClientState == Photon.Realtime.ClientState.Joined)
-                mainCamera = this.gameObject.transform.parent.GetComponent<CameraController>().mainCam; // 멀티용
+                mainCamera = this.gameObject.transform.parent.GetComponent<CameraController>().FindCamera(); // 멀티용
             else
-                mainCamera = this.gameObject.transform.parent.GetComponent<CameraController_Single>().mainCam; // 싱글용
+                mainCamera = this.gameObject.transform.parent.GetComponent<CameraController_Single>().FindCamera(); // 싱글용
 
             //mainCamera = this.gameObject.transform.parent.GetComponent<CameraController_Single>().mainCam; // 싱글용
             //mainCamera = this.gameObject.transform.parent.GetComponent<CameraController>().mainCam; // 멀티용
+
 
         }
 
@@ -41,22 +53,19 @@ namespace JJS.Weapon
             HitLine();
         }
 
-        public void Shoot()
-        {
-        }
 
-        void OnDrawGizmos()
-        {
-            OnDrawGizmosRay();
-        }
+        //void OnDrawGizmos()
+        //{
+        //    OnDrawGizmosRay();
+        //}
 
-        void OnDrawGizmosRay()
-        {
-            ray.origin = startPos.transform.position;
-            ray.direction = dir;
+        //void OnDrawGizmosRay()
+        //{
+        //    ray.origin = startPos.transform.position;
+        //    ray.direction = dir;
 
-            Debug.DrawRay(ray.origin, ray.direction * curDistance, Color.red);
-        }
+        //    Debug.DrawRay(ray.origin, ray.direction * curDistance, Color.red);
+        //}
 
         void HitLine()
         {
@@ -76,8 +85,15 @@ namespace JJS.Weapon
                 curDistance = Vector3.Distance(startPos.transform.position, hitPoint);
 
             }
-            IK.transform.position = hitPoint;
-            Weapon.transform.LookAt(hitPoint);
+            particle.transform.localScale = new Vector3(1,1, curDistance);
+
+            //targetIK.transform.position = hitPoint;
+            //weapon.transform.LookAt(hitPoint);
+
+            weapon.transform.LookAt(hitPoint);
+            //gunDirection.transform.position = hitPoint;
+            hitPos.transform.position = hitPoint;
+            targetIK.transform.LookAt(hitPoint);
         }
     }
 

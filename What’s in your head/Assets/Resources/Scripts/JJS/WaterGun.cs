@@ -44,7 +44,7 @@ namespace JJS.Weapon
 
         public void Shoot()
         {
-            GameObject bullet=spawner.Respawn();
+            GameObject bullet=spawner.Respawn(startPos.transform.position);
             if (bullet != null)
             {
                 BezierCurve bezier = bullet.GetComponent<BezierCurve>();
