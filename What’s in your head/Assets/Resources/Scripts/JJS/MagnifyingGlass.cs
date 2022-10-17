@@ -54,18 +54,18 @@ namespace JJS.Weapon
         }
 
 
-        //void OnDrawGizmos()
-        //{
-        //    OnDrawGizmosRay();
-        //}
+        void OnDrawGizmos()
+        {
+            OnDrawGizmosRay();
+        }
 
-        //void OnDrawGizmosRay()
-        //{
-        //    ray.origin = startPos.transform.position;
-        //    ray.direction = dir;
+        void OnDrawGizmosRay()
+        {
+            ray.origin = startPos.transform.position;
+            ray.direction = dir;
 
-        //    Debug.DrawRay(ray.origin, ray.direction * curDistance, Color.red);
-        //}
+            Debug.DrawRay(ray.origin, ray.direction * curDistance, Color.red);
+        }
 
         void HitLine()
         {
@@ -85,7 +85,7 @@ namespace JJS.Weapon
                 curDistance = Vector3.Distance(startPos.transform.position, hitPoint);
 
             }
-            particle.transform.localScale = new Vector3(1,1, curDistance);
+            particle.transform.localScale = new Vector3(20,20, curDistance*100);
 
             //targetIK.transform.position = hitPoint;
             //weapon.transform.LookAt(hitPoint);
