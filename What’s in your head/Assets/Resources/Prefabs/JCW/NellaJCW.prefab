@@ -2084,7 +2084,7 @@ GameObject:
   - component: {fileID: 5967017729772335748}
   m_Layer: 7
   m_Name: Cine_sholderCam
-  m_TagString: Untagged
+  m_TagString: NellaCamera
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -3448,7 +3448,7 @@ GameObject:
   - component: {fileID: 3481911648991405788}
   m_Layer: 7
   m_Name: Cine_wallCam
-  m_TagString: Untagged
+  m_TagString: NellaCamera
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -3994,7 +3994,7 @@ GameObject:
   - component: {fileID: 6948550985964086569}
   m_Layer: 7
   m_Name: Cine_backCam
-  m_TagString: Untagged
+  m_TagString: NellaCamera
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -4547,6 +4547,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   characterState: {fileID: 2658558600888254740}
   playerMouse: {fileID: 6781922161992669097}
+  mainCamera: {fileID: 0}
+  playerRigidbody: {fileID: 0}
   moveSpeed: 0
   walkSpeed: 4
   runSpeed: 7
@@ -4564,7 +4566,7 @@ MonoBehaviour:
   moveDir: {x: 0, y: 0, z: 0}
   dashVec: {x: 0, y: 0, z: 0}
   inertiaNormalVec: {x: 0, y: 0, z: 0}
-  nextSection: 0
+  CPcount: 0
 --- !u!114 &2658558600888254740
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5529,7 +5531,7 @@ GameObject:
   - component: {fileID: 3691984559118576153}
   m_Layer: 7
   m_Name: Cine_wideCam
-  m_TagString: Untagged
+  m_TagString: NellaCamera
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

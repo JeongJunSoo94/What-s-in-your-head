@@ -9,6 +9,7 @@ using Cinemachine;
 
 using YC.Camera_;
 using YC.Camera_Single;
+using JCW.Object;
 
 public class PlayerController3D : MonoBehaviour
 {
@@ -130,7 +131,7 @@ public class PlayerController3D : MonoBehaviour
         // << : 
 
         Application.targetFrameRate = 120;
-        ITT_KeyManager.Instance.GetKeyDown(PlayerAction.MoveBackward);
+        KeyManager.Instance.GetKeyDown(PlayerAction.MoveBackward);
     }
     // Start is called before the first frame update
     void Start()
@@ -191,21 +192,23 @@ public class PlayerController3D : MonoBehaviour
 
     public void InputRun()
     {
-        if (ITT_KeyManager.Instance.GetKeyDown(PlayerAction.ToggleRun))
+        if (KeyManager.Instance.GetKeyDown(PlayerAction.ToggleRun))
         {
             characterState.ToggleRun();
         }
     }
-    void Resurrect()
+    public void Resurrect()
     {
-        if (!File.Exists(Application.dataPath + "/Resources/CheckPointInfo/" + this.name + "TF" + (CPcount - 1).ToString() + ".json"))
+        if (!File.Exists(Application.dataPath + "/Resources/CheckPointInfo/Stage" +
+            GameManager.Instance.curStageIndex + "/Section" + GameManager.Instance.curSection + ".json"))
         {
+            Debug.Log(GameManager.Instance.curSection);
             Debug.Log("체크포인트 불러오기 실패");
             return;
         }
 
-        string jsonString = File.ReadAllText(Application.dataPath + "/Resources/CheckPointInfo/" + this.name + "TF" + (CPcount - 1).ToString() + ".json");
-        Debug.Log(jsonString);
+        string jsonString = File.ReadAllText(Application.dataPath + "/Resources/CheckPointInfo/Stage" +
+            GameManager.Instance.curStageIndex + "/Section" + GameManager.Instance.curSection + ".json");
 
         SavePosition.PlayerInfo data = JsonUtility.FromJson<SavePosition.PlayerInfo>(jsonString);
         transform.SetPositionAndRotation(new Vector3((float)data.position[0], (float)data.position[1], (float)data.position[2]), new Quaternion((float)data.rotation[0], (float)data.rotation[1], (float)data.rotation[2], (float)data.rotation[3]));
@@ -220,40 +223,40 @@ public class PlayerController3D : MonoBehaviour
         }
         if (Input.GetKeyDown(KeyCode.Keypad1))
         {
-            SoundManager.instance.PlayBGM_RPC("POP");
+            SoundManager.Instance.PlayBGM_RPC("POP");
         }
         if (Input.GetKeyDown(KeyCode.Keypad2))
         {
-            SoundManager.instance.PlayBGM_RPC("Tomboy");
+            SoundManager.Instance.PlayBGM_RPC("Tomboy");
         }
         if (Input.GetKeyDown(KeyCode.Keypad3))
         {
-            SoundManager.instance.PauseResumeBGM_RPC();
+            SoundManager.Instance.PauseResumeBGM_RPC();
         }
         if (Input.GetKeyDown(KeyCode.Keypad4))
         {
-            SoundManager.instance.PlayEffect_RPC("Explosion");
+            SoundManager.Instance.PlayEffect_RPC("Explosion");
         }
         if (Input.GetKeyDown(KeyCode.Keypad5))
         {
-            //SoundManager.instance.PlayEffect_RPC(SoundManager.instance.GetEffectClips("Fireball"));
-            SoundManager.instance.PlayEffect_RPC("Fireball");
+            //SoundManager.Instance.PlayEffect_RPC(SoundManager.Instance.GetEffectClips("Fireball"));
+            SoundManager.Instance.PlayEffect_RPC("Fireball");
         }
         if (Input.GetKeyDown(KeyCode.Keypad6))
         {
-            SoundManager.instance.PlayEffect_RPC("GetItem");
+            SoundManager.Instance.PlayEffect_RPC("GetItem");
         }
         if (Input.GetKeyDown(KeyCode.Keypad7))
         {
-            SoundManager.instance.PlayEffect_RPC("WaterBall");
+            SoundManager.Instance.PlayEffect_RPC("WaterBall");
         }
     }
 
     public void InputMove()
     {
         moveDir =
-          mainCamera.transform.forward * ((ITT_KeyManager.Instance.GetKey(PlayerAction.MoveForward) ? 1 : 0) + (ITT_KeyManager.Instance.GetKey(PlayerAction.MoveBackward) ? -1 : 0))
-        + mainCamera.transform.right * ((ITT_KeyManager.Instance.GetKey(PlayerAction.MoveRight) ? 1 : 0) + (ITT_KeyManager.Instance.GetKey(PlayerAction.MoveLeft) ? -1 : 0));
+          mainCamera.transform.forward * ((KeyManager.Instance.GetKey(PlayerAction.MoveForward) ? 1 : 0) + (KeyManager.Instance.GetKey(PlayerAction.MoveBackward) ? -1 : 0))
+        + mainCamera.transform.right * ((KeyManager.Instance.GetKey(PlayerAction.MoveRight) ? 1 : 0) + (KeyManager.Instance.GetKey(PlayerAction.MoveLeft) ? -1 : 0));
         moveDir.y = 0;
         moveDir = moveDir.normalized;
 
@@ -272,13 +275,13 @@ public class PlayerController3D : MonoBehaviour
 
     public void AimViewInputMove()
     {
-        moveDir.z = ((ITT_KeyManager.Instance.GetKey(PlayerAction.MoveForward) ? 1 : 0) + (ITT_KeyManager.Instance.GetKey(PlayerAction.MoveBackward) ? -1 : 0));
-        moveDir.x = ((ITT_KeyManager.Instance.GetKey(PlayerAction.MoveRight) ? 1 : 0) + (ITT_KeyManager.Instance.GetKey(PlayerAction.MoveLeft) ? -1 : 0));
+        moveDir.z = ((KeyManager.Instance.GetKey(PlayerAction.MoveForward) ? 1 : 0) + (KeyManager.Instance.GetKey(PlayerAction.MoveBackward) ? -1 : 0));
+        moveDir.x = ((KeyManager.Instance.GetKey(PlayerAction.MoveRight) ? 1 : 0) + (KeyManager.Instance.GetKey(PlayerAction.MoveLeft) ? -1 : 0));
     }
 
     public void InputJump()
     {
-        if (ITT_KeyManager.Instance.GetKeyDown(PlayerAction.Jump))
+        if (KeyManager.Instance.GetKeyDown(PlayerAction.Jump))
         {
             if (!characterState.IsJumping)
             {
@@ -316,7 +319,7 @@ public class PlayerController3D : MonoBehaviour
     }
     public void InputDash()
     {
-        if (ITT_KeyManager.Instance.GetKeyDown(PlayerAction.Dash))
+        if (KeyManager.Instance.GetKeyDown(PlayerAction.Dash))
         {
             if (!characterState.IsDashing)
             {

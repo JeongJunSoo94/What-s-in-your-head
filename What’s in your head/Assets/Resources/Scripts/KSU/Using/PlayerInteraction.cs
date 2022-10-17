@@ -45,7 +45,7 @@ namespace KSU
 
         void InputInteract()
         {
-            if (ITT_KeyManager.Instance.GetKeyDown(PlayerAction.Interaction))
+            if (KeyManager.Instance.GetKeyDown(PlayerAction.Interaction))
             {
                 if (!interactionState.isRidingRope && !interactionState.isRidingRail)
                 {
@@ -80,7 +80,7 @@ namespace KSU
                     }
                 }
             }
-            if(ITT_KeyManager.Instance.GetKeyDown(PlayerAction.Jump))
+            if(KeyManager.Instance.GetKeyDown(PlayerAction.Jump))
             {
                 if (interactionState.isRidingRail)
                 {

@@ -265,10 +265,10 @@ namespace KSU
         //        return;
         //    }
 
-        //    bool F = ITT_KeyManager.Instance.GetKey(PlayerAction.MoveForward);
-        //    bool B = ITT_KeyManager.Instance.GetKey(PlayerAction.MoveBackward);
-        //    bool L = ITT_KeyManager.Instance.GetKey(PlayerAction.MoveLeft);
-        //    bool R = ITT_KeyManager.Instance.GetKey(PlayerAction.MoveRight);
+        //    bool F = KeyManager.Instance.GetKey(PlayerAction.MoveForward);
+        //    bool B = KeyManager.Instance.GetKey(PlayerAction.MoveBackward);
+        //    bool L = KeyManager.Instance.GetKey(PlayerAction.MoveLeft);
+        //    bool R = KeyManager.Instance.GetKey(PlayerAction.MoveRight);
 
         //    Direction input = targetDirection;
 

@@ -54,14 +54,14 @@ namespace KSU
         //    {
         //        if (steadyInteractionState.isRidingHookingRope)
         //        {
-        //            if (ITT_KeyManager.Instance.GetKeyDown(PlayerAction.Jump))
+        //            if (KeyManager.Instance.GetKeyDown(PlayerAction.Jump))
         //            {
         //                EscapeMoving();
         //            }
         //        }
         //        else
         //        {
-        //            if (ITT_KeyManager.Instance.GetKeyDown(PlayerAction.Fire))
+        //            if (KeyManager.Instance.GetKeyDown(PlayerAction.Fire))
         //            {
         //                Hook(hookableTarget);
         //            }
