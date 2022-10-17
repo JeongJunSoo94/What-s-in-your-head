@@ -2082,9 +2082,9 @@ GameObject:
   - component: {fileID: 8630947927798686661}
   - component: {fileID: 7716936646535244067}
   - component: {fileID: 5967017729772335748}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Cine_sholderCam
-  m_TagString: Untagged
+  m_TagString: NellaCamera
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -3446,9 +3446,9 @@ GameObject:
   m_Component:
   - component: {fileID: 6039555201729644043}
   - component: {fileID: 3481911648991405788}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Cine_wallCam
-  m_TagString: Untagged
+  m_TagString: NellaCamera
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -3992,9 +3992,9 @@ GameObject:
   - component: {fileID: 6948550985964086571}
   - component: {fileID: 6948550985964086568}
   - component: {fileID: 6948550985964086569}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Cine_backCam
-  m_TagString: Untagged
+  m_TagString: NellaCamera
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -4319,7 +4319,7 @@ GameObject:
   - component: {fileID: 1395799192}
   - component: {fileID: 1395799191}
   - component: {fileID: 1395799190}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: NellaJJS
   m_TagString: Nella
   m_Icon: {fileID: 0}
@@ -4572,7 +4572,7 @@ MonoBehaviour:
   moveDir: {x: 0, y: 0, z: 0}
   dashVec: {x: 0, y: 0, z: 0}
   inertiaNormalVec: {x: 0, y: 0, z: 0}
-  nextSection: 0
+  CPcount: 0
 --- !u!114 &6781922161992669097
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4701,7 +4701,7 @@ MonoBehaviour:
   lookAtObj: {fileID: 6565198078348901689}
   layerFilterForRail:
     serializedVersion: 2
-    m_Bits: 456
+    m_Bits: 1047
   layerForRail:
     serializedVersion: 2
     m_Bits: 1024
@@ -4727,6 +4727,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   currentRidingRope: {fileID: 0}
   interactableRope: {fileID: 0}
+  moveToRopeSpeed: 6
   escapingRopeSpeed: 6
   escapingRopeDelayTime: 1
 --- !u!1 &6948550986939759324
@@ -4753,7 +4754,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6948550986939759324}
-  m_LocalRotation: {x: 0.25492924, y: 0.000000018601712, z: -0.0000000049041544, w: 0.9669597}
+  m_LocalRotation: {x: 0.25492924, y: -0.00000001860171, z: 0.000000004904154, w: 0.9669597}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -5610,9 +5611,9 @@ GameObject:
   m_Component:
   - component: {fileID: 7831375010883561265}
   - component: {fileID: 3691984559118576153}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Cine_wideCam
-  m_TagString: Untagged
+  m_TagString: NellaCamera
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

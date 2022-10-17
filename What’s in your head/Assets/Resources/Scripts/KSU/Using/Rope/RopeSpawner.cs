@@ -11,15 +11,15 @@ namespace KSU
         public GameObject NellaRopeAction;
         public GameObject SteadyRopeAction;
 
-        public float detectingRange = 30f;
-        public float interactableRange = 20f;
+        [Header("탐지 가능 거리")] public float detectingRange = 30f;
+        [Header("상호 작용 가능 거리")] public float interactableRange = 20f;
 
-        public float ropeLength = 15f;
+        [Header("로프 길이")] public float ropeLength = 15f;
 
-        public float rotationSpeed = 180f;
+        [Header("로프 수평 회전 속력")] public float rotationSpeed = 180f;
 
-        public float swingSpeed = 30f;
-        public float swingAngle = 60f;
+        [Header("로프 진자 운동 속력")] public float swingSpeed = 30f;
+        [Header("로프 진자 운동 최대 각도")] public float swingAngle = 60f;
 
         // Start is called before the first frame update
         void Start()
@@ -32,19 +32,21 @@ namespace KSU
             transform.localScale = new Vector3(1, 1, 1) * (detectingRange * 2f);
         }
 
-        public void StartRopeAction(GameObject player)
+        public void StartRopeAction(GameObject player, float moveToRopeSpeed)
         {
             switch (player.tag)
             {
                 case "Nella":
                     {
                         NellaRopeAction.GetComponent<Rope>().player = player;
+                        NellaRopeAction.GetComponent<Rope>().moveToRopeSpeed = moveToRopeSpeed;
                         NellaRopeAction.SetActive(true);
                     }
                     break;
                 case "Steady":
                     {
                         SteadyRopeAction.GetComponent<Rope>().player = player;
+                        SteadyRopeAction.GetComponent<Rope>().moveToRopeSpeed = moveToRopeSpeed;
                         SteadyRopeAction.SetActive(true);
                     }
                     break;

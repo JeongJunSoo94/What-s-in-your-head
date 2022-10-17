@@ -66,6 +66,8 @@ namespace JCW.UI.InGame
 
             // 임시
             isNella = true;
+
+            Debug.Log("타겟 지시기 시작");
         }
         protected void Update()
         {
@@ -142,35 +144,6 @@ namespace JCW.UI.InGame
             return indicatorPosition;
         }
 
-
-        // 지금은 임시로 트리거 Enter/Exit으로 하고 있지만
-        // 정식으로 사용할 때엔 플레이어가 레이를 쏴서 거리에 따라 온 오프 시켜야함.
-        private void OnTriggerEnter(Collider other)
-        {
-            if (other.CompareTag("Nella") || other.CompareTag("Steady"))
-            {
-                // 자기꺼일때만 켜기
-                if (other.gameObject.GetComponent<PhotonView>().IsMine)
-                {
-                    // 여기서는 바로 켜주는걸로 되어있지만, 정식으로 사용할 때엔 플레이어가 레이를 쏘도록 함수를 써야할 듯.
-                    // other.gameObject.SendMessage("레이 쏘는 함수", 매개변수-오브젝트);                    
-                }
-            }
-        }
-
-        private void OnTriggerExit(Collider other)
-        {
-            if (other.CompareTag("Nella") || other.CompareTag("Steady"))
-            {
-                // 자기꺼일때만 켜기
-                if (other.gameObject.GetComponent<PhotonView>().IsMine)
-                {
-                    // 여기서는 바로 켜주는걸로 되어있지만, 정식으로 사용할 때엔 플레이어 레이 리스트에서 지우도록.
-                    // other.gameObject.SendMessage("레이 쏘는 함수", 매개변수-오브젝트);    
-                }
-            }
-        }
-
         public void SetUI(bool _isActive, bool _isSetOn, float _dist, Camera _cam)
         {
             detectUI.SetActive(_isActive);
@@ -193,6 +166,28 @@ namespace JCW.UI.InGame
                     // 거리에 따라 게이지 줄어들게 끔 해주기
                     // 1 - (_dist-상호작용 범위)/(감지범위 - 상호작용 범위) == FillValue에 넣어줌.
                     gauge.fillAmount = 1 - (_dist - interactableRange) / (range - interactableRange);
+                }
+            }
+        }
+
+        public void SetUI(bool _isActive, bool _isSetOn, Vector3 _pos, Camera _cam)
+        {
+            detectUI.SetActive(_isActive);
+            isActive = _isActive;
+            if (target == null)
+                target = transform;
+            target.position = _pos;
+
+            if (isActive)
+            {
+                videoPlayer.targetCamera = _cam;
+                mainCamera = videoPlayer.targetCamera;
+                SetSreenInfo();
+                // 상호작용 범위 밖->안 & 안->밖 들어갔을 때만 애니메이션 재생과 함께 스프라이트 변경
+                if (isInteractable != _isSetOn)
+                {
+                    isInteractable = _isSetOn;
+                    ConvertVideo(_isSetOn);
                 }
             }
         }

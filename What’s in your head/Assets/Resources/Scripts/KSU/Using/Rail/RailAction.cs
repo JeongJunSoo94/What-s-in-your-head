@@ -6,6 +6,7 @@ using Cinemachine.Utility;
 
 using YC.Camera_;
 using YC.Camera_Single;
+using JCW.UI.InGame;
 
 namespace KSU
 {
@@ -17,6 +18,7 @@ namespace KSU
 
         Camera mainCamera;
         [SerializeField] GameObject lookAtObj;
+        GameObject detectedRail;
         public Ray ray;
         RaycastHit _raycastHit;
         public LayerMask layerFilterForRail;
@@ -77,6 +79,7 @@ namespace KSU
         private void Update()
         {
             SearchRail();
+            SendInfoUI();
         }
 
         void SearchRail()
@@ -175,10 +178,34 @@ namespace KSU
             currentRail.GetComponent<Rail>().EscapeRail(this.gameObject);
         }
 
+        void SendInfoUI()
+        {
+            if (interactionState.isRailFounded)
+            {
+                if(interactionState.railTriggerDetectionNum> 0)
+                {
+                    detectedRail.GetComponentInChildren<TargetIndicator>().SetUI(true, true, _raycastHit.point, mainCamera);
+                }
+                
+            }
+            else
+            {
+                if(detectedRail != null)
+                {
+                    detectedRail.GetComponentInChildren<TargetIndicator>().SetUI(false, false, Vector3.zero, mainCamera);
+                }
+            }
+        }
+
         private void OnTriggerEnter(Collider other)
         {
             if (other.CompareTag("Rail"))
             {
+                if(interactionState.railTriggerDetectionNum < 1)
+                {
+                    Debug.Log("할아버지 입장 : " + other.transform.parent.transform.parent.gameObject);
+                    detectedRail = other.transform.parent.transform.parent.gameObject;
+                }
                 interactionState.railTriggerDetectionNum++;
             }
         }
@@ -186,6 +213,10 @@ namespace KSU
         {
             if (other.CompareTag("Rail"))
             {
+                if (interactionState.railTriggerDetectionNum == 1)
+                {
+                    Debug.Log("할아버지 퇴장 : " + other.transform.parent.transform.parent.gameObject);
+                }
                 interactionState.railTriggerDetectionNum--;
             }
         }

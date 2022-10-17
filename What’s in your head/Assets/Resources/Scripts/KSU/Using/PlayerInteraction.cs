@@ -86,14 +86,14 @@ namespace KSU
                 {
                     if (!interactionState.isMoveToRail)
                     {
-                        railAction.EscapeRailAction();
+                        //railAction.EscapeRailAction();
                     }
                 }
                 else if (interactionState.isRidingRope)
                 {
                     if (!interactionState.isMoveFromRope && !interactionState.isMoveToRope)
                     {
-                        //ropeAction.EscapeRope();
+                        ropeAction.EscapeRope();
                     }
                 }
             }
