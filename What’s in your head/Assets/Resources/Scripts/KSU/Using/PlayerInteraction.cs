@@ -23,41 +23,6 @@ namespace KSU
         RailAction railAction;
         RopeAction ropeAction;
 
-        //public float UIRadius = 100f;
-
-        //public float rangeRadius = 5f;
-        //public float rangeDistance = 5f;
-
-        
-
-        //public LayerMask targetLayer;
-        //public Ray ray;
-        //LayerMask layerFilterForRope;
-        //LayerMask layerFilterForRail;
-        //RaycastHit _raycastHit;
-        //public Vector3 hVision;
-
-        //public bool isRailFounded = false;
-        //public bool isRailReady = false;
-        //public bool isRidingRope = false;
-
-
-
-
-        
-
-        //[SerializeField] GameObject rayOrigin;
-        //public GameObject minDistRope = null;
-        //public GameObject hookableTarget;
-
-        /// <summary>
-        public GameObject UI;
-        public GameObject detectingUI;
-        public Sprite gaugeImage;
-        public Sprite interactingImage;
-        /// </summary>
-
-
         // Start is called before the first frame update
         void Awake()
         {

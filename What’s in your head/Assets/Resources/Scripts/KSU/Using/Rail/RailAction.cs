@@ -108,7 +108,7 @@ namespace KSU
                 Debug.Log("2 RayChecked : " + isRayChecked);
                 if (isRayChecked)
                 {
-                    Debug.Log("2 hit! : " + _raycastHit.collider.tag);
+                    Debug.Log("2 hit! : " + hit.collider.tag);
                     if (hit.collider.CompareTag("Rail"))
                     {
                         interactionState.isRailFounded = true;
@@ -125,8 +125,8 @@ namespace KSU
                 Debug.Log("3 RayChecked : " + isRayChecked);
                 if (isRayChecked)
                 {
-                    Debug.Log("3 hit! : " + _raycastHit.collider.tag);
-                    if (hit.collider.tag == "Rail")
+                    Debug.Log("3 hit! : " + hit.collider.tag);
+                    if (hit.collider.CompareTag("Rail"))
                     {
                         interactionState.isRailFounded = true;
                         _raycastHit = hit;
@@ -146,7 +146,7 @@ namespace KSU
                 if (isRayChecked)
                 {
                     Debug.Log("4 hit! : " + _raycastHit.collider.tag);
-                    if (_raycastHit.collider.tag == "Rail")
+                    if (_raycastHit.collider.CompareTag("Rail"))
                     {
                         interactionState.isRailFounded = true;
                         railStartPosiotion = _raycastHit.point;

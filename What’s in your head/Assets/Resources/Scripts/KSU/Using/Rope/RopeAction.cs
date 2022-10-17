@@ -1,7 +1,11 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+
+using Photon.Pun;
 using JCW.UI.Options.InputBindings;
+using YC.Camera_;
+using YC.Camera_Single;
 
 namespace KSU
 {
@@ -40,7 +44,13 @@ namespace KSU
             playerController = GetComponent<PlayerController3D>();
             playerState = GetComponent<CharacterState3D>();
             interactionState = GetComponent<PlayerInteractionState>();
-            mainCamera = playerController.mainCamera;
+            if (PhotonNetwork.NetworkClientState == Photon.Realtime.ClientState.Joined)
+                mainCamera = this.gameObject.GetComponent<CameraController>().FindCamera(); // 멀티용
+            else
+                mainCamera = this.gameObject.GetComponent<CameraController_Single>().FindCamera(); // 싱글용
+
+            if (mainCamera == null)
+                Debug.Log("카메라 NULL");
             layerFilterForRope = ((-1) - (1 << LayerMask.NameToLayer("Player")));
         }
 
@@ -108,6 +118,7 @@ namespace KSU
         public void RideRope()
         {
             playerState.IsAirJumping = false;
+            playerState.WasAirDashing = false;
             interactionState.isRidingRope = true;
             interactionState.isMoveToRope = true;
 
