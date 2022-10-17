@@ -139,7 +139,7 @@ namespace JCW.Object
             {
                 case "Nella":
                 case "Steady":
-                    other.gameObject.GetComponent<PlayerController3D>().Resurrect();
+                    other.gameObject.GetComponent<PlayerController>().Resurrect();
                     break;
             }
         }

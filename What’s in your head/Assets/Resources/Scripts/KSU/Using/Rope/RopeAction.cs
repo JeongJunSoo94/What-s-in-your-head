@@ -25,8 +25,8 @@ namespace KSU
     public class RopeAction : MonoBehaviour
     {
         Camera mainCamera;
-        PlayerController3D playerController;
-        CharacterState3D playerState;
+        PlayerController playerController;
+        PlayerState playerState;
         PlayerInteractionState interactionState;
 
         RaycastHit _raycastHit;
@@ -43,8 +43,8 @@ namespace KSU
 
         private void Awake()
         {
-            playerController = GetComponent<PlayerController3D>();
-            playerState = GetComponent<CharacterState3D>();
+            playerController = GetComponent<PlayerController>();
+            playerState = GetComponent<PlayerState>();
             interactionState = GetComponent<PlayerInteractionState>();
             if (PhotonNetwork.NetworkClientState == Photon.Realtime.ClientState.Joined)
                 mainCamera = this.gameObject.GetComponent<CameraController>().FindCamera(); // 멀티용
@@ -53,8 +53,7 @@ namespace KSU
 
             if (mainCamera == null)
                 Debug.Log("카메라 NULL");
-            else
-                Debug.Log(mainCamera);
+
             layerFilterForRope = ((-1) - (1 << LayerMask.NameToLayer("Player")));
         }
 
@@ -68,29 +67,38 @@ namespace KSU
         {
             if ((detectedRopes.Count > 0) && currentRidingRope == null)
             {
+                if (interactionState.isRailFounded)
+                {
+
+                }
                 Obj_Info node = new();
                 node.playerCamera = mainCamera;
                 float minDist = 100f;
                 GameObject minDistObj = null;
-                Dictionary<GameObject, Obj_Info> temp = new();                
-                foreach (var detectedRope in detectedRopes.Keys)
-                {                              
-                    RopeSpawner spawner = detectedRope.GetComponent<RopeSpawner>();
-                    bool rayCheck = Physics.Raycast(transform.position, (detectedRope.transform.position - transform.position), out _raycastHit, spawner.detectingRange * 1.5f, layerFilterForRope, QueryTriggerInteraction.Ignore);
-                    if(rayCheck)
+                Dictionary<GameObject, Obj_Info> temp = new();
+                if (interactionState.isRailFounded)
+                {
+                    foreach (var detectedRope in detectedRopes.Keys)
                     {
-                        if(_raycastHit.collider.CompareTag("Rope"))
+                        RopeSpawner spawner = detectedRope.GetComponent<RopeSpawner>();
+                        bool rayCheck = Physics.Raycast(transform.position, (detectedRope.transform.position - transform.position), out _raycastHit, spawner.detectingRange * 1.5f, layerFilterForRope, QueryTriggerInteraction.Ignore);
+                        if (rayCheck)
                         {
-                            if((spawner.interactableRange > _raycastHit.distance) && (minDist > _raycastHit.distance) && !interactionState.isRailFounded)
+                            if (_raycastHit.collider.CompareTag("Rope"))
                             {
-                                minDist = _raycastHit.distance;
-                                minDistObj = detectedRope;
+                                node.isUIActive = true;
+                                node.isInteractable = false;
+                                node.distance = Vector3.Distance(transform.position, _raycastHit.collider.gameObject.transform.position);
+                                //temp[detectedRope] = node;
+                                temp.Add(detectedRope, node);
                             }
-                            node.isUIActive = true;
-                            node.isInteractable = false;
-                            node.distance = Vector3.Distance(transform.position, _raycastHit.collider.gameObject.transform.position);
-                            //temp[detectedRope] = node;
-                            temp.Add(detectedRope, node);
+                            else
+                            {
+                                node.isUIActive = false;
+                                node.isInteractable = false;
+                                //temp[detectedRope] = node;
+                                temp.Add(detectedRope, node);
+                            }
                         }
                         else
                         {
@@ -100,23 +108,63 @@ namespace KSU
                             temp.Add(detectedRope, node);
                         }
                     }
-                    else
+
+                    if (minDistObj != null)
                     {
-                        node.isUIActive = false;
-                        node.isInteractable = false;
-                        //temp[detectedRope] = node;
-                        temp.Add(detectedRope, node);
+                        node = temp.GetValueOrDefault(minDistObj);
+                        node.isInteractable = true;
+                        temp[minDistObj] = node;
                     }
+                    detectedRopes = temp;
+                    interactableRope = minDistObj;
                 }
-                
-                if(minDistObj != null)
+                else
                 {
-                    node = temp.GetValueOrDefault(minDistObj);
-                    node.isInteractable = true;
-                    temp[minDistObj] = node;
+                    foreach (var detectedRope in detectedRopes.Keys)
+                    {
+                        RopeSpawner spawner = detectedRope.GetComponent<RopeSpawner>();
+                        bool rayCheck = Physics.Raycast(transform.position, (detectedRope.transform.position - transform.position), out _raycastHit, spawner.detectingRange * 1.5f, layerFilterForRope, QueryTriggerInteraction.Ignore);
+                        if (rayCheck)
+                        {
+                            if (_raycastHit.collider.CompareTag("Rope"))
+                            {
+                                if ((spawner.interactableRange > _raycastHit.distance) && (minDist > _raycastHit.distance) && !interactionState.isRailFounded)
+                                {
+                                    minDist = _raycastHit.distance;
+                                    minDistObj = detectedRope;
+                                }
+                                node.isUIActive = true;
+                                node.isInteractable = false;
+                                node.distance = Vector3.Distance(transform.position, _raycastHit.collider.gameObject.transform.position);
+                                //temp[detectedRope] = node;
+                                temp.Add(detectedRope, node);
+                            }
+                            else
+                            {
+                                node.isUIActive = false;
+                                node.isInteractable = false;
+                                //temp[detectedRope] = node;
+                                temp.Add(detectedRope, node);
+                            }
+                        }
+                        else
+                        {
+                            node.isUIActive = false;
+                            node.isInteractable = false;
+                            //temp[detectedRope] = node;
+                            temp.Add(detectedRope, node);
+                        }
+                    }
+
+                    if (minDistObj != null)
+                    {
+                        node = temp.GetValueOrDefault(minDistObj);
+                        node.isInteractable = true;
+                        temp[minDistObj] = node;
+                    }
+                    detectedRopes = temp;
+                    interactableRope = minDistObj;
                 }
-                detectedRopes = temp;
-                interactableRope = minDistObj;
             }
         }
 

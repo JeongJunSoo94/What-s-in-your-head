@@ -6,27 +6,27 @@ public class DashSMB : CharacterBaseSMB
 {
     override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        if (GetPlayerController3D(animator).enabled)
+        if (GetPlayerController(animator).enabled)
         {
-            GetPlayerController3D(animator).characterState.isRun = false;
+            GetPlayerController(animator).characterState.isRun = false;
         }
     }
 
     // OnStateUpdate is called on each Update frame between OnStateEnter and OnStateExit callbacks
     override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        if (GetPlayerController3D(animator).enabled)
+        if (GetPlayerController(animator).enabled)
         {
              check(animator);
         }
     }
     void check(Animator animator)
     {
-        if (!GetPlayerController3D(animator).characterState.IsGrounded)
+        if (!GetPlayerController(animator).characterState.IsGrounded)
         {
             animator.SetBool("isAir", true);
         }
-        if (!GetPlayerController3D(animator).characterState.IsDashing)
+        if (!GetPlayerController(animator).characterState.IsDashing)
         {
             animator.SetBool("isDash", false);
         }

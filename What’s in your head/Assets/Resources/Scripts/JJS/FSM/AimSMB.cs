@@ -12,7 +12,7 @@ public class AimSMB : CharacterBaseSMB
     // OnStateUpdate is called on each Update frame between OnStateEnter and OnStateExit callbacks
     override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        if (GetPlayerController3D(animator).enabled)
+        if (GetPlayerController(animator).enabled)
         {
             check(animator);
 
@@ -26,9 +26,9 @@ public class AimSMB : CharacterBaseSMB
 
     void check(Animator animator)
     {
-        if (GetPlayerController3D(animator).characterState.aim)
+        if (GetPlayerController(animator).characterState.aim)
         {
-            //GetPlayerController3D(animator).RotateAim();
+            //GetPlayerController(animator).RotateAim();
             if (KeyManager.Instance.GetKey(PlayerAction.Fire))
             {
                 animator.SetBool("AimAttack", true);

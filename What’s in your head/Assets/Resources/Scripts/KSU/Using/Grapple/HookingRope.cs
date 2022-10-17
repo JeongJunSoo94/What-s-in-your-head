@@ -8,8 +8,8 @@ namespace KSU
     public class HookingRope : MonoBehaviour
     {
         SteadyInteractionState steadyInteractionState;
-        PlayerController3D playerController;
-        CharacterState3D playerState;
+        PlayerController playerController;
+        PlayerState playerState;
         Rigidbody playerRigidbody;
 
         public float grappleSpeed = 10f;
@@ -33,8 +33,8 @@ namespace KSU
         // Start is called before the first frame update
         void Awake()
         {
-            playerController = GetComponent<PlayerController3D>();
-            playerState = GetComponent<CharacterState3D>();
+            playerController = GetComponent<PlayerController>();
+            playerState = GetComponent<PlayerState>();
             steadyInteractionState = GetComponent<SteadyInteractionState>();
             playerRigidbody = GetComponent<Rigidbody>();
             mainCamera = playerController.mainCamera;

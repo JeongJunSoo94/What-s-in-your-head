@@ -15,8 +15,8 @@ namespace KSU
         //public Dictionary<GameObject, GameObject> interactableRopeSpawners = new Dictionary<GameObject, GameObject>();
 
         //Camera mainCamera;
-        //PlayerController3D playerController;
-        //CharacterState3D playerState;
+        //PlayerController playerController;
+        //PlayerState playerState;
         PlayerInteractionState interactionState;
 
         //HookingRope grappleAction;
@@ -26,8 +26,8 @@ namespace KSU
         // Start is called before the first frame update
         void Awake()
         {
-            //playerController = GetComponent<PlayerController3D>();
-            //playerState = GetComponent<CharacterState3D>();
+            //playerController = GetComponent<PlayerController>();
+            //playerState = GetComponent<PlayerState>();
             interactionState = GetComponent<PlayerInteractionState>();
             
             //grappleAction = GetComponent<HookingRope>();
@@ -65,9 +65,16 @@ namespace KSU
                 {
                     if (interactionState.isRidingRail)
                     {
-                        if (!interactionState.isMoveToRail)
+                        if (!interactionState.isMovingToRail)
                         {
-                            //railAction.EscapeRailAction();
+                            if (interactionState.isRailFounded)
+                            {
+                                railAction.SwapRail();
+                            }
+                            else if(!interactionState.isRailJumping)
+                            {
+                                railAction.EscapeRailAction();
+                            }
                         }
                     }
 
@@ -84,9 +91,9 @@ namespace KSU
             {
                 if (interactionState.isRidingRail)
                 {
-                    if (!interactionState.isMoveToRail)
+                    if (!interactionState.isMovingToRail)
                     {
-                        //railAction.EscapeRailAction();
+                        railAction.StartRailJump();
                     }
                 }
                 else if (interactionState.isRidingRope)

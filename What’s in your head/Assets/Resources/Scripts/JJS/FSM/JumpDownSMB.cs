@@ -6,20 +6,20 @@ public class JumpDownSMB : CharacterBaseSMB
 {
     override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        if (GetPlayerController3D(animator).enabled)
+        if (GetPlayerController(animator).enabled)
         {
-            GetPlayerController3D(animator).characterState.isRun = false;
+            GetPlayerController(animator).characterState.isRun = false;
         }
     }
 
     // OnStateUpdate is called on each Update frame between OnStateEnter and OnStateExit callbacks
     override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        if (GetPlayerController3D(animator).enabled)
+        if (GetPlayerController(animator).enabled)
         {
-            GetPlayerController3D(animator).InputMove();
-            GetPlayerController3D(animator).InputDash();
-            GetPlayerController3D(animator).InputJump();
+            GetPlayerController(animator).InputMove();
+            GetPlayerController(animator).InputDash();
+            GetPlayerController(animator).InputJump();
             check(animator);
         }
    
@@ -30,9 +30,9 @@ public class JumpDownSMB : CharacterBaseSMB
     void check(Animator animator)
     {
 
-        if (GetPlayerController3D(animator).characterState.RayCheck)
+        if (GetPlayerController(animator).characterState.RayCheck)
         {
-            float DistY = -(GetPlayerController3D(animator).moveVec.y) / 10.0f;
+            float DistY = -(GetPlayerController(animator).moveVec.y) / 10.0f;
             if (DistY > 0.2f)
                 animator.SetFloat("DistY", DistY);
             //animator.SetFloat("DistY", DistY);
@@ -42,17 +42,17 @@ public class JumpDownSMB : CharacterBaseSMB
             animator.SetFloat("DistY", 0.1f);
         }
 
-        if (GetPlayerController3D(animator).characterState.IsGrounded)
+        if (GetPlayerController(animator).characterState.IsGrounded)
         {
             animator.SetBool("isAir", false);
             animator.SetBool("isJump", false);
         }
-        if (GetPlayerController3D(animator).characterState.IsAirJumping)
+        if (GetPlayerController(animator).characterState.IsAirJumping)
         {
             animator.SetBool("isAirJump", true);
             return;
         }
-        if (GetPlayerController3D(animator).characterState.IsAirDashing)
+        if (GetPlayerController(animator).characterState.IsAirDashing)
         {
             animator.SetBool("isAirDash", true);
             return;

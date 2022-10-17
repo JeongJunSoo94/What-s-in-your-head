@@ -12,13 +12,14 @@ namespace KSU
 {
     public class RailAction : MonoBehaviour
     {
-        PlayerController3D playerController;
-        CharacterState3D playerState;
+        Rigidbody playerRigidbody;
+        PlayerController playerController;
+        PlayerState playerState;
         PlayerInteractionState interactionState;
 
-        Camera mainCamera;
+        public Camera mainCamera;
         [SerializeField] GameObject lookAtObj;
-        GameObject detectedRail;
+        Dictionary <GameObject, int> detectedRail = new();
         public Ray ray;
         RaycastHit _raycastHit;
         public LayerMask layerFilterForRail;
@@ -30,6 +31,12 @@ namespace KSU
         public GameObject currentRail;
         public GameObject railStartObject;
         public Vector3 railStartPosiotion = Vector3.zero;
+
+        public float movingToRailSpeed = 10f;
+        float departingRailOffset = 0.2f;
+
+        public float railJumpHeight = 4f;
+        public float railJumpSpeed = 6f;
 
         public float escapingRopeSpeed = 6f;
         public float escapingRoDelayTime = 1f;
@@ -43,10 +50,10 @@ namespace KSU
         Vector3 startLeft;
         Vector3 startRight;
 
-        Vector3 startUps;
-        Vector3 startDowns;
-        Vector3 startLefts;
-        Vector3 startRights;
+        //Vector3 startUps;
+        //Vector3 startDowns;
+        //Vector3 startLefts;
+        //Vector3 startRights;
 
         public Vector3 hVision;
 
@@ -56,16 +63,17 @@ namespace KSU
         Vector3 endLeft;
         Vector3 endRight;
 
-        Vector3 endUps;
-        Vector3 endDowns;
-        Vector3 endLefts;
-        Vector3 endRights;
+        //Vector3 endUps;
+        //Vector3 endDowns;
+        //Vector3 endLefts;
+        //Vector3 endRights;
         /// </summary>
 
         void Awake()
         {
-            playerController = GetComponent<PlayerController3D>();
-            playerState = GetComponent<CharacterState3D>();
+            playerRigidbody = GetComponent<Rigidbody>();
+            playerController = GetComponent<PlayerController>();
+            playerState = GetComponent<PlayerState>();
             interactionState = GetComponent<PlayerInteractionState>();
 
             if (PhotonNetwork.NetworkClientState == Photon.Realtime.ClientState.Joined)
@@ -80,6 +88,50 @@ namespace KSU
         {
             SearchRail();
             SendInfoUI();
+            //if(interactionState.isRailTriggered)
+            //{
+            //    if (interactionState.isMovingToRail)
+            //    {
+            //        MoveToRail();
+            //    }
+            //    else
+            //    {
+            //        if (!interactionState.isRidingRail)
+            //        {
+            //            RideOnRail();
+            //        }
+            //    }
+            //}
+        }
+
+        private void FixedUpdate()
+        {
+            if (interactionState.isRailTriggered)
+            {
+                if (interactionState.isMovingToRail)
+                {
+                    MoveToRail();
+                }
+                else
+                {
+                    if (!interactionState.isRidingRail)
+                    {
+                        RideOnRail();
+                    }
+                }
+            }
+
+            if(interactionState.isRidingRail)
+            {
+                if (interactionState.isRailJumping)
+                {
+                    JumpOnRail();
+                }
+                else
+                {
+                    transform.localPosition = Vector3.zero;
+                }
+            }
         }
 
         void SearchRail()
@@ -93,75 +145,88 @@ namespace KSU
 
         public void SearchWithSphereCast()
         {
-            //ray = mainCamera.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0f));
-            Vector3 cameraForwardXZ = mainCamera.transform.forward;
-            cameraForwardXZ.y = 0;
-            Vector3 rayOrigin = (lookAtObj.transform.position - cameraForwardXZ);
-            Vector3 rayEnd = (lookAtObj.transform.position + mainCamera.transform.forward * (rangeDistance + rangeRadius * 2f));
-            Vector3 direction = (rayEnd - rayOrigin).normalized;
-            bool isRayChecked = Physics.SphereCast(rayOrigin, rangeRadius, direction, out _raycastHit, rangeDistance, layerForRail, QueryTriggerInteraction.Ignore);
-            
-            Debug.Log("1 RayChecked : " + isRayChecked);
-            if (isRayChecked)
+            if(!interactionState.isRailTriggered)
             {
-                Debug.Log("1 hit! : " + _raycastHit.collider.tag);
-                RaycastHit hit;
-                isRayChecked = Physics.SphereCast(rayOrigin, 1f, direction, out hit, (rangeDistance + rangeRadius * 2f) , layerFilterForRail, QueryTriggerInteraction.Ignore);
+                //ray = mainCamera.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0f));
+                Vector3 cameraForwardXZ = mainCamera.transform.forward;
+                cameraForwardXZ.y = 0;
+                Vector3 rayOrigin = (lookAtObj.transform.position - cameraForwardXZ);
+                Vector3 rayEnd = (lookAtObj.transform.position + mainCamera.transform.forward * (rangeDistance + rangeRadius * 2f));
+                Vector3 direction = (rayEnd - rayOrigin).normalized;
+                bool isRayChecked = Physics.SphereCast(rayOrigin, rangeRadius, direction, out _raycastHit, rangeDistance, layerForRail, QueryTriggerInteraction.Ignore);
 
-                Debug.Log("2 RayChecked : " + isRayChecked);
+                //Debug.Log("1 RayChecked : " + isRayChecked);
                 if (isRayChecked)
                 {
-                    Debug.Log("2 hit! : " + hit.collider.tag);
-                    if (hit.collider.CompareTag("Rail"))
+                    //Debug.Log("1 hit! : " + _raycastHit.collider.tag);
+                    RaycastHit hit;
+                    //isRayChecked = Physics.SphereCast(rayOrigin, 1f, direction, out hit, (rangeDistance + rangeRadius * 2f) , layerFilterForRail, QueryTriggerInteraction.Ignore);
+                    isRayChecked = Physics.CapsuleCast(rayOrigin + Vector3.up * rangeRadius, rayOrigin - Vector3.up * rangeRadius, 1f, direction, out hit, (rangeDistance + rangeRadius * 2f), layerFilterForRail, QueryTriggerInteraction.Ignore);
+
+                    //Debug.Log("2 RayChecked : " + isRayChecked);
+                    if (isRayChecked)
                     {
-                        interactionState.isRailFounded = true;
-                        _raycastHit = hit;
-                        railStartPosiotion = _raycastHit.point;
-                        railStartObject = _raycastHit.collider.gameObject;
-                        return;
+                        //Debug.Log("2 hit! : " + hit.collider.tag);
+                        if ((hit.collider.gameObject.transform.parent.gameObject != currentRail) || interactionState.isRailJumping)
+                        {
+                            if (hit.collider.CompareTag("Rail"))
+                            {
+                                interactionState.isRailFounded = true;
+                                _raycastHit = hit;
+                                railStartPosiotion = _raycastHit.point;
+                                railStartObject = _raycastHit.collider.gameObject;
+                                return;
+                            }
+                        }
+                    }
+
+                    direction = (_raycastHit.point - rayOrigin).normalized;
+
+                    isRayChecked = Physics.Raycast(rayOrigin, direction, out hit, (rangeDistance + rangeRadius * 2f), layerFilterForRail, QueryTriggerInteraction.Ignore);
+                    //Debug.Log("3 RayChecked : " + isRayChecked);
+                    if (isRayChecked)
+                    {
+                        //Debug.Log("3 hit! : " + hit.collider.tag);
+                        if ((hit.collider.gameObject.transform.parent.gameObject != currentRail) || interactionState.isRailJumping)
+                        {
+                            if (hit.collider.CompareTag("Rail"))
+                            {
+                                interactionState.isRailFounded = true;
+                                _raycastHit = hit;
+                                railStartPosiotion = _raycastHit.point;
+                                railStartObject = _raycastHit.collider.gameObject;
+                                return;
+                            }
+                        }
+                    }
+                }
+                else
+                {
+                    rayOrigin = (lookAtObj.transform.position + cameraForwardXZ * 2f);
+                    direction = -cameraForwardXZ.normalized;
+
+                    isRayChecked = Physics.SphereCast(rayOrigin, rangeRadius, direction, out _raycastHit, rangeRadius * 2f, layerFilterForRail, QueryTriggerInteraction.Ignore);
+
+                    if (isRayChecked)
+                    {
+                        //Debug.Log("4 hit! : " + _raycastHit.collider.tag);
+                        if ((_raycastHit.collider.gameObject.transform.parent.gameObject != currentRail) || interactionState.isRailJumping)
+                        {
+                            if (_raycastHit.collider.CompareTag("Rail"))
+                            {
+                                interactionState.isRailFounded = true;
+                                railStartPosiotion = _raycastHit.point;
+                                railStartObject = _raycastHit.collider.gameObject;
+                                return;
+                            }
+                        }
                     }
                 }
 
-                direction = (_raycastHit.point - rayOrigin).normalized;
-
-                isRayChecked = Physics.Raycast(rayOrigin, direction, out hit, (rangeDistance + rangeRadius * 2f), layerFilterForRail, QueryTriggerInteraction.Ignore);
-                Debug.Log("3 RayChecked : " + isRayChecked);
-                if (isRayChecked)
-                {
-                    Debug.Log("3 hit! : " + hit.collider.tag);
-                    if (hit.collider.CompareTag("Rail"))
-                    {
-                        interactionState.isRailFounded = true;
-                        _raycastHit = hit;
-                        railStartPosiotion = _raycastHit.point;
-                        railStartObject = _raycastHit.collider.gameObject;
-                        return;
-                    }
-                }
+                //Debug.Log("Not Found : " + false);
+                interactionState.isRailFounded = false;
+                return;
             }
-            else
-            {
-                rayOrigin = (lookAtObj.transform.position + cameraForwardXZ * 2f);
-                direction = -cameraForwardXZ.normalized;
-
-                isRayChecked = Physics.SphereCast(rayOrigin, rangeRadius, direction, out _raycastHit, rangeRadius * 2f, layerFilterForRail, QueryTriggerInteraction.Ignore);
-
-                if (isRayChecked)
-                {
-                    Debug.Log("4 hit! : " + _raycastHit.collider.tag);
-                    if (_raycastHit.collider.CompareTag("Rail"))
-                    {
-                        interactionState.isRailFounded = true;
-                        railStartPosiotion = _raycastHit.point;
-                        railStartObject = _raycastHit.collider.gameObject;
-                        return;
-                    }
-                }
-            }
-
-            Debug.Log("Not Found : " + false);
-            interactionState.isRailFounded = false;
-            return;
         }
 
         public void StartRailAction()
@@ -169,30 +234,92 @@ namespace KSU
             playerState.IsAirJumping = false;
             playerState.WasAirDashing = false;
             playerState.IsGrounded = false;
-            railStartObject.transform.parent.gameObject.GetComponent<Rail>().RideOnRail(railStartPosiotion, railStartObject, this.gameObject);
+            currentRail = railStartObject.transform.parent.gameObject;
+            interactionState.isMovingToRail = true;
+            interactionState.isRailTriggered = true;
+            playerController.enabled = false;
         }
 
+        void MoveToRail()
+        {
+            if((railStartPosiotion - transform.position).magnitude < departingRailOffset)
+            {
+                interactionState.isMovingToRail = false;
+                return;
+            }
+            playerRigidbody.velocity = (railStartPosiotion - transform.position).normalized * movingToRailSpeed;
+        }
+
+        void RideOnRail()
+        {
+            interactionState.isRidingRail = true;
+            railStartObject.transform.parent.gameObject.GetComponent<Rail>().RideOnRail(railStartPosiotion, railStartObject, this.gameObject);
+            interactionState.isRailTriggered = false;
+        }
         public void EscapeRailAction()
         {
             playerState.IsGrounded = false;
             currentRail.GetComponent<Rail>().EscapeRail(this.gameObject);
         }
 
-        void SendInfoUI()
+        public void SwapRail()
         {
-            if (interactionState.isRailFounded)
+            currentRail.GetComponent<Rail>().EscapeRail(this.gameObject);
+            StartRailAction();
+        }
+
+        public void StartRailJump()
+        {
+            interactionState.isRailJumpingUp = true;
+            interactionState.isRailJumping = true;
+        }
+            
+        public void JumpOnRail()
+        {
+            Vector3 localPos = transform.localPosition;
+
+            if(interactionState.isRailJumpingUp)
             {
-                if(interactionState.railTriggerDetectionNum> 0)
+                localPos.y += railJumpSpeed * Time.fixedDeltaTime;
+                if (localPos.y > railJumpHeight)
                 {
-                    detectedRail.GetComponentInChildren<TargetIndicator>().SetUI(true, true, _raycastHit.point, mainCamera);
+                    interactionState.isRailJumpingUp = false;
                 }
-                
             }
             else
             {
-                if(detectedRail != null)
+                localPos.y -= railJumpSpeed * Time.fixedDeltaTime;
+                if (localPos.y < departingRailOffset)
                 {
-                    detectedRail.GetComponentInChildren<TargetIndicator>().SetUI(false, false, Vector3.zero, mainCamera);
+                    localPos.y = 0;
+                    interactionState.isRailJumping = false;
+                }
+            }
+
+            transform.localPosition = localPos;
+        }
+
+        void SendInfoUI()
+        {
+            if(detectedRail.Count > 0)
+            {
+                if (interactionState.isRailFounded)
+                {
+                    railStartObject.transform.parent.gameObject.GetComponentInChildren<TargetIndicator>().SetUI(true, true, _raycastHit.point, mainCamera);
+                    foreach (var rail in detectedRail.Keys)
+                    {
+                        if (rail != railStartObject.transform.parent.gameObject)
+                        {
+                            rail.GetComponentInChildren<TargetIndicator>().SetUI(false, false, Vector3.zero, mainCamera);
+                        }
+                    }
+                }
+                else
+                {
+                    foreach (var rail in detectedRail.Keys)
+                    {
+                        rail.GetComponentInChildren<TargetIndicator>().SetUI(false, false, Vector3.zero, mainCamera);
+                    }
                 }
             }
         }
@@ -201,11 +328,29 @@ namespace KSU
         {
             if (other.CompareTag("Rail"))
             {
-                if(interactionState.railTriggerDetectionNum < 1)
+                if (detectedRail.Count > 0)
                 {
-                    Debug.Log("할아버지 입장 : " + other.transform.parent.transform.parent.gameObject);
-                    detectedRail = other.transform.parent.transform.parent.gameObject;
+                    bool isNewRail = true;
+                    foreach (var rail in detectedRail)
+                    {
+                        if (rail.Key == other.transform.parent.transform.parent.gameObject)
+                        {
+                            detectedRail[rail.Key] = rail.Value + 1;
+                            isNewRail = false;
+                            break;
+                        }
+                    }
+
+                    if (isNewRail)
+                    {
+                        detectedRail.Add(other.transform.parent.transform.parent.gameObject, 1);
+                    }
                 }
+                else
+                {
+                    detectedRail.Add(other.transform.parent.transform.parent.gameObject, 1);
+                }
+
                 interactionState.railTriggerDetectionNum++;
             }
         }
@@ -213,10 +358,30 @@ namespace KSU
         {
             if (other.CompareTag("Rail"))
             {
-                if (interactionState.railTriggerDetectionNum == 1)
+                if (detectedRail.Count > 0)
                 {
-                    Debug.Log("할아버지 퇴장 : " + other.transform.parent.transform.parent.gameObject);
+                    bool isNewRail = true;
+                    foreach (var rail in detectedRail)
+                    {
+                        if (rail.Key == other.transform.parent.transform.parent.gameObject)
+                        {
+                            detectedRail[rail.Key] = rail.Value - 1;
+                            if(rail.Value < 1)
+                            {
+                                detectedRail.Remove(rail.Key);
+                            }
+
+                            isNewRail = false;
+                            break;
+                        }
+                    }
+
+                    if (isNewRail)
+                    {
+                        Debug.Log("레일 갯수 오류");
+                    }
                 }
+
                 interactionState.railTriggerDetectionNum--;
             }
         }
@@ -226,10 +391,10 @@ namespace KSU
             hVision = mainCamera.transform.forward;
 
             startCenter = lookAtObj.transform.position;
-            startUps = startCenter + mainCamera.transform.up;
-            startDowns = startCenter - mainCamera.transform.up;
-            startLefts = startCenter - mainCamera.transform.right;
-            startRights = startCenter + mainCamera.transform.right;
+            //startUps = startCenter + mainCamera.transform.up;
+            //startDowns = startCenter - mainCamera.transform.up;
+            //startLefts = startCenter - mainCamera.transform.right;
+            //startRights = startCenter + mainCamera.transform.right;
 
             startUp = startCenter + mainCamera.transform.up * rangeRadius;
             startDown = startCenter - mainCamera.transform.up * rangeRadius;
@@ -237,10 +402,10 @@ namespace KSU
             startRight = startCenter + mainCamera.transform.right * rangeRadius;
 
             endCenter = startCenter + hVision * rangeDistance;
-            endUps = endCenter + mainCamera.transform.up;
-            endDowns = endCenter - mainCamera.transform.up;
-            endLefts = endCenter - mainCamera.transform.right;
-            endRights = endCenter + mainCamera.transform.right;
+            //endUps = endCenter + mainCamera.transform.up;
+            //endDowns = endCenter - mainCamera.transform.up;
+            //endLefts = endCenter - mainCamera.transform.right;
+            //endRights = endCenter + mainCamera.transform.right;
 
             endUp = endCenter + mainCamera.transform.up * rangeRadius;
             endDown = endCenter - mainCamera.transform.up * rangeRadius;
@@ -264,13 +429,14 @@ namespace KSU
             Gizmos.DrawWireSphere(startCenter, rangeRadius);
             Gizmos.DrawWireSphere(endCenter, rangeRadius);
 
-            Gizmos.DrawLine(startUps, endUps);
-            Gizmos.DrawLine(startDowns, endDowns);
-            Gizmos.DrawLine(startRights, endRights);
-            Gizmos.DrawLine(startLefts, endLefts);
+            //Gizmos.DrawLine(startUps, endUps);
+            //Gizmos.DrawLine(startDowns, endDowns);
+            //Gizmos.DrawLine(startRights, endRights);
+            //Gizmos.DrawLine(startLefts, endLefts);
 
-            Gizmos.DrawWireSphere(startCenter, 1f);
-            Gizmos.DrawWireSphere(endCenter, 1f);
+            //Gizmos.DrawWireSphere(startCenter, 1f);
+            //Gizmos.DrawWireSphere(endCenter, 1f);
+            
         }
     }
 }

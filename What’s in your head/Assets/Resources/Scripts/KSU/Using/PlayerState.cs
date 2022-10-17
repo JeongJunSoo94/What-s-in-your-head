@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CharacterState3D : MonoBehaviour
+public class PlayerState : MonoBehaviour
 {
     //지면 체크 변수
     #region

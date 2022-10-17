@@ -88,7 +88,7 @@ MonoBehaviour:
   railCollider: {fileID: 6362902148480056207, guid: 441f3ee9795852546821e983296ba6eb, type: 3}
   detectionRangeRadius: 20
   detectionRangeLength: 2
-  railSpeed: 4
+  railSpeed: 1
   escapingRailSpeed: 4
 --- !u!1001 &3140090384022468389
 PrefabInstance:
@@ -224,6 +224,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3962358816317797112, guid: e945d683716bac04592b587c13092335, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3962358816317797113, guid: e945d683716bac04592b587c13092335, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3962358816317797116, guid: e945d683716bac04592b587c13092335, type: 3}
       propertyPath: m_IsActive
       value: 1
@@ -231,6 +239,10 @@ PrefabInstance:
     - target: {fileID: 4451739502675131692, guid: e945d683716bac04592b587c13092335, type: 3}
       propertyPath: m_Name
       value: InteractableUI
+      objectReference: {fileID: 0}
+    - target: {fileID: 4451739502675131692, guid: e945d683716bac04592b587c13092335, type: 3}
+      propertyPath: m_Layer
+      value: 5
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e945d683716bac04592b587c13092335, type: 3}

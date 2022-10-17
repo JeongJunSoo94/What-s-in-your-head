@@ -12,8 +12,10 @@ namespace KSU
 
         public int railTriggerDetectionNum = 0;
         public bool isRailFounded = false;
-        public bool isRailReady = false;
+        public bool isRailTriggered = false;
         public bool isRidingRail = false;
-        public bool isMoveToRail = false;
+        public bool isMovingToRail = false;
+        public bool isRailJumpingUp = false;
+        public bool isRailJumping = false;
     }
 }

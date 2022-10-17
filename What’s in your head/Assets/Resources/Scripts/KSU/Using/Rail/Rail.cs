@@ -32,16 +32,21 @@ namespace KSU
         public float railSpeed = 4f;
         public float escapingRailSpeed = 4f;
 
+        Vector3 offset;
 
         void Awake()
         {
             track = GetComponent<Cinemachine.CinemachineSmoothPath>();
+            offset = transform.position;
         }
 
         // Update is called once per frame
         void Update()
         {
-            CheckCarts();
+            if(isNellaCartActive || isSteadyCartActive)
+            {
+                CheckCarts();
+            }
         }
 
         private void OnEnable()
@@ -55,7 +60,6 @@ namespace KSU
             {
                 for (int i = 1; i < track.m_Waypoints.Length; i++)
                 {
-                    Vector3 offset = transform.position;
                     Vector3 start = track.m_Waypoints[i - 1].position + offset;
                     Vector3 end = track.m_Waypoints[i].position + offset;
                     float length = Vector3.Distance(start, end);
@@ -79,7 +83,8 @@ namespace KSU
 
         void SetDestination(GameObject player, Cinemachine.CinemachineDollyCart cartSetUp)
         {
-            Vector3 playerVec = cartSetUp.gameObject.transform.position - player.transform.position;
+            Vector3 playerVec = player.GetComponent<RailAction>().mainCamera.transform.forward;
+            playerVec.y = 0;
             if (Vector3.Angle(cartSetUp.gameObject.transform.forward, playerVec) > 90f)
             {
                 cartSetUp.m_Speed = -railSpeed;
@@ -134,8 +139,9 @@ namespace KSU
             if (track.m_Waypoints.Length > 0)
             {
                 int startIndex = int.Parse(startObj.name);
+                //Debug.Log("startIndex: " + startIndex);
                 GameObject cart = null;
-                player.GetComponent<PlayerController3D>().enabled = false;
+                player.GetComponent<PlayerController>().enabled = false;
                 switch (player.tag)
                 {
                     case "Nella":
@@ -148,11 +154,14 @@ namespace KSU
                         break;
                 }
                 float totalLength = Vector3.Distance(track.m_Waypoints[startIndex].position, track.m_Waypoints[startIndex + 1].position);
-                float startLength = Vector3.Distance(track.m_Waypoints[startIndex].position, startPos);
+                //Debug.Log("totalLength: " + totalLength);
+                float startLength = Vector3.Distance(track.m_Waypoints[startIndex].position + offset, startPos);
+                //Debug.Log("startLength: " + startLength);
                 float rate = startLength / totalLength;
 
                 Cinemachine.CinemachineDollyCart cartSetUp = cart.GetComponent<Cinemachine.CinemachineDollyCart>();
                 cartSetUp.m_Position = startIndex + rate;
+               // Debug.Log("cartSetUp.m_Position: " + cartSetUp.m_Position);
 
 
                 return cartSetUp;
@@ -165,7 +174,16 @@ namespace KSU
         {
             if (isNellaCartActive)
             {
-                Nella.transform.localPosition = Vector3.zero;
+                float signOfSpeed = GetSign(NellaCart.GetComponent<Cinemachine.CinemachineDollyCart>().m_Speed);
+                if (Nella.GetComponent<PlayerInteractionState>().isRailJumping)
+                {
+                    NellaCart.GetComponent<Cinemachine.CinemachineDollyCart>().m_Speed = signOfSpeed * railSpeed / 2f;
+                }
+                else
+                {
+                    NellaCart.GetComponent<Cinemachine.CinemachineDollyCart>().m_Speed = signOfSpeed * railSpeed;
+                }
+
                 if (Mathf.Abs(NellaCart.GetComponent<Cinemachine.CinemachineDollyCart>().m_Position - NellaDestiation) < 0.2f)
                 {
                     EscapeRail(Nella);
@@ -174,7 +192,16 @@ namespace KSU
 
             if (isSteadyCartActive)
             {
-                Nella.transform.localPosition = Vector3.zero;
+                float signOfSpeed = GetSign(SteadyCart.GetComponent<Cinemachine.CinemachineDollyCart>().m_Speed);
+                if (Steady.GetComponent<PlayerInteractionState>().isRailJumping)
+                {
+                    SteadyCart.GetComponent<Cinemachine.CinemachineDollyCart>().m_Speed = signOfSpeed * railSpeed / 2f;
+                }
+                else
+                {
+                    SteadyCart.GetComponent<Cinemachine.CinemachineDollyCart>().m_Speed = signOfSpeed * railSpeed;
+                }
+
                 if (Mathf.Abs(SteadyCart.GetComponent<Cinemachine.CinemachineDollyCart>().m_Position - SteadyDestiation) < 0.2f)
                 {
                     EscapeRail(Steady);
@@ -182,8 +209,23 @@ namespace KSU
             }
         }
 
+        float GetSign(float num)
+        {
+            if (num < 0)
+            {
+                return -1f;
+            }
+            else
+            {
+                return 1f;
+            }
+
+
+        }
+
         public void EscapeRail(GameObject player)
         {
+            player.GetComponent<RailAction>().currentRail = null;
             player.transform.parent = null;
             Camera camera;
             if (PhotonNetwork.NetworkClientState == Photon.Realtime.ClientState.Joined)
@@ -206,7 +248,7 @@ namespace KSU
                     }
                     break;
             }
-            PlayerController3D playerController = player.GetComponent<PlayerController3D>();
+            PlayerController playerController = player.GetComponent<PlayerController>();
 
             Vector3 inertiaVec = camera.transform.forward;
             inertiaVec.y = 0;
@@ -215,6 +257,10 @@ namespace KSU
             playerController.MakeinertiaVec(escapingRailSpeed, inertiaVec.normalized);
             playerController.moveVec = Vector3.up * playerController.jumpSpeed / 2f;
             playerController.enabled = true;
+            PlayerInteractionState interactionState = player.GetComponent<PlayerInteractionState>();
+            interactionState.isRidingRail = false;
+            interactionState.isRailJumping = false;
+            interactionState.isRailJumpingUp = false;
         }
     }
 }

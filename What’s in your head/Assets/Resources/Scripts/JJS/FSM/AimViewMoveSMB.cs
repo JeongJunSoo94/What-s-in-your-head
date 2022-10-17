@@ -7,21 +7,21 @@ public class AimViewMoveSMB : CharacterBaseSMB
     override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
         animator.SetLayerWeight(1, 1);
-        GetPlayerController3D(animator).playerMouse.CheckRightClick(1);
-        if (GetPlayerController3D(animator).enabled)
+        GetPlayerController(animator).playerMouse.CheckRightClick(1);
+        if (GetPlayerController(animator).enabled)
         {
-            GetPlayerController3D(animator).characterState.aim = true;
+            GetPlayerController(animator).characterState.aim = true;
         }
     }
 
     override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        if (GetPlayerController3D(animator).enabled)
+        if (GetPlayerController(animator).enabled)
         {
-            GetPlayerController3D(animator).AimViewInputMove();
-            animator.SetFloat("MoveX", GetPlayerController3D(animator).moveDir.normalized.x * (GetPlayerController3D(animator).characterState.isMove ? 1.0f : 0.0f));
-            animator.SetFloat("MoveZ", GetPlayerController3D(animator).moveDir.normalized.z * (GetPlayerController3D(animator).characterState.isMove ? 1.0f : 0.0f));
-            GetPlayerController3D(animator).InputMove();
+            GetPlayerController(animator).AimViewInputMove();
+            animator.SetFloat("MoveX", GetPlayerController(animator).moveDir.normalized.x * (GetPlayerController(animator).characterState.isMove ? 1.0f : 0.0f));
+            animator.SetFloat("MoveZ", GetPlayerController(animator).moveDir.normalized.z * (GetPlayerController(animator).characterState.isMove ? 1.0f : 0.0f));
+            GetPlayerController(animator).InputMove();
             check(animator);
         }
 
@@ -30,10 +30,10 @@ public class AimViewMoveSMB : CharacterBaseSMB
     public override void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
         animator.SetLayerWeight(1, 0);
-        if (GetPlayerController3D(animator).enabled)
+        if (GetPlayerController(animator).enabled)
         {
-            GetPlayerController3D(animator).playerMouse.CheckRightClick(0);
-            GetPlayerController3D(animator).characterState.aim = false;
+            GetPlayerController(animator).playerMouse.CheckRightClick(0);
+            GetPlayerController(animator).characterState.aim = false;
         }
     }
     void check(Animator animator)

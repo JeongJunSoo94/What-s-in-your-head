@@ -28,12 +28,12 @@ public class IKController : MonoBehaviour
 
     public GameObject target;
 
-    PlayerController3D player;
+    PlayerController player;
 
     private void Awake()
     {
         animator = GetComponent<Animator>();
-        player = GetComponent<PlayerController3D>();
+        player = GetComponent<PlayerController>();
     }
 
 

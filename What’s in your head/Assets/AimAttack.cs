@@ -11,17 +11,17 @@ public class AimAttack : CharacterBaseSMB
 
     override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        if (GetPlayerController3D(animator).enabled)
+        if (GetPlayerController(animator).enabled)
         {
             check(animator);
         }
     }
     void check(Animator animator)
     {
-        //if (!GetPlayerController3D(animator).characterState.IsGrounded)
+        //if (!GetPlayerController(animator).characterState.IsGrounded)
         //{
         //    animator.SetBool("isAir", true);
-        //    if (!GetPlayerController3D(animator).characterState.IsJumping)
+        //    if (!GetPlayerController(animator).characterState.IsJumping)
         //    {
         //        animator.SetTrigger("JumpDown");
         //        return;
@@ -32,12 +32,12 @@ public class AimAttack : CharacterBaseSMB
         //    animator.SetBool("isAir", false);
         //}
 
-        //if (!GetPlayerController3D(animator).characterState.isMove)
+        //if (!GetPlayerController(animator).characterState.isMove)
         //{
-        //    GetPlayerController3D(animator).characterState.isRun = false;
+        //    GetPlayerController(animator).characterState.isRun = false;
         //}
 
-        //GetPlayerController3D(animator).playerMouse.ableToLeft = true;
+        //GetPlayerController(animator).playerMouse.ableToLeft = true;
 
         if (!KeyManager.Instance.GetKey(PlayerAction.Fire))
         {

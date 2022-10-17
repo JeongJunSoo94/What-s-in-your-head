@@ -67,7 +67,7 @@ namespace JCW.UI.InGame
             // 임시
             isNella = true;
 
-            Debug.Log("타겟 지시기 시작");
+            //Debug.Log("타겟 지시기 시작");
         }
         protected void Update()
         {

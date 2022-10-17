@@ -11,11 +11,11 @@ using YC.Camera_;
 using YC.Camera_Single;
 using JCW.Object;
 
-public class PlayerController3D : MonoBehaviour
+public class PlayerController : MonoBehaviour
 {
     //  Scripts Components
     #region    
-    public CharacterState3D characterState;
+    public PlayerState characterState;
     public PlayerMouseController playerMouse;
     #endregion
 
@@ -91,7 +91,7 @@ public class PlayerController3D : MonoBehaviour
         Application.targetFrameRate = 120;
         // << :
 
-        characterState = GetComponent<CharacterState3D>();
+        characterState = GetComponent<PlayerState>();
         //_animator = GetComponent<Animator>();
         playerCapsuleCollider = GetComponent<CapsuleCollider>();
         playerRigidbody = GetComponent<Rigidbody>();
