@@ -8,6 +8,7 @@ using YC.Camera_;
 using YC.Camera_Single;
 
 using JCW.UI.Options.InputBindings;
+using JCW.UI.InGame;
 
 namespace KSU
 {
@@ -21,7 +22,7 @@ namespace KSU
         public float grappleSpeed = 10f;
         public float escapeGrapplePower = 10f;
 
-        Camera mainCamera;
+        Camera playerCamera;
         [SerializeField] GameObject lookAtObj;
         public Ray ray;
         RaycastHit _raycastHit;
@@ -69,9 +70,9 @@ namespace KSU
             playerRigidbody = GetComponent<Rigidbody>();
 
             if (PhotonNetwork.NetworkClientState == Photon.Realtime.ClientState.Joined)
-                mainCamera = this.gameObject.GetComponent<CameraController>().FindCamera(); // 멀티용
+                playerCamera = this.gameObject.GetComponent<CameraController>().FindCamera(); // 멀티용
             else
-                mainCamera = this.gameObject.GetComponent<CameraController_Single>().FindCamera(); // 싱글용
+                playerCamera = this.gameObject.GetComponent<CameraController_Single>().FindCamera(); // 싱글용
         }
 
         void Update()
@@ -106,10 +107,10 @@ namespace KSU
         {
             if (playerState.aim)
             {
-                Vector3 cameraForwardXZ = mainCamera.transform.forward;
+                Vector3 cameraForwardXZ = playerCamera.transform.forward;
                 cameraForwardXZ.y = 0;
-                Vector3 rayOrigin = mainCamera.transform.position;
-                Vector3 rayEnd = (mainCamera.transform.position + mainCamera.transform.forward * (rangeDistance + rangeRadius * 2f));
+                Vector3 rayOrigin = playerCamera.transform.position;
+                Vector3 rayEnd = (playerCamera.transform.position + playerCamera.transform.forward * (rangeDistance + rangeRadius * 2f));
                 Vector3 direction = (rayEnd - rayOrigin).normalized;
                 bool isRayChecked = Physics.SphereCast(rayOrigin, rangeRadius, direction, out _raycastHit, rangeDistance, layerForGrapple, QueryTriggerInteraction.Ignore);
 
@@ -143,7 +144,7 @@ namespace KSU
                 {
                     // 도착위치: 화면 중앙에 레이 쏴서 도착하는 곳
                     Vector3 rayOrigin = grapplSpawner.transform.position;
-                    Vector3 rayEnd = (mainCamera.transform.position + mainCamera.transform.forward * (rangeDistance + rangeRadius * 2f));
+                    Vector3 rayEnd = (playerCamera.transform.position + playerCamera.transform.forward * (rangeDistance + rangeRadius * 2f));
                     Vector3 direction = (rayEnd - rayOrigin).normalized;
                     //bool isRayChecked = Physics.Raycast(rayOrigin, direction, out _raycastHit, rangeDistance + rangeRadius * 2f, layerForGrapple, QueryTriggerInteraction.Ignore);
 
@@ -160,7 +161,7 @@ namespace KSU
             playerState.IsAirJumping = false;
             playerState.WasAirDashing = false;
             playerState.IsGrounded = false;
-            targetPosition = targetObj.GetComponent<HookableObject>().GetOffsetPosition();
+            targetPosition = targetObj.GetComponent<GrappledObject>().GetOffsetPosition();
             grappleVec = (targetPosition - transform.position).normalized * grappleSpeed;
             Vector3 lookVec = grappleVec;
             lookVec.y = 0;
@@ -197,21 +198,21 @@ namespace KSU
         {
             if (playerState.aim)
             {
-                hVision = mainCamera.transform.forward;
+                hVision = playerCamera.transform.forward;
 
                 startCenter = lookAtObj.transform.position;
 
-                startUp = startCenter + mainCamera.transform.up * rangeRadius;
-                startDown = startCenter - mainCamera.transform.up * rangeRadius;
-                startLeft = startCenter - mainCamera.transform.right * rangeRadius;
-                startRight = startCenter + mainCamera.transform.right * rangeRadius;
+                startUp = startCenter + playerCamera.transform.up * rangeRadius;
+                startDown = startCenter - playerCamera.transform.up * rangeRadius;
+                startLeft = startCenter - playerCamera.transform.right * rangeRadius;
+                startRight = startCenter + playerCamera.transform.right * rangeRadius;
 
                 endCenter = startCenter + hVision * rangeDistance;
 
-                endUp = endCenter + mainCamera.transform.up * rangeRadius;
-                endDown = endCenter - mainCamera.transform.up * rangeRadius;
-                endLeft = endCenter - mainCamera.transform.right * rangeRadius;
-                endRight = endCenter + mainCamera.transform.right * rangeRadius;
+                endUp = endCenter + playerCamera.transform.up * rangeRadius;
+                endDown = endCenter - playerCamera.transform.up * rangeRadius;
+                endLeft = endCenter - playerCamera.transform.right * rangeRadius;
+                endRight = endCenter + playerCamera.transform.right * rangeRadius;
             }
         }
 
@@ -219,7 +220,14 @@ namespace KSU
         {
             if (grappledObjects.Count > 0)
             {
-                
+                foreach (var grappledObject in grappledObjects)
+                {
+                    //isMine false면 안보냄 / 현재 널
+
+                    bool rayCheck = Physics.Raycast(playerCamera.transform.position, playerCamera.transform.forward, grappledObject.GetComponent<GrappledObject>().detectingRange * -0.2f, layerFilterForGrapple, QueryTriggerInteraction.Ignore);
+                    //grappledObject.GetComponentInChildren<TargetIndicator>().SetUI(rayCheck, playerCamera); // 오버로드 필요
+                    // UI상태(bool)가 다르면 신호 struct Obj_Info(bool isUIActive,bool isInteractive, float distance)를 보냄
+                }
             }
         }
 
@@ -242,7 +250,7 @@ namespace KSU
                 Gizmos.DrawWireSphere(endCenter, rangeRadius);
             }
             Vector3 rayOrigin = grapplSpawner.transform.position;
-            Vector3 rayEnd = (mainCamera.transform.position + mainCamera.transform.forward * (rangeDistance + rangeRadius * 2f));
+            Vector3 rayEnd = (playerCamera.transform.position + playerCamera.transform.forward * (rangeDistance + rangeRadius * 2f));
 
             sphere.transform.position = rayEnd;
 
@@ -258,8 +266,8 @@ namespace KSU
         }
         private void OnTriggerExit(Collider other)
         {
-            if(other.CompareTag("GrappledObject"))
-                {
+            if (other.CompareTag("GrappledObject"))
+            {
                 grappledObjects.Remove(other.gameObject);
             }
         }
