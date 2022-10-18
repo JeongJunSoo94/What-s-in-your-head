@@ -15,9 +15,9 @@ public class PlayerState : MonoBehaviour
 
 
     //
-    [Range(0.0f, 1f), Tooltip("지면 인식 허용 거리")]
+    [Range(0.0f, 1f), Tooltip("지면 인식 허용 최소 거리")]
     public float groundCheckThresholdMin = 0.1f;
-    [Range(0.0f, 1f), Tooltip("지면 인식 허용 거리")]
+    [Range(0.0f, 1f), Tooltip("지면 인식 허용 최대 거리")]
     public float groundCheckThresholdMax = 0.3f;
     public float height = 0f;
 
@@ -27,6 +27,7 @@ public class PlayerState : MonoBehaviour
 
 
     RaycastHit groundRaycastHit;
+    RaycastHit fowardRaycastHit;
     [Tooltip("캐릭터가 타고 올라갈 수 있는 최대 경사각")]
     public float maxSlopeAngle = 40f;
     [Tooltip("캐릭터가 바라보는 방향의 경사각")]
@@ -36,6 +37,10 @@ public class PlayerState : MonoBehaviour
 
     [Tooltip("지면 위 상태")]
     public bool IsGrounded = false;
+    [Tooltip("전방 막힘 상태")]
+    public bool isFowardBlock = false;
+    [Tooltip("최대 경사각 초과 상태")]
+    public bool isOverAngleForSlope = false;
     #endregion
 
     // 수평 이동 변수
@@ -125,8 +130,8 @@ public class PlayerState : MonoBehaviour
 
     public void CheckGround(float sphereRadius)
     {
-        RayCheck = Physics.SphereCast(transform.position + Vector3.up * (sphereRadius + Physics.defaultContactOffset), (sphereRadius - Physics.defaultContactOffset), Vector3.down, out groundRaycastHit, sphereRadius + groundCheckDistance, groundLayerMask, QueryTriggerInteraction.Ignore);
-
+        RayCheck = Physics.SphereCast(transform.position + Vector3.up * (sphereRadius * 1.5f + Physics.defaultContactOffset), (sphereRadius - Physics.defaultContactOffset), Vector3.down, out groundRaycastHit, groundCheckDistance + sphereRadius * 0.5f + Physics.defaultContactOffset, groundLayerMask, QueryTriggerInteraction.Ignore);
+        
         if (RayCheck)
         {
             slopeAngle = Vector3.Angle(Vector3.up, groundRaycastHit.normal);
@@ -134,10 +139,12 @@ public class PlayerState : MonoBehaviour
             {
                 IsGrounded = false;
                 isRun = false;
+                isOverAngleForSlope = true;
                 //Debug.Log("경사각 초과");
             }
             else
             {
+                isOverAngleForSlope = false;
                 float uSlopeAngleCofacter = Mathf.Tan(slopeAngle * Mathf.PI / 180);
                 height = (transform.position - groundRaycastHit.point).y;
                 if (height <= (groundCheckThresholdMax + Mathf.Abs(uSlopeAngleCofacter)))
@@ -159,9 +166,27 @@ public class PlayerState : MonoBehaviour
                     isRun = false;
                 }
             }
+
+            bool rayChecked = Physics.SphereCast(transform.position + Vector3.up * (sphereRadius + Physics.defaultContactOffset) - transform.forward * Physics.defaultContactOffset, (sphereRadius - Physics.defaultContactOffset), transform.forward, out fowardRaycastHit, 0.2f, groundLayerMask, QueryTriggerInteraction.Ignore);
+            if(rayChecked)
+            {
+                //Debug.Log("fowardRaycastHit.point: " + fowardRaycastHit.point);
+                //Debug.Log("groundRaycastHit.point: " + groundRaycastHit.point);
+                float forwardAngle = Vector3.Angle(Vector3.up, fowardRaycastHit.normal);
+                if (forwardAngle > maxSlopeAngle)
+                    isFowardBlock = true;
+                else
+                    isFowardBlock = false;
+                Debug.Log("isFowardBlockt: " + isFowardBlock);
+            }
+            else
+            {
+                isFowardBlock = false;
+            }
         }
         else
         {
+            isOverAngleForSlope = false;
             IsGrounded = false;
             //Debug.Log("RayCheck 실패");
         }
@@ -264,4 +289,10 @@ public class PlayerState : MonoBehaviour
         }
     }
     #endregion
+
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = Color.red;
+        Gizmos.DrawSphere(groundRaycastHit.point, 0.1f);
+    }
 }

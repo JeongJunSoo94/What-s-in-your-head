@@ -397,7 +397,12 @@ public class PlayerController : MonoBehaviour
             }
             else
             {
-                moveVec = moveDir * airMoveSpeed + inertiaNormalVec * inertiaSpeed + Vector3.up * (moveVec.y + gravity * Time.fixedDeltaTime);
+                moveVec = moveDir * airMoveSpeed + Vector3.up * (moveVec.y + gravity * Time.fixedDeltaTime);
+
+                if (!characterState.isOverAngleForSlope)
+                {
+                    moveVec += inertiaNormalVec * inertiaSpeed;
+                }
 
                 if (moveVec.y < terminalSpeed)
                 {
@@ -433,7 +438,14 @@ public class PlayerController : MonoBehaviour
                         moveSpeed = 0f;
                 }
 
-                moveVec = moveDir * moveSpeed;
+                if(characterState.isFowardBlock)
+                {
+                    moveVec = Vector3.zero;
+                }
+                else
+                {
+                    moveVec = moveDir * moveSpeed;
+                }
             }
 
             if (characterState.isMove) // 내리막길 이동시 경사각에 따른 수직속도 보정값

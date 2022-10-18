@@ -33,7 +33,7 @@ namespace KSU
         public Vector3 railStartPosiotion = Vector3.zero;
 
         public float movingToRailSpeed = 10f;
-        float departingRailOffset = 0.2f;
+        float departingRailOffset = 0.5f;
 
         public float railJumpHeight = 4f;
         public float railJumpSpeed = 6f;
@@ -50,11 +50,6 @@ namespace KSU
         Vector3 startLeft;
         Vector3 startRight;
 
-        //Vector3 startUps;
-        //Vector3 startDowns;
-        //Vector3 startLefts;
-        //Vector3 startRights;
-
         public Vector3 hVision;
 
         Vector3 endCenter;
@@ -62,11 +57,6 @@ namespace KSU
         Vector3 endDown;
         Vector3 endLeft;
         Vector3 endRight;
-
-        //Vector3 endUps;
-        //Vector3 endDowns;
-        //Vector3 endLefts;
-        //Vector3 endRights;
         /// </summary>
 
         void Awake()
@@ -231,13 +221,15 @@ namespace KSU
 
         public void StartRailAction()
         {
+            playerController.enabled = false;
+            playerRigidbody.velocity = Vector3.zero;
+            playerState.IsDashing = false;
             playerState.IsAirJumping = false;
             playerState.WasAirDashing = false;
             playerState.IsGrounded = false;
             currentRail = railStartObject.transform.parent.gameObject;
             interactionState.isMovingToRail = true;
             interactionState.isRailTriggered = true;
-            playerController.enabled = false;
         }
 
         void MoveToRail()
@@ -415,28 +407,22 @@ namespace KSU
 
         private void OnDrawGizmos()
         {
-            if (_raycastHit.point != null)
+            if (interactionState.railTriggerDetectionNum > 0)
             {
-                Gizmos.color = Color.red;
-                Gizmos.DrawSphere(_raycastHit.point, 1f);
+                if (_raycastHit.point != null)
+                {
+                    Gizmos.color = Color.red;
+                    Gizmos.DrawSphere(_raycastHit.point, 1f);
+                }
+
+                Gizmos.DrawLine(startUp, endUp);
+                Gizmos.DrawLine(startDown, endDown);
+                Gizmos.DrawLine(startRight, endRight);
+                Gizmos.DrawLine(startLeft, endLeft);
+
+                Gizmos.DrawWireSphere(startCenter, rangeRadius);
+                Gizmos.DrawWireSphere(endCenter, rangeRadius);
             }
-
-            Gizmos.DrawLine(startUp, endUp);
-            Gizmos.DrawLine(startDown, endDown);
-            Gizmos.DrawLine(startRight, endRight);
-            Gizmos.DrawLine(startLeft, endLeft);
-
-            Gizmos.DrawWireSphere(startCenter, rangeRadius);
-            Gizmos.DrawWireSphere(endCenter, rangeRadius);
-
-            //Gizmos.DrawLine(startUps, endUps);
-            //Gizmos.DrawLine(startDowns, endDowns);
-            //Gizmos.DrawLine(startRights, endRights);
-            //Gizmos.DrawLine(startLefts, endLefts);
-
-            //Gizmos.DrawWireSphere(startCenter, 1f);
-            //Gizmos.DrawWireSphere(endCenter, 1f);
-            
         }
     }
 }

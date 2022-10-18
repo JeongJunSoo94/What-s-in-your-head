@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class SteadyInteractionState : MonoBehaviour
 {
-    public bool isGrapplingObjectFounded = false;
-    public bool isRidingHookingRope = false;
+    public bool isGrappledObjectFounded = false;
+    public bool isGrappling = false;
 
     // Start is called before the first frame update
     void Start()

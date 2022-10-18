@@ -28,6 +28,7 @@ namespace KSU
         public bool isRopeExisting = false;
 
         public bool isSwingForward = true;
+        bool isntSwing = false;
 
         public bool isRotating = true;
         public bool isRotatingToDefault = true;
@@ -75,7 +76,10 @@ namespace KSU
                 //{
                 //    SetRotation();
                 //}
-                Swing();
+                if(!isntSwing)
+                {
+                    Swing();
+                }
                 //CalculateDistance();
             }
             else
@@ -239,23 +243,32 @@ namespace KSU
 
             if (isSwingForward) // 앞으로 갈지 뒤로갈지 결정
             {
-                rotationX -= spawner.swingSpeed * Time.fixedDeltaTime;
+                rotationX -= spawner.swingSpeed * Time.fixedDeltaTime * ((Mathf.Abs(spawner.swingAngle)- Mathf.Abs(rotationX)) * spawner.SwingDeltaSpeed / spawner.swingAngle + ( 1 - spawner.SwingDeltaSpeed));
                 if (rotationX < -spawner.swingAngle)
                 {
                     isSwingForward = false;
+                    StartCoroutine("StopSwingInMoment");
                 }
             }
             else
             {
-                rotationX += spawner.swingSpeed * Time.fixedDeltaTime;
+                rotationX += spawner.swingSpeed * Time.fixedDeltaTime * ((Mathf.Abs(spawner.swingAngle) - Mathf.Abs(rotationX)) * spawner.SwingDeltaSpeed / spawner.swingAngle + (1 - spawner.SwingDeltaSpeed));
                 if (rotationX > spawner.swingAngle)
                 {
                     isSwingForward = true;
+                    StartCoroutine("StopSwingInMoment");
                 }
             }
 
             // rotation에 대입
             ropeAnchor.transform.localRotation = Quaternion.Euler(Vector3.right * rotationX);
+        }
+
+        IEnumerator StopSwingInMoment()
+        {
+            isntSwing = true;
+            yield return new WaitForSeconds(spawner.waitTime);
+            isntSwing = false;
         }
 
         //void InputKey()

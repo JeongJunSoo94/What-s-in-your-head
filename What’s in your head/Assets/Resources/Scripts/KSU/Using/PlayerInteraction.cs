@@ -91,7 +91,7 @@ namespace KSU
             {
                 if (interactionState.isRidingRail)
                 {
-                    if (!interactionState.isMovingToRail)
+                    if (!interactionState.isMovingToRail && !interactionState.isRailJumping)
                     {
                         railAction.StartRailJump();
                     }

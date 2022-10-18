@@ -19,6 +19,9 @@ namespace KSU
         [Header("로프 수평 회전 속력")] public float rotationSpeed = 180f;
 
         [Header("로프 진자 운동 속력")] public float swingSpeed = 30f;
+        [Header("수직 높이에 따른 진자 운동 속력 격차 비율(0.9에 가까울수록 변화가 큼)"), Range(0, 0.9f)] public float SwingDeltaSpeed = 0.4f;
+        [Header("진자 최대 높이 도달시 멈추는 시간")] public float waitTime = 0.1f;
+
         [Header("로프 진자 운동 최대 각도")] public float swingAngle = 60f;
 
         // Start is called before the first frame update
