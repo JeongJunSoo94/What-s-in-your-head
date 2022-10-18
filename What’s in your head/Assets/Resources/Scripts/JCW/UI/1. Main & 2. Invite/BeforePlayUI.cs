@@ -41,7 +41,7 @@ namespace JCW.UI
                         PhotonManager.Instance.gameObject.SendMessage("TryMakeRoom", friendID.text);
                         friendID.text = "";
                         return;
-                    }
+                    }   
                 }
                 friendID.text = "";
                 passUI.SetActive(false);

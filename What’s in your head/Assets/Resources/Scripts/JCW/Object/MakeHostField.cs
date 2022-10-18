@@ -28,8 +28,8 @@ namespace JCW.Object
 
         private void Awake()
         {
-            photonView = this.gameObject.GetComponent<PhotonView>();
-            usingCount = this.gameObject.GetComponent<ContaminationFieldSetting>().count;
+            photonView = GetComponent<PhotonView>();
+            usingCount = GetComponent<ContaminationFieldSetting>().count;
 
             // 스폰될 수 있는 각 꼭지점 정해두기
             firstSpawnPlace = new() { 1, 2*usingCount-1, 2*usingCount*(usingCount-1)+1, 2*usingCount*usingCount-1 };

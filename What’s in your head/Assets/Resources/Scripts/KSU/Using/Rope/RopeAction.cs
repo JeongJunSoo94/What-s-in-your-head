@@ -46,9 +46,9 @@ namespace KSU
             playerState = GetComponent<CharacterState3D>();
             interactionState = GetComponent<PlayerInteractionState>();
             if (PhotonNetwork.NetworkClientState == Photon.Realtime.ClientState.Joined)
-                mainCamera = this.gameObject.GetComponent<CameraController>().FindCamera(); // 멀티용
+                mainCamera = GetComponent<CameraController>().FindCamera(); // 멀티용
             else
-                mainCamera = this.gameObject.GetComponent<CameraController_Single>().FindCamera(); // 싱글용
+                mainCamera = GetComponent<CameraController_Single>().FindCamera(); // 싱글용
 
             if (mainCamera == null)
                 Debug.Log("카메라 NULL");
@@ -182,7 +182,7 @@ namespace KSU
 
         private void OnTriggerEnter(Collider other)
         {
-            if(other.CompareTag("Rope") && this.gameObject.GetComponent<PhotonView>().IsMine)
+            if(other.CompareTag("Rope") && GetComponent<PhotonView>().IsMine)
             {
                 Debug.Log("트리거 엔터 : " + mainCamera);
                 detectedRopes.Add(other.gameObject, new Obj_Info(false, false, 100f));
@@ -191,7 +191,7 @@ namespace KSU
 
         private void OnTriggerExit(Collider other)
         {
-            if (other.CompareTag("Rope") && this.gameObject.GetComponent<PhotonView>().IsMine)
+            if (other.CompareTag("Rope") && GetComponent<PhotonView>().IsMine)
             {
                 Debug.Log("트리거 탈출 : " + mainCamera);
                 other.gameObject.GetComponentInChildren<TargetIndicator>().SetUI(new Obj_Info(false, false, 100f), mainCamera);                

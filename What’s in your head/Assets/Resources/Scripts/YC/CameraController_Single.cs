@@ -139,7 +139,7 @@ namespace YC.Camera_Single
                 OnOffCamera(camList[(int)curCam]);
             }
 
-            player = this.gameObject.GetComponent<PlayerController3D>();
+            player = GetComponent<PlayerController3D>();
 
         }
 

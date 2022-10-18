@@ -12,8 +12,8 @@ namespace JCW.UI.Options
 
         virtual protected void Awake()
         {
-            textName = this.gameObject.GetComponent<Text>();
-            outline = this.gameObject.GetComponent<Outline>();
+            textName = GetComponent<Text>();
+            outline = GetComponent<Outline>();
             this.enabled = false;
         }
 

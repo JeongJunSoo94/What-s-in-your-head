@@ -117,9 +117,9 @@ public class PlayerController3D : MonoBehaviour
         //    _camera = Camera.main;
 
         if (PhotonNetwork.NetworkClientState == Photon.Realtime.ClientState.Joined)
-            mainCamera = this.gameObject.GetComponent<CameraController>().FindCamera(); // 멀티용
+            mainCamera = GetComponent<CameraController>().FindCamera(); // 멀티용
         else
-            mainCamera = this.gameObject.GetComponent<CameraController_Single>().FindCamera(); // 싱글용
+            mainCamera = GetComponent<CameraController_Single>().FindCamera(); // 싱글용
 
         if (mainCamera == null)
             Debug.Log("카메라 NULL");
@@ -202,7 +202,7 @@ public class PlayerController3D : MonoBehaviour
         if (!File.Exists(Application.dataPath + "/Resources/CheckPointInfo/Stage" +
             GameManager.Instance.curStageIndex + "/Section" + GameManager.Instance.curSection + ".json"))
         {
-            Debug.Log(GameManager.Instance.curSection);
+            Debug.Log("현재 섹션 : " + GameManager.Instance.curSection);
             Debug.Log("체크포인트 불러오기 실패");
             return;
         }
@@ -221,32 +221,32 @@ public class PlayerController3D : MonoBehaviour
             Debug.Log("현재 플레이어 목숨 : " + --life);
             Resurrect();
         }
-        if (Input.GetKeyDown(KeyCode.Keypad1))
+        if (Input.GetKeyDown(KeyCode.Alpha1))
         {
             SoundManager.Instance.PlayBGM_RPC("POP");
         }
-        if (Input.GetKeyDown(KeyCode.Keypad2))
+        if (Input.GetKeyDown(KeyCode.Alpha2))
         {
             SoundManager.Instance.PlayBGM_RPC("Tomboy");
         }
-        if (Input.GetKeyDown(KeyCode.Keypad3))
+        if (Input.GetKeyDown(KeyCode.Alpha3))
         {
             SoundManager.Instance.PauseResumeBGM_RPC();
         }
-        if (Input.GetKeyDown(KeyCode.Keypad4))
+        if (Input.GetKeyDown(KeyCode.Alpha4))
         {
             SoundManager.Instance.PlayEffect_RPC("Explosion");
         }
-        if (Input.GetKeyDown(KeyCode.Keypad5))
+        if (Input.GetKeyDown(KeyCode.Alpha5))
         {
             //SoundManager.Instance.PlayEffect_RPC(SoundManager.Instance.GetEffectClips("Fireball"));
             SoundManager.Instance.PlayEffect_RPC("Fireball");
         }
-        if (Input.GetKeyDown(KeyCode.Keypad6))
+        if (Input.GetKeyDown(KeyCode.Alpha6))
         {
             SoundManager.Instance.PlayEffect_RPC("GetItem");
         }
-        if (Input.GetKeyDown(KeyCode.Keypad7))
+        if (Input.GetKeyDown(KeyCode.Alpha7))
         {
             SoundManager.Instance.PlayEffect_RPC("WaterBall");
         }

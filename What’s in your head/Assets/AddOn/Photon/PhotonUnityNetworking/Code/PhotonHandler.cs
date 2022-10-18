@@ -94,7 +94,7 @@ namespace Photon.Pun
 
             if (PhotonNetwork.PhotonServerSettings.EnableSupportLogger)
             {
-                SupportLogger supportLogger = this.gameObject.GetComponent<SupportLogger>();
+                SupportLogger supportLogger = GetComponent<SupportLogger>();
                 if (supportLogger == null)
                 {
                     supportLogger = this.gameObject.AddComponent<SupportLogger>();

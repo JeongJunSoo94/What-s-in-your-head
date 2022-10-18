@@ -11,38 +11,48 @@ namespace JCW.UI.InGame
     public class ReviveUI : MonoBehaviour
     {
         Camera mainCamera;
-
-        static public ReviveUI Instance = null;
+        bool isNella;
+        PhotonView photonView;
 
         void Awake()
         {
-            if (Instance == null)
-            {
-                Instance = this;
-                DontDestroyOnLoad(this.gameObject);
-            }
-            else
-                Destroy(this.gameObject);
-
-
             if (PhotonNetwork.NetworkClientState == Photon.Realtime.ClientState.Joined)
-                mainCamera = transform.parent.GetComponent<CameraController>().FindCamera(); // 멀티용
+                mainCamera = transform.parent.transform.parent.GetComponent<CameraController>().FindCamera(); // 멀티용
             else
-                mainCamera = transform.parent.GetComponent<CameraController_Single>().FindCamera(); // 싱글용            
+                mainCamera = transform.parent.transform.parent.GetComponent<CameraController_Single>().FindCamera(); // 싱글용            
 
             GetComponent<Canvas>().worldCamera = mainCamera;
             GetComponent<Canvas>().planeDistance = 0.15f;
+
+            isNella = GameManager.Instance.characterOwner[PhotonNetwork.IsMasterClient];
+
+            photonView = GetComponent<PhotonView>();
         }
 
-        public void TurnOnUI()
+        private void OnEnable()
         {
-            GetComponent<PhotonView>().RPC(nameof(TurnOnUI_RPC), RpcTarget.All);
-        }
+            if(photonView.IsMine)
+            {
+                if ((bool)(GameManager.Instance.isAlive[isNella]))
+                    transform.GetChild(1).gameObject.SetActive(true);
+                else
+                    transform.GetChild(0).gameObject.SetActive(true);
+            }
+            else
+            {
+                if ((bool)(GameManager.Instance.isAlive[isNella]))
+                    transform.GetChild(0).gameObject.SetActive(true);
+                else
+                    transform.GetChild(1).gameObject.SetActive(true);
+            }
+            
 
+            //GetComponent<PhotonView>().RPC(nameof(TurnOnUI_RPC), RpcTarget.AllViaServer);
+        }
         [PunRPC]
         private void TurnOnUI_RPC()
         {
-            if (GameManager.Instance.isAlive)
+            if ((bool)(GameManager.Instance.isAlive[isNella]))
                 transform.GetChild(1).gameObject.SetActive(true);
             else
                 transform.GetChild(0).gameObject.SetActive(true);

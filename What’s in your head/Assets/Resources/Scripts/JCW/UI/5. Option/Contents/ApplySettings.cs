@@ -70,7 +70,7 @@ namespace JCW.UI.Options
 
         void Start()
         {
-            this.gameObject.GetComponent<Button>().onClick.AddListener(() =>
+            GetComponent<Button>().onClick.AddListener(() =>
             {
                 SaveToFile();
             });
