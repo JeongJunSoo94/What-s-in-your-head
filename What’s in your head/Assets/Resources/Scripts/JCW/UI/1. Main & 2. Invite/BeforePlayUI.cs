@@ -22,10 +22,8 @@ namespace JCW.UI
             backButton.onClick.AddListener(() =>
             {
                 if (PhotonNetwork.NetworkClientState.ToString() == ClientState.Joined.ToString())
-                {
                     PhotonNetwork.LeaveRoom();
-                    this.gameObject.SetActive(false);
-                }                    
+                this.gameObject.SetActive(false);
             });
 
             searchButton.onClick.AddListener(() =>

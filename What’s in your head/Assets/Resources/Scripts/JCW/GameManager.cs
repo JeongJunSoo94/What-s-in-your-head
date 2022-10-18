@@ -62,4 +62,17 @@ public class GameManager : MonoBehaviour
         GameObject go = GameObject.Find(healthUIObjName);
         reviveAllPairs.Add(_isNella, go.GetComponent<HealthUI>());
     }
+
+    public void CheckAliveState(bool _isNella, bool _value)
+    {
+        string character = _isNella ? "넬라" : "스테디";
+        Debug.Log(character + " 살아있나? : " + _value);
+        photonView.RPC(nameof(CheckAliveState_RPC), RpcTarget.AllViaServer, _isNella, _value);
+    }
+
+    [PunRPC]
+    void CheckAliveState_RPC(bool _isNella, bool _value)
+    {
+        isAlive[_isNella] = _value;
+    }
 }

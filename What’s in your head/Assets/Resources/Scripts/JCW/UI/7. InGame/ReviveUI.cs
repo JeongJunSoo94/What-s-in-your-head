@@ -31,39 +31,26 @@ namespace JCW.UI.InGame
 
         private void OnEnable()
         {
+            Debug.Log("IsMine : " + photonView.IsMine + " / isNella " + isNella + " 살아있나? : " + (bool)GameManager.Instance.isAlive[isNella]);
             if(photonView.IsMine)
-            {
-                if ((bool)(GameManager.Instance.isAlive[isNella]))
-                    transform.GetChild(1).gameObject.SetActive(true);
-                else
-                {
-                    int n = isNella ? 0 : 1;
-                    transform.parent.GetChild(n).gameObject.SetActive(false);
-                    transform.GetChild(0).gameObject.SetActive(true);
-                }
-            }
-            else
-            {
-                if ((bool)(GameManager.Instance.isAlive[isNella]))
-                {
-                    int n = !isNella ? 0 : 1;
-                    transform.parent.GetChild(n).gameObject.SetActive(false);
-                    transform.GetChild(0).gameObject.SetActive(true);
-                }
-                else
-                    transform.GetChild(1).gameObject.SetActive(true);
-            }
+                photonView.RPC(nameof(TurnOnUI_RPC), RpcTarget.AllViaServer, (bool)GameManager.Instance.isAlive[isNella]);
             
 
             //GetComponent<PhotonView>().RPC(nameof(TurnOnUI_RPC), RpcTarget.AllViaServer);
         }
         [PunRPC]
-        private void TurnOnUI_RPC()
+        private void TurnOnUI_RPC(bool _isAlive)
         {
-            if ((bool)(GameManager.Instance.isAlive[isNella]))
+            if (_isAlive)
+            {
                 transform.GetChild(1).gameObject.SetActive(true);
+                transform.GetChild(0).gameObject.SetActive(false);
+            }
             else
+            {
                 transform.GetChild(0).gameObject.SetActive(true);
+                transform.GetChild(1).gameObject.SetActive(false);
+            }
         }
     }
 }

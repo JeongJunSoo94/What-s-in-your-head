@@ -50,7 +50,7 @@ namespace JCW.UI.InGame
                 // 현재 여기서 문제
                 //GameManager.Instance.reviveAllPairs.Add(isNella, this);
                 GameManager.Instance.AddReviveAllPair(isNella, transform.name);
-                Debug.Log("isNella : " + isNella + " / reviveAllPairs 추가");
+                Debug.Log("isNella : " + isNella + " / reviveAllPairs 추가 = " + transform.name);
             }
             else
                 charHpUI = isNella ? transform.GetChild(1).gameObject : transform.GetChild(0).gameObject;
@@ -71,7 +71,7 @@ namespace JCW.UI.InGame
 
         void Update()
         {
-            if (!photonView.IsMine)
+            if (!photonView.IsMine || !(bool)GameManager.Instance.isAlive[isNella])
                 return;
             // 테스트용 >>============================================================
             if (Input.GetKeyDown(KeyCode.KeypadMinus))
@@ -89,15 +89,21 @@ namespace JCW.UI.InGame
                 // 사망 시
                 if (curHP <= 0)
                 {
-                    GameManager.Instance.curPlayerHP = 0;
+                    GameManager.Instance.curPlayerHP = maxHP;
 
                     // 현재 캐릭터가 넬라라면 넬라의 살아있음을 false로, 스테디라면 스테디의 살아있음을 false로 바꿈.
-                    GameManager.Instance.isAlive[isNella] = false;
-                    curHP = 0;
+
+                    string character = isNella ? "넬라" : "스테디";
+                    Debug.Log(character + " 사망");
+                    GameManager.Instance.CheckAliveState(isNella, false);
+                    curHP = maxHP;
                     damageList.Clear();
                     photonView.RPC(nameof(SetHpAmount), RpcTarget.AllViaServer, (int)HpState.DAMAGED, 1f);
                     photonView.RPC(nameof(SetHpAmount), RpcTarget.AllViaServer, (int)HpState.NORMAL, 1f);
+                    photonView.RPC(nameof(SetBgImage), RpcTarget.AllViaServer, (int)BgState.DANGEROUS, false);
+                    photonView.RPC(nameof(SetBgImage), RpcTarget.AllViaServer, (int)BgState.DAMAGED, false);
                     //photonView.RPC(nameof(SetRevive), RpcTarget.AllViaServer, true);
+
                     GameManager.Instance.MediateRevive(true);
                 }
                 else

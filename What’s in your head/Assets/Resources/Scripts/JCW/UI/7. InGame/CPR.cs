@@ -17,18 +17,23 @@ namespace JCW.UI.InGame
         [Header("버튼 입력 시 재생될 비디오")] [SerializeField] VideoPlayer heartBeat;
 
         PhotonView photonView;
+        bool isNella;
 
         private void Awake()
         {
             photonView = GetComponent<PhotonView>();
+            isNella = GameManager.Instance.characterOwner[PhotonNetwork.IsMasterClient];
+
         }
 
 
         void Update()
         {
-            photonView.RPC(nameof(IncreaseValue), RpcTarget.AllViaServer, increaseValue * Time.deltaTime);
+            if (!photonView.IsMine)
+                return;
+            photonView.RPC(nameof(IncreaseValue), RpcTarget.AllViaServer, increaseValue * Time.deltaTime, isNella);
             if (KeyManager.Instance.GetKeyDown(PlayerAction.Interaction))
-                photonView.RPC(nameof(IncreaseValue), RpcTarget.AllViaServer, addIncreaseValue, GameManager.Instance.characterOwner[PhotonNetwork.IsMasterClient]);
+                photonView.RPC(nameof(IncreaseValue), RpcTarget.AllViaServer, (float)addIncreaseValue, isNella);
         }
 
         [PunRPC]
@@ -39,7 +44,7 @@ namespace JCW.UI.InGame
                 heartBeat.Play();
             if (heartGauge.fillAmount >= 1f)
             {
-                GameManager.Instance.isAlive[isNella] = true;
+                GameManager.Instance.CheckAliveState(isNella, true);
                 heartGauge.fillAmount = 0f;
                 //transform.parent.gameObject.SetActive(false);
                 GameManager.Instance.MediateRevive(false);
