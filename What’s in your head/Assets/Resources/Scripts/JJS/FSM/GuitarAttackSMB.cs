@@ -58,9 +58,18 @@ namespace JJS
                 }
                 else
                 {
-                    animator.SetBool("isAttack1", false);
-                    animator.SetBool("isAttack2", false);
-                    animator.SetBool("isAttack3", false);
+                    switch (index)
+                    {
+                        case 0:
+                            animator.SetBool("isAttack1", false);
+                            break;
+                        case 1:
+                            animator.SetBool("isAttack2", false);
+                            break;
+                        case 2:
+                            animator.SetBool("isAttack3", false);
+                            break;
+                    }
                 }
             }
 

@@ -26,11 +26,12 @@ namespace JJS
                 gun.mainCamera = this.gameObject.transform.GetComponent<CameraController_Single>().FindCamera(); // ½Ì±Û¿ë
                 cameraMain = this.gameObject.transform.GetComponent<CameraController_Single>().FindCamera(); // ½Ì±Û¿ë
             }
-        }
-
-        private void Update()
-        {
-            TargetUpdate();
+            if (point == null)
+            {
+                point = Resources.Load("Prefabs/JJS/NellaMousePoint") as GameObject;
+                point = Instantiate(point);
+                gun.mousePoint = point;
+            }
         }
 
         public override void AimUpdate(int type=0)
@@ -54,6 +55,7 @@ namespace JJS
         public void OnEnableObject(int index)
         {
             hitObjs[index].gameObject.SetActive(true);
+            TargetUpdate();
         }
 
         public void OnDisableObject(int index)

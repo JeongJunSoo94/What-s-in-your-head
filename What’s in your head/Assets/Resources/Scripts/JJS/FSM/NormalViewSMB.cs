@@ -12,21 +12,25 @@ namespace JJS
             if (GetPlayerController3D(animator).enabled)
             {
                 animator.SetBool("wasAirJump", false);
+                animator.SetBool("isJump", false);
                 GetPlayerController3D(animator).characterState.aim = false;
             }
         }
 
         override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
         {
-            WeaponCheck(animator);
+            if (!GetPlayerController3D(animator).characterState.swap)
+            { 
+                WeaponCheck(animator);
+            GetPlayerController3D(animator).playerMouse.ik.enableIK = false;
+            }
             if (GetPlayerController3D(animator).enabled)
             {
                 GetPlayerController3D(animator).InputRun();
                 GetPlayerController3D(animator).InputMove();
-                GetPlayerController3D(animator).InputJump();
-                GetPlayerController3D(animator).InputDash();
                 check(animator);
             }
+
         }
 
         public override void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
@@ -59,7 +63,6 @@ namespace JJS
         }
         void check(Animator animator)
         {
-            GetPlayerController3D(animator).playerMouse.ik.enableIK = false;
             if (Input.GetKeyDown(KeyCode.Alpha1))
             {
                 GetPlayerController3D(animator).characterState.top = !GetPlayerController3D(animator).characterState.top;
@@ -92,13 +95,6 @@ namespace JJS
                 animator.SetBool("isAir", false);
             }
 
-            if (!GetPlayerController3D(animator).characterState.isMove)
-            {
-                GetPlayerController3D(animator).characterState.isRun = false;
-            }
-            animator.SetBool("isJump", GetPlayerController3D(animator).characterState.IsJumping);
-            animator.SetBool("isDash", GetPlayerController3D(animator).characterState.IsDashing);
-
             if (KeyManager.Instance.GetKey(PlayerAction.Fire))
             {
                 if (GetPlayerController3D(animator).playerMouse.GetUseWeapon()==0)
@@ -107,16 +103,50 @@ namespace JJS
                     return;
                 }
             }
+            if (!GetPlayerController3D(animator).characterState.isMove)
+            {
+                GetPlayerController3D(animator).characterState.isRun = false;
+            }
+            if (GetPlayerController3D(animator).characterState.IsJumping)
+            {
+                animator.SetBool("isJump", true);
+                return;
+            }
+            else
+            {
+                GetPlayerController3D(animator).InputJump();
+            }
+
+            if (GetPlayerController3D(animator).characterState.IsDashing)
+            {
+                animator.SetBool("isDash", true);
+                return;
+            }
+            else
+            {
+                GetPlayerController3D(animator).InputDash();
+            }
+
+
+
+            if (KeyManager.Instance.GetKeyDown(PlayerAction.Swap)&& !GetPlayerController3D(animator).characterState.swap)
+            {
+                if(!animator.GetBool("isAttack1"))
+                {
+                    GetPlayerController3D(animator).characterState.swap = true;
+                    animator.SetBool("WeaponSwap", true);
+                }
+                //GetPlayerController3D(animator).characterState.swap = true;
+                //animator.SetBool("WeaponSwap", true);
+                return;
+            }
          
             if (GetPlayerController3D(animator).playerMouse.GetUseWeapon() == 1&& !GetPlayerController3D(animator).characterState.top && KeyManager.Instance.GetKey(PlayerAction.Aim))
             {
                 animator.SetBool("Aim", true);
+                return;
             }
 
-            if (KeyManager.Instance.GetKeyDown(PlayerAction.Swap))
-            {
-                GetPlayerController3D(animator).playerMouse.WeaponSwap();
-            }
         }
     }
 

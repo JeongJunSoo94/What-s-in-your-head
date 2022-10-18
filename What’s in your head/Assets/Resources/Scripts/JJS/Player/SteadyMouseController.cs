@@ -22,8 +22,17 @@ namespace JJS
                 glass.mainCamera = this.gameObject.transform.GetComponent<CameraController_Single>().FindCamera(); // ½Ì±Û¿ë
                 cameraMain = this.gameObject.transform.GetComponent<CameraController_Single>().FindCamera(); // ½Ì±Û¿ë
             }
+            if (point == null)
+            {
+                point = Resources.Load("Prefabs/JJS/SteadyMousePoint") as GameObject;
+                Instantiate(point);
+                glass.mousePoint = point;
+            }
         }
-
+        public override void AimUpdate(int type = 0)
+        {
+            glass.HitLine();
+        }
     }
 
 }

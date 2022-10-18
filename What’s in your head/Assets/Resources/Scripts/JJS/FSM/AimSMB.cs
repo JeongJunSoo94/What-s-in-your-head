@@ -29,6 +29,8 @@ namespace JJS
 
         void WeaponCheck(Animator animator)
         {
+            if(GetPlayerController3D(animator).characterState.top)
+                GetPlayerController3D(animator).playerMouse.ik.enableIK = false;
             if (GetPlayerController3D(animator).playerMouse.GetUseWeapon() == 1)
             {
                 if (animator.GetLayerWeight(1) == 0&& GetPlayerController3D(animator).characterState.aim)

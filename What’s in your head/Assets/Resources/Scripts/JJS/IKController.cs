@@ -31,7 +31,7 @@ public class IKController : MonoBehaviour
         }
     }
 
-    void SetLookAt()
+    public virtual void SetLookAt()
     {
         animator.SetLookAtWeight(1);
         animator.SetLookAtPosition(hitpos.position);

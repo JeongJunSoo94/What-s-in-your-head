@@ -21,7 +21,7 @@ namespace JJS.Weapon
         public float curveWidth;
 
         public GameObject targetIK;
-        public GameObject gunDirection;
+        public GameObject direction;
         public GameObject hitPos;
         public GameObject mousePoint;
 
@@ -48,10 +48,10 @@ namespace JJS.Weapon
 
         }
 
-        private void FixedUpdate()
-        {
-            HitLine();
-        }
+        //private void FixedUpdate()
+        //{
+        //    HitLine();
+        //}
 
 
         void OnDrawGizmos()
@@ -62,12 +62,15 @@ namespace JJS.Weapon
         void OnDrawGizmosRay()
         {
             ray.origin = startPos.transform.position;
-            ray.direction = dir;
+            ray.direction = dir.normalized;
 
             Debug.DrawRay(ray.origin, ray.direction * curDistance, Color.red);
+            ray.origin = targetIK.transform.position;
+            ray.direction = (hitPos.transform.position- targetIK.transform.position).normalized;
+            Debug.DrawRay(ray.origin, ray.direction * curDistance, Color.green);
         }
 
-        void HitLine()
+        public void HitLine()
         {
             RaycastHit hit;
             Vector3 hitPoint;
@@ -85,14 +88,15 @@ namespace JJS.Weapon
                 curDistance = Vector3.Distance(startPos.transform.position, hitPoint);
 
             }
-            particle.transform.localScale = new Vector3(20,20, curDistance*100);
+            particle.transform.localScale = new Vector3(1,1, curDistance*20);
 
             //targetIK.transform.position = hitPoint;
             //weapon.transform.LookAt(hitPoint);
 
-            weapon.transform.LookAt(hitPoint);
-            //gunDirection.transform.position = hitPoint;
+            //direction.transform.LookAt(hitPoint);
+            // weapon.transform.Rotate(new Vector3(90,0,0));
             hitPos.transform.position = hitPoint;
+            particle.transform.LookAt(hitPoint);
             targetIK.transform.LookAt(hitPoint);
         }
     }
