@@ -36,12 +36,20 @@ namespace JCW.UI.InGame
                 if ((bool)(GameManager.Instance.isAlive[isNella]))
                     transform.GetChild(1).gameObject.SetActive(true);
                 else
+                {
+                    int n = isNella ? 0 : 1;
+                    transform.parent.GetChild(n).gameObject.SetActive(false);
                     transform.GetChild(0).gameObject.SetActive(true);
+                }
             }
             else
             {
                 if ((bool)(GameManager.Instance.isAlive[isNella]))
+                {
+                    int n = !isNella ? 0 : 1;
+                    transform.parent.GetChild(n).gameObject.SetActive(false);
                     transform.GetChild(0).gameObject.SetActive(true);
+                }
                 else
                     transform.GetChild(1).gameObject.SetActive(true);
             }

@@ -49,8 +49,8 @@ namespace JCW.UI.InGame
 
                 // 현재 여기서 문제
                 //GameManager.Instance.reviveAllPairs.Add(isNella, this);
-                GameManager.Instance.AddReviveAllPair(isNella, this.gameObject);
-                //Debug.Log("isNella : " + isNella + " / reviveAllPairs 추가");
+                GameManager.Instance.AddReviveAllPair(isNella, transform.name);
+                Debug.Log("isNella : " + isNella + " / reviveAllPairs 추가");
             }
             else
                 charHpUI = isNella ? transform.GetChild(1).gameObject : transform.GetChild(0).gameObject;
@@ -149,7 +149,6 @@ namespace JCW.UI.InGame
         [PunRPC]
         void SetRevive_RPC(bool value)
         {
-            charHpUI.SetActive(!value);
             reviveUI.SetActive(value);
         }
 

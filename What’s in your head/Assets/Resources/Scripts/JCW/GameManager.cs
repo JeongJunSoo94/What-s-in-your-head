@@ -51,14 +51,15 @@ public class GameManager : MonoBehaviour
         reviveAllPairs[false].SetRevive(value);
     }
 
-    public void AddReviveAllPair(bool _isNella, GameObject healthUIObj)
+    public void AddReviveAllPair(bool _isNella, string healthUIObjName)
     {
-        photonView.RPC(nameof(AddReviveAllPair_RPC), RpcTarget.AllViaServer, _isNella, healthUIObj);
+        photonView.RPC(nameof(AddReviveAllPair_RPC), RpcTarget.AllViaServer, _isNella, healthUIObjName);
     }
 
     [PunRPC]
-    void AddReviveAllPair_RPC(bool _isNella, GameObject healthUIObj)
+    void AddReviveAllPair_RPC(bool _isNella, string healthUIObjName)
     {
-        reviveAllPairs.Add(_isNella, healthUIObj.GetComponent<HealthUI>());
+        GameObject go = GameObject.Find(healthUIObjName);
+        reviveAllPairs.Add(_isNella, go.GetComponent<HealthUI>());
     }
 }
