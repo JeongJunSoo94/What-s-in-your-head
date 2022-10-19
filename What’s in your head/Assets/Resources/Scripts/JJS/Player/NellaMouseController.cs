@@ -14,6 +14,7 @@ namespace JJS
 
         public WaterGun gun;
 
+        public int bulletCount=0;
         private void Awake()
         {
             if (PhotonNetwork.NetworkClientState == Photon.Realtime.ClientState.Joined)
@@ -28,8 +29,7 @@ namespace JJS
             }
             if (point == null)
             {
-                point = Resources.Load("Prefabs/JJS/NellaMousePoint") as GameObject;
-                point = Instantiate(point);
+                point = GameObject.FindGameObjectWithTag("NellaMousePoint");
                 gun.mousePoint = point;
             }
         }
@@ -50,6 +50,7 @@ namespace JJS
         public void Shoot()
         {
             gun.Shoot();
+            bulletCount++;
         }
 
         public void OnEnableObject(int index)

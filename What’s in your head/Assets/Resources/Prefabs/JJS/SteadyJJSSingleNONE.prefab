@@ -882,13 +882,13 @@ GameObject:
   - component: {fileID: 2930903994117802546}
   - component: {fileID: 5015123240381253438}
   - component: {fileID: 6652733506945955613}
-  - component: {fileID: 5203883176027793374}
+  - component: {fileID: 95781633687633014}
   - component: {fileID: 1570721159653722127}
   - component: {fileID: 2930903994117802547}
   - component: {fileID: 5034855453309824435}
   - component: {fileID: 6652733506945955610}
   m_Layer: 6
-  m_Name: SteadyJJSNONE
+  m_Name: SteadyJJSSingleNONE
   m_TagString: Steady
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -996,7 +996,7 @@ MonoBehaviour:
   ObservedComponents:
   - {fileID: 5015123240381253438}
   - {fileID: 6652733506945955613}
-  - {fileID: 5203883176027793374}
+  - {fileID: 95781633687633014}
   sceneViewId: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0
@@ -1056,16 +1056,13 @@ MonoBehaviour:
     Name: AimAttack
   - Type: 4
     SynchronizeType: 2
-    Name: WeaponSwap
-  - Type: 4
-    SynchronizeType: 2
     Name: isAttack
   - Type: 4
     SynchronizeType: 2
     Name: isAttackNext
   - Type: 4
     SynchronizeType: 2
-    Name: Top
+    Name: WeaponSwap
   m_SynchronizeLayers:
   - SynchronizeType: 2
     LayerIndex: 0
@@ -1087,7 +1084,7 @@ MonoBehaviour:
   m_SynchronizeRotation: 1
   m_SynchronizeScale: 0
   m_UseLocal: 1
---- !u!114 &5203883176027793374
+--- !u!114 &95781633687633014
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1096,7 +1093,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 95781633687633015}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 01450141376a61547b3c67c308a86438, type: 3}
+  m_Script: {fileID: 11500000, guid: 12083cc7331a01a4ba471273427f0d9d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   mainCam: {fileID: 0}
@@ -1107,6 +1104,8 @@ MonoBehaviour:
   blendingCam_Clone: 0
   defaultCameraSensitivity: 20
   sholderCameraSensitivity: 20
+  sholderAxisY_MaxUp: 0.3
+  sholderAxisY_MaxDown: 0.5
 --- !u!114 &1570721159653722127
 MonoBehaviour:
   m_ObjectHideFlags: 0

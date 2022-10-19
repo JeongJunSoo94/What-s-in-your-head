@@ -24,10 +24,17 @@ namespace JJS
             }
             if (point == null)
             {
-                point = Resources.Load("Prefabs/JJS/SteadyMousePoint") as GameObject;
-                Instantiate(point);
+                point = GameObject.FindGameObjectWithTag("NellaMousePoint");
                 glass.mousePoint = point;
             }
+        }
+        public void StopBeam()
+        {
+            glass.StopBeam();
+        }
+        public void Shoot()
+        {
+            glass.Shoot();
         }
         public override void AimUpdate(int type = 0)
         {

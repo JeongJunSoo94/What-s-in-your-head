@@ -36,7 +36,6 @@ namespace YC.Camera_
         CinemachineVirtualCameraBase topCam;
         CinemachineVirtualCameraBase wallCam;
 
-        enum CamState { back, wide, sholder, top, wall };
         [SerializeField] CamState curCam;
         [SerializeField] CamState preCam;
         float originCurVirtualCam_XAxis;
@@ -69,7 +68,10 @@ namespace YC.Camera_
         [Tooltip("조준 카메라 감도")]
         public float sholderCameraSensitivity = 20;
 
+        enum CamState { back, wide, sholder, top, wall };
 
+        // >> : 초기 카메라 설정 (바로 위 스테이트 참고)
+        CamState InitCamera = CamState.back; 
         //
 
         PlayerController3D player;
@@ -116,14 +118,18 @@ namespace YC.Camera_
 
             if (!pv.IsMine)
             {
-                curCam_Clone = CamState.back;
-                blendingCam_Clone = CamState.back;
+                if (!topCam)
+                    Debug.Log("NULL!");
+                curCam_Clone = InitCamera;
+                blendingCam_Clone = InitCamera;
                 OnOffCamera(camList[(int)curCam_Clone]);
             }
             else
             {
-                curCam = CamState.back;
-                preCam = CamState.back;
+                if (!topCam)
+                    Debug.Log("NULL!");
+                curCam = InitCamera;
+                preCam = InitCamera;
                 OnOffCamera(camList[(int)curCam]);
             }
 
@@ -241,7 +247,8 @@ namespace YC.Camera_
                     OnOffCamera(backCam);
                 }
             }
-        } 
+        }
+
 
         void CheckStartBlend_Clone() // Clone의 블렌드 시작 시점에 true : 다만 blend 100% 이전에 회귀시 버그 수정 필요
         {
@@ -251,6 +258,7 @@ namespace YC.Camera_
                 {
                     isBlendStart_Clone = true;
                     isBlending_Clone = true;
+                  
 
                     //Debug.Log("Debug : (0) Clone Blend Start! : 서버로부터 블렌딩 시작 여부 받음");
                 }
@@ -335,21 +343,33 @@ namespace YC.Camera_
             {
                 stream.SendNext(cinemachineBrain.IsBlending);
                 stream.SendNext(curCam);
+
+               
+                    
                 stream.SendNext(camList[(int)preCam].GetComponent<CinemachineFreeLook>().m_XAxis.Value);
                 stream.SendNext(camList[(int)preCam].GetComponent<CinemachineFreeLook>().m_YAxis.Value);
+                  
+
                 stream.SendNext(camList[(int)curCam].GetComponent<CinemachineFreeLook>().m_XAxis.Value);
                 stream.SendNext(camList[(int)curCam].GetComponent<CinemachineFreeLook>().m_YAxis.Value);
                 stream.SendNext(camList[(int)curCam].GetComponent<CinemachineFreeLook>().transform.position);
+                
             }
             else
             {
                 isOriginBlending = (bool)stream.ReceiveNext();
                 blendingCam_Clone = (CamState)stream.ReceiveNext();
+
+              
+                   
                 originPreVirtualCam_XAxis = (float)stream.ReceiveNext();
                 originPreVirtualCam_YAxis = (float)stream.ReceiveNext();
+                   
+
                 originCurVirtualCam_XAxis = (float)stream.ReceiveNext();
                 originCurVirtualCam_YAxis = (float)stream.ReceiveNext();
                 originCurCam_Pos = (Vector3)stream.ReceiveNext();         
+                
             }
         }
 

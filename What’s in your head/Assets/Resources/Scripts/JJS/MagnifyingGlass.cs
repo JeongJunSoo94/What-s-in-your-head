@@ -9,12 +9,17 @@ namespace JJS.Weapon
 {
     public class MagnifyingGlass : MonoBehaviour
     {
-        public ParticleSystem particle;
+        public GameObject particleGather;
+        public GameObject particleBeam;
+        public BoxCollider paticleBoxCollider;
         public Camera mainCamera;
 
         Ray ray;
 
         Vector3 dir;
+
+        public float beamWaitTime=2f;
+
         public float maxDistance;
         public float curDistance;
         public float curveHeight = 1f;
@@ -31,6 +36,9 @@ namespace JJS.Weapon
         public GameObject hitBox;
 
         public LayerMask layer;
+
+        public bool beaming;
+
         private void Awake()
         {
         }
@@ -41,17 +49,7 @@ namespace JJS.Weapon
                 mainCamera = this.gameObject.transform.parent.GetComponent<CameraController>().FindCamera(); // 멀티용
             else
                 mainCamera = this.gameObject.transform.parent.GetComponent<CameraController_Single>().FindCamera(); // 싱글용
-
-            //mainCamera = this.gameObject.transform.parent.GetComponent<CameraController_Single>().mainCam; // 싱글용
-            //mainCamera = this.gameObject.transform.parent.GetComponent<CameraController>().mainCam; // 멀티용
-
-
         }
-
-        //private void FixedUpdate()
-        //{
-        //    HitLine();
-        //}
 
 
         void OnDrawGizmos()
@@ -68,6 +66,42 @@ namespace JJS.Weapon
             ray.origin = targetIK.transform.position;
             ray.direction = (hitPos.transform.position- targetIK.transform.position).normalized;
             Debug.DrawRay(ray.origin, ray.direction * curDistance, Color.green);
+        }
+
+        public void BeamEnable(bool enable)
+        {
+            particleBeam.SetActive(enable);
+        }
+
+        public void EffectEnable(bool enable)
+        {
+            particleGather.SetActive(enable);
+        }
+        public void StopBeam()
+        {
+            if (beaming)
+            {
+                StopCoroutine("EffectCoroutine");
+                beaming = false;
+            }
+            else
+            {
+                beaming = false;
+            }
+            EffectEnable(false);
+            BeamEnable(false);
+        }
+        public void Shoot()
+        {
+            StartCoroutine("EffectCoroutine");
+        }
+
+        IEnumerator EffectCoroutine()
+        {
+            beaming = true;
+            EffectEnable(true);
+            yield return new WaitForSeconds(beamWaitTime);
+            BeamEnable(true);
         }
 
         public void HitLine()
@@ -88,15 +122,12 @@ namespace JJS.Weapon
                 curDistance = Vector3.Distance(startPos.transform.position, hitPoint);
 
             }
-            particle.transform.localScale = new Vector3(1,1, curDistance*20);
+            particleGather.transform.localScale = new Vector3(1,1, curDistance);
+            particleBeam.transform.localScale = new Vector3(1,1, curDistance);
 
-            //targetIK.transform.position = hitPoint;
-            //weapon.transform.LookAt(hitPoint);
-
-            //direction.transform.LookAt(hitPoint);
-            // weapon.transform.Rotate(new Vector3(90,0,0));
             hitPos.transform.position = hitPoint;
-            particle.transform.LookAt(hitPoint);
+            particleGather.transform.LookAt(hitPoint);
+            particleBeam.transform.LookAt(hitPoint);
             targetIK.transform.LookAt(hitPoint);
         }
     }
