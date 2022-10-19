@@ -268,13 +268,13 @@ GameObject:
   - component: {fileID: 1713259755560867284}
   - component: {fileID: 2781056347416148120}
   - component: {fileID: 1713259755560867285}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: HealthUI
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1713259755560867284
 Transform:
   m_ObjectHideFlags: 0
@@ -311,7 +311,8 @@ MonoBehaviour:
   Synchronization: 3
   OwnershipTransfer: 0
   observableSearch: 2
-  ObservedComponents: []
+  ObservedComponents:
+  - {fileID: 1713259755560867285}
   sceneViewId: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0
@@ -1515,6 +1516,22 @@ PrefabInstance:
     - target: {fileID: 898961855, guid: 1dd92b00e0d648d499f29f725d094d0f, type: 3}
       propertyPath: sceneViewId
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 112651097525496204, guid: 1dd92b00e0d648d499f29f725d094d0f, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8079658714567800142, guid: 1dd92b00e0d648d499f29f725d094d0f, type: 3}
+      propertyPath: m_FillAmount
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8079658714567800143, guid: 1dd92b00e0d648d499f29f725d094d0f, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: -3
+      objectReference: {fileID: 0}
+    - target: {fileID: 8079658714567800143, guid: 1dd92b00e0d648d499f29f725d094d0f, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 8079658715394303151, guid: 1dd92b00e0d648d499f29f725d094d0f, type: 3}
       propertyPath: m_Pivot.x

@@ -16,6 +16,11 @@ namespace KSU
         {
             isUIActive = isUIAct; isInteractable = isInter; distance = dist;
         }
+
+        public Obj_Info(bool isUIAct, bool isInter)
+        {
+            isUIActive = isUIAct; isInteractable = isInter; distance = 0;
+        }
         public bool isUIActive;
         public bool isInteractable;
         public float distance;
@@ -174,7 +179,7 @@ namespace KSU
                 {
                     //isMine false면 안보냄 / 현재 널
                     //Debug.Log(rope.Key.GetComponentInChildren<TargetIndicator>().gameObject.name);
-                    rope.Key.GetComponentInChildren<TargetIndicator>().SetUI(rope.Value, mainCamera);
+                    rope.Key.GetComponentInChildren<TargetIndicator>().SetUI(rope.Value.isUIActive, rope.Value.isInteractable, rope.Value.distance, mainCamera);
                     // UI상태(bool)가 다르면 신호 struct Obj_Info(bool isUIActive,bool isInteractive, float distance)를 보냄
                 }
             }
@@ -194,7 +199,7 @@ namespace KSU
             if (other.CompareTag("Rope") && GetComponent<PhotonView>().IsMine)
             {
                 Debug.Log("트리거 탈출 : " + mainCamera);
-                other.gameObject.GetComponentInChildren<TargetIndicator>().SetUI(new Obj_Info(false, false, 100f), mainCamera);                
+                other.gameObject.GetComponentInChildren<TargetIndicator>().SetUI(false, false, 100f, mainCamera);                
                 detectedRopes.Remove(other.gameObject);
             }
         }

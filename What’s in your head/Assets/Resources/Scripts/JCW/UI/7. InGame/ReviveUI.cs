@@ -31,7 +31,6 @@ namespace JCW.UI.InGame
 
         private void OnEnable()
         {
-            Debug.Log("IsMine : " + photonView.IsMine + " / isNella " + isNella + " 살아있나? : " + (bool)GameManager.Instance.isAlive[isNella]);
             if(photonView.IsMine)
                 photonView.RPC(nameof(TurnOnUI_RPC), RpcTarget.AllViaServer, (bool)GameManager.Instance.isAlive[isNella]);
             

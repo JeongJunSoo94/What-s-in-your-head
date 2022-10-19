@@ -75,7 +75,8 @@ namespace JCW.UI
 
         public void OnPointerExit(PointerEventData eventData)
         {
-            photonView.RPC(nameof(ChangeSprite), RpcTarget.AllViaServer, false, PhotonNetwork.IsMasterClient);
+            if(this.gameObject.activeSelf)
+                photonView.RPC(nameof(ChangeSprite), RpcTarget.AllViaServer, false, PhotonNetwork.IsMasterClient);
         }
 
         [PunRPC]
@@ -147,7 +148,8 @@ namespace JCW.UI
                         Debug.Log(player + " : " + character);
                     }
                     PhotonManager.Instance.ChangeStage();
-                    GameManager.Instance.isAlive.Add(GameManager.Instance.characterOwner[PhotonNetwork.IsMasterClient], true);
+                    GameManager.Instance.AddAliveState(GameManager.Instance.characterOwner[PhotonNetwork.IsMasterClient], true);
+                    this.enabled = false;
                 }
             }
             // 본인이 선택했던 캐릭터 버튼을 다시 눌렀을 때

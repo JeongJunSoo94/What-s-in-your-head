@@ -184,7 +184,7 @@ namespace KSU
             {
                 if(interactionState.railTriggerDetectionNum> 0)
                 {
-                    detectedRail.GetComponentInChildren<TargetIndicator>().SetUI(true, true, _raycastHit.point, mainCamera);
+                    detectedRail.GetComponentInChildren<TargetIndicator>().SetUI(true, _raycastHit.point, mainCamera);
                 }
                 
             }
@@ -192,7 +192,7 @@ namespace KSU
             {
                 if(detectedRail != null)
                 {
-                    detectedRail.GetComponentInChildren<TargetIndicator>().SetUI(false, false, Vector3.zero, mainCamera);
+                    detectedRail.GetComponentInChildren<TargetIndicator>().SetUI(false, Vector3.zero, mainCamera);
                 }
             }
         }

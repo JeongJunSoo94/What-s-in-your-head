@@ -1,15 +1,14 @@
 using System.Collections;
-using Photon.Pun;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Video;
-using YC.Camera_;
 
 using KSU;
+using Photon.Pun;
 
 namespace JCW.UI.InGame
 {
-    
+
     public class TargetIndicator : MonoBehaviour
     {
         
@@ -37,7 +36,7 @@ namespace JCW.UI.InGame
         float detectRange;
         float interactableRange;
 
-        // 상호작용 가능 시 스프라이트
+        // 감지<->상호작용 스프라이트
         Image interactiveSprite;
 
 
@@ -155,10 +154,12 @@ namespace JCW.UI.InGame
             return indicatorPosition;
         }
 
-        public void SetUI(Obj_Info objInfo, Camera _cam)
+        // 로프용 : 감지 & 상호작용 스프라이트 존재 / 따라서 변환하는 애니메이션도 존재
+        // 타겟은 인스펙터 창에서 넣어줌
+        public void SetUI(bool isUIActive, bool isSetOn, float distance, Camera _cam)
         {
-            detectUI.SetActive(objInfo.isUIActive);
-            isActive = objInfo.isUIActive;
+            detectUI.SetActive(isUIActive);
+            isActive = isUIActive;
 
             if (isActive)
             {
@@ -166,24 +167,27 @@ namespace JCW.UI.InGame
                 mainCamera = videoPlayer.targetCamera;
                 SetSreenInfo();
                 // 상호작용 범위 밖->안 & 안->밖 들어갔을 때만 애니메이션 재생과 함께 스프라이트 변경
-                if (isInteractable != objInfo.isInteractable)
+                if (isInteractable != isSetOn)
                 {
-                    isInteractable = objInfo.isInteractable;
-                    ConvertVideo(objInfo.isInteractable);
+                    isInteractable = isSetOn;
+                    ConvertVideo(isInteractable);
                 }
 
-                if (!isInteractable)
+                // 게이지 필요 없으면 실행 X
+                if (gauge != null && !isSetOn)
                 {
                     // 거리에 따라 게이지 줄어들게 끔 해주기
                     // 1 - (_dist-상호작용 범위)/(감지범위 - 상호작용 범위) == FillValue에 넣어줌.
-                    gauge.fillAmount = 1 - (objInfo.distance - interactableRange) / (detectRange - interactableRange);
+                    gauge.fillAmount = 1 - (distance - interactableRange) / (detectRange - interactableRange);
                 }
             }
         }
 
-        // 레일용
-        public void SetUI(bool _isActive, bool _isSetOn, Vector3 _pos, Camera _cam)
+        // 레일 : 스프라이트는 하나만 있음. 따라서 변환 애니메이션 필요 없음
+        // 타겟을 다른 스크립트에서 받음
+        public void SetUI(bool _isActive, Vector3 _pos, Camera _cam)
         {
+            // _isActive : UI를 켜야하는 지, _isSetOn : 상호작용해야하는 지, _pos : 띄워야하는 위치, _cam : 띄워야하는 화면의 카메라
             detectUI.SetActive(_isActive);
             isActive = _isActive;
             if (target == null)
@@ -192,18 +196,34 @@ namespace JCW.UI.InGame
 
             if (isActive)
             {
-                videoPlayer.targetCamera = _cam;
-                mainCamera = videoPlayer.targetCamera;
+                mainCamera = _cam;
                 SetSreenInfo();
-                // 상호작용 범위 밖->안 & 안->밖 들어갔을 때만 애니메이션 재생과 함께 스프라이트 변경
-                if (isInteractable != _isSetOn)
-                {
-                    isInteractable = _isSetOn;
-                    ConvertVideo(_isSetOn);
-                }
+            }
+        }
+        // 그 외 : 스프라이트 하나만 존재 / 따라서 변환하는 애니메이션 X
+        // 타겟은 인스펙터 창에서 넣어줌
+        public void SetUI(bool _isUIActive, Camera _cam)
+        {
+            // _isActive : UI를 켜야하는 지, _isSetOn : 상호작용해야하는 지, _pos : 띄워야하는 위치, _cam : 띄워야하는 화면의 카메라
+            detectUI.SetActive(_isUIActive);
+            isActive = _isUIActive;
+
+            if (isActive)
+            {
+                mainCamera = _cam;
+                SetSreenInfo();
             }
         }
 
+        public void SetGauge(float value)
+        {
+            if (gauge == null)
+                Debug.Log("게이지가 할당되지 않았습니다. 확인 해주세요");
+            else
+                gauge.fillAmount = value;
+        }
+
+        // 현재 RopeSpawner에서 참조
         public void SetInteractableRange(float _range)
         {
             interactableRange = _range;

@@ -62,19 +62,32 @@ namespace YC.CameraManager_
             }
             else if (Input.GetKeyDown(KeyCode.Keypad3))
             {
-                //Debug.Log("스테디 카메라 전체화면 상황에서, 넬라 카메라 만든다");
+                //Debug.Log("(넬라가 죽었을때) 스테디 카메라 전체화면을 만들어주고, 넬라 카메라 만든다");
                 pv.RPC(nameof(InitCamera), RpcTarget.AllViaServer, 1);
                 pv.RPC(nameof(Cor_SetSizeCamera), RpcTarget.AllViaServer, 0, 0.36f, 2f);           
             }
             else if (Input.GetKeyDown(KeyCode.Keypad4))
             {
-                //Debug.Log("넬라 카메라 전체화면 상황에서, 스테디 카메라 만든다");
+                //Debug.Log("(스테디가 죽었을때) 넬라 카메라 전체화면을 만들어주고, 스테디 카메라 만든다");
                 pv.RPC(nameof(InitCamera), RpcTarget.AllBuffered, 0);
                 pv.RPC(nameof(Cor_SetSizeCamera), RpcTarget.AllBuffered, 1, 0.64f, 2f);               
             }
         }
+        public void NellaDeadCam()
+        {
+            pv.RPC(nameof(InitCamera), RpcTarget.AllViaServer, 1);
+            pv.RPC(nameof(Cor_SetSizeCamera), RpcTarget.AllViaServer, 0, 0.36f, 2f);
+        }
 
-       
+        public void SteadyDeadCam()
+        {
+            pv.RPC(nameof(InitCamera), RpcTarget.AllBuffered, 0);
+            pv.RPC(nameof(Cor_SetSizeCamera), RpcTarget.AllBuffered, 1, 0.64f, 2f);
+        }
+
+        
+
+
         // Sizing 호출 전 초기화 함수
         [PunRPC]
         public void InitCamera(int targetCamera)

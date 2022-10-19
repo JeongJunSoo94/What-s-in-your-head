@@ -364,6 +364,7 @@ namespace YC.Camera_Single
                 else Debug.Log("NULL");
 
                 cinemachineBrain = mainCam.GetComponent<CinemachineBrain>();
+                Debug.Log(CameraManager.Instance.cameras);
                 CameraManager.Instance.cameras[0] = mainCam;
 
             }
