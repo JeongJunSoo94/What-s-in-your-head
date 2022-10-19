@@ -5122,19 +5122,25 @@ MonoBehaviour:
     Name: JumpDown
   - Type: 4
     SynchronizeType: 2
-    Name: isAttack2
-  - Type: 4
-    SynchronizeType: 2
-    Name: isAttack3
-  - Type: 4
-    SynchronizeType: 2
-    Name: isAttack1
-  - Type: 4
-    SynchronizeType: 2
     Name: Aim
   - Type: 4
     SynchronizeType: 2
     Name: AimAttack
+  - Type: 4
+    SynchronizeType: 2
+    Name: Attacking
+  - Type: 4
+    SynchronizeType: 2
+    Name: WeaponSwap
+  - Type: 4
+    SynchronizeType: 2
+    Name: Top
+  - Type: 4
+    SynchronizeType: 2
+    Name: isAttack
+  - Type: 4
+    SynchronizeType: 2
+    Name: isAttackNext
   m_SynchronizeLayers:
   - SynchronizeType: 2
     LayerIndex: 0
@@ -5276,6 +5282,7 @@ MonoBehaviour:
   outOfControllDuration: 0
   aim: 0
   top: 0
+  swap: 0
 --- !u!114 &6125511999642235224
 MonoBehaviour:
   m_ObjectHideFlags: 0

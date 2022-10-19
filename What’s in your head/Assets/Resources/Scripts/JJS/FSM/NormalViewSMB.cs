@@ -7,14 +7,13 @@ namespace JJS
 {
     public class NormalViewSMB : CharacterBaseSMB
     {
+        float AttackDelayTime = 0f;
         override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
         {
-            if (GetPlayerController3D(animator).enabled)
-            {
-                animator.SetBool("wasAirJump", false);
-                animator.SetBool("isJump", false);
-                GetPlayerController3D(animator).characterState.aim = false;
-            }
+            animator.SetBool("wasAirJump", false);
+            animator.SetBool("isJump", false);
+            animator.SetBool("isAttack", false);
+            GetPlayerController3D(animator).characterState.aim = false;
         }
 
         override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
@@ -22,23 +21,18 @@ namespace JJS
             if (!GetPlayerController3D(animator).characterState.swap)
             { 
                 WeaponCheck(animator);
-            GetPlayerController3D(animator).playerMouse.ik.enableIK = false;
+                GetPlayerController3D(animator).playerMouse.ik.enableIK = false;
             }
             if (GetPlayerController3D(animator).enabled)
             {
-                GetPlayerController3D(animator).InputRun();
-                GetPlayerController3D(animator).InputMove();
-                check(animator);
+                InputCheck(animator);
             }
-
+            check(animator);
         }
 
         public override void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
         {
-            if (GetPlayerController3D(animator).enabled)
-            {
-                GetPlayerController3D(animator).MoveStop();
-            }
+            GetPlayerController3D(animator).MoveStop();
         }
         void WeaponCheck(Animator animator)
         {
@@ -61,23 +55,55 @@ namespace JJS
                 }
             }
         }
-        void check(Animator animator)
+
+        void InputCheck(Animator animator)
         {
             if (Input.GetKeyDown(KeyCode.Alpha1))
             {
                 GetPlayerController3D(animator).characterState.top = !GetPlayerController3D(animator).characterState.top;
             }
+          
+            GetPlayerController3D(animator).InputRun();
+            GetPlayerController3D(animator).InputMove();
+            GetPlayerController3D(animator).InputJump();
+            GetPlayerController3D(animator).InputDash();
+            if (KeyManager.Instance.GetKey(PlayerAction.Fire))
+            {
+                if (!animator.GetBool("WeaponSwap"))
+                {
+                    if (GetPlayerController3D(animator).playerMouse.GetUseWeapon() == 0)
+                    {
+                        animator.SetBool("isAttackNext", true);
+                        animator.SetBool("isAttack", true);
+                    }
+                }
+            }
+            if (KeyManager.Instance.GetKeyDown(PlayerAction.Swap) && !GetPlayerController3D(animator).characterState.swap)
+            {
+                if (!animator.GetBool("isAttack"))
+                {
+                    GetPlayerController3D(animator).characterState.swap = true;
+                    animator.SetBool("WeaponSwap", true);
+                }
+            }
+
+            if (GetPlayerController3D(animator).playerMouse.GetUseWeapon() == 1 && !GetPlayerController3D(animator).characterState.top && KeyManager.Instance.GetKey(PlayerAction.Aim))
+            {
+                animator.SetBool("Aim", true);
+            }
+        }
+
+        void check(Animator animator)
+        {
             if (GetPlayerController3D(animator).characterState.top)
             {
                 Cursor.lockState = CursorLockMode.Confined;
                 GetPlayerController3D(animator).playerMouse.TopViewUpdate();
-               
             }
             else
             {
                 Cursor.lockState = CursorLockMode.Locked;
             }
-
 
             animator.SetFloat("HorizonVelocity", (GetPlayerController3D(animator).characterState.isMove ? (GetPlayerController3D(animator).characterState.isRun ? 1.0f : 0.5f) : 0.0f));
 
@@ -95,14 +121,7 @@ namespace JJS
                 animator.SetBool("isAir", false);
             }
 
-            if (KeyManager.Instance.GetKey(PlayerAction.Fire))
-            {
-                if (GetPlayerController3D(animator).playerMouse.GetUseWeapon()==0)
-                {
-                    animator.SetBool("isAttack1", true);
-                    return;
-                }
-            }
+     
             if (!GetPlayerController3D(animator).characterState.isMove)
             {
                 GetPlayerController3D(animator).characterState.isRun = false;
@@ -112,40 +131,15 @@ namespace JJS
                 animator.SetBool("isJump", true);
                 return;
             }
-            else
-            {
-                GetPlayerController3D(animator).InputJump();
-            }
 
             if (GetPlayerController3D(animator).characterState.IsDashing)
             {
                 animator.SetBool("isDash", true);
                 return;
             }
-            else
-            {
-                GetPlayerController3D(animator).InputDash();
-            }
 
 
-
-            if (KeyManager.Instance.GetKeyDown(PlayerAction.Swap)&& !GetPlayerController3D(animator).characterState.swap)
-            {
-                if(!animator.GetBool("isAttack1"))
-                {
-                    GetPlayerController3D(animator).characterState.swap = true;
-                    animator.SetBool("WeaponSwap", true);
-                }
-                //GetPlayerController3D(animator).characterState.swap = true;
-                //animator.SetBool("WeaponSwap", true);
-                return;
-            }
-         
-            if (GetPlayerController3D(animator).playerMouse.GetUseWeapon() == 1&& !GetPlayerController3D(animator).characterState.top && KeyManager.Instance.GetKey(PlayerAction.Aim))
-            {
-                animator.SetBool("Aim", true);
-                return;
-            }
+          
 
         }
     }

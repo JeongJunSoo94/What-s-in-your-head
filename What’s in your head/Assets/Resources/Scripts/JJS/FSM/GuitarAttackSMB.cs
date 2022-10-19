@@ -12,11 +12,7 @@ namespace JJS
         // OnStateEnter is called when a transition starts and the state machine starts to evaluate this state
         override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
         {
-            if (GetPlayerController3D(animator).enabled)
-            {
-                onClick = false;
-
-            }
+            onClick = false;
         }
 
         // OnStateUpdate is called on each Update frame between OnStateEnter and OnStateExit callbacks
@@ -29,13 +25,7 @@ namespace JJS
         }
         public override void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
         {
-            if (GetPlayerController3D(animator).enabled)
-            {
-                animator.SetBool("isAttack1", false);
-
-                animator.SetBool("isAttack2", false);
-                animator.SetBool("isAttack3", false);
-            }
+            animator.SetBool("isAttack", false);
         }
         void Check(Animator animator)
         {
@@ -43,33 +33,11 @@ namespace JJS
             {
                 if (KeyManager.Instance.GetKey(PlayerAction.Fire))
                 {
-                    switch (index)
-                    {
-                        case 0:
-                            animator.SetBool("isAttack1", true);
-                            break;
-                        case 1:
-                            animator.SetBool("isAttack2", true);
-                            break;
-                        case 2:
-                            animator.SetBool("isAttack3", true);
-                            break;
-                    }
+                    animator.SetBool("isAttackNext", true);
                 }
                 else
                 {
-                    switch (index)
-                    {
-                        case 0:
-                            animator.SetBool("isAttack1", false);
-                            break;
-                        case 1:
-                            animator.SetBool("isAttack2", false);
-                            break;
-                        case 2:
-                            animator.SetBool("isAttack3", false);
-                            break;
-                    }
+                    animator.SetBool("isAttackNext", false);
                 }
             }
 
@@ -77,18 +45,7 @@ namespace JJS
                 if (KeyManager.Instance.GetKeyDown(PlayerAction.Fire))
                 {
                     onClick = true;
-                    switch (index)
-                    {
-                        case 0:
-                            animator.SetBool("isAttack1", true);
-                            break;
-                        case 1:
-                            animator.SetBool("isAttack2", true);
-                            break;
-                        case 2:
-                            animator.SetBool("isAttack3", true);
-                            break;
-                    }
+                    animator.SetBool("isAttackNext", true);
                 }
             }
 

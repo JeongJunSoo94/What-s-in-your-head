@@ -12,7 +12,6 @@ namespace JJS
         override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
         {
             animator.SetLayerWeight(1, 1);
-
             index = GetPlayerController3D(animator).playerMouse.GetUseWeapon();
             GetPlayerController3D(animator).playerMouse.WeaponSwap();
         }
@@ -29,5 +28,6 @@ namespace JJS
             GetPlayerController3D(animator).characterState.swap = false;
             animator.SetLayerWeight(1, 0);
         }
+
     }
 }
