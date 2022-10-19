@@ -29,18 +29,21 @@ namespace KSU
         public LayerMask layerFilterForGrapple;
         public LayerMask layerForGrapple;
 
-        public GameObject grapplSpawner;
+        public GameObject grappleSpawner;
+        public SteadyGrapple grapple;
         public Vector3 autoAimPosition;
 
 
         public float rangeRadius = 5f;
         public float rangeDistance = 5f;
-        public GameObject sphere;
+        //public GameObject sphere;
 
         public GameObject hookableTarget;
 
         Vector3 grappleVec;
         Vector3 targetPosition;
+
+        public bool isGrappledObjectCollided = false;
 
         List<GameObject> grappledObjects = new();
 
@@ -79,7 +82,7 @@ namespace KSU
         {
             SearchGrappledObject();
             MakeGizmoVecs();
-            //Fire();
+            InputFire();
             MoveToTarget();
         }
         // 스테디 전용 스킬 클래스로
@@ -132,26 +135,33 @@ namespace KSU
             steadyInteractionState.isGrappledObjectFounded = false;
         }
 
-        void Fire()
+        void InputFire()
         {
-            if(KeyManager.Instance.GetKeyDown(PlayerAction.Fire)) //갈고리 날아가는 도중엔 못쏘게 추가해야함
+            if(!grapple.gameObject.activeSelf)
             {
-                if (steadyInteractionState.isGrappledObjectFounded)
+                if (KeyManager.Instance.GetKeyDown(PlayerAction.Fire)) //갈고리 날아가는 도중엔 못쏘게 추가해야함
                 {
-                    // 도착 위치: autoAimPosition
+                    if (steadyInteractionState.isGrappledObjectFounded)
+                    {
+                        // 도착 위치: autoAimPosition
+                        grapple.InitGrapple(grappleSpawner.transform.position, autoAimPosition);
+                        grapple.gameObject.SetActive(true);
+                    }
+                    else
+                    {
+                        // 도착위치: 화면 중앙에 레이 쏴서 도착하는 곳
+                        grapple.InitGrapple(grappleSpawner.transform.position, (playerCamera.transform.position + playerCamera.transform.forward * (rangeDistance + rangeRadius * 2f)));
+                        grapple.gameObject.SetActive(true);
+                    }
                 }
-                else
-                {
-                    // 도착위치: 화면 중앙에 레이 쏴서 도착하는 곳
-                    Vector3 rayOrigin = grapplSpawner.transform.position;
-                    Vector3 rayEnd = (playerCamera.transform.position + playerCamera.transform.forward * (rangeDistance + rangeRadius * 2f));
-                    Vector3 direction = (rayEnd - rayOrigin).normalized;
-                    //bool isRayChecked = Physics.Raycast(rayOrigin, direction, out _raycastHit, rangeDistance + rangeRadius * 2f, layerForGrapple, QueryTriggerInteraction.Ignore);
+            }
+        }
 
-                }
-                // 스테디 그래플 함수안에 init함수 만들어주고 그걸 통해 도착위치 넣어줌
+        public void RecieveGrappleInfo(bool isSuceeded, GameObject TargetObj)
+        {
+            if(isSuceeded)
+            {
 
-                // 그래플 켜줌
             }
         }
 
@@ -178,6 +188,21 @@ namespace KSU
                     EscapeMoving();
                 }
                 playerRigidbody.velocity = grappleVec;
+            }
+        }
+
+        void SendInfoUI()
+        {
+            if (grappledObjects.Count > 0)
+            {
+                foreach (var grappledObject in grappledObjects)
+                {
+                    //isMine false면 안보냄 / 현재 널
+
+                    bool rayCheck = Physics.Raycast(playerCamera.transform.position, playerCamera.transform.forward, grappledObject.GetComponent<GrappledObject>().detectingRange * -0.2f, layerFilterForGrapple, QueryTriggerInteraction.Ignore);
+                    //grappledObject.GetComponentInChildren<TargetIndicator>().SetUI(rayCheck, playerCamera); // 오버로드 필요
+                    // UI상태(bool)가 다르면 신호 struct Obj_Info(bool isUIActive,bool isInteractive, float distance)를 보냄
+                }
             }
         }
 
@@ -216,21 +241,6 @@ namespace KSU
             }
         }
 
-        void SendInfoUI()
-        {
-            if (grappledObjects.Count > 0)
-            {
-                foreach (var grappledObject in grappledObjects)
-                {
-                    //isMine false면 안보냄 / 현재 널
-
-                    bool rayCheck = Physics.Raycast(playerCamera.transform.position, playerCamera.transform.forward, grappledObject.GetComponent<GrappledObject>().detectingRange * -0.2f, layerFilterForGrapple, QueryTriggerInteraction.Ignore);
-                    //grappledObject.GetComponentInChildren<TargetIndicator>().SetUI(rayCheck, playerCamera); // 오버로드 필요
-                    // UI상태(bool)가 다르면 신호 struct Obj_Info(bool isUIActive,bool isInteractive, float distance)를 보냄
-                }
-            }
-        }
-
         private void OnDrawGizmos()
         {
             if(playerState.aim)
@@ -249,10 +259,10 @@ namespace KSU
                 Gizmos.DrawWireSphere(startCenter, rangeRadius);
                 Gizmos.DrawWireSphere(endCenter, rangeRadius);
             }
-            Vector3 rayOrigin = grapplSpawner.transform.position;
+            Vector3 rayOrigin = grappleSpawner.transform.position;
             Vector3 rayEnd = (playerCamera.transform.position + playerCamera.transform.forward * (rangeDistance + rangeRadius * 2f));
 
-            sphere.transform.position = rayEnd;
+            //sphere.transform.position = rayEnd;
 
             Gizmos.DrawLine(rayOrigin, rayEnd);
         }

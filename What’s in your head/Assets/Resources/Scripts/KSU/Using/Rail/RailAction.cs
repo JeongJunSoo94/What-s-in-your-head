@@ -137,85 +137,168 @@ namespace KSU
         {
             if(!interactionState.isRailTriggered)
             {
-                //ray = mainCamera.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0f));
-                Vector3 cameraForwardXZ = mainCamera.transform.forward;
-                cameraForwardXZ.y = 0;
-                Vector3 rayOrigin = (lookAtObj.transform.position - cameraForwardXZ);
-                Vector3 rayEnd = (lookAtObj.transform.position + mainCamera.transform.forward * (rangeDistance + rangeRadius * 2f));
-                Vector3 direction = (rayEnd - rayOrigin).normalized;
-                bool isRayChecked = Physics.SphereCast(rayOrigin, rangeRadius, direction, out _raycastHit, rangeDistance, layerForRail, QueryTriggerInteraction.Ignore);
-
-                //Debug.Log("1 RayChecked : " + isRayChecked);
-                if (isRayChecked)
+                if(playerState.aim)
                 {
-                    //Debug.Log("1 hit! : " + _raycastHit.collider.tag);
-                    RaycastHit hit;
-                    //isRayChecked = Physics.SphereCast(rayOrigin, 1f, direction, out hit, (rangeDistance + rangeRadius * 2f) , layerFilterForRail, QueryTriggerInteraction.Ignore);
-                    isRayChecked = Physics.CapsuleCast(rayOrigin + Vector3.up * rangeRadius, rayOrigin - Vector3.up * rangeRadius, 1f, direction, out hit, (rangeDistance + rangeRadius * 2f), layerFilterForRail, QueryTriggerInteraction.Ignore);
+                    Vector3 cameraForwardXZ = mainCamera.transform.forward;
+                    cameraForwardXZ.y = 0;
+                    Vector3 rayOrigin = mainCamera.transform.position + cameraForwardXZ * rangeRadius;
+                    //Vector3 rayEnd = (mainCamera.transform.position + mainCamera.transform.forward * (rangeDistance + rangeRadius * 2f));
+                    Vector3 direction = mainCamera.transform.forward;
+                    bool isRayChecked = Physics.SphereCast(rayOrigin, rangeRadius, direction, out _raycastHit, rangeDistance, layerForRail, QueryTriggerInteraction.Ignore);
 
-                    //Debug.Log("2 RayChecked : " + isRayChecked);
+                    //Debug.Log("1 RayChecked : " + isRayChecked);
                     if (isRayChecked)
                     {
-                        //Debug.Log("2 hit! : " + hit.collider.tag);
-                        if ((hit.collider.gameObject.transform.parent.gameObject != currentRail) || interactionState.isRailJumping)
+                        //Debug.Log("1 hit! : " + _raycastHit.collider.tag);
+                        RaycastHit hit;
+                        //isRayChecked = Physics.SphereCast(rayOrigin, 1f, direction, out hit, (rangeDistance + rangeRadius * 2f) , layerFilterForRail, QueryTriggerInteraction.Ignore);
+                        isRayChecked = Physics.CapsuleCast(rayOrigin + Vector3.up * rangeRadius, rayOrigin - Vector3.up * rangeRadius, 1f, direction, out hit, (rangeDistance + rangeRadius * 2f), layerFilterForRail, QueryTriggerInteraction.Ignore);
+
+                        //Debug.Log("2 RayChecked : " + isRayChecked);
+                        if (isRayChecked)
                         {
-                            if (hit.collider.CompareTag("Rail"))
+                            //Debug.Log("2 hit! : " + hit.collider.tag);
+                            if ((hit.collider.gameObject.transform.parent.gameObject != currentRail) || interactionState.isRailJumping)
                             {
-                                interactionState.isRailFounded = true;
-                                _raycastHit = hit;
-                                railStartPosiotion = _raycastHit.point;
-                                railStartObject = _raycastHit.collider.gameObject;
-                                return;
+                                if (hit.collider.CompareTag("Rail"))
+                                {
+                                    interactionState.isRailFounded = true;
+                                    _raycastHit = hit;
+                                    railStartPosiotion = _raycastHit.point;
+                                    railStartObject = _raycastHit.collider.gameObject;
+                                    return;
+                                }
+                            }
+                        }
+
+                        direction = (_raycastHit.point - rayOrigin).normalized;
+
+                        isRayChecked = Physics.Raycast(rayOrigin, direction, out hit, (rangeDistance + rangeRadius * 2f), layerFilterForRail, QueryTriggerInteraction.Ignore);
+                        //Debug.Log("3 RayChecked : " + isRayChecked);
+                        if (isRayChecked)
+                        {
+                            //Debug.Log("3 hit! : " + hit.collider.tag);
+                            if ((hit.collider.gameObject.transform.parent.gameObject != currentRail) || interactionState.isRailJumping)
+                            {
+                                if (hit.collider.CompareTag("Rail"))
+                                {
+                                    interactionState.isRailFounded = true;
+                                    _raycastHit = hit;
+                                    railStartPosiotion = _raycastHit.point;
+                                    railStartObject = _raycastHit.collider.gameObject;
+                                    return;
+                                }
+                            }
+                        }
+                    }
+                    else
+                    {
+                        rayOrigin = (lookAtObj.transform.position + cameraForwardXZ * 2f);
+                        direction = -cameraForwardXZ.normalized;
+
+                        isRayChecked = Physics.SphereCast(rayOrigin, rangeRadius, direction, out _raycastHit, rangeRadius * 2f, layerFilterForRail, QueryTriggerInteraction.Ignore);
+
+                        if (isRayChecked)
+                        {
+                            //Debug.Log("4 hit! : " + _raycastHit.collider.tag);
+                            if ((_raycastHit.collider.gameObject.transform.parent.gameObject != currentRail) || interactionState.isRailJumping)
+                            {
+                                if (_raycastHit.collider.CompareTag("Rail"))
+                                {
+                                    interactionState.isRailFounded = true;
+                                    railStartPosiotion = _raycastHit.point;
+                                    railStartObject = _raycastHit.collider.gameObject;
+                                    return;
+                                }
                             }
                         }
                     }
 
-                    direction = (_raycastHit.point - rayOrigin).normalized;
-
-                    isRayChecked = Physics.Raycast(rayOrigin, direction, out hit, (rangeDistance + rangeRadius * 2f), layerFilterForRail, QueryTriggerInteraction.Ignore);
-                    //Debug.Log("3 RayChecked : " + isRayChecked);
-                    if (isRayChecked)
-                    {
-                        //Debug.Log("3 hit! : " + hit.collider.tag);
-                        if ((hit.collider.gameObject.transform.parent.gameObject != currentRail) || interactionState.isRailJumping)
-                        {
-                            if (hit.collider.CompareTag("Rail"))
-                            {
-                                interactionState.isRailFounded = true;
-                                _raycastHit = hit;
-                                railStartPosiotion = _raycastHit.point;
-                                railStartObject = _raycastHit.collider.gameObject;
-                                return;
-                            }
-                        }
-                    }
+                    //Debug.Log("Not Found : " + false);
+                    interactionState.isRailFounded = false;
+                    return;
                 }
                 else
                 {
-                    rayOrigin = (lookAtObj.transform.position + cameraForwardXZ * 2f);
-                    direction = -cameraForwardXZ.normalized;
+                    Vector3 cameraForwardXZ = mainCamera.transform.forward;
+                    cameraForwardXZ.y = 0;
+                    Vector3 rayOrigin = (lookAtObj.transform.position - cameraForwardXZ);
+                    Vector3 rayEnd = (lookAtObj.transform.position + mainCamera.transform.forward * (rangeDistance + rangeRadius * 2f));
+                    Vector3 direction = (rayEnd - rayOrigin).normalized;
+                    bool isRayChecked = Physics.SphereCast(rayOrigin, rangeRadius, direction, out _raycastHit, rangeDistance, layerForRail, QueryTriggerInteraction.Ignore);
 
-                    isRayChecked = Physics.SphereCast(rayOrigin, rangeRadius, direction, out _raycastHit, rangeRadius * 2f, layerFilterForRail, QueryTriggerInteraction.Ignore);
-
+                    //Debug.Log("1 RayChecked : " + isRayChecked);
                     if (isRayChecked)
                     {
-                        //Debug.Log("4 hit! : " + _raycastHit.collider.tag);
-                        if ((_raycastHit.collider.gameObject.transform.parent.gameObject != currentRail) || interactionState.isRailJumping)
+                        //Debug.Log("1 hit! : " + _raycastHit.collider.tag);
+                        RaycastHit hit;
+                        //isRayChecked = Physics.SphereCast(rayOrigin, 1f, direction, out hit, (rangeDistance + rangeRadius * 2f) , layerFilterForRail, QueryTriggerInteraction.Ignore);
+                        isRayChecked = Physics.CapsuleCast(rayOrigin + Vector3.up * rangeRadius, rayOrigin - Vector3.up * rangeRadius, 1f, direction, out hit, (rangeDistance + rangeRadius * 2f), layerFilterForRail, QueryTriggerInteraction.Ignore);
+
+                        //Debug.Log("2 RayChecked : " + isRayChecked);
+                        if (isRayChecked)
                         {
-                            if (_raycastHit.collider.CompareTag("Rail"))
+                            //Debug.Log("2 hit! : " + hit.collider.tag);
+                            if ((hit.collider.gameObject.transform.parent.gameObject != currentRail) || interactionState.isRailJumping)
                             {
-                                interactionState.isRailFounded = true;
-                                railStartPosiotion = _raycastHit.point;
-                                railStartObject = _raycastHit.collider.gameObject;
-                                return;
+                                if (hit.collider.CompareTag("Rail"))
+                                {
+                                    interactionState.isRailFounded = true;
+                                    _raycastHit = hit;
+                                    railStartPosiotion = _raycastHit.point;
+                                    railStartObject = _raycastHit.collider.gameObject;
+                                    return;
+                                }
+                            }
+                        }
+
+                        direction = (_raycastHit.point - rayOrigin).normalized;
+
+                        isRayChecked = Physics.Raycast(rayOrigin, direction, out hit, (rangeDistance + rangeRadius * 2f), layerFilterForRail, QueryTriggerInteraction.Ignore);
+                        //Debug.Log("3 RayChecked : " + isRayChecked);
+                        if (isRayChecked)
+                        {
+                            //Debug.Log("3 hit! : " + hit.collider.tag);
+                            if ((hit.collider.gameObject.transform.parent.gameObject != currentRail) || interactionState.isRailJumping)
+                            {
+                                if (hit.collider.CompareTag("Rail"))
+                                {
+                                    interactionState.isRailFounded = true;
+                                    _raycastHit = hit;
+                                    railStartPosiotion = _raycastHit.point;
+                                    railStartObject = _raycastHit.collider.gameObject;
+                                    return;
+                                }
                             }
                         }
                     }
-                }
+                    else
+                    {
+                        rayOrigin = (lookAtObj.transform.position + cameraForwardXZ * 2f);
+                        direction = -cameraForwardXZ.normalized;
 
-                //Debug.Log("Not Found : " + false);
-                interactionState.isRailFounded = false;
-                return;
+                        isRayChecked = Physics.SphereCast(rayOrigin, rangeRadius, direction, out _raycastHit, rangeRadius * 2f, layerFilterForRail, QueryTriggerInteraction.Ignore);
+
+                        if (isRayChecked)
+                        {
+                            //Debug.Log("4 hit! : " + _raycastHit.collider.tag);
+                            if ((_raycastHit.collider.gameObject.transform.parent.gameObject != currentRail) || interactionState.isRailJumping)
+                            {
+                                if (_raycastHit.collider.CompareTag("Rail"))
+                                {
+                                    interactionState.isRailFounded = true;
+                                    railStartPosiotion = _raycastHit.point;
+                                    railStartObject = _raycastHit.collider.gameObject;
+                                    return;
+                                }
+                            }
+                        }
+                    }
+
+                    //Debug.Log("Not Found : " + false);
+                    interactionState.isRailFounded = false;
+                    return;
+                }
             }
         }
 

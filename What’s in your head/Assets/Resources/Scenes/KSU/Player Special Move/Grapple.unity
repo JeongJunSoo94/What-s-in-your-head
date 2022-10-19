@@ -326,56 +326,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 951115316486156352, guid: 0ebf7568bfcc5da4a928a592f199591a, type: 3}
   m_PrefabInstance: {fileID: 525349648}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &204470597
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 204470598}
-  - component: {fileID: 204470599}
-  m_Layer: 6
-  m_Name: GrappleSpawner
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &204470598
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 204470597}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.35697743, y: 0.89804065, z: 0.21729527}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 319871415}
-  m_Father: {fileID: 1290028498}
-  m_RootOrder: 17
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &204470599
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 204470597}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 070b3e5e14a6b294abb1f99ee7cf6448, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  spawnTime: 2.5
-  obj: {fileID: 319871414}
-  count: 1
-  spawnCount: 0
-  spawnType: 0
 --- !u!1 &319871414
 GameObject:
   m_ObjectHideFlags: 0
@@ -387,7 +337,8 @@ GameObject:
   - component: {fileID: 319871415}
   - component: {fileID: 319871416}
   - component: {fileID: 319871417}
-  m_Layer: 3
+  - component: {fileID: 319871418}
+  m_Layer: 0
   m_Name: Grapple
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -401,15 +352,14 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 319871414}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0.35697743, y: 0.89804065, z: 0.21729527}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 730500367}
-  - {fileID: 607399811}
-  m_Father: {fileID: 204470598}
-  m_RootOrder: 0
+  m_Father: {fileID: 0}
+  m_RootOrder: 14
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!135 &319871416
 SphereCollider:
@@ -419,7 +369,7 @@ SphereCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 319871414}
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
   m_Radius: 0.18
@@ -436,8 +386,30 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2e8b28ddc07e15447acba7cc53e405a8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  player: {fileID: 1290028516}
   departingOffset: 0.2
   isEndPosition: 0
+  moveSpeed: 15
+  horizonInertiaSpeed: 0
+  horizonInertiaVec: {x: 0, y: 0, z: 0}
+  fallingVelocity: {x: 0, y: 0, z: 0}
+  delayDeactivationTime: 1
+--- !u!54 &319871418
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 319871414}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_UseGravity: 0
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
 --- !u!1 &333838536
 GameObject:
   m_ObjectHideFlags: 0
@@ -544,7 +516,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4894812727458717817, guid: 5f2bc23feace46841a8a5a1a3921d364, type: 3}
       propertyPath: m_RootOrder
-      value: 17
+      value: 18
       objectReference: {fileID: 0}
     - target: {fileID: 4894812727458717817, guid: 5f2bc23feace46841a8a5a1a3921d364, type: 3}
       propertyPath: m_LocalPosition.x
@@ -893,7 +865,7 @@ GameObject:
   - component: {fileID: 526173721}
   - component: {fileID: 526173720}
   - component: {fileID: 526173719}
-  m_Layer: 11
+  m_Layer: 12
   m_Name: DetectingTrriger
   m_TagString: GrappledObject
   m_Icon: {fileID: 0}
@@ -1155,9 +1127,8 @@ GameObject:
   - component: {fileID: 607399811}
   - component: {fileID: 607399814}
   - component: {fileID: 607399813}
-  - component: {fileID: 607399815}
   m_Layer: 6
-  m_Name: Sphere
+  m_Name: GrappleSpawner
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1171,12 +1142,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 607399810}
   m_LocalRotation: {x: -0, y: -0.30719045, z: -0, w: 0.9516481}
-  m_LocalPosition: {x: -0.42697853, y: -0.74, z: -0.46796298}
-  m_LocalScale: {x: 0.19999999, y: 0.2, z: 0.19999999}
+  m_LocalPosition: {x: -0.070001096, y: 0.15804064, z: -0.2506677}
+  m_LocalScale: {x: 0.19999996, y: 0.2, z: 0.19999996}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 319871415}
-  m_RootOrder: 1
+  m_Father: {fileID: 1290028498}
+  m_RootOrder: 17
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!23 &607399813
 MeshRenderer:
@@ -1228,19 +1199,6 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 607399810}
   m_Mesh: {fileID: 10207, guid: 0000000000000000e000000000000000, type: 0}
---- !u!135 &607399815
-SphereCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 607399810}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Radius: 0.50000006
-  m_Center: {x: -0.00000011920929, y: -0.00000011920929, z: 0}
 --- !u!1 &704469418
 GameObject:
   m_ObjectHideFlags: 0
@@ -1354,7 +1312,7 @@ Transform:
   - {fileID: 526173722}
   - {fileID: 1792303081}
   m_Father: {fileID: 0}
-  m_RootOrder: 19
+  m_RootOrder: 20
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &728635780
 PrefabInstance:
@@ -1838,7 +1796,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 18
+  m_RootOrder: 19
   m_LocalEulerAnglesHint: {x: -45, y: 0, z: 0}
 --- !u!1 &1069392332
 GameObject:
@@ -2164,12 +2122,13 @@ MonoBehaviour:
   layerForGrapple:
     serializedVersion: 2
     m_Bits: 2048
-  grapplSpawner: {fileID: 204470597}
+  grappleSpawner: {fileID: 607399810}
+  grapple: {fileID: 319871417}
   autoAimPosition: {x: 0, y: 0, z: 0}
   rangeRadius: 5
   rangeDistance: 20
-  sphere: {fileID: 607399810}
   hookableTarget: {fileID: 0}
+  isGrappledObjectCollided: 0
   hVision: {x: 0, y: 0, z: 0}
 --- !u!1 &1297671405
 GameObject:
@@ -2547,6 +2506,10 @@ PrefabInstance:
     - target: {fileID: 4868871993783650, guid: 157334fe1b9d5334bb1927ec68e77034, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 23042162905002914, guid: 157334fe1b9d5334bb1927ec68e77034, type: 3}
+      propertyPath: m_Materials.Array.size
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 157334fe1b9d5334bb1927ec68e77034, type: 3}
@@ -6371,7 +6334,7 @@ Transform:
   - {fileID: 1076546895732636760}
   - {fileID: 6194773666554089068}
   m_Father: {fileID: 0}
-  m_RootOrder: 16
+  m_RootOrder: 17
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!54 &4920868674103589418
 Rigidbody:
@@ -6969,7 +6932,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6948550986710143214, guid: b41ac5291baceac40b96be4b3201b317, type: 3}
       propertyPath: m_RootOrder
-      value: 14
+      value: 15
       objectReference: {fileID: 0}
     - target: {fileID: 6948550986710143214, guid: b41ac5291baceac40b96be4b3201b317, type: 3}
       propertyPath: m_LocalPosition.x
@@ -7011,6 +6974,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6948550986710143215, guid: b41ac5291baceac40b96be4b3201b317, type: 3}
+      propertyPath: m_IsTrigger
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6948550986939759327, guid: b41ac5291baceac40b96be4b3201b317, type: 3}
       propertyPath: m_LocalRotation.w
       value: 0.9669597
@@ -7021,11 +6988,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6948550986939759327, guid: b41ac5291baceac40b96be4b3201b317, type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0.000000018601689
+      value: -0.000000018601712
       objectReference: {fileID: 0}
     - target: {fileID: 6948550986939759327, guid: b41ac5291baceac40b96be4b3201b317, type: 3}
       propertyPath: m_LocalRotation.z
-      value: -0.0000000049041486
+      value: 0.0000000049041544
       objectReference: {fileID: 0}
     - target: {fileID: 6948550986943097439, guid: b41ac5291baceac40b96be4b3201b317, type: 3}
       propertyPath: m_LocalRotation.w
@@ -7659,7 +7626,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 15
+  m_RootOrder: 16
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!81 &6379600833286804148
 AudioListener:
@@ -8464,12 +8431,13 @@ MonoBehaviour:
   layerForGrapple:
     serializedVersion: 2
     m_Bits: 0
-  grapplSpawner: {fileID: 0}
+  grappleSpawner: {fileID: 0}
+  grapple: {fileID: 0}
   autoAimPosition: {x: 0, y: 0, z: 0}
   rangeRadius: 5
   rangeDistance: 5
-  sphere: {fileID: 0}
   hookableTarget: {fileID: 0}
+  isGrappledObjectCollided: 0
   hVision: {x: 0, y: 0, z: 0}
 --- !u!114 &7904537219624717397
 MonoBehaviour:
