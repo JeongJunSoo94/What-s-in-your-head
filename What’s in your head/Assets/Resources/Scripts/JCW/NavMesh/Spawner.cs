@@ -33,7 +33,6 @@ namespace JCW.Spawner
         {
             GameObject gameObject = null;
 
-
             if (spawnCount < count)
             {
                 ++spawnCount;
@@ -44,6 +43,7 @@ namespace JCW.Spawner
             return gameObject;
         }
 
+        // 미리 오브젝트를 생성해서 자식으로 담아둠.
         public void SpawnInit()
         {
             objQueue = new Queue<GameObject>();
@@ -73,6 +73,18 @@ namespace JCW.Spawner
                 }
                 else
                     yield return new WaitUntil(() => spawnCount < count);
+            }
+        }
+
+        public void StopSpawn()
+        {
+            StopCoroutine(nameof(Spawn));
+            for (int i=0; i< transform.childCount; ++i)
+            {
+                if (transform.GetChild(i).gameObject.activeSelf)
+                {
+                    Despawn(transform.GetChild(i).gameObject);
+                }
             }
         }
     }

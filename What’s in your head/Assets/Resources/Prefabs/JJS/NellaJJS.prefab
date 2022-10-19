@@ -1,5 +1,88 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &607399810
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 607399811}
+  - component: {fileID: 607399814}
+  - component: {fileID: 607399813}
+  m_Layer: 6
+  m_Name: RHandPos
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &607399811
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 607399810}
+  m_LocalRotation: {x: 0.35955155, y: 0.6736649, z: -0.547672, w: -0.3419849}
+  m_LocalPosition: {x: 0.011, y: 0.113, z: 0.004}
+  m_LocalScale: {x: 0.19999999, y: 0.2, z: 0.19999996}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 192384439860111228}
+  m_RootOrder: 3
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!33 &607399814
+MeshFilter:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 607399810}
+  m_Mesh: {fileID: 10207, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!23 &607399813
+MeshRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 607399810}
+  m_Enabled: 1
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 2100000, guid: cd644746d7159df42b0c206b559af881, type: 2}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 3
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
 --- !u!1 &28992872964798573
 GameObject:
   m_ObjectHideFlags: 3
@@ -2084,7 +2167,7 @@ GameObject:
   - component: {fileID: 5967017729772335748}
   m_Layer: 7
   m_Name: Cine_sholderCam
-  m_TagString: NellaCamera
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2242,8 +2325,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_CollideAgainst:
     serializedVersion: 2
-    m_Bits: 256
-  m_IgnoreTag: Player
+    m_Bits: 8
+  m_IgnoreTag: Nella
   m_TransparentLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -3448,7 +3531,7 @@ GameObject:
   - component: {fileID: 3481911648991405788}
   m_Layer: 7
   m_Name: Cine_wallCam
-  m_TagString: NellaCamera
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -3994,7 +4077,7 @@ GameObject:
   - component: {fileID: 6948550985964086569}
   m_Layer: 7
   m_Name: Cine_backCam
-  m_TagString: NellaCamera
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -4152,8 +4235,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_CollideAgainst:
     serializedVersion: 2
-    m_Bits: 320
-  m_IgnoreTag: Player
+    m_Bits: 8
+  m_IgnoreTag: Nella
   m_TransparentLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -4319,6 +4402,8 @@ GameObject:
   - component: {fileID: 1395799192}
   - component: {fileID: 1395799191}
   - component: {fileID: 1395799190}
+  - component: {fileID: 1290028500}
+  - component: {fileID: 1290028516}
   m_Layer: 6
   m_Name: NellaJJS
   m_TagString: Nella
@@ -4618,6 +4703,8 @@ MonoBehaviour:
   slopeAngle: 0
   slopeAngleCofacter: 0
   IsGrounded: 0
+  isFowardBlock: 0
+  isOverAngleForSlope: 0
   isMove: 0
   isRun: 0
   jumpCoolTime: 0.2
@@ -4671,9 +4758,11 @@ MonoBehaviour:
   isMoveFromRope: 0
   railTriggerDetectionNum: 0
   isRailFounded: 0
-  isRailReady: 0
+  isRailTriggered: 0
   isRidingRail: 0
-  isMoveToRail: 0
+  isMovingToRail: 0
+  isRailJumpingUp: 0
+  isRailJumping: 0
 --- !u!114 &1395799192
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4698,18 +4787,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cbbcf1fce5f3fb7419efc97b38b925f8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  mainCamera: {fileID: 0}
   lookAtObj: {fileID: 6565198078348901689}
   layerFilterForRail:
     serializedVersion: 2
-    m_Bits: 1047
+    m_Bits: 1079
   layerForRail:
     serializedVersion: 2
     m_Bits: 1024
-  rangeRadius: 5
-  rangeDistance: 5
+  rangeRadius: 3
+  rangeDistance: 10
   currentRail: {fileID: 0}
   railStartObject: {fileID: 0}
   railStartPosiotion: {x: 0, y: 0, z: 0}
+  movingToRailSpeed: 10
+  railJumpHeight: 5
+  railJumpSpeed: 10
   escapingRopeSpeed: 6
   escapingRoDelayTime: 1
   hVision: {x: 0, y: 0, z: 0}
@@ -4725,11 +4818,56 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ed9fae8c09db74141b058cb723cb5b57, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  hand: {fileID: 607399810}
   currentRidingRope: {fileID: 0}
   interactableRope: {fileID: 0}
   moveToRopeSpeed: 6
   escapingRopeSpeed: 6
   escapingRopeDelayTime: 1
+--- !u!114 &1290028500
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6948550986710143184}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 579bab751d308f040bfbbe0c7f21e5da, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isGrappledObjectFounded: 0
+  isGrappling: 0
+--- !u!114 &1290028516
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6948550986710143184}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bc8bd3eaf0d7d5f44a968f46cbb73a7c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  grappleSpeed: 10
+  escapeGrapplePower: 10
+  lookAtObj: {fileID: 6565198078348901689}
+  layerFilterForGrapple:
+    serializedVersion: 2
+    m_Bits: 2101171
+  layerForGrapple:
+    serializedVersion: 2
+    m_Bits: 2048
+  grappleSpawner: {fileID: 607399810}
+  grapple: {fileID: 0}
+  autoAimPosition: {x: 0, y: 0, z: 0}
+  rangeRadius: 5
+  rangeDistance: 20
+  rangeAngle: 30
+  hookableTarget: {fileID: 0}
+  isGrappledObjectCollided: 0
+  hVision: {x: 0, y: 0, z: 0}
 --- !u!1 &6948550986939759324
 GameObject:
   m_ObjectHideFlags: 3
@@ -4754,7 +4892,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6948550986939759324}
-  m_LocalRotation: {x: 0.25492924, y: -0.00000001860171, z: 0.000000004904154, w: 0.9669597}
+  m_LocalRotation: {x: 0.25492924, y: 0.00000001860171, z: -0.000000004904154, w: 0.9669597}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -4831,7 +4969,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6948550986943097436}
-  m_LocalRotation: {x: 0.23729853, y: -0.000000016714914, z: 0.000000004083049, w: 0.9714368}
+  m_LocalRotation: {x: 0.23729853, y: -0.000000015474678, z: 0.000000003780089, w: 0.9714368}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -5035,7 +5173,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6948550987402162236}
-  m_LocalRotation: {x: 0.18709706, y: -0, z: -0, w: 0.98234147}
+  m_LocalRotation: {x: 0.18709706, y: -1e-45, z: -0, w: 0.98234147}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -5313,6 +5451,7 @@ Transform:
   - {fileID: 7663720128384094495}
   - {fileID: 3695839838292239713}
   - {fileID: 2915400752078903624}
+  - {fileID: 607399811}
   m_Father: {fileID: 7778528669510153445}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -5613,7 +5752,7 @@ GameObject:
   - component: {fileID: 3691984559118576153}
   m_Layer: 7
   m_Name: Cine_wideCam
-  m_TagString: NellaCamera
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

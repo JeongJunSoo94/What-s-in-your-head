@@ -36,6 +36,8 @@ namespace KSU
 
         public float rangeRadius = 5f;
         public float rangeDistance = 5f;
+        [Range(1f,89f)]
+        public float rangeAngle = 30f;
         //public GameObject sphere;
 
         public GameObject hookableTarget;
@@ -125,9 +127,12 @@ namespace KSU
                     {
                         if (_raycastHit.collider.CompareTag("GrappledObject"))
                         {
-                            autoAimPosition = _raycastHit.collider.gameObject.transform.position;
-                            steadyInteractionState.isGrappledObjectFounded = true;
-                            return;
+                            if (Vector3.Angle(playerCamera.transform.forward, (_raycastHit.collider.gameObject.transform.position - rayOrigin)) < rangeAngle)
+                            {
+                                autoAimPosition = _raycastHit.collider.gameObject.transform.position;
+                                steadyInteractionState.isGrappledObjectFounded = true;
+                                return;
+                            }
                         }
                     }
                 }
@@ -157,11 +162,11 @@ namespace KSU
             }
         }
 
-        public void RecieveGrappleInfo(bool isSuceeded, GameObject TargetObj)
+        public void RecieveGrappleInfo(bool isSuceeded, GameObject targetObj)
         {
             if(isSuceeded)
             {
-
+                Hook(targetObj);
             }
         }
 
@@ -171,6 +176,9 @@ namespace KSU
             playerState.IsAirJumping = false;
             playerState.WasAirDashing = false;
             playerState.IsGrounded = false;
+            Debug.Log("targetObj: " + targetObj.name);
+            Debug.Log("targetObj.GetComponent<GrappledObject>() : " + targetObj.GetComponent<GrappledObject>());
+            Debug.Log("offset: " + targetObj.GetComponent<GrappledObject>().GetOffsetPosition());
             targetPosition = targetObj.GetComponent<GrappledObject>().GetOffsetPosition();
             grappleVec = (targetPosition - transform.position).normalized * grappleSpeed;
             Vector3 lookVec = grappleVec;
@@ -183,7 +191,7 @@ namespace KSU
         {
             if (steadyInteractionState.isGrappling)
             {
-                if (Vector3.Distance(transform.position, targetPosition) < 2f)
+                if (Vector3.Distance(transform.position, targetPosition) < 0.2f)
                 {
                     EscapeMoving();
                 }
@@ -209,7 +217,6 @@ namespace KSU
         public void EscapeMoving()
         {
             steadyInteractionState.isGrappling = false;
-
             Vector3 inertiaVec = grappleVec;
             float jumpPower = inertiaVec.y;
             inertiaVec.y = 0;
@@ -217,6 +224,7 @@ namespace KSU
             playerController.MakeinertiaVec(escapeGrapplePower, transform.forward.normalized);
             playerController.moveVec = Vector3.up * jumpPower;
             playerController.enabled = true;
+            grapple.gameObject.SetActive(false);
         }
 
         void MakeGizmoVecs()
@@ -225,7 +233,7 @@ namespace KSU
             {
                 hVision = playerCamera.transform.forward;
 
-                startCenter = lookAtObj.transform.position;
+                startCenter = playerCamera.transform.position;
 
                 startUp = startCenter + playerCamera.transform.up * rangeRadius;
                 startDown = startCenter - playerCamera.transform.up * rangeRadius;

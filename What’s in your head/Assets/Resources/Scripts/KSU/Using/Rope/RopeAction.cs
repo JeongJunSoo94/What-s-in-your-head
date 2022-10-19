@@ -29,6 +29,9 @@ namespace KSU
         PlayerState playerState;
         PlayerInteractionState interactionState;
 
+        LineRenderer rope;
+        public GameObject hand;
+
         RaycastHit _raycastHit;
         LayerMask layerFilterForRope;
 
@@ -54,6 +57,8 @@ namespace KSU
             if (mainCamera == null)
                 Debug.Log("Ä«¸Þ¶ó NULL");
 
+            rope = GetComponentInChildren<LineRenderer>();
+
             layerFilterForRope = ((-1) - (1 << LayerMask.NameToLayer("Player")));
         }
 
@@ -61,6 +66,15 @@ namespace KSU
         {
             FindInteractableRope();
             SendInfoUI();
+
+            if(interactionState.isRidingRope)
+            {
+                if(currentRidingRope != null)
+                {
+                    rope.SetPosition(0, hand.transform.position);
+                    rope.SetPosition(1, currentRidingRope.transform.position);
+                }
+            }
         }
 
         void FindInteractableRope()
@@ -186,6 +200,10 @@ namespace KSU
             detectedRopes[currentRidingRope] = node;
 
             currentRidingRope.GetComponentInChildren<RopeSpawner>().StartRopeAction(this.gameObject, moveToRopeSpeed);
+
+            rope.SetPosition(0, hand.transform.position);
+            rope.SetPosition(1, hand.transform.position);
+            rope.enabled = true;
         }
         public void EscapeRope()
         {
@@ -206,6 +224,7 @@ namespace KSU
             playerController.MakeinertiaVec(escapingRopeSpeed, inertiaVec.normalized);
             playerController.moveVec = Vector3.up * playerController.jumpSpeed * jumpPower;
             playerController.enabled = true;
+            rope.enabled = false;
         }
 
         IEnumerator DelayEscape()

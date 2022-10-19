@@ -380,12 +380,12 @@ namespace KSU
             {
                 if (interactionState.isRailFounded)
                 {
-                    railStartObject.transform.parent.gameObject.GetComponentInChildren<TargetIndicator>().SetUI(true, true, _raycastHit.point, mainCamera);
+                    railStartObject.transform.parent.gameObject.GetComponentInChildren<TargetIndicator>().SetUI(true, _raycastHit.point, mainCamera);
                     foreach (var rail in detectedRail.Keys)
                     {
                         if (rail != railStartObject.transform.parent.gameObject)
                         {
-                            rail.GetComponentInChildren<TargetIndicator>().SetUI(false, false, Vector3.zero, mainCamera);
+                            rail.GetComponentInChildren<TargetIndicator>().SetUI(false, Vector3.zero, mainCamera);
                         }
                     }
                 }
@@ -393,7 +393,7 @@ namespace KSU
                 {
                     foreach (var rail in detectedRail.Keys)
                     {
-                        rail.GetComponentInChildren<TargetIndicator>().SetUI(false, false, Vector3.zero, mainCamera);
+                        rail.GetComponentInChildren<TargetIndicator>().SetUI(false, Vector3.zero, mainCamera);
                     }
                 }
             }
