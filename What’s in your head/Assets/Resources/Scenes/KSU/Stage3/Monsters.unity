@@ -803,7 +803,7 @@ GameObject:
   - component: {fileID: 586321154}
   - component: {fileID: 586321153}
   - component: {fileID: 586321152}
-  - component: {fileID: 586321151}
+  - component: {fileID: 586321158}
   m_Layer: 0
   m_Name: PoisonSnake
   m_TagString: Untagged
@@ -811,21 +811,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &586321151
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 586321150}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9a94e45dd52f7c348b04c966faaeed8f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  healthPoint: 0
-  attackPower: 0
-  moveSpeed: 0
 --- !u!195 &586321152
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -860,9 +845,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 98985092c8312ff42a3c4d0032893613, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  healthPoint: 0
+  maxHP: 0
   attackPower: 0
+  targetObject: {fileID: 0}
+  detectingRange: 0
   moveSpeed: 0
+  stuckTime: 0
+  sturnTime: 0
+  currentState: 0
 --- !u!136 &586321154
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -942,6 +932,26 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 21
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &586321158
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 586321150}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 98985092c8312ff42a3c4d0032893613, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxHP: 0
+  attackPower: 0
+  targetObject: {fileID: 0}
+  detectingRange: 0
+  moveSpeed: 0
+  stuckTime: 0
+  sturnTime: 0
+  currentState: 0
 --- !u!4 &615849040
 Transform:
   m_ObjectHideFlags: 0
@@ -1414,8 +1424,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 858945094}
-  m_LocalRotation: {x: 0.122183286, y: 0.00000003415493, z: -0.0000000042046646, w: 0.9925076}
-  m_LocalPosition: {x: 0.99999994, y: 2.776114, z: -3.8675244}
+  m_LocalRotation: {x: 0.23729853, y: -0.000000033429824, z: 0.000000008166098, w: 0.9714368}
+  m_LocalPosition: {x: 0, y: 10, z: -15}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1627,9 +1637,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 43c8bd5d50fc75249a4dbbed35675669, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  healthPoint: 0
+  maxHP: 0
   attackPower: 0
+  targetObject: {fileID: 0}
+  detectingRange: 0
   moveSpeed: 0
+  stuckTime: 0
+  sturnTime: 0
+  currentState: 0
+  rushSpeed: 0
 --- !u!136 &1133309805
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -7673,7 +7689,7 @@ Transform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &6948550986519873200
 MonoBehaviour:
-  m_ObjectHideFlags: 0
+  m_ObjectHideFlags: 3
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
@@ -7685,7 +7701,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
 --- !u!114 &6948550986519873202
 MonoBehaviour:
-  m_ObjectHideFlags: 0
+  m_ObjectHideFlags: 3
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
@@ -7712,7 +7728,7 @@ MonoBehaviour:
   m_CenterOnActivate: 1
 --- !u!114 &6948550986519873203
 MonoBehaviour:
-  m_ObjectHideFlags: 0
+  m_ObjectHideFlags: 3
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
@@ -7766,7 +7782,7 @@ MonoBehaviour:
   m_HeadingIsSlave: 1
 --- !u!1 &6948550986519873204
 GameObject:
-  m_ObjectHideFlags: 0
+  m_ObjectHideFlags: 3
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
@@ -7785,7 +7801,7 @@ GameObject:
   m_IsActive: 1
 --- !u!4 &6948550986519873205
 Transform:
-  m_ObjectHideFlags: 0
+  m_ObjectHideFlags: 3
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
@@ -8089,7 +8105,7 @@ GameObject:
   m_IsActive: 1
 --- !u!114 &6948550987248033840
 MonoBehaviour:
-  m_ObjectHideFlags: 0
+  m_ObjectHideFlags: 3
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
@@ -8101,7 +8117,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
 --- !u!114 &6948550987248033842
 MonoBehaviour:
-  m_ObjectHideFlags: 0
+  m_ObjectHideFlags: 3
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
@@ -8128,7 +8144,7 @@ MonoBehaviour:
   m_CenterOnActivate: 1
 --- !u!114 &6948550987248033843
 MonoBehaviour:
-  m_ObjectHideFlags: 0
+  m_ObjectHideFlags: 3
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
@@ -8182,7 +8198,7 @@ MonoBehaviour:
   m_HeadingIsSlave: 1
 --- !u!1 &6948550987248033844
 GameObject:
-  m_ObjectHideFlags: 0
+  m_ObjectHideFlags: 3
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
@@ -8201,7 +8217,7 @@ GameObject:
   m_IsActive: 1
 --- !u!4 &6948550987248033845
 Transform:
-  m_ObjectHideFlags: 0
+  m_ObjectHideFlags: 3
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
