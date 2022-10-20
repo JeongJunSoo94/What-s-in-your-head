@@ -36,7 +36,7 @@ namespace JCW.UI
 
         [PunRPC]
         public void Leave()
-        {
+        {            
             nellaButtonOwner.GetComponent<Text>().text = "";
             steadyButtonOwner.GetComponent<Text>().text = "";
 

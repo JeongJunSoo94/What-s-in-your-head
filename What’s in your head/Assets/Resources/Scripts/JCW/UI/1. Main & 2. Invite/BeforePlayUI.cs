@@ -15,7 +15,7 @@ namespace JCW.UI
         [Header("초대장 전송 성공")] [SerializeField] GameObject passUI = null;
         [Header("초대장 전송 실패")] [SerializeField] GameObject failUI = null;
 
-        void Start()
+        private void Awake()
         {
             myID.text = PhotonManager.Instance.userID;
 

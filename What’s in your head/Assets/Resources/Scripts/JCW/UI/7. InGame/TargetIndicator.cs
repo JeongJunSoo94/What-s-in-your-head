@@ -10,13 +10,13 @@ namespace JCW.UI.InGame
 {
 
     public class TargetIndicator : MonoBehaviour
-    {
-        
+    {        
         [Header("UI")] [SerializeField] GameObject detectUI;
         [Header("타겟 오브젝트의 위치")] [SerializeField] Transform target;
         [Header("이미지 트랜스폼")] [SerializeField] RectTransform imgTransform;
         [Header("게이지")] [SerializeField] Image gauge;
         [Header("클립 플레이어")] [SerializeField] VideoPlayer videoPlayer;
+        [Header("UI를 보여줄 카메라")] [SerializeField] Camera mainCamera;
 
         [Header("넬라 - 감지 & 상호작용 스프라이트 및 클립")]
         [SerializeField] Sprite nella_DetectSprite;
@@ -30,7 +30,7 @@ namespace JCW.UI.InGame
         [SerializeField] VideoClip steady_SetOffClip;
 
         private RectTransform canvasSize;
-        private Camera mainCamera;
+        
 
         // 감지 범위 & 상호작용 가능 범위
         float detectRange;
@@ -184,10 +184,10 @@ namespace JCW.UI.InGame
         }
 
         // 레일 : 스프라이트는 하나만 있음. 따라서 변환 애니메이션 필요 없음
-        // 타겟을 다른 스크립트에서 받음
+        // 타겟을 다른 스크립트에서 받음, 띄워야하는 위치가 고정된 오브젝트의 특정 위치가 아니므로, 실시간으로 변경될 수 있음.
         public void SetUI(bool _isActive, Vector3 _pos, Camera _cam)
         {
-            // _isActive : UI를 켜야하는 지, _isSetOn : 상호작용해야하는 지, _pos : 띄워야하는 위치, _cam : 띄워야하는 화면의 카메라
+            // _isActive : UI를 켜야하는 지,  _pos : 띄워야하는 위치, _cam : 띄워야하는 화면의 카메라
             detectUI.SetActive(_isActive);
             isActive = _isActive;
             if (target == null)
@@ -201,10 +201,10 @@ namespace JCW.UI.InGame
             }
         }
         // 그 외 : 스프라이트 하나만 존재 / 따라서 변환하는 애니메이션 X
-        // 타겟은 인스펙터 창에서 넣어줌
+        // 타겟은 인스펙터 창에서 넣어줌, 물총 맞아서 자라나는 식물에 넣어주면 될듯
         public void SetUI(bool _isUIActive, Camera _cam)
         {
-            // _isActive : UI를 켜야하는 지, _isSetOn : 상호작용해야하는 지, _pos : 띄워야하는 위치, _cam : 띄워야하는 화면의 카메라
+            // _isActive : UI를 켜야하는 지, _cam : 띄워야하는 화면의 카메라
             detectUI.SetActive(_isUIActive);
             isActive = _isUIActive;
 
@@ -213,6 +213,16 @@ namespace JCW.UI.InGame
                 mainCamera = _cam;
                 SetSreenInfo();
             }
+        }
+
+        // 플레이어끼리 서로 감지하는 용도
+        public void SetUI(bool _isUIActive)
+        {
+            detectUI.SetActive(_isUIActive);
+            isActive = _isUIActive;
+
+            if (isActive)
+                SetSreenInfo();
         }
 
         public void SetGauge(float value)

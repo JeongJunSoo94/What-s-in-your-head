@@ -36,7 +36,10 @@ namespace JCW.UI.InGame
             curStageIndex = GameManager.Instance.curStageIndex;
             photonView = GetComponent<PhotonView>();
             thisImg = GetComponent<Image>();
-            isNella = GameManager.Instance.characterOwner[PhotonNetwork.IsMasterClient];
+            if (GameManager.Instance.characterOwner.Count == 0)
+                isNella = true;
+            else
+                isNella = GameManager.Instance.characterOwner[PhotonNetwork.IsMasterClient];
 
             switch(curStageIndex)
             {
@@ -76,11 +79,12 @@ namespace JCW.UI.InGame
 
         public void MoveSideUI(bool isOn)
         {
-            photonView.RPC(nameof(MoveSideUI_RPC), RpcTarget.AllViaServer);
+            photonView.RPC(nameof(MoveSideUI_RPC), RpcTarget.AllViaServer, isOn);
         }
 
         void MoveSideUI_RPC(bool isOn)
         {
+            Debug.Log("비켜나기 시작");
             Vector2 ogPos = GetComponent<RectTransform>().anchoredPosition;
             float tempOffset = isOn ? offset : -offset;
             Vector2 movePos = isNella ? new Vector2(ogPos.x + tempOffset, ogPos.y) : new Vector2(ogPos.x - tempOffset, ogPos.y);

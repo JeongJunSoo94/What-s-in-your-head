@@ -42,10 +42,7 @@ namespace JJS
         private void OnTriggerEnter(Collider other)
         {
             if (other.gameObject.CompareTag("ContaminationField"))
-            {
-                Debug.Log("³ª°¡¶ó");
                 other.gameObject.SendMessage("GetDamaged");
-            }
 
             Debug.Log(other.gameObject.name);
             spawner.Despawn(this.gameObject);

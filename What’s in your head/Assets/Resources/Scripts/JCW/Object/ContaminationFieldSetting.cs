@@ -13,6 +13,7 @@ namespace JCW.Object
         [Header("오염 필드")][SerializeField] GameObject hostField;
         [Header("전염 되는 필드")][SerializeField] GameObject carrierField;
         [Header("생성 시키기")] public bool create = true;
+        [Header("감염 가능 여부")] public bool canInfect = true;
 
 
         float gap = 5f;
@@ -39,9 +40,17 @@ namespace JCW.Object
                         Vector3 curTransform = new Vector3(transformParent.x - (count/2)*gap + j*gap,
                                                             transformParent.y, 
                                                             transformParent.z + (count/2)*gap - i*gap);
-
-                        Instantiate(carrierField, curTransform, this.transform.rotation, this.transform).SetActive(true);
-                        Instantiate(hostField, curTransform, this.transform.rotation, this.transform).SetActive(false);
+                        if (canInfect)
+                        {
+                            Instantiate(carrierField, curTransform, this.transform.rotation, this.transform).SetActive(true);
+                            Instantiate(hostField, curTransform, this.transform.rotation, this.transform).SetActive(false);
+                        }
+                        else
+                        {
+                            Instantiate(carrierField, curTransform, this.transform.rotation, this.transform).SetActive(false);
+                            Instantiate(hostField, curTransform, this.transform.rotation, this.transform).SetActive(true);
+                        }
+                        
                     }
                 }
                 create = false;
