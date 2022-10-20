@@ -14,9 +14,13 @@ namespace KSU
         [SerializeField] float onceSpawnNum;
         [SerializeField] float maxSpawnNum;
 
+        [SerializeField] List<GameObject> spawnPosition;
+        [SerializeField] List<int> spawnPattern; // 패턴 배열은 한 요소가 6자리 int형 숫자(0 ~ 3)고, 스폰할때 그 위치에 맞는 곳에서 스폰
+        int patternCount;
+
         Spawner spawner;
 
-        int spawnSeed;// 패턴 배열의 길이로 나누고 그 나머지는 배열의 처음 인덱스를 뜻함, 패턴 배열은 한 요소가 6자리 int형 숫자(0 ~ 3)고, 스폰할때 그 위치에 맞는 곳에서 스폰
+        [SerializeField] int spawnSeed;// 패턴 배열의 길이로 나누고 그 나머지는 배열의 처음 인덱스를 뜻함, SerializeField는 테스트용 완성 후 지울 예정
 
         bool isGameEnd = false;
 
@@ -25,6 +29,7 @@ namespace KSU
         {
             var random = new System.Random(Guid.NewGuid().GetHashCode());
             spawner = GetComponentInChildren<Spawner>();
+            // spawner 에 접근해서 맥스 스폰갯수에 접근하면 좋을듯
         }
 
         // Update is called once per frame
@@ -32,14 +37,25 @@ namespace KSU
         {
             if(isGameEnd)
             {
-                StopAllCoroutines();
-                spawner.StopSpawn();
+                this.gameObject.SetActive(false);
             }
         }
 
         private void OnEnable()
         {
             StartCoroutine(nameof(DelayStart));
+            patternCount = 0;
+        }
+
+        private void OnDisable()
+        {
+            StopAllCoroutines();
+            spawner.StopSpawn();
+        }
+
+        public void SetSpawnSeed(int seed) // 이거 말고 게임매니저한테서 시드 받아오는 함수로 변경되는게 나아 보임
+        {
+            spawnSeed = seed;
         }
 
         IEnumerator DelayStart()
@@ -54,12 +70,17 @@ namespace KSU
             {
                 if (spawner.spawnCount < maxSpawnNum)
                 {
-                    for(int i = 0; i < onceSpawnNum; ++i)
+                    if (patternCount > spawnPattern.Count)
+                        patternCount = 0;
+
+                    int spawnPatternNum = spawnPattern[patternCount];
+                    for (int i = 0; i < onceSpawnNum; ++i)
                     {
                         if (spawner.spawnCount == maxSpawnNum)
                             break;
-
-                        //Respawn(이 안에 벡터, 시드에 따라 결정됨);
+                        
+                        spawner.Respawn(spawnPosition[(spawnPatternNum % 10) % spawnPosition.Count].transform.position);
+                        spawnPatternNum /= 10;
                     }
                     yield return new WaitForSeconds(spawnDelayTime);
                 }

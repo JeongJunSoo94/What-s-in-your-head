@@ -30,5 +30,4 @@ public class BaseTracer : MonoBehaviour
             spawner.Despawn(this.gameObject);
         }
     }
-
 }

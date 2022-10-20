@@ -6,8 +6,8 @@ namespace KSU
 {
     public class SteadyGrapple : MonoBehaviour
     {
-        public SteadyGrappleAction player;
-        public GameObject spawner;
+        public SteadyGrappleAction player; // 스테디
+        public GameObject spawner; //스테디 손 위치에 있는 그래플, 그래플을 던지면 손에있는 그래플이 꺼지고 이 스크립트 달린 그래플이 켜지면서 날아감
         LineRenderer grappleRope;
         Vector3 endPosistion;
 
