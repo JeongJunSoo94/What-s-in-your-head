@@ -19,7 +19,7 @@ namespace JCW.UI
 
         private void Awake()
         {
-            thisImg = this.gameObject.GetComponent<Image>();
+            thisImg = GetComponent<Image>();
         }
 
         private void OnEnable()

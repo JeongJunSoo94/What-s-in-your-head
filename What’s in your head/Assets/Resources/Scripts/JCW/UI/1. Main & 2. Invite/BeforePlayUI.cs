@@ -15,17 +15,15 @@ namespace JCW.UI
         [Header("초대장 전송 성공")] [SerializeField] GameObject passUI = null;
         [Header("초대장 전송 실패")] [SerializeField] GameObject failUI = null;
 
-        void Start()
+        private void Awake()
         {
             myID.text = PhotonManager.Instance.userID;
 
             backButton.onClick.AddListener(() =>
             {
                 if (PhotonNetwork.NetworkClientState.ToString() == ClientState.Joined.ToString())
-                {
                     PhotonNetwork.LeaveRoom();
-                    this.gameObject.SetActive(false);
-                }                    
+                this.gameObject.SetActive(false);
             });
 
             searchButton.onClick.AddListener(() =>
@@ -41,7 +39,7 @@ namespace JCW.UI
                         PhotonManager.Instance.gameObject.SendMessage("TryMakeRoom", friendID.text);
                         friendID.text = "";
                         return;
-                    }
+                    }   
                 }
                 friendID.text = "";
                 passUI.SetActive(false);

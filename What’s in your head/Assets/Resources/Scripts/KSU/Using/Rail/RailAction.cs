@@ -69,9 +69,9 @@ namespace KSU
             interactionState = GetComponent<PlayerInteractionState>();
 
             if (PhotonNetwork.NetworkClientState == Photon.Realtime.ClientState.Joined)
-                mainCamera = this.gameObject.GetComponent<CameraController>().FindCamera(); // 멀티용
+                mainCamera = GetComponent<CameraController>().FindCamera(); // 멀티용
             else
-                mainCamera = this.gameObject.GetComponent<CameraController_Single>().FindCamera(); // 싱글용
+                mainCamera = GetComponent<CameraController_Single>().FindCamera(); // 싱글용
             //layerForRail = ((1) + (1 << LayerMask.NameToLayer("Rail")));
             //layerFilterForRail = ((-1) - (1 << LayerMask.NameToLayer("Player")));
         }
@@ -184,7 +184,7 @@ namespace KSU
             {
                 if(interactionState.railTriggerDetectionNum> 0)
                 {
-                    detectedRail.GetComponentInChildren<TargetIndicator>().SetUI(true, true, _raycastHit.point, mainCamera);
+                    detectedRail.GetComponentInChildren<TargetIndicator>().SetUI(true, _raycastHit.point, mainCamera);
                 }
                 
             }
@@ -192,7 +192,7 @@ namespace KSU
             {
                 if(detectedRail != null)
                 {
-                    detectedRail.GetComponentInChildren<TargetIndicator>().SetUI(false, false, Vector3.zero, mainCamera);
+                    detectedRail.GetComponentInChildren<TargetIndicator>().SetUI(false, Vector3.zero, mainCamera);
                 }
             }
         }

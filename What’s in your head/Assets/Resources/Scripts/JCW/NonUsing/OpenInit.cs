@@ -17,7 +17,7 @@ namespace JCW.UI.Options
                 Debug.Log("초기화 버튼이 할당되지 않았습니다 !!");
                 return;
             }
-            this.gameObject.GetComponent<Button>().onClick.AddListener(() =>
+            GetComponent<Button>().onClick.AddListener(() =>
             {
                 initWarning.SetActive(true);
             });

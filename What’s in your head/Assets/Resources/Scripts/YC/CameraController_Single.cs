@@ -139,7 +139,7 @@ namespace YC.Camera_Single
                 OnOffCamera(camList[(int)curCam]);
             }
 
-            player = this.gameObject.GetComponent<PlayerController3D>();
+            player = GetComponent<PlayerController3D>();
 
         }
 
@@ -364,6 +364,7 @@ namespace YC.Camera_Single
                 else Debug.Log("NULL");
 
                 cinemachineBrain = mainCam.GetComponent<CinemachineBrain>();
+                Debug.Log(CameraManager.Instance.cameras);
                 CameraManager.Instance.cameras[0] = mainCam;
 
             }

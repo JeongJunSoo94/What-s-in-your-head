@@ -1,220 +1,234 @@
+using Photon.Pun;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+
 namespace YC.CameraManager_
 {
+    public enum CharacterCamera { NELLA, STEADY};
+    [RequireComponent(typeof(PhotonView))]
     public class CameraManager : MonoBehaviour
     {
-        enum Cameras { Left, Right };
-  
-        public Camera[] cameras;
-        [Header("Right Camera Rect : Increase")]
-        [SerializeField] bool toggle1;
-        [Header("Left Camera Rect : Increase")]
-        [SerializeField] bool toggle2;
-        [Header("Right Camera Rect : Full")]
-        [SerializeField] bool toggle3;
-        [Header("Left Camera Rect : Full")]
-        [SerializeField] bool toggle4;
-        [Header("Right Camera : X -> O")]
-        [SerializeField] bool toggle5;
-        [Header("Left Camera : X -> O")]
-        [SerializeField] bool toggle6;
+        [HideInInspector] public Camera[] cameras;
 
-        [Space]
-        [Header("보간 시간")]
-        [SerializeField] float lerpTime;
+        public bool isBlending { get; private set; }
 
-        float currentMilldeValue; // 현재 카메라 분할의 중앙선 값
-
-        ///[SerializeField] bool test = true;
-        ///[SerializeField] bool testToggle = false;
-
-        private static CameraManager sInstance;
-        public static CameraManager Instance
-        {
-            get
-            {
-                if (sInstance == null)
-                {
-                    GameObject newGameObject = new GameObject("_CameraManager");
-                    sInstance = newGameObject.AddComponent<CameraManager>();
-                }
-                return sInstance;
-            }
-        }
+        PhotonView pv;
+        public static CameraManager Instance = null;
 
         void Awake()
         {
+            if (Instance == null)
+                Instance = this;
+            else
+                Destroy(this.gameObject);
+
             DontDestroyOnLoad(this.gameObject);
+
+            pv = GetComponent<PhotonView>();
+
             cameras = new Camera[2];
+            isBlending = false;
 
-            toggle1 = false;
-            toggle2 = false;
-            toggle3 = false;
-            toggle4 = false;
-            toggle5 = false;
-            toggle6 = false;
-
-            currentMilldeValue = 0.5f;
-            lerpTime = 1.0f;
         }
 
         void Update()
         {
-            if (cameras[0] == null || cameras[1] == null) return;
+            if (cameras[(int)CharacterCamera.NELLA] == null || cameras[(int)CharacterCamera.STEADY] == null) return;
 
-            CheckAndPlay();
-            ///if (test) StartCoroutine("Test");
-            ///if (testToggle)
-            ///{
-            ///    StartCoroutine(SizingCamera(0.5f, 0, 1.0f));
-            ///}
-            ///if (test)
-            ///{
-            ///    StartCoroutine(SizingCamera(0.5f, 0, 1.0f)); // 오른쪽 full
-            ///    //StartCoroutine(SizingCamera(0.5f, 1, 1.0f)); // 왼쪽 full
-            ///    test = false;
-            ///}
+            if(pv.IsMine) CheckAndPlay();
 
+            //Debug.Log(isBlending);
         }
 
         void CheckAndPlay()
         {
-            if (toggle1)
+            // 초기 아무 전체화면 (1 or 2)
+            // 넬라 죽음(3) -> 살아남(2)
+            // 스테디 죽음(4) -> 살아남 (1)
+
+            if (isBlending) return;
+
+            if (Input.GetKeyDown(KeyCode.Keypad1))
             {
-                StartCoroutine(SizingCamera(Cameras.Right, currentMilldeValue, 0.2f, lerpTime));
-                toggle1 = false;
+                //Debug.Log("넬라 카메라 전체화면");
+                pv.RPC(nameof(Cor_SetFullScreen), RpcTarget.AllBuffered, 0, 2f);                 
             }
-            else if (toggle2)
+            else if (Input.GetKeyDown(KeyCode.Keypad2))
             {
-                StartCoroutine(SizingCamera(Cameras.Left, currentMilldeValue, 0.7f, lerpTime));
-                toggle2 = false;
+                //Debug.Log("스테디 카메라 전체화면");
+                pv.RPC(nameof(Cor_SetFullScreen), RpcTarget.AllBuffered, 1, 2f);   
             }
-            else if (toggle3)
+            else if (Input.GetKeyDown(KeyCode.Keypad3))
             {
-                StartCoroutine(SizingCamera(Cameras.Right, currentMilldeValue, 0.0f, lerpTime));
-                toggle3 = false;
+                //Debug.Log("(넬라가 죽었을때) 스테디 카메라 전체화면을 만들어주고, 넬라 카메라 만든다");
+                pv.RPC(nameof(InitCamera), RpcTarget.AllViaServer, 1);
+                pv.RPC(nameof(Cor_SetSizeCamera), RpcTarget.AllViaServer, 0, 0.36f, 2f);           
             }
-            else if (toggle4)
+            else if (Input.GetKeyDown(KeyCode.Keypad4))
             {
-                StartCoroutine(SizingCamera(Cameras.Left, currentMilldeValue, 1.0f, lerpTime));
-                toggle4 = false;
+                //Debug.Log("(스테디가 죽었을때) 넬라 카메라 전체화면을 만들어주고, 스테디 카메라 만든다");
+                pv.RPC(nameof(InitCamera), RpcTarget.AllBuffered, 0);
+                pv.RPC(nameof(Cor_SetSizeCamera), RpcTarget.AllBuffered, 1, 0.64f, 2f);               
             }
-            else if (toggle5)
+        }
+        public void NellaDeadCam()
+        {
+            pv.RPC(nameof(InitCamera), RpcTarget.AllViaServer, 1);
+            pv.RPC(nameof(Cor_SetSizeCamera), RpcTarget.AllViaServer, 0, 0.36f, 2f);
+        }
+
+        public void SteadyDeadCam()
+        {
+            pv.RPC(nameof(InitCamera), RpcTarget.AllBuffered, 0);
+            pv.RPC(nameof(Cor_SetSizeCamera), RpcTarget.AllBuffered, 1, 0.64f, 2f);
+        }
+
+        
+
+
+        // Sizing 호출 전 초기화 함수
+        [PunRPC]
+        public void InitCamera(int targetCamera)
+        {
+            if (targetCamera == 0) // 넬라 카메라 전체화면
             {
-                StartCoroutine(SizingCamera(Cameras.Right, currentMilldeValue, 0.5f, lerpTime));
-                toggle5 = false;
+                Rect rc1 = new Rect(0, 0, 1, 1);
+                cameras[(int)CharacterCamera.NELLA].rect = rc1;
+                Rect rc2 = new Rect(1, 0, 0, 1);
+                cameras[(int)CharacterCamera.STEADY].rect = rc2;
             }
-            else if (toggle6)
+            else if (targetCamera == 1) // 스테디 카메라 전체화면
             {
-                StartCoroutine(SizingCamera(Cameras.Left, currentMilldeValue, 0.5f, lerpTime));
-                toggle6 = false;
+                Rect rc1 = new Rect(0, 0, 0, 1);
+                cameras[(int)CharacterCamera.NELLA].rect = rc1;
+                Rect rc2 = new Rect(0, 0, 1, 1);
+                cameras[(int)CharacterCamera.STEADY].rect = rc2;
             }
         }
 
 
-        IEnumerator SizingCamera(Cameras TargetCamera, float startPoint, float endPoint, float lerptime) // 중간지점 -> 옮길지점
+        // 현재 카메라 상황에서 lerpTime동안 targetCamera를 전체화면으로 세팅한다
+        [PunRPC]
+        public void Cor_SetFullScreen(int targetCamera, float lerpTime)
         {
-            Rect camRect1 = cameras[0].rect;
-            Rect camRect2 = cameras[1].rect;
+            StartCoroutine(SetFullScreen(targetCamera, lerpTime));
+        }
+        public IEnumerator SetFullScreen(int targetCamera, float LerpTime) 
+        {           
+            Rect camRect1 = cameras[(int)CharacterCamera.NELLA].rect;
+            Rect camRect2 = cameras[(int)CharacterCamera.STEADY].rect;
             float currentTime = 0;
 
-            if (TargetCamera == Cameras.Right && startPoint > endPoint) // 오른쪽 카메라 Up
-            {
-                while (camRect1.width > endPoint)
+            isBlending = true;
+
+            if (targetCamera == 0) // 넬라 카메라 전체화면
+            {           
+                while (camRect1.width < 1)
                 {
-                    camRect1 = cameras[0].rect;
-                    camRect2 = cameras[1].rect;
+                    camRect1 = cameras[(int)CharacterCamera.NELLA].rect;
+                    camRect2 = cameras[(int)CharacterCamera.STEADY].rect;
 
                     currentTime += Time.deltaTime;
-                    if (currentTime >= lerptime) currentTime = lerptime;
+                    if (currentTime >= LerpTime) currentTime = LerpTime;
 
-                    float wd = Mathf.Lerp(startPoint, endPoint, currentTime / lerptime);
-                    if (wd < endPoint) wd = endPoint;
-                    currentMilldeValue = wd;               
-                    //Debug.Log("Debug - Camera Manager : " + wd);
+                    float wd = Mathf.Lerp(camRect1.width, 1, currentTime / LerpTime);
+                    if (wd > 1) wd = 1;
 
                     Rect rc1 = new Rect(camRect1.x, camRect1.y, wd, camRect1.height);
-                    cameras[0].rect = rc1;
-                    Rect rc2 = new Rect(wd, camRect2.y, camRect2.width, camRect2.height);
-                    cameras[1].rect = rc2;
+                    cameras[(int)CharacterCamera.NELLA].rect = rc1;
+                    Rect rc2 = new Rect(wd, camRect2.y, 1 - wd, camRect2.height);
+                    cameras[(int)CharacterCamera.STEADY].rect = rc2;
 
                     yield return null;
                 }
+
+                isBlending = false;
             }
-            else if (TargetCamera == Cameras.Left && startPoint < endPoint) // 왼쪽 카메라 Up
+            else if (targetCamera == 1) // 스테디 카메라 전체화면
             {
-                while (camRect1.width < endPoint)
+                while (camRect2.x > 0.0001f)
                 {
-                    camRect1 = cameras[0].rect;
-                    camRect2 = cameras[1].rect;
+                    camRect1 = cameras[(int)CharacterCamera.NELLA].rect;
+                    camRect2 = cameras[(int)CharacterCamera.STEADY].rect;
 
                     currentTime += Time.deltaTime;
-                    if (currentTime >= lerptime) currentTime = lerptime;
+                    if (currentTime >= LerpTime) currentTime = LerpTime;
 
-                    float wd = Mathf.Lerp(startPoint, endPoint, currentTime / lerptime);
-                    if (wd > endPoint) wd = endPoint;
-                    currentMilldeValue = wd;                    
-                    //Debug.Log("Debug - Camera Manager : " + wd);
+                    float wd = Mathf.Lerp(camRect1.width, 0.0001f, currentTime / LerpTime);
+                    if (wd < 0.0001f) wd = 0;
 
                     Rect rc1 = new Rect(camRect1.x, camRect1.y, wd, camRect1.height);
-                    cameras[0].rect = rc1;
-                    Rect rc2 = new Rect(wd, camRect2.y, camRect2.width, camRect2.height);
-                    cameras[1].rect = rc2;
-
+                    cameras[(int)CharacterCamera.NELLA].rect = rc1;
+                    Rect rc2 = new Rect(wd, camRect2.y, 1 - wd, camRect2.height);
+                    cameras[(int)CharacterCamera.STEADY].rect = rc2;
                     yield return null;
                 }
+
+                isBlending = false;
             }
         }
 
+        // 전체화면 상황에서, targetCamera를 targetCamera까지 lerpTime동안 늘린다
+        [PunRPC] 
+        public void Cor_SetSizeCamera(int targetCamera, float middleValue, float lerpTime)
+        {           
+            StartCoroutine(SetSizeCamera(targetCamera, middleValue, lerpTime));
+        }
+        public IEnumerator SetSizeCamera(int targetCamera, float middleValue, float LerpTime) 
+        {
+            Rect camRect1 = cameras[(int)CharacterCamera.NELLA].rect;
+            Rect camRect2 = cameras[(int)CharacterCamera.STEADY].rect;
+            float currentTime = 0;
 
+            isBlending = true;
+       
+            if (targetCamera == 0) // 스테디 전체화면 상황에서, 넬라 카메라를 만들어줌(늘려줌)
+            {                
+                while (camRect1.width < middleValue)
+                {
+                    camRect1 = cameras[(int)CharacterCamera.NELLA].rect;
+                    camRect2 = cameras[(int)CharacterCamera.STEADY].rect;
 
-        //// 2개의 카메라를 1개의 카메라로 합친다.
-        //void CombineCamera(float startPoint, float endPoint)
-        //{
-        //    Rect camRect1 = cameras[0].rect;
-        //    Rect camRect2 = cameras[1].rect;
+                    currentTime += Time.deltaTime;
+                    if (currentTime >= LerpTime) currentTime = LerpTime;
 
-        //    Debug.Log("진행중!");
+                    float wd = Mathf.Lerp(camRect1.width, middleValue, currentTime / LerpTime);
 
-        //    currentTime += Time.deltaTime;
+                    if (wd > middleValue) wd = middleValue;
 
-        //    if (currentTime >= lerpTime) currentTime = lerpTime;
+                    Rect rc1 = new Rect(camRect1.x, camRect1.y, wd, camRect1.height);
+                    cameras[(int)CharacterCamera.NELLA].rect = rc1;
+                    Rect rc2 = new Rect(wd, camRect2.y, 1 - wd, camRect2.height);
+                    cameras[(int)CharacterCamera.STEADY].rect = rc2;
+                    yield return null;
+                }
 
+                isBlending = false;
+            }
+            else if (targetCamera == 1) // 넬라 전체화면 상황에서, 스테디 카메라를 만들어줌(늘려줌)
+            {           
+                while (camRect2.x > middleValue)
+                {
+                    camRect1 = cameras[(int)CharacterCamera.NELLA].rect;
+                    camRect2 = cameras[(int)CharacterCamera.STEADY].rect;
 
-        //    if (camRect1.width > 0.0f)
-        //    {
-        //        float wd = Mathf.Lerp(startPoint, endPoint, currentTime / lerpTime);
-        //        if (wd < 0.0f) wd = 0.0f;
+                    currentTime += Time.deltaTime;
+                    if (currentTime >= LerpTime) currentTime = LerpTime;
 
-        //        Rect rc1 = new Rect(camRect1.x, camRect1.y, wd, camRect1.height);
-        //        cameras[0].rect = rc1;
+                    float wd = Mathf.Lerp(camRect1.width, middleValue, currentTime / LerpTime);
+                    if (wd < middleValue) wd = middleValue;
 
-        //        Rect rc2 = new Rect(wd, camRect2.y, camRect2.width, camRect2.height);
-        //        cameras[1].rect = rc2;
-        //    }   
-        //}
+                    Rect rc1 = new Rect(camRect1.x, camRect1.y, wd, camRect1.height);
+                    cameras[(int)CharacterCamera.NELLA].rect = rc1;
+                    Rect rc2 = new Rect(wd, camRect2.y, 1 - wd, camRect2.height);
+                    cameras[(int)CharacterCamera.STEADY].rect = rc2;
+                    yield return null;
+                }
 
-
-        // 한쪽은 줄이고 한쪽은 늘리고 or 한쪽으로 병합
-
-
-
-
-
-
-
-        //IEnumerator Test()
-        //{
-        //    test = false;
-
-        //    yield return new WaitForSeconds(3.0f);
-
-        //    testToggle = true;
-        //}
-
-
-    }
+                isBlending = false;
+            }
+        }
+    }     
 }

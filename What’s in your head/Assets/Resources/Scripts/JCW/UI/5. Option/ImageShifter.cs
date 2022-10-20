@@ -14,7 +14,7 @@ namespace JCW.UI.Options
 
         virtual protected void Awake()
         {
-            thisImg = obj == null ? this.gameObject.GetComponent<Image>() : obj.GetComponent<Image>();
+            thisImg = obj == null ? GetComponent<Image>() : obj.GetComponent<Image>();
         }
 
         virtual public void OnPointerEnter(PointerEventData eventData)

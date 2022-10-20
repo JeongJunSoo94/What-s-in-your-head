@@ -14,7 +14,7 @@ namespace JCW.UI.Options
 
         private void Awake()
         {
-            button = this.gameObject.GetComponent<Button>();
+            button = GetComponent<Button>();
             textObj = this.gameObject.transform.GetChild(0).gameObject;
             text = textObj.GetComponent<Text>();
         }

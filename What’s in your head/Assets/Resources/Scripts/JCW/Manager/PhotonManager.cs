@@ -99,14 +99,11 @@ namespace JCW.Network
         public override void OnCreatedRoom()
         {
             Debug.Log("방 생성 완료");
-            Debug.Log($"방 이름 : {PhotonNetwork.CurrentRoom.Name}");
         }
 
         // 룸에 입장한 후 호출되는 콜백 함수
         public override void OnJoinedRoom()
         {
-            Debug.Log("접속한 방 이름 : " + PhotonNetwork.CurrentRoom.Name);
-
             // 룸에 접속한 사용자 정보 확인
             foreach (var player in PhotonNetwork.CurrentRoom.Players)
             {
@@ -193,8 +190,7 @@ namespace JCW.Network
                 Debug.Log("스테디 생성");
                 PhotonNetwork.Instantiate("Prefabs/YC/MainCamera_Steady", new Vector3(0, 0, 0), Quaternion.identity, 0);
                 PhotonNetwork.Instantiate("Prefabs/JCW/SteadyJCW", new Vector3(10, 0, -5), Quaternion.identity);
-            }
-
+            }            
 
             //PhotonNetwork.Instantiate("Prefabs/JCW/SoundManager/SoundManager", Vector3.zero, Quaternion.identity);
             //PhotonNetwork.Instantiate("Prefabs/JCW/Photon/Player", Vector3.zero, Quaternion.identity);
