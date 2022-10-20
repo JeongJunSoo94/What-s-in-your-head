@@ -79,6 +79,8 @@ namespace JCW.UI.InGame
 
         public void MoveSideUI(bool isOn)
         {
+            if (photonView==null)
+                photonView = GetComponent<PhotonView>();
             photonView.RPC(nameof(MoveSideUI_RPC), RpcTarget.AllViaServer, isOn);
         }
 

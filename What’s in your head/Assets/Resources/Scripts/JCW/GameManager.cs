@@ -32,9 +32,7 @@ public class GameManager : MonoBehaviour
         photonView = GetComponent<PhotonView>();
 
         curStageIndex = 0;
-        curSection = 0;        
-        //isAlive.Add(characterOwner[PhotonNetwork.IsMasterClient], true);
-        //isAlive.Add(!characterOwner[PhotonNetwork.IsMasterClient], true);        
+        curSection = 0;             
     }
     public void SectionUP() { ++curSection;  }
 

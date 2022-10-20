@@ -68,7 +68,10 @@ namespace JCW.UI.InGame
             }
             curHP = GameManager.Instance.curPlayerHP;
             previousHP = curHP;
+        }
 
+        private void OnEnable()
+        {
             swapUI.MoveSideUI(true);
         }
 
@@ -109,9 +112,6 @@ namespace JCW.UI.InGame
                     damageList.Clear();
                     Dead();
                     photonView.RPC(nameof(TurnOffUI), RpcTarget.AllViaServer, isNella);
-                    //photonView.RPC(nameof(SetRevive), RpcTarget.AllViaServer, true);
-                    Debug.Log("살아있는 플레이어 체크 HashTable 내부 개수 : " + GameManager.Instance.isAlive.Count);
-                    Debug.Log("Nella 살아있나 : " + GameManager.Instance.isAlive[true] + " / Steady 살아있나 : " + GameManager.Instance.isAlive[false]);
                     if (!(bool)GameManager.Instance.isAlive[true] && !(bool)GameManager.Instance.isAlive[false])
                         GameManager.Instance.MediateRevive(false);
                     else
