@@ -22,7 +22,6 @@ namespace JCW.UI.InGame
         [Header("최대 체력 (기본값 : 12)")] [SerializeField] int maxHP = 12;
         [Header("N초 후 회복")] [SerializeField] float healSecond;
         [Header("N초 후 게이지 깎임")] [SerializeField] float damageSecond;
-        [Header("무기 변경 시 사용할 UI")] [SerializeField] SwapItem swapUI;
 
 
         // 캐릭터에 따라 달리 사용할 UI
@@ -48,17 +47,13 @@ namespace JCW.UI.InGame
                 isNella = true;
             else
                 isNella = GameManager.Instance.characterOwner[PhotonNetwork.IsMasterClient];
+
+            charHpUI = transform.GetChild(0).gameObject;
             if (photonView.IsMine)
-            {
-                charHpUI = isNella ? transform.GetChild(0).gameObject : transform.GetChild(1).gameObject;
-                GameManager.Instance.AddReviveAllPair(isNella, transform.parent.name);
-            }
-            else
-                charHpUI = isNella ? transform.GetChild(1).gameObject : transform.GetChild(0).gameObject;
-        
+                GameManager.Instance.AddReviveAllPair(isNella, transform.parent.name);       
 
             charHpUI.SetActive(true);
-            reviveUI = transform.GetChild(2).gameObject;
+            reviveUI = transform.GetChild(1).gameObject;
 
             // 배경과, HP를 미리 할당
             for (int i = 0 ; i < (int)BgState.END ; ++i)
@@ -68,16 +63,6 @@ namespace JCW.UI.InGame
             }
             curHP = GameManager.Instance.curPlayerHP;
             previousHP = curHP;
-        }
-
-        private void OnEnable()
-        {
-            swapUI.MoveSideUI(true);
-        }
-
-        private void OnDisable()
-        {
-            swapUI.MoveSideUI(false);
         }
 
         void Update()
@@ -111,7 +96,9 @@ namespace JCW.UI.InGame
                     curHP = maxHP;
                     damageList.Clear();
                     Dead();
-                    photonView.RPC(nameof(TurnOffUI), RpcTarget.AllViaServer, isNella);
+                    photonView.RPC(nameof(TurnOffUI), RpcTarget.AllViaServer);
+
+                    // 넬라 & 스테디 둘 다 죽었으면
                     if (!(bool)GameManager.Instance.isAlive[true] && !(bool)GameManager.Instance.isAlive[false])
                         GameManager.Instance.MediateRevive(false);
                     else
@@ -157,13 +144,9 @@ namespace JCW.UI.InGame
         }
 
         [PunRPC]
-        void TurnOffUI(bool isNellaValue)
+        void TurnOffUI()
         {
-            if (isNellaValue)
-                transform.GetChild(0).gameObject.SetActive(false);
-            else
-                transform.GetChild(1).gameObject.SetActive(false);
-
+            charHpUI.SetActive(false);
         }
         void Dead()
         {
@@ -181,23 +164,8 @@ namespace JCW.UI.InGame
         [PunRPC]
         void SetRevive_RPC(bool value)
         {
-            if(!value)
-            {
-                if (photonView.IsMine)
-                {
-                    if (isNella)
-                        transform.GetChild(0).gameObject.SetActive(true);
-                    else
-                        transform.GetChild(1).gameObject.SetActive(true);
-                }
-                else
-                {
-                    if (isNella)
-                        transform.GetChild(1).gameObject.SetActive(true);
-                    else
-                        transform.GetChild(0).gameObject.SetActive(true);
-                }
-            }            
+            if(!value && photonView.IsMine)
+                charHpUI.SetActive(true);
             reviveUI.SetActive(value);
         }
 

@@ -1,7 +1,5 @@
 using JCW.UI.Options.InputBindings;
 using Photon.Pun;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Video;
@@ -23,7 +21,6 @@ namespace JCW.UI.InGame
         {
             photonView = GetComponent<PhotonView>();
             isNella = GameManager.Instance.characterOwner[PhotonNetwork.IsMasterClient];
-
         }
 
 

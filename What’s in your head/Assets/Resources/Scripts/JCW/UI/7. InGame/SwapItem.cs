@@ -1,6 +1,4 @@
 using Photon.Pun;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -9,7 +7,6 @@ namespace JCW.UI.InGame
     [RequireComponent(typeof(PhotonView))]
     public class SwapItem : MonoBehaviour
     {
-        [Header("HP UI가 떴을 시 밀려나는 정도")] [SerializeField] float offset = 150f;
         [Header("스테이지 1")] [SerializeField] Sprite firstWeapon1;
                              [SerializeField] Sprite secondWeapon1;
         [Header("스테이지 2")] [SerializeField] Sprite firstWeapon2;
@@ -17,7 +14,7 @@ namespace JCW.UI.InGame
         [Header("스테이지 3")] [SerializeField] Sprite firstWeapon3;
                              [SerializeField] Sprite secondWeapon3;
         [Header("스테이지 4")] [SerializeField] Sprite firstWeapon4;
-                             [SerializeField] Sprite secondWeapon4;
+                             [SerializeField] Sprite secondWeapon4; 
 
         int curStageIndex;
         PhotonView photonView;
@@ -41,7 +38,7 @@ namespace JCW.UI.InGame
             else
                 isNella = GameManager.Instance.characterOwner[PhotonNetwork.IsMasterClient];
 
-            switch(curStageIndex)
+            switch (curStageIndex)
             {
                 case 1:
                     firstWeapon = firstWeapon1;
@@ -64,6 +61,34 @@ namespace JCW.UI.InGame
             thisImg.sprite = firstWeapon;
         }
 
+        private void Update()
+        {
+            if (!photonView.IsMine)
+                return;
+            if (Input.GetKeyDown(KeyCode.Tab))
+                SwapUI();
+        }
+
+        private void LateUpdate()
+        {
+            if (photonView.IsMine)
+                SetImg((bool)GameManager.Instance.isAlive[isNella]);
+        }
+
+        public void SetImg(bool isOn)
+        {
+            // Update에서 자주 부르는 RPC를 막기 위함
+            if ((bool)GameManager.Instance.isAlive[isNella] == isOn)
+                return;
+            photonView.RPC(nameof(SetImg_RPC), RpcTarget.AllViaServer, isOn);
+        }
+
+        [PunRPC]
+        void SetImg_RPC(bool isOn)
+        {
+            GetComponent<Image>().enabled = isOn;
+        }
+
 
         public void SwapUI()
         {
@@ -75,22 +100,6 @@ namespace JCW.UI.InGame
         {
             isSwap = !isSwap;
             thisImg.sprite = isSwap ? secondWeapon : firstWeapon;
-        }
-
-        public void MoveSideUI(bool isOn)
-        {
-            if (photonView==null)
-                photonView = GetComponent<PhotonView>();
-            photonView.RPC(nameof(MoveSideUI_RPC), RpcTarget.AllViaServer, isOn);
-        }
-
-        void MoveSideUI_RPC(bool isOn)
-        {
-            Debug.Log("비켜나기 시작");
-            Vector2 ogPos = GetComponent<RectTransform>().anchoredPosition;
-            float tempOffset = isOn ? offset : -offset;
-            Vector2 movePos = isNella ? new Vector2(ogPos.x + tempOffset, ogPos.y) : new Vector2(ogPos.x - tempOffset, ogPos.y);
-            GetComponent<RectTransform>().anchoredPosition = movePos;
         }
     }
 }

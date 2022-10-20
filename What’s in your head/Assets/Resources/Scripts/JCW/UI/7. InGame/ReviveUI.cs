@@ -1,31 +1,20 @@
 using Photon.Pun;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using YC.Camera_;
-using YC.Camera_Single;
 
 namespace JCW.UI.InGame
 {
     [RequireComponent(typeof(PhotonView))]
     public class ReviveUI : MonoBehaviour
     {
-        Camera mainCamera;
         bool isNella;
         PhotonView photonView;
 
         void Awake()
         {
-            if (PhotonNetwork.NetworkClientState == Photon.Realtime.ClientState.Joined)
-                mainCamera = transform.parent.transform.parent.GetComponent<CameraController>().FindCamera(); // 멀티용
+            if (GameManager.Instance.characterOwner.Count==0)
+                isNella = true;
             else
-                mainCamera = transform.parent.transform.parent.GetComponent<CameraController_Single>().FindCamera(); // 싱글용            
-
-            GetComponent<Canvas>().worldCamera = mainCamera;
-            GetComponent<Canvas>().planeDistance = 0.15f;
-
-            isNella = GameManager.Instance.characterOwner[PhotonNetwork.IsMasterClient];
-
+                isNella = GameManager.Instance.characterOwner[PhotonNetwork.IsMasterClient];
             photonView = GetComponent<PhotonView>();
         }
 
