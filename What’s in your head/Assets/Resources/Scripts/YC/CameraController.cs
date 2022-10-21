@@ -15,6 +15,7 @@ using Cinemachine;
 
 using JCW.UI.Options.InputBindings;
 using YC.CameraManager_;
+using UnityEngine.Rendering.Universal;
 
 namespace YC.Camera_
 {
@@ -398,6 +399,7 @@ namespace YC.Camera_
             if (this.gameObject.CompareTag("Nella"))
             {
                 mainCam = GameObject.FindGameObjectWithTag("NellaCamera").GetComponent<Camera>();
+                mainCam.GetComponent<UniversalAdditionalCameraData>().SetRenderer(0);
 
                 cinemachineBrain = mainCam.GetComponent<CinemachineBrain>();
                 CameraManager.Instance.cameras[0] = mainCam;
@@ -406,6 +408,7 @@ namespace YC.Camera_
             else if (this.gameObject.CompareTag("Steady"))
             {
                 mainCam = GameObject.FindGameObjectWithTag("SteadyCamera").GetComponent<Camera>();
+                mainCam.GetComponent<UniversalAdditionalCameraData>().SetRenderer(1);
                 cinemachineBrain = mainCam.GetComponent<CinemachineBrain>();
                 CameraManager.Instance.cameras[1] = mainCam;
             }
