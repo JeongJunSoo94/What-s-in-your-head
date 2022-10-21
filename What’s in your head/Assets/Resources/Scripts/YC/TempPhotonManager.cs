@@ -78,7 +78,7 @@ namespace YC.Photon
             ro.MaxPlayers = 20;     // 최대 접속자 수 : 20명
             ro.IsOpen = true;       // 룸의 오픈 여부
             ro.IsVisible = true;    // 로비에서 룸 목록에 노출 여부
-            PhotonNetwork.JoinOrCreateRoom("JCWz", ro, null);
+            PhotonNetwork.JoinOrCreateRoom("YC", ro, null);
         }
 
         // 랜덤 매치메이킹 실패시 호출되는 콜백 함수
@@ -93,7 +93,7 @@ namespace YC.Photon
             ro.IsVisible = true;    // 로비에서 룸 목록에 노출 여부
 
             // 룸 생성
-            PhotonNetwork.CreateRoom("My Room", ro);
+            PhotonNetwork.CreateRoom("YC", ro);
         }
 
         // 룸 생성이 완료시 호출되는 콜백 함수

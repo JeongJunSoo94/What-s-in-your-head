@@ -292,6 +292,7 @@ MonoBehaviour:
   - m_Transitions
   - m_Follow
   - m_StandbyUpdate
+  - m_Lens
   m_LockStageInInspector: 00000000
   m_StreamingVersion: 20170927
   m_Priority: 10
@@ -1730,9 +1731,9 @@ MonoBehaviour:
   m_StandbyUpdate: 0
   m_LookAt: {fileID: 3535128755585226343}
   m_Follow: {fileID: 1027278642859859402}
-  m_CommonLens: 0
+  m_CommonLens: 1
   m_Lens:
-    FieldOfView: 70
+    FieldOfView: 40
     OrthographicSize: 10
     NearClipPlane: 0.1
     FarClipPlane: 5000
@@ -1929,6 +1930,7 @@ MonoBehaviour:
   - m_Transitions
   - m_Follow
   - m_StandbyUpdate
+  - m_Lens
   m_LockStageInInspector: 00000000
   m_StreamingVersion: 20170927
   m_Priority: 10
@@ -4120,6 +4122,7 @@ MonoBehaviour:
   - m_Transitions
   - m_Follow
   - m_StandbyUpdate
+  - m_Lens
   m_LockStageInInspector: 00000000
   m_StreamingVersion: 20170927
   m_Priority: 10
@@ -5296,14 +5299,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 01450141376a61547b3c67c308a86438, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mainCam: {fileID: 0}
   cinemachineBrain: {fileID: 0}
   curCam: 0
   preCam: 0
   curCam_Clone: 0
   blendingCam_Clone: 0
+  blendingPrevCam_Clone: 0
+  preCam_Clone: 0
   defaultCameraSensitivity: 20
   sholderCameraSensitivity: 20
+  sholderAxisY_MaxUp: 0
+  sholderAxisY_MaxDown: 0
 --- !u!114 &8011218605724820560
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5551,9 +5557,9 @@ MonoBehaviour:
   m_StandbyUpdate: 2
   m_LookAt: {fileID: 3535128755585226343}
   m_Follow: {fileID: 1027278642859859402}
-  m_CommonLens: 0
+  m_CommonLens: 1
   m_Lens:
-    FieldOfView: 70
+    FieldOfView: 40
     OrthographicSize: 10
     NearClipPlane: 0.1
     FarClipPlane: 5000
@@ -6056,6 +6062,7 @@ MonoBehaviour:
   - m_Transitions
   - m_Follow
   - m_StandbyUpdate
+  - m_Lens
   m_LockStageInInspector: 00000000
   m_StreamingVersion: 20170927
   m_Priority: 10
@@ -6133,6 +6140,7 @@ MonoBehaviour:
   - m_Transitions
   - m_Follow
   - m_StandbyUpdate
+  - m_Lens
   m_LockStageInInspector: 00000000
   m_StreamingVersion: 20170927
   m_Priority: 10
@@ -6210,6 +6218,7 @@ MonoBehaviour:
   - m_Transitions
   - m_Follow
   - m_StandbyUpdate
+  - m_Lens
   m_LockStageInInspector: 00000000
   m_StreamingVersion: 20170927
   m_Priority: 10
