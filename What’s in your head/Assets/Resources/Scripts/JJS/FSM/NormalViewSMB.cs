@@ -36,7 +36,7 @@ namespace JJS
         }
         void WeaponCheck(Animator animator)
         {
-            if (GetPlayerController(animator).playerMouse.GetUseWeapon() == 1)
+            if (GetPlayerController(animator).playerMouse.WeaponAimCheck[GetPlayerController(animator).playerMouse.GetUseWeapon()])
             {
                 if (animator.GetLayerWeight(1) == 0 && GetPlayerController(animator).characterState.aim)
                 {
@@ -66,15 +66,29 @@ namespace JJS
             GetPlayerController(animator).InputRun();
             GetPlayerController(animator).InputMove();
             GetPlayerController(animator).InputJump();
-            GetPlayerController(animator).InputDash();
+            if (!GetPlayerController(animator).playerMouse.WeaponAimCheck[GetPlayerController(animator).playerMouse.GetUseWeapon()]) /////////// 3스테이지 전용 코드
+            {
+                if (!animator.GetBool("isAttack"))
+                {
+                    GetPlayerController(animator).InputDash();
+                }
+            }
+            else
+            {
+                GetPlayerController(animator).InputDash();
+            }
+
             if (KeyManager.Instance.GetKey(PlayerAction.Fire))
             {
                 if (!animator.GetBool("WeaponSwap"))
                 {
-                    if (GetPlayerController(animator).playerMouse.GetUseWeapon() == 0)
+                    if (!GetPlayerController(animator).playerMouse.WeaponAimCheck[GetPlayerController(animator).playerMouse.GetUseWeapon()])
                     {
-                        animator.SetBool("isAttackNext", true);
-                        animator.SetBool("isAttack", true);
+                        if(!GetPlayerController(animator).characterState.IsDashing)
+                        {
+                            animator.SetBool("isAttackNext", true);
+                            animator.SetBool("isAttack", true);
+                        }
                     }
                 }
             }
@@ -87,7 +101,7 @@ namespace JJS
                 }
             }
 
-            if (GetPlayerController(animator).playerMouse.GetUseWeapon() == 1 && !GetPlayerController(animator).characterState.top && KeyManager.Instance.GetKey(PlayerAction.Aim))
+            if (GetPlayerController(animator).playerMouse.WeaponAimCheck[GetPlayerController(animator).playerMouse.GetUseWeapon()] && !GetPlayerController(animator).characterState.top && KeyManager.Instance.GetKey(PlayerAction.Aim))
             {
                 animator.SetBool("Aim", true);
             }

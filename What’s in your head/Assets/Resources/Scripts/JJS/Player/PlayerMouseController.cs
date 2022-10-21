@@ -9,6 +9,7 @@ namespace JJS
         public GameObject point;
         public Camera cameraMain;
         public GameObject[] Weapon;
+        public bool[] WeaponAimCheck;
         public IKController ik;
 
         public bool ableToLeft;

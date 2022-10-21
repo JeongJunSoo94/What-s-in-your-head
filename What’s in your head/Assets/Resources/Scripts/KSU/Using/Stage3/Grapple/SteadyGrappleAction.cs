@@ -30,7 +30,8 @@ namespace KSU
         public LayerMask layerForGrapple;
 
         public GameObject grappleSpawner;
-        public SteadyGrapple grapple;
+        public GameObject grappleObject;
+        SteadyGrapple grapple;
         public Vector3 autoAimPosition;
 
 
@@ -78,13 +79,21 @@ namespace KSU
                 playerCamera = this.gameObject.GetComponent<CameraController>().FindCamera(); // 멀티용
             else
                 playerCamera = this.gameObject.GetComponent<CameraController_Single>().FindCamera(); // 싱글용
+            grappleObject = Instantiate(grappleObject);
+            grapple = grappleObject.GetComponent<SteadyGrapple>();
+            grapple.player = this;
+            grapple.spawner = grappleSpawner;
         }
 
         void Update()
         {
             SearchGrappledObject();
-            MakeGizmoVecs();
-            InputFire();
+            SendInfoUI();
+            if (grappleSpawner.activeSelf && grappleSpawner.transform.parent.gameObject.activeSelf)
+            {
+                MakeGizmoVecs();
+                InputFire();
+            }
             MoveToTarget();
         }
         // 스테디 전용 스킬 클래스로
@@ -146,6 +155,7 @@ namespace KSU
             {
                 if (KeyManager.Instance.GetKeyDown(PlayerAction.Fire)) //갈고리 날아가는 도중엔 못쏘게 추가해야함
                 {
+                    grappleSpawner.SetActive(false);
                     if (steadyInteractionState.isGrappledObjectFounded)
                     {
                         // 도착 위치: autoAimPosition
@@ -164,9 +174,13 @@ namespace KSU
 
         public void RecieveGrappleInfo(bool isSuceeded, GameObject targetObj)
         {
-            if(isSuceeded)
+            if (isSuceeded)
             {
                 Hook(targetObj);
+            }
+            else
+            {
+                grappleSpawner.SetActive(true);
             }
         }
 
@@ -205,17 +219,23 @@ namespace KSU
             {
                 foreach (var grappledObject in grappledObjects)
                 {
-                    //isMine false면 안보냄 / 현재 널
-
-                    bool rayCheck = Physics.Raycast(playerCamera.transform.position, playerCamera.transform.forward, grappledObject.GetComponent<GrappledObject>().detectingRange * -0.2f, layerFilterForGrapple, QueryTriggerInteraction.Ignore);
-                    //grappledObject.GetComponentInChildren<TargetIndicator>().SetUI(rayCheck, playerCamera); // 오버로드 필요
-                    // UI상태(bool)가 다르면 신호 struct Obj_Info(bool isUIActive,bool isInteractive, float distance)를 보냄
+                    Vector3 directoin = (grappledObject.transform.parent.position - playerCamera.transform.position).normalized;
+                    bool rayCheck = Physics.Raycast(playerCamera.transform.position, directoin, grappledObject.GetComponentInParent<GrappledObject>().detectingRange * 1.5f, layerFilterForGrapple, QueryTriggerInteraction.Ignore);
+                    if(rayCheck)
+                    {
+                        grappledObject.transform.parent.gameObject.GetComponentInChildren<TargetIndicator>().SetUI(true, playerCamera);
+                    }
+                    else
+                    {
+                        grappledObject.transform.parent.gameObject.GetComponentInChildren<TargetIndicator>().SetUI(false, playerCamera);
+                    }
                 }
             }
         }
 
         public void EscapeMoving()
         {
+            grappleSpawner.SetActive(true);
             steadyInteractionState.isGrappling = false;
             Vector3 inertiaVec = grappleVec;
             float jumpPower = inertiaVec.y;
@@ -251,7 +271,7 @@ namespace KSU
 
         private void OnDrawGizmos()
         {
-            if(playerState.aim)
+            if (playerState.aim)
             {
                 if (_raycastHit.point != null)
                 {
@@ -286,7 +306,18 @@ namespace KSU
         {
             if (other.CompareTag("GrappledObject"))
             {
+                other.gameObject.transform.parent.gameObject.GetComponentInChildren<TargetIndicator>().SetUI(false, playerCamera);
                 grappledObjects.Remove(other.gameObject);
+            }
+        }
+
+        private void OnCollisionEnter(Collision collision)
+        {
+            if(steadyInteractionState.isGrappling)
+            {
+                playerRigidbody.velocity = Vector3.zero;
+                grappleVec = Vector3.zero;
+                EscapeMoving();
             }
         }
     }

@@ -26782,6 +26782,10 @@ GameObject:
   - component: {fileID: 1441877394586250121}
   - component: {fileID: 8750876866218855433}
   - component: {fileID: 6988878118824629920}
+  - component: {fileID: 542594154494124672}
+  - component: {fileID: 1961179990579619761}
+  - component: {fileID: 6911123928387761077}
+  - component: {fileID: 3732263654288024843}
   m_Layer: 6
   m_Name: SteadyJJS
   m_TagString: Steady
@@ -26995,14 +26999,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 01450141376a61547b3c67c308a86438, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mainCam: {fileID: 0}
   cinemachineBrain: {fileID: 0}
   curCam: 0
   preCam: 0
   curCam_Clone: 0
   blendingCam_Clone: 0
+  blendingPrevCam_Clone: 0
+  preCam_Clone: 0
   defaultCameraSensitivity: 20
   sholderCameraSensitivity: 20
+  sholderAxisY_MaxUp: 0
+  sholderAxisY_MaxDown: 0
 --- !u!114 &2982061266958903733
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -27082,6 +27089,8 @@ MonoBehaviour:
   slopeAngle: 0
   slopeAngleCofacter: 0
   IsGrounded: 0
+  isFowardBlock: 0
+  isOverAngleForSlope: 0
   isMove: 0
   isRun: 0
   jumpCoolTime: 0.2
@@ -27118,6 +27127,89 @@ MonoBehaviour:
   animator: {fileID: 0}
   enableIK: 0
   ray: {fileID: 8768540777832219447}
+--- !u!114 &542594154494124672
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4466008002383961549}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c895243319594754da9e58423a5e54b4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isRidingRope: 0
+  isMoveToRope: 0
+  isMoveFromRope: 0
+  railTriggerDetectionNum: 0
+  isRailFounded: 0
+  isRailTriggered: 0
+  isRidingRail: 0
+  isMovingToRail: 0
+  isRailJumpingUp: 0
+  isRailJumping: 0
+--- !u!114 &1961179990579619761
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4466008002383961549}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 53c173593f4146742abd36b73400707b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &6911123928387761077
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4466008002383961549}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cbbcf1fce5f3fb7419efc97b38b925f8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  mainCamera: {fileID: 0}
+  lookAtObj: {fileID: 0}
+  layerFilterForRail:
+    serializedVersion: 2
+    m_Bits: 0
+  layerForRail:
+    serializedVersion: 2
+    m_Bits: 0
+  rangeRadius: 5
+  rangeDistance: 5
+  currentRail: {fileID: 0}
+  railStartObject: {fileID: 0}
+  railStartPosiotion: {x: 0, y: 0, z: 0}
+  movingToRailSpeed: 10
+  railJumpHeight: 4
+  railJumpSpeed: 6
+  escapingRopeSpeed: 6
+  escapingRoDelayTime: 1
+  hVision: {x: 0, y: 0, z: 0}
+--- !u!114 &3732263654288024843
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4466008002383961549}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ed9fae8c09db74141b058cb723cb5b57, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  hand: {fileID: 0}
+  currentRidingRope: {fileID: 0}
+  interactableRope: {fileID: 0}
+  moveToRopeSpeed: 6
+  escapingRopeSpeed: 6
+  escapingRopeDelayTime: 1
 --- !u!1 &4466008002735749242
 GameObject:
   m_ObjectHideFlags: 0

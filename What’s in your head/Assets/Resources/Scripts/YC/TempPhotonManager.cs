@@ -26,10 +26,15 @@ namespace YC.Photon
         // 사용자 아이디 입력
         private string userId = "Mary";
 
+        [SerializeField] string roomName;
+        [SerializeField] string nellaPrefabDirectory;
+        [SerializeField] string steadyPrefabDirectory;
+        [SerializeField] bool isNella;
+
         
 
         void Awake()
-        {
+        {            
             //Cursor.lockState = CursorLockMode.Locked;
             Screen.SetResolution(1920, 1080, false);
 
@@ -78,7 +83,7 @@ namespace YC.Photon
             ro.MaxPlayers = 20;     // 최대 접속자 수 : 20명
             ro.IsOpen = true;       // 룸의 오픈 여부
             ro.IsVisible = true;    // 로비에서 룸 목록에 노출 여부
-            PhotonNetwork.JoinOrCreateRoom("YC", ro, null);
+            PhotonNetwork.JoinOrCreateRoom(roomName, ro, null);
         }
 
         // 랜덤 매치메이킹 실패시 호출되는 콜백 함수
@@ -126,9 +131,19 @@ namespace YC.Photon
 
             if (PhotonNetwork.CurrentRoom.PlayerCount == 1)
             {              
-                PhotonNetwork.Instantiate("Prefabs/YC/MainCamera_Nella", new Vector3(0, 0, 0), Quaternion.identity, 0);
-                PhotonNetwork.Instantiate("Prefabs/JCW/NellaMousePoint", new Vector3(0, 0, 0), Quaternion.identity, 0);
-                PhotonNetwork.Instantiate("Prefabs/JCW/NellaJCW", new Vector3 (-5, 0, -5), Quaternion.identity, 0);
+                if(isNella)
+                {
+                    PhotonNetwork.Instantiate("Prefabs/YC/MainCamera_Nella", new Vector3(0, 0, 0), Quaternion.identity, 0);
+                    PhotonNetwork.Instantiate("Prefabs/JCW/NellaMousePoint", new Vector3(0, 0, 0), Quaternion.identity, 0);
+                    PhotonNetwork.Instantiate(nellaPrefabDirectory, new Vector3(-5, 0, -5), Quaternion.identity, 0);
+                }
+                else
+                {
+                    PhotonNetwork.Instantiate("Prefabs/YC/MainCamera_Steady", new Vector3(0, 0, 0), Quaternion.identity, 0);
+                    PhotonNetwork.Instantiate("Prefabs/JCW/SteadyMousePoint", new Vector3(0, 0, 0), Quaternion.identity, 0);
+                    PhotonNetwork.Instantiate(steadyPrefabDirectory, new Vector3(5, 0, -5), Quaternion.identity, 0);
+                }
+                
                 //CameraManager.Instance.cameras[0] = GameObject.FindGameObjectWithTag("NellaCamera").GetComponent<Camera>();
 
                 //CameraManager.Instance.cameras[0] = 
@@ -140,9 +155,18 @@ namespace YC.Photon
             }
             else if (PhotonNetwork.CurrentRoom.PlayerCount == 2)
             {
-                PhotonNetwork.Instantiate("Prefabs/YC/MainCamera_Steady", new Vector3(0, 0, 0), Quaternion.identity, 0);
-                PhotonNetwork.Instantiate("Prefabs/JCW/SteadyMousePoint", new Vector3(0, 0, 0), Quaternion.identity, 0);
-                PhotonNetwork.Instantiate("Prefabs/JCW/SteadyJCW", new Vector3(5, 0, -5), Quaternion.identity, 0);
+                if (isNella)
+                {
+                    PhotonNetwork.Instantiate("Prefabs/YC/MainCamera_Steady", new Vector3(0, 0, 0), Quaternion.identity, 0);
+                    PhotonNetwork.Instantiate("Prefabs/JCW/SteadyMousePoint", new Vector3(0, 0, 0), Quaternion.identity, 0);
+                    PhotonNetwork.Instantiate(steadyPrefabDirectory, new Vector3(5, 0, -5), Quaternion.identity, 0);
+                }
+                else
+                {
+                    PhotonNetwork.Instantiate("Prefabs/YC/MainCamera_Nella", new Vector3(0, 0, 0), Quaternion.identity, 0);
+                    PhotonNetwork.Instantiate("Prefabs/JCW/NellaMousePoint", new Vector3(0, 0, 0), Quaternion.identity, 0);
+                    PhotonNetwork.Instantiate(nellaPrefabDirectory, new Vector3(-5, 0, -5), Quaternion.identity, 0);
+                }
                 //CameraManager.Instance.cameras[1] = GameObject.FindGameObjectWithTag("SteadyCamera").GetComponent<Camera>();
 
                 //CameraManager.Instance.cameras[1] = 

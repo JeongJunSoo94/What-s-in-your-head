@@ -39,7 +39,7 @@ namespace JJS
 
         void check(Animator animator)
         {
-            if (GetPlayerController(animator).playerMouse.GetUseWeapon() == 1)
+            if (GetPlayerController(animator).playerMouse.WeaponAimCheck[GetPlayerController(animator).playerMouse.GetUseWeapon()])
             {
                 if (GetPlayerController(animator).characterState.top)
                 {

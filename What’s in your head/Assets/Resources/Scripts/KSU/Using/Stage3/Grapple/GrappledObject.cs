@@ -6,7 +6,7 @@ namespace KSU
 {
     public class GrappledObject : MonoBehaviour
     {
-        [SerializeField] GameObject detectingTrriger;
+        [SerializeField] GameObject detectingTrigger;
         public GameObject offset;
 
         public float detectingRange;
@@ -14,7 +14,7 @@ namespace KSU
         // Start is called before the first frame update
         void Start()
         {
-            detectingTrriger.transform.localScale = new Vector3(1, 1, 1) * (detectingRange * 2f);
+            detectingTrigger.transform.localScale = new Vector3(1, 1, 1) * (detectingRange * 2f);
         }
 
         // Update is called once per frame

@@ -86,6 +86,7 @@ public class PlayerState : MonoBehaviour
     public bool aim = false;
     public bool top = false;
     public bool swap = false;
+
     // 지면 체크 함수(지면 각도에 따라서 지면체크 거리 안에 안들어올 수 있기에 보정 필요)
     #region
     //public void CheckGround(float sphereRadius)

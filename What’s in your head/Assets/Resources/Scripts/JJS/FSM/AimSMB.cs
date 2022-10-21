@@ -31,7 +31,7 @@ namespace JJS
         {
             if(GetPlayerController(animator).characterState.top)
                 GetPlayerController(animator).playerMouse.ik.enableIK = false;
-            if (GetPlayerController(animator).playerMouse.GetUseWeapon() == 1)
+            if (GetPlayerController(animator).playerMouse.WeaponAimCheck[GetPlayerController(animator).playerMouse.GetUseWeapon()])
             {
                 if (animator.GetLayerWeight(1) == 0&& GetPlayerController(animator).characterState.aim)
                 {
@@ -49,7 +49,7 @@ namespace JJS
 
         void check(Animator animator)
         {
-            if (GetPlayerController(animator).playerMouse.GetUseWeapon() == 1)
+            if (GetPlayerController(animator).playerMouse.WeaponAimCheck[GetPlayerController(animator).playerMouse.GetUseWeapon()])
             {
                 if (GetPlayerController(animator).characterState.aim|| GetPlayerController(animator).characterState.top)
                 {
