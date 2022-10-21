@@ -47,8 +47,9 @@ namespace JJS
         {
             if (other.gameObject.CompareTag("ContaminationField"))
                 other.gameObject.SendMessage("GetDamaged");
+            if (other.gameObject.layer == LayerMask.NameToLayer("UI"))
+                return;
 
-            Debug.Log(other.gameObject.name);
             spawner.Despawn(this.gameObject);
         }
 

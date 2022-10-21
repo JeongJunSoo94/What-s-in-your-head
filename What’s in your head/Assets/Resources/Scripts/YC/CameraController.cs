@@ -171,6 +171,8 @@ namespace YC.Camera_
             }
         }
 
+        
+
         void BlockMouseControlInBlending() // 블렌딩 도중 마우스 입력을 막는다
         {
             if (cinemachineBrain.IsBlending)
@@ -237,6 +239,8 @@ namespace YC.Camera_
                     preCam = curCam;
                     curCam = CamState.sholder;
 
+                    camList[(int)curCam].GetComponent<CinemachineFreeLook>().m_YAxis.Value = 0.5f;
+
                     OnOffCamera(sholderCam);
 
                     sholderCam.GetComponent<CinemachineFreeLook>().m_XAxis = temp;
@@ -245,6 +249,8 @@ namespace YC.Camera_
                 {
                     preCam = curCam;
                     curCam = CamState.top;
+
+
                     OnOffCamera(topCam);
                 }
             }
@@ -257,6 +263,10 @@ namespace YC.Camera_
 
                     preCam = curCam;
                     curCam = CamState.back;
+
+                    camList[(int)curCam].GetComponent<CinemachineFreeLook>().m_YAxis.Value = 0.5f;
+
+
 
                     OnOffCamera(backCam);
 
