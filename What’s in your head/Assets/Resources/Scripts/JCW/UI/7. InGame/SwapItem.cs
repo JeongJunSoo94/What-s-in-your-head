@@ -40,6 +40,7 @@ namespace JCW.UI.InGame
 
             switch (curStageIndex)
             {
+                default:
                 case 1:
                     firstWeapon = firstWeapon1;
                     secondWeapon = secondWeapon1;

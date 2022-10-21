@@ -12,7 +12,10 @@ public class GameManager : MonoBehaviour
 
     [HideInInspector] public int curStageIndex = 0;
     [HideInInspector] public Hashtable isAlive = new();
+
+    // 좌측 bool 값은 Nella 캐릭터인지, 우측은 해당 캐릭터가 가지고 있는 HealthUI 스크립트
     [HideInInspector] public Dictionary<bool, HealthUI> reviveAllPairs= new();
+    [HideInInspector] public Dictionary<bool, CharUI> hpAllPairs= new();
     public int curSection { get; private set; }
     public int curPlayerHP = 12;
 
@@ -36,42 +39,47 @@ public class GameManager : MonoBehaviour
     }
     public void SectionUP() { ++curSection;  }
 
+    // 누구 하나 죽었거나, 죽음->부활일 때 작동하는 함수
     public void MediateRevive(bool value)
     {
-        photonView.RPC(nameof(Mediate), RpcTarget.AllViaServer, value);
+        photonView.RPC(nameof(MediateRevive_RPC), RpcTarget.AllViaServer, value);
     }
 
     [PunRPC]
-    void Mediate(bool value)
+    void MediateRevive_RPC(bool value)
     {
         reviveAllPairs[true].SetRevive(value);
         reviveAllPairs[false].SetRevive(value);
     }
 
-    public void AddReviveAllPair(bool isNellaValue, string hUIOwnerName)
+    // HP UI 켜고 끄는 함수
+
+    public void MediateHP(bool value)
     {
-        photonView.RPC(nameof(AddRevive), RpcTarget.AllViaServer, isNellaValue, hUIOwnerName);
+        photonView.RPC(nameof(MediateHP_RPC), RpcTarget.AllViaServer, value);
     }
 
     [PunRPC]
-    void AddRevive(bool isNellaValue, string hUIOwnerName)
+    void MediateHP_RPC(bool value)
     {
-        GameObject go = GameObject.Find(hUIOwnerName);        
-        reviveAllPairs.Add(isNellaValue, go.GetComponentInChildren<HealthUI>());
+        hpAllPairs[true].SetHP(value);
+        hpAllPairs[false].SetHP(value);
     }
 
-    public void CheckAliveState(bool _isNella, bool _value)
+    // 각 캐릭터가 살아있는 지 죽어있는지, 양 컴퓨터의 게임매니저를 통해 값 변경
+    public void SetAliveState(bool _isNella, bool _value)
     {
-        CheckAlive(_isNella, _value);
-        photonView.RPC(nameof(CheckAlive), RpcTarget.Others, _isNella, _value);
+        SetAlive(_isNella, _value);
+        photonView.RPC(nameof(SetAlive), RpcTarget.Others, _isNella, _value);
     }
 
     [PunRPC]
-    void CheckAlive(bool _isNella, bool _value)
+    void SetAlive(bool _isNella, bool _value)
     {
         isAlive[_isNella] = _value;
     }
 
+    // 각 캐릭터가 살아있는 지 죽어있는지, 양 컴퓨터의 게임매니저를 통해 추가
     public void AddAliveState(bool _isNella, bool _value)
     {
         photonView.RPC(nameof(AddAlive), RpcTarget.AllViaServer, _isNella, _value);
