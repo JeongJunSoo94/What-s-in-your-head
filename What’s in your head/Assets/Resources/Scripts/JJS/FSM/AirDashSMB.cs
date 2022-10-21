@@ -15,29 +15,29 @@ namespace JJS
         // OnStateUpdate is called on each Update frame between OnStateEnter and OnStateExit callbacks
         override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
         {
-            if (GetPlayerController3D(animator).enabled)
+            if (GetPlayerController(animator).enabled)
             {
-                GetPlayerController3D(animator).InputMove();
-                GetPlayerController3D(animator).InputJump();
+                GetPlayerController(animator).InputMove();
+                GetPlayerController(animator).InputJump();
                 check(animator);
             }
 
         }
         override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
         {
-            if (GetPlayerController3D(animator).enabled)
+            if (GetPlayerController(animator).enabled)
             {
                 animator.SetBool("isAirDash", false);
             }
         }
         void check(Animator animator)
         {
-            if (GetPlayerController3D(animator).characterState.IsGrounded)
+            if (GetPlayerController(animator).characterState.IsGrounded)
             {
                 animator.SetBool("isAir", false);
                 animator.SetBool("isAirDash", false);
             }
-            if (!GetPlayerController3D(animator).characterState.IsAirDashing)
+            if (!GetPlayerController(animator).characterState.IsAirDashing)
             {
                 animator.SetBool("isAirDash", false);
             }
@@ -46,7 +46,7 @@ namespace JJS
             {
                 animator.SetBool("isAirJump", false);
             }
-            else if (GetPlayerController3D(animator).characterState.IsAirJumping)
+            else if (GetPlayerController(animator).characterState.IsAirJumping)
             {
                 animator.SetBool("isAirJump", true);
                 return;

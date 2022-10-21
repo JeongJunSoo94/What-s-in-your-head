@@ -16,7 +16,7 @@ namespace JJS
         override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
         {
             WeaponCheck(animator);
-            if (GetPlayerController3D(animator).enabled)
+            if (GetPlayerController(animator).enabled)
             {
                 check(animator);
             }
@@ -29,11 +29,11 @@ namespace JJS
 
         void WeaponCheck(Animator animator)
         {
-            if(GetPlayerController3D(animator).characterState.top)
-                GetPlayerController3D(animator).playerMouse.ik.enableIK = false;
-            if (GetPlayerController3D(animator).playerMouse.GetUseWeapon() == 1)
+            if(GetPlayerController(animator).characterState.top)
+                GetPlayerController(animator).playerMouse.ik.enableIK = false;
+            if (GetPlayerController(animator).playerMouse.GetUseWeapon() == 1)
             {
-                if (animator.GetLayerWeight(1) == 0&& GetPlayerController3D(animator).characterState.aim)
+                if (animator.GetLayerWeight(1) == 0&& GetPlayerController(animator).characterState.aim)
                 {
                     animator.SetLayerWeight(1, 1);
                 }
@@ -49,9 +49,9 @@ namespace JJS
 
         void check(Animator animator)
         {
-            if (GetPlayerController3D(animator).playerMouse.GetUseWeapon() == 1)
+            if (GetPlayerController(animator).playerMouse.GetUseWeapon() == 1)
             {
-                if (GetPlayerController3D(animator).characterState.aim|| GetPlayerController3D(animator).characterState.top)
+                if (GetPlayerController(animator).characterState.aim|| GetPlayerController(animator).characterState.top)
                 {
                     if (KeyManager.Instance.GetKey(PlayerAction.Fire))
                     {

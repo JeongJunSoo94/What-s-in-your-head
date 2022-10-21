@@ -39,9 +39,9 @@ namespace JJS
 
         void check(Animator animator)
         {
-            if (GetPlayerController3D(animator).playerMouse.GetUseWeapon() == 1)
+            if (GetPlayerController(animator).playerMouse.GetUseWeapon() == 1)
             {
-                if (GetPlayerController3D(animator).characterState.top)
+                if (GetPlayerController(animator).characterState.top)
                 {
                     animator.SetBool("Aim", true);
                     animator.SetBool("Top", true);

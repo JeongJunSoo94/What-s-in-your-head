@@ -16,6 +16,8 @@ using Cinemachine;
 using JCW.UI.Options.InputBindings;
 using YC.CameraManager_;
 
+using KSU;
+
 namespace YC.Camera_
 {
     public class CameraController : MonoBehaviour, IPunObservable
@@ -73,7 +75,7 @@ namespace YC.Camera_
         [Tooltip("조준 카메라 감도")]
         public float sholderCameraSensitivity = 20;
 
-        PlayerController3D player;
+        PlayerController player;
 
         float sholderViewMaxY;
         [SerializeField] float sholderAxisY_MaxUp;
@@ -132,7 +134,7 @@ namespace YC.Camera_
 
             FindCamera();
 
-            player = this.gameObject.GetComponent<PlayerController3D>();
+            player = this.gameObject.GetComponent<PlayerController>();
 
 
             // 카메라 FOV 초기화 (해당 시네머신 카메라는 Commone Lens 설정 필요)

@@ -13,7 +13,7 @@ namespace JJS
 
         override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
         {
-            if (GetPlayerController3D(animator).enabled)
+            if (GetPlayerController(animator).enabled)
             {
               
                 check(animator);
@@ -21,20 +21,20 @@ namespace JJS
         }
         void check(Animator animator)
         {
-            GetPlayerController3D(animator).playerMouse.ik.enableIK = true;
+            GetPlayerController(animator).playerMouse.ik.enableIK = true;
             animator.SetLayerWeight(1, 1);
-            if (GetPlayerController3D(animator).characterState.top)
+            if (GetPlayerController(animator).characterState.top)
             { 
-                GetPlayerController3D(animator).playerMouse.AimUpdate(2);
+                GetPlayerController(animator).playerMouse.AimUpdate(2);
             }
             if (!KeyManager.Instance.GetKey(PlayerAction.Fire))
             {
                 animator.SetBool("AimAttack", false);
             }
-            //if (!GetPlayerController3D(animator).characterState.IsGrounded)
+            //if (!GetPlayerController(animator).characterState.IsGrounded)
             //{
             //    animator.SetBool("isAir", true);
-            //    if (!GetPlayerController3D(animator).characterState.IsJumping)
+            //    if (!GetPlayerController(animator).characterState.IsJumping)
             //    {
             //        animator.SetTrigger("JumpDown");
             //        return;
@@ -45,12 +45,12 @@ namespace JJS
             //    animator.SetBool("isAir", false);
             //}
 
-            //if (!GetPlayerController3D(animator).characterState.isMove)
+            //if (!GetPlayerController(animator).characterState.isMove)
             //{
-            //    GetPlayerController3D(animator).characterState.isRun = false;
+            //    GetPlayerController(animator).characterState.isRun = false;
             //}
 
-            //GetPlayerController3D(animator).playerMouse.ableToLeft = true;
+            //GetPlayerController(animator).playerMouse.ableToLeft = true;
 
         }
 

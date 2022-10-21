@@ -16,6 +16,8 @@ using Cinemachine;
 using JCW.UI.Options.InputBindings;
 using YC.CameraManager_;
 
+using KSU;
+
 namespace YC.Camera_Single
 {
     public class CameraController_Single : MonoBehaviour, IPunObservable
@@ -70,7 +72,7 @@ namespace YC.Camera_Single
         public float sholderCameraSensitivity = 20;
 
 
-        PlayerController3D player;
+        PlayerController player;
 
         float sholderViewMaxY;
         [SerializeField] float sholderAxisY_MaxUp;
@@ -139,7 +141,7 @@ namespace YC.Camera_Single
                 OnOffCamera(camList[(int)curCam]);
             }
 
-            player = GetComponent<PlayerController3D>();
+            player = GetComponent<PlayerController>();
 
         }
 

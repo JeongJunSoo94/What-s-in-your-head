@@ -13,17 +13,17 @@ namespace JJS
             animator.SetBool("wasAirJump", false);
             animator.SetBool("isJump", false);
             animator.SetBool("isAttack", false);
-            GetPlayerController3D(animator).characterState.aim = false;
+            GetPlayerController(animator).characterState.aim = false;
         }
 
         override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
         {
-            if (!GetPlayerController3D(animator).characterState.swap)
+            if (!GetPlayerController(animator).characterState.swap)
             { 
                 WeaponCheck(animator);
-                GetPlayerController3D(animator).playerMouse.ik.enableIK = false;
+                GetPlayerController(animator).playerMouse.ik.enableIK = false;
             }
-            if (GetPlayerController3D(animator).enabled)
+            if (GetPlayerController(animator).enabled)
             {
                 InputCheck(animator);
             }
@@ -32,13 +32,13 @@ namespace JJS
 
         public override void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
         {
-            GetPlayerController3D(animator).MoveStop();
+            GetPlayerController(animator).MoveStop();
         }
         void WeaponCheck(Animator animator)
         {
-            if (GetPlayerController3D(animator).playerMouse.GetUseWeapon() == 1)
+            if (GetPlayerController(animator).playerMouse.GetUseWeapon() == 1)
             {
-                if (animator.GetLayerWeight(1) == 0 && GetPlayerController3D(animator).characterState.aim)
+                if (animator.GetLayerWeight(1) == 0 && GetPlayerController(animator).characterState.aim)
                 {
                     animator.SetLayerWeight(1, 1);
                 }
@@ -60,34 +60,34 @@ namespace JJS
         {
             if (Input.GetKeyDown(KeyCode.Alpha1))
             {
-                GetPlayerController3D(animator).characterState.top = !GetPlayerController3D(animator).characterState.top;
+                GetPlayerController(animator).characterState.top = !GetPlayerController(animator).characterState.top;
             }
           
-            GetPlayerController3D(animator).InputRun();
-            GetPlayerController3D(animator).InputMove();
-            GetPlayerController3D(animator).InputJump();
-            GetPlayerController3D(animator).InputDash();
+            GetPlayerController(animator).InputRun();
+            GetPlayerController(animator).InputMove();
+            GetPlayerController(animator).InputJump();
+            GetPlayerController(animator).InputDash();
             if (KeyManager.Instance.GetKey(PlayerAction.Fire))
             {
                 if (!animator.GetBool("WeaponSwap"))
                 {
-                    if (GetPlayerController3D(animator).playerMouse.GetUseWeapon() == 0)
+                    if (GetPlayerController(animator).playerMouse.GetUseWeapon() == 0)
                     {
                         animator.SetBool("isAttackNext", true);
                         animator.SetBool("isAttack", true);
                     }
                 }
             }
-            if (KeyManager.Instance.GetKeyDown(PlayerAction.Swap) && !GetPlayerController3D(animator).characterState.swap)
+            if (KeyManager.Instance.GetKeyDown(PlayerAction.Swap) && !GetPlayerController(animator).characterState.swap)
             {
                 if (!animator.GetBool("isAttack"))
                 {
-                    GetPlayerController3D(animator).characterState.swap = true;
+                    GetPlayerController(animator).characterState.swap = true;
                     animator.SetBool("WeaponSwap", true);
                 }
             }
 
-            if (GetPlayerController3D(animator).playerMouse.GetUseWeapon() == 1 && !GetPlayerController3D(animator).characterState.top && KeyManager.Instance.GetKey(PlayerAction.Aim))
+            if (GetPlayerController(animator).playerMouse.GetUseWeapon() == 1 && !GetPlayerController(animator).characterState.top && KeyManager.Instance.GetKey(PlayerAction.Aim))
             {
                 animator.SetBool("Aim", true);
             }
@@ -95,22 +95,22 @@ namespace JJS
 
         void check(Animator animator)
         {
-            if (GetPlayerController3D(animator).characterState.top)
+            if (GetPlayerController(animator).characterState.top)
             {
                 Cursor.lockState = CursorLockMode.Confined;
-                GetPlayerController3D(animator).playerMouse.TopViewUpdate();
+                GetPlayerController(animator).playerMouse.TopViewUpdate();
             }
             else
             {
                 Cursor.lockState = CursorLockMode.Locked;
             }
 
-            animator.SetFloat("HorizonVelocity", (GetPlayerController3D(animator).characterState.isMove ? (GetPlayerController3D(animator).characterState.isRun ? 1.0f : 0.5f) : 0.0f));
+            animator.SetFloat("HorizonVelocity", (GetPlayerController(animator).characterState.isMove ? (GetPlayerController(animator).characterState.isRun ? 1.0f : 0.5f) : 0.0f));
 
-            if (!GetPlayerController3D(animator).characterState.IsGrounded)
+            if (!GetPlayerController(animator).characterState.IsGrounded)
             {
                 animator.SetBool("isAir", true);
-                if (!GetPlayerController3D(animator).characterState.IsJumping)
+                if (!GetPlayerController(animator).characterState.IsJumping)
                 {
                     animator.SetTrigger("JumpDown");
                     return;
@@ -122,17 +122,17 @@ namespace JJS
             }
 
      
-            if (!GetPlayerController3D(animator).characterState.isMove)
+            if (!GetPlayerController(animator).characterState.isMove)
             {
-                GetPlayerController3D(animator).characterState.isRun = false;
+                GetPlayerController(animator).characterState.isRun = false;
             }
-            if (GetPlayerController3D(animator).characterState.IsJumping)
+            if (GetPlayerController(animator).characterState.IsJumping)
             {
                 animator.SetBool("isJump", true);
                 return;
             }
 
-            if (GetPlayerController3D(animator).characterState.IsDashing)
+            if (GetPlayerController(animator).characterState.IsDashing)
             {
                 animator.SetBool("isDash", true);
                 return;

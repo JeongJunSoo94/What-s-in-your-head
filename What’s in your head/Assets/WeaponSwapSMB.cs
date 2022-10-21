@@ -12,12 +12,12 @@ namespace JJS
         override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
         {
             animator.SetLayerWeight(1, 1);
-            index = GetPlayerController3D(animator).playerMouse.GetUseWeapon();
-            GetPlayerController3D(animator).playerMouse.WeaponSwap();
+            index = GetPlayerController(animator).playerMouse.GetUseWeapon();
+            GetPlayerController(animator).playerMouse.WeaponSwap();
         }
         override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
         {
-            if (index!= GetPlayerController3D(animator).playerMouse.GetUseWeapon())
+            if (index!= GetPlayerController(animator).playerMouse.GetUseWeapon())
             {
                 animator.SetBool("WeaponSwap", false);
             }
@@ -25,7 +25,7 @@ namespace JJS
 
         override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
         {
-            GetPlayerController3D(animator).characterState.swap = false;
+            GetPlayerController(animator).characterState.swap = false;
             animator.SetLayerWeight(1, 0);
         }
 
