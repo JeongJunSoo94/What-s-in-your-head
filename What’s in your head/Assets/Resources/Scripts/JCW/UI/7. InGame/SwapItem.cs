@@ -71,8 +71,8 @@ namespace JCW.UI.InGame
 
         private void LateUpdate()
         {
-            if (photonView.IsMine)
-                SetImg((bool)GameManager.Instance.isAlive[isNella]);
+            //if (photonView.IsMine)
+                //SetImg((bool)GameManager.Instance.isAlive[isNella]);
         }
 
         public void SetImg(bool isOn)
