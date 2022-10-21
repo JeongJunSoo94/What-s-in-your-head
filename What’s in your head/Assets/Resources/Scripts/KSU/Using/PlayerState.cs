@@ -79,7 +79,8 @@ public class PlayerState : MonoBehaviour
 
     //제어불가능 상태 변수
     #region
-    public bool IsOutOfControl = false;
+    public bool isMine = false;
+    public bool isOutOfControl = false;
     public float outOfControllDuration;
     #endregion
 

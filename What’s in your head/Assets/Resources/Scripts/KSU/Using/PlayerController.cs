@@ -131,7 +131,7 @@ namespace KSU
 
 
 
-            if (!photonView.IsMine) this.enabled = false;
+            characterState.isMine = photonView.IsMine;
             // << : 
 
             Application.targetFrameRate = 120;
@@ -146,15 +146,15 @@ namespace KSU
         // Update is called once per frame
         void Update()
         {
-            if (!photonView.IsMine)
-                return;
             CheckState();
+            //if (!photonView.IsMine)
+            //    return;
             //CheckKeyInput(); // 이건 animator의  fsm으로 한다고 했으나 여기에 모아서 사용해둠(fsm으로 이동 될 것들)
         }
 
         private void FixedUpdate()
         {
-            if (!photonView.IsMine)
+            if (!photonView.IsMine || characterState.isOutOfControl)
                 return;
             TakeRotation();
             Move();

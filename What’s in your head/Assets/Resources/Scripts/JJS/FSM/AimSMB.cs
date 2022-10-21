@@ -16,7 +16,7 @@ namespace JJS
         override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
         {
             WeaponCheck(animator);
-            if (GetPlayerController(animator).enabled)
+            if (GetPlayerController(animator).characterState.isMine)
             {
                 check(animator);
             }
@@ -31,7 +31,7 @@ namespace JJS
         {
             if(GetPlayerController(animator).characterState.top)
                 GetPlayerController(animator).playerMouse.ik.enableIK = false;
-            if (GetPlayerController(animator).playerMouse.WeaponAimCheck[GetPlayerController(animator).playerMouse.GetUseWeapon()])
+            if (GetPlayerController(animator).playerMouse.weaponInfo[GetPlayerController(animator).playerMouse.GetUseWeapon()].canAim)
             {
                 if (animator.GetLayerWeight(1) == 0&& GetPlayerController(animator).characterState.aim)
                 {
@@ -49,7 +49,7 @@ namespace JJS
 
         void check(Animator animator)
         {
-            if (GetPlayerController(animator).playerMouse.WeaponAimCheck[GetPlayerController(animator).playerMouse.GetUseWeapon()])
+            if (GetPlayerController(animator).playerMouse.weaponInfo[GetPlayerController(animator).playerMouse.GetUseWeapon()].canAim)
             {
                 if (GetPlayerController(animator).characterState.aim|| GetPlayerController(animator).characterState.top)
                 {
@@ -58,10 +58,18 @@ namespace JJS
                         animator.SetBool("AimAttack", true);
                     }
                 }
-                //if (KeyManager.Instance.GetKey(PlayerAction.Fire))
-                //{
-                //    animator.SetBool("AimAttack", true);
-                //}
+            }
+
+            if (GetPlayerController(animator).playerMouse.weaponInfo[GetPlayerController(animator).playerMouse.GetUseWeapon()].canAim)
+            {
+                if (GetPlayerController(animator).characterState.top)
+                {
+                    animator.SetBool("Aim", true);
+                    animator.SetBool("Top", true);
+                    return;
+                }
+
+                //animator.SetBool("Aim", KeyManager.Instance.GetKey(PlayerAction.Aim));
             }
         }
 

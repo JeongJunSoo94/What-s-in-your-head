@@ -23,7 +23,7 @@ namespace JJS
                 WeaponCheck(animator);
                 GetPlayerController(animator).playerMouse.ik.enableIK = false;
             }
-            if (GetPlayerController(animator).enabled)
+            if (GetPlayerController(animator).characterState.isMine)
             {
                 InputCheck(animator);
             }
@@ -36,15 +36,22 @@ namespace JJS
         }
         void WeaponCheck(Animator animator)
         {
-            if (GetPlayerController(animator).playerMouse.WeaponAimCheck[GetPlayerController(animator).playerMouse.GetUseWeapon()])
+            if (GetPlayerController(animator).playerMouse.weaponInfo[GetPlayerController(animator).playerMouse.GetUseWeapon()].canAim)
             {
-                if (animator.GetLayerWeight(1) == 0 && GetPlayerController(animator).characterState.aim)
+                if(GetPlayerController(animator).playerMouse.weaponInfo[GetPlayerController(animator).playerMouse.GetUseWeapon()].canNoAimAttack)
                 {
                     animator.SetLayerWeight(1, 1);
                 }
                 else
                 {
-                    animator.SetLayerWeight(1, 0);
+                    if (animator.GetLayerWeight(1) == 0 && GetPlayerController(animator).characterState.aim)
+                    {
+                        animator.SetLayerWeight(1, 1);
+                    }
+                    else
+                    {
+                        animator.SetLayerWeight(1, 0);
+                    }
                 }
             }
             else
@@ -66,7 +73,7 @@ namespace JJS
             GetPlayerController(animator).InputRun();
             GetPlayerController(animator).InputMove();
             GetPlayerController(animator).InputJump();
-            if (!GetPlayerController(animator).playerMouse.WeaponAimCheck[GetPlayerController(animator).playerMouse.GetUseWeapon()]) /////////// 3스테이지 전용 코드
+            if (!GetPlayerController(animator).playerMouse.weaponInfo[GetPlayerController(animator).playerMouse.GetUseWeapon()].canAim) /////////// 3스테이지 전용 코드
             {
                 if (!animator.GetBool("isAttack"))
                 {
@@ -82,7 +89,7 @@ namespace JJS
             {
                 if (!animator.GetBool("WeaponSwap"))
                 {
-                    if (!GetPlayerController(animator).playerMouse.WeaponAimCheck[GetPlayerController(animator).playerMouse.GetUseWeapon()])
+                    if (!GetPlayerController(animator).playerMouse.weaponInfo[GetPlayerController(animator).playerMouse.GetUseWeapon()].canAim)
                     {
                         if(!GetPlayerController(animator).characterState.IsDashing)
                         {
@@ -101,7 +108,7 @@ namespace JJS
                 }
             }
 
-            if (GetPlayerController(animator).playerMouse.WeaponAimCheck[GetPlayerController(animator).playerMouse.GetUseWeapon()] && !GetPlayerController(animator).characterState.top && KeyManager.Instance.GetKey(PlayerAction.Aim))
+            if (GetPlayerController(animator).playerMouse.weaponInfo[GetPlayerController(animator).playerMouse.GetUseWeapon()].canAim && !GetPlayerController(animator).characterState.top && KeyManager.Instance.GetKey(PlayerAction.Aim))
             {
                 animator.SetBool("Aim", true);
             }

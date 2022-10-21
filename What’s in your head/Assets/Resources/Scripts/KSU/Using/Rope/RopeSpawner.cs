@@ -29,7 +29,7 @@ namespace KSU
         void Start()
         {
             transform.localScale = new Vector3(1, 1, 1) * (detectingRange * 2f);
-            UIObj.SendMessage("SetInteractableRange", interactableRange);
+            //  .SendMessage("SetInteractableRange", interactableRange);
         }
 
         public void StartRopeAction(GameObject player, float moveToRopeSpeed)

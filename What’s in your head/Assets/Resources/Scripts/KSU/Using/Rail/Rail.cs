@@ -131,7 +131,19 @@ namespace KSU
                 player.transform.localRotation = Quaternion.Euler(new Vector3(0, 0, 0));
             }
             cartSetUp.gameObject.SetActive(true);
-            isNellaCartActive = true;
+            switch (player.tag)
+            {
+                case "Nella":
+                    {
+                        isNellaCartActive = true;   
+                    }
+                    break;
+                case "Steady":
+                    {
+                        isSteadyCartActive = true;
+                    }
+                    break;
+            }
         }
 
         Cinemachine.CinemachineDollyCart CreateCart(Vector3 startPos, GameObject startObj, GameObject player)
@@ -141,7 +153,7 @@ namespace KSU
                 int startIndex = int.Parse(startObj.name);
                 //Debug.Log("startIndex: " + startIndex);
                 GameObject cart = null;
-                player.GetComponent<PlayerController>().enabled = false;
+                player.GetComponent<PlayerController>().characterState.isOutOfControl = true;
                 switch (player.tag)
                 {
                     case "Nella":
@@ -256,7 +268,7 @@ namespace KSU
             player.transform.LookAt(player.transform.position + inertiaVec);
             playerController.MakeinertiaVec(escapingRailSpeed, inertiaVec.normalized);
             playerController.moveVec = Vector3.up * playerController.jumpSpeed / 2f;
-            playerController.enabled = true;
+            playerController.characterState.isOutOfControl = false;
             PlayerInteractionState interactionState = player.GetComponent<PlayerInteractionState>();
             interactionState.isRidingRail = false;
             interactionState.isRailJumping = false;

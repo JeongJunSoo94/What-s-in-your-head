@@ -7,6 +7,7 @@ namespace KSU
     public class SteadyInteractionState : MonoBehaviour
     {
         public bool isGrappledObjectFounded = false;
+        public bool isSucceededInGrappling = false;
         public bool isGrappling = false;
 
         // Start is called before the first frame update

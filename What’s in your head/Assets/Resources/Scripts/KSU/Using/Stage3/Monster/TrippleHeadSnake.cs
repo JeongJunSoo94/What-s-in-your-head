@@ -22,18 +22,15 @@ namespace KSU
         // Update is called once per frame
         void Update()
         {
-            void Update()
+            Detect();
+            switch (currentState)
             {
-                Detect();
-                switch (currentState)
-                {
-                    case state.Chase:
-                    case state.Stuck:
-                    case state.Sturn:
-                        Detect();
-                        Chase();
-                        break;
-                }
+                case state.Chase:
+                case state.Stuck:
+                case state.Sturn:
+                    Detect();
+                    Chase();
+                    break;
             }
         }
 

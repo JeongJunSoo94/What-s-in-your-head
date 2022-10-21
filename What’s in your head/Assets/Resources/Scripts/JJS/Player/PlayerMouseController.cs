@@ -1,15 +1,27 @@
 using System.Collections;
 using System.Collections.Generic;
+using System;
 using UnityEngine;
 using JCW.UI.Options.InputBindings;
 namespace JJS
 {
     public class PlayerMouseController : MonoBehaviour
     {
+        [Serializable]
+        public struct WeaponInfo
+        {
+            public GameObject weapon;
+            public bool canAim;
+            public bool canNoAimAttack;
+            public bool canMoveAttack;
+        }
+
+
         public GameObject point;
         public Camera cameraMain;
-        public GameObject[] Weapon;
-        public bool[] WeaponAimCheck;
+        //public GameObject[] weapon;
+        //public bool[] weaponAimCheck;
+        [Header("조준, 무조준 공격, 공격 중 이동")] public List<WeaponInfo> weaponInfo;
         public IKController ik;
 
         public bool ableToLeft;
@@ -30,11 +42,11 @@ namespace JJS
 
         public virtual int GetUseWeapon()
         {
-            if (Weapon.Length != 0)
+            if (weaponInfo.Count != 0)
             {
-                for (int i = 0; i < Weapon.Length; ++i)
+                for (int i = 0; i < weaponInfo.Count; ++i)
                 {
-                    if (Weapon[i].activeSelf)
+                    if (weaponInfo[i].weapon.activeSelf)
                     {
                         return i;
                     }
@@ -60,15 +72,39 @@ namespace JJS
 
         public virtual void WeaponSwap()
         {
-            if (Weapon.Length != 0)
+            if (weaponInfo.Count != 0)
             {
-                for (int i = 0; i < Weapon.Length; ++i)
+                for (int i = 0; i < weaponInfo.Count; ++i)
                 {
-                    Weapon[i].SetActive(!Weapon[i].activeSelf);
+                    weaponInfo[i].weapon.SetActive(!weaponInfo[i].weapon.activeSelf);
                 }
             }
         }
 
+        public virtual bool GetCustomInfo()
+        {
+            return false;
+        }
+
+        //public virtual bool InputLeftMouseButton()
+        //{
+            
+        //}
+
+        //public virtual bool InputLeftMouseButtonDown()
+        //{
+
+        //}
+
+        //public virtual bool InputRightMouseButton()
+        //{
+            
+        //}
+
+        //public virtual bool InputRightMouseButtonDown()
+        //{
+
+        //}
     }
 
 }

@@ -7,7 +7,7 @@ using Photon.Pun;
 using YC.Camera_;
 using YC.Camera_Single;
 
-using JCW.UI.Options.InputBindings;
+
 using JCW.UI.InGame;
 
 namespace KSU
@@ -18,6 +18,7 @@ namespace KSU
         PlayerController playerController;
         PlayerState playerState;
         Rigidbody playerRigidbody;
+        Animator playerAnimator;
 
         public float grappleSpeed = 10f;
         public float escapeGrapplePower = 10f;
@@ -41,12 +42,11 @@ namespace KSU
         public float rangeAngle = 30f;
         //public GameObject sphere;
 
-        public GameObject hookableTarget;
+        public GameObject grappledTarget;
 
         Vector3 grappleVec;
         Vector3 targetPosition;
 
-        public bool isGrappledObjectCollided = false;
 
         List<GameObject> grappledObjects = new();
 
@@ -80,9 +80,12 @@ namespace KSU
             else
                 playerCamera = this.gameObject.GetComponent<CameraController_Single>().FindCamera(); // 싱글용
             grappleObject = Instantiate(grappleObject);
+            grappleObject.SetActive(false);
             grapple = grappleObject.GetComponent<SteadyGrapple>();
             grapple.player = this;
             grapple.spawner = grappleSpawner;
+
+            playerAnimator = GetComponent<Animator>();
         }
 
         void Update()
@@ -92,7 +95,6 @@ namespace KSU
             if (grappleSpawner.activeSelf && grappleSpawner.transform.parent.gameObject.activeSelf)
             {
                 MakeGizmoVecs();
-                InputFire();
             }
             MoveToTarget();
         }
@@ -119,41 +121,44 @@ namespace KSU
         //}
         public void SearchGrappledObject()
         {
-            if (playerState.aim)
+            if(!playerAnimator.GetBool("isShootingGrapple"))
             {
-                Vector3 cameraForwardXZ = playerCamera.transform.forward;
-                cameraForwardXZ.y = 0;
-                Vector3 rayOrigin = playerCamera.transform.position;
-                Vector3 rayEnd = (playerCamera.transform.position + playerCamera.transform.forward * (rangeDistance + rangeRadius * 2f));
-                Vector3 direction = (rayEnd - rayOrigin).normalized;
-                bool isRayChecked = Physics.SphereCast(rayOrigin, rangeRadius, direction, out _raycastHit, rangeDistance, layerForGrapple, QueryTriggerInteraction.Ignore);
-
-                if (isRayChecked)
+                if (playerState.aim)
                 {
-                    direction = (_raycastHit.collider.gameObject.transform.position - rayOrigin).normalized;
-                    isRayChecked = Physics.SphereCast(rayOrigin, 0.2f, direction, out _raycastHit, (rangeDistance + rangeRadius * 2f), layerFilterForGrapple, QueryTriggerInteraction.Ignore);
+                    Vector3 cameraForwardXZ = playerCamera.transform.forward;
+                    cameraForwardXZ.y = 0;
+                    Vector3 rayOrigin = playerCamera.transform.position;
+                    Vector3 rayEnd = (playerCamera.transform.position + playerCamera.transform.forward * (rangeDistance + rangeRadius * 2f));
+                    Vector3 direction = (rayEnd - rayOrigin).normalized;
+                    bool isRayChecked = Physics.SphereCast(rayOrigin, rangeRadius, direction, out _raycastHit, rangeDistance, layerForGrapple, QueryTriggerInteraction.Ignore);
+
                     if (isRayChecked)
                     {
-                        if (_raycastHit.collider.CompareTag("GrappledObject"))
+                        direction = (_raycastHit.collider.gameObject.transform.position - rayOrigin).normalized;
+                        isRayChecked = Physics.SphereCast(rayOrigin, 0.2f, direction, out _raycastHit, (rangeDistance + rangeRadius * 2f), layerFilterForGrapple, QueryTriggerInteraction.Ignore);
+                        if (isRayChecked)
                         {
-                            if (Vector3.Angle(playerCamera.transform.forward, (_raycastHit.collider.gameObject.transform.position - rayOrigin)) < rangeAngle)
+                            if (_raycastHit.collider.CompareTag("GrappledObject"))
                             {
-                                autoAimPosition = _raycastHit.collider.gameObject.transform.position;
-                                steadyInteractionState.isGrappledObjectFounded = true;
-                                return;
+                                if (Vector3.Angle(playerCamera.transform.forward, (_raycastHit.collider.gameObject.transform.position - rayOrigin)) < rangeAngle)
+                                {
+                                    autoAimPosition = _raycastHit.collider.gameObject.transform.position;
+                                    steadyInteractionState.isGrappledObjectFounded = true;
+                                    return;
+                                }
                             }
                         }
                     }
                 }
+                steadyInteractionState.isGrappledObjectFounded = false;
             }
-            steadyInteractionState.isGrappledObjectFounded = false;
         }
 
-        void InputFire()
+        public void InputFire()
         {
-            if(!grapple.gameObject.activeSelf)
+            if (grappleSpawner.activeSelf && grappleSpawner.transform.parent.gameObject.activeSelf)
             {
-                if (KeyManager.Instance.GetKeyDown(PlayerAction.Fire)) //갈고리 날아가는 도중엔 못쏘게 추가해야함
+                if (!grapple.gameObject.activeSelf)
                 {
                     grappleSpawner.SetActive(false);
                     if (steadyInteractionState.isGrappledObjectFounded)
@@ -174,9 +179,10 @@ namespace KSU
 
         public void RecieveGrappleInfo(bool isSuceeded, GameObject targetObj)
         {
+            steadyInteractionState.isSucceededInGrappling = isSuceeded;
             if (isSuceeded)
             {
-                Hook(targetObj);
+                grappledTarget = targetObj;
             }
             else
             {
@@ -184,16 +190,21 @@ namespace KSU
             }
         }
 
-        public void Hook(GameObject targetObj)
+        public bool GetWhetherHit()
         {
-            playerController.enabled = false;
+            return steadyInteractionState.isSucceededInGrappling;
+        }
+
+        public void Hook()
+        {
+            playerController.characterState.isOutOfControl = true;
             playerState.IsAirJumping = false;
             playerState.WasAirDashing = false;
             playerState.IsGrounded = false;
-            Debug.Log("targetObj: " + targetObj.name);
-            Debug.Log("targetObj.GetComponent<GrappledObject>() : " + targetObj.GetComponent<GrappledObject>());
-            Debug.Log("offset: " + targetObj.GetComponent<GrappledObject>().GetOffsetPosition());
-            targetPosition = targetObj.GetComponent<GrappledObject>().GetOffsetPosition();
+            Debug.Log("targetObj: " + grappledTarget.name);
+            Debug.Log("targetObj.GetComponent<GrappledObject>() : " + grappledTarget.GetComponent<GrappledObject>());
+            Debug.Log("offset: " + grappledTarget.GetComponent<GrappledObject>().GetOffsetPosition());
+            targetPosition = grappledTarget.GetComponent<GrappledObject>().GetOffsetPosition();
             grappleVec = (targetPosition - transform.position).normalized * grappleSpeed;
             Vector3 lookVec = grappleVec;
             lookVec.y = 0;
@@ -215,6 +226,7 @@ namespace KSU
 
         void SendInfoUI()
         {
+            Debug.Log("grappledObjects.Count: " + grappledObjects.Count);
             if (grappledObjects.Count > 0)
             {
                 foreach (var grappledObject in grappledObjects)
@@ -235,6 +247,8 @@ namespace KSU
 
         public void EscapeMoving()
         {
+            grappledTarget = null;
+            steadyInteractionState.isSucceededInGrappling = false;
             grappleSpawner.SetActive(true);
             steadyInteractionState.isGrappling = false;
             Vector3 inertiaVec = grappleVec;
@@ -243,7 +257,7 @@ namespace KSU
 
             playerController.MakeinertiaVec(escapeGrapplePower, transform.forward.normalized);
             playerController.moveVec = Vector3.up * jumpPower;
-            playerController.enabled = true;
+            playerController.characterState.isOutOfControl = false;
             grapple.gameObject.SetActive(false);
         }
 
@@ -297,14 +311,15 @@ namespace KSU
 
         private void OnTriggerEnter(Collider other)
         {
-            if (other.CompareTag("GrappledObject"))
+            
+            if ((other.gameObject.layer == LayerMask.NameToLayer("UITriggers")) && other.CompareTag("GrappledObject"))
             {
                 grappledObjects.Add(other.gameObject);
             }
         }
         private void OnTriggerExit(Collider other)
         {
-            if (other.CompareTag("GrappledObject"))
+            if ((other.gameObject.layer == LayerMask.NameToLayer("UITriggers")) && other.CompareTag("GrappledObject"))
             {
                 other.gameObject.transform.parent.gameObject.GetComponentInChildren<TargetIndicator>().SetUI(false, playerCamera);
                 grappledObjects.Remove(other.gameObject);

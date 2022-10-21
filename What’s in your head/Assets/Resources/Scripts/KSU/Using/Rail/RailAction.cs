@@ -304,7 +304,7 @@ namespace KSU
 
         public void StartRailAction()
         {
-            playerController.enabled = false;
+            playerController.characterState.isOutOfControl = true;
             playerRigidbody.velocity = Vector3.zero;
             playerState.IsDashing = false;
             playerState.IsAirJumping = false;

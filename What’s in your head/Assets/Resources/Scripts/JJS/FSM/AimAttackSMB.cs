@@ -13,7 +13,7 @@ namespace JJS
 
         override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
         {
-            if (GetPlayerController(animator).enabled)
+            if (GetPlayerController(animator).characterState.isMine)
             {
               
                 check(animator);

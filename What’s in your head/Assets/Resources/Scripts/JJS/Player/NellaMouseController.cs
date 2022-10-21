@@ -41,9 +41,9 @@ namespace JJS
 
         public override void SetWeaponEnable(int weaponIndex,bool enable)
         {
-            if (Weapon.Length != 0)
+            if (weaponInfo.Count != 0)
             {
-                Weapon[weaponIndex].SetActive(enable);
+                weaponInfo[weaponIndex].weapon.SetActive(enable);
             }
         }
 

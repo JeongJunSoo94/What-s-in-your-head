@@ -9,7 +9,7 @@ namespace JJS
     {
         override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
         {
-            if (GetPlayerController(animator).enabled)
+            if (GetPlayerController(animator).characterState.isMine)
             {
                 GetPlayerController(animator).characterState.aim = true;
             }
@@ -19,7 +19,7 @@ namespace JJS
         {
             GetPlayerController(animator).playerMouse.AimUpdate(1);
             GetPlayerController(animator).playerMouse.ik.enableIK = true;
-            if (GetPlayerController(animator).enabled)
+            if (GetPlayerController(animator).characterState.isMine)
             {
                 GetPlayerController(animator).AimViewInputMove();
                 animator.SetFloat("MoveX", GetPlayerController(animator).moveDir.normalized.x * (GetPlayerController(animator).characterState.isMove ? 1.0f : 0.0f));
@@ -32,7 +32,7 @@ namespace JJS
 
         public override void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
         {
-            if (GetPlayerController(animator).enabled)
+            if (GetPlayerController(animator).characterState.isMine)
             {
                 GetPlayerController(animator).characterState.aim = false;
             }

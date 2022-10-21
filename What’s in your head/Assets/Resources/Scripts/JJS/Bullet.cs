@@ -49,7 +49,10 @@ namespace JJS
                 other.gameObject.SendMessage("GetDamaged");
 
             Debug.Log(other.gameObject.name);
-            spawner.Despawn(this.gameObject);
+            if(!(other.gameObject.layer == LayerMask.NameToLayer("UITriggers")))
+            {
+                spawner.Despawn(this.gameObject);
+            }
         }
 
     }

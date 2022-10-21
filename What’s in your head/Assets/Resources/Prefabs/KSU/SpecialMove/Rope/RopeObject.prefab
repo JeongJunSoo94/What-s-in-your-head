@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &1542640131
+--- !u!1 &2533938642016885039
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,46 +8,172 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 1542640132}
-  - component: {fileID: 1542640135}
-  - component: {fileID: 1542640134}
+  - component: {fileID: 2533938642016885033}
+  - component: {fileID: 5004490685935881634}
   m_Layer: 10
+  m_Name: NellaRopeCenter
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
+--- !u!4 &2533938642016885033
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2533938642016885039}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 6651808157955961874}
+  m_Father: {fileID: 6881603122338134843}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &5004490685935881634
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2533938642016885039}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 78d85ff96e38a134683cb0819eb1f44f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  spawner: {fileID: 6881603122338134840}
+  ropeAnchor: {fileID: 8498836600798948919}
+  rope: {fileID: 5004490687421568997}
+  player: {fileID: 0}
+  startXAngle: 0
+  rotationX: 0
+  startYRotation: 0
+  targetAddYRotationDefault: 0
+  currentAddYRotationDefault: 0
+  targetAddYRotation: 0
+  currentAddYRotation: 0
+  rotationTolerance: 5
+  isReadyToRide: 0
+  isRopeExisting: 0
+  isSwingForward: 1
+  isRotating: 1
+  isRotatingToDefault: 1
+  moveToRopeSpeed: 4
+--- !u!1 &4572983599584445800
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6909459629311670717}
+  - component: {fileID: 5004490687517360604}
+  m_Layer: 10
+  m_Name: SteadyRopeCenter
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
+--- !u!4 &6909459629311670717
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4572983599584445800}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 6042323652880642058}
+  m_Father: {fileID: 6881603122338134843}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &5004490687517360604
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4572983599584445800}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 78d85ff96e38a134683cb0819eb1f44f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  spawner: {fileID: 6881603122338134840}
+  ropeAnchor: {fileID: 6800200630649093089}
+  rope: {fileID: 7128356471856483081}
+  player: {fileID: 0}
+  startXAngle: 0
+  rotationX: 0
+  startYRotation: 0
+  targetAddYRotationDefault: 0
+  currentAddYRotationDefault: 0
+  targetAddYRotation: 0
+  currentAddYRotation: 0
+  rotationTolerance: 5
+  isReadyToRide: 0
+  isRopeExisting: 0
+  isSwingForward: 1
+  isRotating: 1
+  isRotatingToDefault: 1
+  moveToRopeSpeed: 4
+--- !u!1 &5004490686744432656
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5004490686744432663}
+  - component: {fileID: 5004490686744432660}
+  - component: {fileID: 5004490686744432661}
+  m_Layer: 9
   m_Name: Sphere
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &1542640132
+--- !u!4 &5004490686744432663
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1542640131}
+  m_GameObject: {fileID: 5004490686744432656}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 1942133735139718139}
+  m_Father: {fileID: 6881603120986321384}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!33 &1542640135
+--- !u!33 &5004490686744432660
 MeshFilter:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1542640131}
+  m_GameObject: {fileID: 5004490686744432656}
   m_Mesh: {fileID: 10207, guid: 0000000000000000e000000000000000, type: 0}
---- !u!23 &1542640134
+--- !u!23 &5004490686744432661
 MeshRenderer:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1542640131}
+  m_GameObject: {fileID: 5004490686744432656}
   m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 1
@@ -83,7 +209,7 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!1 &1935054326
+--- !u!1 &5004490687421568997
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -91,7 +217,7 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 1935054327}
+  - component: {fileID: 5004490687421568996}
   m_Layer: 10
   m_Name: NellaRope
   m_TagString: Untagged
@@ -99,22 +225,22 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &1935054327
+--- !u!4 &5004490687421568996
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1935054326}
+  m_GameObject: {fileID: 5004490687421568997}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 1818466361812678145}
+  m_Father: {fileID: 6651808157955961874}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &1942133735139718136
+--- !u!1 &6800200630649093089
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -122,46 +248,79 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 1942133735139718139}
-  - component: {fileID: 3201554413995192656}
+  - component: {fileID: 6042323652880642058}
   m_Layer: 10
+  m_Name: SteadyRopePendulum
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6042323652880642058
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6800200630649093089}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 651002978485470910}
+  m_Father: {fileID: 6909459629311670717}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &6881603120986321387
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6881603120986321384}
+  - component: {fileID: 7574404785446695747}
+  m_Layer: 9
   m_Name: RopeObject
   m_TagString: Rope
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &1942133735139718139
+--- !u!4 &6881603120986321384
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1942133735139718136}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 17, z: -30}
+  m_GameObject: {fileID: 6881603120986321387}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 15, z: -40}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 1942133735771814184}
-  - {fileID: 1542640132}
+  - {fileID: 6881603122338134843}
+  - {fileID: 5004490686744432663}
+  - {fileID: 7318167261003115763}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!135 &3201554413995192656
+--- !u!135 &7574404785446695747
 SphereCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1942133735139718136}
+  m_GameObject: {fileID: 6881603120986321387}
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
   m_Radius: 0.5
   m_Center: {x: 0, y: 0, z: 0}
---- !u!1 &1942133735771814180
+--- !u!1 &6881603122338134839
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -169,50 +328,50 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 1942133735771814184}
-  - component: {fileID: 1942133735771814185}
-  - component: {fileID: 1942133735771814182}
-  - component: {fileID: 1942133735771814183}
-  - component: {fileID: 1942133735771814187}
-  m_Layer: 10
+  - component: {fileID: 6881603122338134843}
+  - component: {fileID: 6881603122338134842}
+  - component: {fileID: 6881603122338134837}
+  - component: {fileID: 6881603122338134836}
+  - component: {fileID: 6881603122338134840}
+  m_Layer: 12
   m_Name: RopeSpawner
   m_TagString: Rope
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &1942133735771814184
+--- !u!4 &6881603122338134843
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1942133735771814180}
+  m_GameObject: {fileID: 6881603122338134839}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 7375169984744954682}
-  - {fileID: 1914259842798975918}
-  m_Father: {fileID: 1942133735139718139}
+  - {fileID: 2533938642016885033}
+  - {fileID: 6909459629311670717}
+  m_Father: {fileID: 6881603120986321384}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!33 &1942133735771814185
+--- !u!33 &6881603122338134842
 MeshFilter:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1942133735771814180}
+  m_GameObject: {fileID: 6881603122338134839}
   m_Mesh: {fileID: 10207, guid: 0000000000000000e000000000000000, type: 0}
---- !u!23 &1942133735771814182
+--- !u!23 &6881603122338134837
 MeshRenderer:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1942133735771814180}
+  m_GameObject: {fileID: 6881603122338134839}
   m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 1
@@ -248,40 +407,43 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!135 &1942133735771814183
+--- !u!135 &6881603122338134836
 SphereCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1942133735771814180}
+  m_GameObject: {fileID: 6881603122338134839}
   m_Material: {fileID: 0}
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
   m_Radius: 0.5
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &1942133735771814187
+--- !u!114 &6881603122338134840
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1942133735771814180}
+  m_GameObject: {fileID: 6881603122338134839}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 3d54e5f945b03114ca01660d2a991e79, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  NellaRopeAction: {fileID: 7375169984744954684}
-  SteadyRopeAction: {fileID: 8792440004115613563}
+  NellaRopeAction: {fileID: 2533938642016885039}
+  SteadyRopeAction: {fileID: 4572983599584445800}
+  UIObj: {fileID: 0}
   detectingRange: 25
   interactableRange: 10
   ropeLength: 7.5
   rotationSpeed: 30
   swingSpeed: 60
+  SwingDeltaSpeed: 0.4
+  waitTime: 0.1
   swingAngle: 60
---- !u!1 &1958133118479907314
+--- !u!1 &7128356471856483081
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -289,39 +451,7 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 1632872189339496985}
-  m_Layer: 10
-  m_Name: SteadyRopePendulum
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1632872189339496985
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1958133118479907314}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 5511093131758322861}
-  m_Father: {fileID: 1914259842798975918}
-  m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &2854868412701149466
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 5511093131758322861}
+  - component: {fileID: 651002978485470910}
   m_Layer: 10
   m_Name: SteadyRope
   m_TagString: Untagged
@@ -329,22 +459,22 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &5511093131758322861
+--- !u!4 &651002978485470910
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2854868412701149466}
+  m_GameObject: {fileID: 7128356471856483081}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 1632872189339496985}
+  m_Father: {fileID: 6042323652880642058}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &3495474043969104932
+--- !u!1 &8498836600798948919
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -352,7 +482,7 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 1818466361812678145}
+  - component: {fileID: 6651808157955961874}
   m_Layer: 10
   m_Name: NellaRopePendulum
   m_TagString: Untagged
@@ -360,145 +490,81 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &1818466361812678145
+--- !u!4 &6651808157955961874
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3495474043969104932}
+  m_GameObject: {fileID: 8498836600798948919}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 1935054327}
-  m_Father: {fileID: 7375169984744954682}
+  - {fileID: 5004490687421568996}
+  m_Father: {fileID: 2533938642016885033}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &7375169984744954684
-GameObject:
+--- !u!1001 &5004490686661099550
+PrefabInstance:
   m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 7375169984744954682}
-  - component: {fileID: 1439142223}
-  m_Layer: 10
-  m_Name: NellaRopeCenter
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 0
---- !u!4 &7375169984744954682
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 6881603120986321384}
+    m_Modifications:
+    - target: {fileID: 2377020555910212845, guid: e945d683716bac04592b587c13092335, type: 3}
+      propertyPath: m_RootOrder
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2377020555910212845, guid: e945d683716bac04592b587c13092335, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2377020555910212845, guid: e945d683716bac04592b587c13092335, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2377020555910212845, guid: e945d683716bac04592b587c13092335, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2377020555910212845, guid: e945d683716bac04592b587c13092335, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2377020555910212845, guid: e945d683716bac04592b587c13092335, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2377020555910212845, guid: e945d683716bac04592b587c13092335, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2377020555910212845, guid: e945d683716bac04592b587c13092335, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2377020555910212845, guid: e945d683716bac04592b587c13092335, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2377020555910212845, guid: e945d683716bac04592b587c13092335, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2377020555910212845, guid: e945d683716bac04592b587c13092335, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2377020555910212846, guid: e945d683716bac04592b587c13092335, type: 3}
+      propertyPath: m_Name
+      value: IndicatorUI
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: e945d683716bac04592b587c13092335, type: 3}
+--- !u!4 &7318167261003115763 stripped
 Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
+  m_CorrespondingSourceObject: {fileID: 2377020555910212845, guid: e945d683716bac04592b587c13092335, type: 3}
+  m_PrefabInstance: {fileID: 5004490686661099550}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7375169984744954684}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 1818466361812678145}
-  m_Father: {fileID: 1942133735771814184}
-  m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1439142223
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7375169984744954684}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0ce79e8d3559ccb40a5e787289046dce, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  spawner: {fileID: 1942133735771814187}
-  ropeAnchor: {fileID: 3495474043969104932}
-  rope: {fileID: 1935054326}
-  player: {fileID: 0}
-  startXAngle: 0
-  rotationX: 0
-  startYRotation: 0
-  targetAddYRotationDefault: 0
-  currentAddYRotationDefault: 0
-  targetAddYRotation: 0
-  currentAddYRotation: 0
-  rotationTolerance: 5
-  isReadyToRide: 0
-  isRopeExisting: 0
-  isSwingForward: 1
-  isRotating: 1
-  isRotatingToDefault: 1
-  moveToRopeSpeed: 4
---- !u!1 &8792440004115613563
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1914259842798975918}
-  - component: {fileID: 1323996954}
-  m_Layer: 10
-  m_Name: SteadyRopeCenter
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 0
---- !u!4 &1914259842798975918
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8792440004115613563}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 1632872189339496985}
-  m_Father: {fileID: 1942133735771814184}
-  m_RootOrder: 1
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1323996954
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8792440004115613563}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0ce79e8d3559ccb40a5e787289046dce, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  spawner: {fileID: 1942133735771814187}
-  ropeAnchor: {fileID: 1958133118479907314}
-  rope: {fileID: 2854868412701149466}
-  player: {fileID: 0}
-  startXAngle: 0
-  rotationX: 0
-  startYRotation: 0
-  targetAddYRotationDefault: 0
-  currentAddYRotationDefault: 0
-  targetAddYRotation: 0
-  currentAddYRotation: 0
-  rotationTolerance: 5
-  isReadyToRide: 0
-  isRopeExisting: 0
-  isSwingForward: 1
-  isRotating: 1
-  isRotatingToDefault: 1
-  moveToRopeSpeed: 4

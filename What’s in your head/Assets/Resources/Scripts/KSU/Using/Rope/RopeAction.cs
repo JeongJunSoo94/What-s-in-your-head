@@ -226,7 +226,7 @@ namespace KSU
             transform.LookAt(transform.position + inertiaVec);
             playerController.MakeinertiaVec(escapingRopeSpeed, inertiaVec.normalized);
             playerController.moveVec = Vector3.up * playerController.jumpSpeed * jumpPower;
-            playerController.enabled = true;
+            playerController.characterState.isOutOfControl = false;
             rope.enabled = false;
         }
 
@@ -246,7 +246,7 @@ namespace KSU
                 {
                     //isMine false면 안보냄 / 현재 널
                     //Debug.Log(rope.Key.GetComponentInChildren<TargetIndicator>().gameObject.name);
-                    rope.Key.GetComponentInChildren<TargetIndicator>().SetUI(rope.Value.isUIActive, rope.Value.isInteractable, rope.Value.distance, mainCamera);
+                    rope.Key.transform.parent.gameObject.GetComponentInChildren<TargetIndicator>().SetUI(rope.Value.isUIActive, rope.Value.isInteractable, rope.Value.distance, mainCamera);
                     // UI상태(bool)가 다르면 신호 struct Obj_Info(bool isUIActive,bool isInteractive, float distance)를 보냄
                 }
             }
