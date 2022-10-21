@@ -58,8 +58,7 @@ namespace JCW.UI
             }
 
             buttonList[(int)MenuSelect.Play].onClick.AddListener(() => 
-            { 
-                playObj.SetActive(true);
+            {                 
                 RoomOptions lobbyOptions = new()
                 {
                     MaxPlayers = 20,    // 최대 접속자수, 포톤 무료는 20CCU이므로 20 초과로는 못한다.
@@ -67,6 +66,7 @@ namespace JCW.UI
                     IsVisible = false,   // 로비에서 룸 목록에 노출시킬지 여부  
                 };
                 PhotonNetwork.JoinOrCreateRoom("Lobby", lobbyOptions, null);
+                StartCoroutine(nameof(OpenRoom));
             });
 
             buttonList[(int)MenuSelect.Option].onClick.AddListener(() => { optionObj.SetActive(true); });
@@ -80,8 +80,18 @@ namespace JCW.UI
                 #endif
             });
 
-            yield return null;
+            yield break;
 
+        }
+
+        IEnumerator OpenRoom()
+        {
+            while (PhotonNetwork.NetworkClientState != ClientState.Joined)
+            {
+                yield return null;
+            }
+            playObj.SetActive(true);
+            yield break;
         }
     }
 }

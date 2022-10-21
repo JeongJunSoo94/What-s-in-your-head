@@ -7,8 +7,11 @@ namespace JJS
     public class Bullet : MonoBehaviour
     {
         float bulletRange;
+        public float speed= 1f;
         public BezierCurve curve;
         public Spawner spawner;
+
+        public Vector3 vecDistance;
         private void Awake()
         {
             spawner = this.transform.parent.gameObject.GetComponent<Spawner>();
@@ -21,6 +24,7 @@ namespace JJS
         private void OnEnable()
         {
             bulletRange = 0f;
+            vecDistance = curve.p1 - curve.p4;
         }
 
         // >> : 찬, 총알 발사 관련 수정 
@@ -28,7 +32,7 @@ namespace JJS
         {
             if (bulletRange < 1f)
             {
-                bulletRange += Time.deltaTime;
+                bulletRange += speed * Time.deltaTime;
             }
             else
             {
@@ -42,10 +46,7 @@ namespace JJS
         private void OnTriggerEnter(Collider other)
         {
             if (other.gameObject.CompareTag("ContaminationField"))
-            {
-                Debug.Log("나가라");
                 other.gameObject.SendMessage("GetDamaged");
-            }
 
             Debug.Log(other.gameObject.name);
             spawner.Despawn(this.gameObject);

@@ -4,8 +4,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-
-
 namespace JCW.Object
 {
     [RequireComponent(typeof(PhotonView))]
@@ -16,6 +14,7 @@ namespace JCW.Object
         [Header("두 번째 스폰 시간")][SerializeField] float secondSpawnTime = 120f;
         [Header("깜빡거리는 시간")][SerializeField] float flickTime = 1f;
         [Header("주위 필드 감염 소요 시간")][SerializeField] float infectTime = 5f;
+        [Header("감염 가능 여부")][SerializeField] bool canInfect = true;
 
         int usingCount;
         List<int> firstSpawnPlace;
@@ -28,8 +27,13 @@ namespace JCW.Object
 
         private void Awake()
         {
-            photonView = this.gameObject.GetComponent<PhotonView>();
-            usingCount = this.gameObject.GetComponent<ContaminationFieldSetting>().count;
+            photonView = GetComponent<PhotonView>();
+            if (!canInfect)
+            {
+                this.enabled = false;
+                return;
+            }
+            usingCount = GetComponent<ContaminationFieldSetting>().count;
 
             // 스폰될 수 있는 각 꼭지점 정해두기
             firstSpawnPlace = new() { 1, 2*usingCount-1, 2*usingCount*(usingCount-1)+1, 2*usingCount*usingCount-1 };
@@ -125,6 +129,7 @@ namespace JCW.Object
         [PunRPC]
         void SetPurifiedRPC(int myIndex)
         {
+            Debug.Log("정화시킬 인덱스 : " + myIndex);
             transform.GetChild(myIndex).gameObject.GetComponent<HostField>().enabled = false;
             transform.GetChild(myIndex).gameObject.SetActive(false);
             transform.GetChild(myIndex - 1).gameObject.SetActive(true);

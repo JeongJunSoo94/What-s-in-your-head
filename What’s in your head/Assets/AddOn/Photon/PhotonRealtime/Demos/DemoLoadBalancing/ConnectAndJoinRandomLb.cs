@@ -30,7 +30,7 @@ namespace Photon.Realtime.Demo
                 Debug.LogError("Error while connecting");
             }
 
-            this.ch = this.gameObject.GetComponent<ConnectionHandler>();
+            this.ch = GetComponent<ConnectionHandler>();
             if (this.ch != null)
             {
                 this.ch.Client = this.lbc;

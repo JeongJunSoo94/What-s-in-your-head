@@ -12,14 +12,18 @@ namespace KSU
 {
     public struct Obj_Info
     {
-        public Obj_Info(bool isUIAct, bool isInter, float dist, Camera pCamera)
+        public Obj_Info(bool isUIAct, bool isInter, float dist)
         {
-            isUIActive = isUIAct; isInteractable = isInter; distance = dist; playerCamera = pCamera;
+            isUIActive = isUIAct; isInteractable = isInter; distance = dist;
+        }
+
+        public Obj_Info(bool isUIAct, bool isInter)
+        {
+            isUIActive = isUIAct; isInteractable = isInter; distance = 0;
         }
         public bool isUIActive;
         public bool isInteractable;
         public float distance;
-        public Camera playerCamera;
     }
 
     public class RopeAction : MonoBehaviour
@@ -50,9 +54,9 @@ namespace KSU
             playerState = GetComponent<PlayerState>();
             interactionState = GetComponent<PlayerInteractionState>();
             if (PhotonNetwork.NetworkClientState == Photon.Realtime.ClientState.Joined)
-                mainCamera = this.gameObject.GetComponent<CameraController>().FindCamera(); // 멀티용
+                mainCamera = GetComponent<CameraController>().FindCamera(); // 멀티용
             else
-                mainCamera = this.gameObject.GetComponent<CameraController_Single>().FindCamera(); // 싱글용
+                mainCamera = GetComponent<CameraController_Single>().FindCamera(); // 싱글용
 
             if (mainCamera == null)
                 Debug.Log("카메라 NULL");
@@ -86,7 +90,6 @@ namespace KSU
 
                 }
                 Obj_Info node = new();
-                node.playerCamera = mainCamera;
                 float minDist = 100f;
                 GameObject minDistObj = null;
                 Dictionary<GameObject, Obj_Info> temp = new();
@@ -243,8 +246,7 @@ namespace KSU
                 {
                     //isMine false면 안보냄 / 현재 널
                     //Debug.Log(rope.Key.GetComponentInChildren<TargetIndicator>().gameObject.name);
-                    Debug.Log("넘겨줄 카메라" + rope.Value.playerCamera);
-                    rope.Key.GetComponentInChildren<TargetIndicator>().SetUI(rope.Value.isUIActive, rope.Value.isInteractable, rope.Value.distance, rope.Value.playerCamera);
+                    rope.Key.GetComponentInChildren<TargetIndicator>().SetUI(rope.Value.isUIActive, rope.Value.isInteractable, rope.Value.distance, mainCamera);
                     // UI상태(bool)가 다르면 신호 struct Obj_Info(bool isUIActive,bool isInteractive, float distance)를 보냄
                 }
             }
@@ -252,17 +254,19 @@ namespace KSU
 
         private void OnTriggerEnter(Collider other)
         {
-            if(other.CompareTag("Rope") && this.gameObject.GetComponent<PhotonView>().IsMine)
+            if(other.CompareTag("Rope") && GetComponent<PhotonView>().IsMine)
             {
                 Debug.Log("트리거 엔터 : " + mainCamera);
-                detectedRopes.Add(other.gameObject, new Obj_Info(false, false, 100f, mainCamera));
+                detectedRopes.Add(other.gameObject, new Obj_Info(false, false, 100f));
             }
         }
 
         private void OnTriggerExit(Collider other)
         {
-            if (other.CompareTag("Rope") && this.gameObject.GetComponent<PhotonView>().IsMine)
+            if (other.CompareTag("Rope") && GetComponent<PhotonView>().IsMine)
             {
+                Debug.Log("트리거 탈출 : " + mainCamera);
+                other.gameObject.GetComponentInChildren<TargetIndicator>().SetUI(false, false, 100f, mainCamera);                
                 detectedRopes.Remove(other.gameObject);
             }
         }

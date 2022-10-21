@@ -42,7 +42,7 @@ namespace JCW.UI.Options
 
             isSlider = funcTexts.Count==0;
 
-            hoveringImg = this.gameObject.GetComponent<Image>();
+            hoveringImg = GetComponent<Image>();
             if (isSlider)
             {
                 slider = funcValue.GetComponent<Slider>();

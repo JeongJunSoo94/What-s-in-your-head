@@ -46,8 +46,8 @@ namespace JCW.UI
             if (this.gameObject.name.Contains("Nella"))
                 isNella = true;
 
-            thisImg = this.gameObject.GetComponent<Image>();
-            photonView = this.gameObject.GetComponent<PhotonView>();
+            thisImg = GetComponent<Image>();
+            photonView = GetComponent<PhotonView>();
 
             // 버튼을 누른 사람
             curButtonOwner = this.gameObject.transform.GetChild(0).gameObject.GetComponent<Text>();
@@ -62,7 +62,7 @@ namespace JCW.UI
             charName = character.GetComponent<Text>();
             charDesc = character.transform.GetChild(0).gameObject.GetComponent<Text>();
 
-            this.gameObject.GetComponent<Button>().onClick.AddListener(() =>
+            GetComponent<Button>().onClick.AddListener(() =>
             {
                 photonView.RPC(nameof(SelectSprite), RpcTarget.AllViaServer, PhotonNetwork.LocalPlayer.NickName, PhotonNetwork.IsMasterClient);
             });
@@ -75,7 +75,8 @@ namespace JCW.UI
 
         public void OnPointerExit(PointerEventData eventData)
         {
-            photonView.RPC(nameof(ChangeSprite), RpcTarget.AllViaServer, false, PhotonNetwork.IsMasterClient);
+            if(this.gameObject.activeSelf)
+                photonView.RPC(nameof(ChangeSprite), RpcTarget.AllViaServer, false, PhotonNetwork.IsMasterClient);
         }
 
         [PunRPC]
@@ -147,6 +148,8 @@ namespace JCW.UI
                         Debug.Log(player + " : " + character);
                     }
                     PhotonManager.Instance.ChangeStage();
+                    GameManager.Instance.AddAliveState(GameManager.Instance.characterOwner[PhotonNetwork.IsMasterClient], true);
+                    this.enabled = false;
                 }
             }
             // 본인이 선택했던 캐릭터 버튼을 다시 눌렀을 때

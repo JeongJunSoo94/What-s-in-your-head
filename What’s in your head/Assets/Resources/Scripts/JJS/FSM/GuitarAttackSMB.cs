@@ -2,84 +2,54 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using JCW.UI.Options.InputBindings;
-public class GuitarAttackSMB : CharacterBaseSMB
+using JJS.CharacterSMB;
+namespace JJS
 {
-    public int index;
-    bool onClick;
-    // OnStateEnter is called when a transition starts and the state machine starts to evaluate this state
-    override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
+    public class GuitarAttackSMB : CharacterBaseSMB
     {
-        GetPlayerController(animator).playerMouse.CheckLeftClick(1);
-        if (GetPlayerController(animator).enabled)
+        public int index;
+        bool onClick;
+        // OnStateEnter is called when a transition starts and the state machine starts to evaluate this state
+        override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
         {
             onClick = false;
-
         }
-    }
 
-    // OnStateUpdate is called on each Update frame between OnStateEnter and OnStateExit callbacks
-    override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
-    {
-        if (GetPlayerController(animator).enabled)
+        // OnStateUpdate is called on each Update frame between OnStateEnter and OnStateExit callbacks
+        override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
         {
-            Check(animator);
-        }
-    }
-    public override void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
-    {
-        if (GetPlayerController(animator).enabled)
-        {
-            animator.SetBool("isAttack1", false);
-
-            animator.SetBool("isAttack2", false);
-            animator.SetBool("isAttack3", false);
-        }
-    }
-    void Check(Animator animator)
-    {
-        if (!onClick)
-        {
-            if (KeyManager.Instance.GetKey(PlayerAction.Fire))
+            if (GetPlayerController3D(animator).enabled)
             {
-                switch (index)
+                Check(animator);
+            }
+        }
+        public override void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
+        {
+            animator.SetBool("isAttack", false);
+        }
+        void Check(Animator animator)
+        {
+            if (!onClick)
+            {
+                if (KeyManager.Instance.GetKey(PlayerAction.Fire))
                 {
-                    case 0:
-                        animator.SetBool("isAttack1", true); 
-                        break;
-                    case 1:
-                        animator.SetBool("isAttack2", true);
-                        break;
-                    case 2:
-                        animator.SetBool("isAttack3", true);
-                        break;
+                    animator.SetBool("isAttackNext", true);
+                }
+                else
+                {
+                    animator.SetBool("isAttackNext", false);
                 }
             }
-            else
+
             {
-                animator.SetBool("isAttack1", false);
-                animator.SetBool("isAttack2", false);
-                animator.SetBool("isAttack3", false);
-            }
-        }
-        
-        {
-            if (KeyManager.Instance.GetKeyDown(PlayerAction.Fire))
-            {
-                onClick = true;
-                switch (index)
+                if (KeyManager.Instance.GetKeyDown(PlayerAction.Fire))
                 {
-                    case 0:
-                        animator.SetBool("isAttack1", true);
-                        break;
-                    case 1:
-                        animator.SetBool("isAttack2", true);
-                        break;
-                    case 2:
-                        animator.SetBool("isAttack3", true);
-                        break;
+                    onClick = true;
+                    animator.SetBool("isAttackNext", true);
                 }
             }
+
         }
-        
     }
 }
+

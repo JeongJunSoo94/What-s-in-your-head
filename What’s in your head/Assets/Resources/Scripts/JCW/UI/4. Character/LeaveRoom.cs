@@ -30,13 +30,13 @@ namespace JCW.UI
 
             backButton.onClick.AddListener(() =>
             {
-                this.gameObject.GetComponent<PhotonView>().RPC(nameof(Leave), RpcTarget.AllViaServer);
+                GetComponent<PhotonView>().RPC(nameof(Leave), RpcTarget.AllViaServer);
             });
         }
 
         [PunRPC]
         public void Leave()
-        {
+        {            
             nellaButtonOwner.GetComponent<Text>().text = "";
             steadyButtonOwner.GetComponent<Text>().text = "";
 

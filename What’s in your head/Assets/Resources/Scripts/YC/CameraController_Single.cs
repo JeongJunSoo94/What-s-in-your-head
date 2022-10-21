@@ -70,7 +70,7 @@ namespace YC.Camera_Single
         public float sholderCameraSensitivity = 20;
 
 
-        PlayerController player;
+        PlayerController3D player;
 
         float sholderViewMaxY;
         [SerializeField] float sholderAxisY_MaxUp;
@@ -139,7 +139,7 @@ namespace YC.Camera_Single
                 OnOffCamera(camList[(int)curCam]);
             }
 
-            player = this.gameObject.GetComponent<PlayerController>();
+            player = GetComponent<PlayerController3D>();
 
         }
 
@@ -360,10 +360,11 @@ namespace YC.Camera_Single
             {
                 mainCam = GameObject.FindGameObjectWithTag("NellaCamera").GetComponent<Camera>();
 
-                //if (mainCam) Debug.Log("OK");
-                //else Debug.Log("NULL");
+                if (mainCam) Debug.Log("OK");
+                else Debug.Log("NULL");
 
                 cinemachineBrain = mainCam.GetComponent<CinemachineBrain>();
+                Debug.Log(CameraManager.Instance.cameras);
                 CameraManager.Instance.cameras[0] = mainCam;
 
             }

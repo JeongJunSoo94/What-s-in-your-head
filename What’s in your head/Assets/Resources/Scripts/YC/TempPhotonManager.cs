@@ -78,7 +78,7 @@ namespace YC.Photon
             ro.MaxPlayers = 20;     // 최대 접속자 수 : 20명
             ro.IsOpen = true;       // 룸의 오픈 여부
             ro.IsVisible = true;    // 로비에서 룸 목록에 노출 여부
-            PhotonNetwork.JoinOrCreateRoom("JCWz", ro, null);
+            PhotonNetwork.JoinOrCreateRoom("YC", ro, null);
         }
 
         // 랜덤 매치메이킹 실패시 호출되는 콜백 함수
@@ -93,7 +93,7 @@ namespace YC.Photon
             ro.IsVisible = true;    // 로비에서 룸 목록에 노출 여부
 
             // 룸 생성
-            PhotonNetwork.CreateRoom("My Room", ro);
+            PhotonNetwork.CreateRoom("YC", ro);
         }
 
         // 룸 생성이 완료시 호출되는 콜백 함수
@@ -127,8 +127,8 @@ namespace YC.Photon
             if (PhotonNetwork.CurrentRoom.PlayerCount == 1)
             {              
                 PhotonNetwork.Instantiate("Prefabs/YC/MainCamera_Nella", new Vector3(0, 0, 0), Quaternion.identity, 0);
-                GameObject Inst = PhotonNetwork.Instantiate("Prefabs/JCW/NellaJCW", new Vector3 (-5, 0, -5), Quaternion.identity, 0);
-
+                PhotonNetwork.Instantiate("Prefabs/JCW/NellaMousePoint", new Vector3(0, 0, 0), Quaternion.identity, 0);
+                PhotonNetwork.Instantiate("Prefabs/JCW/NellaJCW", new Vector3 (-5, 0, -5), Quaternion.identity, 0);
                 //CameraManager.Instance.cameras[0] = GameObject.FindGameObjectWithTag("NellaCamera").GetComponent<Camera>();
 
                 //CameraManager.Instance.cameras[0] = 
@@ -141,8 +141,8 @@ namespace YC.Photon
             else if (PhotonNetwork.CurrentRoom.PlayerCount == 2)
             {
                 PhotonNetwork.Instantiate("Prefabs/YC/MainCamera_Steady", new Vector3(0, 0, 0), Quaternion.identity, 0);
-                GameObject Inst = PhotonNetwork.Instantiate("Prefabs/JCW/SteadyJCW", new Vector3(5, 0, -5), Quaternion.identity, 0);
-
+                PhotonNetwork.Instantiate("Prefabs/JCW/SteadyMousePoint", new Vector3(0, 0, 0), Quaternion.identity, 0);
+                PhotonNetwork.Instantiate("Prefabs/JCW/SteadyJCW", new Vector3(5, 0, -5), Quaternion.identity, 0);
                 //CameraManager.Instance.cameras[1] = GameObject.FindGameObjectWithTag("SteadyCamera").GetComponent<Camera>();
 
                 //CameraManager.Instance.cameras[1] = 
