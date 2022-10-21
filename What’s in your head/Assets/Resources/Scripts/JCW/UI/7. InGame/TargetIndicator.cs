@@ -21,13 +21,13 @@ namespace JCW.UI.InGame
         [Header("넬라 - 감지 & 상호작용 스프라이트 및 클립")]
         [SerializeField] Sprite nella_DetectSprite;
         [SerializeField] Sprite nella_InteractableSprite;
-        [SerializeField] VideoClip nella_SetOnClip;
-        [SerializeField] VideoClip nella_SetOffClip;
+        [Tooltip("변환하는 경우에만 넣어주는 애니메이션 영상")][SerializeField] VideoClip nella_SetOnClip;
+        [Tooltip("변환하는 경우에만 넣어주는 애니메이션 영상")][SerializeField] VideoClip nella_SetOffClip;
         [Header("스테디 - 감지 & 상호작용 스프라이트 및 클립")]
         [SerializeField] Sprite steady_DetectSprite;
         [SerializeField] Sprite steady_InteractableSprite;
-        [SerializeField] VideoClip steady_SetOnClip;
-        [SerializeField] VideoClip steady_SetOffClip;
+        [Tooltip("변환하는 경우에만 넣어주는 애니메이션 영상")][SerializeField] VideoClip steady_SetOnClip;
+        [Tooltip("변환하는 경우에만 넣어주는 애니메이션 영상")][SerializeField] VideoClip steady_SetOffClip;
 
         private RectTransform canvasSize;
         
