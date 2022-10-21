@@ -6,7 +6,8 @@ using UnityEngine;
 
 namespace YC.CameraManager_
 {
-    public enum CharacterCamera { NELLA, STEADY};
+    public enum CharacterCamera { NELLA, STEADY };
+
     [RequireComponent(typeof(PhotonView))]
     public class CameraManager : MonoBehaviour
     {
@@ -16,6 +17,11 @@ namespace YC.CameraManager_
 
         PhotonView pv;
         public static CameraManager Instance = null;
+
+        float currentMiddleValue = 0.5f; // 현재 카메라 분할 중앙값
+
+
+        CharacterCamera curFullCamera;
 
         void Awake()
         {
@@ -31,100 +37,124 @@ namespace YC.CameraManager_
             cameras = new Camera[2];
             isBlending = false;
 
+            curFullCamera = new CharacterCamera();
+
         }
 
         void Update()
         {
             if (cameras[(int)CharacterCamera.NELLA] == null || cameras[(int)CharacterCamera.STEADY] == null) return;
 
-            if(pv.IsMine) CheckAndPlay();
+            if (pv.IsMine) CheckAndPlay();
 
             //Debug.Log(isBlending);
         }
 
         void CheckAndPlay()
         {
-            // 초기 아무 전체화면 (1 or 2)
-            // 넬라 죽음(3) -> 살아남(2)
-            // 스테디 죽음(4) -> 살아남 (1)
-
             if (isBlending) return;
 
             if (Input.GetKeyDown(KeyCode.Keypad1))
             {
-                //Debug.Log("넬라 카메라 전체화면");
-                pv.RPC(nameof(Cor_SetFullScreen), RpcTarget.AllBuffered, 0, 2f);                 
+                NellaDeadCam();
+
             }
             else if (Input.GetKeyDown(KeyCode.Keypad2))
             {
-                //Debug.Log("스테디 카메라 전체화면");
-                pv.RPC(nameof(Cor_SetFullScreen), RpcTarget.AllBuffered, 1, 2f);   
+                SteadyDeadCam();
             }
             else if (Input.GetKeyDown(KeyCode.Keypad3))
             {
-                //Debug.Log("(넬라가 죽었을때) 스테디 카메라 전체화면을 만들어주고, 넬라 카메라 만든다");
-                pv.RPC(nameof(InitCamera), RpcTarget.AllViaServer, 1);
-                pv.RPC(nameof(Cor_SetSizeCamera), RpcTarget.AllViaServer, 0, 0.36f, 2f);           
+                ReviveCam();
             }
             else if (Input.GetKeyDown(KeyCode.Keypad4))
             {
-                //Debug.Log("(스테디가 죽었을때) 넬라 카메라 전체화면을 만들어주고, 스테디 카메라 만든다");
-                pv.RPC(nameof(InitCamera), RpcTarget.AllBuffered, 0);
-                pv.RPC(nameof(Cor_SetSizeCamera), RpcTarget.AllBuffered, 1, 0.64f, 2f);               
+                //Cor_SetSplitCamera((int)CharacterCamera.NELLA, 0.64f, 2f); 다른 스테이지 미완
+            }
+            else if (Input.GetKeyDown(KeyCode.Keypad5))
+            {
+                //Cor_SetSplitCamera((int)CharacterCamera.STEADY, 0.36f, 2f); 다른 스테이지 미완
+
+            }
+            else if (Input.GetKeyDown(KeyCode.Keypad6))
+            {
+
             }
         }
+
+
+
+
+
+
+        // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> // 
+   
+        // 스테이지 3 디펜스 모드 : 넬라 죽었을 때 호출
         public void NellaDeadCam()
         {
-            pv.RPC(nameof(InitCamera), RpcTarget.AllViaServer, 1);
-            pv.RPC(nameof(Cor_SetSizeCamera), RpcTarget.AllViaServer, 0, 0.36f, 2f);
+            pv.RPC(nameof(InitCamera), RpcTarget.AllViaServer, (int)CharacterCamera.STEADY); // 일단 스테디 카메라를 Full로 세팅
+            pv.RPC(nameof(Cor_SetSizeCamera), RpcTarget.AllViaServer, 0.36f, 2f);// 넬라 카메라를 만들어줌 (늘려줌)
         }
 
+        // 스테이지 3 디펜스 모드 : 스테디 죽었을 때 호출
         public void SteadyDeadCam()
         {
-            pv.RPC(nameof(InitCamera), RpcTarget.AllBuffered, 0);
-            pv.RPC(nameof(Cor_SetSizeCamera), RpcTarget.AllBuffered, 1, 0.64f, 2f);
+            pv.RPC(nameof(InitCamera), RpcTarget.AllBuffered, (int)CharacterCamera.NELLA); // 일단 넬라 카메라를 Full로 세팅
+            pv.RPC(nameof(Cor_SetSizeCamera), RpcTarget.AllBuffered, 0.64f, 2f); // 스테디 카메라를 만들어줌 (늘려줌)
         }
 
-        
+        // 스테이지 3 디펜스 모드 : 넬라가 부활했을 때나, 스테디가 부활했을 때 호출
+        public void ReviveCam()
+        {
+            pv.RPC(nameof(Cor_SetFullScreen), RpcTarget.AllBuffered, 2f); // 죽기 전 Full로 되어있던 카메라를 다시 Full로 만들어줌
+        }
+
+        // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> // 
 
 
-        // Sizing 호출 전 초기화 함수
+
+
+        // Stage 3 Defence Mode - Sizing 호출 전 초기화 함수 (한프레임 동안 카메라를 Full로 세팅)
         [PunRPC]
         public void InitCamera(int targetCamera)
         {
-            if (targetCamera == 0) // 넬라 카메라 전체화면
+            if (targetCamera == (int)CharacterCamera.NELLA) // 넬라 카메라 전체화면
             {
                 Rect rc1 = new Rect(0, 0, 1, 1);
                 cameras[(int)CharacterCamera.NELLA].rect = rc1;
                 Rect rc2 = new Rect(1, 0, 0, 1);
                 cameras[(int)CharacterCamera.STEADY].rect = rc2;
+
+                curFullCamera = CharacterCamera.NELLA;
             }
-            else if (targetCamera == 1) // 스테디 카메라 전체화면
+            else if (targetCamera == (int)CharacterCamera.STEADY) // 스테디 카메라 전체화면
             {
                 Rect rc1 = new Rect(0, 0, 0, 1);
                 cameras[(int)CharacterCamera.NELLA].rect = rc1;
                 Rect rc2 = new Rect(0, 0, 1, 1);
                 cameras[(int)CharacterCamera.STEADY].rect = rc2;
+
+                curFullCamera = CharacterCamera.STEADY;
             }
         }
 
 
-        // 현재 카메라 상황에서 lerpTime동안 targetCamera를 전체화면으로 세팅한다
+        //Stage 3 Defence Mode - Sizing 전체 화면 세팅 (Lerp 시간 동안)
         [PunRPC]
-        public void Cor_SetFullScreen(int targetCamera, float lerpTime)
+        public void Cor_SetFullScreen(float lerpTime)
         {
-            StartCoroutine(SetFullScreen(targetCamera, lerpTime));
+            StartCoroutine(SetFullScreen(lerpTime));
         }
-        public IEnumerator SetFullScreen(int targetCamera, float LerpTime) 
-        {           
+        public IEnumerator SetFullScreen(float LerpTime)
+        {
             Rect camRect1 = cameras[(int)CharacterCamera.NELLA].rect;
             Rect camRect2 = cameras[(int)CharacterCamera.STEADY].rect;
             float currentTime = 0;
 
             isBlending = true;
-
-            if (targetCamera == 0) // 넬라 카메라 전체화면
-            {           
+            
+            if (curFullCamera == CharacterCamera.NELLA) // 넬라 카메라 전체화면
+            {
                 while (camRect1.width < 1)
                 {
                     camRect1 = cameras[(int)CharacterCamera.NELLA].rect;
@@ -146,7 +176,7 @@ namespace YC.CameraManager_
 
                 isBlending = false;
             }
-            else if (targetCamera == 1) // 스테디 카메라 전체화면
+            else if (curFullCamera == CharacterCamera.STEADY) // 스테디 카메라 전체화면
             {
                 while (camRect2.x > 0.0001f)
                 {
@@ -170,22 +200,23 @@ namespace YC.CameraManager_
             }
         }
 
-        // 전체화면 상황에서, targetCamera를 targetCamera까지 lerpTime동안 늘린다
-        [PunRPC] 
-        public void Cor_SetSizeCamera(int targetCamera, float middleValue, float lerpTime)
-        {           
-            StartCoroutine(SetSizeCamera(targetCamera, middleValue, lerpTime));
+
+        // Stage 3 Defence Mode - Sizing 전체화면 상황에서, 현재 전체화면이 누구 카메라인지에 따라 새로 카메라를 만들어준다. (Lerp 시간 동안)
+        [PunRPC]
+        public void Cor_SetSizeCamera(float middleValue, float lerpTime)
+        {
+            StartCoroutine(SetSizeCamera(middleValue, lerpTime));
         }
-        public IEnumerator SetSizeCamera(int targetCamera, float middleValue, float LerpTime) 
+        public IEnumerator SetSizeCamera(float middleValue, float LerpTime)
         {
             Rect camRect1 = cameras[(int)CharacterCamera.NELLA].rect;
             Rect camRect2 = cameras[(int)CharacterCamera.STEADY].rect;
             float currentTime = 0;
 
             isBlending = true;
-       
-            if (targetCamera == 0) // 스테디 전체화면 상황에서, 넬라 카메라를 만들어줌(늘려줌)
-            {                
+
+            if (curFullCamera == CharacterCamera.STEADY) // 스테디 전체화면이면, 넬라 카메라를 만들어줌(늘려줌)
+            {
                 while (camRect1.width < middleValue)
                 {
                     camRect1 = cameras[(int)CharacterCamera.NELLA].rect;
@@ -207,8 +238,9 @@ namespace YC.CameraManager_
 
                 isBlending = false;
             }
-            else if (targetCamera == 1) // 넬라 전체화면 상황에서, 스테디 카메라를 만들어줌(늘려줌)
-            {           
+            else if (curFullCamera == CharacterCamera.NELLA) // 넬라 전체화면이면, 스테디 카메라를 만들어줌(늘려줌)
+            {
+
                 while (camRect2.x > middleValue)
                 {
                     camRect1 = cameras[(int)CharacterCamera.NELLA].rect;
@@ -228,7 +260,69 @@ namespace YC.CameraManager_
                 }
 
                 isBlending = false;
+            }          
+        }
+
+
+        // 분할 화면에서 죽었을때 ex 0.5f -> 0.36f (미완)
+        [PunRPC]
+        public void Cor_SetSplitCamera(int targetCamera, float middleValue, float LerpTime)
+        {
+            StartCoroutine(SetSplitCamera(targetCamera, middleValue, LerpTime));
+        }
+        public IEnumerator SetSplitCamera(int targetCamera, float middleValue, float LerpTime)
+        {
+            Rect camRect1 = cameras[(int)CharacterCamera.NELLA].rect;
+            Rect camRect2 = cameras[(int)CharacterCamera.STEADY].rect;
+            float currentTime = 0;
+
+            isBlending = true;
+
+            if (targetCamera == (int)CharacterCamera.STEADY) // 스테디 죽었을 때 (스테디 카메라를 줄여준다)
+            {
+                while (camRect1.width < middleValue)
+                {
+                    camRect1 = cameras[(int)CharacterCamera.NELLA].rect;
+                    camRect2 = cameras[(int)CharacterCamera.STEADY].rect;
+
+                    currentTime += Time.deltaTime;
+                    if (currentTime >= LerpTime) currentTime = LerpTime;
+
+                    float currentMiddleValue = Mathf.Lerp(camRect1.width, middleValue, currentTime / LerpTime);
+                    if (currentMiddleValue > middleValue) currentMiddleValue = middleValue;
+
+                    Rect rc1 = new Rect(camRect1.x, camRect1.y, currentMiddleValue, camRect1.height);
+                    cameras[(int)CharacterCamera.NELLA].rect = rc1;
+                    Rect rc2 = new Rect(currentMiddleValue, camRect2.y, 1 - currentMiddleValue, camRect2.height);
+                    cameras[(int)CharacterCamera.STEADY].rect = rc2;
+
+                    yield return null;
+                }
+
+                isBlending = false;
+            }
+            else if (targetCamera == (int)CharacterCamera.NELLA) // 넬라 죽었을 때 (넬라 카메라를 줄여준다)
+            {
+                while (camRect2.x > middleValue)
+                {
+                    camRect1 = cameras[(int)CharacterCamera.NELLA].rect;
+                    camRect2 = cameras[(int)CharacterCamera.STEADY].rect;
+
+                    currentTime += Time.deltaTime;
+                    if (currentTime >= LerpTime) currentTime = LerpTime;
+
+                    float currentMiddleValue = Mathf.Lerp(camRect1.width, middleValue, currentTime / LerpTime);
+                    if (currentMiddleValue < middleValue) currentMiddleValue = middleValue;
+
+                    Rect rc1 = new Rect(camRect1.x, camRect1.y, currentMiddleValue, camRect1.height);
+                    cameras[(int)CharacterCamera.NELLA].rect = rc1;
+                    Rect rc2 = new Rect(currentMiddleValue, camRect2.y, 1 - currentMiddleValue, camRect2.height);
+                    cameras[(int)CharacterCamera.STEADY].rect = rc2;
+                    yield return null;
+                }
+
+                isBlending = false;
             }
         }
-    }     
+    }
 }
