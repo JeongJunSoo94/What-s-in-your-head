@@ -39,6 +39,15 @@ namespace JJS
         }
         void check(Animator animator)
         {
+            if (Input.GetKeyDown(KeyCode.Alpha1))
+            {
+                GetPlayerController(animator).characterState.top = !GetPlayerController(animator).characterState.top;
+                animator.SetBool("Top", GetPlayerController(animator).characterState.top);
+            }
+            if (GetPlayerController(animator).characterState.top)
+            {
+                GetPlayerController(animator).playerMouse.TopViewUpdate();
+            }
             //if (!KeyManager.Instance.GetKey(PlayerAction.Aim))
             //{
             //    animator.SetBool("Aim", false);

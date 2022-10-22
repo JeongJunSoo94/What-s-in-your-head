@@ -16,9 +16,6 @@ namespace JJS
         {
             spawner = this.transform.parent.gameObject.GetComponent<Spawner>();
             curve = gameObject.GetComponent<BezierCurve>();
-        }
-        void Start()
-        {
             bulletRange = 0f;
         }
         private void OnEnable()
@@ -32,7 +29,7 @@ namespace JJS
         {
             if (bulletRange < 1f)
             {
-                bulletRange += speed * Time.deltaTime;
+                bulletRange += speed/Vector3.Distance(curve.p1, curve.p4) * Time.deltaTime;
             }
             else
             {

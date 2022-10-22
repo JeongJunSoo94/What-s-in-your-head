@@ -336,13 +336,13 @@ namespace KSU
 
         public void TakeRotation()
         {
-            if (characterState.aim)
-            {
-                RotateAim();
-            }
-            else if (characterState.top)
+            if (characterState.top)
             {
                 RotateTop();
+            }
+            else if (characterState.aim)
+            {
+                RotateAim();
             }
             else
             {
@@ -353,9 +353,9 @@ namespace KSU
         {
             if (!characterState.IsDashing && !characterState.IsAirDashing)
             {
-                Vector3 forward = playerMouse.point.transform.position;
+                Vector3 forward = (playerMouse.point.transform.position - transform.position);
                 forward.y = 0;
-                transform.LookAt(forward);
+                transform.LookAt(transform.position + forward);
             }
         }
 

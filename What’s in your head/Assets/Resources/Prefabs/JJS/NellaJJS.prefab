@@ -2464,8 +2464,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   spawnTime: 0
   obj: {fileID: 2660365490216987232, guid: a0267121bd4e0054ab0964d04eafb129, type: 3}
-  count: 20
-  spawnCount: 10
+  count: 50
+  spawnCount: 0
   spawnType: 0
 --- !u!1 &4403930799163794179
 GameObject:
@@ -5295,14 +5295,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 01450141376a61547b3c67c308a86438, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mainCam: {fileID: 0}
   cinemachineBrain: {fileID: 0}
   curCam: 0
   preCam: 0
   curCam_Clone: 0
   blendingCam_Clone: 0
+  blendingPrevCam_Clone: 0
+  preCam_Clone: 0
   defaultCameraSensitivity: 20
   sholderCameraSensitivity: 20
+  sholderAxisY_MaxUp: 0
+  sholderAxisY_MaxDown: 0
 --- !u!114 &8011218605724820560
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5336,7 +5339,6 @@ MonoBehaviour:
   moveDir: {x: 0, y: 0, z: 0}
   dashVec: {x: 0, y: 0, z: 0}
   inertiaNormalVec: {x: 0, y: 0, z: 0}
-  CPcount: 0
 --- !u!114 &5027572550733305681
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5351,9 +5353,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   point: {fileID: 0}
   cameraMain: {fileID: 0}
-  Weapon:
-  - {fileID: 3723959394221475216}
-  - {fileID: 2288157919270802511}
+  weaponInfo:
+  - weapon: {fileID: 3723959394221475216}
+    canAim: 0
+    canNoAimAttack: 1
+    canMoveAttack: 0
+  - weapon: {fileID: 2288157919270802511}
+    canAim: 1
+    canNoAimAttack: 0
+    canMoveAttack: 1
   ik: {fileID: 6125511999642235224}
   ableToLeft: 0
   ableToRight: 0
@@ -5387,6 +5395,8 @@ MonoBehaviour:
   slopeAngle: 0
   slopeAngleCofacter: 0
   IsGrounded: 0
+  isFowardBlock: 0
+  isOverAngleForSlope: 0
   isMove: 0
   isRun: 0
   jumpCoolTime: 0.2
@@ -5398,7 +5408,8 @@ MonoBehaviour:
   WasAirDashing: 0
   dashTime: 1
   airDashTime: 0.5
-  IsOutOfControl: 0
+  isMine: 0
+  isOutOfControl: 0
   outOfControllDuration: 0
   aim: 0
   top: 0
