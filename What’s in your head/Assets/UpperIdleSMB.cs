@@ -10,7 +10,7 @@ namespace JJS
         // OnStateEnter is called when a transition starts and the state machine starts to evaluate this state
         override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
         {
-            //GetPlayerController(animator).characterState.aim = false;
+            GetPlayerController(animator).characterState.aim = false;
         }
 
         // OnStateUpdate is called on each Update frame between OnStateEnter and OnStateExit callbacks
@@ -58,7 +58,7 @@ namespace JJS
                     return;
                 }
 
-                //animator.SetBool("Aim", KeyManager.Instance.GetKey(PlayerAction.Aim));
+                animator.SetBool("Aim", KeyManager.Instance.GetKey(PlayerAction.Aim));
             }
         }
     }

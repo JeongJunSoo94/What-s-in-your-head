@@ -336,13 +336,13 @@ namespace KSU
 
         public void TakeRotation()
         {
-            if (characterState.aim)
-            {
-                RotateAim();
-            }
-            else if (characterState.top)
+            if (characterState.top)
             {
                 RotateTop();
+            }
+            else if (characterState.aim)
+            {
+                RotateAim();
             }
             else
             {

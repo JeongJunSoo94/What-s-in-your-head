@@ -200,7 +200,7 @@ namespace YC.Camera_
             {
                 AxisState axisY = camList[(int)curCam].GetComponent<CinemachineFreeLook>().m_YAxis;
 
-                if (axisY.Value < sholderAxisY_MaxUp)
+                if (axisY.Value < sholderAxisY_MaxUp) // 커서가 Max 위로 넘어감
                 {
                     // axisY.m_InputAxisValue : 커서 위(1) ~ 아래(0)
                     // axisY.Value : 커서 위(-) ~ 아래 (+)
@@ -212,19 +212,23 @@ namespace YC.Camera_
                     else if (axisY.m_InputAxisValue < 0)
                     {
                         axisY.m_MaxSpeed = sholderViewMaxY;
+
                     }
                 }
-
-                if (axisY.Value > sholderAxisY_MaxDown)
+                else if (axisY.Value > sholderAxisY_MaxDown) // 커서가 Min 밑으로 내려감
                 {
                     if (axisY.m_InputAxisValue > 0)
                     {
-                        axisY.m_MaxSpeed = sholderViewMaxY;
+                        axisY.m_MaxSpeed = sholderAxisY_MaxDown;
                     }
                     else if (axisY.m_InputAxisValue < 0)
                     {
                         axisY.m_MaxSpeed = 0;
                     }
+                }
+                else
+                {
+                    axisY.m_MaxSpeed = 3;
                 }
                 camList[(int)curCam].GetComponent<CinemachineFreeLook>().m_YAxis = axisY;
             }

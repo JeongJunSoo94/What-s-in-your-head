@@ -9,10 +9,10 @@ namespace JJS
     {
         override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
         {
-            if (GetPlayerController(animator).characterState.isMine)
-            {
-                GetPlayerController(animator).characterState.aim = true;
-            }
+            //if (GetPlayerController(animator).characterState.isMine)
+            //{
+            //    GetPlayerController(animator).characterState.aim = true;
+            //}
         }
 
         override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
@@ -32,17 +32,26 @@ namespace JJS
 
         public override void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
         {
-            if (GetPlayerController(animator).characterState.isMine)
-            {
-                GetPlayerController(animator).characterState.aim = false;
-            }
+            //if (GetPlayerController(animator).characterState.isMine)
+            //{
+            //    GetPlayerController(animator).characterState.aim = false;
+            //}
         }
         void check(Animator animator)
         {
-            if (!KeyManager.Instance.GetKey(PlayerAction.Aim))
+            if (Input.GetKeyDown(KeyCode.Alpha1))
             {
-                animator.SetBool("Aim", false);
+                GetPlayerController(animator).characterState.top = !GetPlayerController(animator).characterState.top;
+                animator.SetBool("Top", GetPlayerController(animator).characterState.top);
             }
+            if (GetPlayerController(animator).characterState.top)
+            {
+                GetPlayerController(animator).playerMouse.TopViewUpdate();
+            }
+            //if (!KeyManager.Instance.GetKey(PlayerAction.Aim))
+            //{
+            //    animator.SetBool("Aim", false);
+            //}
         }
 
     }
