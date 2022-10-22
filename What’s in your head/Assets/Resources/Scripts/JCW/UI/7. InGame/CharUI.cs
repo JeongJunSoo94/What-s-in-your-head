@@ -35,6 +35,9 @@ namespace JCW.UI.InGame
             else
                 mainCamera = transform.parent.GetComponent<CameraController_Single>().FindCamera(); // 싱글용            
 
+
+           
+
             GetComponent<Canvas>().worldCamera = mainCamera;
             GetComponent<Canvas>().planeDistance = 0.15f;
 
@@ -44,6 +47,11 @@ namespace JCW.UI.InGame
             else
                 isNella = GameManager.Instance.characterOwner[PhotonNetwork.IsMasterClient];
 
+            if (photonView.IsMine)
+                GameManager.Instance.hpAllPairs.Add(isNella, this);
+            else
+                GameManager.Instance.hpAllPairs.Add(!isNella, this);
+
             itemUI_RT = transform.GetChild(0).gameObject.GetComponent<RectTransform>();
             hpUI = transform.GetChild(1).gameObject;
         }
@@ -51,24 +59,22 @@ namespace JCW.UI.InGame
         {
             if (!photonView.IsMine)
                 return;
-            
+
             // 체크용
-            if (Input.GetKeyDown(KeyCode.KeypadDivide))
-                SetHP(true);
-            if (Input.GetKeyDown(KeyCode.KeypadMultiply))
-                SetHP(false);
+            if (Input.GetKeyDown(KeyCode.KeypadDivide) && !hpUI.activeSelf)
+                GameManager.Instance.MediateHP(true);
+            if (Input.GetKeyDown(KeyCode.KeypadMultiply) && hpUI.activeSelf)
+                GameManager.Instance.MediateHP(false);
         }
 
         public void SetHP(bool isOn)
         {
-            if(hpUI.activeSelf != isOn)
-                photonView.RPC(nameof(SetHP_RPC), RpcTarget.AllViaServer, isOn);
+            photonView.RPC(nameof(SetHP_RPC), RpcTarget.AllViaServer, isOn);
         }
 
         [PunRPC]
         void SetHP_RPC(bool isOn)
         {
-            Debug.Log("isMine : " + photonView.IsMine + " / isNella : " + isNella + " 비켜준다");
             Vector2 ogPos = itemUI_RT.anchoredPosition;
             float tempOffset = isOn ? offset : -offset;
             Vector2 movePos;

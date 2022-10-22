@@ -22,9 +22,6 @@ namespace JCW.UI.InGame
         {
             if(photonView.IsMine)
                 photonView.RPC(nameof(TurnOnUI_RPC), RpcTarget.AllViaServer, (bool)GameManager.Instance.isAlive[isNella]);
-            
-
-            //GetComponent<PhotonView>().RPC(nameof(TurnOnUI_RPC), RpcTarget.AllViaServer);
         }
         [PunRPC]
         private void TurnOnUI_RPC(bool _isAlive)

@@ -24,7 +24,7 @@ namespace JCW.UI.InGame
         [Header("N초 후 게이지 깎임")] [SerializeField] float damageSecond;
 
 
-        // 캐릭터에 따라 달리 사용할 UI
+        // 각각 HP UI와 누구 하나 죽었을 때 나올 UI
         GameObject charHpUI;
         GameObject reviveUI;
         readonly List<Image> bgImages = new();
@@ -48,10 +48,16 @@ namespace JCW.UI.InGame
             else
                 isNella = GameManager.Instance.characterOwner[PhotonNetwork.IsMasterClient];
 
-            charHpUI = transform.GetChild(0).gameObject;
             if (photonView.IsMine)
-                GameManager.Instance.AddReviveAllPair(isNella, transform.parent.name);       
+                GameManager.Instance.reviveAllPairs.Add(isNella, this);
+            else
+                GameManager.Instance.reviveAllPairs.Add(!isNella, this);
 
+
+            //if (photonView.IsMine)
+            //    GameManager.Instance.AddReviveAllPair(isNella, transform.parent.name);       
+
+            charHpUI = transform.GetChild(0).gameObject;
             charHpUI.SetActive(true);
             reviveUI = transform.GetChild(1).gameObject;
 
@@ -88,7 +94,7 @@ namespace JCW.UI.InGame
                     GameManager.Instance.curPlayerHP = maxHP;
 
                     // 현재 캐릭터가 넬라라면 넬라의 살아있음을 false로, 스테디라면 스테디의 살아있음을 false로 바꿈.
-                    GameManager.Instance.CheckAliveState(isNella, false);
+                    GameManager.Instance.SetAliveState(isNella, false);
                     if (isNella)
                         CameraManager.Instance.NellaDeadCam();
                     else
@@ -164,7 +170,7 @@ namespace JCW.UI.InGame
         [PunRPC]
         void SetRevive_RPC(bool value)
         {
-            if(!value && photonView.IsMine)
+            if(!value)
                 charHpUI.SetActive(true);
             reviveUI.SetActive(value);
         }
@@ -182,12 +188,16 @@ namespace JCW.UI.InGame
         IEnumerator Cure()
         {
             int count = 0;
+
+            // 깜빡 2번하기
             while (count < 3)
             {
                 yield return new WaitForSeconds(0.1f);
                 ++count;
                 hpImages[(int)HpState.HEAL].enabled = !hpImages[(int)HpState.HEAL].enabled;
             }
+
+
             SetHpAmount((int)HpState.NORMAL, 1f);
             SetHpAmount((int)HpState.DAMAGED, 1f);
             hpImages[(int)HpState.HEAL].enabled = false;

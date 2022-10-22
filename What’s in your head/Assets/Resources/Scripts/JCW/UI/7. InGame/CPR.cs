@@ -3,6 +3,7 @@ using Photon.Pun;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Video;
+using YC.CameraManager_;
 
 namespace JCW.UI.InGame
 {
@@ -41,9 +42,10 @@ namespace JCW.UI.InGame
                 heartBeat.Play();
             if (heartGauge.fillAmount >= 1f)
             {
-                GameManager.Instance.CheckAliveState(isNella, true);
+                GameManager.Instance.SetAliveState(isNella, true);
                 heartGauge.fillAmount = 0f;
                 GameManager.Instance.MediateRevive(false);
+                CameraManager.Instance.ReviveCam();
             }
         }
     }

@@ -3,9 +3,6 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Video;
 
-using KSU;
-using Photon.Pun;
-
 namespace JCW.UI.InGame
 {
 
@@ -22,12 +19,12 @@ namespace JCW.UI.InGame
         [SerializeField] Sprite nella_DetectSprite;
         [SerializeField] Sprite nella_InteractableSprite;
         [Tooltip("변환하는 경우에만 넣어주는 애니메이션 영상")][SerializeField] VideoClip nella_SetOnClip;
-        [Tooltip("변환하는 경우에만 넣어주는 애니메이션 영상")][SerializeField] VideoClip nella_SetOffClip;
+                                                        [SerializeField] VideoClip nella_SetOffClip;
         [Header("스테디 - 감지 & 상호작용 스프라이트 및 클립")]
         [SerializeField] Sprite steady_DetectSprite;
         [SerializeField] Sprite steady_InteractableSprite;
         [Tooltip("변환하는 경우에만 넣어주는 애니메이션 영상")][SerializeField] VideoClip steady_SetOnClip;
-        [Tooltip("변환하는 경우에만 넣어주는 애니메이션 영상")][SerializeField] VideoClip steady_SetOffClip;
+                                                        [SerializeField] VideoClip steady_SetOffClip;
 
         private RectTransform canvasSize;
         
