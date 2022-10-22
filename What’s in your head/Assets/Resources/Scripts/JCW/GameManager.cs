@@ -9,6 +9,7 @@ public class GameManager : MonoBehaviour
 {    
     // 좌측 bool 값은 master client인지, 우측 bool 값은 Nella 캐릭터인지.    
     [HideInInspector] public Dictionary<bool, bool> characterOwner = new();
+   
 
     // 현재 스테이지 , 섹션 인덱스
     [HideInInspector] public int curStageIndex = 0;

@@ -26,7 +26,7 @@ namespace JCW.UI.InGame
 
         private void Awake()
         {
-            if(transform.parent.GetComponent<PhotonView>().IsMine)
+            if(!transform.parent.GetComponent<PhotonView>().IsMine)
             {
                 Destroy(this);
                 return;
