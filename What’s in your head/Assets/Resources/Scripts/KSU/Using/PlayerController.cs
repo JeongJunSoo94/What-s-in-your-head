@@ -84,9 +84,6 @@ namespace KSU
         #endregion
 
         // 체크카운트 - JCW
-        public int CPcount = 0;
-        private int life = 3;
-
 
         void Awake()
         {
@@ -101,24 +98,10 @@ namespace KSU
             playerRigidbody = GetComponent<Rigidbody>();
             playerMouse = GetComponent<PlayerMouseController>();
 
-            // >> :
-            //_camera = Camera.main;
-            // << :
-
 
             //====================================================
 
             photonView = GetComponent<PhotonView>();
-
-            // >> : YC - 카메라 세팅은 CameraController.cs에서 하겠습니다. 아래 코드 진행시 분활 화면이 불가능합니다.
-            //if (!photonView.IsMine)
-            //{
-            //    GetComponentInChildren<Camera>().gameObject.SetActive(false);
-            //    GetComponentInChildren<CinemachineFreeLook>().gameObject.SetActive(false);
-            //    Destroy(this);
-            //}
-            //else
-            //    _camera = Camera.main;
 
             if (PhotonNetwork.NetworkClientState == Photon.Realtime.ClientState.Joined)
                 mainCamera = this.gameObject.GetComponent<CameraController>().FindCamera(); // 멀티용
@@ -132,6 +115,8 @@ namespace KSU
 
 
             characterState.isMine = photonView.IsMine;
+            if (!photonView.IsMine)
+                GameManager.Instance.otherPlayerTF = this.transform;
             // << : 
 
             Application.targetFrameRate = 120;
@@ -222,7 +207,6 @@ namespace KSU
         {
             if (Input.GetKeyDown(KeyCode.G))
             {
-                Debug.Log("현재 플레이어 목숨 : " + --life);
                 Resurrect();
             }
             if (Input.GetKeyDown(KeyCode.Keypad1))
