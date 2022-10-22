@@ -48,9 +48,9 @@ public class SteadyUpperIdleSMB : CharacterBaseSMB
 
         if (GetPlayerController(animator).playerMouse.weaponInfo[GetPlayerController(animator).playerMouse.GetUseWeapon()].canAim)
         {
-            if (GetPlayerController(animator).characterState.top && !GetPlayerController(animator).playerMouse.weaponInfo[GetPlayerController(animator).playerMouse.GetUseWeapon()].canNoAimAttack)
+            if (GetPlayerController(animator).characterState.top)
             {
-                animator.SetBool("Aim", true);
+                animator.SetBool("Aim", !GetPlayerController(animator).playerMouse.weaponInfo[GetPlayerController(animator).playerMouse.GetUseWeapon()].canNoAimAttack);
                 animator.SetBool("Top", true);
                 return;
             }

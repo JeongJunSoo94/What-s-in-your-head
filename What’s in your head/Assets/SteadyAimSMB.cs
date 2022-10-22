@@ -49,36 +49,27 @@ namespace JJS
 
         void check(Animator animator)
         {
-            if (GetPlayerController(animator).playerMouse.weaponInfo[GetPlayerController(animator).playerMouse.GetUseWeapon()].canAim)
+            if (KeyManager.Instance.GetKey(PlayerAction.Fire))
             {
-                if (GetPlayerController(animator).characterState.aim || GetPlayerController(animator).characterState.top)
-                {
-                    if (KeyManager.Instance.GetKey(PlayerAction.Fire))
-                    {
-                        animator.SetBool("AimAttack", true);
-                    }
-                }
+                animator.SetBool("AimAttack", true);
+            }
 
-                if (GetPlayerController(animator).playerMouse.GetUseWeapon() == 0)
+            if (GetPlayerController(animator).playerMouse.GetUseWeapon() == 0)
+            {
+                if (KeyManager.Instance.GetKeyDown(PlayerAction.Fire))
                 {
-                    if (KeyManager.Instance.GetKeyDown(PlayerAction.Fire))
-                    {
-                        animator.SetBool("isShootingGrapple", true);
-                    }
+                    animator.SetBool("isShootingGrapple", true);
                 }
             }
 
-            if (GetPlayerController(animator).playerMouse.weaponInfo[GetPlayerController(animator).playerMouse.GetUseWeapon()].canAim)
+            if (GetPlayerController(animator).characterState.top)
             {
-                if (GetPlayerController(animator).characterState.top && !GetPlayerController(animator).playerMouse.weaponInfo[GetPlayerController(animator).playerMouse.GetUseWeapon()].canNoAimAttack)
-                {
-                    animator.SetBool("Aim", true);
-                    animator.SetBool("Top", true);
-                    return;
-                }
-
-                animator.SetBool("Aim", KeyManager.Instance.GetKey(PlayerAction.Aim));
+                animator.SetBool("Aim", !GetPlayerController(animator).playerMouse.weaponInfo[GetPlayerController(animator).playerMouse.GetUseWeapon()].canNoAimAttack);
+                animator.SetBool("Top", true);
+                return;
             }
+
+            animator.SetBool("Aim", KeyManager.Instance.GetKey(PlayerAction.Aim));
         }
 
         // OnStateMove is called right after Animator.OnAnimatorMove()

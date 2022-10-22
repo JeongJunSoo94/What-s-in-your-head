@@ -52,6 +52,7 @@ namespace KSU
 
         public void InitGrapple(Vector3 startPos, Vector3 endPos)
         {
+            grappleRigidbody.velocity = Vector3.zero;
             transform.position = startPos;
             endPosistion = endPos;
             isEndPosition = false;

@@ -20,7 +20,9 @@ namespace KSU
         Rigidbody playerRigidbody;
         Animator playerAnimator;
 
+        public float grappleMoveSpeed = 10f;
         public float grappleSpeed = 10f;
+        public float grappleDepartOffSet = 0.5f;
         public float escapeGrapplePower = 10f;
 
         Camera playerCamera;
@@ -164,6 +166,7 @@ namespace KSU
                     if (steadyInteractionState.isGrappledObjectFounded)
                     {
                         // µµÂø À§Ä¡: autoAimPosition
+                        transform.LookAt(transform.position + playerCamera.transform.forward);
                         grapple.InitGrapple(grappleSpawner.transform.position, autoAimPosition);
                         grapple.gameObject.SetActive(true);
                     }
