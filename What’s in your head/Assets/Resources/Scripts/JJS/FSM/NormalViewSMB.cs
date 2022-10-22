@@ -68,6 +68,7 @@ namespace JJS
             if (Input.GetKeyDown(KeyCode.Alpha1))
             {
                 GetPlayerController(animator).characterState.top = !GetPlayerController(animator).characterState.top;
+                animator.SetBool("Top", GetPlayerController(animator).characterState.top);
             }
           
             GetPlayerController(animator).InputRun();

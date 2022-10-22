@@ -248,7 +248,7 @@ namespace YC.Camera_
 
                     sholderCam.GetComponent<CinemachineFreeLook>().m_XAxis = temp;
                 }
-                else if (Input.GetKeyDown(KeyCode.Alpha1)) // back View -> Top View
+                else if (player.characterState.top) // back View -> Top View
                 {
                     preCam = curCam;
                     curCam = CamState.top;
@@ -278,7 +278,7 @@ namespace YC.Camera_
             }
             else if (curCam == CamState.top)
             {
-                if (Input.GetKeyDown(KeyCode.Alpha1)) // Top View -> back View
+                if (!player.characterState.top) // Top View -> back View
                 {
                     preCam = curCam;
                     curCam = CamState.back;

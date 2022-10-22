@@ -26966,6 +26966,12 @@ MonoBehaviour:
   - Type: 4
     SynchronizeType: 2
     Name: Top
+  - Type: 4
+    SynchronizeType: 0
+    Name: isShootingGrapple
+  - Type: 4
+    SynchronizeType: 0
+    Name: isGrappleMoving
   m_SynchronizeLayers:
   - SynchronizeType: 2
     LayerIndex: 0
@@ -27043,7 +27049,6 @@ MonoBehaviour:
   moveDir: {x: 0, y: 0, z: 0}
   dashVec: {x: 0, y: 0, z: 0}
   inertiaNormalVec: {x: 0, y: 0, z: 0}
-  CPcount: 0
 --- !u!114 &1441877394586250121
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -27058,13 +27063,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   point: {fileID: 0}
   cameraMain: {fileID: 0}
-  Weapon:
-  - {fileID: 8770239819481882399}
-  - {fileID: 8770354767411689546}
+  weaponInfo:
+  - weapon: {fileID: 8770239819481882399}
+    canAim: 0
+    canNoAimAttack: 0
+    canMoveAttack: 0
+  - weapon: {fileID: 8770354767411689546}
+    canAim: 0
+    canNoAimAttack: 0
+    canMoveAttack: 0
   ik: {fileID: 6988878118824629920}
   ableToLeft: 0
   ableToRight: 0
   glass: {fileID: 8768540777746556850}
+  grapple: {fileID: 0}
 --- !u!114 &8750876866218855433
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -27102,7 +27114,8 @@ MonoBehaviour:
   WasAirDashing: 0
   dashTime: 1
   airDashTime: 0.5
-  IsOutOfControl: 0
+  isMine: 0
+  isOutOfControl: 0
   outOfControllDuration: 0
   aim: 0
   top: 0
