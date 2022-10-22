@@ -20,31 +20,35 @@ namespace KSU
         Rigidbody playerRigidbody;
         Animator playerAnimator;
 
-        public float grappleMoveSpeed = 10f;
-        public float grappleSpeed = 10f;
-        public float grappleDepartOffSet = 0.5f;
-        public float escapeGrapplePower = 10f;
-
-        public Camera playerCamera;
+        Camera playerCamera;
         [SerializeField] GameObject lookAtObj;
-        public Ray ray;
         RaycastHit _raycastHit;
-        public LayerMask layerFilterForGrapple;
-        public LayerMask layerForGrapple;
+        [SerializeField] LayerMask layerFilterForGrapple;
+        [SerializeField] LayerMask layerForGrapple;
 
-        public GameObject grappleSpawner;
-        public GameObject grappleObject;
+        [SerializeField] GameObject grappleSpawner;
+        [SerializeField] GameObject grappleObject;
         SteadyGrapple grapple;
-        public Vector3 autoAimPosition;
+        Vector3 autoAimPosition;
 
-
+        [Header("_______변경 가능 값_______")]
+        [Header("플레이어 날아가는 속력")]
+        public float grappleMoveSpeed = 10f;
+        [Header("갈고리 날아가는 속력")]
+        public float grappleSpeed = 10f;
+        [Header("갈고리 속력이 빠를땐 이 값을 조금 높이세요")]
+        public float grappleDepartOffset = 0.5f;
+        [Header("목표지점 도착후 날아가는 속도")]
+        public float escapeGrapplePower = 10f;
+        [Header("오토 타겟팅 탐지 범위(캡슐) 반지름")]
         public float rangeRadius = 5f;
+        [Header("오토 타겟팅 탐지 범위(캡슐) 길이(거리)")]
         public float rangeDistance = 5f;
-        [Range(1f,89f)]
+        [Header("오토 타겟팅 탐지 범위 (각도)"), Range(1f,89f)]
         public float rangeAngle = 30f;
         //public GameObject sphere;
 
-        public GameObject grappledTarget;
+        GameObject grappledTarget;
 
         Vector3 grappleVec;
         Vector3 targetPosition;
@@ -140,7 +144,8 @@ namespace KSU
                         isRayChecked = Physics.SphereCast(rayOrigin, 0.2f, direction, out _raycastHit, (rangeDistance + rangeRadius * 2f), layerFilterForGrapple, QueryTriggerInteraction.Ignore);
                         if (isRayChecked)
                         {
-                            if (_raycastHit.collider.CompareTag("GrappledObject"))
+                            Debug.Log("_raycastHit.collider.gameObject.layer:" + _raycastHit.collider.gameObject.layer);
+                            if (_raycastHit.collider.gameObject.layer == LayerMask.NameToLayer("AutoAimedObject"))
                             {
                                 if (Vector3.Angle(playerCamera.transform.forward, (_raycastHit.collider.gameObject.transform.position - rayOrigin)) < rangeAngle)
                                 {
@@ -167,14 +172,12 @@ namespace KSU
                     {
                         // 도착 위치: autoAimPosition
                         transform.LookAt(transform.position + playerCamera.transform.forward);
-                        grapple.InitGrapple(grappleSpawner.transform.position, autoAimPosition);
-                        grapple.gameObject.SetActive(true);
+                        grapple.InitGrapple(grappleSpawner.transform.position, autoAimPosition, grappleSpeed, grappleDepartOffset);
                     }
                     else
                     {
                         // 도착위치: 화면 중앙에 레이 쏴서 도착하는 곳
-                        grapple.InitGrapple(grappleSpawner.transform.position, (playerCamera.transform.position + playerCamera.transform.forward * (rangeDistance + rangeRadius * 2f)));
-                        grapple.gameObject.SetActive(true);
+                        grapple.InitGrapple(grappleSpawner.transform.position, (playerCamera.transform.position + playerCamera.transform.forward * (rangeDistance + rangeRadius * 2f)), grappleSpeed, grappleDepartOffset);
                     }
                 }
             }
@@ -208,7 +211,7 @@ namespace KSU
             Debug.Log("targetObj.GetComponent<GrappledObject>() : " + grappledTarget.GetComponent<GrappledObject>());
             Debug.Log("offset: " + grappledTarget.GetComponent<GrappledObject>().GetOffsetPosition());
             targetPosition = grappledTarget.GetComponent<GrappledObject>().GetOffsetPosition();
-            grappleVec = (targetPosition - transform.position).normalized * grappleSpeed;
+            grappleVec = (targetPosition - transform.position).normalized * grappleMoveSpeed;
             Vector3 lookVec = grappleVec;
             lookVec.y = 0;
             transform.LookAt(transform.position + lookVec);
@@ -229,7 +232,6 @@ namespace KSU
 
         void SendInfoUI()
         {
-            Debug.Log("grappledObjects.Count: " + grappledObjects.Count);
             if (grappledObjects.Count > 0)
             {
                 foreach (var grappledObject in grappledObjects)

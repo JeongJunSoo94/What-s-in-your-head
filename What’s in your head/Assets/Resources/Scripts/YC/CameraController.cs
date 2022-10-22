@@ -170,7 +170,7 @@ namespace YC.Camera_
             {
                 //BlockMouseControlInBlending();
                 SetCamera();
-                //SetAimYAxis();
+                SetAimYAxis();
             }
         }
 

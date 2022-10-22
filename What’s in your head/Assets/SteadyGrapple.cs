@@ -50,13 +50,16 @@ namespace KSU
             MakeRope();
         }
 
-        public void InitGrapple(Vector3 startPos, Vector3 endPos)
+        public void InitGrapple(Vector3 startPos, Vector3 endPos, float grappleSpeed, float Offset)
         {
             grappleRigidbody.velocity = Vector3.zero;
             transform.position = startPos;
             endPosistion = endPos;
             isEndPosition = false;
             isSucceeded = false;
+            moveSpeed = grappleSpeed;
+            departingOffset = Offset;
+            this.gameObject.SetActive(true);
         }
 
         void MoveToEndPosition()

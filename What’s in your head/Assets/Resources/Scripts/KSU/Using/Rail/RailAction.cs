@@ -25,13 +25,16 @@ namespace KSU
         public LayerMask layerFilterForRail;
         public LayerMask layerForRail;
 
+        [Header("레일 탐지 범위(캡슐) 반지름")]
         public float rangeRadius = 5f;
+        [Header("레일 탐지 범위(캡슐) 길이(거리)")]
         public float rangeDistance = 5f;
 
         public GameObject currentRail;
         public GameObject railStartObject;
         public Vector3 railStartPosiotion = Vector3.zero;
 
+        [Header("레일 상호작용키 사용후 레일까지 날아가는 시간(갈아타기 동일)")]
         public float movingToRailSpeed = 10f;
         float departingRailOffset = 0.5f;
 

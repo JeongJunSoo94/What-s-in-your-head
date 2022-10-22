@@ -47,7 +47,8 @@ public class SteadyUpperIdleSMB : CharacterBaseSMB
                 return;
             }
 
-            animator.SetBool("Aim", KeyManager.Instance.GetKey(PlayerAction.Aim));
+            if(GetPlayerController(animator).characterState.CanJump && GetPlayerController(animator).characterState.IsGrounded)
+                animator.SetBool("Aim", KeyManager.Instance.GetKey(PlayerAction.Aim));
         }
     }
 }

@@ -4,17 +4,14 @@ using UnityEngine;
 
 public class PlayerState : MonoBehaviour
 {
+    
+
     //지면 체크 변수
     #region
     [Tooltip("지면으로 체크할 레이어 설정")]
     public LayerMask groundLayerMask;
     [Range(0.1f, 10.0f), Tooltip("지면 감지 거리")]
     public float groundCheckDistance = 2.0f;
-    //[Range(0.0f, 1f), Tooltip("지면 인식 허용 거리")]
-    //public float groundCheckThreshold = 0.2f;
-
-
-    //
     [Range(0.0f, 1f), Tooltip("지면 인식 허용 최소 거리")]
     public float groundCheckThresholdMin = 0.1f;
     [Range(0.0f, 1f), Tooltip("지면 인식 허용 최대 거리")]
@@ -28,8 +25,6 @@ public class PlayerState : MonoBehaviour
 
     RaycastHit groundRaycastHit;
     RaycastHit fowardRaycastHit;
-    [Tooltip("캐릭터가 타고 올라갈 수 있는 최대 경사각")]
-    public float maxSlopeAngle = 40f;
     [Tooltip("캐릭터가 바라보는 방향의 경사각")]
     public float slopeAngle;
     [Tooltip("slopeAngle만큼의 Y축 보정 인자")]
@@ -53,8 +48,6 @@ public class PlayerState : MonoBehaviour
 
     // 점프 변수
     #region
-    [Tooltip("점프 쿨타임")]
-    public float jumpCoolTime = 0.2f;
     [Tooltip("점프 쿨이 돌았을 때 TRUE")]
     public bool CanJump = true;
     [Tooltip("지면에서 점프한 상태")]
@@ -71,10 +64,7 @@ public class PlayerState : MonoBehaviour
     public bool IsAirDashing = false;
     [Tooltip("공중에서 이전에 대시했던 상태")]
     public bool WasAirDashing = false;
-    [Tooltip("지면 대시 지속 시간")]
-    public float dashTime = 1f;
-    [Tooltip("공중 대시 지속 시간")]
-    public float airDashTime = 0.5f;
+    
     #endregion
 
     //제어불가능 상태 변수
@@ -87,6 +77,16 @@ public class PlayerState : MonoBehaviour
     public bool aim = false;
     public bool top = false;
     public bool swap = false;
+
+    [Header("_______변경 가능 값_______")]
+    [Header("캐릭터가 타고 올라갈 수 있는 최대 경사각")]
+    public float maxSlopeAngle = 40f;
+    [Header("점프 쿨타임")]
+    public float jumpCoolTime = 0.2f;
+    [Header("지면 대시 지속 시간")]
+    public float dashTime = 1f;
+    [Header("공중 대시 지속 시간")]
+    public float airDashTime = 0.5f;
 
     // 지면 체크 함수(지면 각도에 따라서 지면체크 거리 안에 안들어올 수 있기에 보정 필요)
     #region

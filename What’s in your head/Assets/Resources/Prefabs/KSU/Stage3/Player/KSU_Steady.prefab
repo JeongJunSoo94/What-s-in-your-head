@@ -27024,6 +27024,12 @@ MonoBehaviour:
   - Type: 4
     SynchronizeType: 2
     Name: Top
+  - Type: 4
+    SynchronizeType: 2
+    Name: isShootingGrapple
+  - Type: 4
+    SynchronizeType: 2
+    Name: isGrappleMoving
   m_SynchronizeLayers:
   - SynchronizeType: 2
     LayerIndex: 0
@@ -27302,11 +27308,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bc8bd3eaf0d7d5f44a968f46cbb73a7c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  grappleMoveSpeed: 10
-  grappleSpeed: 10
-  grappleDepartOffSet: 0.5
-  escapeGrapplePower: 10
-  playerCamera: {fileID: 0}
   lookAtObj: {fileID: 470626217913593892}
   layerFilterForGrapple:
     serializedVersion: 2
@@ -27316,11 +27317,13 @@ MonoBehaviour:
     m_Bits: 2048
   grappleSpawner: {fileID: 1911663723217604559}
   grappleObject: {fileID: 7909980709306676830, guid: c9b54073bf48f804ebee62282b5e85af, type: 3}
-  autoAimPosition: {x: 0, y: 0, z: 0}
+  grappleMoveSpeed: 10
+  grappleSpeed: 10
+  grappleDepartOffset: 0.5
+  escapeGrapplePower: 10
   rangeRadius: 5
   rangeDistance: 20
   rangeAngle: 89
-  grappledTarget: {fileID: 0}
   hVision: {x: 0, y: 0, z: 0}
 --- !u!1 &4466008002735749242
 GameObject:

@@ -70,12 +70,14 @@ namespace JJS
                 GetPlayerController(animator).characterState.top = !GetPlayerController(animator).characterState.top;
                 animator.SetBool("Top", GetPlayerController(animator).characterState.top);
             }
-          
+            
             GetPlayerController(animator).InputRun();
             GetPlayerController(animator).InputMove();
-            GetPlayerController(animator).InputJump();
+            //GetPlayerController(animator).InputJump();
             if (!GetPlayerController(animator).playerMouse.weaponInfo[GetPlayerController(animator).playerMouse.GetUseWeapon()].canAim) /////////// 3스테이지 전용 코드
             {
+                
+                GetPlayerController(animator).InputJump();
                 if (!animator.GetBool("isAttack"))
                 {
                     GetPlayerController(animator).InputDash();
@@ -83,7 +85,11 @@ namespace JJS
             }
             else
             {
-                GetPlayerController(animator).InputDash();
+                if (!animator.GetBool("Aim"))
+                {
+                    GetPlayerController(animator).InputJump();
+                    GetPlayerController(animator).InputDash();
+                }
             }
 
             if (KeyManager.Instance.GetKey(PlayerAction.Fire))
