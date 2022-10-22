@@ -12,6 +12,7 @@ namespace JJS
         bool isFired = false;
         override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
         {
+            animator.SetBool("Aim", false);
             isSuceededInHit = false;
             isFired = false;
         }

@@ -13,7 +13,7 @@ namespace JJS
             animator.SetBool("wasAirJump", false);
             animator.SetBool("isJump", false);
             animator.SetBool("isAttack", false);
-            GetPlayerController(animator).characterState.aim = false;
+            //GetPlayerController(animator).characterState.aim = false;
         }
 
         override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
@@ -108,10 +108,10 @@ namespace JJS
                 }
             }
 
-            if (GetPlayerController(animator).playerMouse.weaponInfo[GetPlayerController(animator).playerMouse.GetUseWeapon()].canAim && !GetPlayerController(animator).characterState.top && KeyManager.Instance.GetKey(PlayerAction.Aim))
-            {
-                animator.SetBool("Aim", true);
-            }
+            //if (GetPlayerController(animator).playerMouse.weaponInfo[GetPlayerController(animator).playerMouse.GetUseWeapon()].canAim && !GetPlayerController(animator).characterState.top && KeyManager.Instance.GetKey(PlayerAction.Aim))
+            //{
+            //    animator.SetBool("Aim", true);
+            //}
         }
 
         void check(Animator animator)

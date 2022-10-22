@@ -38,19 +38,11 @@ public class SteadyUpperIdleSMB : CharacterBaseSMB
 
     void check(Animator animator)
     {
-        if (GetPlayerController(animator).playerMouse.GetUseWeapon() == 0)
-        {
-            if (KeyManager.Instance.GetKeyDown(PlayerAction.Fire))
-            {
-                animator.SetBool("isShootingGrapple", true);
-            }
-        }
-
         if (GetPlayerController(animator).playerMouse.weaponInfo[GetPlayerController(animator).playerMouse.GetUseWeapon()].canAim)
         {
             if (GetPlayerController(animator).characterState.top)
             {
-                animator.SetBool("Aim", !GetPlayerController(animator).playerMouse.weaponInfo[GetPlayerController(animator).playerMouse.GetUseWeapon()].canNoAimAttack);
+                animator.SetBool("Aim", true);
                 animator.SetBool("Top", true);
                 return;
             }

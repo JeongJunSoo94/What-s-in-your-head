@@ -9,7 +9,7 @@ namespace JJS
     {
         override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
         {
-
+            GetPlayerController(animator).characterState.aim = true;
         }
 
         // OnStateUpdate is called on each Update frame between OnStateEnter and OnStateExit callbacks
@@ -69,7 +69,7 @@ namespace JJS
                     return;
                 }
 
-                //animator.SetBool("Aim", KeyManager.Instance.GetKey(PlayerAction.Aim));
+                animator.SetBool("Aim", KeyManager.Instance.GetKey(PlayerAction.Aim));
             }
         }
 

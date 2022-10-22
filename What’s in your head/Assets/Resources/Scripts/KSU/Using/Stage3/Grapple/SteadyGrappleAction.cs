@@ -25,7 +25,7 @@ namespace KSU
         public float grappleDepartOffSet = 0.5f;
         public float escapeGrapplePower = 10f;
 
-        Camera playerCamera;
+        public Camera playerCamera;
         [SerializeField] GameObject lookAtObj;
         public Ray ray;
         RaycastHit _raycastHit;
