@@ -26,7 +26,7 @@ namespace JCW.UI.InGame
 
         private void Awake()
         {
-            if(transform.parent.GetComponent<PhotonView>().IsMine)
+            if(!transform.parent.GetComponent<PhotonView>().IsMine)
             {
                 Destroy(this);
                 return;
@@ -56,17 +56,17 @@ namespace JCW.UI.InGame
 
             myPlayerTF = transform.parent;
             mainCamera = transform.parent.GetComponent<CameraController>().FindCamera();
-            otherPlayerTF = GameManager.Instance.otherPlayerTF;
+            //otherPlayerTF = GameManager.Instance.otherPlayerTF;
         }
 
         void Update()
         {
             // 포지션 설정
             Vector3 myIndicatorPosition = mainCamera.WorldToScreenPoint(myPlayerTF.position);
-            Vector3 otherIndicatorPosition = mainCamera.WorldToScreenPoint(otherPlayerTF.position);
+            //Vector3 otherIndicatorPosition = mainCamera.WorldToScreenPoint(otherPlayerTF.position);
 
             myImgTransform.position = myIndicatorPosition;
-            otherImgTransform.position = otherIndicatorPosition;
+            //otherImgTransform.position = otherIndicatorPosition;
 
             // 방향 설정
             // 플레이어의 Rotation.y값과 UI의 Rotation.z값이 연동되어야함.

@@ -340,9 +340,22 @@ namespace KSU
             {
                 RotateAim();
             }
+            else if (characterState.top)
+            {
+                RotateTop();
+            }
             else
             {
                 RotateSlerp();
+            }
+        }
+        public void RotateTop()
+        {
+            if (!characterState.IsDashing && !characterState.IsAirDashing)
+            {
+                Vector3 forward = playerMouse.point.transform.position;
+                forward.y = 0;
+                transform.LookAt(forward);
             }
         }
 
