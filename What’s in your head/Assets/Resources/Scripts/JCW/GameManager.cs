@@ -10,13 +10,20 @@ public class GameManager : MonoBehaviour
     // 좌측 bool 값은 master client인지, 우측 bool 값은 Nella 캐릭터인지.    
     [HideInInspector] public Dictionary<bool, bool> characterOwner = new();
 
+    // 현재 스테이지 , 섹션 인덱스
     [HideInInspector] public int curStageIndex = 0;
+    [HideInInspector] public int curSection { get; private set; }
+    
+    // 현재 캐릭터들의 생존 여부
     [HideInInspector] public Hashtable isAlive = new();
 
-    // 좌측 bool 값은 Nella 캐릭터인지, 우측은 해당 캐릭터가 가지고 있는 HealthUI 스크립트
+    // 좌측 bool 값은 Nella 캐릭터인지, 우측은 해당 캐릭터가 가지고 있는 스크립트
     [HideInInspector] public Dictionary<bool, HealthUI> reviveAllPairs= new();
     [HideInInspector] public Dictionary<bool, CharUI> hpAllPairs= new();
-    public int curSection { get; private set; }
+
+    // Remote인 다른 캐릭터의 위치
+    [HideInInspector] public Transform otherPlayerTF;
+
     public int curPlayerHP = 12;
 
     PhotonView photonView;

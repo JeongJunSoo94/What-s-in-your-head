@@ -127,7 +127,11 @@ public class PlayerController3D : MonoBehaviour
 
 
 
-        if (!photonView.IsMine) this.enabled = false;
+        if (!photonView.IsMine)
+        {
+            GameManager.Instance.otherPlayerTF = this.transform;
+            this.enabled = false;
+        }
         // << : 
 
         Application.targetFrameRate = 120;
