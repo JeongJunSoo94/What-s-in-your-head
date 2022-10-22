@@ -28,7 +28,7 @@ namespace KSU
         //Animator _animator;
         CapsuleCollider playerCapsuleCollider;
         public Camera mainCamera;
-        public Rigidbody playerRigidbody;
+        Rigidbody playerRigidbody;
         //[Header("Å° ¼³Á¤")] [SerializeField] private GameObject UI_BG;    
         PhotonView photonView;
         #endregion

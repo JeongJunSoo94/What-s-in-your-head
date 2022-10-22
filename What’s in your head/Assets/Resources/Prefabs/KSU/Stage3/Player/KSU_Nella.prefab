@@ -1995,7 +1995,7 @@ LineRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3568458664836984830}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -5254,6 +5254,10 @@ GameObject:
   - component: {fileID: 4557260369275093484}
   - component: {fileID: 6125511999642235224}
   - component: {fileID: 4573562063243766625}
+  - component: {fileID: 8891849524777518278}
+  - component: {fileID: 3596058637112808704}
+  - component: {fileID: 6169874678787101720}
+  - component: {fileID: -2508882052053191699}
   m_Layer: 6
   m_Name: KSU_Nella
   m_TagString: Nella
@@ -5426,7 +5430,6 @@ MonoBehaviour:
   characterState: {fileID: 4557260369275093484}
   playerMouse: {fileID: 5027572550733305681}
   mainCamera: {fileID: 0}
-  playerRigidbody: {fileID: 0}
   moveSpeed: 0
   walkSpeed: 4
   runSpeed: 7
@@ -5496,7 +5499,6 @@ MonoBehaviour:
   groundCheckThresholdMax: 0.1
   height: 0
   RayCheck: 0
-  maxSlopeAngle: 40
   slopeAngle: 0
   slopeAngleCofacter: 0
   IsGrounded: 0
@@ -5504,21 +5506,22 @@ MonoBehaviour:
   isOverAngleForSlope: 0
   isMove: 0
   isRun: 0
-  jumpCoolTime: 0.2
   CanJump: 1
   IsJumping: 0
   IsAirJumping: 0
   IsDashing: 0
   IsAirDashing: 0
   WasAirDashing: 0
-  dashTime: 1
-  airDashTime: 0.5
   isMine: 0
   isOutOfControl: 0
   outOfControllDuration: 0
   aim: 0
   top: 0
   swap: 0
+  maxSlopeAngle: 40
+  jumpCoolTime: 0.2
+  dashTime: 1
+  airDashTime: 0.5
 --- !u!114 &6125511999642235224
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5609,6 +5612,84 @@ MonoBehaviour:
     LayerIndex: 0
   - SynchronizeType: 2
     LayerIndex: 1
+--- !u!114 &8891849524777518278
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8914183395468562472}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c895243319594754da9e58423a5e54b4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isRidingRope: 0
+  isMoveToRope: 0
+  isMoveFromRope: 0
+  railTriggerDetectionNum: 0
+  isRailFounded: 0
+  isRailTriggered: 0
+  isRidingRail: 0
+  isMovingToRail: 0
+  isRailJumpingUp: 0
+  isRailJumping: 0
+--- !u!114 &3596058637112808704
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8914183395468562472}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 53c173593f4146742abd36b73400707b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &6169874678787101720
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8914183395468562472}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cbbcf1fce5f3fb7419efc97b38b925f8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  mainCamera: {fileID: 0}
+  lookAtObj: {fileID: 4667972223633112513}
+  layerFilterForRail:
+    serializedVersion: 2
+    m_Bits: 36353
+  layerForRail:
+    serializedVersion: 2
+    m_Bits: 1024
+  currentRail: {fileID: 0}
+  railStartObject: {fileID: 0}
+  rangeRadius: 5
+  rangeDistance: 5
+  movingToRailSpeed: 10
+  railJumpHeight: 4
+  railJumpSpeed: 6
+--- !u!114 &-2508882052053191699
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8914183395468562472}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ed9fae8c09db74141b058cb723cb5b57, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  hand: {fileID: 3568458664836984830}
+  interactableRope: {fileID: 0}
+  moveToRopeSpeed: 6
+  escapingRopeSpeed: 6
+  escapingRopeDelayTime: 1
 --- !u!1 &8914183395660981719
 GameObject:
   m_ObjectHideFlags: 0

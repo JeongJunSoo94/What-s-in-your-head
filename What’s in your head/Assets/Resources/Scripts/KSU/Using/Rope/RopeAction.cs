@@ -34,19 +34,23 @@ namespace KSU
         PlayerInteractionState interactionState;
 
         LineRenderer rope;
-        public GameObject hand;
+        [SerializeField] GameObject hand;
 
         RaycastHit _raycastHit;
         LayerMask layerFilterForRope;
 
-        public GameObject currentRidingRope;
+        GameObject currentRidingRope;
         public GameObject interactableRope;
 
-        public Dictionary<GameObject, Obj_Info> detectedRopes = new Dictionary<GameObject, Obj_Info>();
+        Dictionary<GameObject, Obj_Info> detectedRopes = new Dictionary<GameObject, Obj_Info>();
 
-        [Header("로프로 날아가는 속도")] public float moveToRopeSpeed = 6f;
-        [Header("로프 해제 시 날아가는")] public float escapingRopeSpeed = 6f;
-        [Header("로프 해제 후 딜레이 타임")] public float escapingRopeDelayTime = 1f;
+        [Header("_______변경 가능 값_______")]
+        [Header("로프로 날아가는 속도")] 
+        public float moveToRopeSpeed = 6f;
+        [Header("로프 해제 시 날아가는")] 
+        public float escapingRopeSpeed = 6f;
+        [Header("로프 해제 후 딜레이 타임")] 
+        public float escapingRopeDelayTime = 1f;
 
         private void Awake()
         {

@@ -26,11 +26,16 @@ namespace KSU
         Cinemachine.CinemachineSmoothPath track;
         public GameObject railCollider;
 
+        [Header("_______변경 가능 값_______")]
+        [Header("레일 UI 확인 가능 범위(캡슐) 반지름")]
         public float detectionRangeRadius = 10f;
+        [Header("레일 UI 확인 가능 범위(캡슐) 길이(거리)")]
         public float detectionRangeLength = 2f;
-
+        [Header("레일 타는 중 속도")]
         public float railSpeed = 4f;
-        public float escapingRailSpeed = 4f;
+        //[Header("레일 탈출 속도")]
+        //public
+        float escapingRailSpeed = 4f;
 
         Vector3 offset;
 

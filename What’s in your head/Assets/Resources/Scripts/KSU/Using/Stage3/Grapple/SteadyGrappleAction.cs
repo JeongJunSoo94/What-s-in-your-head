@@ -43,10 +43,11 @@ namespace KSU
         [Header("오토 타겟팅 탐지 범위(캡슐) 반지름")]
         public float rangeRadius = 5f;
         [Header("오토 타겟팅 탐지 범위(캡슐) 길이(거리)")]
-        public float rangeDistance = 5f;
+        public float rangeDistance = 15f;
+        [Header("갈고리 투척 최대 거리(오토 타겟팅 거리 이상으로)")]
+        public float grapplingRange = 30f;
         [Header("오토 타겟팅 탐지 범위 (각도)"), Range(1f,89f)]
         public float rangeAngle = 30f;
-        //public GameObject sphere;
 
         GameObject grappledTarget;
 
@@ -63,7 +64,7 @@ namespace KSU
         Vector3 startLeft;
         Vector3 startRight;
 
-        public Vector3 hVision;
+        Vector3 hVision;
 
         Vector3 endCenter;
         Vector3 endUp;
@@ -168,10 +169,18 @@ namespace KSU
                 if (!grapple.gameObject.activeSelf)
                 {
                     grappleSpawner.SetActive(false);
+                    if(/* 탑뷰일 때*/)
+                    {
+                        ///////////////// 선택지 2: 여기에 마우스 거리 만큼의 위치까지 쏘는 갈고리 발사
+                        Vector3 forward = (playerController.playerMouse.point.transform.position - transform.position);
+                        forward.y = 0;
+                        if(forward.magnitude > )
+                        grapple.InitGrapple(grappleSpawner.transform.position, (playerCamera.transform.position + transform.forward * (rangeDistance + rangeRadius * 2f)), grappleSpeed, grappleDepartOffset);
+                    }
+                    else
                     if (steadyInteractionState.isGrappledObjectFounded)
                     {
                         // 도착 위치: autoAimPosition
-                        transform.LookAt(transform.position + playerCamera.transform.forward);
                         grapple.InitGrapple(grappleSpawner.transform.position, autoAimPosition, grappleSpeed, grappleDepartOffset);
                     }
                     else
