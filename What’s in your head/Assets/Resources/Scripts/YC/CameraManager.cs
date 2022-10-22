@@ -2,7 +2,7 @@ using Photon.Pun;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using YC.Camera_;
 
 namespace YC.CameraManager_
 {
@@ -19,6 +19,15 @@ namespace YC.CameraManager_
         public static CameraManager Instance = null;
 
         float currentMiddleValue = 0.5f; // 현재 카메라 분할 중앙값
+
+        [SerializeField]
+        float defenceModeFOV = 60;
+
+        [Header("<기획 편집 사항>")]
+        [Header("보간 시간(디펜스 모드 카메라가 늘어나고 줄어드는 속도)")]
+        [SerializeField] float _LerpTime = 2.5f;
+
+
 
 
         CharacterCamera curFullCamera;
@@ -45,9 +54,37 @@ namespace YC.CameraManager_
         {
             if (cameras[(int)CharacterCamera.NELLA] == null || cameras[(int)CharacterCamera.STEADY] == null) return;
 
-            if (pv.IsMine) CheckAndPlay();
+            if (pv.IsMine)
+            {
+                CheckAndPlay();
 
-            //Debug.Log(isBlending);
+                // << : 유닛 테스트용 디펜스 모드 전환
+                //      
+                //      타이틀 씬 통해서 접근시
+                //      아래 함수 게임매니저 통해 플레이어들 불러오도록
+                //      플레이어 각각 NormalView함수 인풋 부분 수정(탑 스테이트로 바꾸는 부분)
+                if (Input.GetKeyDown(KeyCode.Alpha9)) // 게임매니저 통해서 호출하도록 
+                {
+                    pv.RPC(nameof(InitCamera), RpcTarget.AllBuffered, (int)CharacterCamera.NELLA); 
+                    pv.RPC(nameof(SetDefenceModeCamera), RpcTarget.AllBuffered);
+
+                }
+            }
+        }
+        [PunRPC]
+        void SetDefenceModeCamera()
+        {
+            // 유닛 테스트 임시용이다.
+            // 타이틀 씬 통해서 접속시, 게임매니저 통해서 플레이어 받아온다
+            GameObject NellaTemp = GameObject.FindGameObjectWithTag("Nella");
+            GameObject SteadyTemp = GameObject.FindGameObjectWithTag("Steady");
+
+            if(NellaTemp)
+                NellaTemp.GetComponent<CameraController>().SetDefenseMode();
+
+            if (SteadyTemp)
+                SteadyTemp.GetComponent<CameraController>().SetDefenseMode();
+
         }
 
         void CheckAndPlay()
@@ -93,20 +130,20 @@ namespace YC.CameraManager_
         public void NellaDeadCam()
         {
             pv.RPC(nameof(InitCamera), RpcTarget.AllViaServer, (int)CharacterCamera.STEADY); // 일단 스테디 카메라를 Full로 세팅
-            pv.RPC(nameof(Cor_SetSizeCamera), RpcTarget.AllViaServer, 0.36f, 2f);// 넬라 카메라를 만들어줌 (늘려줌)
+            pv.RPC(nameof(Cor_SetSizeCamera), RpcTarget.AllViaServer, 0.36f, _LerpTime);// 넬라 카메라를 만들어줌 (늘려줌)
         }
 
         // 스테이지 3 디펜스 모드 : 스테디 죽었을 때 호출
         public void SteadyDeadCam()
         {
             pv.RPC(nameof(InitCamera), RpcTarget.AllBuffered, (int)CharacterCamera.NELLA); // 일단 넬라 카메라를 Full로 세팅
-            pv.RPC(nameof(Cor_SetSizeCamera), RpcTarget.AllBuffered, 0.64f, 2f); // 스테디 카메라를 만들어줌 (늘려줌)
+            pv.RPC(nameof(Cor_SetSizeCamera), RpcTarget.AllBuffered, 0.64f, _LerpTime); // 스테디 카메라를 만들어줌 (늘려줌)
         }
 
         // 스테이지 3 디펜스 모드 : 넬라가 부활했을 때나, 스테디가 부활했을 때 호출
         public void ReviveCam()
         {
-            pv.RPC(nameof(Cor_SetFullScreen), RpcTarget.AllBuffered, 2f); // 죽기 전 Full로 되어있던 카메라를 다시 Full로 만들어줌
+            pv.RPC(nameof(Cor_SetFullScreen), RpcTarget.AllBuffered, _LerpTime); // 죽기 전 Full로 되어있던 카메라를 다시 Full로 만들어줌
         }
 
         // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> // 

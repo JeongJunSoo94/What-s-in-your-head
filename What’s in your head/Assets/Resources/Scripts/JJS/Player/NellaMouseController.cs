@@ -38,6 +38,12 @@ namespace JJS
             }
         }
 
+        // << : 오브젝트 충돌 체크 위해 수정
+        private void Update()
+        {
+            TargetUpdate();
+        }
+
         public override void AimUpdate(int type=0)
         {
             gun.ShootLine(type);
@@ -83,11 +89,11 @@ namespace JJS
                     {
                         for (int j = 0; j < hitObjs[i].HitColliders.Length; j++)
                         {
-                            //hitObjs[i].HitColliders[j].gameObject.SetActive(false);
-
                             // << : 넬라 기타 어택 센드메시지 수정 YC
-                            Debug.Log("넬라 마우스 컨트롤러 : Guitar Collision");
-                            hitObjs[i].HitColliders[j].gameObject.SendMessage("Attacked");
+                            if (hitObjs[i].HitColliders[j].gameObject.layer == LayerMask.NameToLayer("Platform"))
+                            {
+                                hitObjs[i].HitColliders[j].gameObject.SendMessage("Attacked");
+                            }
                         }
                     }
                 }
