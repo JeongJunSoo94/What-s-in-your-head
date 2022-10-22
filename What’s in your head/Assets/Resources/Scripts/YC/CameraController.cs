@@ -315,6 +315,24 @@ namespace YC.Camera_
             Debug.Log("디펜스 모드 세팅 - 카메라 컨트롤러!");
 
         }
+
+        // << : 스테디 빔 사용시, 스테디 Aim Attack State에서 호출
+        public void SetSteadyBeam(bool isLock)
+        {
+            if(isLock)
+            {
+                camList[(int)curCam].GetComponent<CinemachineFreeLook>().m_XAxis.m_InputAxisName = "";
+                camList[(int)curCam].GetComponent<CinemachineFreeLook>().m_YAxis.m_InputAxisName = "";
+            }
+            else
+            {
+                camList[(int)curCam].GetComponent<CinemachineFreeLook>().m_XAxis.m_InputAxisName = "Mouse X";
+                camList[(int)curCam].GetComponent<CinemachineFreeLook>().m_YAxis.m_InputAxisName = "Mouse Y";
+            }
+
+        }
+
+
         void CheckStartBlend_Clone() // Owner의 가상 카메라 전환 여부 체크 
         {
             if (blendingPrevCam_Clone != blendingCam_Clone)
