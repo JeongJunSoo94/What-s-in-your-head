@@ -164,7 +164,7 @@ namespace KSU
             if (characterState.IsGrounded)
             {
                 characterState.CheckGround(playerCapsuleCollider.radius);
-                if (!characterState.IsGrounded)
+                if (!characterState.IsGrounded && characterState.CanJump)
                 {
                     Vector3 horVel = playerRigidbody.velocity;
                     horVel.y = 0;
@@ -294,7 +294,8 @@ namespace KSU
                     {
                         Vector3 horVel = playerRigidbody.velocity;
                         horVel.y = 0;
-                        MakeinertiaVec(horVel.magnitude, moveDir);
+                        transform.LookAt(transform.position + horVel);
+                        MakeinertiaVec(horVel.magnitude, horVel.normalized);
                         moveVec.y = jumpSpeed;
                         return;
                     }
