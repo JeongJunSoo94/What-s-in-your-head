@@ -229,7 +229,7 @@ namespace KSU
 
         void SendInfoUI()
         {
-            Debug.Log("grappledObjects.Count: " + grappledObjects.Count);
+            //Debug.Log("grappledObjects.Count: " + grappledObjects.Count);
             if (grappledObjects.Count > 0)
             {
                 foreach (var grappledObject in grappledObjects)

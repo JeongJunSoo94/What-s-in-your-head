@@ -26,7 +26,7 @@ namespace KSU
         Vector3 noAimRot = new Vector3(-7.631f, 181.991f, 91.828f);
 
         // Start is called before the first frame update
-        void Start()
+        void Awake()
         {
             grappleRigidbody = GetComponent<Rigidbody>();
             grappleRope = GetComponent<LineRenderer>();
