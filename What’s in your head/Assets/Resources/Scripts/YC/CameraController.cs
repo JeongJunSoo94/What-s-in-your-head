@@ -15,6 +15,7 @@ using Cinemachine;
 
 using JCW.UI.Options.InputBindings;
 using YC.CameraManager_;
+using UnityEngine.Rendering.Universal;
 
 using KSU;
 
@@ -173,6 +174,8 @@ namespace YC.Camera_
             }
         }
 
+
+
         void BlockMouseControlInBlending() // 블렌딩 도중 마우스 입력을 막는다
         {
             if (cinemachineBrain.IsBlending)
@@ -239,6 +242,8 @@ namespace YC.Camera_
                     preCam = curCam;
                     curCam = CamState.sholder;
 
+                    camList[(int)curCam].GetComponent<CinemachineFreeLook>().m_YAxis.Value = 0.5f;
+
                     OnOffCamera(sholderCam);
 
                     sholderCam.GetComponent<CinemachineFreeLook>().m_XAxis = temp;
@@ -247,6 +252,8 @@ namespace YC.Camera_
                 {
                     preCam = curCam;
                     curCam = CamState.top;
+
+
                     OnOffCamera(topCam);
                 }
             }
@@ -259,6 +266,10 @@ namespace YC.Camera_
 
                     preCam = curCam;
                     curCam = CamState.back;
+
+                    camList[(int)curCam].GetComponent<CinemachineFreeLook>().m_YAxis.Value = 0.5f;
+
+
 
                     OnOffCamera(backCam);
 
@@ -390,6 +401,7 @@ namespace YC.Camera_
             if (this.gameObject.CompareTag("Nella"))
             {
                 mainCam = GameObject.FindGameObjectWithTag("NellaCamera").GetComponent<Camera>();
+                mainCam.GetComponent<UniversalAdditionalCameraData>().SetRenderer(0);
 
                 cinemachineBrain = mainCam.GetComponent<CinemachineBrain>();
                 CameraManager.Instance.cameras[0] = mainCam;
@@ -398,6 +410,7 @@ namespace YC.Camera_
             else if (this.gameObject.CompareTag("Steady"))
             {
                 mainCam = GameObject.FindGameObjectWithTag("SteadyCamera").GetComponent<Camera>();
+                mainCam.GetComponent<UniversalAdditionalCameraData>().SetRenderer(1);
                 cinemachineBrain = mainCam.GetComponent<CinemachineBrain>();
                 CameraManager.Instance.cameras[1] = mainCam;
             }
