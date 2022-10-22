@@ -65,7 +65,8 @@ namespace JJS
 
         void InputCheck(Animator animator)
         {
-            if (Input.GetKeyDown(KeyCode.Alpha1))
+            // << 디펜스 모드 입장시 스테이트 전환 YC
+            if (Input.GetKeyDown(KeyCode.Alpha9))
             {
                 GetPlayerController(animator).characterState.top = !GetPlayerController(animator).characterState.top;
                 animator.SetBool("Top", GetPlayerController(animator).characterState.top);
