@@ -32,7 +32,7 @@ namespace YC_OBJ
        
         void Update()
         {
-            Debug.Log(curCount);    
+            //Debug.Log(curCount);    
         }
 
         private void OnTriggerEnter(Collider other)
