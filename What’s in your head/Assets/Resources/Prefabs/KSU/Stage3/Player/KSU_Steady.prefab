@@ -27089,7 +27089,6 @@ MonoBehaviour:
   characterState: {fileID: 8750876866218855433}
   playerMouse: {fileID: 1441877394586250121}
   mainCamera: {fileID: 0}
-  playerRigidbody: {fileID: 0}
   moveSpeed: 0
   walkSpeed: 4
   runSpeed: 7
@@ -27119,7 +27118,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 79eaf00710311bd4abc8301ba037e744, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  point: {fileID: 0}
+  point: {fileID: 8939535261352753444, guid: ee0a33d1c4c620c49a258063353353d8, type: 3}
   cameraMain: {fileID: 0}
   weaponInfo:
   - weapon: {fileID: 4916860645856199904}
@@ -27155,7 +27154,6 @@ MonoBehaviour:
   groundCheckThresholdMax: 0.1
   height: 0
   RayCheck: 0
-  maxSlopeAngle: 40
   slopeAngle: 0
   slopeAngleCofacter: 0
   IsGrounded: 0
@@ -27163,21 +27161,22 @@ MonoBehaviour:
   isOverAngleForSlope: 0
   isMove: 0
   isRun: 0
-  jumpCoolTime: 0.2
   CanJump: 1
   IsJumping: 0
   IsAirJumping: 0
   IsDashing: 0
   IsAirDashing: 0
   WasAirDashing: 0
-  dashTime: 1
-  airDashTime: 0.5
   isMine: 0
   isOutOfControl: 0
   outOfControllDuration: 0
   aim: 0
   top: 0
   swap: 0
+  maxSlopeAngle: 40
+  jumpCoolTime: 0.2
+  dashTime: 1
+  airDashTime: 0.5
 --- !u!114 &6988878118824629920
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -27252,17 +27251,13 @@ MonoBehaviour:
   layerForRail:
     serializedVersion: 2
     m_Bits: 1024
-  rangeRadius: 5
-  rangeDistance: 5
   currentRail: {fileID: 0}
   railStartObject: {fileID: 0}
-  railStartPosiotion: {x: 0, y: 0, z: 0}
+  rangeRadius: 5
+  rangeDistance: 5
   movingToRailSpeed: 10
   railJumpHeight: 4
   railJumpSpeed: 6
-  escapingRopeSpeed: 6
-  escapingRoDelayTime: 1
-  hVision: {x: 0, y: 0, z: 0}
 --- !u!114 &-8464429117851822576
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -27276,7 +27271,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   hand: {fileID: 5036646347784986607}
-  currentRidingRope: {fileID: 0}
+  layerFilterForRope:
+    serializedVersion: 2
+    m_Bits: 36353
   interactableRope: {fileID: 0}
   moveToRopeSpeed: 6
   escapingRopeSpeed: 6
@@ -27323,8 +27320,8 @@ MonoBehaviour:
   escapeGrapplePower: 10
   rangeRadius: 5
   rangeDistance: 20
+  grapplingRange: 30
   rangeAngle: 89
-  hVision: {x: 0, y: 0, z: 0}
 --- !u!1 &4466008002735749242
 GameObject:
   m_ObjectHideFlags: 0
