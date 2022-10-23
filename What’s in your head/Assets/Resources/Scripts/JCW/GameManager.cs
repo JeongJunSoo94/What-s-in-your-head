@@ -5,15 +5,14 @@ using Photon.Pun;
 using UnityEngine;
 
 [RequireComponent(typeof(PhotonView))]
-public class GameManager : MonoBehaviour
+public class GameManager : MonoBehaviour, IPunObservable
 {    
     // 좌측 bool 값은 master client인지, 우측 bool 값은 Nella 캐릭터인지.    
-    [HideInInspector] public Dictionary<bool, bool> characterOwner = new();
-   
+    [HideInInspector] public Dictionary<bool, bool> characterOwner = new();   
 
     // 현재 스테이지 , 섹션 인덱스
     [HideInInspector] public int curStageIndex = 0;
-    [HideInInspector] public int curSection { get; private set; }
+    [HideInInspector] public int curSection;
     
     // 현재 캐릭터들의 생존 여부
     [HideInInspector] public Hashtable isAlive = new();
@@ -24,6 +23,9 @@ public class GameManager : MonoBehaviour
 
     // Remote인 다른 캐릭터의 위치
     [HideInInspector] public Transform otherPlayerTF;
+
+    // 현재 탑뷰인지
+    [Header("탑뷰")] public bool isTopView;
 
     public int curPlayerHP = 12;
 
@@ -47,7 +49,7 @@ public class GameManager : MonoBehaviour
     }
     public void SectionUP() { ++curSection;  }
 
-    // 누구 하나 죽었거나, 죽음->부활일 때 작동하는 함수
+    // 누구 하나 죽었거나, 죽음->부활일 때 작동하는 함수=====================
     public void MediateRevive(bool value)
     {
         photonView.RPC(nameof(MediateRevive_RPC), RpcTarget.AllViaServer, value);
@@ -59,8 +61,10 @@ public class GameManager : MonoBehaviour
         reviveAllPairs[true].SetRevive(value);
         reviveAllPairs[false].SetRevive(value);
     }
+    // ====================================================================
 
-    // HP UI 켜고 끄는 함수
+
+    // HP UI 켜고 끄는 함수===================================================
 
     public void MediateHP(bool value)
     {
@@ -73,6 +77,7 @@ public class GameManager : MonoBehaviour
         hpAllPairs[true].SetHP(value);
         hpAllPairs[false].SetHP(value);
     }
+    //=======================================================================
 
     // 각 캐릭터가 살아있는 지 죽어있는지, 양 컴퓨터의 게임매니저를 통해 값 변경
     public void SetAliveState(bool _isNella, bool _value)
@@ -86,6 +91,7 @@ public class GameManager : MonoBehaviour
     {
         isAlive[_isNella] = _value;
     }
+    //==========================================================================
 
     // 각 캐릭터가 살아있는 지 죽어있는지, 양 컴퓨터의 게임매니저를 통해 추가
     public void AddAliveState(bool _isNella, bool _value)
@@ -97,5 +103,25 @@ public class GameManager : MonoBehaviour
     void AddAlive(bool _isNella, bool _value)
     {
         isAlive.Add(_isNella, _value);
+    }
+    //===========================================================================
+
+    public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
+    {
+        // 보내는 사람
+        if (stream.IsWriting)
+        {
+            stream.SendNext(isTopView);
+            stream.SendNext(curStageIndex);            
+            stream.SendNext(curSection);            
+        }
+
+        // 받는 사람
+        else
+        {
+            isTopView                                   = (bool)stream.ReceiveNext();
+            curStageIndex                               = (int)stream.ReceiveNext();
+            curSection                                  = (int)stream.ReceiveNext();
+        }
     }
 }

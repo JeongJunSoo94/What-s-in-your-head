@@ -1,6 +1,7 @@
 using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
+using YC.CameraManager_;
 
 namespace JCW.UI.InGame.Indicator
 {
@@ -33,6 +34,11 @@ namespace JCW.UI.InGame.Indicator
 
         // UI가 켜졌는지
         protected bool isActive;
+
+        virtual protected void Awake()
+        {
+            mainCamera = isNella ? CameraManager.Instance.cameras[0] : CameraManager.Instance.cameras[1];
+        }
 
         // 카메라 범위를 벗어났을 때를 위한 설정
         protected Vector3 OutOfRange(Vector3 indicatorPosition)

@@ -1,4 +1,5 @@
 using System.Collections;
+using Photon.Pun;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Video;
@@ -23,8 +24,9 @@ namespace JCW.UI.InGame.Indicator
         //상호작용 가능한지
         bool isInteractable;
 
-        void Awake()
+        override protected void Awake()
         {
+            base.Awake();
             detectUI = transform.GetChild(0).gameObject;
             imgTransform = detectUI.transform.GetChild(0).GetComponent<RectTransform>();
 
@@ -42,10 +44,10 @@ namespace JCW.UI.InGame.Indicator
             videoPlayer = imgTransform.GetChild(0).GetComponent<VideoPlayer>();
 
             // 정식으로 사용할 때엔 아래 코드 쓸것
-            //isNella = GameManager.Instance.characterOwner[PhotonNetwork.IsMasterClient];
+            isNella = GameManager.Instance.characterOwner[PhotonNetwork.IsMasterClient];
 
             // 임시
-            isNella = true;
+            //isNella = true;
         }
 
         private void Update()
@@ -90,15 +92,14 @@ namespace JCW.UI.InGame.Indicator
 
         // 로프용 : 감지 & 상호작용 스프라이트 존재 / 따라서 변환하는 애니메이션도 존재
         // 타겟은 인스펙터 창에서 넣어줌
-        public void SetUI(bool isUIActive, bool isSetOn, float distance, Camera _cam)
+        public void SetUI(bool isUIActive, bool isSetOn, float distance)
         {
             detectUI.SetActive(isUIActive);
             isActive = isUIActive;
 
             if (isActive)
             {
-                videoPlayer.targetCamera = _cam;
-                mainCamera = videoPlayer.targetCamera;
+                videoPlayer.targetCamera = mainCamera;
                 SetSreenInfo();
                 // 상호작용 범위 밖->안 & 안->밖 들어갔을 때만 애니메이션 재생과 함께 스프라이트 변경
                 if (isInteractable != isSetOn)

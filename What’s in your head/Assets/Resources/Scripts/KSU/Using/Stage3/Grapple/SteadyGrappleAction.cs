@@ -9,6 +9,7 @@ using YC.Camera_Single;
 
 
 using JCW.UI.InGame;
+using JCW.UI.InGame.Indicator;
 
 namespace KSU
 {
@@ -235,11 +236,11 @@ namespace KSU
                     bool rayCheck = Physics.Raycast(playerCamera.transform.position, directoin, grappledObject.GetComponentInParent<GrappledObject>().detectingRange * 1.5f, layerFilterForGrapple, QueryTriggerInteraction.Ignore);
                     if(rayCheck)
                     {
-                        grappledObject.transform.parent.gameObject.GetComponentInChildren<TargetIndicator>().SetUI(true, playerCamera);
+                        grappledObject.transform.parent.gameObject.GetComponentInChildren<OneIndicator>().SetUI(true);
                     }
                     else
                     {
-                        grappledObject.transform.parent.gameObject.GetComponentInChildren<TargetIndicator>().SetUI(false, playerCamera);
+                        grappledObject.transform.parent.gameObject.GetComponentInChildren<OneIndicator>().SetUI(false);
                     }
                 }
             }
@@ -321,7 +322,7 @@ namespace KSU
         {
             if ((other.gameObject.layer == LayerMask.NameToLayer("UITriggers")) && other.CompareTag("GrappledObject"))
             {
-                other.gameObject.transform.parent.gameObject.GetComponentInChildren<TargetIndicator>().SetUI(false, playerCamera);
+                other.gameObject.transform.parent.gameObject.GetComponentInChildren<OneIndicator>().SetUI(false);
                 grappledObjects.Remove(other.gameObject);
             }
         }

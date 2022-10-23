@@ -7,6 +7,7 @@ using JCW.UI.Options.InputBindings;
 using YC.Camera_;
 using YC.Camera_Single;
 using JCW.UI.InGame;
+using JCW.UI.InGame.Indicator;
 
 namespace KSU
 {
@@ -246,7 +247,7 @@ namespace KSU
                 {
                     //isMine false면 안보냄 / 현재 널
                     //Debug.Log(rope.Key.GetComponentInChildren<TargetIndicator>().gameObject.name);
-                    rope.Key.transform.parent.gameObject.GetComponentInChildren<TargetIndicator>().SetUI(rope.Value.isUIActive, rope.Value.isInteractable, rope.Value.distance, mainCamera);
+                    rope.Key.transform.parent.gameObject.GetComponentInChildren<ConvertIndicator>().SetUI(rope.Value.isUIActive, rope.Value.isInteractable, rope.Value.distance);
                     // UI상태(bool)가 다르면 신호 struct Obj_Info(bool isUIActive,bool isInteractive, float distance)를 보냄
                 }
             }
@@ -266,7 +267,7 @@ namespace KSU
             if (other.CompareTag("Rope") && GetComponent<PhotonView>().IsMine)
             {
                 Debug.Log("트리거 탈출 : " + mainCamera);
-                other.gameObject.GetComponentInChildren<TargetIndicator>().SetUI(false, false, 100f, mainCamera);                
+                other.gameObject.GetComponentInChildren<ConvertIndicator>().SetUI(false, false, 100f);                
                 detectedRopes.Remove(other.gameObject);
             }
         }

@@ -7,6 +7,7 @@ using Cinemachine.Utility;
 using YC.Camera_;
 using YC.Camera_Single;
 using JCW.UI.InGame;
+using JCW.UI.InGame.Indicator;
 
 namespace KSU
 {
@@ -380,12 +381,12 @@ namespace KSU
             {
                 if (interactionState.isRailFounded)
                 {
-                    railStartObject.transform.parent.gameObject.GetComponentInChildren<TargetIndicator>().SetUI(true, _raycastHit.point, mainCamera);
+                    railStartObject.transform.parent.gameObject.GetComponentInChildren<OneIndicator>().SetUI(true, _raycastHit.point);
                     foreach (var rail in detectedRail.Keys)
                     {
                         if (rail != railStartObject.transform.parent.gameObject)
                         {
-                            rail.GetComponentInChildren<TargetIndicator>().SetUI(false, Vector3.zero, mainCamera);
+                            rail.GetComponentInChildren<OneIndicator>().SetUI(false, Vector3.zero);
                         }
                     }
                 }
@@ -393,7 +394,7 @@ namespace KSU
                 {
                     foreach (var rail in detectedRail.Keys)
                     {
-                        rail.GetComponentInChildren<TargetIndicator>().SetUI(false, Vector3.zero, mainCamera);
+                        rail.GetComponentInChildren<OneIndicator>().SetUI(false, Vector3.zero);
                     }
                 }
             }

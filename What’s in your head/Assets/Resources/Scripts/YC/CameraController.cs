@@ -248,7 +248,7 @@ namespace YC.Camera_
 
                     sholderCam.GetComponent<CinemachineFreeLook>().m_XAxis = temp;
                 }
-                else if (Input.GetKeyDown(KeyCode.Alpha1)) // back View -> Top View
+                else if (GameManager.Instance.isTopView) // back View -> Top View
                 {
                     preCam = curCam;
                     curCam = CamState.top;
