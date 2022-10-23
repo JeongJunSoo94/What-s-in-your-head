@@ -11,7 +11,6 @@ namespace JJS
         public BezierCurve curve;
         public Spawner spawner;
 
-        public Vector3 vecDistance;
         private void Awake()
         {
             spawner = this.transform.parent.gameObject.GetComponent<Spawner>();
@@ -21,21 +20,25 @@ namespace JJS
         private void OnEnable()
         {
             bulletRange = 0f;
-            vecDistance = curve.p1 - curve.p4;
+            curve.range = 0;
         }
+
 
         // >> : 찬, 총알 발사 관련 수정 
         void Update()
         {
             if (bulletRange < 1f)
             {
-                bulletRange += speed/Vector3.Distance(curve.p1, curve.p4) * Time.deltaTime;
+                bulletRange += speed / Vector3.Distance(curve.p1, curve.p4) * Time.deltaTime;
             }
             else
             {
                 bulletRange = 1f;
                 spawner.Despawn(this.gameObject);
             }
+            Vector3 direction = curve.BezierCurveUpdate(curve.p1, curve.p2, curve.p3, curve.p4, bulletRange+ (speed / Vector3.Distance(curve.p1, curve.p4))* Time.deltaTime);
+
+            transform.LookAt(direction);
             curve.range = bulletRange;
         }
         // << :

@@ -23,8 +23,10 @@ namespace JJS
         }
         void Update()
         {
-            if(on)
+            if (on)
+            {
                 targetObj.transform.position = BezierCurveUpdate(p1, p2, p3, p4, range);
+            }
         }
 
         public Vector3 BezierCurveUpdate(Vector3 p_1, Vector3 p_2, Vector3 p_3, Vector3 p_4, float value)

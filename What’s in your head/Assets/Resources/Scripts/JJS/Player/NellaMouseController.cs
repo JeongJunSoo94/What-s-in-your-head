@@ -41,17 +41,25 @@ namespace JJS
 
         public override void SetWeaponEnable(int weaponIndex,bool enable)
         {
-            if (weaponInfo.Count != 0)
+            //if (weaponInfo.Count != 0)
+            //{
+            //    weaponInfo[weaponIndex].weapon.SetActive(enable);
+            //}
+            if (enable)
             {
-                weaponInfo[weaponIndex].weapon.SetActive(enable);
+                gun.ShootStart();
+            }
+            else
+            {
+                gun.ShootStop();
             }
         }
 
-        public void Shoot()
-        {
-            gun.Shoot();
-            bulletCount++;
-        }
+        //public void Shoot()
+        //{
+        //    gun.Shoot();
+        //    bulletCount++;
+        //}
 
         public void OnEnableObject(int index)
         {
@@ -68,6 +76,7 @@ namespace JJS
         {
             ableToLeft = !ableToLeft;
         }
+
 
         void TargetUpdate()
         {
