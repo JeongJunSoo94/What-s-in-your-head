@@ -453,8 +453,8 @@ namespace KSU
                 if (characterState.isMove) // 내리막길 이동시 경사각에 따른 수직속도 보정값
                     moveVec.y = characterState.slopeAngleCofacter * moveSpeed;
 
-                if (characterState.height >= characterState.groundCheckThresholdMin)
-                    moveVec += Vector3.up * (gravity * gravityCofactor * Time.fixedDeltaTime);
+                //if (characterState.height >= characterState.groundCheckThresholdMin)
+                //    moveVec += Vector3.up * (gravity * gravityCofactor * Time.fixedDeltaTime);
             }
 
             playerRigidbody.velocity = moveVec;

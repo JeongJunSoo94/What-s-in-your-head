@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 7909980709306676818}
   - component: {fileID: 7909980709306676816}
   - component: {fileID: 7909980709306676817}
-  m_Layer: 21
+  m_Layer: 6
   m_Name: Grapple
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -178,11 +178,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   player: {fileID: 0}
   spawner: {fileID: 0}
-  departingOffset: 0.2
   isEndPosition: 0
   isSucceeded: 0
-  moveSpeed: 15
   horizonInertiaSpeed: 0
+  gravity: 0
   horizonInertiaVec: {x: 0, y: 0, z: 0}
   fallingVelocity: {x: 0, y: 0, z: 0}
   delayDeactivationTime: 1
@@ -196,6 +195,10 @@ PrefabInstance:
     - target: {fileID: 1754576605744820, guid: 157334fe1b9d5334bb1927ec68e77034, type: 3}
       propertyPath: m_Name
       value: Hook
+      objectReference: {fileID: 0}
+    - target: {fileID: 1754576605744820, guid: 157334fe1b9d5334bb1927ec68e77034, type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 4868871993783650, guid: 157334fe1b9d5334bb1927ec68e77034, type: 3}
       propertyPath: m_RootOrder

@@ -58,8 +58,13 @@ namespace JJS
                     return;
                 }
 
-                if(GetPlayerController(animator).characterState.CanJump)
-                    animator.SetBool("Aim", KeyManager.Instance.GetKey(PlayerAction.Aim));
+                if (GetPlayerController(animator).characterState.isMine)
+                {
+                    if (GetPlayerController(animator).characterState.CanJump)
+                    {
+                        animator.SetBool("Aim", KeyManager.Instance.GetKey(PlayerAction.Aim));
+                    }
+                }
             }
         }
     }

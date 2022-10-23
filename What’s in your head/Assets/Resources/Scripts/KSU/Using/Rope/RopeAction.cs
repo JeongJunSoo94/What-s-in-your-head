@@ -6,7 +6,7 @@ using Photon.Pun;
 using JCW.UI.Options.InputBindings;
 using YC.Camera_;
 using YC.Camera_Single;
-using JCW.UI.InGame;
+using JCW.UI.InGame.Indicator;
 
 namespace KSU
 {
@@ -239,7 +239,7 @@ namespace KSU
             {
                 foreach (var rope in detectedRopes)
                 {
-                    rope.Key.transform.GetComponentInChildren<TargetIndicator>().SetUI(rope.Value.isUIActive, rope.Value.isInteractable, rope.Value.distance, mainCamera);
+                    rope.Key.transform.GetComponentInChildren<ConvertIndicator>().SetUI(rope.Value.isUIActive, rope.Value.isInteractable, rope.Value.distance);
                 }
             }
         }
@@ -258,7 +258,7 @@ namespace KSU
             if (other.CompareTag("Rope") && GetComponent<PhotonView>().IsMine)
             {
                 Debug.Log("∆Æ∏Æ∞≈ ≈ª√‚ : " + other.gameObject.transform.parent.gameObject);
-                other.gameObject.transform.parent.gameObject.GetComponentInChildren<TargetIndicator>().SetUI(false, false, 100f, mainCamera);                
+                other.gameObject.transform.parent.gameObject.GetComponentInChildren<ConvertIndicator>().SetUI(false, false, 100f);                
                 detectedRopes.Remove(other.gameObject.transform.parent.gameObject);
             }
         }

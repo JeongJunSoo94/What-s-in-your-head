@@ -49,13 +49,16 @@ namespace JJS
 
         void check(Animator animator)
         {
-            if (GetPlayerController(animator).playerMouse.weaponInfo[GetPlayerController(animator).playerMouse.GetUseWeapon()].canAim)
+            if(GetPlayerController(animator).characterState.isMine)
             {
-                if (GetPlayerController(animator).characterState.aim|| GetPlayerController(animator).characterState.top)
+                if (GetPlayerController(animator).playerMouse.weaponInfo[GetPlayerController(animator).playerMouse.GetUseWeapon()].canAim)
                 {
-                    if (KeyManager.Instance.GetKey(PlayerAction.Fire))
+                    if (GetPlayerController(animator).characterState.aim || GetPlayerController(animator).characterState.top)
                     {
-                        animator.SetBool("AimAttack", true);
+                        if (KeyManager.Instance.GetKey(PlayerAction.Fire))
+                        {
+                            animator.SetBool("AimAttack", true);
+                        }
                     }
                 }
             }
@@ -69,7 +72,10 @@ namespace JJS
                     return;
                 }
 
-                animator.SetBool("Aim", KeyManager.Instance.GetKey(PlayerAction.Aim));
+                if(GetPlayerController(animator).characterState.isMine)
+                {
+                    animator.SetBool("Aim", KeyManager.Instance.GetKey(PlayerAction.Aim));
+                }
             }
         }
 
