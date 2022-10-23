@@ -12,7 +12,8 @@ namespace JJS
         {
             if (GetPlayerController(animator).characterState.isMine) // << : 찬 (스테디 빔 마우스 락)
             {
-                GetPlayerController(animator).GetComponent<CameraController>().SetSteadyBeam(true);
+                if(GetPlayerController(animator).CompareTag("Steady"))
+                    GetPlayerController(animator).GetComponent<CameraController>().SetSteadyBeam(true);
             }
         }
 
@@ -64,7 +65,8 @@ namespace JJS
         {
             if (GetPlayerController(animator).characterState.isMine) // << : 찬 (스테디 빔 마우스 락)
             {
-                GetPlayerController(animator).GetComponent<CameraController>().SetSteadyBeam(false);
+                if (GetPlayerController(animator).CompareTag("Steady"))
+                    GetPlayerController(animator).GetComponent<CameraController>().SetSteadyBeam(false);
             }
         }
 

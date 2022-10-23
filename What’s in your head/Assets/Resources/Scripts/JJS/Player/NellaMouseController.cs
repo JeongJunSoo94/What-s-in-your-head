@@ -89,11 +89,11 @@ namespace JJS
                     {
                         for (int j = 0; j < hitObjs[i].HitColliders.Length; j++)
                         {
-                            // << : 넬라 기타 어택 센드메시지 수정 YC
-                            if (hitObjs[i].HitColliders[j].gameObject.layer == LayerMask.NameToLayer("Platform"))
+                            // << : 넬라 기타 어택 센드메시지 수정 YC (기타가 부쉬와 충돌시 부쉬에게 센드메시지(부쉬 이펙트 및 삭제)
+                            if (hitObjs[i].HitColliders[j].gameObject.CompareTag("Bush"))
                             {
                                 hitObjs[i].HitColliders[j].gameObject.SendMessage("Attacked");
-                            }
+                            }                         
                         }
                     }
                 }
