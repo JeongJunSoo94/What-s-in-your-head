@@ -14,7 +14,6 @@ namespace JJS
 
         public WaterGun gun;
 
-        public int bulletCount=0;
         private void Awake()
         {
             if (PhotonNetwork.NetworkClientState == Photon.Realtime.ClientState.Joined)
