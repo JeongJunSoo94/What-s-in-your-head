@@ -1,4 +1,5 @@
 using System.Collections;
+using Photon.Pun;
 using UnityEngine;
 using UnityEngine.UI;
 using YC.CameraManager_;
@@ -32,6 +33,14 @@ namespace JCW.UI.InGame.Indicator
 
         // UI가 켜졌는지
         protected bool isActive;
+
+        virtual protected void Start()
+        {
+            if (GameManager.Instance.characterOwner.Count == 0)
+                isNella =true;
+            else
+                isNella = GameManager.Instance.characterOwner[PhotonNetwork.IsMasterClient];
+        }
 
         // 카메라 범위를 벗어났을 때를 위한 설정
         protected Vector3 OutOfRange(Vector3 indicatorPosition)

@@ -39,10 +39,15 @@ namespace JCW.UI.InGame.Indicator
             {
                 Destroy(this.gameObject);
                 return;
-            }            
-            // 정식으로 사용할 때엔 아래 코드 쓸것
-            isNella = GameManager.Instance.characterOwner[PhotonNetwork.IsMasterClient];
-            if(isNella)
+            }
+            
+            myTF = transform.parent;
+        }
+
+        protected override void Start()
+        {
+            base.Start();
+            if (isNella)
             {
                 myIndicatorTop = nellaTopView;
                 otherIndicatorTop = steadyTopView;
@@ -54,9 +59,6 @@ namespace JCW.UI.InGame.Indicator
                 otherIndicatorTop = nellaTopView;
                 otherIndicatorNormal = nellaNormal;
             }
-
-            // 임시
-            //isNella = true;
             detectUI = transform.GetChild(0).gameObject;
             myImgTransform = detectUI.transform.GetChild(0).GetComponent<RectTransform>();
             myImgTransform.sizeDelta = new Vector2(myIndicatorTop.bounds.size.x, myIndicatorTop.bounds.size.y);
@@ -65,7 +67,7 @@ namespace JCW.UI.InGame.Indicator
             myImg = myImgTransform.gameObject.GetComponent<Image>();
             myImg.sprite = myIndicatorTop;
 
-            //TopView인지를 받아와야함            
+
 
             // 노멀 뷰일때만 쓰임 =======================================================================================
             // 기존에 설정된 스프라이트 크기만큼 범위 조절
@@ -78,16 +80,6 @@ namespace JCW.UI.InGame.Indicator
             outOfSightImgScale = imgTransform.localScale * 0.8f;
             initImgScale = imgTransform.localScale;
             // ========================================================================================================
-
-            
-
-            //타겟은 상대방
-            //target = GameManager.Instance.otherPlayerTF;            
-            myTF = transform.parent;
-
-            // 내 카메라를 가져와야함
-            //mainCamera = isNella ? CameraManager.Instance.cameras[0] : CameraManager.Instance.cameras[1];
-            SetSreenInfo();
         }
 
         void Update()

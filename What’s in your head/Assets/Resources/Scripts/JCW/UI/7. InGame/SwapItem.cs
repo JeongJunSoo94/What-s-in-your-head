@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using KSU;
 using Photon.Pun;
 using UnityEngine;
 using UnityEngine.UI;
@@ -22,6 +21,7 @@ namespace JCW.UI.InGame
         private void Awake()
         {
             curStageIndex = GameManager.Instance.curStageIndex;
+            curStageIndex = 3;
             if (curStageIndex != 2 && curStageIndex != 3)
             {
                 this.gameObject.SetActive(false);
