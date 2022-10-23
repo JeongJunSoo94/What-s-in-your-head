@@ -6,20 +6,20 @@ using UnityEngine;
 
 [RequireComponent(typeof(PhotonView))]
 public class GameManager : MonoBehaviour, IPunObservable
-{
+{    
     // 좌측 bool 값은 master client인지, 우측 bool 값은 Nella 캐릭터인지.    
-    [HideInInspector] public Dictionary<bool, bool> characterOwner = new();
+    [HideInInspector] public Dictionary<bool, bool> characterOwner = new();   
 
     // 현재 스테이지 , 섹션 인덱스
     [HideInInspector] public int curStageIndex = 0;
     [HideInInspector] public int curSection;
-
+    
     // 현재 캐릭터들의 생존 여부
     [HideInInspector] public Hashtable isAlive = new();
 
     // 좌측 bool 값은 Nella 캐릭터인지, 우측은 해당 캐릭터가 가지고 있는 스크립트
-    [HideInInspector] public Dictionary<bool, HealthUI> reviveAllPairs = new();
-    [HideInInspector] public Dictionary<bool, CharUI> hpAllPairs = new();
+    [HideInInspector] public Dictionary<bool, HealthUI> reviveAllPairs= new();
+    [HideInInspector] public Dictionary<bool, CharUI> hpAllPairs= new();
 
     // Remote인 다른 캐릭터의 위치
     [HideInInspector] public Transform otherPlayerTF;
@@ -34,7 +34,7 @@ public class GameManager : MonoBehaviour, IPunObservable
     public static GameManager Instance;
     private void Awake()
     {
-        if (Instance == null)
+        if (Instance==null)
         {
             Instance = this;
             DontDestroyOnLoad(this.gameObject);
@@ -45,9 +45,9 @@ public class GameManager : MonoBehaviour, IPunObservable
         photonView = GetComponent<PhotonView>();
 
         curStageIndex = 0;
-        curSection = 0;
+        curSection = 0;             
     }
-    public void SectionUP() { ++curSection; }
+    public void SectionUP() { ++curSection;  }
 
     // 누구 하나 죽었거나, 죽음->부활일 때 작동하는 함수=====================
     public void MediateRevive(bool value)
@@ -112,16 +112,16 @@ public class GameManager : MonoBehaviour, IPunObservable
         if (stream.IsWriting)
         {
             stream.SendNext(isTopView);
-            stream.SendNext(curStageIndex);
-            stream.SendNext(curSection);
+            stream.SendNext(curStageIndex);            
+            stream.SendNext(curSection);            
         }
 
         // 받는 사람
         else
         {
-            isTopView = (bool)stream.ReceiveNext();
-            curStageIndex = (int)stream.ReceiveNext();
-            curSection = (int)stream.ReceiveNext();
+            isTopView                                   = (bool)stream.ReceiveNext();
+            curStageIndex                               = (int)stream.ReceiveNext();
+            curSection                                  = (int)stream.ReceiveNext();
         }
     }
 }

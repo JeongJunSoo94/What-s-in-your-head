@@ -41,10 +41,8 @@ namespace JCW.UI.InGame.Indicator
                 return;
             }            
             // 정식으로 사용할 때엔 아래 코드 쓸것
-            //isNella = GameManager.Instance.characterOwner[PhotonNetwork.IsMasterClient];
-            // 임시
-            isNella = true;
-            if (isNella)
+            isNella = GameManager.Instance.characterOwner[PhotonNetwork.IsMasterClient];
+            if(isNella)
             {
                 myIndicatorTop = nellaTopView;
                 otherIndicatorTop = steadyTopView;
@@ -56,6 +54,9 @@ namespace JCW.UI.InGame.Indicator
                 otherIndicatorTop = nellaTopView;
                 otherIndicatorNormal = nellaNormal;
             }
+
+            // 임시
+            //isNella = true;
             detectUI = transform.GetChild(0).gameObject;
             myImgTransform = detectUI.transform.GetChild(0).GetComponent<RectTransform>();
             myImgTransform.sizeDelta = new Vector2(myIndicatorTop.bounds.size.x, myIndicatorTop.bounds.size.y);

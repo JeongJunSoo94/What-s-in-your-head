@@ -79,7 +79,7 @@ namespace JCW.UI.InGame.Indicator
         // 스크린 사이즈 Rect값에 맞게끔 설정
         protected void SetSreenInfo()
         {
-            if (mainCamera == null)
+            if (mainCamera==null)
                 SetCam();
             Rect cameraPos = mainCamera.rect;
             screenSize = new(canvasSize.rect.width * cameraPos.x,

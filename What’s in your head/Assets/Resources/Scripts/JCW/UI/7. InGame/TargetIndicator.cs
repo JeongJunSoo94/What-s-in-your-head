@@ -269,7 +269,7 @@ namespace JCW.UI.InGame
             yield return null;
         }
 
-        // 스크린 사이즈
+        // 스크린 사이즈 Rect값에 맞게끔 설정
         void SetSreenInfo()
         {
             Rect cameraPos = mainCamera.rect;

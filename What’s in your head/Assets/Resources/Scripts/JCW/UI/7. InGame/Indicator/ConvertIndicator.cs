@@ -29,7 +29,7 @@ namespace JCW.UI.InGame.Indicator
             
             detectUI = transform.GetChild(0).gameObject;
             imgTransform = detectUI.transform.GetChild(0).GetComponent<RectTransform>();
-
+            gauge = detectUI.transform.GetChild(1).GetComponent<Image>();
 
             // 기존에 설정된 스프라이트 크기만큼 범위 조절
             imgTransform.sizeDelta = new Vector2(nella_DetectSprite.bounds.size.x, nella_DetectSprite.bounds.size.y);
@@ -44,9 +44,11 @@ namespace JCW.UI.InGame.Indicator
             videoPlayer = imgTransform.GetChild(0).GetComponent<VideoPlayer>();
 
             // 정식으로 사용할 때엔 아래 코드 쓸것
-            //isNella = GameManager.Instance.characterOwner[PhotonNetwork.IsMasterClient];
+            isNella = GameManager.Instance.characterOwner[PhotonNetwork.IsMasterClient];
             // 임시
-            isNella = true;
+            //isNella = true;
+
+            
         }
 
         private void Update()
@@ -68,7 +70,7 @@ namespace JCW.UI.InGame.Indicator
                    && indicatorPosition.y <= screenSize.y + screenSize.height && indicatorPosition.y >= screenSize.y)
                 {
                     imgTransform.localScale = initImgScale;
-                    if(gauge != null)
+                    if(gauge!=null)
                         gauge.transform.localScale = initImgScale;
                     indicatorPosition.z = 0f;
                 }
@@ -83,7 +85,7 @@ namespace JCW.UI.InGame.Indicator
             }
 
             imgTransform.position = indicatorPosition;
-            if (gauge != null)
+            if(gauge!=null)
                 gauge.transform.position = indicatorPosition;
         }
 

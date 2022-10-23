@@ -21,11 +21,11 @@ namespace JCW.UI.InGame
 
         private void Awake()
         {
-            //curStageIndex = GameManager.Instance.curStageIndex;
-            curStageIndex = 3;
+            curStageIndex = GameManager.Instance.curStageIndex;
             if (curStageIndex != 2 && curStageIndex != 3)
             {
                 this.gameObject.SetActive(false);
+                return;
             }
 
             photonView = GetComponent<PhotonView>();
