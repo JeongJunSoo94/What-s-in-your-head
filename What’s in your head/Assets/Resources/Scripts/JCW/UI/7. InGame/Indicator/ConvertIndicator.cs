@@ -8,11 +8,11 @@ namespace JCW.UI.InGame.Indicator
     public class ConvertIndicator : BaseIndicator
     {
         [Header("UI의 대상")] [SerializeField] Transform target;
-        [Header("넬라 - 감지 & 상호작용 스프라이트 및 클립")] [SerializeField] new Sprite nella_DetectSprite;
+        [Header("넬라 - 감지 & 상호작용 스프라이트 및 클립")] [SerializeField] Sprite nella_DetectSprite;
         [SerializeField] Sprite nella_InteractableSprite;
         [Tooltip("변환하는 경우에만 넣어주는 애니메이션 영상")] [SerializeField] VideoClip nella_SetOnClip;
         [SerializeField] VideoClip nella_SetOffClip;
-        [Header("스테디 - 감지 & 상호작용 스프라이트 및 클립")] [SerializeField] new Sprite steady_DetectSprite;
+        [Header("스테디 - 감지 & 상호작용 스프라이트 및 클립")] [SerializeField] Sprite steady_DetectSprite;
         [SerializeField] Sprite steady_InteractableSprite;
         [Tooltip("변환하는 경우에만 넣어주는 애니메이션 영상")] [SerializeField] VideoClip steady_SetOnClip;
         [SerializeField] VideoClip steady_SetOffClip;
@@ -24,12 +24,12 @@ namespace JCW.UI.InGame.Indicator
         //상호작용 가능한지
         bool isInteractable;
 
-        override protected void Awake()
+        protected void Awake()
         {
-            base.Awake();
+            
             detectUI = transform.GetChild(0).gameObject;
             imgTransform = detectUI.transform.GetChild(0).GetComponent<RectTransform>();
-
+            gauge = detectUI.transform.GetChild(1).GetComponent<Image>();
 
             // 기존에 설정된 스프라이트 크기만큼 범위 조절
             imgTransform.sizeDelta = new Vector2(nella_DetectSprite.bounds.size.x, nella_DetectSprite.bounds.size.y);
@@ -45,13 +45,16 @@ namespace JCW.UI.InGame.Indicator
 
             // 정식으로 사용할 때엔 아래 코드 쓸것
             isNella = GameManager.Instance.characterOwner[PhotonNetwork.IsMasterClient];
-
             // 임시
             //isNella = true;
+
+            
         }
 
         private void Update()
         {
+            if (mainCamera == null)
+                SetCam();
             if (!isActive)
                 return;
             detectRange = transform.lossyScale.x / 2f;
@@ -67,7 +70,8 @@ namespace JCW.UI.InGame.Indicator
                    && indicatorPosition.y <= screenSize.y + screenSize.height && indicatorPosition.y >= screenSize.y)
                 {
                     imgTransform.localScale = initImgScale;
-                    gauge.transform.localScale = initImgScale;
+                    if(gauge!=null)
+                        gauge.transform.localScale = initImgScale;
                     indicatorPosition.z = 0f;
                 }
                 else
@@ -81,7 +85,8 @@ namespace JCW.UI.InGame.Indicator
             }
 
             imgTransform.position = indicatorPosition;
-            gauge.transform.position = indicatorPosition;
+            if(gauge!=null)
+                gauge.transform.position = indicatorPosition;
         }
 
         // 현재 RopeSpawner에서 참조

@@ -26,8 +26,6 @@ namespace JCW.UI.InGame.Indicator
         protected Vector3 outOfSightImgScale;
 
         // 기본 스프라이트
-        protected Sprite nella_DetectSprite;
-        protected Sprite steady_DetectSprite;
         protected Image interactiveImg;
 
         protected bool isNella;
@@ -35,16 +33,12 @@ namespace JCW.UI.InGame.Indicator
         // UI가 켜졌는지
         protected bool isActive;
 
-        virtual protected void Awake()
-        {
-            mainCamera = isNella ? CameraManager.Instance.cameras[0] : CameraManager.Instance.cameras[1];
-        }
-
         // 카메라 범위를 벗어났을 때를 위한 설정
         protected Vector3 OutOfRange(Vector3 indicatorPosition)
         {
             imgTransform.localScale = outOfSightImgScale;
-            gauge.transform.localScale = outOfSightImgScale;
+            if(gauge!=null)
+                gauge.transform.localScale = outOfSightImgScale;
             indicatorPosition.z = 0f;
 
             // 현재 카메라 화면의 중심 위치 잡기
@@ -85,11 +79,18 @@ namespace JCW.UI.InGame.Indicator
         // 스크린 사이즈 Rect값에 맞게끔 설정
         protected void SetSreenInfo()
         {
+            if (mainCamera==null)
+                SetCam();
             Rect cameraPos = mainCamera.rect;
             screenSize = new(canvasSize.rect.width * cameraPos.x,
                              canvasSize.rect.height * cameraPos.y,
                              canvasSize.rect.width * cameraPos.width,
                              canvasSize.rect.height * cameraPos.height);
+        }
+
+        protected void SetCam()
+        {
+            mainCamera = isNella ? CameraManager.Instance.cameras[0] : CameraManager.Instance.cameras[1];
         }
     }
 }

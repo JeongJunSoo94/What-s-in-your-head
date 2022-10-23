@@ -10,12 +10,12 @@ namespace JCW.UI.InGame.Indicator
     {
         [Header("UI의 대상")] [SerializeField] Transform target;
         // 기본 스프라이트
-        [Header("넬라 전용 스프라이트")] [SerializeField] protected new Sprite nella_DetectSprite;
-        [Header("스테디 전용 스프라이트")] [SerializeField] protected new Sprite steady_DetectSprite;
+        [Header("넬라 전용 스프라이트")] [SerializeField] protected Sprite nella_DetectSprite;
+        [Header("스테디 전용 스프라이트")] [SerializeField] protected Sprite steady_DetectSprite;
 
-        override protected void Awake()
+        protected void Awake()
         {
-            base.Awake();
+            
             detectUI = transform.GetChild(0).gameObject;
             imgTransform = detectUI.transform.GetChild(0).GetComponent<RectTransform>();
 
@@ -32,12 +32,13 @@ namespace JCW.UI.InGame.Indicator
 
             // 정식으로 사용할 때엔 아래 코드 쓸것
             isNella = GameManager.Instance.characterOwner[PhotonNetwork.IsMasterClient];
-
             // 임시
             //isNella = true;
         }
         private void Update()
         {
+            if (mainCamera == null)
+                SetCam();
             if (!isActive)
                 return;
             // 타겟의 위치를 메인카메라의 스크린 좌표로 변경
@@ -52,7 +53,8 @@ namespace JCW.UI.InGame.Indicator
                    && indicatorPosition.y <= screenSize.y + screenSize.height && indicatorPosition.y >= screenSize.y)
                 {
                     imgTransform.localScale = initImgScale;
-                    gauge.transform.localScale = initImgScale;
+                    if(gauge!=null)
+                        gauge.transform.localScale = initImgScale;
                     indicatorPosition.z = 0f;
                 }
                 else
@@ -66,7 +68,8 @@ namespace JCW.UI.InGame.Indicator
             }
 
             imgTransform.position = indicatorPosition;
-            gauge.transform.position = indicatorPosition;
+            if(gauge != null)
+                gauge.transform.position = indicatorPosition;
         }
 
         // 레일 : 스프라이트는 하나만 있음. 따라서 변환 애니메이션 필요 없음

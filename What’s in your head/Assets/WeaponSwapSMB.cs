@@ -3,17 +3,21 @@ using System.Collections.Generic;
 using UnityEngine;
 using JCW.UI.Options.InputBindings;
 using JJS.CharacterSMB;
+using JCW.UI.InGame;
+
 namespace JJS
 {
     public class WeaponSwapSMB : CharacterBaseSMB
     {
         int index=0;
+        SwapItem swapItem;
+
         // OnStateEnter is called when a transition starts and the state machine starts to evaluate this state
         override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
         {
             animator.SetLayerWeight(1, 1);
             index = GetPlayerController(animator).playerMouse.GetUseWeapon();
-            GetPlayerController(animator).playerMouse.WeaponSwap();
+            GetPlayerController(animator).playerMouse.WeaponSwap();    
         }
         override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
         {
