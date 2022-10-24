@@ -24,6 +24,8 @@ namespace JCW.UI.InGame
         Transform myPlayerTF;
         Transform otherPlayerTF;
 
+        bool isTopView;
+
         private void Awake()
         {
             if(!transform.parent.GetComponent<PhotonView>().IsMine)
@@ -35,23 +37,15 @@ namespace JCW.UI.InGame
             myImgTransform = transform.GetChild(0).GetChild(0).GetComponent<RectTransform>();
             otherImgTransform = transform.GetChild(0).GetChild(1).GetComponent<RectTransform>();
 
-            if (GameManager.Instance.characterOwner.Count != 0)
-            {
-                if (GameManager.Instance.characterOwner[PhotonNetwork.IsMasterClient])
-                {
-                    myImgTransform.gameObject.GetComponent<Image>().sprite = nellaIndicator;
-                    otherImgTransform.gameObject.GetComponent<Image>().sprite = steadyIndicator;
-                }
-                else
-                {
-                    myImgTransform.gameObject.GetComponent<Image>().sprite = steadyIndicator;
-                    otherImgTransform.gameObject.GetComponent<Image>().sprite = nellaIndicator;
-                }
-            }
-            else
+            if (GameManager.Instance.characterOwner[PhotonNetwork.IsMasterClient])
             {
                 myImgTransform.gameObject.GetComponent<Image>().sprite = nellaIndicator;
                 otherImgTransform.gameObject.GetComponent<Image>().sprite = steadyIndicator;
+            }
+            else
+            {
+                myImgTransform.gameObject.GetComponent<Image>().sprite = steadyIndicator;
+                otherImgTransform.gameObject.GetComponent<Image>().sprite = nellaIndicator;
             }
 
             myPlayerTF = transform.parent;
@@ -61,6 +55,12 @@ namespace JCW.UI.InGame
 
         void Update()
         {
+            if (isTopView != GameManager.Instance.isTopView)
+            {
+                isTopView = GameManager.Instance.isTopView;
+                if(isTopView) transform.GetChild(0).gameObject.SetActive(true);
+                else transform.GetChild(0).gameObject.SetActive(false);
+            }
             // 포지션 설정
             Vector3 myIndicatorPosition = mainCamera.WorldToScreenPoint(myPlayerTF.position);
             //Vector3 otherIndicatorPosition = mainCamera.WorldToScreenPoint(otherPlayerTF.position);

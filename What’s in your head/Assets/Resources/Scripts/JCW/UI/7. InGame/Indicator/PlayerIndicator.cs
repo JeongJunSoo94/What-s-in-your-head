@@ -129,6 +129,9 @@ namespace JCW.UI.InGame.Indicator
                 imgTransform.sizeDelta = new Vector2(otherIndicatorTop.bounds.size.x, otherIndicatorTop.bounds.size.y);
                 otherImg.sprite = otherIndicatorTop;
                 // 포지션 설정
+
+                Debug.Log("타겟 : " + target);
+                Debug.Log("지시기 포지션 : " + indicatorPosition);
                 Vector3 myIndicatorPosition = mainCamera.WorldToScreenPoint(myTF.position);
 
                 myImgTransform.position = myIndicatorPosition;

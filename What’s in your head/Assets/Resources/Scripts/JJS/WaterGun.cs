@@ -26,6 +26,7 @@ namespace JJS.Weapon
         public float curveWidth=0.5f;
         public float shootSpeed = 0.5f;
         public int bulletCount = 0;
+        public LayerMask layerMask;
 
         [Header("Don't touch")]
         public BezierCurve bezierCurveOrbit;
@@ -135,8 +136,24 @@ namespace JJS.Weapon
             }
             else if (type == 1)
             {
-                dir = mainCamera.transform.forward;
-                PhisicsShootLine(startPos.transform.position, dir);
+                RaycastHit hit;
+                if (Physics.Raycast(mainCamera.transform.position, mainCamera.transform.forward, out hit, shootMaxDistance, layerMask, QueryTriggerInteraction.Ignore))
+                {
+                    if (hit.distance > Vector3.Distance(startPos.transform.position, mainCamera.transform.position))
+                    {
+                        dir = (hit.point - startPos.transform.position).normalized;
+                        PhisicsShootLine(startPos.transform.position, dir);
+                    }
+                    else
+                    {
+                        MaxPhysicsLine(startPos.transform.position, mainCamera.transform.forward);
+                    }
+                }
+                else
+                {
+                    MaxPhysicsLine(startPos.transform.position, mainCamera.transform.forward);
+                }
+
             }
             else if (type == 2)
             {
@@ -174,6 +191,14 @@ namespace JJS.Weapon
 
         void PhisicsShootLine(Vector3 startPosition,Vector3 rayDirection)
         {
+            if (!CurPhysicsLine(startPosition, rayDirection))
+            {
+                MaxPhysicsLine(startPosition, rayDirection);
+            }
+        }
+
+        bool CurPhysicsLine(Vector3 startPosition, Vector3 rayDirection)
+        {
             RaycastHit hit;
             if (Physics.Raycast(startPosition, rayDirection, out hit, shootMaxDistance, -1, QueryTriggerInteraction.Ignore))
             {
@@ -199,32 +224,35 @@ namespace JJS.Weapon
                 bezierCurveOrbit.p2 = hit.point + direction;
                 bezierCurveOrbit.p3 = hit.point;
                 bezierCurveOrbit.p4 = hit.point;
+                return true;
+            }
+            return false;
+        }
+
+        void MaxPhysicsLine(Vector3 startPosition, Vector3 rayDirection)
+        {
+            Vector3 maxPos = startPosition + rayDirection * shootMaxDistance;
+            shootCurDistance = Vector3.Distance(startPosition, maxPos);
+            bezierCurveOrbit.p1 = startPosition;
+            bezierCurveOrbit.p3 = maxPos;
+            bezierCurveOrbit.p4 = maxPos;
+
+            float Height = maxPos.y - startPosition.y;
+            Height /= shootMaxDistance;
+            float width = curveWidth;
+            if (Height > 0)
+            {
+                width -= Height * 0.25f;
             }
             else
             {
-                Vector3 maxPos = startPosition + rayDirection * shootMaxDistance;
-                shootCurDistance = Vector3.Distance(startPosition, maxPos);
-                bezierCurveOrbit.p1 = startPosition;
-                bezierCurveOrbit.p3 = maxPos;
-                bezierCurveOrbit.p4 = maxPos;
-
-                float Height = maxPos.y - startPosition.y;
-                Height /= shootMaxDistance;
-                float width = curveWidth;
-                if (Height > 0)
-                {
-                    width -= Height * 0.25f;
-                }
-                else
-                {
-                    width -= Height * 0.25f;
-                    Height *= -1f;
-                }
-
-                Vector3 direction = (startPosition - maxPos) * width;
-                direction.y += 1f + Height * curveHeight;
-                bezierCurveOrbit.p2 = maxPos + direction;
+                width -= Height * 0.25f;
+                Height *= -1f;
             }
+
+            Vector3 direction = (startPosition - maxPos) * width;
+            direction.y += 1f + Height * curveHeight;
+            bezierCurveOrbit.p2 = maxPos + direction;
         }
     }
 }

@@ -17,7 +17,14 @@ namespace JJS
 
         override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
         {
-            GetPlayerController(animator).playerMouse.AimUpdate(2);
+            if (GetPlayerController(animator).characterState.top)
+            {
+                GetPlayerController(animator).playerMouse.AimUpdate(2);
+            }
+            else
+            {
+                GetPlayerController(animator).playerMouse.AimUpdate(1);
+            }
             GetPlayerController(animator).playerMouse.ik.enableIK = true;
             if (GetPlayerController(animator).characterState.isMine)
             {

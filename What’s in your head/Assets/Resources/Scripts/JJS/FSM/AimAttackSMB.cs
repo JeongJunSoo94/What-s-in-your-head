@@ -16,9 +16,14 @@ namespace JJS
         {
             GetPlayerController(animator).playerMouse.ik.enableIK = true;
             animator.SetLayerWeight(1, 1);
+
             if (GetPlayerController(animator).characterState.top)
             {
                 GetPlayerController(animator).playerMouse.AimUpdate(2);
+            }
+            else
+            {
+                GetPlayerController(animator).playerMouse.AimUpdate(1);
             }
             if (GetPlayerController(animator).characterState.isMine)
             {

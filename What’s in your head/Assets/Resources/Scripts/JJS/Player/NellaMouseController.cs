@@ -43,20 +43,20 @@ namespace JJS
 
         public override void AimUpdate(int type=0)
         {
-            Vector3 mousePos = Input.mousePosition;
-            float x = mousePos.x * (1-cameraMain.rect.width);
-            mousePos.x -= x;
-            ray = cameraMain.ScreenPointToRay(mousePos);
-            int layerMask = (-1) - (1 << LayerMask.NameToLayer("Player"));
-            if (Physics.Raycast(ray, out hit, 100, layerMask, QueryTriggerInteraction.Ignore))
-            {
-                point.transform.position = hit.point;
-            }
-            else
-            {
-                Vector3 dir = cameraMain.transform.forward;
-                point.transform.position = gun.startPos.transform.position + dir * gun.shootMaxDistance;
-            }
+            //Vector3 mousePos = Input.mousePosition;
+            //float x = mousePos.x * (1 - cameraMain.rect.width);
+            //mousePos.x -= x;
+            //ray = cameraMain.ScreenPointToRay(mousePos);
+            //int layerMask = (-1) - (1 << LayerMask.NameToLayer("Player"));
+            //if (Physics.Raycast(ray, out hit, 100, layerMask, QueryTriggerInteraction.Ignore))
+            //{
+            //    point.transform.position = hit.point;
+            //}
+            //else
+            //{
+            //    Vector3 dir = cameraMain.transform.forward;
+            //    point.transform.position = gun.startPos.transform.position + dir * gun.shootMaxDistance;
+            //}
             gun.ShootLine(type);
         }
 
