@@ -98,7 +98,7 @@ namespace YC.Photon
             ro.IsVisible = true;    // 로비에서 룸 목록에 노출 여부
 
             // 룸 생성
-            PhotonNetwork.CreateRoom("YC", ro);
+            PhotonNetwork.CreateRoom(roomName, ro);
         }
 
         // 룸 생성이 완료시 호출되는 콜백 함수
