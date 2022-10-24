@@ -11,13 +11,15 @@ namespace KSU
         LineRenderer grappleRope;
         Vector3 endPosistion;
 
-        public float departingOffset = 0.2f;
+        float departingOffset = 0.2f;
         public bool isEndPosition = false;
         public bool isSucceeded = false;
 
-        public float moveSpeed = 15f;
+        float moveSpeed = 15f;
+        float airDrag = 10f;
         Rigidbody grappleRigidbody;
         public float horizonInertiaSpeed;
+        public float gravity = 20f;
         public Vector3 horizonInertiaVec;
         public Vector3 fallingVelocity;
 
@@ -84,11 +86,11 @@ namespace KSU
 
         void FallToGround()
         {
-            horizonInertiaSpeed -= moveSpeed * Time.fixedDeltaTime;
+            horizonInertiaSpeed -= moveSpeed * airDrag * Time.fixedDeltaTime;
             if (horizonInertiaSpeed < 0)
                 horizonInertiaSpeed = 0f;
             fallingVelocity = horizonInertiaVec * horizonInertiaSpeed;
-            fallingVelocity.y = grappleRigidbody.velocity.y - 9.8f * Time.fixedDeltaTime; 
+            fallingVelocity.y = grappleRigidbody.velocity.y + gravity * Time.fixedDeltaTime; 
         }
 
         void MakeRope()
@@ -99,7 +101,15 @@ namespace KSU
 
         IEnumerator DelayDeactivation()
         {
-            yield return new WaitForSeconds(delayDeactivationTime);
+            if(GameManager.Instance.isTopView)
+            {
+                yield return new WaitForSeconds(0f);
+            }
+            else
+            {
+                yield return new WaitForSeconds(delayDeactivationTime);
+
+            }
             if (this.gameObject.activeSelf)
             {
                 player.RecieveGrappleInfo(false, null);

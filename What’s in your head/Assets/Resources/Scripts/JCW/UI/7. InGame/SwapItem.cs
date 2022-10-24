@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Photon.Pun;
 using UnityEngine;
 using UnityEngine.UI;
@@ -7,100 +8,44 @@ namespace JCW.UI.InGame
     [RequireComponent(typeof(PhotonView))]
     public class SwapItem : MonoBehaviour
     {
-        [Header("스테이지 1")] [SerializeField] Sprite firstWeapon1;
-                             [SerializeField] Sprite secondWeapon1;
-        [Header("스테이지 2")] [SerializeField] Sprite firstWeapon2;
-                             [SerializeField] Sprite secondWeapon2;
-        [Header("스테이지 3")] [SerializeField] Sprite firstWeapon3;
-                             [SerializeField] Sprite secondWeapon3;
-        [Header("스테이지 4")] [SerializeField] Sprite firstWeapon4;
-                             [SerializeField] Sprite secondWeapon4; 
+        [Header("스테이지 2")] [SerializeField] List<Sprite> Weapon2;
+        [Header("스테이지 3")] [SerializeField] List<Sprite> Weapon3;
 
         int curStageIndex;
         PhotonView photonView;
-        bool isSwap = false;
         Image thisImg;
 
-        // 첫번째 무기를 들었을 때와 두번째 무기를 들었을 때의 이미지
-        Sprite firstWeapon;
-        Sprite secondWeapon;
-
-        // 현재 넬라인지
-        bool isNella;
+        // 무기 목록
+        readonly Dictionary<int, List<Sprite>> weaponList = new();
 
         private void Awake()
         {
             curStageIndex = GameManager.Instance.curStageIndex;
-            photonView = GetComponent<PhotonView>();
-            thisImg = GetComponent<Image>();
-            if (GameManager.Instance.characterOwner.Count == 0)
-                isNella = true;
-            else
-                isNella = GameManager.Instance.characterOwner[PhotonNetwork.IsMasterClient];
-
-            switch (curStageIndex)
+            curStageIndex = 3;
+            if (curStageIndex != 2 && curStageIndex != 3)
             {
-                default:
-                case 1:
-                    firstWeapon = firstWeapon1;
-                    secondWeapon = secondWeapon1;
-                    break;
-                case 2:
-                    firstWeapon = firstWeapon2;
-                    secondWeapon = secondWeapon2;
-                    break;
-                case 3:
-                    firstWeapon = firstWeapon3;
-                    secondWeapon = secondWeapon3;
-                    break;
-                case 4:
-                    firstWeapon = firstWeapon4;
-                    secondWeapon = secondWeapon4;
-                    break;
+                this.gameObject.SetActive(false);
+                return;
             }
 
-            thisImg.sprite = firstWeapon;
+            photonView = GetComponent<PhotonView>();
+            thisImg = GetComponent<Image>();
+
+            weaponList.Add(2, Weapon2);
+            weaponList.Add(3, Weapon3);
+
+            thisImg.sprite = weaponList[curStageIndex][0];
         }
 
-        private void Update()
+        public void SetSwap(int index)
         {
-            if (!photonView.IsMine)
-                return;
-            if (Input.GetKeyDown(KeyCode.Tab))
-                SwapUI();
-        }
-
-        private void LateUpdate()
-        {
-            //if (photonView.IsMine)
-                //SetImg((bool)GameManager.Instance.isAlive[isNella]);
-        }
-
-        public void SetImg(bool isOn)
-        {
-            // Update에서 자주 부르는 RPC를 막기 위함
-            if ((bool)GameManager.Instance.isAlive[isNella] == isOn)
-                return;
-            photonView.RPC(nameof(SetImg_RPC), RpcTarget.AllViaServer, isOn);
+            photonView.RPC(nameof(SetSwap_RPC), RpcTarget.AllViaServer, index);
         }
 
         [PunRPC]
-        void SetImg_RPC(bool isOn)
+        void SetSwap_RPC(int index)
         {
-            GetComponent<Image>().enabled = isOn;
-        }
-
-
-        public void SwapUI()
-        {
-            photonView.RPC(nameof(SwapUI_RPC), RpcTarget.AllViaServer);
-        }
-
-        [PunRPC]
-        void SwapUI_RPC()
-        {
-            isSwap = !isSwap;
-            thisImg.sprite = isSwap ? secondWeapon : firstWeapon;
+            thisImg.sprite = weaponList[curStageIndex][index];
         }
     }
 }

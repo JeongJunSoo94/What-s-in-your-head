@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using JCW.UI.Options.InputBindings;
 using JJS.CharacterSMB;
+using JCW.UI.InGame;
+
 namespace JJS
 {
     public class WeaponSwapSMB : CharacterBaseSMB
@@ -14,6 +16,10 @@ namespace JJS
             animator.SetLayerWeight(1, 1);
             index = GetPlayerController(animator).playerMouse.GetUseWeapon();
             GetPlayerController(animator).playerMouse.WeaponSwap();
+            if(GetPlayerController(animator).characterState.isMine)
+            {
+                GetPlayerController(animator).gameObject.GetComponentInChildren<SwapItem>().SetSwap(GetPlayerController(animator).playerMouse.GetUseWeapon());
+            }
         }
         override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
         {

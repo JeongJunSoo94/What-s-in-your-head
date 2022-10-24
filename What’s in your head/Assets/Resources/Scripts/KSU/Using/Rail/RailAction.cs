@@ -6,7 +6,7 @@ using Cinemachine.Utility;
 
 using YC.Camera_;
 using YC.Camera_Single;
-using JCW.UI.InGame;
+using JCW.UI.InGame.Indicator;
 
 namespace KSU
 {
@@ -20,29 +20,27 @@ namespace KSU
         public Camera mainCamera;
         [SerializeField] GameObject lookAtObj;
         Dictionary <GameObject, int> detectedRail = new();
-        public Ray ray;
         RaycastHit _raycastHit;
-        public LayerMask layerFilterForRail;
-        public LayerMask layerForRail;
+        [SerializeField] LayerMask layerFilterForRail;
+        [SerializeField] LayerMask layerForRail;
 
+        public GameObject currentRail;
+        public GameObject railStartObject;
+        Vector3 railStartPosiotion = Vector3.zero;
+        
+        float departingRailOffset = 0.5f;
+
+        [Header("_______변경 가능 값_______")]
         [Header("레일 탐지 범위(캡슐) 반지름")]
         public float rangeRadius = 5f;
         [Header("레일 탐지 범위(캡슐) 길이(거리)")]
         public float rangeDistance = 5f;
-
-        public GameObject currentRail;
-        public GameObject railStartObject;
-        public Vector3 railStartPosiotion = Vector3.zero;
-
         [Header("레일 상호작용키 사용후 레일까지 날아가는 시간(갈아타기 동일)")]
         public float movingToRailSpeed = 10f;
-        float departingRailOffset = 0.5f;
-
+        [Header("레일 타는 중 점프 높이")]
         public float railJumpHeight = 4f;
+        [Header("레일 타는 중 점프 속도(상승 하강 동일)")]
         public float railJumpSpeed = 6f;
-
-        public float escapingRopeSpeed = 6f;
-        public float escapingRoDelayTime = 1f;
 
 
 
@@ -53,7 +51,7 @@ namespace KSU
         Vector3 startLeft;
         Vector3 startRight;
 
-        public Vector3 hVision;
+        Vector3 hVision;
 
         Vector3 endCenter;
         Vector3 endUp;
@@ -383,12 +381,12 @@ namespace KSU
             {
                 if (interactionState.isRailFounded)
                 {
-                    railStartObject.transform.parent.gameObject.GetComponentInChildren<TargetIndicator>().SetUI(true, _raycastHit.point, mainCamera);
+                    railStartObject.transform.parent.gameObject.GetComponentInChildren<OneIndicator>().SetUI(true, _raycastHit.point);
                     foreach (var rail in detectedRail.Keys)
                     {
                         if (rail != railStartObject.transform.parent.gameObject)
                         {
-                            rail.GetComponentInChildren<TargetIndicator>().SetUI(false, Vector3.zero, mainCamera);
+                            rail.GetComponentInChildren<OneIndicator>().SetUI(false, Vector3.zero);
                         }
                     }
                 }
@@ -396,7 +394,7 @@ namespace KSU
                 {
                     foreach (var rail in detectedRail.Keys)
                     {
-                        rail.GetComponentInChildren<TargetIndicator>().SetUI(false, Vector3.zero, mainCamera);
+                        rail.GetComponentInChildren<OneIndicator>().SetUI(false, Vector3.zero);
                     }
                 }
             }

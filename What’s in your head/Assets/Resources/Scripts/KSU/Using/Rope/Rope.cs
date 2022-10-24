@@ -22,7 +22,7 @@ namespace KSU
         public float currentAddYRotationDefault;
         public float targetAddYRotation;
         public float currentAddYRotation;
-        [Header("로프 수평 회전 허용 오차값")] public float rotationTolerance = 5f;
+        float rotationTolerance = 5f;
 
         public bool isReadyToRide = false;
         public bool isRopeExisting = false;
@@ -40,6 +40,7 @@ namespace KSU
         void Start()
         {
             spawner = GetComponentInParent<RopeSpawner>();
+            rotationTolerance = spawner.rotationOffset;
         }
 
         //void Update()

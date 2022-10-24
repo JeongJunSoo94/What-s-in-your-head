@@ -6,7 +6,7 @@ using Photon.Pun;
 using JCW.UI.Options.InputBindings;
 using YC.Camera_;
 using YC.Camera_Single;
-using JCW.UI.InGame;
+using JCW.UI.InGame.Indicator;
 
 namespace KSU
 {
@@ -34,19 +34,23 @@ namespace KSU
         PlayerInteractionState interactionState;
 
         LineRenderer rope;
-        public GameObject hand;
+        [SerializeField] GameObject hand;
 
         RaycastHit _raycastHit;
-        LayerMask layerFilterForRope;
+        [SerializeField] LayerMask layerFilterForRope;
 
-        public GameObject currentRidingRope;
+        GameObject currentRidingRope;
         public GameObject interactableRope;
 
-        public Dictionary<GameObject, Obj_Info> detectedRopes = new Dictionary<GameObject, Obj_Info>();
+        Dictionary<GameObject, Obj_Info> detectedRopes = new Dictionary<GameObject, Obj_Info>();
 
-        [Header("로프로 날아가는 속도")] public float moveToRopeSpeed = 6f;
-        [Header("로프 해제 시 날아가는")] public float escapingRopeSpeed = 6f;
-        [Header("로프 해제 후 딜레이 타임")] public float escapingRopeDelayTime = 1f;
+        [Header("_______변경 가능 값_______")]
+        [Header("로프로 날아가는 속도")] 
+        public float moveToRopeSpeed = 6f;
+        [Header("로프 해제 시 날아가는")] 
+        public float escapingRopeSpeed = 6f;
+        [Header("로프 해제 후 딜레이 타임")] 
+        public float escapingRopeDelayTime = 1f;
 
         private void Awake()
         {
@@ -62,14 +66,15 @@ namespace KSU
                 Debug.Log("카메라 NULL");
 
             rope = GetComponentInChildren<LineRenderer>();
-
-            layerFilterForRope = ((-1) - (1 << LayerMask.NameToLayer("Player")));
         }
 
         private void Update()
         {
-            FindInteractableRope();
-            SendInfoUI();
+            if(playerState.isMine)
+            {
+                FindInteractableRope();
+                SendInfoUI();
+            }
 
             if(interactionState.isRidingRope)
             {
@@ -85,10 +90,6 @@ namespace KSU
         {
             if ((detectedRopes.Count > 0) && currentRidingRope == null)
             {
-                if (interactionState.isRailFounded)
-                {
-
-                }
                 Obj_Info node = new();
                 float minDist = 100f;
                 GameObject minDistObj = null;
@@ -106,14 +107,12 @@ namespace KSU
                                 node.isUIActive = true;
                                 node.isInteractable = false;
                                 node.distance = Vector3.Distance(transform.position, _raycastHit.collider.gameObject.transform.position);
-                                //temp[detectedRope] = node;
                                 temp.Add(detectedRope, node);
                             }
                             else
                             {
                                 node.isUIActive = false;
                                 node.isInteractable = false;
-                                //temp[detectedRope] = node;
                                 temp.Add(detectedRope, node);
                             }
                         }
@@ -121,7 +120,6 @@ namespace KSU
                         {
                             node.isUIActive = false;
                             node.isInteractable = false;
-                            //temp[detectedRope] = node;
                             temp.Add(detectedRope, node);
                         }
                     }
@@ -153,14 +151,12 @@ namespace KSU
                                 node.isUIActive = true;
                                 node.isInteractable = false;
                                 node.distance = Vector3.Distance(transform.position, _raycastHit.collider.gameObject.transform.position);
-                                //temp[detectedRope] = node;
                                 temp.Add(detectedRope, node);
                             }
                             else
                             {
                                 node.isUIActive = false;
                                 node.isInteractable = false;
-                                //temp[detectedRope] = node;
                                 temp.Add(detectedRope, node);
                             }
                         }
@@ -168,7 +164,6 @@ namespace KSU
                         {
                             node.isUIActive = false;
                             node.isInteractable = false;
-                            //temp[detectedRope] = node;
                             temp.Add(detectedRope, node);
                         }
                     }
@@ -202,7 +197,7 @@ namespace KSU
             node.isInteractable = false;
             detectedRopes[currentRidingRope] = node;
 
-            currentRidingRope.GetComponentInChildren<RopeSpawner>().StartRopeAction(this.gameObject, moveToRopeSpeed);
+            currentRidingRope.GetComponent<RopeSpawner>().StartRopeAction(this.gameObject, moveToRopeSpeed);
 
             rope.SetPosition(0, hand.transform.position);
             rope.SetPosition(1, hand.transform.position);
@@ -212,7 +207,7 @@ namespace KSU
         {
             StartCoroutine("DelayEscape");
 
-            float jumpPower = currentRidingRope.GetComponentInChildren<RopeSpawner>().EndRopeAction(this.gameObject);
+            float jumpPower = currentRidingRope.GetComponent<RopeSpawner>().EndRopeAction(this.gameObject);
 
             Obj_Info node = detectedRopes.GetValueOrDefault(currentRidingRope);
             node.isUIActive = true;
@@ -244,10 +239,7 @@ namespace KSU
             {
                 foreach (var rope in detectedRopes)
                 {
-                    //isMine false면 안보냄 / 현재 널
-                    //Debug.Log(rope.Key.GetComponentInChildren<TargetIndicator>().gameObject.name);
-                    rope.Key.transform.parent.gameObject.GetComponentInChildren<TargetIndicator>().SetUI(rope.Value.isUIActive, rope.Value.isInteractable, rope.Value.distance, mainCamera);
-                    // UI상태(bool)가 다르면 신호 struct Obj_Info(bool isUIActive,bool isInteractive, float distance)를 보냄
+                    rope.Key.transform.GetComponentInChildren<ConvertIndicator>().SetUI(rope.Value.isUIActive, rope.Value.isInteractable, rope.Value.distance);
                 }
             }
         }
@@ -256,8 +248,8 @@ namespace KSU
         {
             if(other.CompareTag("Rope") && GetComponent<PhotonView>().IsMine)
             {
-                Debug.Log("트리거 엔터 : " + mainCamera);
-                detectedRopes.Add(other.gameObject, new Obj_Info(false, false, 100f));
+                Debug.Log("트리거 엔터 : " + other.gameObject.transform.parent.gameObject);
+                detectedRopes.Add(other.gameObject.transform.parent.gameObject, new Obj_Info(false, false, 100f));
             }
         }
 
@@ -265,9 +257,9 @@ namespace KSU
         {
             if (other.CompareTag("Rope") && GetComponent<PhotonView>().IsMine)
             {
-                Debug.Log("트리거 탈출 : " + mainCamera);
-                other.gameObject.GetComponentInChildren<TargetIndicator>().SetUI(false, false, 100f, mainCamera);                
-                detectedRopes.Remove(other.gameObject);
+                Debug.Log("트리거 탈출 : " + other.gameObject.transform.parent.gameObject);
+                other.gameObject.transform.parent.gameObject.GetComponentInChildren<ConvertIndicator>().SetUI(false, false, 100f);                
+                detectedRopes.Remove(other.gameObject.transform.parent.gameObject);
             }
         }
     }

@@ -8,7 +8,7 @@ using YC.Camera_;
 using YC.Camera_Single;
 
 
-using JCW.UI.InGame;
+using JCW.UI.InGame.Indicator;
 
 namespace KSU
 {
@@ -43,10 +43,11 @@ namespace KSU
         [Header("오토 타겟팅 탐지 범위(캡슐) 반지름")]
         public float rangeRadius = 5f;
         [Header("오토 타겟팅 탐지 범위(캡슐) 길이(거리)")]
-        public float rangeDistance = 5f;
-        [Header("오토 타겟팅 탐지 범위 (각도)"), Range(1f,89f)]
+        public float rangeDistance = 15f;
+        [Header("갈고리 투척 최대 거리(rangeDistance + rangeRadius * 2 이상으로)")]
+        public float grapplingRange = 30f;
+        [Header("오토 타겟팅 탐지 범위 (각도)"), Range(1f, 89f)]
         public float rangeAngle = 30f;
-        //public GameObject sphere;
 
         GameObject grappledTarget;
 
@@ -63,7 +64,7 @@ namespace KSU
         Vector3 startLeft;
         Vector3 startRight;
 
-        public Vector3 hVision;
+        Vector3 hVision;
 
         Vector3 endCenter;
         Vector3 endUp;
@@ -127,7 +128,7 @@ namespace KSU
         //}
         public void SearchGrappledObject()
         {
-            if(!playerAnimator.GetBool("isShootingGrapple"))
+            if (!playerAnimator.GetBool("isShootingGrapple"))
             {
                 if (playerState.aim)
                 {
@@ -168,16 +169,25 @@ namespace KSU
                 if (!grapple.gameObject.activeSelf)
                 {
                     grappleSpawner.SetActive(false);
-                    if (steadyInteractionState.isGrappledObjectFounded)
+                    if(GameManager.Instance.isTopView)
+                    {
+                        ///////////////// 선택지 2: 여기에 마우스 거리 만큼의 위치까지 쏘는 갈고리 발사
+                        Vector3 forward = (playerController.playerMouse.point.transform.position - grappleSpawner.transform.position);
+                        forward.y = 0;
+                        Debug.Log("forward.magnitude: " + forward.magnitude);
+                        if (forward.magnitude > grapplingRange)
+                            forward = forward.normalized * grapplingRange;
+                        grapple.InitGrapple(grappleSpawner.transform.position, (grappleSpawner.transform.position + forward), grappleSpeed, grappleDepartOffset);
+                    }
+                    else if (steadyInteractionState.isGrappledObjectFounded)
                     {
                         // 도착 위치: autoAimPosition
-                        transform.LookAt(transform.position + playerCamera.transform.forward);
                         grapple.InitGrapple(grappleSpawner.transform.position, autoAimPosition, grappleSpeed, grappleDepartOffset);
                     }
                     else
                     {
                         // 도착위치: 화면 중앙에 레이 쏴서 도착하는 곳
-                        grapple.InitGrapple(grappleSpawner.transform.position, (playerCamera.transform.position + playerCamera.transform.forward * (rangeDistance + rangeRadius * 2f)), grappleSpeed, grappleDepartOffset);
+                        grapple.InitGrapple(grappleSpawner.transform.position, (playerCamera.transform.position + playerCamera.transform.forward * grapplingRange), grappleSpeed, grappleDepartOffset);
                     }
                 }
             }
@@ -238,13 +248,13 @@ namespace KSU
                 {
                     Vector3 directoin = (grappledObject.transform.parent.position - playerCamera.transform.position).normalized;
                     bool rayCheck = Physics.Raycast(playerCamera.transform.position, directoin, grappledObject.GetComponentInParent<GrappledObject>().detectingRange * 1.5f, layerFilterForGrapple, QueryTriggerInteraction.Ignore);
-                    if(rayCheck)
+                    if (rayCheck)
                     {
-                        grappledObject.transform.parent.gameObject.GetComponentInChildren<TargetIndicator>().SetUI(true, playerCamera);
+                        grappledObject.transform.parent.gameObject.GetComponentInChildren<OneIndicator>().SetUI(true);
                     }
                     else
                     {
-                        grappledObject.transform.parent.gameObject.GetComponentInChildren<TargetIndicator>().SetUI(false, playerCamera);
+                        grappledObject.transform.parent.gameObject.GetComponentInChildren<OneIndicator>().SetUI(false);
                     }
                 }
             }
@@ -316,7 +326,7 @@ namespace KSU
 
         private void OnTriggerEnter(Collider other)
         {
-            
+
             if ((other.gameObject.layer == LayerMask.NameToLayer("UITriggers")) && other.CompareTag("GrappledObject"))
             {
                 grappledObjects.Add(other.gameObject);
@@ -326,14 +336,14 @@ namespace KSU
         {
             if ((other.gameObject.layer == LayerMask.NameToLayer("UITriggers")) && other.CompareTag("GrappledObject"))
             {
-                other.gameObject.transform.parent.gameObject.GetComponentInChildren<TargetIndicator>().SetUI(false, playerCamera);
+                other.gameObject.transform.parent.gameObject.GetComponentInChildren<OneIndicator>().SetUI(false);
                 grappledObjects.Remove(other.gameObject);
             }
         }
 
         private void OnCollisionEnter(Collision collision)
         {
-            if(steadyInteractionState.isGrappling)
+            if (steadyInteractionState.isGrappling)
             {
                 playerRigidbody.velocity = Vector3.zero;
                 grappleVec = Vector3.zero;
