@@ -63,7 +63,9 @@ namespace YC.CameraManager_
                 //      타이틀 씬 통해서 접근시
                 //      아래 함수 게임매니저 통해 플레이어들 불러오도록
                 //      플레이어 각각 NormalView함수 인풋 부분 수정(탑 스테이트로 바꾸는 부분)
-                if (Input.GetKeyDown(KeyCode.Alpha9)) // 게임매니저 통해서 호출하도록 
+
+                //if (Input.GetKeyDown(KeyCode.Alpha9)) // 게임매니저 통해서 호출하도록 
+                if (GameManager.Instance.isTopView)
                 {
                     pv.RPC(nameof(InitCamera), RpcTarget.AllBuffered, (int)CharacterCamera.NELLA); 
                     pv.RPC(nameof(SetDefenceModeCamera), RpcTarget.AllBuffered);

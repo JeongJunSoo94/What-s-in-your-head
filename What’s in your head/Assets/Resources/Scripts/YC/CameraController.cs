@@ -446,19 +446,46 @@ namespace YC.Camera_
         {
             if (this.gameObject.CompareTag("Nella"))
             {
-                mainCam = GameObject.FindGameObjectWithTag("NellaCamera").GetComponent<Camera>();
-                mainCam.GetComponent<UniversalAdditionalCameraData>().SetRenderer(0);
+                //mainCam = GameObject.FindGameObjectWithTag("NellaCamera").GetComponent<Camera>();
+                //mainCam.GetComponent<UniversalAdditionalCameraData>().SetRenderer(0);
 
-                cinemachineBrain = mainCam.GetComponent<CinemachineBrain>();
-                CameraManager.Instance.cameras[0] = mainCam;
+                //cinemachineBrain = mainCam.GetComponent<CinemachineBrain>();
+                //CameraManager.Instance.cameras[0] = mainCam;
+
+                if(!mainCam)
+                {
+                    mainCam = GameObject.FindGameObjectWithTag("NellaCamera").GetComponent<Camera>();
+                    mainCam.GetComponent<UniversalAdditionalCameraData>().SetRenderer(0);
+
+                    cinemachineBrain = mainCam.GetComponent<CinemachineBrain>();
+                    CameraManager.Instance.cameras[0] = mainCam;
+                    return mainCam;
+                }
+                else
+                {
+                    return mainCam;
+                }
 
             }
             else if (this.gameObject.CompareTag("Steady"))
             {
-                mainCam = GameObject.FindGameObjectWithTag("SteadyCamera").GetComponent<Camera>();
-                mainCam.GetComponent<UniversalAdditionalCameraData>().SetRenderer(1);
-                cinemachineBrain = mainCam.GetComponent<CinemachineBrain>();
-                CameraManager.Instance.cameras[1] = mainCam;
+                //mainCam = GameObject.FindGameObjectWithTag("SteadyCamera").GetComponent<Camera>();
+                //mainCam.GetComponent<UniversalAdditionalCameraData>().SetRenderer(1);
+                //cinemachineBrain = mainCam.GetComponent<CinemachineBrain>();
+                //CameraManager.Instance.cameras[1] = mainCam;
+                if (!mainCam)
+                {
+                    mainCam = GameObject.FindGameObjectWithTag("SteadyCamera").GetComponent<Camera>();
+                    mainCam.GetComponent<UniversalAdditionalCameraData>().SetRenderer(1);
+                    cinemachineBrain = mainCam.GetComponent<CinemachineBrain>();
+                    CameraManager.Instance.cameras[1] = mainCam;
+                    return mainCam;
+                }
+                else
+                {
+                    return mainCam;
+                }
+
             }
             return mainCam;
         }
