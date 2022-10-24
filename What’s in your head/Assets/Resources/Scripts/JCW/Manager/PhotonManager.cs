@@ -179,6 +179,7 @@ namespace JCW.Network
 
             // 넬라인 지 아닌지 판단해서 캐릭터 생성해주면 됨
             // 현재 자신이 마스터인지 아닌지와 어떤 캐릭터를 선택했는지가 담겨있음.
+            GameManager.Instance.SetRandomSeed();
             if (GameManager.Instance.characterOwner[PhotonNetwork.IsMasterClient])
             {
                 Debug.Log("넬라 생성");

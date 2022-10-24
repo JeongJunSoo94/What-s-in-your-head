@@ -15,9 +15,9 @@ namespace JCW.UI.InGame.Indicator
 
         protected void Awake()
         {
-            
             detectUI = transform.GetChild(0).gameObject;
             imgTransform = detectUI.transform.GetChild(0).GetComponent<RectTransform>();
+            gauge = detectUI.transform.GetChild(1).GetComponent<Image>();
 
 
             // 기존에 설정된 스프라이트 크기만큼 범위 조절
@@ -55,8 +55,7 @@ namespace JCW.UI.InGame.Indicator
                    && indicatorPosition.y <= screenSize.y + screenSize.height && indicatorPosition.y >= screenSize.y)
                 {
                     imgTransform.localScale = initImgScale;
-                    if(gauge!=null)
-                        gauge.transform.localScale = initImgScale;
+                    gauge.transform.localScale = initImgScale;
                     indicatorPosition.z = 0f;
                 }
                 else
@@ -70,8 +69,7 @@ namespace JCW.UI.InGame.Indicator
             }
 
             imgTransform.position = indicatorPosition;
-            if(gauge != null)
-                gauge.transform.position = indicatorPosition;
+            gauge.transform.position = indicatorPosition;
         }
 
         // 레일 : 스프라이트는 하나만 있음. 따라서 변환 애니메이션 필요 없음
@@ -102,10 +100,7 @@ namespace JCW.UI.InGame.Indicator
 
         public void SetGauge(float value)
         {
-            if (gauge == null)
-                Debug.Log("게이지가 할당되지 않았습니다. 확인 해주세요");
-            else
-                gauge.fillAmount = value;
+            gauge.fillAmount = value;
         }
     }
 }

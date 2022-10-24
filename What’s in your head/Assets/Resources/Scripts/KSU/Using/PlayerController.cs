@@ -103,11 +103,7 @@ namespace KSU
 
             photonView = GetComponent<PhotonView>();
 
-            if (PhotonNetwork.NetworkClientState == Photon.Realtime.ClientState.Joined)
-                mainCamera = this.gameObject.GetComponent<CameraController>().FindCamera(); // 멀티용
-            else
-                mainCamera = this.gameObject.GetComponent<CameraController_Single>().FindCamera(); // 싱글용
-
+            mainCamera = this.gameObject.GetComponent<CameraController>().FindCamera(); // 멀티용
             if (mainCamera == null)
                 Debug.Log("카메라 NULL");
 
@@ -116,16 +112,19 @@ namespace KSU
 
             characterState.isMine = photonView.IsMine;
             if (!photonView.IsMine)
+            {
                 GameManager.Instance.otherPlayerTF = this.transform;
+                mainCamera.GetComponent<AudioListener>().enabled = false;
+            }
+            else if (GameManager.Instance.isTest)
+            {
+                GameManager.Instance.characterOwner.Add(PhotonNetwork.IsMasterClient, gameObject.name.Contains("Nella"));
+                GameManager.Instance.isAlive.Add(GameManager.Instance.characterOwner[PhotonNetwork.IsMasterClient], true);
+            }
             // << : 
 
             Application.targetFrameRate = 120;
             KeyManager.Instance.GetKeyDown(PlayerAction.MoveBackward);
-        }
-        // Start is called before the first frame update
-        void Start()
-        {
-
         }
 
         // Update is called once per frame
@@ -139,8 +138,15 @@ namespace KSU
 
         private void FixedUpdate()
         {
-            if (!photonView.IsMine || characterState.isOutOfControl)
+            if (!photonView.IsMine)
+            {
+                if(transform.parent != null)
+                    playerRigidbody.velocity = Vector3.zero;
                 return;
+            }else if(characterState.isOutOfControl)
+            {
+                return;
+            }
             TakeRotation();
             Move();
         }
@@ -290,6 +296,7 @@ namespace KSU
                     characterState.CheckAirJump();
                     if (characterState.IsAirJumping)
                     {
+                        characterState.IsAirDashing = false;
                         Rotate();
                         if (characterState.isMove)
                         {
@@ -453,13 +460,14 @@ namespace KSU
                 if (characterState.isMove) // 내리막길 이동시 경사각에 따른 수직속도 보정값
                     moveVec.y = characterState.slopeAngleCofacter * moveSpeed;
 
-                //if (characterState.height >= characterState.groundCheckThresholdMin)
-                //    moveVec += Vector3.up * (gravity * gravityCofactor * Time.fixedDeltaTime);
+                if (characterState.height >= characterState.groundCheckThresholdMin)
+                    moveVec += Vector3.up * (gravity * gravityCofactor * Time.fixedDeltaTime);
             }
 
             playerRigidbody.velocity = moveVec;
 
 
         }
+
     }
 }

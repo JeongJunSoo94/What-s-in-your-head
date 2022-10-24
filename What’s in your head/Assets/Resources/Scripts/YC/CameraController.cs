@@ -174,7 +174,7 @@ namespace YC.Camera_
             }
         }
 
-
+        
 
         void BlockMouseControlInBlending() // 블렌딩 도중 마우스 입력을 막는다
         {
@@ -232,7 +232,7 @@ namespace YC.Camera_
                     axisY.m_MaxSpeed = 3;
                 }
                 camList[(int)curCam].GetComponent<CinemachineFreeLook>().m_YAxis = axisY;
-            }
+            }       
         }
 
         void SetCamera() // 플레이어 State 따라카메라 세팅 
@@ -295,8 +295,8 @@ namespace YC.Camera_
         public void SetDefenseMode()
         {
             Debug.Log("들어옴!");
-
-            if (pv.IsMine)
+            
+            if(pv.IsMine)
             {
                 preCam = curCam;
                 curCam = CamState.top;
@@ -310,7 +310,7 @@ namespace YC.Camera_
             {
                 mainCam.fieldOfView = 60;
             }
-
+            
 
             Debug.Log("디펜스 모드 세팅 - 카메라 컨트롤러!");
 
@@ -319,7 +319,7 @@ namespace YC.Camera_
         // << : 스테디 빔 사용시, 스테디 Aim Attack State에서 호출
         public void SetSteadyBeam(bool isLock)
         {
-            if (isLock)
+            if(isLock)
             {
                 camList[(int)curCam].GetComponent<CinemachineFreeLook>().m_XAxis.m_InputAxisName = "";
                 camList[(int)curCam].GetComponent<CinemachineFreeLook>().m_YAxis.m_InputAxisName = "";
@@ -452,7 +452,7 @@ namespace YC.Camera_
                 //cinemachineBrain = mainCam.GetComponent<CinemachineBrain>();
                 //CameraManager.Instance.cameras[0] = mainCam;
 
-                if (!mainCam)
+                if(!mainCam)
                 {
                     mainCam = GameObject.FindGameObjectWithTag("NellaCamera").GetComponent<Camera>();
                     mainCam.GetComponent<UniversalAdditionalCameraData>().SetRenderer(0);

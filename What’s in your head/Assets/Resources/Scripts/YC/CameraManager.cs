@@ -67,7 +67,7 @@ namespace YC.CameraManager_
                 //if (Input.GetKeyDown(KeyCode.Alpha9)) // 게임매니저 통해서 호출하도록 
                 if (GameManager.Instance.isTopView)
                 {
-                    pv.RPC(nameof(InitCamera), RpcTarget.AllBuffered, (int)CharacterCamera.NELLA);
+                    pv.RPC(nameof(InitCamera), RpcTarget.AllBuffered, (int)CharacterCamera.NELLA); 
                     pv.RPC(nameof(SetDefenceModeCamera), RpcTarget.AllBuffered);
 
                 }
@@ -81,7 +81,7 @@ namespace YC.CameraManager_
             GameObject NellaTemp = GameObject.FindGameObjectWithTag("Nella");
             GameObject SteadyTemp = GameObject.FindGameObjectWithTag("Steady");
 
-            if (NellaTemp)
+            if(NellaTemp)
                 NellaTemp.GetComponent<CameraController>().SetDefenseMode();
 
             if (SteadyTemp)
@@ -127,7 +127,7 @@ namespace YC.CameraManager_
 
 
         // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> // 
-
+   
         // 스테이지 3 디펜스 모드 : 넬라 죽었을 때 호출
         public void NellaDeadCam()
         {
@@ -191,7 +191,7 @@ namespace YC.CameraManager_
             float currentTime = 0;
 
             isBlending = true;
-
+            
             if (curFullCamera == CharacterCamera.NELLA) // 넬라 카메라 전체화면
             {
                 while (camRect1.width < 1)
@@ -299,7 +299,7 @@ namespace YC.CameraManager_
                 }
 
                 isBlending = false;
-            }
+            }          
         }
 
 

@@ -1,3 +1,4 @@
+using Photon.Pun;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
@@ -6,7 +7,7 @@ using UnityEngine.Video;
 namespace JCW.UI.InGame
 {
 
-    public class TargetIndicator : MonoBehaviour
+    public class OneIndicator : MonoBehaviour
     {        
         [Header("UI")] [SerializeField] GameObject detectUI;
         [Header("타겟 오브젝트의 위치")] [SerializeField] Transform target;
@@ -68,10 +69,7 @@ namespace JCW.UI.InGame
             initImgScale = imgTransform.localScale;
 
             // 정식으로 사용할 때엔 아래 코드 쓸것
-            //isNella = GameManager.Instance.characterOwner[PhotonNetwork.IsMasterClient];
-
-            // 임시
-            isNella = true;
+            isNella = GameManager.Instance.characterOwner[PhotonNetwork.IsMasterClient];
         }
         protected void Update()
         {

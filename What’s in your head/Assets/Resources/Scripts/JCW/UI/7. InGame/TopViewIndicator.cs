@@ -22,9 +22,7 @@ namespace JCW.UI.InGame
 
         // 플레이어 위치
         Transform myPlayerTF;
-        Transform otherPlayerTF;
-
-        bool isTopView;
+        Transform otherPlayerTF = null;
 
         private void Awake()
         {
@@ -55,27 +53,30 @@ namespace JCW.UI.InGame
 
         void Update()
         {
-            if (isTopView != GameManager.Instance.isTopView)
+            if(otherPlayerTF == null)
             {
-                isTopView = GameManager.Instance.isTopView;
-                if(isTopView) transform.GetChild(0).gameObject.SetActive(true);
-                else transform.GetChild(0).gameObject.SetActive(false);
+                if (GameManager.Instance.otherPlayerTF == null)
+                    return;
+                otherPlayerTF = GameManager.Instance.otherPlayerTF;
             }
             // 포지션 설정
             Vector3 myIndicatorPosition = mainCamera.WorldToScreenPoint(myPlayerTF.position);
-            //Vector3 otherIndicatorPosition = mainCamera.WorldToScreenPoint(otherPlayerTF.position);
+            Vector3 otherIndicatorPosition = mainCamera.WorldToScreenPoint(otherPlayerTF.position);
 
             myImgTransform.position = myIndicatorPosition;
-            //otherImgTransform.position = otherIndicatorPosition;
+            otherImgTransform.position = otherIndicatorPosition;
 
             // 방향 설정
             // 플레이어의 Rotation.y값과 UI의 Rotation.z값이 연동되어야함.
 
             float curEulerY = myPlayerTF.rotation.eulerAngles.y > 180 ? myPlayerTF.rotation.eulerAngles.y - 360 :
                 (myPlayerTF.rotation.eulerAngles.y < -180 ? myPlayerTF.rotation.eulerAngles.y + 360 : myPlayerTF.rotation.eulerAngles.y);
+            float otherEulerY = otherPlayerTF.rotation.eulerAngles.y > 180 ? otherPlayerTF.rotation.eulerAngles.y - 360 :
+                (otherPlayerTF.rotation.eulerAngles.y < -180 ? otherPlayerTF.rotation.eulerAngles.y + 360 : otherPlayerTF.rotation.eulerAngles.y);
 
             // 그냥 쿼터니언으로 넣으면 왜 안되는지 알아내야함.
             myImgTransform.rotation = Quaternion.Euler(0, 0, -curEulerY);
+            otherImgTransform.rotation = Quaternion.Euler(0, 0, -otherEulerY);
 
         }
     }

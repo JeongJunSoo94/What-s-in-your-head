@@ -5719,7 +5719,7 @@ GameObject:
   - component: {fileID: 5882252725840425124}
   m_Layer: 0
   m_Name: OrbitalBeamGreenBeam
-  m_TagString: Untagged
+  m_TagString: SteadyBeam
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -26955,6 +26955,7 @@ MonoBehaviour:
   ObservedComponents:
   - {fileID: 8734580271458543236}
   - {fileID: 6988878118824629927}
+  - {fileID: 0}
   - {fileID: 8401977837889013348}
   sceneViewId: 0
   InstantiationId: 0
@@ -27153,7 +27154,9 @@ MonoBehaviour:
   groundCheckDistance: 2
   groundCheckThresholdMin: 0.02
   groundCheckThresholdMax: 0.1
+  forwardblockingMinHeight: 0.2
   height: 0
+  forwardHeight: 0
   RayCheck: 0
   slopeAngle: 0
   slopeAngleCofacter: 0
