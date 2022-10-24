@@ -145,7 +145,12 @@ namespace YC.CameraManager_
         // 스테이지 3 디펜스 모드 : 넬라가 부활했을 때나, 스테디가 부활했을 때 호출
         public void ReviveCam()
         {
-            pv.RPC(nameof(Cor_SetFullScreen), RpcTarget.AllBuffered, _LerpTime); // 죽기 전 Full로 되어있던 카메라를 다시 Full로 만들어줌
+            //pv.RPC(nameof(Cor_SetFullScreen), RpcTarget.AllBuffered, _LerpTime); // 죽기 전 Full로 되어있던 카메라를 다시 Full로 만들어줌
+
+            
+            // >> : 찬우형 요청
+            pv.RPC(nameof(Cor_SetSizeCamera), RpcTarget.AllBuffered, 0.5f, _LerpTime); 
+
         }
 
         // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> // 
