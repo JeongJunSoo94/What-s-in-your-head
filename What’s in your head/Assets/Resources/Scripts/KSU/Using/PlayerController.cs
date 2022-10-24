@@ -296,6 +296,7 @@ namespace KSU
                     characterState.CheckAirJump();
                     if (characterState.IsAirJumping)
                     {
+                        characterState.IsAirDashing = false;
                         Rotate();
                         if (characterState.isMove)
                         {

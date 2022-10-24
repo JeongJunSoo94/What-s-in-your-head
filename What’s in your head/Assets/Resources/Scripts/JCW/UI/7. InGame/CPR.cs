@@ -39,6 +39,7 @@ namespace JCW.UI.InGame
             if(photonView.IsMine)
             {                
                 mainCam.GetComponent<CinemachineBrain>().enabled = false;
+                curPlayer.GetComponent<PlayerState>().isOutOfControl = true;
             }
             
         }
@@ -49,6 +50,7 @@ namespace JCW.UI.InGame
             if (photonView.IsMine)
             {
                 mainCam.GetComponent<CinemachineBrain>().enabled = true;
+                curPlayer.GetComponent<PlayerState>().isOutOfControl = false;
             }
         }
 
