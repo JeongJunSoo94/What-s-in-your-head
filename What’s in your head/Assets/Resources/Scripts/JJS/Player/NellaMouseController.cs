@@ -17,16 +17,8 @@ namespace JJS
         public int bulletCount=0;
         private void Awake()
         {
-            if (PhotonNetwork.NetworkClientState == Photon.Realtime.ClientState.Joined)
-            {
-                gun.mainCamera = this.gameObject.transform.GetComponent<CameraController>().FindCamera(); // 멀티용
-                cameraMain = this.gameObject.transform.GetComponent<CameraController>().FindCamera(); // 멀티용
-            }
-            else
-            {
-                gun.mainCamera = this.gameObject.transform.GetComponent<CameraController_Single>().FindCamera(); // 싱글용
-                cameraMain = this.gameObject.transform.GetComponent<CameraController_Single>().FindCamera(); // 싱글용
-            }
+            cameraMain = this.gameObject.transform.GetComponent<CameraController>().FindCamera(); // 멀티용
+            gun.mainCamera = cameraMain; // 멀티용
             if (point == null)
             {
                 point = GameObject.FindGameObjectWithTag("NellaMousePoint");

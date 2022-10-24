@@ -26,6 +26,10 @@ public class GameManager : MonoBehaviour, IPunObservable
 
     // 현재 탑뷰인지
     [Header("탑뷰")] public bool isTopView;
+    [Header("테스트용")] public bool isTest;
+
+    // 랜덤시드
+    int randomSeed;
 
     public int curPlayerHP = 12;
 
@@ -45,8 +49,23 @@ public class GameManager : MonoBehaviour, IPunObservable
         photonView = GetComponent<PhotonView>();
 
         curStageIndex = 0;
-        curSection = 0;             
+        curSection = 0;
+        
+            
     }
+
+    public void SetRandomSeed()
+    {
+        if (photonView.IsMine)
+            photonView.RPC(nameof(SetRandomSeed_RPC), RpcTarget.AllViaServer, Random.Range(0, 2147483640));
+    }
+
+    [PunRPC]
+    void SetRandomSeed_RPC(int seed)
+    {
+        randomSeed = seed;
+    }
+
     public void SectionUP() { ++curSection;  }
 
     // 누구 하나 죽었거나, 죽음->부활일 때 작동하는 함수=====================
@@ -113,7 +132,7 @@ public class GameManager : MonoBehaviour, IPunObservable
         {
             stream.SendNext(isTopView);
             stream.SendNext(curStageIndex);            
-            stream.SendNext(curSection);            
+            stream.SendNext(curSection);
         }
 
         // 받는 사람

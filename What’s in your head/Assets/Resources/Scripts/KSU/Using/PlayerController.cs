@@ -103,11 +103,7 @@ namespace KSU
 
             photonView = GetComponent<PhotonView>();
 
-            if (PhotonNetwork.NetworkClientState == Photon.Realtime.ClientState.Joined)
-                mainCamera = this.gameObject.GetComponent<CameraController>().FindCamera(); // 멀티용
-            else
-                mainCamera = this.gameObject.GetComponent<CameraController_Single>().FindCamera(); // 싱글용
-
+            mainCamera = this.gameObject.GetComponent<CameraController>().FindCamera(); // 멀티용
             if (mainCamera == null)
                 Debug.Log("카메라 NULL");
 
@@ -116,16 +112,19 @@ namespace KSU
 
             characterState.isMine = photonView.IsMine;
             if (!photonView.IsMine)
+            {
                 GameManager.Instance.otherPlayerTF = this.transform;
+                mainCamera.GetComponent<AudioListener>().enabled = false;
+            }
+            else if (GameManager.Instance.isTest)
+            {
+                GameManager.Instance.characterOwner.Add(PhotonNetwork.IsMasterClient, gameObject.name.Contains("Nella"));
+                GameManager.Instance.isAlive.Add(GameManager.Instance.characterOwner[PhotonNetwork.IsMasterClient], true);
+            }
             // << : 
 
             Application.targetFrameRate = 120;
             KeyManager.Instance.GetKeyDown(PlayerAction.MoveBackward);
-        }
-        // Start is called before the first frame update
-        void Start()
-        {
-
         }
 
         // Update is called once per frame

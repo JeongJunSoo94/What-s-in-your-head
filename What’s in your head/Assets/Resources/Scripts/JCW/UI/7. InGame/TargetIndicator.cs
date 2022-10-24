@@ -1,3 +1,4 @@
+using Photon.Pun;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
@@ -68,10 +69,7 @@ namespace JCW.UI.InGame
             initImgScale = imgTransform.localScale;
 
             // 정식으로 사용할 때엔 아래 코드 쓸것
-            //isNella = GameManager.Instance.characterOwner[PhotonNetwork.IsMasterClient];
-
-            // 임시
-            isNella = true;
+            isNella = GameManager.Instance.characterOwner[PhotonNetwork.IsMasterClient];
         }
         protected void Update()
         {

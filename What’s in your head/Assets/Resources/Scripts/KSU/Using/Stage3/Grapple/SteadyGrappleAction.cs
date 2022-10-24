@@ -82,10 +82,9 @@ namespace KSU
             steadyInteractionState = GetComponent<SteadyInteractionState>();
             playerRigidbody = GetComponent<Rigidbody>();
 
-            if (PhotonNetwork.NetworkClientState == Photon.Realtime.ClientState.Joined)
-                playerCamera = this.gameObject.GetComponent<CameraController>().FindCamera(); // 멀티용
-            else
-                playerCamera = this.gameObject.GetComponent<CameraController_Single>().FindCamera(); // 싱글용
+            
+            playerCamera = this.gameObject.GetComponent<CameraController>().FindCamera(); // 멀티용
+
             grappleObject = Instantiate(grappleObject);
             grappleObject.SetActive(false);
             grapple = grappleObject.GetComponent<SteadyGrapple>();

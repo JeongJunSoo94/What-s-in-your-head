@@ -86,6 +86,8 @@ namespace JCW.UI.InGame.Indicator
         {
             if (mainCamera == null)
                 SetCam();
+            if (GameManager.Instance.otherPlayerTF == null)
+                return;
             // 타겟의 위치를 메인카메라의 스크린 좌표로 변경
             Vector3 indicatorPosition = mainCamera.WorldToScreenPoint(GameManager.Instance.otherPlayerTF.position);
             if (!GameManager.Instance.isTopView)
