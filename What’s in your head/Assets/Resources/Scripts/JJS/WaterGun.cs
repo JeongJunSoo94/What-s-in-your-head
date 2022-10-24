@@ -25,6 +25,7 @@ namespace JJS.Weapon
         public float curveHeight=1f;
         public float curveWidth=0.5f;
         public float shootSpeed = 0.5f;
+        public int bulletCount = 0;
 
         [Header("Don't touch")]
         public BezierCurve bezierCurveOrbit;
@@ -40,7 +41,7 @@ namespace JJS.Weapon
         public bool startShoot;
         public float curShootCool;
         GameObject bulletSpawner;
-        public int bulletCount = 0;
+        public int bulletCurCount = 0;
         private void Awake()
         {
             bezierCurveOrbit = gameObject.GetComponent<BezierCurve>();
@@ -49,7 +50,7 @@ namespace JJS.Weapon
             bulletSpawner.AddComponent<Spawner>();
             spawner = bulletSpawner.GetComponent<Spawner>();
             spawner.obj = bullet;
-            spawner.count = 50;
+            spawner.count = bulletCount;
             spawner.spawnCount = 0;
         }
         //void FixedUpdate()
@@ -75,7 +76,7 @@ namespace JJS.Weapon
                 if (curShootCool == 0)
                 {
                     Shoot();
-                    bulletCount++;
+                    bulletCurCount++;
                     StartCoroutine(ShootCoolTime());
                 }
                 yield return new WaitForSeconds(shootSpeed -curShootCool);
@@ -96,7 +97,7 @@ namespace JJS.Weapon
 
         void Shoot()
         {
-            GameObject bullet=spawner.Respawn(startPos.transform.position);
+            GameObject bullet=spawner.Respawn(startPos.transform.position, Quaternion.LookRotation(bezierCurveOrbit.p2 - startPos.transform.position));
             if (bullet != null)
             {
                 Bullet bulletInfo = bullet.GetComponent<Bullet>();

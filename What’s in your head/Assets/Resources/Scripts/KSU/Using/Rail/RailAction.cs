@@ -489,24 +489,24 @@ namespace KSU
             endRight = endCenter + mainCamera.transform.right * rangeRadius;
         }
 
-        private void OnDrawGizmos()
-        {
-            if (interactionState.railTriggerDetectionNum > 0)
-            {
-                if (_raycastHit.point != null)
-                {
-                    Gizmos.color = Color.red;
-                    Gizmos.DrawSphere(_raycastHit.point, 1f);
-                }
+        //private void OnDrawGizmos()
+        //{
+        //    if (interactionState.railTriggerDetectionNum > 0)
+        //    {
+        //        if (_raycastHit.point != null)
+        //        {
+        //            Gizmos.color = Color.red;
+        //            Gizmos.DrawSphere(_raycastHit.point, 1f);
+        //        }
 
-                Gizmos.DrawLine(startUp, endUp);
-                Gizmos.DrawLine(startDown, endDown);
-                Gizmos.DrawLine(startRight, endRight);
-                Gizmos.DrawLine(startLeft, endLeft);
+        //        Gizmos.DrawLine(startUp, endUp);
+        //        Gizmos.DrawLine(startDown, endDown);
+        //        Gizmos.DrawLine(startRight, endRight);
+        //        Gizmos.DrawLine(startLeft, endLeft);
 
-                Gizmos.DrawWireSphere(startCenter, rangeRadius);
-                Gizmos.DrawWireSphere(endCenter, rangeRadius);
-            }
-        }
+        //        Gizmos.DrawWireSphere(startCenter, rangeRadius);
+        //        Gizmos.DrawWireSphere(endCenter, rangeRadius);
+        //    }
+        //}
     }
 }

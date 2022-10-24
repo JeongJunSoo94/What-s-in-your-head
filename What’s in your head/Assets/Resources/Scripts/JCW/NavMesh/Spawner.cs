@@ -43,6 +43,21 @@ namespace JCW.Spawner
             return gameObject;
         }
 
+        public GameObject Respawn(Vector3 pos, Quaternion rotation)
+        {
+            GameObject gameObject = null;
+
+            if (spawnCount < count)
+            {
+                ++spawnCount;
+                gameObject = objQueue.Dequeue();
+                gameObject.transform.position = pos;
+                gameObject.transform.rotation = rotation;
+                gameObject.SetActive(true);
+            }
+            return gameObject;
+        }
+
         // 미리 오브젝트를 생성해서 자식으로 담아둠.
         public void SpawnInit()
         {

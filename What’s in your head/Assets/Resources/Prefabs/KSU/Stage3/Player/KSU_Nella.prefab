@@ -2485,7 +2485,6 @@ GameObject:
   - component: {fileID: 4271477110735829063}
   - component: {fileID: 4271477110735829057}
   - component: {fileID: 4271477110735829085}
-  - component: {fileID: 4271477110735829084}
   m_Layer: 0
   m_Name: WaterGun
   m_TagString: Untagged
@@ -2520,19 +2519,25 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6ea524bf7bc0bdf4a8e2422914d8924e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  bezierCurveOrbit: {fileID: 0}
-  mainCamera: {fileID: 0}
-  spawner: {fileID: 0}
+  speed: 20
   shootMaxDistance: 30
   shootCurDistance: 0
   curveHeight: 1
   curveWidth: 0.5
+  shootSpeed: 0.5
+  bezierCurveOrbit: {fileID: 0}
+  mainCamera: {fileID: 0}
+  spawner: {fileID: 0}
   targetIK: {fileID: 3723959393930102280}
   gunDirection: {fileID: 6883025196847062771}
   hitPos: {fileID: 9005828818139765504}
   mousePoint: {fileID: 0}
   weapon: {fileID: 3723959393930102280}
   startPos: {fileID: 3723959395216327100}
+  bullet: {fileID: 2660365490216987232, guid: a0267121bd4e0054ab0964d04eafb129, type: 3}
+  startShoot: 0
+  curShootCool: 0
+  bulletCount: 0
 --- !u!114 &4271477110735829085
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2552,23 +2557,6 @@ MonoBehaviour:
   p3: {x: 0, y: 0, z: 0}
   p4: {x: 0, y: 0, z: 0}
   on: 0
---- !u!114 &4271477110735829084
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4271477110735829062}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 070b3e5e14a6b294abb1f99ee7cf6448, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  spawnTime: 0
-  obj: {fileID: 2660365490216987232, guid: a0267121bd4e0054ab0964d04eafb129, type: 3}
-  count: 50
-  spawnCount: 0
-  spawnType: 0
 --- !u!1 &4403930799163794179
 GameObject:
   m_ObjectHideFlags: 0
@@ -4937,6 +4925,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 75aae2b5ebf38594284bd8c27d946cff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  waterGun: {fileID: 0}
 --- !u!1 &8618641202618329507
 GameObject:
   m_ObjectHideFlags: 0
@@ -5474,12 +5463,13 @@ MonoBehaviour:
   ik: {fileID: 6125511999642235224}
   ableToLeft: 0
   ableToRight: 0
+  clickLeft: 0
+  clickRight: 0
   hitObjs:
   - {fileID: 1305514216266557921}
   - {fileID: 7656355952428297822}
   - {fileID: 2048753255070762641}
   gun: {fileID: 4271477110735829057}
-  bulletCount: 0
 --- !u!114 &4557260369275093484
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5608,6 +5598,9 @@ MonoBehaviour:
   - Type: 4
     SynchronizeType: 2
     Name: isAttackNext
+  - Type: 1
+    SynchronizeType: 0
+    Name: BulletCool
   m_SynchronizeLayers:
   - SynchronizeType: 2
     LayerIndex: 0

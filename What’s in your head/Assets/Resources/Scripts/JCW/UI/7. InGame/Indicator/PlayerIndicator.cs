@@ -86,8 +86,12 @@ namespace JCW.UI.InGame.Indicator
         {
             if (mainCamera == null)
                 SetCam();
+            if (GameManager.Instance.otherPlayerTF == null)
+                return;
+            else if ( target == null)
+                target = GameManager.Instance.otherPlayerTF;
             // 타겟의 위치를 메인카메라의 스크린 좌표로 변경
-            Vector3 indicatorPosition = mainCamera.WorldToScreenPoint(GameManager.Instance.otherPlayerTF.position);
+            Vector3 indicatorPosition = mainCamera.WorldToScreenPoint(target.position);
             if (!GameManager.Instance.isTopView)
             {               
                 otherImg.sprite = otherIndicatorNormal;
@@ -135,6 +139,8 @@ namespace JCW.UI.InGame.Indicator
 
                 float myCurEulerY = myTF.rotation.eulerAngles.y > 180 ? myTF.rotation.eulerAngles.y - 360 :
                     (myTF.rotation.eulerAngles.y < -180 ? myTF.rotation.eulerAngles.y + 360 : myTF.rotation.eulerAngles.y);
+
+                
 
                 float otherCurEulerY = target.rotation.eulerAngles.y > 180 ? target.rotation.eulerAngles.y - 360 :
                     (target.rotation.eulerAngles.y < -180 ? target.rotation.eulerAngles.y + 360 : target.rotation.eulerAngles.y);

@@ -33,7 +33,11 @@ namespace JJS
                 GetPlayerController(animator).playerMouse.ik.enableIK = false;
             if (GetPlayerController(animator).playerMouse.weaponInfo[GetPlayerController(animator).playerMouse.GetUseWeapon()].canAim)
             {
-                if (animator.GetLayerWeight(1) == 0&& GetPlayerController(animator).characterState.aim)
+                if (GetPlayerController(animator).characterState.top)
+                {
+                    animator.SetLayerWeight(1, 0);
+                }
+                else
                 {
                     animator.SetLayerWeight(1, 1);
                 }
@@ -68,7 +72,6 @@ namespace JJS
                     animator.SetBool("Top", true);
                     return;
                 }
-
                 animator.SetBool("Aim", KeyManager.Instance.GetKey(PlayerAction.Aim));
             }
         }

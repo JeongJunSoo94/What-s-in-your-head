@@ -25,7 +25,7 @@ public class GameManager : MonoBehaviour, IPunObservable
     [HideInInspector] public Transform otherPlayerTF;
 
     // «ˆ¿Á ≈æ∫‰¿Œ¡ˆ
-    [Header("≈æ∫‰")] public bool isTopView;
+    [Header("≈æ∫‰")] public bool isTopView =false;
 
     public int curPlayerHP = 12;
 
@@ -46,6 +46,18 @@ public class GameManager : MonoBehaviour, IPunObservable
 
         curStageIndex = 0;
         curSection = 0;             
+    }
+
+    private void Update()
+    {
+        if (photonView.IsMine)
+        {
+            if (Input.GetKeyDown(KeyCode.Keypad0))
+            {
+                isTopView = !isTopView;
+            }
+        }
+
     }
     public void SectionUP() { ++curSection;  }
 

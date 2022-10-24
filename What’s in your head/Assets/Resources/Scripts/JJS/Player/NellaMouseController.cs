@@ -43,6 +43,20 @@ namespace JJS
 
         public override void AimUpdate(int type=0)
         {
+            Vector3 mousePos = Input.mousePosition;
+            float x = mousePos.x * (1-cameraMain.rect.width);
+            mousePos.x -= x;
+            ray = cameraMain.ScreenPointToRay(mousePos);
+            int layerMask = (-1) - (1 << LayerMask.NameToLayer("Player"));
+            if (Physics.Raycast(ray, out hit, 100, layerMask, QueryTriggerInteraction.Ignore))
+            {
+                point.transform.position = hit.point;
+            }
+            else
+            {
+                Vector3 dir = cameraMain.transform.forward;
+                point.transform.position = gun.startPos.transform.position + dir * gun.shootMaxDistance;
+            }
             gun.ShootLine(type);
         }
 
@@ -51,17 +65,22 @@ namespace JJS
             if(photonView.IsMine)
             {
                 if (player.characterState.aim)
-                { 
+                {
                     if (KeyManager.Instance.GetKey(PlayerAction.Fire))
                     {
                         photonView.RPC(nameof(SetWeaponEnable), RpcTarget.AllViaServer, 0, true);
                         clickLeft = true;
                     }
                     else
-                    { 
-                        photonView.RPC(nameof(SetWeaponEnable), RpcTarget.AllViaServer, 0, false); 
+                    {
+                        photonView.RPC(nameof(SetWeaponEnable), RpcTarget.AllViaServer, 0, false);
                         clickLeft = false;
                     }
+                }
+                else
+                {
+                    photonView.RPC(nameof(SetWeaponEnable), RpcTarget.AllViaServer, 0, false);
+                    clickLeft = false;
                 }
             }
             

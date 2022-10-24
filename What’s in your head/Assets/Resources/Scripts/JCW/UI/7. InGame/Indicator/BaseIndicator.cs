@@ -37,7 +37,7 @@ namespace JCW.UI.InGame.Indicator
         virtual protected void Start()
         {
             if (GameManager.Instance.characterOwner.Count == 0)
-                isNella =true;
+                isNella = false;
             else
                 isNella = GameManager.Instance.characterOwner[PhotonNetwork.IsMasterClient];
         }

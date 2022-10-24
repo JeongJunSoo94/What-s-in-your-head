@@ -104,11 +104,18 @@ namespace JJS.Weapon
             BeamEnable(true);
         }
 
-        public void HitLine()
+        public void HitLine(int type)
         {
             RaycastHit hit;
             Vector3 hitPoint;
-            dir = mainCamera.transform.forward;
+            if (type == 0)
+            {
+                dir = mainCamera.transform.forward;
+            }
+            else
+            {
+                dir = (mousePoint.transform.position - startPos.transform.position).normalized;
+            }
 
             if (Physics.Raycast(startPos.transform.position, dir, out hit, maxDistance, -1, QueryTriggerInteraction.Ignore))
             {

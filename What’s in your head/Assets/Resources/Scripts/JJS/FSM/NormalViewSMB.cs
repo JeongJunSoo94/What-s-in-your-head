@@ -65,12 +65,11 @@ namespace JJS
 
         void InputCheck(Animator animator)
         {
-            if (Input.GetKeyDown(KeyCode.Alpha1))
+            if (GameManager.Instance.isTopView)
             {
-                GetPlayerController(animator).characterState.top = !GetPlayerController(animator).characterState.top;
-                animator.SetBool("Top", GetPlayerController(animator).characterState.top);
+                GetPlayerController(animator).playerMouse.TopViewUpdate();
             }
-            
+
             GetPlayerController(animator).InputRun();
             GetPlayerController(animator).InputMove();
             //GetPlayerController(animator).InputJump();
@@ -123,15 +122,18 @@ namespace JJS
 
         void check(Animator animator)
         {
-            if (GetPlayerController(animator).characterState.top)
+            if (GameManager.Instance.isTopView)
             {
+                //GetPlayerController(animator).characterState.top = !GetPlayerController(animator).characterState.top;
+                GetPlayerController(animator).characterState.top = true;
                 Cursor.lockState = CursorLockMode.Confined;
-                GetPlayerController(animator).playerMouse.TopViewUpdate();
             }
             else
             {
                 Cursor.lockState = CursorLockMode.Locked;
+                GetPlayerController(animator).characterState.top = false;
             }
+            animator.SetBool("Top", GetPlayerController(animator).characterState.top);
 
             animator.SetFloat("HorizonVelocity", (GetPlayerController(animator).characterState.isMove ? (GetPlayerController(animator).characterState.isRun ? 1.0f : 0.5f) : 0.0f));
 

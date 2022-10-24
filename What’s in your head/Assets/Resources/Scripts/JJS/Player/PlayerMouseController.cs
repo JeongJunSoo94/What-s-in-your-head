@@ -30,8 +30,8 @@ namespace JJS
         public bool clickLeft;
         public bool clickRight;
 
-        Ray ray;
-        RaycastHit hit;
+        protected Ray ray;
+        protected RaycastHit hit;
         private void Awake()
         {
             ableToLeft = false;

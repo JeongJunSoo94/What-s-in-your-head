@@ -14,6 +14,12 @@ namespace JJS
 
         override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
         {
+            GetPlayerController(animator).playerMouse.ik.enableIK = true;
+            animator.SetLayerWeight(1, 1);
+            if (GetPlayerController(animator).characterState.top)
+            {
+                GetPlayerController(animator).playerMouse.AimUpdate(2);
+            }
             if (GetPlayerController(animator).characterState.isMine)
             {
               
@@ -22,12 +28,7 @@ namespace JJS
         }
         void check(Animator animator)
         {
-            GetPlayerController(animator).playerMouse.ik.enableIK = true;
-            animator.SetLayerWeight(1, 1);
-            if (GetPlayerController(animator).characterState.top)
-            { 
-                GetPlayerController(animator).playerMouse.AimUpdate(2);
-            }
+            
             if (!KeyManager.Instance.GetKey(PlayerAction.Fire))
             {
                 animator.SetBool("AimAttack", false);

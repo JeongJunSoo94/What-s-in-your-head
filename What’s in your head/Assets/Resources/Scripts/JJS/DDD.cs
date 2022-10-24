@@ -16,6 +16,6 @@ public class DDD : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        bulletCount.text = waterGun.bulletCount.ToString();
+        bulletCount.text = waterGun.bulletCurCount.ToString();
     }
 }
