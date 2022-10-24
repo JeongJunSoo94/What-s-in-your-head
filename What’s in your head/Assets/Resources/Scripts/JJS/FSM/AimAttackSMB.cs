@@ -9,7 +9,7 @@ namespace JJS
     {
         override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
         {
-            GetPlayerController(animator).playerMouse.SetWeaponEnable(GetPlayerController(animator).playerMouse.GetUseWeapon(), true);
+            //GetPlayerController(animator).playerMouse.SetWeaponEnable(GetPlayerController(animator).playerMouse.GetUseWeapon(), true);
         }
 
         override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
@@ -58,7 +58,7 @@ namespace JJS
         // OnStateExit is called when a transition ends and the state machine finishes evaluating this state
         override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
         {
-            GetPlayerController(animator).playerMouse.SetWeaponEnable(GetPlayerController(animator).playerMouse.GetUseWeapon(), false);
+            //GetPlayerController(animator).playerMouse.SetWeaponEnable(GetPlayerController(animator).playerMouse.GetUseWeapon(), false);
         }
 
         // OnStateMove is called right after Animator.OnAnimatorMove()

@@ -5,14 +5,20 @@ using YC.Camera_;
 using YC.Camera_Single;
 using Photon.Pun;
 using JJS.Weapon;
-
+using JCW.UI.Options.InputBindings;
+using KSU;
 namespace JJS
 {
+    [RequireComponent(typeof(PhotonView))]
     public class NellaMouseController : PlayerMouseController
     {
         public List<Discovery3D> hitObjs;
 
         public WaterGun gun;
+
+        PhotonView photonView;
+
+        PlayerController player;
 
         private void Awake()
         {
@@ -31,6 +37,8 @@ namespace JJS
                 point = GameObject.FindGameObjectWithTag("NellaMousePoint");
                 gun.mousePoint = point;
             }
+            photonView = GetComponent<PhotonView>();
+            player = GetComponent<PlayerController>();
         }
 
         public override void AimUpdate(int type=0)
@@ -38,6 +46,29 @@ namespace JJS
             gun.ShootLine(type);
         }
 
+        private void Update()
+        {
+            if(photonView.IsMine)
+            {
+                if (player.characterState.aim)
+                { 
+                    if (KeyManager.Instance.GetKey(PlayerAction.Fire))
+                    {
+                        photonView.RPC(nameof(SetWeaponEnable), RpcTarget.AllViaServer, 0, true);
+                        clickLeft = true;
+                    }
+                    else
+                    { 
+                        photonView.RPC(nameof(SetWeaponEnable), RpcTarget.AllViaServer, 0, false); 
+                        clickLeft = false;
+                    }
+                }
+            }
+            
+            //SetWeaponEnable(GetPlayerController(animator).playerMouse.GetUseWeapon(), false)
+        }
+
+        [PunRPC]
         public override void SetWeaponEnable(int weaponIndex,bool enable)
         {
             //if (weaponInfo.Count != 0)

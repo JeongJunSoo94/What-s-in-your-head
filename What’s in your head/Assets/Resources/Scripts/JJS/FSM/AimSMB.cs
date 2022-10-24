@@ -53,7 +53,7 @@ namespace JJS
             {
                 if (GetPlayerController(animator).characterState.aim|| GetPlayerController(animator).characterState.top)
                 {
-                    if (KeyManager.Instance.GetKey(PlayerAction.Fire))
+                    if (GetPlayerController(animator).playerMouse.clickLeft)
                     {
                         animator.SetBool("AimAttack", true);
                     }

@@ -27,6 +27,9 @@ namespace JJS
         public bool ableToLeft;
         public bool ableToRight;
 
+        public bool clickLeft;
+        public bool clickRight;
+
         Ray ray;
         RaycastHit hit;
         private void Awake()
