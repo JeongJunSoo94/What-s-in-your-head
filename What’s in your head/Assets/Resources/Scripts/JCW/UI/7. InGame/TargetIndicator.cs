@@ -6,7 +6,7 @@ using UnityEngine.Video;
 namespace JCW.UI.InGame
 {
 
-    public class TargetIndicator : MonoBehaviour
+    public class OneIndicator : MonoBehaviour
     {        
         [Header("UI")] [SerializeField] GameObject detectUI;
         [Header("타겟 오브젝트의 위치")] [SerializeField] Transform target;
