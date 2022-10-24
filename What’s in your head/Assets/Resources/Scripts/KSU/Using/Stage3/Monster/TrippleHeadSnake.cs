@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace KSU
+namespace KSU.Monster
 {
     public class TrippleHeadSnake : DefenseMonster
     {
@@ -11,6 +11,7 @@ namespace KSU
         public state currentState = state.Idle;
 
         [SerializeField] float rushSpeed;
+        [SerializeField] float rotationSpeed;
         GameObject rushTarget;
 
         // Start is called before the first frame update
@@ -23,36 +24,26 @@ namespace KSU
         void Update()
         {
             Detect();
-            switch (currentState)
-            {
-                case state.Chase:
-                case state.Stuck:
-                case state.Sturn:
-                    Detect();
-                    Chase();
-                    break;
-            }
         }
 
-        void SetTaget()
+        public void SetRushTaget()
         {
-             if(rushTarget == null)
-            {
-                rushTarget = currentTarget;
-            }
-
+            rushTarget = currentTarget;
         }
 
-        void Rotate()
+        public void RotateForRush()
         {
             // 十君覗 馬切
-            transform.LookAt(rushTarget.transform.position);
+            Vector3 direction = (rushTarget.transform.position - transform.position);
+            Vector3 forward = Vector3.Slerp(transform.forward, direction.normalized, rotationSpeed * Time.deltaTime / Vector3.Angle(transform.forward, direction.normalized));
+            forward.y = 0;
+            transform.LookAt(transform.position + forward);
         }
 
         public void Rush()
         {
             rushTarget = null;
-            monsterRigidBody.velocity = transform.forward * rushSpeed;
+            monsterNavAgent.destination = (transform.position + transform.forward);
         }
     }
 }

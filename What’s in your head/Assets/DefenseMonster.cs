@@ -5,7 +5,7 @@ using UnityEngine.AI;
 
 using JCW.Spawner;
 
-namespace KSU
+namespace KSU.Monster
 {
     public class DefenseMonster : MonoBehaviour
     {
@@ -22,21 +22,24 @@ namespace KSU
 
         protected Collider[] detectedColliders;
 
-        protected Rigidbody monsterRigidBody;
         protected NavMeshAgent monsterNavAgent;
         protected Animator monsterAnimator;
 
         protected Spawner spawner;
 
+        public bool isTargetFounded = false;
+
         bool isDefenseMode = false;
 
         // Start is called before the first frame update
-        void Start()
+        void Awake()
         {
-            monsterRigidBody = GetComponent<Rigidbody>();
+            //monsterRigidBody = GetComponent<Rigidbody>();
             monsterNavAgent = GetComponent<NavMeshAgent>();
             spawner = GetComponentInParent<Spawner>();
             monsterAnimator = GetComponent<Animator>();
+
+            //isDefenseMode = GameManger 에서 받기
         }
 
         private void OnEnable()
@@ -48,6 +51,8 @@ namespace KSU
         {
             currentHP = maxHP;
             detectedTarget = null;
+            currentTarget = null;
+            monsterNavAgent.speed = moveSpeed;
         }
 
         public void GetDamag(int damage)
@@ -64,7 +69,7 @@ namespace KSU
             spawner.Despawn(this.gameObject);
         }
 
-        protected void Chase()
+        public void Chase()
         {
             if (detectedTarget != null)
             {
@@ -78,11 +83,32 @@ namespace KSU
                 currentTarget = targetObject;
             }
 
-            monsterNavAgent.destination = currentTarget.transform.position;
+            if (currentTarget != null)
+            {
+                monsterNavAgent.destination = currentTarget.transform.position;
+                isTargetFounded = true;
+            }
+            else
+            {
+                isTargetFounded = false;
+            }
+        }
+
+        public void StopChasing()
+        {
+            monsterNavAgent.enabled = false;
+        }
+
+        public void StartChasing()
+        {
+            monsterNavAgent.enabled = true;
         }
 
         protected void Detect()
         {
+            if (detectedTarget != null)
+                return;
+
             detectedColliders = Physics.OverlapSphere(transform.position, detectingRange);
             if (detectedColliders.Length > 0)
             {

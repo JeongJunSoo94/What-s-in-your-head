@@ -70,13 +70,10 @@ namespace KSU
 
         private void Update()
         {
-            if(playerState.isMine)
-            {
-                FindInteractableRope();
-                SendInfoUI();
-            }
+            FindInteractableRope();
+            SendInfoUI();
 
-            if(interactionState.isRidingRope)
+            if (interactionState.isRidingRope)
             {
                 if(currentRidingRope != null)
                 {
@@ -235,6 +232,9 @@ namespace KSU
 
         void SendInfoUI()
         {
+            if (!playerState.isMine)
+                return;
+
             if (detectedRopes.Count > 0)
             {
                 foreach (var rope in detectedRopes)
@@ -246,7 +246,7 @@ namespace KSU
 
         private void OnTriggerEnter(Collider other)
         {
-            if(other.CompareTag("Rope") && GetComponent<PhotonView>().IsMine)
+            if(other.CompareTag("Rope"))
             {
                 Debug.Log("트리거 엔터 : " + other.gameObject.transform.parent.gameObject);
                 detectedRopes.Add(other.gameObject.transform.parent.gameObject, new Obj_Info(false, false, 100f));
@@ -255,7 +255,7 @@ namespace KSU
 
         private void OnTriggerExit(Collider other)
         {
-            if (other.CompareTag("Rope") && GetComponent<PhotonView>().IsMine)
+            if (other.CompareTag("Rope"))
             {
                 Debug.Log("트리거 탈출 : " + other.gameObject.transform.parent.gameObject);
                 other.gameObject.transform.parent.gameObject.GetComponentInChildren<ConvertIndicator>().SetUI(false, false, 100f);                
