@@ -30,22 +30,14 @@ namespace JCW.UI.InGame
 
         private void Awake()
         {
-            if (PhotonNetwork.NetworkClientState == Photon.Realtime.ClientState.Joined)
-                mainCamera = transform.parent.GetComponent<CameraController>().FindCamera(); // 멀티용
-            else
-                mainCamera = transform.parent.GetComponent<CameraController_Single>().FindCamera(); // 싱글용            
-
-
-           
+            mainCamera = transform.parent.GetComponent<CameraController>().FindCamera(); // 멀티용       
 
             GetComponent<Canvas>().worldCamera = mainCamera;
             GetComponent<Canvas>().planeDistance = 0.15f;
 
             photonView = GetComponent<PhotonView>();
-            if (GameManager.Instance.characterOwner.Count == 0)
-                isNella = true;
-            else
-                isNella = GameManager.Instance.characterOwner[PhotonNetwork.IsMasterClient];
+
+            isNella = GameManager.Instance.characterOwner[PhotonNetwork.IsMasterClient];
 
             if (photonView.IsMine)
                 GameManager.Instance.hpAllPairs.Add(isNella, this);
@@ -69,7 +61,8 @@ namespace JCW.UI.InGame
 
         public void SetHP(bool isOn)
         {
-            photonView.RPC(nameof(SetHP_RPC), RpcTarget.AllViaServer, isOn);
+            if(photonView.IsMine)
+                photonView.RPC(nameof(SetHP_RPC), RpcTarget.AllViaServer, isOn);
         }
 
         [PunRPC]

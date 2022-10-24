@@ -18,7 +18,7 @@ namespace KSU
         //PlayerController playerController;
         //PlayerState playerState;
         PlayerInteractionState interactionState;
-
+        PlayerState playerState;
         //HookingRope grappleAction;
         RailAction railAction;
         RopeAction ropeAction;
@@ -29,7 +29,7 @@ namespace KSU
             //playerController = GetComponent<PlayerController>();
             //playerState = GetComponent<PlayerState>();
             interactionState = GetComponent<PlayerInteractionState>();
-            
+            playerState = GetComponent<PlayerState>();
             //grappleAction = GetComponent<HookingRope>();
             railAction = GetComponent<RailAction>();
             ropeAction = GetComponent<RopeAction>();
@@ -40,7 +40,8 @@ namespace KSU
         // Update is called once per frame
         void Update()
         {
-            InputInteract();
+            if (playerState.isMine)
+                InputInteract();
         }
 
         void InputInteract()

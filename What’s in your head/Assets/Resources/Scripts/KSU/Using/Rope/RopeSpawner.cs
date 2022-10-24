@@ -1,3 +1,4 @@
+using JCW.UI.InGame.Indicator;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -35,7 +36,7 @@ namespace KSU
         void Start()
         {
             detector.transform.localScale = new Vector3(1, 1, 1) * (detectingRange * 2f);
-            //  .SendMessage("SetInteractableRange", interactableRange);
+            transform.GetChild(3).GetComponent<ConvertIndicator>().SetInteractableRange(detectingRange, interactableRange);
         }
 
         public void StartRopeAction(GameObject player, float moveToRopeSpeed)

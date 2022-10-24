@@ -39,11 +39,14 @@ namespace JCW.UI.InGame.Indicator
             {
                 Destroy(this.gameObject);
                 return;
-            }            
-            // 정식으로 사용할 때엔 아래 코드 쓸것
-            //isNella = GameManager.Instance.characterOwner[PhotonNetwork.IsMasterClient];
-            // 임시
-            isNella = true;
+            }
+            
+            myTF = transform.parent;
+        }
+
+        protected override void Start()
+        {
+            base.Start();
             if (isNella)
             {
                 myIndicatorTop = nellaTopView;
@@ -64,7 +67,7 @@ namespace JCW.UI.InGame.Indicator
             myImg = myImgTransform.gameObject.GetComponent<Image>();
             myImg.sprite = myIndicatorTop;
 
-            //TopView인지를 받아와야함            
+
 
             // 노멀 뷰일때만 쓰임 =======================================================================================
             // 기존에 설정된 스프라이트 크기만큼 범위 조절
@@ -77,24 +80,20 @@ namespace JCW.UI.InGame.Indicator
             outOfSightImgScale = imgTransform.localScale * 0.8f;
             initImgScale = imgTransform.localScale;
             // ========================================================================================================
-
-            
-
-            //타겟은 상대방
-            //target = GameManager.Instance.otherPlayerTF;            
-            myTF = transform.parent;
-
-            // 내 카메라를 가져와야함
-            //mainCamera = isNella ? CameraManager.Instance.cameras[0] : CameraManager.Instance.cameras[1];
-            SetSreenInfo();
         }
 
         void Update()
         {
             if (mainCamera == null)
                 SetCam();
+            if(target == null)
+            {
+                if (GameManager.Instance.otherPlayerTF == null)
+                    return;
+                target = GameManager.Instance.otherPlayerTF;
+            }
             // 타겟의 위치를 메인카메라의 스크린 좌표로 변경
-            Vector3 indicatorPosition = mainCamera.WorldToScreenPoint(GameManager.Instance.otherPlayerTF.position);
+            Vector3 indicatorPosition = mainCamera.WorldToScreenPoint(target.position);
             if (!GameManager.Instance.isTopView)
             {               
                 otherImg.sprite = otherIndicatorNormal;

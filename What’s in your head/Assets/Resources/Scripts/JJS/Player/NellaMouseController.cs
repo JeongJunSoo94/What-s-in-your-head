@@ -15,23 +15,25 @@ namespace JJS
         public WaterGun gun;
 
         public int bulletCount=0;
+
+        
+
+
         private void Awake()
         {
-            if (PhotonNetwork.NetworkClientState == Photon.Realtime.ClientState.Joined)
-            {
-                gun.mainCamera = this.gameObject.transform.GetComponent<CameraController>().FindCamera(); // 멀티용
-                cameraMain = this.gameObject.transform.GetComponent<CameraController>().FindCamera(); // 멀티용
-            }
-            else
-            {
-                gun.mainCamera = this.gameObject.transform.GetComponent<CameraController_Single>().FindCamera(); // 싱글용
-                cameraMain = this.gameObject.transform.GetComponent<CameraController_Single>().FindCamera(); // 싱글용
-            }
+            cameraMain = this.gameObject.transform.GetComponent<CameraController>().FindCamera(); // 멀티용
+            gun.mainCamera = cameraMain; // 멀티용
             if (point == null)
             {
                 point = GameObject.FindGameObjectWithTag("NellaMousePoint");
                 gun.mousePoint = point;
             }
+        }
+
+        // << : 오브젝트 충돌 체크 위해 수정
+        private void Update()
+        {
+            TargetUpdate();
         }
 
         public override void AimUpdate(int type=0)
@@ -79,9 +81,11 @@ namespace JJS
                     {
                         for (int j = 0; j < hitObjs[i].HitColliders.Length; j++)
                         {
-                            hitObjs[i].HitColliders[j].gameObject.SetActive(false);
-                            //hitObjs[i].HitColliders[j].gameObject.SendMessage("");
-
+                            // << : 넬라 기타 어택 센드메시지 수정 YC (기타가 부쉬와 충돌시 부쉬에게 센드메시지(부쉬 이펙트 및 삭제)
+                            if (hitObjs[i].HitColliders[j].gameObject.CompareTag("Bush"))
+                            {
+                                hitObjs[i].HitColliders[j].gameObject.SendMessage("Attacked", 0.3f);
+                            }                         
                         }
                     }
                 }

@@ -15,26 +15,28 @@ namespace JCW.UI.InGame.Indicator
 
         protected void Awake()
         {
-            
             detectUI = transform.GetChild(0).gameObject;
             imgTransform = detectUI.transform.GetChild(0).GetComponent<RectTransform>();
+            gauge = detectUI.transform.GetChild(1).GetComponent<Image>();
 
 
             // 기존에 설정된 스프라이트 크기만큼 범위 조절
             imgTransform.sizeDelta = new Vector2(nella_DetectSprite.bounds.size.x, nella_DetectSprite.bounds.size.y);
             interactiveImg = imgTransform.gameObject.GetComponent<Image>();
-            interactiveImg.sprite = nella_DetectSprite;
+            
 
             canvasSize = detectUI.GetComponent<RectTransform>();
             screenLimitOffset = imgTransform.rect.width * 0.4f;
             outOfSightImgScale = imgTransform.localScale * 0.8f;
-            initImgScale = imgTransform.localScale;
-
-            // 정식으로 사용할 때엔 아래 코드 쓸것
-            //isNella = GameManager.Instance.characterOwner[PhotonNetwork.IsMasterClient];
-            // 임시
-            isNella = false;
+            initImgScale = imgTransform.localScale;            
         }
+
+        protected override void Start()
+        {
+            base.Start();
+            interactiveImg.sprite = isNella ? nella_DetectSprite : steady_DetectSprite;
+        }
+
         private void Update()
         {
             if (mainCamera == null)
@@ -53,8 +55,7 @@ namespace JCW.UI.InGame.Indicator
                    && indicatorPosition.y <= screenSize.y + screenSize.height && indicatorPosition.y >= screenSize.y)
                 {
                     imgTransform.localScale = initImgScale;
-                    if(gauge != null)
-                        gauge.transform.localScale = initImgScale;
+                    gauge.transform.localScale = initImgScale;
                     indicatorPosition.z = 0f;
                 }
                 else
@@ -68,8 +69,7 @@ namespace JCW.UI.InGame.Indicator
             }
 
             imgTransform.position = indicatorPosition;
-            if (gauge != null)
-                gauge.transform.position = indicatorPosition;
+            gauge.transform.position = indicatorPosition;
         }
 
         // 레일 : 스프라이트는 하나만 있음. 따라서 변환 애니메이션 필요 없음
@@ -100,10 +100,7 @@ namespace JCW.UI.InGame.Indicator
 
         public void SetGauge(float value)
         {
-            if (gauge == null)
-                Debug.Log("게이지가 할당되지 않았습니다. 확인 해주세요");
-            else
-                gauge.fillAmount = value;
+            gauge.fillAmount = value;
         }
     }
 }

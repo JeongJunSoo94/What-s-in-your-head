@@ -244,11 +244,8 @@ namespace KSU
         {
             player.GetComponent<RailAction>().currentRail = null;
             player.transform.parent = null;
-            Camera camera;
-            if (PhotonNetwork.NetworkClientState == Photon.Realtime.ClientState.Joined)
-                camera = player.GetComponent<CameraController>().mainCam; // 멀티용
-            else
-                camera = player.GetComponent<CameraController_Single>().mainCam; // 싱글용
+            Camera camera;            
+            camera = player.GetComponent<CameraController>().mainCam; // 멀티용
             switch (player.tag)
             {
                 case "Nella":

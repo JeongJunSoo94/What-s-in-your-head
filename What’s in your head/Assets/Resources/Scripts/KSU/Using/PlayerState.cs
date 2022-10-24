@@ -13,10 +13,13 @@ public class PlayerState : MonoBehaviour
     [Range(0.1f, 10.0f), Tooltip("지면 감지 거리")]
     public float groundCheckDistance = 2.0f;
     [Range(0.0f, 1f), Tooltip("지면 인식 허용 최소 거리")]
-    public float groundCheckThresholdMin = 0.1f;
+    public float groundCheckThresholdMin = 0.02f;
     [Range(0.0f, 1f), Tooltip("지면 인식 허용 최대 거리")]
-    public float groundCheckThresholdMax = 0.3f;
+    public float groundCheckThresholdMax = 0.1f;
+    [Range(0.0f, 1f), Tooltip("전방 막힘 최소 높이")]
+    public float forwardblockingMinHeight = 0.2f;
     public float height = 0f;
+    public float forwardHeight = 0f;
 
     public bool RayCheck;
     //
@@ -176,11 +179,23 @@ public class PlayerState : MonoBehaviour
                 //Debug.Log("fowardRaycastHit.point: " + fowardRaycastHit.point);
                 //Debug.Log("groundRaycastHit.point: " + groundRaycastHit.point);
                 float forwardAngle = Vector3.Angle(Vector3.up, fowardRaycastHit.normal);
+                //Vector3 start = transform.position + Vector3.up * fowardRaycastHit.point.y;
+                //float distance = Vector3.Distance(start, fowardRaycastHit.point);
                 if (forwardAngle > maxSlopeAngle)
+                {
                     isFowardBlock = true;
+                }
                 else
                     isFowardBlock = false;
-                Debug.Log("isFowardBlockt: " + isFowardBlock);
+
+                forwardHeight = Mathf.Abs(fowardRaycastHit.point.y - transform.position.y);
+                if (forwardHeight < forwardblockingMinHeight)
+                {
+                    slopeAngleCofacter = forwardblockingMinHeight;
+                    IsGrounded = true;
+                    isFowardBlock = false;
+                }
+                //Debug.Log("isFowardBlock: " + isFowardBlock);
             }
             else
             {
@@ -192,6 +207,10 @@ public class PlayerState : MonoBehaviour
             isOverAngleForSlope = false;
             IsGrounded = false;
             //Debug.Log("RayCheck 실패");
+        }
+        if(!IsGrounded)
+        {
+            Debug.Log("지면체크: " + IsGrounded);
         }
     }
     #endregion
@@ -296,6 +315,6 @@ public class PlayerState : MonoBehaviour
     private void OnDrawGizmos()
     {
         Gizmos.color = Color.red;
-        Gizmos.DrawSphere(groundRaycastHit.point, 0.1f);
+        Gizmos.DrawSphere(fowardRaycastHit.point, 0.1f);
     }
 }

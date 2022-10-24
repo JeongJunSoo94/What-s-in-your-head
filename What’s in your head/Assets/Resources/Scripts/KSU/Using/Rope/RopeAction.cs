@@ -57,10 +57,7 @@ namespace KSU
             playerController = GetComponent<PlayerController>();
             playerState = GetComponent<PlayerState>();
             interactionState = GetComponent<PlayerInteractionState>();
-            if (PhotonNetwork.NetworkClientState == Photon.Realtime.ClientState.Joined)
-                mainCamera = GetComponent<CameraController>().FindCamera(); // 멀티용
-            else
-                mainCamera = GetComponent<CameraController_Single>().FindCamera(); // 싱글용
+            mainCamera = GetComponent<CameraController>().FindCamera(); // 멀티용
 
             if (mainCamera == null)
                 Debug.Log("카메라 NULL");

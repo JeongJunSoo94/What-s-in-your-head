@@ -46,7 +46,7 @@ namespace JCW.Object
         [PunRPC]
         private void Check(Vector3 pos, Quaternion rot)
         {
-            GameManager.Instance.SectionUP();
+            ++GameManager.Instance.curSection;
             Debug.Log("체크포인트 접촉 : " + GameManager.Instance.curSection);
             PlayerInfo playerTF = new(pos, rot);
             JsonData infoJson = JsonMapper.ToJson(playerTF);

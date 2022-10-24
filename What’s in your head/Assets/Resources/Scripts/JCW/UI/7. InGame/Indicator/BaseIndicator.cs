@@ -1,4 +1,5 @@
 using System.Collections;
+using Photon.Pun;
 using UnityEngine;
 using UnityEngine.UI;
 using YC.CameraManager_;
@@ -32,6 +33,11 @@ namespace JCW.UI.InGame.Indicator
 
         // UI가 켜졌는지
         protected bool isActive;
+
+        virtual protected void Start()
+        {
+            isNella = GameManager.Instance.characterOwner[PhotonNetwork.IsMasterClient];
+        }
 
         // 카메라 범위를 벗어났을 때를 위한 설정
         protected Vector3 OutOfRange(Vector3 indicatorPosition)
@@ -79,7 +85,7 @@ namespace JCW.UI.InGame.Indicator
         // 스크린 사이즈 Rect값에 맞게끔 설정
         protected void SetSreenInfo()
         {
-            if (mainCamera == null)
+            if (mainCamera==null)
                 SetCam();
             Rect cameraPos = mainCamera.rect;
             screenSize = new(canvasSize.rect.width * cameraPos.x,
