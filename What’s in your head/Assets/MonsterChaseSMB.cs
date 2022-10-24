@@ -37,9 +37,19 @@ namespace KSU.Monster
         //    // Implement code that sets up animation IK (inverse kinematics)
         //}
 
-        void CheckState()
+        void CheckState(Animator animator)
         {
-            //if()
+            
+
+            if (true)
+            {
+                animator.SetBool("isAttacked", true);
+            }
+            if(GetMonsterController(animator) is TrippleHeadSnake)
+            {
+                TrippleHeadSnake tps = GetMonsterController(animator) as TrippleHeadSnake;
+                tps.
+            }
         }
     }
 }

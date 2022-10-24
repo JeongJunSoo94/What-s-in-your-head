@@ -29,12 +29,18 @@ namespace YC.Photon
         [SerializeField] string roomName;
         [SerializeField] string nellaPrefabDirectory;
         [SerializeField] string steadyPrefabDirectory;
-        [SerializeField] bool isNella;
+        [SerializeField] public bool isNella;
 
+
+        public static TempPhotonManager Instance;
         
 
         void Awake()
-        {            
+        {
+            if (Instance == null)
+                Instance = this;
+            else
+                Destroy(this.gameObject);
             //Cursor.lockState = CursorLockMode.Locked;
             Screen.SetResolution(1920, 1080, false);
 

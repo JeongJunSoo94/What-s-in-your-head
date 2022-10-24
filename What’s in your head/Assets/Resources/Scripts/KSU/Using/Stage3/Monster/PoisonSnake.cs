@@ -6,10 +6,6 @@ namespace KSU.Monster
 {
     public class PoisonSnake : DefenseMonster
     {
-        public enum state { Idle, Chase, Stuck, Sturn, Dead}
-
-        public state currentState = state.Idle;
-
         // Start is called before the first frame update
         void Start()
         {
@@ -20,15 +16,6 @@ namespace KSU.Monster
         void Update()
         {
             Detect();
-            switch (currentState)
-            {
-                case state.Chase:
-                case state.Stuck:
-                case state.Sturn:
-                    Detect();
-                    Chase();
-                    break;
-            }
         }
     }
 }

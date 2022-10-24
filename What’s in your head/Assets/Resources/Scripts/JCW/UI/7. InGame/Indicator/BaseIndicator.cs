@@ -3,6 +3,7 @@ using Photon.Pun;
 using UnityEngine;
 using UnityEngine.UI;
 using YC.CameraManager_;
+using YC.Photon;
 
 namespace JCW.UI.InGame.Indicator
 {
@@ -36,7 +37,10 @@ namespace JCW.UI.InGame.Indicator
 
         virtual protected void Start()
         {
-            isNella = GameManager.Instance.characterOwner[PhotonNetwork.IsMasterClient];
+            if (GameManager.Instance.characterOwner.Count == 0)
+                isNella = TempPhotonManager.Instance.isNella;
+            else
+                isNella = GameManager.Instance.characterOwner[PhotonNetwork.IsMasterClient];
         }
 
         // 카메라 범위를 벗어났을 때를 위한 설정

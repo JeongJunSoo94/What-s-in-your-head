@@ -5,6 +5,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using YC.Camera_;
 using YC.Camera_Single;
+using YC.Photon;
 
 namespace JCW.UI.InGame
 {
@@ -37,7 +38,10 @@ namespace JCW.UI.InGame
 
             photonView = GetComponent<PhotonView>();
 
-            isNella = GameManager.Instance.characterOwner[PhotonNetwork.IsMasterClient];
+            if(GameManager.Instance.characterOwner.Count != 0)
+                isNella = GameManager.Instance.characterOwner[PhotonNetwork.IsMasterClient];
+            else
+                isNella = TempPhotonManager.Instance.isNella;
 
             if (photonView.IsMine)
                 GameManager.Instance.hpAllPairs.Add(isNella, this);

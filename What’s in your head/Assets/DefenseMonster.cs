@@ -17,13 +17,16 @@ namespace KSU.Monster
         protected GameObject currentTarget;
         [SerializeField] protected float detectingRange;
         public float moveSpeed; //시리얼
-        public float stuckTime; //시리얼
+        //public float stuckTime; //시리얼
         public float sturnTime; //시리얼
+        public float ropeRadius = 1f;
+        public int ropeVertexes = 50;
 
         protected Collider[] detectedColliders;
 
         protected NavMeshAgent monsterNavAgent;
         protected Animator monsterAnimator;
+        protected LineRenderer monsterRope;
 
         protected Spawner spawner;
 
@@ -38,7 +41,8 @@ namespace KSU.Monster
             monsterNavAgent = GetComponent<NavMeshAgent>();
             spawner = GetComponentInParent<Spawner>();
             monsterAnimator = GetComponent<Animator>();
-
+            monsterRope = GetComponent<LineRenderer>();
+            InitRope();
             //isDefenseMode = GameManger 에서 받기
         }
 
@@ -47,25 +51,64 @@ namespace KSU.Monster
             InitMonster();
         }
 
-        void InitMonster()
+        protected virtual void InitMonster()
         {
             currentHP = maxHP;
             detectedTarget = null;
             currentTarget = null;
             monsterNavAgent.speed = moveSpeed;
+            monsterAnimator.SetBool("isAttacked", false);
+            monsterAnimator.SetBool("isDead", false);
+            monsterAnimator.SetBool("isSturn", false);
+            monsterAnimator.SetBool("isChasing", false);
+            monsterAnimator.SetBool("isTargetOn", false);
         }
 
-        public void GetDamag(int damage)
+        void InitRope()
+        {
+            monsterRope.positionCount = ropeVertexes * 4 + 1;
+            monsterRope.useWorldSpace = false;
+            float x;
+            float z;
+            float y = 1f;
+            float angle = 20f;
+            for(int i = 0; i < (ropeVertexes * 4 + 1); ++i)
+            {
+                x = Mathf.Cos(Mathf.Deg2Rad * angle) * ropeRadius;
+                z = Mathf.Sin(Mathf.Deg2Rad * angle) * ropeRadius;
+                y -= 0.1f / ropeVertexes; 
+                monsterRope.SetPosition(i, new Vector3(x, y, z));
+                angle += (360f / ropeVertexes);
+            }
+
+        }
+
+        public void GetDamage(int damage)
         {
             currentHP -= damage;
+            monsterAnimator.SetBool("isAttacked", true);
             if (currentHP < 0)
             {
                 monsterAnimator.SetBool("isDead", true);
             }
         }
 
+
+        public void GetSturn()
+        {
+            StartCoroutine(nameof(DelaySturn));
+        }
+
+        IEnumerator DelaySturn()
+        {
+            monsterAnimator.SetBool("isSturn", true);
+            yield return new WaitForSeconds(sturnTime);
+            monsterAnimator.SetBool("isSturn", false);
+        }
+
         public void Dead()
         {
+            StopAllCoroutines();
             spawner.Despawn(this.gameObject);
         }
 
@@ -117,12 +160,14 @@ namespace KSU.Monster
                     if (collider.gameObject.layer == LayerMask.NameToLayer("Player"))
                     {
                         detectedTarget = collider.gameObject;
+                        monsterAnimator.SetBool("isChasing", true);
                     }
                 }
             }
             else if (isDefenseMode)
             {
                 detectedTarget = null;
+                monsterAnimator.SetBool("isChasing", true);
             }
         }
     }
