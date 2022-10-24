@@ -187,7 +187,18 @@ namespace KSU
                     else
                     {
                         // µµÂøÀ§Ä¡: È­¸é Áß¾Ó¿¡ ·¹ÀÌ ½÷¼­ µµÂøÇÏ´Â °÷
-                        grapple.InitGrapple(grappleSpawner.transform.position, (playerCamera.transform.position + playerCamera.transform.forward * grapplingRange), grappleSpeed, grappleDepartOffset);
+                        RaycastHit hit;
+                        bool rayCheck = Physics.Raycast(playerCamera.transform.position, playerCamera.transform.forward, out hit, grapplingRange,-1,QueryTriggerInteraction.Ignore);
+                        if(rayCheck && (hit.distance > Vector3.Distance(transform.position, playerCamera.transform.position)))
+                        {
+                            grapple.InitGrapple(grappleSpawner.transform.position, hit.point, grappleSpeed, grappleDepartOffset);
+                        }
+                        else
+                        {
+                            grapple.InitGrapple(grappleSpawner.transform.position, (playerCamera.transform.position + playerCamera.transform.forward * grapplingRange), grappleSpeed, grappleDepartOffset);
+                        }
+                        //grapple.InitGrapple(grappleSpawner.transform.position, (playerCamera.transform.position + playerCamera.transform.forward * grapplingRange), grappleSpeed, grappleDepartOffset);
+
                     }
                 }
             }
