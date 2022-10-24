@@ -50,8 +50,12 @@ public class GameManager : MonoBehaviour, IPunObservable
 
         curStageIndex = 0;
         curSection = 0;
-        
-            
+    }
+
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Keypad0))
+            isTopView = !isTopView;
     }
 
     public void SetRandomSeed()
