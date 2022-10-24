@@ -226,6 +226,7 @@ namespace KSU
                     return rotationX / spawner.swingAngle;
                 }
             }
+            isntSwing = false;
             return -rotationX / spawner.swingAngle;
         }
 
@@ -248,7 +249,7 @@ namespace KSU
                 if (rotationX < -spawner.swingAngle)
                 {
                     isSwingForward = false;
-                    StartCoroutine("StopSwingInMoment");
+                    StartCoroutine(nameof(StopSwingInMoment));
                 }
             }
             else
@@ -257,7 +258,7 @@ namespace KSU
                 if (rotationX > spawner.swingAngle)
                 {
                     isSwingForward = true;
-                    StartCoroutine("StopSwingInMoment");
+                    StartCoroutine(nameof(StopSwingInMoment));
                 }
             }
 

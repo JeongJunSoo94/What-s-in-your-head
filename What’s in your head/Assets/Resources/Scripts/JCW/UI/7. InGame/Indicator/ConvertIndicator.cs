@@ -42,11 +42,6 @@ namespace JCW.UI.InGame.Indicator
 
             videoPlayer = imgTransform.GetChild(0).GetComponent<VideoPlayer>();
 
-            //if (GameManager.Instance.characterOwner.Count == 0)
-            //    isNella =true;
-            //else
-            //    isNella = GameManager.Instance.characterOwner[PhotonNetwork.IsMasterClient];
-
         }
 
         override protected void Start()
@@ -61,7 +56,7 @@ namespace JCW.UI.InGame.Indicator
                 SetCam();
             if (!isActive)
                 return;
-            detectRange = transform.lossyScale.x / 2f;
+            //detectRange = transform.lossyScale.x / 2f;
             // 타겟의 위치를 메인카메라의 스크린 좌표로 변경
             Vector3 indicatorPosition = mainCamera.WorldToScreenPoint(target.position);
 
@@ -94,9 +89,10 @@ namespace JCW.UI.InGame.Indicator
         }
 
         // 현재 RopeSpawner에서 참조
-        public void SetInteractableRange(float _range)
+        public void SetInteractableRange(float _detectRange, float _interactableRange)
         {
-            interactableRange = _range;
+            detectRange = _detectRange;
+            interactableRange = _interactableRange;
         }
 
         // 로프용 : 감지 & 상호작용 스프라이트 존재 / 따라서 변환하는 애니메이션도 존재
@@ -119,10 +115,10 @@ namespace JCW.UI.InGame.Indicator
 
                 // 게이지 필요 없으면 실행 X
                 if (gauge != null && !isSetOn)
-                {
+                {                    
                     // 거리에 따라 게이지 줄어들게 끔 해주기
                     // 1 - (_dist-상호작용 범위)/(감지범위 - 상호작용 범위) == FillValue에 넣어줌.
-                    gauge.fillAmount = 1 - (distance - interactableRange) / (detectRange - interactableRange);
+                    gauge.fillAmount = 1f - (distance - interactableRange) / (detectRange - interactableRange);
                 }
             }
         }
@@ -130,6 +126,8 @@ namespace JCW.UI.InGame.Indicator
         public void ConvertVideo(bool _isSetOn)
         {
             // 이미지를 잠깐 꺼주고 동영상 켜주기
+            if(gauge != null)
+                gauge.enabled = !_isSetOn;
             interactiveImg.enabled = false;
             videoPlayer.Stop();
             StopCoroutine(nameof(PlayVideoClip));

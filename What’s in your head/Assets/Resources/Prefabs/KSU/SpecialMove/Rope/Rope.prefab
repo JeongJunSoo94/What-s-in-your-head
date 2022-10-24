@@ -277,8 +277,8 @@ MonoBehaviour:
   NellaRopeCentor: {fileID: 7148799794434866652}
   SteadyRopeCentor: {fileID: 9181001353760776603}
   detector: {fileID: 2278722284234432452}
-  detectingRange: 25
-  interactableRange: 10
+  detectingRange: 20
+  interactableRange: 12
   ropeLength: 7.5
   rotationSpeed: 30
   rotationOffset: 2
@@ -480,6 +480,14 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 2278722285654922523}
     m_Modifications:
+    - target: {fileID: 623097551787325021, guid: 3c8266a11c7104846ade25bfa0201353, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 53
+      objectReference: {fileID: 0}
+    - target: {fileID: 623097551787325021, guid: 3c8266a11c7104846ade25bfa0201353, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 53
+      objectReference: {fileID: 0}
     - target: {fileID: 623097551995562029, guid: 3c8266a11c7104846ade25bfa0201353, type: 3}
       propertyPath: m_Name
       value: ConvertIndicator
@@ -528,10 +536,58 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 623097553369430470, guid: 3c8266a11c7104846ade25bfa0201353, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 53
+      objectReference: {fileID: 0}
+    - target: {fileID: 623097553369430470, guid: 3c8266a11c7104846ade25bfa0201353, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 53
+      objectReference: {fileID: 0}
+    - target: {fileID: 7567999407377790181, guid: 3c8266a11c7104846ade25bfa0201353, type: 3}
+      propertyPath: target
+      value: 
+      objectReference: {fileID: 2278722285654922523}
+    - target: {fileID: 7567999407377790181, guid: 3c8266a11c7104846ade25bfa0201353, type: 3}
+      propertyPath: nella_SetOnClip
+      value: 
+      objectReference: {fileID: 32900000, guid: 8e61dd5f624f1834d899e4bdc855e37a, type: 3}
+    - target: {fileID: 7567999407377790181, guid: 3c8266a11c7104846ade25bfa0201353, type: 3}
+      propertyPath: nella_SetOffClip
+      value: 
+      objectReference: {fileID: 32900000, guid: fb3a495e99432804f96ba9e01073bd43, type: 3}
+    - target: {fileID: 7567999407377790181, guid: 3c8266a11c7104846ade25bfa0201353, type: 3}
+      propertyPath: steady_SetOnClip
+      value: 
+      objectReference: {fileID: 32900000, guid: 8e61dd5f624f1834d899e4bdc855e37a, type: 3}
+    - target: {fileID: 7567999407377790181, guid: 3c8266a11c7104846ade25bfa0201353, type: 3}
+      propertyPath: steady_SetOffClip
+      value: 
+      objectReference: {fileID: 32900000, guid: fb3a495e99432804f96ba9e01073bd43, type: 3}
+    - target: {fileID: 7567999407377790181, guid: 3c8266a11c7104846ade25bfa0201353, type: 3}
+      propertyPath: nella_DetectSprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 668eb5e073b3ad444a6f08a2fd0b7b13, type: 3}
+    - target: {fileID: 7567999407377790181, guid: 3c8266a11c7104846ade25bfa0201353, type: 3}
+      propertyPath: steady_DetectSprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 668eb5e073b3ad444a6f08a2fd0b7b13, type: 3}
+    - target: {fileID: 7567999407377790181, guid: 3c8266a11c7104846ade25bfa0201353, type: 3}
+      propertyPath: nella_InteractableSprite
+      value: 
+      objectReference: {fileID: 21300000, guid: b206c1d47c132e24bae247aeaf17a024, type: 3}
+    - target: {fileID: 7567999407377790181, guid: 3c8266a11c7104846ade25bfa0201353, type: 3}
+      propertyPath: steady_InteractableSprite
+      value: 
+      objectReference: {fileID: 21300000, guid: b206c1d47c132e24bae247aeaf17a024, type: 3}
     - target: {fileID: 7936304210235357417, guid: 3c8266a11c7104846ade25bfa0201353, type: 3}
       propertyPath: target
       value: 
       objectReference: {fileID: 2278722285654922523}
+    - target: {fileID: 8340223328737845168, guid: 3c8266a11c7104846ade25bfa0201353, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3c8266a11c7104846ade25bfa0201353, type: 3}
 --- !u!4 &9219503683839299085 stripped
