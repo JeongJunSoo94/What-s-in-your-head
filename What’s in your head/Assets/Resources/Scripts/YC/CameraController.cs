@@ -83,7 +83,7 @@ namespace YC.Camera_
         [SerializeField] float sholderAxisY_MaxDown;
 
         bool isInitCamera = false;
-
+        [SerializeField] float DefenceModeFOV = 60;
 
         void Awake()
         {
@@ -237,6 +237,8 @@ namespace YC.Camera_
 
         void SetCamera() // 플레이어 State 따라카메라 세팅 
         {
+            if (GameManager.Instance.isTopView) return;
+
             if (curCam == CamState.back)
             {
                 //if(Input.GetMouseButtonDown(1))
@@ -304,11 +306,11 @@ namespace YC.Camera_
                 Debug.Log("로그 확인");
                 OnOffCamera(topCam);
 
-                camList[(int)curCam].GetComponent<CinemachineVirtualCamera>().m_Lens.FieldOfView = 60;
+                camList[(int)curCam].GetComponent<CinemachineVirtualCamera>().m_Lens.FieldOfView = DefenceModeFOV;
             }
             else
             {
-                mainCam.fieldOfView = 60;
+                mainCam.fieldOfView = DefenceModeFOV;
             }
             
 

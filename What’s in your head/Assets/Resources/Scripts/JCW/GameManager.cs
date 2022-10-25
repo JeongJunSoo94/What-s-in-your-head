@@ -106,6 +106,16 @@ public class GameManager : MonoBehaviour, IPunObservable
     }
     //===========================================================================
 
+    // >> : 임시 디버그용
+    void Update()
+    {
+        if(Input.GetKeyDown(KeyCode.Keypad8))
+        {
+            isTopView = true;
+        }
+    }
+    // << :
+
     public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
     {
         // 보내는 사람
