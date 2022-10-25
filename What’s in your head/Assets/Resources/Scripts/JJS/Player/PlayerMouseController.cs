@@ -35,10 +35,16 @@ namespace JJS
 
         protected Ray ray;
         protected RaycastHit hit;
+
+        public bool canSwap;
+        public float curCool=0f;
+        public float swapCool=0.5f;
+
         private void Awake()
         {
             ableToLeft = false;
             ableToRight = false;
+            canSwap = true;
             ik = GetComponent<IKController>();
         }
         public virtual void SetWeaponEnable(int weaponIndex, bool enable)
@@ -84,6 +90,29 @@ namespace JJS
                     weaponInfo[i].weapon.SetActive(!weaponInfo[i].weapon.activeSelf);
                 }
             }
+        }
+
+        public void SwapCoroutine()
+        {
+            if (canSwap)
+            { 
+                StartCoroutine(SwapCoolTime());
+            }
+        }
+
+
+
+        IEnumerator SwapCoolTime()
+        {
+            canSwap = false;
+            while (curCool < swapCool)
+            {
+                curCool += 0.01f;
+                yield return new WaitForSeconds(0.01f);
+            }
+            curCool = 0;
+            canSwap = true;
+            yield break;
         }
 
         public virtual bool GetCustomInfo()

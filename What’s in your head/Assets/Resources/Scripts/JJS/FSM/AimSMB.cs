@@ -58,12 +58,17 @@ namespace JJS
             {
                 if (GetPlayerController(animator).characterState.aim|| GetPlayerController(animator).characterState.top)
                 {
-                    if (GetPlayerController(animator).playerMouse.clickLeft)
+                    if (!GetPlayerController(animator).characterState.IsJumping&& !GetPlayerController(animator).characterState.IsAirJumping
+                        &&!GetPlayerController(animator).characterState.IsDashing && !GetPlayerController(animator).characterState.IsAirDashing)
                     {
-                        animator.SetBool("AimAttack", true);
+                        if (GetPlayerController(animator).playerMouse.clickLeft)
+                        {
+                            animator.SetBool("AimAttack", true);
+                        }
                     }
                 }
             }
+
 
             if (GetPlayerController(animator).playerMouse.weaponInfo[GetPlayerController(animator).playerMouse.GetUseWeapon()].canAim)
             {
