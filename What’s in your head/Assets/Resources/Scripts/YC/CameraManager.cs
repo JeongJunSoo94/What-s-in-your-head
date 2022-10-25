@@ -74,7 +74,7 @@ namespace YC.CameraManager_
                     pv.RPC(nameof(SetDefenceModeCamera), RpcTarget.AllBuffered);
                     wasTopView = true;
                 }
-                else if (wasTopView)
+                else if (!GameManager.Instance.isTopView && wasTopView)
                 {
                     wasTopView = false;
                 }
@@ -152,10 +152,8 @@ namespace YC.CameraManager_
 
             
         }
-        public void SteadyDeadCam()
-        {
-            pv.RPC(nameof(SteadyDeadCam_RPC), RpcTarget.AllViaServer);
-        }
+      
+       
 
         // 스테이지 3 디펜스 모드 : 넬라 죽었을 때 호출
         [PunRPC]
@@ -181,6 +179,11 @@ namespace YC.CameraManager_
             }
         }
 
+        public void SteadyDeadCam()
+        {
+            pv.RPC(nameof(SteadyDeadCam_RPC), RpcTarget.AllViaServer);
+        }
+
         // 스테이지 3 디펜스 모드 : 스테디 죽었을 때 호출
         [PunRPC]
         public void SteadyDeadCam_RPC()
@@ -204,14 +207,36 @@ namespace YC.CameraManager_
             }
         }
 
-        // 스테이지 3 디펜스 모드 : 넬라가 부활했을 때나, 스테디가 부활했을 때 호출
         public void ReviveCam()
+        {
+            pv.RPC(nameof(ReviveCam_RPC), RpcTarget.AllViaServer);
+        }
+
+        // 스테이지 3 디펜스 모드 : 넬라가 부활했을 때나, 스테디가 부활했을 때 호출
+        [PunRPC]
+        public void ReviveCam_RPC()
         {
             // >> : 기존
             //pv.RPC(nameof(Cor_SetFullScreen), RpcTarget.AllBuffered, _LerpTime); // 죽기 전 Full로 되어있던 카메라를 다시 Full로 만들어줌
 
             // >> : 수정  
-            pv.RPC(nameof(Cor_SetFullScreen), RpcTarget.AllBuffered, _LerpTime); // 죽기 전 Full로 되어있던 카메라를 다시 Full로 만들어줌
+            //pv.RPC(nameof(Cor_SetFullScreen), RpcTarget.AllBuffered, _LerpTime); // 죽기 전 Full로 되어있던 카메라를 다시 Full로 만들어줌
+
+            // >> : 2차 수정
+            //if (GameManager.Instance.characterOwner[PhotonNetwork.IsMasterClient]) // 내가 넬라라면
+            //{
+            //    //InitCamera((int)CharacterCamera.NELLA);
+            //    StartCoroutine(SetFullScreen(_LerpTime));
+
+
+            //}
+            //else // 내가 스테디라면
+            //{
+            //    //InitCamera((int)CharacterCamera.STEADY);
+            //    StartCoroutine(SetFullScreen(_LerpTime));
+            //}
+
+            StartCoroutine(SetFullScreen(_LerpTime));
         }
 
 
@@ -241,11 +266,11 @@ namespace YC.CameraManager_
 
 
         //Stage 3 Defence Mode - Sizing 전체 화면 세팅 (Lerp 시간 동안)
-        [PunRPC]
-        public void Cor_SetFullScreen(float lerpTime)
-        {
-            StartCoroutine(SetFullScreen(lerpTime));
-        }
+        //[PunRPC]
+        //public void Cor_SetFullScreen(float lerpTime)
+        //{
+        //    StartCoroutine(SetFullScreen(lerpTime));
+        //}
         public IEnumerator SetFullScreen(float LerpTime)
         {
             Rect camRect1 = cameras[(int)CharacterCamera.NELLA].rect;
@@ -254,7 +279,7 @@ namespace YC.CameraManager_
 
             isBlending = true;
 
-            if (curFullCamera == CharacterCamera.NELLA) // 넬라 카메라 전체화면
+            if (curFullCamera == CharacterCamera.STEADY) // 넬라 카메라 전체화면
             {
                 while (camRect1.width < 1)
                 {
@@ -273,11 +298,15 @@ namespace YC.CameraManager_
                     cameras[(int)CharacterCamera.STEADY].rect = rc2;
 
                     yield return null;
+                    // >> : 수정 
+                    InitCamera((int)CharacterCamera.STEADY);
+
+
                 }
 
                 isBlending = false;
             }
-            else if (curFullCamera == CharacterCamera.STEADY) // 스테디 카메라 전체화면
+            else if (curFullCamera == CharacterCamera.NELLA) // 스테디 카메라 전체화면
             {
                 while (camRect2.x > 0.0001f)
                 {
@@ -295,6 +324,9 @@ namespace YC.CameraManager_
                     Rect rc2 = new Rect(wd, camRect2.y, 1 - wd, camRect2.height);
                     cameras[(int)CharacterCamera.STEADY].rect = rc2;
                     yield return null;
+
+                    // >> : 수정 
+                    InitCamera((int)CharacterCamera.NELLA);
                 }
 
                 isBlending = false;

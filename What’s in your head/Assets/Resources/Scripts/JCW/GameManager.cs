@@ -51,6 +51,13 @@ public class GameManager : MonoBehaviour, IPunObservable
 
         photonView = GetComponent<PhotonView>();
 
+        //{
+        //    GameObject obj = new GameObject("_GameManager");
+        //    photonView = obj.AddComponent<PhotonView>();
+        //    photonView.ViewID = PhotonNetwork.AllocateViewID(0);
+        //    photonView.observableSearch = PhotonView.ObservableSearch.AutoFindAll;
+        //}
+
         curStageIndex = 0;
         curSection = 0;
     }

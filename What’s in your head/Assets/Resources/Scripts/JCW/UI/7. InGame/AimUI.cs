@@ -10,20 +10,17 @@ namespace JCW.UI.InGame
     public class AimUI : MonoBehaviour
     {
         Camera mainCamera;
+        Camera curCam;
         RectTransform imgTransform;
-        bool isTargeting;
         bool wasTopView;
 
         bool isNella;
 
         Transform targetTF;
         Transform playerTF;
-
-        Canvas thisCanvas;
        
         private void Awake()
         {
-            mainCamera = GetComponent<Canvas>().worldCamera;
             imgTransform = transform.GetChild(0).GetComponent<RectTransform>();
             if (!GetComponent<PhotonView>().IsMine)
             {
@@ -32,26 +29,25 @@ namespace JCW.UI.InGame
             }
             StartCoroutine(nameof(WaitForPlayer));
             playerTF = this.transform.parent;
-            thisCanvas = GetComponent<Canvas>();
 
         }
 
         private void Update()
         {
+            if (targetTF == null)
+                return;
             if (GameManager.Instance.isTopView)
             {
                 if (!wasTopView)
                 {
                     wasTopView = true;
                     this.transform.parent = targetTF;
-                    thisCanvas.renderMode = RenderMode.ScreenSpaceOverlay;
+                    if(curCam.rect.width <= 0.1f)
+                        curCam = isNella ? CameraManager.Instance.cameras[1] : CameraManager.Instance.cameras[0];
                 }
-                //Vector3 pos = Input.mousePosition;
-                //pos.z = 0.15f;
-                //imgTransform.position = mainCamera.ScreenToWorldPoint(pos);
-                if (mainCamera.rect.width <= 0.1f)
+                if (curCam.rect.width <= 0.1f)
                     return;
-                imgTransform.position = mainCamera.WorldToScreenPoint(targetTF.position);
+                imgTransform.position = curCam.WorldToScreenPoint(targetTF.position);                
                 //mainCamera.ScreenToWorldPoint
             }
             else if (wasTopView)
@@ -59,28 +55,9 @@ namespace JCW.UI.InGame
                 wasTopView = false;
                 this.transform.parent = playerTF;
                 imgTransform.localPosition = Vector3.zero;
-                thisCanvas.renderMode = RenderMode.ScreenSpaceCamera;
-                thisCanvas.worldCamera = mainCamera;
             }
         }
 
-        //private void LateUpdate()
-        //{
-        //    if(isTargeting)
-        //        isTargeting = false;
-        //    else
-        //    {                 
-        //        imgTransform.localPosition = Vector3.zero;            
-        //    }
-        //}
-
-
-        public void MoveTarget(Vector3 targetPosition)
-        {
-            // 그림의 위치를 타겟의 위치로 변경
-            imgTransform.position = mainCamera.WorldToScreenPoint(targetPosition);
-            isTargeting = true;
-        }
         protected IEnumerator WaitForPlayer()
         {
             while (GameManager.Instance.characterOwner.Count <= 1)
@@ -90,6 +67,9 @@ namespace JCW.UI.InGame
             Debug.Log("isNella : " + isNella);
             targetTF = isNella ? GameObject.FindWithTag("NellaMousePoint").transform : GameObject.FindWithTag("SteadyMousePoint").transform;
             Debug.Log(targetTF);
+
+            mainCamera = isNella ? CameraManager.Instance.cameras[0] : CameraManager.Instance.cameras[1];
+            curCam = mainCamera;
             yield break;
         }
     }
