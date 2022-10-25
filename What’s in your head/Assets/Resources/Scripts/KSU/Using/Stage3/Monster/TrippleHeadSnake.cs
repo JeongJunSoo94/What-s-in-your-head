@@ -120,7 +120,6 @@ namespace KSU.Monster
 
         public void Rush()
         {
-            rushTarget = null;
             monsterNavAgent.destination = (transform.position + transform.forward * 10f);
         }
 
@@ -131,6 +130,7 @@ namespace KSU.Monster
 
         public void EndRush()
         {
+            rushTarget = null;
             monsterNavAgent.destination = transform.position;
             rushTrigger.SetActive(false);
             
