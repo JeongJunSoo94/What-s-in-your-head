@@ -27,10 +27,9 @@ namespace YC.CameraManager_
         [Header("보간 시간(디펜스 모드 카메라가 늘어나고 줄어드는 속도)")]
         [SerializeField] float _LerpTime = 2.5f;
 
+        CharacterCamera curFullCamera;
 
         bool wasTopView;
-
-        CharacterCamera curFullCamera;
 
         void Awake()
         {
@@ -52,11 +51,12 @@ namespace YC.CameraManager_
 
         void Update()
         {
-            if (cameras[(int)CharacterCamera.NELLA] == null || cameras[(int)CharacterCamera.STEADY] == null) return;
+            if (cameras[(int)CharacterCamera.NELLA] == null ||
+                cameras[(int)CharacterCamera.STEADY] == null) return;
 
             if (pv.IsMine)
             {
-                CheckAndPlay();
+                //Debugg();
 
                 // << : 유닛 테스트용 디펜스 모드 전환
                 //      
@@ -64,10 +64,13 @@ namespace YC.CameraManager_
                 //      아래 함수 게임매니저 통해 플레이어들 불러오도록
                 //      플레이어 각각 NormalView함수 인풋 부분 수정(탑 스테이트로 바꾸는 부분)
 
-                //if (Input.GetKeyDown(KeyCode.Alpha9)) // 게임매니저 통해서 호출하도록 
                 if (GameManager.Instance.isTopView && wasTopView == false)
                 {
-                    pv.RPC(nameof(InitCamera), RpcTarget.AllBuffered, (int)CharacterCamera.NELLA); 
+                    // >> : 기존
+                    //pv.RPC(nameof(InitCamera), RpcTarget.AllBuffered, (int)CharacterCamera.NELLA); 
+                    //pv.RPC(nameof(SetDefenceModeCamera), RpcTarget.AllBuffered);
+
+                    // >> : 수정
                     pv.RPC(nameof(SetDefenceModeCamera), RpcTarget.AllBuffered);
                     wasTopView = true;
                 }
@@ -75,26 +78,42 @@ namespace YC.CameraManager_
                 {
                     wasTopView = false;
                 }
-
             }
         }
+
         [PunRPC]
         void SetDefenceModeCamera()
         {
-            // 유닛 테스트 임시용이다.
-            // 타이틀 씬 통해서 접속시, 게임매니저 통해서 플레이어 받아온다
-            GameObject NellaTemp = GameObject.FindGameObjectWithTag("Nella");
-            GameObject SteadyTemp = GameObject.FindGameObjectWithTag("Steady");
+            // >> : 기존
+            //// 유닛 테스트 임시용이다.
+            //// 타이틀 씬 통해서 접속시, 게임매니저 통해서 플레이어 받아온다
 
-            if(NellaTemp)
-                NellaTemp.GetComponent<CameraController>().SetDefenseMode();
+            //GameObject NellaTemp = GameObject.FindGameObjectWithTag("Nella");
+            //GameObject SteadyTemp = GameObject.FindGameObjectWithTag("Steady");
 
-            if (SteadyTemp)
-                SteadyTemp.GetComponent<CameraController>().SetDefenseMode();
+            //if(NellaTemp)
+            //    NellaTemp.GetComponent<CameraController>().SetDefenseMode();
 
+            //if (SteadyTemp)
+            //    SteadyTemp.GetComponent<CameraController>().SetDefenseMode();
+
+
+            // >> : 수정
+            if (GameManager.Instance.characterOwner[PhotonNetwork.IsMasterClient]) // 넬라면
+            {
+                //pv.RPC(nameof(InitCamera), RpcTarget.AllBuffered, (int)CharacterCamera.NELLA);
+                InitCamera((int)CharacterCamera.NELLA);
+                GameObject.FindGameObjectWithTag("Nella").GetComponent<CameraController>().SetDefenseMode();
+            }
+            else // 스테디라면
+            {
+                //pv.RPC(nameof(InitCamera), RpcTarget.AllBuffered, (int)CharacterCamera.STEADY);
+                InitCamera((int)CharacterCamera.STEADY);
+                GameObject.FindGameObjectWithTag("Steady").GetComponent<CameraController>().SetDefenseMode();
+            }
         }
 
-        void CheckAndPlay()
+        void Debugg()
         {
             if (isBlending) return;
 
@@ -126,36 +145,74 @@ namespace YC.CameraManager_
             }
         }
 
-
-
-
-
-
-        // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> // 
-   
-        // 스테이지 3 디펜스 모드 : 넬라 죽었을 때 호출
         public void NellaDeadCam()
         {
-            pv.RPC(nameof(InitCamera), RpcTarget.AllViaServer, (int)CharacterCamera.STEADY); // 일단 스테디 카메라를 Full로 세팅
-            pv.RPC(nameof(Cor_SetSizeCamera), RpcTarget.AllViaServer, 0.36f, _LerpTime);// 넬라 카메라를 만들어줌 (늘려줌)
+            pv.RPC(nameof(NellaDeadCam_RPC), RpcTarget.AllViaServer);
+            Debug.Log("넬라 RPC 호출!");
+
+            
+        }
+        public void SteadyDeadCam()
+        {
+            pv.RPC(nameof(SteadyDeadCam_RPC), RpcTarget.AllViaServer);
+        }
+
+        // 스테이지 3 디펜스 모드 : 넬라 죽었을 때 호출
+        [PunRPC]
+        public void NellaDeadCam_RPC()
+        {
+            // >> : 기존
+            //pv.RPC(nameof(InitCamera), RpcTarget.AllViaServer, (int)CharacterCamera.STEADY); // 일단 스테디 카메라를 Full로 세팅
+            //pv.RPC(nameof(Cor_SetSizeCamera), RpcTarget.AllViaServer, 0.36f, _LerpTime);// 넬라 카메라를 만들어줌 (늘려줌)
+
+            // >> : 수정
+            if (GameManager.Instance.characterOwner[PhotonNetwork.IsMasterClient]) // 내가 넬라라면
+            {
+                //pv.RPC(nameof(InitCamera), RpcTarget.AllViaServer, (int)CharacterCamera.STEADY); // 일단 스테디 카메라를 Full로 세팅
+                //pv.RPC(nameof(Cor_SetSizeCamera), RpcTarget.AllViaServer, 0.36f, _LerpTime);// 넬라 카메라를 만들어줌 (늘려줌)
+                InitCamera((int)CharacterCamera.STEADY);
+                Debug.Log("스테디 전체화면!");
+                StartCoroutine(SetSizeCamera(0.36f,_LerpTime));
+            }
+            else // 내가 스테디라면
+            {
+                //pv.RPC(nameof(Cor_SetSizeCamera), RpcTarget.AllViaServer, 0.36f, _LerpTime);
+                StartCoroutine(SetSizeCamera(0.36f, _LerpTime));
+            }
         }
 
         // 스테이지 3 디펜스 모드 : 스테디 죽었을 때 호출
-        public void SteadyDeadCam()
+        [PunRPC]
+        public void SteadyDeadCam_RPC()
         {
-            pv.RPC(nameof(InitCamera), RpcTarget.AllBuffered, (int)CharacterCamera.NELLA); // 일단 넬라 카메라를 Full로 세팅
-            pv.RPC(nameof(Cor_SetSizeCamera), RpcTarget.AllBuffered, 0.64f, _LerpTime); // 스테디 카메라를 만들어줌 (늘려줌)
+            // >> : 기존
+            //pv.RPC(nameof(InitCamera), RpcTarget.AllBuffered, (int)CharacterCamera.NELLA); // 일단 넬라 카메라를 Full로 세팅
+            //pv.RPC(nameof(Cor_SetSizeCamera), RpcTarget.AllBuffered, 0.64f, _LerpTime); // 스테디 카메라를 만들어줌 (늘려줌)
+
+            // >> : 수정 
+            if (GameManager.Instance.characterOwner[PhotonNetwork.IsMasterClient]) // 내가 넬라라면
+            {
+                //pv.RPC(nameof(Cor_SetSizeCamera), RpcTarget.AllBuffered, 0.64f, _LerpTime);
+                StartCoroutine(SetSizeCamera(0.64f, _LerpTime));
+            }
+            else // 내가 스테디라면
+            {
+                //pv.RPC(nameof(InitCamera), RpcTarget.AllBuffered, (int)CharacterCamera.NELLA); // 일단 넬라 카메라를 Full로 세팅
+                //pv.RPC(nameof(Cor_SetSizeCamera), RpcTarget.AllBuffered, 0.64f, _LerpTime); // 스테디 카메라를 만들어줌 (늘려줌)
+                InitCamera((int)CharacterCamera.NELLA);
+                StartCoroutine(SetSizeCamera(0.64f, _LerpTime));
+            }
         }
 
         // 스테이지 3 디펜스 모드 : 넬라가 부활했을 때나, 스테디가 부활했을 때 호출
         public void ReviveCam()
         {
+            // >> : 기존
+            //pv.RPC(nameof(Cor_SetFullScreen), RpcTarget.AllBuffered, _LerpTime); // 죽기 전 Full로 되어있던 카메라를 다시 Full로 만들어줌
+
+            // >> : 수정  
             pv.RPC(nameof(Cor_SetFullScreen), RpcTarget.AllBuffered, _LerpTime); // 죽기 전 Full로 되어있던 카메라를 다시 Full로 만들어줌
         }
-
-        // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> // 
-
-
 
 
         // Stage 3 Defence Mode - Sizing 호출 전 초기화 함수 (한프레임 동안 카메라를 Full로 세팅)
@@ -196,7 +253,7 @@ namespace YC.CameraManager_
             float currentTime = 0;
 
             isBlending = true;
-            
+
             if (curFullCamera == CharacterCamera.NELLA) // 넬라 카메라 전체화면
             {
                 while (camRect1.width < 1)
@@ -259,6 +316,7 @@ namespace YC.CameraManager_
 
             isBlending = true;
 
+            Debug.Log("보간 시작!");
             if (curFullCamera == CharacterCamera.STEADY) // 스테디 전체화면이면, 넬라 카메라를 만들어줌(늘려줌)
             {
                 while (camRect1.width < middleValue)
@@ -277,8 +335,11 @@ namespace YC.CameraManager_
                     cameras[(int)CharacterCamera.NELLA].rect = rc1;
                     Rect rc2 = new Rect(wd, camRect2.y, 1 - wd, camRect2.height);
                     cameras[(int)CharacterCamera.STEADY].rect = rc2;
+
+                    Debug.Log(wd);
                     yield return null;
                 }
+                Debug.Log("보간 종료!");
 
                 isBlending = false;
             }
@@ -304,7 +365,7 @@ namespace YC.CameraManager_
                 }
 
                 isBlending = false;
-            }          
+            }
         }
 
 

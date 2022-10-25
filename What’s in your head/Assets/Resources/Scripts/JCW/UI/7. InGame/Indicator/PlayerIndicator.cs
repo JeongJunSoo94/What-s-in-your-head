@@ -23,6 +23,7 @@ namespace JCW.UI.InGame.Indicator
         Sprite otherIndicatorNormal;
 
         //내 이미지 & 상대방 이미지
+        RectTransform canvasRect;
         RectTransform myImgTransform;
         // 내 플레이어 위치
         Transform myTF;
@@ -32,6 +33,9 @@ namespace JCW.UI.InGame.Indicator
         Image myImg;
         Image otherImg;
 
+        bool wasTopView;
+        bool isStart_Player = false;
+
         protected void Awake()
         {            
             photonView = GetComponent<PhotonView>();
@@ -40,8 +44,8 @@ namespace JCW.UI.InGame.Indicator
                 Destroy(this.gameObject);
                 return;
             }
-            
-            myTF = transform.parent;
+
+            //myTF = transform.parent;
         }
 
         protected override void Start()
@@ -52,8 +56,9 @@ namespace JCW.UI.InGame.Indicator
 
         void Update()
         {
-            if (isStart == false)
-                return;
+            //canvasRect.transform.rotation = new Quaternion(0, 0, 0,0);
+            if (isStart_Player == false)
+                return;            
             SetSreenInfo();
             if (target == null)
             {
@@ -65,22 +70,25 @@ namespace JCW.UI.InGame.Indicator
             Vector3 indicatorPosition = mainCamera.WorldToScreenPoint(target.position);
             if (!GameManager.Instance.isTopView)
             {
-                Debug.Log(mainCamera.name);
-                otherImg.sprite = otherIndicatorNormal;
-
+                if(wasTopView)
+                {
+                    wasTopView = false;
+                    otherImg.sprite = otherIndicatorNormal;
+                    myImg.enabled = false;
+                }
                 // 타겟이 화면 안에 들어올 때
                 if (indicatorPosition.z >= 0f)
                 {
                     if (indicatorPosition.x <= screenSize.x + screenSize.width && indicatorPosition.x >= screenSize.x
                        && indicatorPosition.y <= screenSize.y + screenSize.height && indicatorPosition.y >= screenSize.y)
                     {
-                        Debug.Log("화면 안에 들어옴");
+                        //Debug.Log("화면 안에 들어옴");
                         otherImg.enabled = false;
                         indicatorPosition.z = 0f;
                     }
                     else
                     {
-                        Debug.Log("카메라 앞인데 화면 안에 안 들어옴");
+                        //Debug.Log("카메라 앞인데 화면 안에 안 들어옴");
                         otherImg.enabled = true;
                         indicatorPosition = OutOfRange(indicatorPosition);
                     }
@@ -88,7 +96,7 @@ namespace JCW.UI.InGame.Indicator
                 //타겟이 내 카메라 뒤에 있을 때, 화면에 그림
                 else
                 {
-                    Debug.Log("카메라 뒤라 화면 안에 안 들어옴");
+                    //Debug.Log("카메라 뒤라 화면 안에 안 들어옴");
                     imgTransform.sizeDelta = new Vector2(otherIndicatorNormal.bounds.size.x, otherIndicatorNormal.bounds.size.y);
                     otherImg.enabled = true;
                     SetSreenInfo();
@@ -99,10 +107,17 @@ namespace JCW.UI.InGame.Indicator
             // 탑뷰일때
             else
             {
-                myImg.enabled = true;
-                otherImg.enabled = true;
-                imgTransform.sizeDelta = new Vector2(otherIndicatorTop.bounds.size.x, otherIndicatorTop.bounds.size.y);
-                otherImg.sprite = otherIndicatorTop;
+                if(!wasTopView)
+                {
+                    myImg.enabled = true;
+                    otherImg.enabled = true;
+                    imgTransform.sizeDelta = new Vector2(otherIndicatorTop.bounds.size.x, otherIndicatorTop.bounds.size.y);
+                    otherImg.sprite = otherIndicatorTop;
+                    wasTopView = true;
+                    imgTransform.localScale = initImgScale;
+                }
+                if (mainCamera.rect.width <= 0.1f)
+                    return;
                 // 포지션 설정
                 Vector3 myIndicatorPosition = mainCamera.WorldToScreenPoint(myTF.position);
 
@@ -132,6 +147,7 @@ namespace JCW.UI.InGame.Indicator
                 yield return new WaitForSeconds(0.1f);
             }
 
+            myTF = GameManager.Instance.myPlayerTF;
 
             if (isNella)
             {
@@ -146,6 +162,7 @@ namespace JCW.UI.InGame.Indicator
                 otherIndicatorNormal = nellaNormal;
             }
             detectUI = transform.GetChild(0).gameObject;
+            canvasRect = detectUI.GetComponent<RectTransform>();
             myImgTransform = detectUI.transform.GetChild(0).GetComponent<RectTransform>();
             myImgTransform.sizeDelta = new Vector2(myIndicatorTop.bounds.size.x, myIndicatorTop.bounds.size.y);
             imgTransform = detectUI.transform.GetChild(1).GetComponent<RectTransform>();
@@ -166,6 +183,8 @@ namespace JCW.UI.InGame.Indicator
             outOfSightImgScale = imgTransform.localScale * 0.8f;
             initImgScale = imgTransform.localScale;
             // ========================================================================================================
+
+            isStart_Player = true;
 
             yield break;
         }

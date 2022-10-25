@@ -116,6 +116,9 @@ namespace KSU
                 GameManager.Instance.otherPlayerTF = this.transform;
                 mainCamera.GetComponent<AudioListener>().enabled = false;
             }
+            else
+                GameManager.Instance.myPlayerTF = this.transform;
+
             // << : 
 
             Application.targetFrameRate = 120;

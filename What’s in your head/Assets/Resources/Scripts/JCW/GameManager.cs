@@ -24,6 +24,8 @@ public class GameManager : MonoBehaviour, IPunObservable
 
     // Remote인 다른 캐릭터의 위치
     [HideInInspector] public Transform otherPlayerTF;
+    // Owner인 내 캐릭터의 위치
+    [HideInInspector] public Transform myPlayerTF;
 
     // 현재 탑뷰인지
     [Header("탑뷰")] public bool isTopView;

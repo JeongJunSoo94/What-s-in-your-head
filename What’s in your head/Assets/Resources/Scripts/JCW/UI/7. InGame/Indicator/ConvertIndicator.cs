@@ -62,6 +62,8 @@ namespace JCW.UI.InGame.Indicator
             // 타겟의 위치를 메인카메라의 스크린 좌표로 변경
 
             SetSreenInfo();
+            if (mainCamera.rect.width <= 0.1f)
+                return;
             Vector3 indicatorPosition = mainCamera.WorldToScreenPoint(target.position);
 
 
