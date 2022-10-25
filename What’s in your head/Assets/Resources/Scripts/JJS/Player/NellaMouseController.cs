@@ -39,6 +39,7 @@ namespace JJS
             }
             photonView = GetComponent<PhotonView>();
             player = GetComponent<PlayerController>();
+            canSwap = true;
         }
 
         public override void AimUpdate(int type=0)
@@ -62,11 +63,11 @@ namespace JJS
 
         private void Update()
         {
-            if(photonView.IsMine)
+            if (photonView.IsMine)
             {
                 if (player.characterState.aim)
                 {
-                    if (KeyManager.Instance.GetKey(PlayerAction.Fire)&& GetUseWeapon()==0)
+                    if (KeyManager.Instance.GetKey(PlayerAction.Fire) && GetUseWeapon() == 0)
                     {
                         photonView.RPC(nameof(SetWeaponEnable), RpcTarget.AllViaServer, 0, true);
                         clickLeft = true;
@@ -83,7 +84,7 @@ namespace JJS
                     clickLeft = false;
                 }
             }
-            
+
             //SetWeaponEnable(GetPlayerController(animator).playerMouse.GetUseWeapon(), false)
         }
 

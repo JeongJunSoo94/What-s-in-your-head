@@ -14,6 +14,10 @@ namespace JJS
     {
         public MagnifyingGlass glass;
         public SteadyGrappleAction grapple;
+
+        PhotonView photonView;
+
+        PlayerController player;
         //public SteadyGrappleAction grapple;
         private void Awake()
         {
@@ -24,7 +28,36 @@ namespace JJS
                 point = GameObject.FindGameObjectWithTag("SteadyMousePoint");
                 glass.mousePoint = point;
             }
+            canSwap = true;
+            photonView = GetComponent<PhotonView>();
+
+            player = GetComponent<PlayerController>();
         }
+
+        private void Update()
+        {
+            if (photonView.IsMine)
+            {
+                if (player.characterState.aim)
+                {
+                    if (KeyManager.Instance.GetKey(PlayerAction.Fire) && GetUseWeapon() == 1)
+                    {
+                        clickLeft = true;
+                    }
+                    else
+                    {
+                        clickLeft = false;
+                    }
+                }
+                else
+                {
+                    clickLeft = false;
+                }
+            }
+
+            //SetWeaponEnable(GetPlayerController(animator).playerMouse.GetUseWeapon(), false)
+        }
+
         public void StopBeam()
         {
             glass.StopBeam();

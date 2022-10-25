@@ -73,8 +73,7 @@ namespace JJS
             GetPlayerController(animator).InputRun();
             GetPlayerController(animator).InputMove();
             //GetPlayerController(animator).InputJump();
-            if (!GetPlayerController(animator).playerMouse.weaponInfo[GetPlayerController(animator).playerMouse.GetUseWeapon()].canAim
-                || GetPlayerController(animator).characterState.top) /////////// 3스테이지 전용 코드
+            if (!GetPlayerController(animator).playerMouse.weaponInfo[GetPlayerController(animator).playerMouse.GetUseWeapon()].canAim) /////////// 3스테이지 전용 코드
             {
                 
                 GetPlayerController(animator).InputJump();
@@ -91,6 +90,8 @@ namespace JJS
                     GetPlayerController(animator).InputDash();
                 }
             }
+           
+
 
             if (KeyManager.Instance.GetKey(PlayerAction.Fire))
             {
@@ -108,9 +109,10 @@ namespace JJS
             }
             if (KeyManager.Instance.GetKeyDown(PlayerAction.Swap) && !GetPlayerController(animator).characterState.swap)
             {
-                if (!animator.GetBool("isAttack"))
+                if (!animator.GetBool("isAttack")&& GetPlayerController(animator).playerMouse.canSwap)
                 {
                     GetPlayerController(animator).characterState.swap = true;
+                    GetPlayerController(animator).playerMouse.SwapCoroutine();
                     animator.SetBool("WeaponSwap", true);
                 }
             }

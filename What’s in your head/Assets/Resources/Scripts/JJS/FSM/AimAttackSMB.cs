@@ -10,6 +10,7 @@ namespace JJS
         override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
         {
             //GetPlayerController(animator).playerMouse.SetWeaponEnable(GetPlayerController(animator).playerMouse.GetUseWeapon(), true);
+ 
         }
 
         override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
@@ -27,14 +28,13 @@ namespace JJS
             }
             if (GetPlayerController(animator).characterState.isMine)
             {
-              
                 check(animator);
             }
         }
         void check(Animator animator)
         {
             
-            if (!KeyManager.Instance.GetKey(PlayerAction.Fire))
+            if (!GetPlayerController(animator).playerMouse.clickLeft)
             {
                 animator.SetBool("AimAttack", false);
             }
