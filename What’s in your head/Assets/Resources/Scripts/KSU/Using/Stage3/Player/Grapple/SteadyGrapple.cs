@@ -123,17 +123,51 @@ namespace KSU
 
             if((other.gameObject.layer != LayerMask.NameToLayer("UITriggers")) && (other.gameObject.layer != LayerMask.NameToLayer("Player")) && (other.gameObject.layer != LayerMask.NameToLayer("Bullet")))
             {
-                if(other.CompareTag("GrappledObject"))
+                //if(other.CompareTag("GrappledObject"))
+                //{
+                //    player.RecieveGrappleInfo(true, other.gameObject);
+                //    isSucceeded = true;
+                //    grappleRigidbody.velocity = Vector3.zero;
+                //    StopCoroutine(nameof(DelayDeactivation));
+                //}
+                //else
+                //{
+                //    player.RecieveGrappleInfo(false, null);
+                //    this.gameObject.SetActive(false);
+                //}
+
+                switch(other.tag)
                 {
-                    player.RecieveGrappleInfo(true, other.gameObject);
-                    isSucceeded = true;
-                    grappleRigidbody.velocity = Vector3.zero;
-                    StopCoroutine(nameof(DelayDeactivation));
-                }
-                else
-                {
-                    player.RecieveGrappleInfo(false, null);
-                    this.gameObject.SetActive(false);
+                    case "GrappledObject":
+                        {
+                            player.RecieveGrappleInfo(true, other.gameObject);
+                            isSucceeded = true;
+                            grappleRigidbody.velocity = Vector3.zero;
+                            //StopCoroutine(nameof(DelayDeactivation));///////////////// 이거 왜해놨더라
+                        }
+                        break;
+                    case "PoisonSnake":
+                        {
+                            player.RecieveGrappleInfo(true, other.gameObject);
+                            isSucceeded = true;
+                            grappleRigidbody.velocity = Vector3.zero;
+                            //StopCoroutine(nameof(DelayDeactivation));
+                        }
+                        break;
+                    case "TrippleHeadSnake":
+                        {
+                            player.RecieveGrappleInfo(true, other.gameObject);
+                            isSucceeded = true;
+                            grappleRigidbody.velocity = Vector3.zero;
+                            //StopCoroutine(nameof(DelayDeactivation));
+                        }
+                        break;
+                    default:
+                        {
+                            player.RecieveGrappleInfo(false, null);
+                            this.gameObject.SetActive(false);
+                        }
+                        break;
                 }
             }
         }
