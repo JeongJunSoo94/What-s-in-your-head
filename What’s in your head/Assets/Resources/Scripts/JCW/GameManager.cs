@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using JCW.UI.InGame;
 using Photon.Pun;
 using UnityEngine;
+using YC.Photon;
 
 [RequireComponent(typeof(PhotonView))]
 public class GameManager : MonoBehaviour, IPunObservable
@@ -38,7 +39,7 @@ public class GameManager : MonoBehaviour, IPunObservable
     public static GameManager Instance;
     private void Awake()
     {
-        if (Instance==null)
+        if (Instance == null)
         {
             Instance = this;
             DontDestroyOnLoad(this.gameObject);
@@ -54,7 +55,7 @@ public class GameManager : MonoBehaviour, IPunObservable
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Keypad0))
+        if(Input.GetKeyDown(KeyCode.Keypad0))
             isTopView = !isTopView;
     }
 

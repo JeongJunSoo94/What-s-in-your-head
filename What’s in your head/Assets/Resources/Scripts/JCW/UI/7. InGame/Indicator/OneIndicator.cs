@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Photon.Pun;
 using UnityEngine;
 using UnityEngine.UI;
+using YC.Photon;
 
 namespace JCW.UI.InGame.Indicator
 {
@@ -34,16 +35,15 @@ namespace JCW.UI.InGame.Indicator
         protected override void Start()
         {
             base.Start();
-            interactiveImg.sprite = isNella ? nella_DetectSprite : steady_DetectSprite;
+            StartCoroutine(nameof(Wait));
         }
 
         private void Update()
         {
-            if (mainCamera == null)
-                SetCam();
+            if (isStart == false)
+                return;
             if (!isActive)
                 return;
-            // 타겟의 위치를 메인카메라의 스크린 좌표로 변경
             Vector3 indicatorPosition = mainCamera.WorldToScreenPoint(target.position);
 
 
@@ -101,6 +101,16 @@ namespace JCW.UI.InGame.Indicator
         public void SetGauge(float value)
         {
             gauge.fillAmount = value;
+        }
+
+        IEnumerator Wait()
+        {
+            while (!isStart)
+            {
+                yield return new WaitForSeconds(0.1f);
+            }
+            interactiveImg.sprite = isNella ? nella_DetectSprite : steady_DetectSprite;
+            yield break;
         }
     }
 }

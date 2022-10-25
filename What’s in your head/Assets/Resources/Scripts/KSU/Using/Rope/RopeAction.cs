@@ -70,7 +70,8 @@ namespace KSU
             if(playerState.isMine)
             {
                 FindInteractableRope();
-                SendInfoUI();
+                if(GameManager.Instance.characterOwner.Count !=0)
+                    SendInfoUI();
             }
 
             if(interactionState.isRidingRope)

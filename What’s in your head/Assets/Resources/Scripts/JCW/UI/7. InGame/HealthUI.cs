@@ -69,7 +69,10 @@ namespace JCW.UI.InGame
         void Update()
         {
             if (!photonView.IsMine || !(bool)GameManager.Instance.isAlive[isNella])
+            {
+                Debug.Log("IsMine : " + photonView.IsMine + " / 현 캐릭 생존 상태 : " + (bool)GameManager.Instance.isAlive[isNella]);
                 return;
+            }
             // 테스트용 >>============================================================
             if (Input.GetKeyDown(KeyCode.KeypadMinus))
                 GameManager.Instance.curPlayerHP -= 4;
@@ -165,8 +168,12 @@ namespace JCW.UI.InGame
         [PunRPC]
         void SetRevive_RPC(bool value)
         {
-            if(!value)
+            if (!value)
+            {
+                //Debug.Log("HP 만땅 채우기");
                 charHpUI.SetActive(true);
+                //GameManager.Instance.curPlayerHP = maxHP;
+            }
             reviveUI.SetActive(value);
         }
 
