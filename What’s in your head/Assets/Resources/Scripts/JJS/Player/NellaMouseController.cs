@@ -135,15 +135,20 @@ namespace JJS
 
             for (int i = 0; i < hitObjs.Count; i++)
             {
+                Debug.Log("ㅇㅇㅇㅇ");
                 if (hitObjs[i].gameObject.activeSelf)
                 {
+                    Debug.Log("부딪힌 오브젝트 켜져있음");
                     if (hitObjs[i].targetObj.Count != 0)
                     {
+                        Debug.Log("부딪힌 오브젝트 개수 1개 이상");
                         for (int j = 0; j < hitObjs[i].HitColliders.Length; j++)
                         {
+                            Debug.Log("부쉬와 충돌 체크");
                             // << : 찬 수정, 부쉬 오브젝트 관련
                             if (hitObjs[i].HitColliders[j].gameObject.CompareTag("Bush"))
                             {
+                                Debug.Log("부쉬와 충돌");
                                 hitObjs[i].HitColliders[j].gameObject.SendMessage("Attacked", 0.01f);
                             }
                         }

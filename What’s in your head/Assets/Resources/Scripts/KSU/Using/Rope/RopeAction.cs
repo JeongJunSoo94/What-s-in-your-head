@@ -215,6 +215,8 @@ namespace KSU
             transform.LookAt(transform.position + inertiaVec);
             playerController.MakeinertiaVec(escapingRopeSpeed, inertiaVec.normalized);
             playerController.moveVec = Vector3.up * playerController.jumpSpeed * jumpPower;
+            playerState.WasAirDashing = false;
+            playerState.IsAirJumping = false;
             playerController.characterState.isRiding = false;
             rope.enabled = false;
         }

@@ -4414,7 +4414,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &5865305643984531538
 RectTransform:
   m_ObjectHideFlags: 0
@@ -5286,7 +5286,9 @@ MonoBehaviour:
   WasAirDashing: 0
   isMine: 0
   isOutOfControl: 0
-  outOfControllDuration: 0
+  isStopped: 0
+  isRiding: 0
+  deadDuration: 0
   aim: 0
   top: 0
   swap: 0
@@ -5462,8 +5464,8 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 36353
   interactableRope: {fileID: 0}
-  moveToRopeSpeed: 6
-  escapingRopeSpeed: 6
+  moveToRopeSpeed: 12
+  escapingRopeSpeed: 8
   escapingRopeDelayTime: 1
 --- !u!1 &8914183395660981719
 GameObject:

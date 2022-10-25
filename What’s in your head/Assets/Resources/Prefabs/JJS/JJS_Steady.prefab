@@ -5719,7 +5719,7 @@ GameObject:
   - component: {fileID: 5882252725840425124}
   m_Layer: 0
   m_Name: OrbitalBeamGreenBeam
-  m_TagString: Untagged
+  m_TagString: SteadyBeam
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -27179,7 +27179,9 @@ MonoBehaviour:
   WasAirDashing: 0
   isMine: 0
   isOutOfControl: 0
-  outOfControllDuration: 0
+  isStopped: 0
+  isRiding: 0
+  deadDuration: 0
   aim: 0
   top: 0
   swap: 0
@@ -27285,8 +27287,8 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 36353
   interactableRope: {fileID: 0}
-  moveToRopeSpeed: 6
-  escapingRopeSpeed: 6
+  moveToRopeSpeed: 12
+  escapingRopeSpeed: 8
   escapingRopeDelayTime: 1
 --- !u!114 &8239392579310060931
 MonoBehaviour:
@@ -27956,7 +27958,7 @@ LineRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5036646347784986607}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -49577,7 +49579,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &8768540777006978762
 Transform:
   m_ObjectHideFlags: 0
@@ -49692,7 +49694,7 @@ MonoBehaviour:
   paticleBoxCollider: {fileID: 2276343840837846358}
   mainCamera: {fileID: 0}
   beamWaitTime: 2
-  maxDistance: 30
+  maxDistance: 100
   curDistance: 0
   curveHeight: 1
   curveWidth: 0

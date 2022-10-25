@@ -137,6 +137,11 @@ namespace KSU
         {
             if (!photonView.IsMine || characterState.isStopped || characterState.isRiding)
             {
+                playerRigidbody.velocity = Vector3.zero;
+                return;
+            }
+            if (characterState.isRiding)
+            {
                 return;
             }
             TakeRotation();

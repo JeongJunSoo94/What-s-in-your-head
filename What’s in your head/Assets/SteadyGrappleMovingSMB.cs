@@ -45,14 +45,14 @@ namespace JJS
         {
             if(!isMovingToTarget)
             {
-                if (GetPlayerController(animator).characterState.isOutOfControl)
+                if (GetPlayerController(animator).characterState.isRiding)
                 {
                     isMovingToTarget = true;
                 }
             }
             else
             {
-                if (!GetPlayerController(animator).characterState.isOutOfControl)
+                if (!GetPlayerController(animator).characterState.isRiding)
                 {
                     animator.SetBool("isGrappleMoving", false);
                 }
