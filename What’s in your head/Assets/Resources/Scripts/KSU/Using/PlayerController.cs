@@ -142,7 +142,7 @@ namespace KSU
             if (!photonView.IsMine)
             {
                 if(transform.parent != null)
-                    playerRigidbody.velocity = Vector3.zero;
+                    //playerRigidbody.velocity = Vector3.zero;
                 return;
             }else if(characterState.isOutOfControl)
             {
