@@ -24,11 +24,14 @@ namespace JJS
         [Header("조준, 무조준 공격, 공격 중 이동")] public List<WeaponInfo> weaponInfo;
         public IKController ik;
 
-        public bool ableToLeft;
-        public bool ableToRight;
+        [HideInInspector] public bool ableToLeft;
+        [HideInInspector] public bool ableToRight;
 
-        public bool clickLeft;
-        public bool clickRight;
+        [HideInInspector] public bool clickLeft;
+        [HideInInspector] public bool clickRight;
+
+        public LayerMask mouseLayer;
+        public int mouseRayDistance;
 
         protected Ray ray;
         protected RaycastHit hit;
@@ -66,8 +69,7 @@ namespace JJS
         public virtual void TopViewUpdate()
         {
             ray = cameraMain.ScreenPointToRay(Input.mousePosition);
-            int layerMask = (-1) - (1 << LayerMask.NameToLayer("Player"));
-            if (Physics.Raycast(ray, out hit, 100, layerMask, QueryTriggerInteraction.Ignore))
+            if (Physics.Raycast(ray, out hit, mouseRayDistance, mouseLayer, QueryTriggerInteraction.Ignore))
             {
                 point.transform.position = hit.point;
             }

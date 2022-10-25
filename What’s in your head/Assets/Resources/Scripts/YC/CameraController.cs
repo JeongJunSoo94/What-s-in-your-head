@@ -237,6 +237,10 @@ namespace YC.Camera_
 
         void SetCamera() // 플레이어 State 따라카메라 세팅 
         {
+            if (GameManager.Instance.isTopView)
+            {
+                return;
+            }
             if (curCam == CamState.back)
             {
                 //if(Input.GetMouseButtonDown(1))

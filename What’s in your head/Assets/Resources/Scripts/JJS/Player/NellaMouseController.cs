@@ -66,7 +66,7 @@ namespace JJS
             {
                 if (player.characterState.aim)
                 {
-                    if (KeyManager.Instance.GetKey(PlayerAction.Fire))
+                    if (KeyManager.Instance.GetKey(PlayerAction.Fire)&& GetUseWeapon()==0)
                     {
                         photonView.RPC(nameof(SetWeaponEnable), RpcTarget.AllViaServer, 0, true);
                         clickLeft = true;

@@ -2525,6 +2525,10 @@ MonoBehaviour:
   curveHeight: 1
   curveWidth: 0.5
   shootSpeed: 0.5
+  bulletCount: 0
+  layerMask:
+    serializedVersion: 2
+    m_Bits: 0
   bezierCurveOrbit: {fileID: 0}
   mainCamera: {fileID: 0}
   spawner: {fileID: 0}
@@ -2537,7 +2541,7 @@ MonoBehaviour:
   bullet: {fileID: 2660365490216987232, guid: a0267121bd4e0054ab0964d04eafb129, type: 3}
   startShoot: 0
   curShootCool: 0
-  bulletCount: 0
+  bulletCurCount: 0
 --- !u!114 &4271477110735829085
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5465,6 +5469,10 @@ MonoBehaviour:
   ableToRight: 0
   clickLeft: 0
   clickRight: 0
+  mouseLayer:
+    serializedVersion: 2
+    m_Bits: 8
+  mouseRayDistance: 100
   hitObjs:
   - {fileID: 1305514216266557921}
   - {fileID: 7656355952428297822}
@@ -5600,9 +5608,6 @@ MonoBehaviour:
   - Type: 4
     SynchronizeType: 2
     Name: isAttackNext
-  - Type: 1
-    SynchronizeType: 0
-    Name: BulletCool
   m_SynchronizeLayers:
   - SynchronizeType: 2
     LayerIndex: 0
