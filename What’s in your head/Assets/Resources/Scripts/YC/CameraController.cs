@@ -305,7 +305,7 @@ namespace YC.Camera_
                 preCam = curCam;
                 curCam = CamState.top;
 
-                Debug.Log("로그 확인");
+                //Debug.Log("로그 확인");
                 OnOffCamera(topCam);
 
                 camList[(int)curCam].GetComponent<CinemachineVirtualCamera>().m_Lens.FieldOfView = 60;
@@ -316,7 +316,7 @@ namespace YC.Camera_
             }
             
 
-            Debug.Log("디펜스 모드 세팅 - 카메라 컨트롤러!");
+            //Debug.Log("디펜스 모드 세팅 - 카메라 컨트롤러!");
 
         }
 

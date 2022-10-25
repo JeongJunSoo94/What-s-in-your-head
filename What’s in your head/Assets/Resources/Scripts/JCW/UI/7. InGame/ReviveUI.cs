@@ -26,7 +26,8 @@ namespace JCW.UI.InGame
         {
             if (_isAlive)
             {
-                transform.GetChild(1).gameObject.SetActive(true);
+                if(!GameManager.Instance.isTopView)
+                    transform.GetChild(1).gameObject.SetActive(true);
                 transform.GetChild(0).gameObject.SetActive(false);
             }
             else
