@@ -5,7 +5,6 @@ using UnityEngine;
 using UnityEngine.UI;
 using YC.Camera_;
 using YC.Camera_Single;
-using YC.Photon;
 
 namespace JCW.UI.InGame
 {
@@ -28,6 +27,8 @@ namespace JCW.UI.InGame
         // 메인 캠
         Camera mainCamera;
 
+        bool isStart = false;
+
 
         private void Awake()
         {
@@ -36,24 +37,16 @@ namespace JCW.UI.InGame
             GetComponent<Canvas>().worldCamera = mainCamera;
             GetComponent<Canvas>().planeDistance = 0.15f;
 
-            photonView = GetComponent<PhotonView>();
-
-            if(GameManager.Instance.characterOwner.Count != 0)
-                isNella = GameManager.Instance.characterOwner[PhotonNetwork.IsMasterClient];
-            else
-                isNella = TempPhotonManager.Instance.isNella;
-
-            if (photonView.IsMine)
-                GameManager.Instance.hpAllPairs.Add(isNella, this);
-            else
-                GameManager.Instance.hpAllPairs.Add(!isNella, this);
+            photonView = GetComponent<PhotonView>();            
 
             itemUI_RT = transform.GetChild(0).gameObject.GetComponent<RectTransform>();
             hpUI = transform.GetChild(1).gameObject;
+
+            StartCoroutine(nameof(WaitForPlayer));
         }
         private void Update()
         {
-            if (!photonView.IsMine)
+            if (!photonView.IsMine || !isStart)
                 return;
 
             // 체크용
@@ -81,6 +74,23 @@ namespace JCW.UI.InGame
                 movePos = isNella ? new Vector2(ogPos.x - tempOffset, ogPos.y) : new Vector2(ogPos.x + tempOffset, ogPos.y);
             itemUI_RT.anchoredPosition = movePos;
             hpUI.SetActive(isOn);
+        }
+
+        protected IEnumerator WaitForPlayer()
+        {
+            while (GameManager.Instance.characterOwner.Count <= 1)
+                yield return new WaitForSeconds(0.2f);
+
+
+            isNella = GameManager.Instance.characterOwner[PhotonNetwork.IsMasterClient];
+
+            if (photonView.IsMine)
+                GameManager.Instance.hpAllPairs.Add(isNella, this);
+            else
+                GameManager.Instance.hpAllPairs.Add(!isNella, this);
+
+            isStart = true;
+            yield break;
         }
 
     }

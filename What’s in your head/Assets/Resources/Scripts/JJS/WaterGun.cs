@@ -11,43 +11,100 @@ namespace JJS.Weapon
 {
     public class WaterGun : MonoBehaviour
     {
-        public BezierCurve bezierCurveOrbit;
-
-        public Camera mainCamera;
-
-        public Spawner spawner;
 
         Ray ray;
 
         Vector3 dir;
+
+        [Header("BulletInfo")]
+        public float speed = 1;
+
+        [Header("WaterGunInfo")]
         public float shootMaxDistance;
         public float shootCurDistance;
         public float curveHeight=1f;
-        public float curveWidth;
+        public float curveWidth=0.5f;
+        public float shootSpeed = 0.5f;
+        public int bulletCount = 0;
+        public LayerMask layerMask;
 
+        [Header("Don't touch")]
+        public BezierCurve bezierCurveOrbit;
+        public Camera mainCamera;
+        public Spawner spawner;
         public GameObject targetIK;
         public GameObject gunDirection;
         public GameObject hitPos;
         public GameObject mousePoint;
-
         public GameObject weapon;
         public GameObject startPos;
+        public GameObject bullet;
+        public bool startShoot;
+        public float curShootCool;
+        GameObject bulletSpawner;
+        public int bulletCurCount = 0;
         private void Awake()
         {
             bezierCurveOrbit = gameObject.GetComponent<BezierCurve>();
             bezierCurveOrbit.targetObj = startPos;
-            spawner = gameObject.GetComponent<Spawner>();
+            bulletSpawner = new GameObject("BulletSpawner");
+            bulletSpawner.AddComponent<Spawner>();
+            spawner = bulletSpawner.GetComponent<Spawner>();
+            spawner.obj = bullet;
+            spawner.count = bulletCount;
+            spawner.spawnCount = 0;
         }
         //void FixedUpdate()
         //{
         //}
 
-        public void Shoot()
+        public void ShootStart()
         {
-            GameObject bullet=spawner.Respawn(startPos.transform.position);
+            startShoot = true;
+            StartCoroutine(ShootCoroutine());
+        }
+
+        public void ShootStop()
+        {
+            startShoot = false;
+            StopCoroutine(ShootCoroutine());
+        }
+
+        IEnumerator ShootCoroutine()
+        {
+            while (startShoot)
+            {
+                if (curShootCool == 0)
+                {
+                    Shoot();
+                    bulletCurCount++;
+                    StartCoroutine(ShootCoolTime());
+                }
+                yield return new WaitForSeconds(shootSpeed -curShootCool);
+            }
+            yield break;
+        }
+
+        IEnumerator ShootCoolTime()
+        {
+            while (curShootCool< shootSpeed)
+            {
+                curShootCool+= 0.01f;
+                yield return new WaitForSeconds(0.01f);
+            }
+            curShootCool = 0;
+            yield break;
+        }
+
+        void Shoot()
+        {
+            GameObject bullet=spawner.Respawn(startPos.transform.position, Quaternion.LookRotation(bezierCurveOrbit.p2 - startPos.transform.position));
             if (bullet != null)
             {
+                Bullet bulletInfo = bullet.GetComponent<Bullet>();
+                bulletInfo.speed = speed;
                 BezierCurve bezier = bullet.GetComponent<BezierCurve>();
+
                 bezier.p1 = bezierCurveOrbit.p1;
                 bezier.p2 = bezierCurveOrbit.p2;
                 bezier.p3 = bezierCurveOrbit.p3;
@@ -55,20 +112,20 @@ namespace JJS.Weapon
             }
         }
 
-        void OnDrawGizmos()
-        {
-            OnDrawGizmosRay();
-        }
+        //void OnDrawGizmos()
+        //{
+        //    OnDrawGizmosRay();
+        //}
 
-        void OnDrawGizmosRay()
-        {
-            ray.origin = startPos.transform.position;
-            ray.direction = dir;
+        //void OnDrawGizmosRay()
+        //{
+        //    ray.origin = startPos.transform.position;
+        //    ray.direction = dir;
 
-            Debug.DrawRay(ray.origin, ray.direction * shootCurDistance, Color.red);
+        //    Debug.DrawRay(ray.origin, ray.direction * shootCurDistance, Color.red);
 
-            //Debug.DrawRay(Weapon.transform.position, ray.direction * shootCurDistance, Color.green);
-        }
+        //    //Debug.DrawRay(Weapon.transform.position, ray.direction * shootCurDistance, Color.green);
+        //}
 
         public void ShootLine(int type=0)
         {
@@ -79,8 +136,24 @@ namespace JJS.Weapon
             }
             else if (type == 1)
             {
-                dir = mainCamera.transform.forward;
-                PhisicsShootLine(startPos.transform.position, dir);
+                RaycastHit hit;
+                if (Physics.Raycast(mainCamera.transform.position, mainCamera.transform.forward, out hit, shootMaxDistance, layerMask, QueryTriggerInteraction.Ignore))
+                {
+                    if (hit.distance > Vector3.Distance(startPos.transform.position, mainCamera.transform.position))
+                    {
+                        dir = (hit.point - startPos.transform.position).normalized;
+                        PhisicsShootLine(startPos.transform.position, dir);
+                    }
+                    else
+                    {
+                        MaxPhysicsLine(startPos.transform.position, mainCamera.transform.forward);
+                    }
+                }
+                else
+                {
+                    MaxPhysicsLine(startPos.transform.position, mainCamera.transform.forward);
+                }
+
             }
             else if (type == 2)
             {
@@ -118,6 +191,14 @@ namespace JJS.Weapon
 
         void PhisicsShootLine(Vector3 startPosition,Vector3 rayDirection)
         {
+            if (!CurPhysicsLine(startPosition, rayDirection))
+            {
+                MaxPhysicsLine(startPosition, rayDirection);
+            }
+        }
+
+        bool CurPhysicsLine(Vector3 startPosition, Vector3 rayDirection)
+        {
             RaycastHit hit;
             if (Physics.Raycast(startPosition, rayDirection, out hit, shootMaxDistance, -1, QueryTriggerInteraction.Ignore))
             {
@@ -129,11 +210,11 @@ namespace JJS.Weapon
                 float width = curveWidth;
                 if (Height > 0)
                 {
-                    width -= Height;
+                    width -= Height * 0.25f;
                 }
                 else
                 {
-                    width -= Height;
+                    width -= Height * 0.25f;
                     Height *= -1f;
                 }
 
@@ -143,32 +224,35 @@ namespace JJS.Weapon
                 bezierCurveOrbit.p2 = hit.point + direction;
                 bezierCurveOrbit.p3 = hit.point;
                 bezierCurveOrbit.p4 = hit.point;
+                return true;
+            }
+            return false;
+        }
+
+        void MaxPhysicsLine(Vector3 startPosition, Vector3 rayDirection)
+        {
+            Vector3 maxPos = startPosition + rayDirection * shootMaxDistance;
+            shootCurDistance = Vector3.Distance(startPosition, maxPos);
+            bezierCurveOrbit.p1 = startPosition;
+            bezierCurveOrbit.p3 = maxPos;
+            bezierCurveOrbit.p4 = maxPos;
+
+            float Height = maxPos.y - startPosition.y;
+            Height /= shootMaxDistance;
+            float width = curveWidth;
+            if (Height > 0)
+            {
+                width -= Height * 0.25f;
             }
             else
             {
-                Vector3 maxPos = startPosition + rayDirection * shootMaxDistance;
-                shootCurDistance = Vector3.Distance(startPosition, maxPos);
-                bezierCurveOrbit.p1 = startPosition;
-                bezierCurveOrbit.p3 = maxPos;
-                bezierCurveOrbit.p4 = maxPos;
-
-                float Height = maxPos.y - startPosition.y;
-                Height /= shootMaxDistance;
-                float width = curveWidth;
-                if (Height > 0)
-                {
-                    width -= Height * 0.25f;
-                }
-                else
-                {
-                    width -= Height * 0.25f;
-                    Height *= -1f;
-                }
-
-                Vector3 direction = (startPosition - maxPos) * width;
-                direction.y += 1f + Height * curveHeight;
-                bezierCurveOrbit.p2 = maxPos + direction;
+                width -= Height * 0.25f;
+                Height *= -1f;
             }
+
+            Vector3 direction = (startPosition - maxPos) * width;
+            direction.y += 1f + Height * curveHeight;
+            bezierCurveOrbit.p2 = maxPos + direction;
         }
     }
 }

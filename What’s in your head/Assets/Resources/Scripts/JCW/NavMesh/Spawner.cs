@@ -6,9 +6,9 @@ namespace JCW.Spawner
 {
     public class Spawner : MonoBehaviour
     {
-        [Header("스폰 시간")] [Range(0.0f, 10.0f)] public float spawnTime = 2.5f;
-        [Header("스폰할 오브젝트")] public GameObject obj = null;
-        [Header("최대 오브젝트 수")] [Range(0, 50)] public int count = 20;
+        [SerializeField] [Header("스폰 시간")] [Range(0.0f, 10.0f)] private float spawnTime = 2.5f;
+        [SerializeField] [Header("스폰할 오브젝트")] public GameObject obj = null;
+        [SerializeField] [Header("최대 오브젝트 수")] [Range(0, 50)] public int count = 20;
 
         Queue<GameObject> objQueue;
         /*[HideInInspector]*/
@@ -38,6 +38,21 @@ namespace JCW.Spawner
                 ++spawnCount;
                 gameObject = objQueue.Dequeue();
                 gameObject.transform.position = pos;
+                gameObject.SetActive(true);
+            }
+            return gameObject;
+        }
+
+        public GameObject Respawn(Vector3 pos, Quaternion rotation)
+        {
+            GameObject gameObject = null;
+
+            if (spawnCount < count)
+            {
+                ++spawnCount;
+                gameObject = objQueue.Dequeue();
+                gameObject.transform.position = pos;
+                gameObject.transform.rotation = rotation;
                 gameObject.SetActive(true);
             }
             return gameObject;

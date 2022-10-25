@@ -9,6 +9,7 @@ namespace JJS
     {
         override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
         {
+            animator.SetLayerWeight(1, 1);
             //if (GetPlayerController(animator).characterState.isMine)
             //{
             //    GetPlayerController(animator).characterState.aim = true;
@@ -17,7 +18,10 @@ namespace JJS
 
         override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
         {
-            GetPlayerController(animator).playerMouse.AimUpdate(1);
+            if (!GetPlayerController(animator).characterState.top)
+            {
+                GetPlayerController(animator).playerMouse.AimUpdate(1);
+            }
             GetPlayerController(animator).playerMouse.ik.enableIK = true;
             if (GetPlayerController(animator).characterState.isMine)
             {
@@ -39,15 +43,17 @@ namespace JJS
         }
         void check(Animator animator)
         {
-            if (Input.GetKeyDown(KeyCode.Alpha1))
-            {
-                GetPlayerController(animator).characterState.top = !GetPlayerController(animator).characterState.top;
-                animator.SetBool("Top", GetPlayerController(animator).characterState.top);
-            }
-            if (GetPlayerController(animator).characterState.top)
-            {
-                GetPlayerController(animator).playerMouse.TopViewUpdate();
-            }
+
+            //if (Input.GetKeyDown(KeyCode.Alpha1))
+            //{
+            //    GetPlayerController(animator).characterState.top = !GetPlayerController(animator).characterState.top;
+            //    animator.SetBool("Top", GetPlayerController(animator).characterState.top);
+            //}
+            //if (GetPlayerController(animator).characterState.top)
+            //{
+            //    GetPlayerController(animator).playerMouse.TopViewUpdate();
+            //    Cursor.lockState = CursorLockMode.Locked;
+            //}
             //if (!KeyManager.Instance.GetKey(PlayerAction.Aim))
             //{
             //    animator.SetBool("Aim", false);

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using JCW.UI.InGame;
 using Photon.Pun;
 using UnityEngine;
+using YC.Photon;
 
 [RequireComponent(typeof(PhotonView))]
 public class GameManager : MonoBehaviour, IPunObservable
@@ -23,6 +24,8 @@ public class GameManager : MonoBehaviour, IPunObservable
 
     // Remote인 다른 캐릭터의 위치
     [HideInInspector] public Transform otherPlayerTF;
+    // Owner인 내 캐릭터의 위치
+    [HideInInspector] public Transform myPlayerTF;
 
     // 현재 탑뷰인지
     [Header("탑뷰")] public bool isTopView;
@@ -38,7 +41,7 @@ public class GameManager : MonoBehaviour, IPunObservable
     public static GameManager Instance;
     private void Awake()
     {
-        if (Instance==null)
+        if (Instance == null)
         {
             Instance = this;
             DontDestroyOnLoad(this.gameObject);
@@ -50,8 +53,12 @@ public class GameManager : MonoBehaviour, IPunObservable
 
         curStageIndex = 0;
         curSection = 0;
-        
-            
+    }
+
+    private void Update()
+    {
+        if(Input.GetKeyDown(KeyCode.Keypad0))
+            isTopView = !isTopView;
     }
 
     public void SetRandomSeed()

@@ -21,6 +21,7 @@ namespace JJS
             Handles.DrawLine(Generator.p3, Generator.p4);
 
             int pivotCount = 50;
+            float halfpivotCount = pivotCount*0.5f;
             for (float i = 0; i < pivotCount; i++)
             {
                 float valueBefore = i / pivotCount;

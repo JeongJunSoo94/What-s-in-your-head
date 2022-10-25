@@ -15,6 +15,7 @@ namespace JJS
         // OnStateUpdate is called on each Update frame between OnStateEnter and OnStateExit callbacks
         override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
         {
+            
             WeaponCheck(animator);
             if (GetPlayerController(animator).characterState.isMine)
             {
@@ -33,7 +34,11 @@ namespace JJS
                 GetPlayerController(animator).playerMouse.ik.enableIK = false;
             if (GetPlayerController(animator).playerMouse.weaponInfo[GetPlayerController(animator).playerMouse.GetUseWeapon()].canAim)
             {
-                if (animator.GetLayerWeight(1) == 0&& GetPlayerController(animator).characterState.aim)
+                if (GetPlayerController(animator).characterState.top)
+                {
+                    animator.SetLayerWeight(1, 0);
+                }
+                else
                 {
                     animator.SetLayerWeight(1, 1);
                 }
@@ -49,19 +54,21 @@ namespace JJS
 
         void check(Animator animator)
         {
-            if(GetPlayerController(animator).characterState.isMine)
+            if (GetPlayerController(animator).playerMouse.weaponInfo[GetPlayerController(animator).playerMouse.GetUseWeapon()].canAim)
             {
-                if (GetPlayerController(animator).playerMouse.weaponInfo[GetPlayerController(animator).playerMouse.GetUseWeapon()].canAim)
+                if (GetPlayerController(animator).characterState.aim|| GetPlayerController(animator).characterState.top)
                 {
-                    if (GetPlayerController(animator).characterState.aim || GetPlayerController(animator).characterState.top)
+                    if (!GetPlayerController(animator).characterState.IsJumping&& !GetPlayerController(animator).characterState.IsAirJumping
+                        &&!GetPlayerController(animator).characterState.IsDashing && !GetPlayerController(animator).characterState.IsAirDashing)
                     {
-                        if (KeyManager.Instance.GetKey(PlayerAction.Fire))
+                        if (GetPlayerController(animator).playerMouse.clickLeft)
                         {
                             animator.SetBool("AimAttack", true);
                         }
                     }
                 }
             }
+
 
             if (GetPlayerController(animator).playerMouse.weaponInfo[GetPlayerController(animator).playerMouse.GetUseWeapon()].canAim)
             {
@@ -71,11 +78,7 @@ namespace JJS
                     animator.SetBool("Top", true);
                     return;
                 }
-
-                if(GetPlayerController(animator).characterState.isMine)
-                {
-                    animator.SetBool("Aim", KeyManager.Instance.GetKey(PlayerAction.Aim));
-                }
+                animator.SetBool("Aim", KeyManager.Instance.GetKey(PlayerAction.Aim));
             }
         }
 

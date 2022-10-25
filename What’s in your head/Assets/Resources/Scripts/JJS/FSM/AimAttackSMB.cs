@@ -3,14 +3,17 @@ using System.Collections.Generic;
 using UnityEngine;
 using JCW.UI.Options.InputBindings;
 using JJS.CharacterSMB;
-using YC.Camera_; // << : 찬 (스테디 빔 마우스 락)
+using YC.Camera_;
 namespace JJS
 {
     public class AimAttackSMB : CharacterBaseSMB
     {
         override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
         {
-            if (GetPlayerController(animator).characterState.isMine) // << : 찬 (스테디 빔 마우스 락)
+            //GetPlayerController(animator).playerMouse.SetWeaponEnable(GetPlayerController(animator).playerMouse.GetUseWeapon(), true);
+ 
+            // << : 찬 수정 (스테디가 빔으로 공격할시, 공격이 끝날때 까지 마우스 인풋을 막는다)
+            if(GetPlayerController(animator))
             {
                 if(GetPlayerController(animator).CompareTag("Steady"))
                     GetPlayerController(animator).GetComponent<CameraController>().SetSteadyBeam(true);
@@ -19,21 +22,26 @@ namespace JJS
 
         override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
         {
+            GetPlayerController(animator).playerMouse.ik.enableIK = true;
+            animator.SetLayerWeight(1, 1);
+
+            if (GetPlayerController(animator).characterState.top)
+            {
+                GetPlayerController(animator).playerMouse.AimUpdate(2);
+            }
+            else
+            {
+                GetPlayerController(animator).playerMouse.AimUpdate(1);
+            }
             if (GetPlayerController(animator).characterState.isMine)
             {
-              
                 check(animator);
             }
         }
         void check(Animator animator)
         {
-            GetPlayerController(animator).playerMouse.ik.enableIK = true;
-            animator.SetLayerWeight(1, 1);
-            if (GetPlayerController(animator).characterState.top)
-            { 
-                GetPlayerController(animator).playerMouse.AimUpdate(2);
-            }
-            if (!KeyManager.Instance.GetKey(PlayerAction.Fire))
+            
+            if (!GetPlayerController(animator).playerMouse.clickLeft)
             {
                 animator.SetBool("AimAttack", false);
             }
@@ -63,7 +71,10 @@ namespace JJS
         // OnStateExit is called when a transition ends and the state machine finishes evaluating this state
         override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
         {
-            if (GetPlayerController(animator).characterState.isMine) // << : 찬 (스테디 빔 마우스 락)
+            //GetPlayerController(animator).playerMouse.SetWeaponEnable(GetPlayerController(animator).playerMouse.GetUseWeapon(), false);
+
+            // << : 찬 수정 (스테디가 빔으로 공격할시, 공격이 끝날때 까지 마우스 인풋을 막는다)
+            if (GetPlayerController(animator))
             {
                 if (GetPlayerController(animator).CompareTag("Steady"))
                     GetPlayerController(animator).GetComponent<CameraController>().SetSteadyBeam(false);

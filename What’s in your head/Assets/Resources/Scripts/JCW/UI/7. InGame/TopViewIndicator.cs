@@ -60,6 +60,7 @@ namespace JCW.UI.InGame
                 otherPlayerTF = GameManager.Instance.otherPlayerTF;
             }
             // 포지션 설정
+            Debug.Log("탑 뷰 내 위치 : " + myPlayerTF.position);
             Vector3 myIndicatorPosition = mainCamera.WorldToScreenPoint(myPlayerTF.position);
             Vector3 otherIndicatorPosition = mainCamera.WorldToScreenPoint(otherPlayerTF.position);
 

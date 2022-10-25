@@ -311,31 +311,31 @@ namespace KSU
             }
         }
 
-        private void OnDrawGizmos()
-        {
-            if (playerState.aim)
-            {
-                if (_raycastHit.point != null)
-                {
-                    Gizmos.color = Color.red;
-                    Gizmos.DrawSphere(_raycastHit.point, 1f);
-                }
+        //private void OnDrawGizmos()
+        //{
+        //    if (playerState.aim)
+        //    {
+        //        if (_raycastHit.point != null)
+        //        {
+        //            Gizmos.color = Color.red;
+        //            Gizmos.DrawSphere(_raycastHit.point, 1f);
+        //        }
 
-                Gizmos.DrawLine(startUp, endUp);
-                Gizmos.DrawLine(startDown, endDown);
-                Gizmos.DrawLine(startRight, endRight);
-                Gizmos.DrawLine(startLeft, endLeft);
+        //        Gizmos.DrawLine(startUp, endUp);
+        //        Gizmos.DrawLine(startDown, endDown);
+        //        Gizmos.DrawLine(startRight, endRight);
+        //        Gizmos.DrawLine(startLeft, endLeft);
 
-                Gizmos.DrawWireSphere(startCenter, rangeRadius);
-                Gizmos.DrawWireSphere(endCenter, rangeRadius);
-            }
-            Vector3 rayOrigin = grappleSpawner.transform.position;
-            Vector3 rayEnd = (playerCamera.transform.position + playerCamera.transform.forward * (rangeDistance + rangeRadius * 2f));
+        //        Gizmos.DrawWireSphere(startCenter, rangeRadius);
+        //        Gizmos.DrawWireSphere(endCenter, rangeRadius);
+        //    }
+        //    Vector3 rayOrigin = grappleSpawner.transform.position;
+        //    Vector3 rayEnd = (playerCamera.transform.position + playerCamera.transform.forward * (rangeDistance + rangeRadius * 2f));
 
-            //sphere.transform.position = rayEnd;
+        //    //sphere.transform.position = rayEnd;
 
-            Gizmos.DrawLine(rayOrigin, rayEnd);
-        }
+        //    Gizmos.DrawLine(rayOrigin, rayEnd);
+        //}
 
         private void OnTriggerEnter(Collider other)
         {

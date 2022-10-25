@@ -44,7 +44,7 @@ namespace JJS
                 }
                 else
                 {
-                    if (animator.GetLayerWeight(1) == 0 && GetPlayerController(animator).characterState.aim)
+                    if (animator.GetLayerWeight(1) == 0 && GetPlayerController(animator).characterState.aim|| GetPlayerController(animator).characterState.top)
                     {
                         animator.SetLayerWeight(1, 1);
                     }
@@ -65,17 +65,24 @@ namespace JJS
 
         void InputCheck(Animator animator)
         {
-            // << 디펜스 모드 입장시 스테이트 전환 YC
             if (GameManager.Instance.isTopView)
             {
-                GetPlayerController(animator).characterState.top = !GetPlayerController(animator).characterState.top;
-                animator.SetBool("Top", GetPlayerController(animator).characterState.top);
+                if (GetPlayerController(animator).CompareTag("Steady"))
+                {
+                    if (!GetPlayerController(animator).playerMouse.clickLeft)
+                        GetPlayerController(animator).playerMouse.TopViewUpdate();
+                }
+                else
+                {
+                    GetPlayerController(animator).playerMouse.TopViewUpdate();
+                }
             }
 
             GetPlayerController(animator).InputRun();
             GetPlayerController(animator).InputMove();
             //GetPlayerController(animator).InputJump();
-            if (!GetPlayerController(animator).playerMouse.weaponInfo[GetPlayerController(animator).playerMouse.GetUseWeapon()].canAim) /////////// 3스테이지 전용 코드
+            if (!GetPlayerController(animator).playerMouse.weaponInfo[GetPlayerController(animator).playerMouse.GetUseWeapon()].canAim
+                ||GetPlayerController(animator).characterState.top) /////////// 3스테이지 전용 코드
             {
                 
                 GetPlayerController(animator).InputJump();
@@ -92,6 +99,8 @@ namespace JJS
                     GetPlayerController(animator).InputDash();
                 }
             }
+           
+
 
             if (KeyManager.Instance.GetKey(PlayerAction.Fire))
             {
@@ -109,9 +118,10 @@ namespace JJS
             }
             if (KeyManager.Instance.GetKeyDown(PlayerAction.Swap) && !GetPlayerController(animator).characterState.swap)
             {
-                if (!animator.GetBool("isAttack"))
+                if (!animator.GetBool("isAttack")&& GetPlayerController(animator).playerMouse.canSwap)
                 {
                     GetPlayerController(animator).characterState.swap = true;
+                    GetPlayerController(animator).playerMouse.SwapCoroutine();
                     animator.SetBool("WeaponSwap", true);
                 }
             }
@@ -124,15 +134,18 @@ namespace JJS
 
         void check(Animator animator)
         {
-            if (GetPlayerController(animator).characterState.top)
+            if (GameManager.Instance.isTopView)
             {
+                //GetPlayerController(animator).characterState.top = !GetPlayerController(animator).characterState.top;
+                GetPlayerController(animator).characterState.top = true;
                 Cursor.lockState = CursorLockMode.Confined;
-                GetPlayerController(animator).playerMouse.TopViewUpdate();
             }
             else
             {
                 Cursor.lockState = CursorLockMode.Locked;
+                GetPlayerController(animator).characterState.top = false;
             }
+            animator.SetBool("Top", GetPlayerController(animator).characterState.top);
 
             animator.SetFloat("HorizonVelocity", (GetPlayerController(animator).characterState.isMove ? (GetPlayerController(animator).characterState.isRun ? 1.0f : 0.5f) : 0.0f));
 
