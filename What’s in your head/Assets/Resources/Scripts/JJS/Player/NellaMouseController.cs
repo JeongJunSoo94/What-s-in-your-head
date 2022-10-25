@@ -85,6 +85,8 @@ namespace JJS
                 }
             }
 
+
+
             //SetWeaponEnable(GetPlayerController(animator).playerMouse.GetUseWeapon(), false)
         }
 
@@ -129,6 +131,8 @@ namespace JJS
 
         public void TargetUpdate()
         {
+            Debug.Log("CHECK!");
+
             for (int i = 0; i < hitObjs.Count; i++)
             {
                 if (hitObjs[i].gameObject.activeSelf)
@@ -137,9 +141,11 @@ namespace JJS
                     {
                         for (int j = 0; j < hitObjs[i].HitColliders.Length; j++)
                         {
-                            hitObjs[i].HitColliders[j].gameObject.SetActive(false);
-                            //hitObjs[i].HitColliders[j].gameObject.SendMessage("");
-
+                            // << : 찬 수정, 부쉬 오브젝트 관련
+                            if (hitObjs[i].HitColliders[j].gameObject.CompareTag("Bush"))
+                            {
+                                hitObjs[i].HitColliders[j].gameObject.SendMessage("Attacked", 0.01f);
+                            }
                         }
                     }
                 }

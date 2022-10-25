@@ -73,8 +73,10 @@ namespace YC.CameraManager_
                     // >> : 수정
                     pv.RPC(nameof(SetDefenceModeCamera), RpcTarget.AllBuffered);
                     wasTopView = true;
+
+                    Debug.Log("업데이트중!");
                 }
-                else if (wasTopView)
+                else if (!GameManager.Instance.isTopView && wasTopView)
                 {
                     wasTopView = false;
                 }

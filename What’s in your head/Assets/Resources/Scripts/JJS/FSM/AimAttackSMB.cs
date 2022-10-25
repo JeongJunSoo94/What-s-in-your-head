@@ -11,28 +11,23 @@ namespace JJS
         override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
         {
             //GetPlayerController(animator).playerMouse.SetWeaponEnable(GetPlayerController(animator).playerMouse.GetUseWeapon(), true);
-            if (GetPlayerController(animator))
+ 
+            // << : 찬 수정 (스테디가 빔으로 공격할시, 공격이 끝날때 까지 마우스 인풋을 막는다)
+            if(GetPlayerController(animator))
             {
-                if (GetPlayerController(animator).CompareTag("Steady"))
-                {
-                    if(!GetPlayerController(animator).characterState.top)
-                        GetPlayerController(animator).gameObject.GetComponent<CameraController>().SetSteadyBeam(true);
-
-                    if (GetPlayerController(animator).characterState.top)
-                        GetPlayerController(animator).playerMouse.AimUpdate(3);
-                }
+                if(GetPlayerController(animator).CompareTag("Steady"))
+                    GetPlayerController(animator).GetComponent<CameraController>().SetSteadyBeam(true);
             }
-
         }
 
         override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
         {
             GetPlayerController(animator).playerMouse.ik.enableIK = true;
+            animator.SetLayerWeight(1, 1);
 
             if (GetPlayerController(animator).characterState.top)
             {
-                if (!GetPlayerController(animator).CompareTag("Steady"))
-                    GetPlayerController(animator).playerMouse.AimUpdate(2);
+                GetPlayerController(animator).playerMouse.AimUpdate(2);
             }
             else
             {
@@ -77,13 +72,12 @@ namespace JJS
         override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
         {
             //GetPlayerController(animator).playerMouse.SetWeaponEnable(GetPlayerController(animator).playerMouse.GetUseWeapon(), false);
+
+            // << : 찬 수정 (스테디가 빔으로 공격할시, 공격이 끝날때 까지 마우스 인풋을 막는다)
             if (GetPlayerController(animator))
             {
                 if (GetPlayerController(animator).CompareTag("Steady"))
-                {
-                    if (!GetPlayerController(animator).characterState.top)
-                        GetPlayerController(animator).gameObject.GetComponent<CameraController>().SetSteadyBeam(false);
-                }
+                    GetPlayerController(animator).GetComponent<CameraController>().SetSteadyBeam(false);
             }
         }
 
