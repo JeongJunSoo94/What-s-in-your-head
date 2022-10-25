@@ -138,12 +138,7 @@ namespace KSU
 
         private void FixedUpdate()
         {
-            if (!photonView.IsMine)
-            {
-                if(transform.parent != null)
-                    playerRigidbody.velocity = Vector3.zero;
-                return;
-            }else if(characterState.isOutOfControl)
+            if (!photonView.IsMine || characterState.isStopped)
             {
                 return;
             }
@@ -343,6 +338,11 @@ namespace KSU
 
         public void TakeRotation()
         {
+            if (characterState.isOutOfControl)
+            {
+                return;
+            }
+
             if (characterState.top)
             {
                 RotateTop();
@@ -400,6 +400,13 @@ namespace KSU
         {
             if (!characterState.IsGrounded || !characterState.CanJump)
             {
+                if (characterState.isOutOfControl)
+                {
+                    moveVec = Vector3.up * (moveVec.y + gravity * Time.fixedDeltaTime);
+                    playerRigidbody.velocity = moveVec;
+                    return;
+                }
+
                 if (characterState.IsAirDashing) // 공중대시 중일 때
                 {
                     moveVec = transform.forward.normalized * airDashSpeed;
@@ -421,6 +428,14 @@ namespace KSU
             }
             else
             {
+                if (characterState.isOutOfControl)
+                {
+                    moveVec = Vector3.zero;
+                    playerRigidbody.velocity = moveVec;
+                    return;
+                }
+
+
                 if (characterState.IsDashing) // 대시 중일 때
                 {
                     moveSpeed = dashSpeed;
@@ -465,8 +480,6 @@ namespace KSU
             }
 
             playerRigidbody.velocity = moveVec;
-
-
         }
 
     }

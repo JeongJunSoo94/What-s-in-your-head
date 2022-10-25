@@ -15,9 +15,12 @@ public class PlayerState : MonoBehaviour
     [Range(0.0f, 1f), Tooltip("지면 인식 허용 최소 거리")]
     public float groundCheckThresholdMin = 0.02f;
     [Range(0.0f, 1f), Tooltip("지면 인식 허용 최대 거리")]
-    public float groundCheckThresholdMax = 0.1f;
+    public float groundCheckThresholdMax = 0.2f;
     [Range(0.0f, 1f), Tooltip("전방 막힘 최소 높이")]
     public float forwardblockingMinHeight = 0.2f;
+
+    //bool isGroundDelayOn = false;
+    //public float groundDelayTime = 0.05f;
     public float height = 0f;
     public float forwardHeight = 0f;
 
@@ -74,7 +77,8 @@ public class PlayerState : MonoBehaviour
     #region
     public bool isMine = false;
     public bool isOutOfControl = false;
-    public float outOfControllDuration;
+    public bool isStopped = false;
+    public float deadDuration;
     #endregion
 
     public bool aim = false;
@@ -136,6 +140,12 @@ public class PlayerState : MonoBehaviour
 
     public void CheckGround(float sphereRadius)
     {
+        //if (isGroundDelayOn)
+        //{
+        //    IsGrounded = true;
+        //    return;
+        //}
+
         RayCheck = Physics.SphereCast(transform.position + Vector3.up * (sphereRadius * 1.5f + Physics.defaultContactOffset), (sphereRadius - Physics.defaultContactOffset), Vector3.down, out groundRaycastHit, groundCheckDistance + sphereRadius * 0.5f + Physics.defaultContactOffset, groundLayerMask, QueryTriggerInteraction.Ignore);
         
         if (RayCheck)
@@ -143,10 +153,10 @@ public class PlayerState : MonoBehaviour
             slopeAngle = Vector3.Angle(Vector3.up, groundRaycastHit.normal);
             if (Mathf.Abs(slopeAngle) >= maxSlopeAngle)
             {
+                //Debug.Log("경사각 초과");
                 IsGrounded = false;
                 isRun = false;
                 isOverAngleForSlope = true;
-                //Debug.Log("경사각 초과");
             }
             else
             {
@@ -194,6 +204,7 @@ public class PlayerState : MonoBehaviour
                     slopeAngleCofacter = forwardblockingMinHeight;
                     IsGrounded = true;
                     isFowardBlock = false;
+                    //StartCoroutine(nameof(StartGroundDelay));
                 }
                 //Debug.Log("isFowardBlock: " + isFowardBlock);
             }
@@ -208,11 +219,18 @@ public class PlayerState : MonoBehaviour
             IsGrounded = false;
             //Debug.Log("RayCheck 실패");
         }
-        if(!IsGrounded)
-        {
-            Debug.Log("지면체크: " + IsGrounded);
-        }
+        //if(!IsGrounded)
+        //{
+        //    Debug.Log("지면체크: " + IsGrounded);
+        //}
     }
+
+    //IEnumerator StartGroundDelay()
+    //{
+    //    isGroundDelayOn = true;
+    //    yield return new WaitForSeconds(groundDelayTime);
+    //    isGroundDelayOn = false;
+    //}
     #endregion
 
     //달리기 함수
