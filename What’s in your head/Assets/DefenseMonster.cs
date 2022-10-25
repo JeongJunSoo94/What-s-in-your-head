@@ -33,6 +33,7 @@ namespace KSU.Monster
 
         public bool isAttackDelayOn = false;
         public float attackDelayTime = 2f;
+        [SerializeField] GameObject attackTrigger;
 
         public bool isTargetFounded = false;
 
@@ -87,16 +88,6 @@ namespace KSU.Monster
 
         }
 
-        public void GetEnableRope()
-        {
-            monsterRope.enabled = true;
-        }
-
-        public void GetDisableRope()
-        {
-            monsterRope.enabled = false;
-        }
-
         public virtual void GetDamage(int damage)
         {
             currentHP -= damage;
@@ -115,12 +106,20 @@ namespace KSU.Monster
         public void StartSturn()
         {
             StartCoroutine(nameof(DelaySturn));
+            monsterRope.enabled = true;
+            // ½ºÅÏ ÀÌÆåÆ® ÄÑ±â
         }
 
         IEnumerator DelaySturn()
         {
             yield return new WaitForSeconds(sturnTime);
             monsterAnimator.SetBool("isSturn", false);
+        }
+
+        public void EndSturn()
+        {
+            monsterRope.enabled = false;
+            // ½ºÅÏ ÀÌÆåÆ® ²ô±â
         }
 
         public void Dead()
@@ -190,7 +189,7 @@ namespace KSU.Monster
 
         public bool IsReadyToAttck()
         {
-            if(isAttackDelayOn && (attackRange > Vector3.Distance(transform.position, currentTarget.transform.position)))
+            if(!isAttackDelayOn && (attackRange > Vector3.Distance(transform.position, currentTarget.transform.position)))
             {
                 return true;
             }
@@ -210,6 +209,16 @@ namespace KSU.Monster
             isAttackDelayOn = true;
             yield return new WaitForSeconds(attackDelayTime);
             isAttackDelayOn = false;
+        }
+
+        public void StartBiting()
+        {
+            attackTrigger.SetActive(true);
+        }
+
+        public void EndBiting()
+        {
+            attackTrigger.SetActive(false);
         }
     }
 }

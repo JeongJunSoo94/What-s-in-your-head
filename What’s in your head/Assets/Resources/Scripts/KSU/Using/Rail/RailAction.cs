@@ -303,7 +303,7 @@ namespace KSU
 
         public void StartRailAction()
         {
-            playerController.characterState.isOutOfControl = true;
+            playerController.characterState.isRiding = true;
             playerRigidbody.velocity = Vector3.zero;
             playerState.IsDashing = false;
             playerState.IsAirJumping = false;

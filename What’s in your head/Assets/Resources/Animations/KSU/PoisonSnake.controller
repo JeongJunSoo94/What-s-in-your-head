@@ -75,7 +75,8 @@ AnimatorState:
   m_Transitions:
   - {fileID: -1553838316987821411}
   - {fileID: -5541520567126376040}
-  m_StateMachineBehaviours: []
+  m_StateMachineBehaviours:
+  - {fileID: -1311716405075105161}
   m_Position: {x: 50, y: 50, z: 0}
   m_IKOnFeet: 0
   m_WriteDefaultValues: 1
@@ -124,7 +125,7 @@ AnimatorStateTransition:
   m_Name: 
   m_Conditions:
   - m_ConditionMode: 1
-    m_ConditionEvent: isSturn
+    m_ConditionEvent: isSturned
     m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: -5554697902492742724}
@@ -182,7 +183,7 @@ AnimatorStateTransition:
     m_ConditionEvent: isAttacked
     m_EventTreshold: 0
   - m_ConditionMode: 2
-    m_ConditionEvent: isSturn
+    m_ConditionEvent: isSturned
     m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: 4050046474586503661}
@@ -210,7 +211,7 @@ AnimatorStateTransition:
     m_ConditionEvent: isAttacked
     m_EventTreshold: 0
   - m_ConditionMode: 2
-    m_ConditionEvent: isSturn
+    m_ConditionEvent: isSturned
     m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: -3665439258241407534}
@@ -240,7 +241,8 @@ AnimatorState:
   - {fileID: -2468886873752428237}
   - {fileID: 5939128809763400961}
   - {fileID: 2591639308355079915}
-  m_StateMachineBehaviours: []
+  m_StateMachineBehaviours:
+  - {fileID: -173157185323337850}
   m_Position: {x: 50, y: 50, z: 0}
   m_IKOnFeet: 0
   m_WriteDefaultValues: 1
@@ -286,7 +288,7 @@ AnimatorStateTransition:
   m_Name: 
   m_Conditions:
   - m_ConditionMode: 2
-    m_ConditionEvent: isSturn
+    m_ConditionEvent: isSturned
     m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: -3665439258241407534}
@@ -302,6 +304,18 @@ AnimatorStateTransition:
   m_InterruptionSource: 0
   m_OrderedInterruption: 1
   m_CanTransitionToSelf: 1
+--- !u!114 &-1311716405075105161
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2954f5b78d6e90949a9c94a9fcf18ee1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1107 &-667478430866685672
 AnimatorStateMachine:
   serializedVersion: 6
@@ -316,19 +330,19 @@ AnimatorStateMachine:
     m_Position: {x: 200, y: -10, z: 0}
   - serializedVersion: 1
     m_State: {fileID: 4050046474586503661}
-    m_Position: {x: 360, y: 90, z: 0}
+    m_Position: {x: 330, y: 90, z: 0}
   - serializedVersion: 1
     m_State: {fileID: -3665439258241407534}
-    m_Position: {x: 840, y: 100, z: 0}
+    m_Position: {x: 830, y: 160, z: 0}
   - serializedVersion: 1
     m_State: {fileID: -5554697902492742724}
-    m_Position: {x: 330, y: 310, z: 0}
+    m_Position: {x: 190, y: 340, z: 0}
   - serializedVersion: 1
     m_State: {fileID: -7656797290583643568}
     m_Position: {x: 430, y: -90, z: 0}
   - serializedVersion: 1
     m_State: {fileID: -2784826164019584499}
-    m_Position: {x: 510, y: 160, z: 0}
+    m_Position: {x: 440, y: 190, z: 0}
   m_ChildStateMachines: []
   m_AnyStateTransitions:
   - {fileID: 9062167916510271259}
@@ -340,6 +354,18 @@ AnimatorStateMachine:
   m_ExitPosition: {x: 810, y: 250, z: 0}
   m_ParentStateMachinePosition: {x: 800, y: 20, z: 0}
   m_DefaultState: {fileID: 1947847650839045265}
+--- !u!114 &-173157185323337850
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 92258859b3333164eb6a85df45beebf2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!91 &9100000
 AnimatorController:
   m_ObjectHideFlags: 0
@@ -349,7 +375,13 @@ AnimatorController:
   m_Name: PoisonSnake
   serializedVersion: 5
   m_AnimatorParameters:
-  - m_Name: isSturn
+  - m_Name: isSturned
+    m_Type: 4
+    m_DefaultFloat: 0
+    m_DefaultInt: 0
+    m_DefaultBool: 0
+    m_Controller: {fileID: 0}
+  - m_Name: WasSturned
     m_Type: 4
     m_DefaultFloat: 0
     m_DefaultInt: 0
@@ -404,7 +436,7 @@ AnimatorStateTransition:
     m_ConditionEvent: isChasing
     m_EventTreshold: 0
   - m_ConditionMode: 2
-    m_ConditionEvent: isSturn
+    m_ConditionEvent: isSturned
     m_EventTreshold: 0
   - m_ConditionMode: 2
     m_ConditionEvent: isAttacked
@@ -423,6 +455,18 @@ AnimatorStateTransition:
   m_InterruptionSource: 0
   m_OrderedInterruption: 1
   m_CanTransitionToSelf: 1
+--- !u!114 &405276484247737657
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 418dfb7a0ed86ea4e85132592ea23fbb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1102 &1947847650839045265
 AnimatorState:
   serializedVersion: 6
@@ -486,7 +530,7 @@ AnimatorStateTransition:
   m_Name: 
   m_Conditions:
   - m_ConditionMode: 1
-    m_ConditionEvent: isSturn
+    m_ConditionEvent: isSturned
     m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: -5554697902492742724}
@@ -527,7 +571,8 @@ AnimatorState:
   m_Transitions:
   - {fileID: 5526025243823338562}
   - {fileID: -2808222785076787861}
-  m_StateMachineBehaviours: []
+  m_StateMachineBehaviours:
+  - {fileID: 405276484247737657}
   m_Position: {x: 50, y: 50, z: 0}
   m_IKOnFeet: 0
   m_WriteDefaultValues: 1
@@ -551,7 +596,7 @@ AnimatorStateTransition:
   m_Name: 
   m_Conditions:
   - m_ConditionMode: 1
-    m_ConditionEvent: isSturn
+    m_ConditionEvent: isSturned
     m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: -5554697902492742724}
@@ -576,7 +621,7 @@ AnimatorStateTransition:
   m_Name: 
   m_Conditions:
   - m_ConditionMode: 1
-    m_ConditionEvent: isSturn
+    m_ConditionEvent: isSturned
     m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: -5554697902492742724}
@@ -604,7 +649,7 @@ AnimatorStateTransition:
     m_ConditionEvent: isAttacked
     m_EventTreshold: 0
   - m_ConditionMode: 2
-    m_ConditionEvent: isSturn
+    m_ConditionEvent: isSturned
     m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: 4050046474586503661}
@@ -632,7 +677,7 @@ AnimatorStateTransition:
     m_ConditionEvent: isAttacked
     m_EventTreshold: 0
   - m_ConditionMode: 2
-    m_ConditionEvent: isSturn
+    m_ConditionEvent: isSturned
     m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: 4050046474586503661}

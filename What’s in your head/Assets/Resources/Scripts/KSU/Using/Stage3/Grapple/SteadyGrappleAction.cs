@@ -163,6 +163,9 @@ namespace KSU
 
         public void InputFire()
         {
+            if (playerState.isOutOfControl || playerState.isStopped)
+                return;
+
             if (grappleSpawner.activeSelf && grappleSpawner.transform.parent.gameObject.activeSelf)
             {
                 if (!grapple.gameObject.activeSelf)
@@ -223,7 +226,7 @@ namespace KSU
 
         public void Hook()
         {
-            playerController.characterState.isOutOfControl = true;
+            playerController.characterState.isRiding = true;
             playerState.IsAirJumping = false;
             playerState.WasAirDashing = false;
             playerState.IsGrounded = false;
@@ -282,7 +285,7 @@ namespace KSU
 
             playerController.MakeinertiaVec(escapeGrapplePower, transform.forward.normalized);
             playerController.moveVec = Vector3.up * jumpPower;
-            playerController.characterState.isOutOfControl = false;
+            playerController.characterState.isRiding = false;
             grapple.gameObject.SetActive(false);
         }
 

@@ -158,7 +158,7 @@ namespace KSU
                 int startIndex = int.Parse(startObj.name);
                 //Debug.Log("startIndex: " + startIndex);
                 GameObject cart = null;
-                player.GetComponent<PlayerController>().characterState.isOutOfControl = true;
+                player.GetComponent<PlayerController>().characterState.isRiding = true;
                 switch (player.tag)
                 {
                     case "Nella":
@@ -270,7 +270,7 @@ namespace KSU
             player.transform.LookAt(player.transform.position + inertiaVec);
             playerController.MakeinertiaVec(escapingRailSpeed, inertiaVec.normalized);
             playerController.moveVec = Vector3.up * playerController.jumpSpeed / 2f;
-            playerController.characterState.isOutOfControl = false;
+            playerController.characterState.isRiding = false;
             PlayerInteractionState interactionState = player.GetComponent<PlayerInteractionState>();
             interactionState.isRidingRail = false;
             interactionState.isRailJumping = false;

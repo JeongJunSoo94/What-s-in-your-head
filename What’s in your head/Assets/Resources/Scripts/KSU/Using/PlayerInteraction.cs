@@ -46,6 +46,9 @@ namespace KSU
 
         void InputInteract()
         {
+            if (playerState.isOutOfControl || playerState.isStopped)
+                return;
+
             if (KeyManager.Instance.GetKeyDown(PlayerAction.Interaction))
             {
                 if (!interactionState.isRidingRope && !interactionState.isRidingRail)

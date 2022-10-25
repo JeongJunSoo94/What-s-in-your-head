@@ -4,25 +4,30 @@ using UnityEngine;
 
 namespace KSU.Monster
 {
-    public class MonsterDeadSMB : MonsterSMB
+    public class MonsterSetRushTargetSMB : MonsterSMB
     {
+        TrippleHeadSnake trippleHeadSnake;
         // OnStateEnter is called when a transition starts and the state machine starts to evaluate this state
-        //override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
-        //{
-        //    
-        //}
+        override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
+        {
+            if (trippleHeadSnake == null)
+            {
+                trippleHeadSnake = (GetMonsterController(animator) as TrippleHeadSnake);
+            }
+            trippleHeadSnake.SetRushTaget();
+        }
 
         // OnStateUpdate is called on each Update frame between OnStateEnter and OnStateExit callbacks
-        //override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
+        override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
+        {
+            trippleHeadSnake.RotateForRush();
+        }
+
+        // OnStateExit is called when a transition ends and the state machine finishes evaluating this state
+        //override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
         //{
         //    
         //}
-
-        override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
-        {
-            animator.SetBool("isDead", false);
-            GetMonsterController(animator).Dead();
-        }
 
         // OnStateMove is called right after Animator.OnAnimatorMove()
         //override public void OnStateMove(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
@@ -37,4 +42,3 @@ namespace KSU.Monster
         //}
     }
 }
-

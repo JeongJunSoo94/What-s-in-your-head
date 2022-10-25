@@ -78,6 +78,7 @@ public class PlayerState : MonoBehaviour
     public bool isMine = false;
     public bool isOutOfControl = false;
     public bool isStopped = false;
+    public bool isRiding = false;
     public float deadDuration;
     #endregion
 

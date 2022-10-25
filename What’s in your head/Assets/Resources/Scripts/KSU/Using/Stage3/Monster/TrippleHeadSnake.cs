@@ -11,6 +11,7 @@ namespace KSU.Monster
         [SerializeField] float rushSpeed;
         [SerializeField] float rotationSpeed;
         GameObject rushTarget;
+        [SerializeField] GameObject rushTrigger;
 
         bool isRushDelayOn = false;
         public float rushDelayTime = 10f;
@@ -77,10 +78,10 @@ namespace KSU.Monster
         public void SetRushTaget()
         {
             rushTarget = currentTarget;
-            StartCoroutine(nameof(DelayReadyToRush));
+            StartCoroutine(nameof(MaintainReadyToRush));
         }
 
-        IEnumerator DelayReadyToRush()
+        IEnumerator MaintainReadyToRush()
         {
             monsterAnimator.SetBool("isReadyToRush", true);
             yield return new WaitForSeconds(readyToRushTime);
@@ -97,6 +98,10 @@ namespace KSU.Monster
         public void StartRush()
         {
             StartCoroutine(nameof(DelayRush));
+            StartCoroutine(nameof(MaintainRush));
+            ActivateRush();
+            StartChasing();
+            Rush();
         }
 
         IEnumerator MaintainRush()
@@ -116,7 +121,19 @@ namespace KSU.Monster
         public void Rush()
         {
             rushTarget = null;
-            monsterNavAgent.destination = (transform.position + transform.forward);
+            monsterNavAgent.destination = (transform.position + transform.forward * 10f);
+        }
+
+        void ActivateRush()
+        {
+            rushTrigger.SetActive(true);
+        }
+
+        public void EndRush()
+        {
+            monsterNavAgent.destination = transform.position;
+            rushTrigger.SetActive(false);
+            
         }
     }
 }

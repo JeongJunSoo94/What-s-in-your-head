@@ -10,6 +10,7 @@ namespace KSU.Monster
         // OnStateEnter is called when a transition starts and the state machine starts to evaluate this state
         override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
         {
+            animator.SetBool("WasSturned", false);
             GetMonsterController(animator).StartChasing();
         }
 
@@ -40,25 +41,20 @@ namespace KSU.Monster
 
         void CheckState(Animator animator)
         {
-            
             if(GetMonsterController(animator) is TrippleHeadSnake)
             {
                 TrippleHeadSnake trippleHeadSnake = (GetMonsterController(animator) as TrippleHeadSnake);
                 if(trippleHeadSnake.IsReadyToRush())
                 {
                     animator.SetBool("isReadyToRush", true);
-                }
-                else if (trippleHeadSnake.IsReadyToAttck())
-                {
-                    animator.SetBool("isAttacking", true);
+                    return;
                 }
             }
-            else if(GetMonsterController(animator) is PoisonSnake)
+
+
+            if (GetMonsterController(animator).IsReadyToAttck())
             {
-                if(GetMonsterController(animator).IsReadyToAttck())
-                {
-                    animator.SetBool("isAttacking", true);
-                }
+                animator.SetBool("isAttacking", true);
             }
         }
     }

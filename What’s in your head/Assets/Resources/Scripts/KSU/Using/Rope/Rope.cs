@@ -176,7 +176,7 @@ namespace KSU
             localPos.y = -spawner.ropeLength;
 
             rope.transform.localPosition = localPos;
-            player.GetComponent<PlayerController>().characterState.isOutOfControl = true;
+            player.GetComponent<PlayerController>().characterState.isRiding = true;
             Vector3 localRot = Vector3.zero;
             localRot.x = startXAngle;
             ropeAnchor.transform.localRotation = Quaternion.Euler(localRot);

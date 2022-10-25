@@ -138,7 +138,7 @@ namespace KSU
 
         private void FixedUpdate()
         {
-            if (!photonView.IsMine || characterState.isStopped)
+            if (!photonView.IsMine || characterState.isStopped || characterState.isRiding)
             {
                 return;
             }
@@ -182,6 +182,9 @@ namespace KSU
 
         public void InputRun()
         {
+            if (characterState.isOutOfControl || characterState.isStopped)
+                return;
+
             if (KeyManager.Instance.GetKeyDown(PlayerAction.ToggleRun))
             {
                 characterState.ToggleRun();
@@ -243,6 +246,8 @@ namespace KSU
 
         public void InputMove()
         {
+            if (characterState.isOutOfControl || characterState.isStopped)
+                return;
             moveDir =
               mainCamera.transform.forward * ((KeyManager.Instance.GetKey(PlayerAction.MoveForward) ? 1 : 0) + (KeyManager.Instance.GetKey(PlayerAction.MoveBackward) ? -1 : 0))
             + mainCamera.transform.right * ((KeyManager.Instance.GetKey(PlayerAction.MoveRight) ? 1 : 0) + (KeyManager.Instance.GetKey(PlayerAction.MoveLeft) ? -1 : 0));
@@ -264,12 +269,16 @@ namespace KSU
 
         public void AimViewInputMove()
         {
+            if (characterState.isOutOfControl || characterState.isStopped)
+                return;
             moveDir.z = ((KeyManager.Instance.GetKey(PlayerAction.MoveForward) ? 1 : 0) + (KeyManager.Instance.GetKey(PlayerAction.MoveBackward) ? -1 : 0));
             moveDir.x = ((KeyManager.Instance.GetKey(PlayerAction.MoveRight) ? 1 : 0) + (KeyManager.Instance.GetKey(PlayerAction.MoveLeft) ? -1 : 0));
         }
 
         public void InputJump()
         {
+            if (characterState.isOutOfControl || characterState.isStopped)
+                return;
             if (KeyManager.Instance.GetKeyDown(PlayerAction.Jump))
             {
                 if (!characterState.IsJumping)
@@ -310,6 +319,8 @@ namespace KSU
         }
         public void InputDash()
         {
+            if (characterState.isOutOfControl || characterState.isStopped)
+                return;
             if (KeyManager.Instance.GetKeyDown(PlayerAction.Dash))
             {
                 if (!characterState.IsDashing)
@@ -338,7 +349,7 @@ namespace KSU
 
         public void TakeRotation()
         {
-            if (characterState.isOutOfControl)
+            if (characterState.isOutOfControl || characterState.isStopped)
             {
                 return;
             }
