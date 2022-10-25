@@ -34,9 +34,15 @@ namespace JCW.UI.InGame.Indicator
         // UI가 켜졌는지
         protected bool isActive;
 
+        // 온전히 설정이 되었는지
+        protected bool isStart;
+
         virtual protected void Start()
         {
-            isNella = GameManager.Instance.characterOwner[PhotonNetwork.IsMasterClient];
+            if (GameManager.Instance.isTest)
+                StartCoroutine(nameof(WaitForPlayer));
+            else
+                isStart = true;
         }
 
         // 카메라 범위를 벗어났을 때를 위한 설정
@@ -87,6 +93,8 @@ namespace JCW.UI.InGame.Indicator
         {
             if (mainCamera==null)
                 SetCam();
+            if (mainCamera == null)
+                return;
             Rect cameraPos = mainCamera.rect;
             screenSize = new(canvasSize.rect.width * cameraPos.x,
                              canvasSize.rect.height * cameraPos.y,
@@ -97,6 +105,16 @@ namespace JCW.UI.InGame.Indicator
         protected void SetCam()
         {
             mainCamera = isNella ? CameraManager.Instance.cameras[0] : CameraManager.Instance.cameras[1];
+        }
+
+        protected IEnumerator WaitForPlayer()
+        {
+            while (GameManager.Instance.characterOwner.Count <= 1)
+                yield return new WaitForSeconds(0.2f);
+
+            isNella = GameManager.Instance.characterOwner[PhotonNetwork.IsMasterClient];
+            isStart = true;
+            yield break;
         }
     }
 }

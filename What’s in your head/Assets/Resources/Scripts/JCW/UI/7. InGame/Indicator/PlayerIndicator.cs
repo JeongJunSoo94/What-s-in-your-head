@@ -47,46 +47,15 @@ namespace JCW.UI.InGame.Indicator
         protected override void Start()
         {
             base.Start();
-            if (isNella)
-            {
-                myIndicatorTop = nellaTopView;
-                otherIndicatorTop = steadyTopView;
-                otherIndicatorNormal = steadyNormal;
-            }
-            else
-            {
-                myIndicatorTop = steadyTopView;
-                otherIndicatorTop = nellaTopView;
-                otherIndicatorNormal = nellaNormal;
-            }
-            detectUI = transform.GetChild(0).gameObject;
-            myImgTransform = detectUI.transform.GetChild(0).GetComponent<RectTransform>();
-            myImgTransform.sizeDelta = new Vector2(myIndicatorTop.bounds.size.x, myIndicatorTop.bounds.size.y);
-            imgTransform = detectUI.transform.GetChild(1).GetComponent<RectTransform>();
-
-            myImg = myImgTransform.gameObject.GetComponent<Image>();
-            myImg.sprite = myIndicatorTop;
-
-
-
-            // 노멀 뷰일때만 쓰임 =======================================================================================
-            // 기존에 설정된 스프라이트 크기만큼 범위 조절
-            imgTransform.sizeDelta = new Vector2(otherIndicatorNormal.bounds.size.x, otherIndicatorNormal.bounds.size.y);
-            otherImg = imgTransform.gameObject.GetComponent<Image>();
-            otherImg.sprite = otherIndicatorNormal;
-
-            canvasSize = detectUI.GetComponent<RectTransform>();
-            screenLimitOffset = imgTransform.rect.width * 0.4f;
-            outOfSightImgScale = imgTransform.localScale * 0.8f;
-            initImgScale = imgTransform.localScale;
-            // ========================================================================================================
+            StartCoroutine(nameof(Wait));
         }
 
         void Update()
         {
-            if (mainCamera == null)
-                SetCam();
-            if(target == null)
+            if (isStart == false)
+                return;
+            SetSreenInfo();
+            if (target == null)
             {
                 if (GameManager.Instance.otherPlayerTF == null)
                     return;
@@ -95,7 +64,8 @@ namespace JCW.UI.InGame.Indicator
             // 타겟의 위치를 메인카메라의 스크린 좌표로 변경
             Vector3 indicatorPosition = mainCamera.WorldToScreenPoint(target.position);
             if (!GameManager.Instance.isTopView)
-            {               
+            {
+                Debug.Log(mainCamera.name);
                 otherImg.sprite = otherIndicatorNormal;
 
                 // 타겟이 화면 안에 들어올 때
@@ -104,11 +74,13 @@ namespace JCW.UI.InGame.Indicator
                     if (indicatorPosition.x <= screenSize.x + screenSize.width && indicatorPosition.x >= screenSize.x
                        && indicatorPosition.y <= screenSize.y + screenSize.height && indicatorPosition.y >= screenSize.y)
                     {
+                        Debug.Log("화면 안에 들어옴");
                         otherImg.enabled = false;
                         indicatorPosition.z = 0f;
                     }
                     else
                     {
+                        Debug.Log("카메라 앞인데 화면 안에 안 들어옴");
                         otherImg.enabled = true;
                         indicatorPosition = OutOfRange(indicatorPosition);
                     }
@@ -116,6 +88,7 @@ namespace JCW.UI.InGame.Indicator
                 //타겟이 내 카메라 뒤에 있을 때, 화면에 그림
                 else
                 {
+                    Debug.Log("카메라 뒤라 화면 안에 안 들어옴");
                     imgTransform.sizeDelta = new Vector2(otherIndicatorNormal.bounds.size.x, otherIndicatorNormal.bounds.size.y);
                     otherImg.enabled = true;
                     SetSreenInfo();
@@ -150,6 +123,51 @@ namespace JCW.UI.InGame.Indicator
                 imgTransform.rotation = Quaternion.Euler(0, 0, -otherCurEulerY);
             }
             imgTransform.position = indicatorPosition;
+        }
+
+        IEnumerator Wait()
+        {
+            while (!isStart)
+            {
+                yield return new WaitForSeconds(0.1f);
+            }
+
+
+            if (isNella)
+            {
+                myIndicatorTop = nellaTopView;
+                otherIndicatorTop = steadyTopView;
+                otherIndicatorNormal = steadyNormal;
+            }
+            else
+            {
+                myIndicatorTop = steadyTopView;
+                otherIndicatorTop = nellaTopView;
+                otherIndicatorNormal = nellaNormal;
+            }
+            detectUI = transform.GetChild(0).gameObject;
+            myImgTransform = detectUI.transform.GetChild(0).GetComponent<RectTransform>();
+            myImgTransform.sizeDelta = new Vector2(myIndicatorTop.bounds.size.x, myIndicatorTop.bounds.size.y);
+            imgTransform = detectUI.transform.GetChild(1).GetComponent<RectTransform>();
+
+            myImg = myImgTransform.gameObject.GetComponent<Image>();
+            myImg.sprite = myIndicatorTop;
+
+
+
+            // 노멀 뷰일때만 쓰임 =======================================================================================
+            // 기존에 설정된 스프라이트 크기만큼 범위 조절
+            imgTransform.sizeDelta = new Vector2(otherIndicatorNormal.bounds.size.x, otherIndicatorNormal.bounds.size.y);
+            otherImg = imgTransform.gameObject.GetComponent<Image>();
+            otherImg.sprite = otherIndicatorNormal;
+
+            canvasSize = detectUI.GetComponent<RectTransform>();
+            screenLimitOffset = imgTransform.rect.width * 0.4f;
+            outOfSightImgScale = imgTransform.localScale * 0.8f;
+            initImgScale = imgTransform.localScale;
+            // ========================================================================================================
+
+            yield break;
         }
     }
 }

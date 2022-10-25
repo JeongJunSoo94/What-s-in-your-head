@@ -29,12 +29,17 @@ namespace YC.Photon
         [SerializeField] string roomName;
         [SerializeField] string nellaPrefabDirectory;
         [SerializeField] string steadyPrefabDirectory;
-        [SerializeField] bool isNella;
+        [SerializeField] public bool isNella;
 
-        
+
+        static public TempPhotonManager Instance = null;
 
         void Awake()
-        {            
+        {
+            if (Instance == null)
+                Instance = this;
+            else
+                Destroy(this.gameObject);
             //Cursor.lockState = CursorLockMode.Locked;
             Screen.SetResolution(1920, 1080, false);
 
@@ -127,8 +132,6 @@ namespace YC.Photon
             // https://doc.photonengine.com/ko-kr/pun/current/gameplay/instantiation
 
 
-
-
             if (PhotonNetwork.CurrentRoom.PlayerCount == 1)
             {              
                 if(isNella)
@@ -136,12 +139,20 @@ namespace YC.Photon
                     PhotonNetwork.Instantiate("Prefabs/YC/MainCamera_Nella", new Vector3(0, 0, 0), Quaternion.identity, 0);
                     PhotonNetwork.Instantiate("Prefabs/JCW/NellaMousePoint", new Vector3(0, 0, 0), Quaternion.identity, 0);
                     PhotonNetwork.Instantiate(nellaPrefabDirectory, new Vector3(-5, 0, -5), Quaternion.identity, 0);
+                    GameManager.Instance.characterOwner.Add(true, true);
+                    GameManager.Instance.characterOwner.Add(false, false);
+                    GameManager.Instance.isAlive.Add(true, true);
+                    GameManager.Instance.isAlive.Add(false, true);
                 }
                 else
                 {
                     PhotonNetwork.Instantiate("Prefabs/YC/MainCamera_Steady", new Vector3(0, 0, 0), Quaternion.identity, 0);
                     PhotonNetwork.Instantiate("Prefabs/JCW/SteadyMousePoint", new Vector3(0, 0, 0), Quaternion.identity, 0);
                     PhotonNetwork.Instantiate(steadyPrefabDirectory, new Vector3(5, 0, -5), Quaternion.identity, 0);
+                    GameManager.Instance.characterOwner.Add(true, false);
+                    GameManager.Instance.characterOwner.Add(false, true);
+                    GameManager.Instance.isAlive.Add(true, true);
+                    GameManager.Instance.isAlive.Add(false, true);
                 }
                 
                 //CameraManager.Instance.cameras[0] = GameObject.FindGameObjectWithTag("NellaCamera").GetComponent<Camera>();
@@ -160,12 +171,20 @@ namespace YC.Photon
                     PhotonNetwork.Instantiate("Prefabs/YC/MainCamera_Steady", new Vector3(0, 0, 0), Quaternion.identity, 0);
                     PhotonNetwork.Instantiate("Prefabs/JCW/SteadyMousePoint", new Vector3(0, 0, 0), Quaternion.identity, 0);
                     PhotonNetwork.Instantiate(steadyPrefabDirectory, new Vector3(5, 0, -5), Quaternion.identity, 0);
+                    GameManager.Instance.characterOwner.Add(false, false);
+                    GameManager.Instance.characterOwner.Add(true, true);
+                    GameManager.Instance.isAlive.Add(true, true);
+                    GameManager.Instance.isAlive.Add(false, true);
                 }
                 else
                 {
                     PhotonNetwork.Instantiate("Prefabs/YC/MainCamera_Nella", new Vector3(0, 0, 0), Quaternion.identity, 0);
                     PhotonNetwork.Instantiate("Prefabs/JCW/NellaMousePoint", new Vector3(0, 0, 0), Quaternion.identity, 0);
                     PhotonNetwork.Instantiate(nellaPrefabDirectory, new Vector3(-5, 0, -5), Quaternion.identity, 0);
+                    GameManager.Instance.characterOwner.Add(true, false);
+                    GameManager.Instance.characterOwner.Add(false, true);
+                    GameManager.Instance.isAlive.Add(true, true);
+                    GameManager.Instance.isAlive.Add(false, true);
                 }
                 //CameraManager.Instance.cameras[1] = GameObject.FindGameObjectWithTag("SteadyCamera").GetComponent<Camera>();
 

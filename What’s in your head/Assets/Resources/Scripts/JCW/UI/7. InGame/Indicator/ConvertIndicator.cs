@@ -3,6 +3,8 @@ using Photon.Pun;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Video;
+using YC.Photon;
+
 namespace JCW.UI.InGame.Indicator
 {
     public class ConvertIndicator : BaseIndicator
@@ -47,17 +49,19 @@ namespace JCW.UI.InGame.Indicator
         override protected void Start()
         {
             base.Start();
-            interactiveImg.sprite = isNella ? nella_DetectSprite : steady_DetectSprite;
+            StartCoroutine(nameof(Wait));
         }
 
         private void Update()
         {
-            if (mainCamera == null)
-                SetCam();
+            if (isStart == false)
+                return;
             if (!isActive)
                 return;
             //detectRange = transform.lossyScale.x / 2f;
             // 타겟의 위치를 메인카메라의 스크린 좌표로 변경
+
+            SetSreenInfo();
             Vector3 indicatorPosition = mainCamera.WorldToScreenPoint(target.position);
 
 
@@ -156,6 +160,16 @@ namespace JCW.UI.InGame.Indicator
 
 
             yield return null;
+        }
+
+        IEnumerator Wait()
+        {
+            while (!isStart)
+            {
+                yield return new WaitForSeconds(0.1f);
+            }
+            interactiveImg.sprite = isNella ? nella_DetectSprite : steady_DetectSprite;
+            yield break;
         }
     }
 }

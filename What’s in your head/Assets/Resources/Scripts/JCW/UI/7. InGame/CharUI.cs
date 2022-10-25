@@ -35,14 +35,7 @@ namespace JCW.UI.InGame
             GetComponent<Canvas>().worldCamera = mainCamera;
             GetComponent<Canvas>().planeDistance = 0.15f;
 
-            photonView = GetComponent<PhotonView>();
-
-            isNella = GameManager.Instance.characterOwner[PhotonNetwork.IsMasterClient];
-
-            if (photonView.IsMine)
-                GameManager.Instance.hpAllPairs.Add(isNella, this);
-            else
-                GameManager.Instance.hpAllPairs.Add(!isNella, this);
+            photonView = GetComponent<PhotonView>();            
 
             itemUI_RT = transform.GetChild(0).gameObject.GetComponent<RectTransform>();
             hpUI = transform.GetChild(1).gameObject;
@@ -77,6 +70,21 @@ namespace JCW.UI.InGame
                 movePos = isNella ? new Vector2(ogPos.x - tempOffset, ogPos.y) : new Vector2(ogPos.x + tempOffset, ogPos.y);
             itemUI_RT.anchoredPosition = movePos;
             hpUI.SetActive(isOn);
+        }
+
+        protected IEnumerator WaitForPlayer()
+        {
+            while (GameManager.Instance.characterOwner.Count == 0)
+                yield return new WaitForSeconds(0.2f);
+
+
+            isNella = GameManager.Instance.characterOwner[PhotonNetwork.IsMasterClient];
+
+            if (photonView.IsMine)
+                GameManager.Instance.hpAllPairs.Add(isNella, this);
+            else
+                GameManager.Instance.hpAllPairs.Add(!isNella, this);
+            yield break;
         }
 
     }

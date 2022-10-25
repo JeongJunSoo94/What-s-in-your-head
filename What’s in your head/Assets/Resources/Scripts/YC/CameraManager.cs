@@ -28,7 +28,7 @@ namespace YC.CameraManager_
         [SerializeField] float _LerpTime = 2.5f;
 
 
-
+        bool wasTopView;
 
         CharacterCamera curFullCamera;
 
@@ -65,12 +65,17 @@ namespace YC.CameraManager_
                 //      플레이어 각각 NormalView함수 인풋 부분 수정(탑 스테이트로 바꾸는 부분)
 
                 //if (Input.GetKeyDown(KeyCode.Alpha9)) // 게임매니저 통해서 호출하도록 
-                if (GameManager.Instance.isTopView)
+                if (GameManager.Instance.isTopView && wasTopView == false)
                 {
                     pv.RPC(nameof(InitCamera), RpcTarget.AllBuffered, (int)CharacterCamera.NELLA); 
                     pv.RPC(nameof(SetDefenceModeCamera), RpcTarget.AllBuffered);
-
+                    wasTopView = true;
                 }
+                else if (wasTopView)
+                {
+                    wasTopView = false;
+                }
+
             }
         }
         [PunRPC]
