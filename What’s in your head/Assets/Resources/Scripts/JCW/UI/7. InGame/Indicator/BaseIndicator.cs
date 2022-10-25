@@ -42,7 +42,10 @@ namespace JCW.UI.InGame.Indicator
             if (GameManager.Instance.isTest)
                 StartCoroutine(nameof(WaitForPlayer));
             else
+            {
                 isStart = true;
+                isNella = GameManager.Instance.characterOwner[PhotonNetwork.IsMasterClient];
+            }
         }
 
         // 카메라 범위를 벗어났을 때를 위한 설정
