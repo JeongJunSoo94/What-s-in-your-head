@@ -139,8 +139,16 @@ namespace JJS.Weapon
                     hitPoint = MaxPhysicsLine(startPos.transform.position, dir);
                 }
             }
+            if (type != 3)
+            {
+                hitPos.transform.position = hitPoint;
+            }
+            else
+            { 
+                hitPos.transform.position = mousePoint.transform.position;
+            }
 
-
+            // hitPos.transform.position = hitPoint;
             //if (Physics.Raycast(startPos.transform.position, dir, out hit, maxDistance, -1, QueryTriggerInteraction.Ignore))
             //{
             //    hitPoint = hit.point;
@@ -153,14 +161,13 @@ namespace JJS.Weapon
             //    curDistance = Vector3.Distance(startPos.transform.position, hitPoint);
 
             //}
-            curDistance = Vector3.Distance(startPos.transform.position, hitPoint);
+            curDistance = Vector3.Distance(startPos.transform.position, hitPos.transform.position);
             particleGather.transform.localScale = new Vector3(1,1, curDistance);
             particleBeam.transform.localScale = new Vector3(1,1, curDistance);
 
-            hitPos.transform.position = hitPoint;
-            particleGather.transform.LookAt(hitPoint);
-            particleBeam.transform.LookAt(hitPoint);
-            targetIK.transform.LookAt(hitPoint);
+            particleGather.transform.LookAt(hitPos.transform.position);
+            particleBeam.transform.LookAt(hitPos.transform.position);
+            targetIK.transform.LookAt(hitPos.transform.position);
         }
 
         Vector3 MaxPhysicsLine(Vector3 startPosition, Vector3 rayDirection)

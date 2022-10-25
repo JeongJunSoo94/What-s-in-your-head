@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using JCW.UI.Options.InputBindings;
 using JJS.CharacterSMB;
+using YC.Camera_;
 namespace JJS
 {
     public class AimAttackSMB : CharacterBaseSMB
@@ -10,17 +11,28 @@ namespace JJS
         override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
         {
             //GetPlayerController(animator).playerMouse.SetWeaponEnable(GetPlayerController(animator).playerMouse.GetUseWeapon(), true);
- 
+            if (GetPlayerController(animator))
+            {
+                if (GetPlayerController(animator).CompareTag("Steady"))
+                {
+                    if(!GetPlayerController(animator).characterState.top)
+                        GetPlayerController(animator).gameObject.GetComponent<CameraController>().SetSteadyBeam(true);
+
+                    if (GetPlayerController(animator).characterState.top)
+                        GetPlayerController(animator).playerMouse.AimUpdate(3);
+                }
+            }
+
         }
 
         override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
         {
             GetPlayerController(animator).playerMouse.ik.enableIK = true;
-            animator.SetLayerWeight(1, 1);
 
             if (GetPlayerController(animator).characterState.top)
             {
-                GetPlayerController(animator).playerMouse.AimUpdate(2);
+                if (!GetPlayerController(animator).CompareTag("Steady"))
+                    GetPlayerController(animator).playerMouse.AimUpdate(2);
             }
             else
             {
@@ -65,6 +77,14 @@ namespace JJS
         override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
         {
             //GetPlayerController(animator).playerMouse.SetWeaponEnable(GetPlayerController(animator).playerMouse.GetUseWeapon(), false);
+            if (GetPlayerController(animator))
+            {
+                if (GetPlayerController(animator).CompareTag("Steady"))
+                {
+                    if (!GetPlayerController(animator).characterState.top)
+                        GetPlayerController(animator).gameObject.GetComponent<CameraController>().SetSteadyBeam(false);
+                }
+            }
         }
 
         // OnStateMove is called right after Animator.OnAnimatorMove()

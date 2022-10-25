@@ -9,6 +9,7 @@ namespace JJS
     {
         override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
         {
+            animator.SetLayerWeight(1, 1);
             //if (GetPlayerController(animator).characterState.isMine)
             //{
             //    GetPlayerController(animator).characterState.aim = true;
@@ -17,11 +18,7 @@ namespace JJS
 
         override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
         {
-            if (GetPlayerController(animator).characterState.top)
-            {
-                GetPlayerController(animator).playerMouse.AimUpdate(2);
-            }
-            else
+            if (!GetPlayerController(animator).characterState.top)
             {
                 GetPlayerController(animator).playerMouse.AimUpdate(1);
             }

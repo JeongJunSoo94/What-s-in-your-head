@@ -23,16 +23,17 @@ namespace JJS
         }
         override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
         {
-            if (index!= GetPlayerController(animator).playerMouse.GetUseWeapon())
-            {
-                animator.SetBool("WeaponSwap", false);
-            }
+            //if (index!= GetPlayerController(animator).playerMouse.GetUseWeapon())
+            //{
+            //    animator.SetBool("WeaponSwap", false);
+            //}
         }
 
         override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
         {
             GetPlayerController(animator).characterState.swap = false;
             animator.SetLayerWeight(1, 0);
+            animator.SetBool("WeaponSwap", false);
         }
 
     }

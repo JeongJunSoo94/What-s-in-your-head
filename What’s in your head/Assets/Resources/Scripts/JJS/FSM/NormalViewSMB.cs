@@ -44,7 +44,7 @@ namespace JJS
                 }
                 else
                 {
-                    if (animator.GetLayerWeight(1) == 0 && GetPlayerController(animator).characterState.aim)
+                    if (animator.GetLayerWeight(1) == 0 && GetPlayerController(animator).characterState.aim|| GetPlayerController(animator).characterState.top)
                     {
                         animator.SetLayerWeight(1, 1);
                     }
@@ -67,13 +67,22 @@ namespace JJS
         {
             if (GameManager.Instance.isTopView)
             {
-                GetPlayerController(animator).playerMouse.TopViewUpdate();
+                if (GetPlayerController(animator).CompareTag("Steady"))
+                {
+                    if (!GetPlayerController(animator).playerMouse.clickLeft)
+                        GetPlayerController(animator).playerMouse.TopViewUpdate();
+                }
+                else
+                {
+                    GetPlayerController(animator).playerMouse.TopViewUpdate();
+                }
             }
 
             GetPlayerController(animator).InputRun();
             GetPlayerController(animator).InputMove();
             //GetPlayerController(animator).InputJump();
-            if (!GetPlayerController(animator).playerMouse.weaponInfo[GetPlayerController(animator).playerMouse.GetUseWeapon()].canAim) /////////// 3스테이지 전용 코드
+            if (!GetPlayerController(animator).playerMouse.weaponInfo[GetPlayerController(animator).playerMouse.GetUseWeapon()].canAim
+                ||GetPlayerController(animator).characterState.top) /////////// 3스테이지 전용 코드
             {
                 
                 GetPlayerController(animator).InputJump();

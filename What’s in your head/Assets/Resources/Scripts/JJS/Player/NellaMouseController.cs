@@ -114,7 +114,6 @@ namespace JJS
         public void OnEnableObject(int index)
         {
             hitObjs[index].gameObject.SetActive(true);
-            TargetUpdate();
         }
 
         public void OnDisableObject(int index)
@@ -128,7 +127,7 @@ namespace JJS
         }
 
 
-        void TargetUpdate()
+        public void TargetUpdate()
         {
             for (int i = 0; i < hitObjs.Count; i++)
             {
