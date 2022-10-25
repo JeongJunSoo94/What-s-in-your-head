@@ -17,6 +17,7 @@ namespace KSU.Monster
         override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
         {
             GetMonsterController(animator).Chase();
+            CheckState(animator);
         }
 
         // OnStateExit is called when a transition ends and the state machine finishes evaluating this state
@@ -40,15 +41,24 @@ namespace KSU.Monster
         void CheckState(Animator animator)
         {
             
-
-            if (true)
-            {
-                animator.SetBool("isAttacked", true);
-            }
             if(GetMonsterController(animator) is TrippleHeadSnake)
             {
-                TrippleHeadSnake tps = GetMonsterController(animator) as TrippleHeadSnake;
-                tps.
+                TrippleHeadSnake trippleHeadSnake = (GetMonsterController(animator) as TrippleHeadSnake);
+                if(trippleHeadSnake.IsReadyToRush())
+                {
+                    animator.SetBool("isReadyToRush", true);
+                }
+                else if (trippleHeadSnake.IsReadyToAttck())
+                {
+                    animator.SetBool("isAttacking", true);
+                }
+            }
+            else if(GetMonsterController(animator) is PoisonSnake)
+            {
+                if(GetMonsterController(animator).IsReadyToAttck())
+                {
+                    animator.SetBool("isAttacking", true);
+                }
             }
         }
     }

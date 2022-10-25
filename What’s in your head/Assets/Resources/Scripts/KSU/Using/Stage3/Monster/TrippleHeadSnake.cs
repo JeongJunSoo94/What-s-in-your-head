@@ -12,6 +12,9 @@ namespace KSU.Monster
         [SerializeField] float rotationSpeed;
         GameObject rushTarget;
 
+        bool isRushDelayOn = false;
+        public float rushDelayTime = 10f;
+
         // Start is called before the first frame update
         void Start()
         {
@@ -24,6 +27,11 @@ namespace KSU.Monster
             Detect();
         }
 
+        private void OnEnable()
+        {
+            InitMonster();
+        }
+
         protected override void InitMonster()
         {
             currentHP = maxHP;
@@ -34,9 +42,36 @@ namespace KSU.Monster
             monsterAnimator.SetBool("isDead", false);
             monsterAnimator.SetBool("isSturn", false);
             monsterAnimator.SetBool("isChasing", false);
-            monsterAnimator.SetBool("isTargetOn", false);
+            monsterAnimator.SetBool("isAttacking", false);
             monsterAnimator.SetBool("isReadyToRush", false);
             monsterAnimator.SetBool("isRushing", false);
+            isRushDelayOn = false;
+        }
+
+        public override void GetDamage(int damage)
+        {
+
+            if(monsterAnimator.GetBool("isSturn"))
+            {
+                currentHP -= damage;
+                monsterAnimator.SetBool("isAttacked", true);
+                if (currentHP < 0)
+                {
+                    monsterAnimator.SetBool("isDead", true);
+                }
+            }
+        }
+
+        public bool IsReadyToRush()
+        {
+            if(!isRushDelayOn)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
 
         public void SetRushTaget()
@@ -64,11 +99,18 @@ namespace KSU.Monster
             StartCoroutine(nameof(DelayRush));
         }
 
-        IEnumerator DelayRush()
+        IEnumerator MaintainRush()
         {
             monsterAnimator.SetBool("isRushing", true);
             yield return new WaitForSeconds(rushTime);
             monsterAnimator.SetBool("isRushing", false);
+        }
+
+        IEnumerator DelayRush()
+        {
+            isRushDelayOn = true;
+            yield return new WaitForSeconds(rushTime);
+            isRushDelayOn = false;
         }
 
         public void Rush()

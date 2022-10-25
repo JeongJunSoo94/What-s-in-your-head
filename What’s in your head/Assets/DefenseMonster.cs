@@ -11,7 +11,8 @@ namespace KSU.Monster
     {
         [SerializeField] protected int maxHP;
         protected int currentHP;
-        [SerializeField] protected int attackPower;
+        public float attackRange = 1f;
+        public int attackPower;
         [SerializeField] protected GameObject targetObject;
         protected GameObject detectedTarget;
         protected GameObject currentTarget;
@@ -30,6 +31,9 @@ namespace KSU.Monster
 
         protected Spawner spawner;
 
+        public bool isAttackDelayOn = false;
+        public float attackDelayTime = 2f;
+
         public bool isTargetFounded = false;
 
         bool isDefenseMode = false;
@@ -46,10 +50,10 @@ namespace KSU.Monster
             //isDefenseMode = GameManger 에서 받기
         }
 
-        private void OnEnable()
-        {
-            InitMonster();
-        }
+        //private void OnDisable()
+        //{
+        //    InitMonster();
+        //}
 
         protected virtual void InitMonster()
         {
@@ -61,7 +65,7 @@ namespace KSU.Monster
             monsterAnimator.SetBool("isDead", false);
             monsterAnimator.SetBool("isSturn", false);
             monsterAnimator.SetBool("isChasing", false);
-            monsterAnimator.SetBool("isTargetOn", false);
+            monsterAnimator.SetBool("isAttacking", false);
         }
 
         void InitRope()
@@ -83,7 +87,17 @@ namespace KSU.Monster
 
         }
 
-        public void GetDamage(int damage)
+        public void GetEnableRope()
+        {
+            monsterRope.enabled = true;
+        }
+
+        public void GetDisableRope()
+        {
+            monsterRope.enabled = false;
+        }
+
+        public virtual void GetDamage(int damage)
         {
             currentHP -= damage;
             monsterAnimator.SetBool("isAttacked", true);
@@ -96,12 +110,15 @@ namespace KSU.Monster
 
         public void GetSturn()
         {
+            monsterAnimator.SetBool("isSturn", true);
+        }
+        public void StartSturn()
+        {
             StartCoroutine(nameof(DelaySturn));
         }
 
         IEnumerator DelaySturn()
         {
-            monsterAnimator.SetBool("isSturn", true);
             yield return new WaitForSeconds(sturnTime);
             monsterAnimator.SetBool("isSturn", false);
         }
@@ -169,6 +186,30 @@ namespace KSU.Monster
                 detectedTarget = null;
                 monsterAnimator.SetBool("isChasing", true);
             }
+        }
+
+        public bool IsReadyToAttck()
+        {
+            if(isAttackDelayOn && (attackRange > Vector3.Distance(transform.position, currentTarget.transform.position)))
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        public void StartAttack()
+        {
+            StartCoroutine(nameof(DelayAttack));
+        }
+
+        IEnumerator DelayAttack()
+        {
+            isAttackDelayOn = true;
+            yield return new WaitForSeconds(attackDelayTime);
+            isAttackDelayOn = false;
         }
     }
 }

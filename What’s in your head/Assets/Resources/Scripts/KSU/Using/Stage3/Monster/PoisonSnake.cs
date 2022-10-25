@@ -17,5 +17,10 @@ namespace KSU.Monster
         {
             Detect();
         }
+
+        private void OnEnable()
+        {
+            InitMonster();
+        }
     }
 }
