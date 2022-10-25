@@ -27,10 +27,9 @@ namespace YC.CameraManager_
         [Header("보간 시간(디펜스 모드 카메라가 늘어나고 줄어드는 속도)")]
         [SerializeField] float _LerpTime = 2.5f;
 
-
-
-
         CharacterCamera curFullCamera;
+
+        bool wasTopView;
 
         void Awake()
         {
@@ -65,7 +64,7 @@ namespace YC.CameraManager_
                 //      아래 함수 게임매니저 통해 플레이어들 불러오도록
                 //      플레이어 각각 NormalView함수 인풋 부분 수정(탑 스테이트로 바꾸는 부분)
 
-                if (GameManager.Instance.isTopView)
+                if (GameManager.Instance.isTopView && wasTopView == false)
                 {
                     // >> : 기존
                     //pv.RPC(nameof(InitCamera), RpcTarget.AllBuffered, (int)CharacterCamera.NELLA); 
@@ -73,6 +72,11 @@ namespace YC.CameraManager_
 
                     // >> : 수정
                     pv.RPC(nameof(SetDefenceModeCamera), RpcTarget.AllBuffered);
+                    wasTopView = true;
+                }
+                else if (wasTopView)
+                {
+                    wasTopView = false;
                 }
             }
         }
@@ -141,9 +145,21 @@ namespace YC.CameraManager_
             }
         }
 
+        public void NellaDeadCam()
+        {
+            pv.RPC(nameof(NellaDeadCam_RPC), RpcTarget.AllViaServer);
+            Debug.Log("넬라 RPC 호출!");
+
+            
+        }
+        public void SteadyDeadCam()
+        {
+            pv.RPC(nameof(SteadyDeadCam_RPC), RpcTarget.AllViaServer);
+        }
 
         // 스테이지 3 디펜스 모드 : 넬라 죽었을 때 호출
-        public void NellaDeadCam()
+        [PunRPC]
+        public void NellaDeadCam_RPC()
         {
             // >> : 기존
             //pv.RPC(nameof(InitCamera), RpcTarget.AllViaServer, (int)CharacterCamera.STEADY); // 일단 스테디 카메라를 Full로 세팅
@@ -155,17 +171,19 @@ namespace YC.CameraManager_
                 //pv.RPC(nameof(InitCamera), RpcTarget.AllViaServer, (int)CharacterCamera.STEADY); // 일단 스테디 카메라를 Full로 세팅
                 //pv.RPC(nameof(Cor_SetSizeCamera), RpcTarget.AllViaServer, 0.36f, _LerpTime);// 넬라 카메라를 만들어줌 (늘려줌)
                 InitCamera((int)CharacterCamera.STEADY);
-                SetSizeCamera(0.36f, _LerpTime);
+                Debug.Log("스테디 전체화면!");
+                StartCoroutine(SetSizeCamera(0.36f,_LerpTime));
             }
             else // 내가 스테디라면
             {
                 //pv.RPC(nameof(Cor_SetSizeCamera), RpcTarget.AllViaServer, 0.36f, _LerpTime);
-                SetSizeCamera(0.36f, _LerpTime);
+                StartCoroutine(SetSizeCamera(0.36f, _LerpTime));
             }
         }
 
         // 스테이지 3 디펜스 모드 : 스테디 죽었을 때 호출
-        public void SteadyDeadCam()
+        [PunRPC]
+        public void SteadyDeadCam_RPC()
         {
             // >> : 기존
             //pv.RPC(nameof(InitCamera), RpcTarget.AllBuffered, (int)CharacterCamera.NELLA); // 일단 넬라 카메라를 Full로 세팅
@@ -175,21 +193,25 @@ namespace YC.CameraManager_
             if (GameManager.Instance.characterOwner[PhotonNetwork.IsMasterClient]) // 내가 넬라라면
             {
                 //pv.RPC(nameof(Cor_SetSizeCamera), RpcTarget.AllBuffered, 0.64f, _LerpTime);
-                SetSizeCamera(0.64f, _LerpTime);
+                StartCoroutine(SetSizeCamera(0.64f, _LerpTime));
             }
             else // 내가 스테디라면
             {
                 //pv.RPC(nameof(InitCamera), RpcTarget.AllBuffered, (int)CharacterCamera.NELLA); // 일단 넬라 카메라를 Full로 세팅
                 //pv.RPC(nameof(Cor_SetSizeCamera), RpcTarget.AllBuffered, 0.64f, _LerpTime); // 스테디 카메라를 만들어줌 (늘려줌)
                 InitCamera((int)CharacterCamera.NELLA);
-                SetSizeCamera(0.64f, _LerpTime);
+                StartCoroutine(SetSizeCamera(0.64f, _LerpTime));
             }
         }
 
         // 스테이지 3 디펜스 모드 : 넬라가 부활했을 때나, 스테디가 부활했을 때 호출
         public void ReviveCam()
         {
-            pv.RPC(nameof(Cor_SetFullScreen), RpcTarget.AllBuffered, _LerpTime); // 죽기 전 Full로 되어있던 카메라를 다시 Full로 만들어줌          
+            // >> : 기존
+            //pv.RPC(nameof(Cor_SetFullScreen), RpcTarget.AllBuffered, _LerpTime); // 죽기 전 Full로 되어있던 카메라를 다시 Full로 만들어줌
+
+            // >> : 수정  
+            pv.RPC(nameof(Cor_SetFullScreen), RpcTarget.AllBuffered, _LerpTime); // 죽기 전 Full로 되어있던 카메라를 다시 Full로 만들어줌
         }
 
 
@@ -294,6 +316,7 @@ namespace YC.CameraManager_
 
             isBlending = true;
 
+            Debug.Log("보간 시작!");
             if (curFullCamera == CharacterCamera.STEADY) // 스테디 전체화면이면, 넬라 카메라를 만들어줌(늘려줌)
             {
                 while (camRect1.width < middleValue)
@@ -312,8 +335,11 @@ namespace YC.CameraManager_
                     cameras[(int)CharacterCamera.NELLA].rect = rc1;
                     Rect rc2 = new Rect(wd, camRect2.y, 1 - wd, camRect2.height);
                     cameras[(int)CharacterCamera.STEADY].rect = rc2;
+
+                    Debug.Log(wd);
                     yield return null;
                 }
+                Debug.Log("보간 종료!");
 
                 isBlending = false;
             }

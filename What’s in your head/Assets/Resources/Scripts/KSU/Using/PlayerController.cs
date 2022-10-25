@@ -116,11 +116,9 @@ namespace KSU
                 GameManager.Instance.otherPlayerTF = this.transform;
                 mainCamera.GetComponent<AudioListener>().enabled = false;
             }
-            else if (GameManager.Instance.isTest)
-            {
-                GameManager.Instance.characterOwner.Add(PhotonNetwork.IsMasterClient, gameObject.name.Contains("Nella"));
-                GameManager.Instance.isAlive.Add(GameManager.Instance.characterOwner[PhotonNetwork.IsMasterClient], true);
-            }
+            else
+                GameManager.Instance.myPlayerTF = this.transform;
+
             // << : 
 
             Application.targetFrameRate = 120;
