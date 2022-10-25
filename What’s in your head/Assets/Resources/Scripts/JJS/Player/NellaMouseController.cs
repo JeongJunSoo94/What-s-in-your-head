@@ -138,9 +138,13 @@ namespace JJS
                     {
                         for (int j = 0; j < hitObjs[i].HitColliders.Length; j++)
                         {
-                            hitObjs[i].HitColliders[j].gameObject.SetActive(false);
-                            //hitObjs[i].HitColliders[j].gameObject.SendMessage("");
+                            Debug.Log("Attack!");
 
+                            if(hitObjs[i].HitColliders[j].gameObject.CompareTag("Bush"))
+                            {
+                                Debug.Log("부쉬 맞고, 센드메시지 보냄!");
+                                hitObjs[i].HitColliders[j].gameObject.SendMessage("Attacked", 0.1f);
+                            }
                         }
                     }
                 }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using JCW.UI.Options.InputBindings;
 using JJS.CharacterSMB;
+using YC.Camera_;
 namespace JJS
 {
     public class AimAttackSMB : CharacterBaseSMB
@@ -11,6 +12,12 @@ namespace JJS
         {
             //GetPlayerController(animator).playerMouse.SetWeaponEnable(GetPlayerController(animator).playerMouse.GetUseWeapon(), true);
  
+            // << : 찬 수정 (스테디가 빔으로 공격할시, 공격이 끝날때 까지 마우스 인풋을 막는다)
+            if(GetPlayerController(animator))
+            {
+                if(GetPlayerController(animator).CompareTag("Steady"))
+                    GetPlayerController(animator).GetComponent<CameraController>().SetSteadyBeam(true);
+            }
         }
 
         override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
@@ -65,6 +72,13 @@ namespace JJS
         override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
         {
             //GetPlayerController(animator).playerMouse.SetWeaponEnable(GetPlayerController(animator).playerMouse.GetUseWeapon(), false);
+
+            // << : 찬 수정 (스테디가 빔으로 공격할시, 공격이 끝날때 까지 마우스 인풋을 막는다)
+            if (GetPlayerController(animator))
+            {
+                if (GetPlayerController(animator).CompareTag("Steady"))
+                    GetPlayerController(animator).GetComponent<CameraController>().SetSteadyBeam(false);
+            }
         }
 
         // OnStateMove is called right after Animator.OnAnimatorMove()

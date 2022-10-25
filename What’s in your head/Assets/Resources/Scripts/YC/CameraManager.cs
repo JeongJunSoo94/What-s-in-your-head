@@ -27,9 +27,6 @@ namespace YC.CameraManager_
         [Header("보간 시간(디펜스 모드 카메라가 늘어나고 줄어드는 속도)")]
         [SerializeField] float _LerpTime = 2.5f;
 
-
-
-
         CharacterCamera curFullCamera;
 
         void Awake()
