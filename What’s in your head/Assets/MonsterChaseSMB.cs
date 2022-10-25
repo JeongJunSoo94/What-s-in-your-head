@@ -41,15 +41,15 @@ namespace KSU.Monster
         {
             
 
-            if (true)
-            {
-                animator.SetBool("isAttacked", true);
-            }
-            if(GetMonsterController(animator) is TrippleHeadSnake)
-            {
-                TrippleHeadSnake tps = GetMonsterController(animator) as TrippleHeadSnake;
-                tps.
-            }
+            //if (true)
+            //{
+            //    animator.SetBool("isAttacked", true);
+            //}
+            //if(GetMonsterController(animator) is TrippleHeadSnake)
+            //{
+            //    TrippleHeadSnake tps = GetMonsterController(animator) as TrippleHeadSnake;
+            //    tps.
+            //}
         }
     }
 }
