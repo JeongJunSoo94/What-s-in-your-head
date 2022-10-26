@@ -16,8 +16,6 @@ namespace JJS
 
         public WaterGun gun;
 
-        PhotonView photonView;
-
         PlayerController player;
 
 
@@ -41,7 +39,6 @@ namespace JJS
             photonView = GetComponent<PhotonView>();
             player = GetComponent<PlayerController>();
             canSwap = true;
-           
         }
 
         public override void AimUpdate(int type=0)
@@ -69,10 +66,19 @@ namespace JJS
             {
                 if (player.characterState.aim)
                 {
-                    if (KeyManager.Instance.GetKey(PlayerAction.Fire) && GetUseWeapon() == 0)
+                    if (!player.characterState.IsJumping && !player.characterState.IsAirJumping
+                        && !player.characterState.IsDashing && !player.characterState.IsAirDashing)
                     {
-                        photonView.RPC(nameof(SetWeaponEnable), RpcTarget.AllViaServer, 0, true);
-                        clickLeft = true;
+                        if (KeyManager.Instance.GetKey(PlayerAction.Fire) && GetUseWeapon() == 0)
+                        {
+                            photonView.RPC(nameof(SetWeaponEnable), RpcTarget.AllViaServer, 0, true);
+                            clickLeft = true;
+                        }
+                        else
+                        {
+                            photonView.RPC(nameof(SetWeaponEnable), RpcTarget.AllViaServer, 0, false);
+                            clickLeft = false;
+                        }
                     }
                     else
                     {
@@ -85,6 +91,11 @@ namespace JJS
                     photonView.RPC(nameof(SetWeaponEnable), RpcTarget.AllViaServer, 0, false);
                     clickLeft = false;
                 }
+
+                if (KeyManager.Instance.GetKey(PlayerAction.Swap))
+                {
+                    photonView.RPC(nameof(WeaponSwap), RpcTarget.AllViaServer, 0, true);
+                }
             }
 
             //SetWeaponEnable(GetPlayerController(animator).playerMouse.GetUseWeapon(), false)
@@ -94,8 +105,13 @@ namespace JJS
         [PunRPC]
         public override void SetWeaponEnable(int weaponIndex,bool enable)
         {
+            
             if (enable)
             {
+                if (player.characterState.top)
+                {
+                    AimUpdate(2);
+                }
                 gun.ShootStart();
             }
             else

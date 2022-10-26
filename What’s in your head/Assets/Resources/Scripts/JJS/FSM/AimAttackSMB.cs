@@ -30,10 +30,6 @@ namespace JJS
                 if (GetPlayerController(animator).CompareTag("Steady"))
                 { 
                     GetPlayerController(animator).playerMouse.AimUpdate(3);
-                } 
-                else
-                {
-                    GetPlayerController(animator).playerMouse.AimUpdate(2);
                 }
             }
             else
@@ -42,6 +38,7 @@ namespace JJS
             }
             if (GetPlayerController(animator).characterState.isMine)
             {
+
                 check(animator);
             }
         }

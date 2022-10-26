@@ -1,10 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
 using System;
+using Photon.Pun;
 using UnityEngine;
 using JCW.UI.Options.InputBindings;
 namespace JJS
 {
+    [RequireComponent(typeof(PhotonView))]
     public class PlayerMouseController : MonoBehaviour
     {
         [Serializable]
@@ -15,7 +17,7 @@ namespace JJS
             public bool canNoAimAttack;
             public bool canMoveAttack;
         }
-
+        protected PhotonView photonView;
 
         public GameObject point;
         public Camera cameraMain;

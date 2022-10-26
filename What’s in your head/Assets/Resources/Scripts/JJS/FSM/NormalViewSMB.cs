@@ -82,9 +82,8 @@ namespace JJS
             GetPlayerController(animator).InputMove();
             //GetPlayerController(animator).InputJump();
             if (!GetPlayerController(animator).playerMouse.weaponInfo[GetPlayerController(animator).playerMouse.GetUseWeapon()].canAim
-                ||GetPlayerController(animator).characterState.top) /////////// 3스테이지 전용 코드
+                ||GetPlayerController(animator).characterState.top && !animator.GetBool("AimAttack")) /////////// 3스테이지 전용 코드
             {
-                
                 GetPlayerController(animator).InputJump();
                 if (!animator.GetBool("isAttack"))
                 {

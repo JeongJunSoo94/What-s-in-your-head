@@ -13,6 +13,11 @@ namespace JJS
             animator.SetLayerWeight(1, 0);
             if (!GetPlayerController(animator).characterState.top)
                 GetPlayerController(animator).characterState.aim = false;
+
+            if (GetPlayerController(animator).playerMouse is SteadyMouseController)
+            {
+                animator.SetBool("isShootingGrapple", false);
+            }
         }
 
         // OnStateUpdate is called on each Update frame between OnStateEnter and OnStateExit callbacks

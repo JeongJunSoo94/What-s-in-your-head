@@ -171,6 +171,7 @@ namespace YC.Camera_
                 //BlockMouseControlInBlending();
                 SetCamera();
                 SetAimYAxis();
+                
             }
         }
 
@@ -200,7 +201,7 @@ namespace YC.Camera_
             {
                 AxisState axisY = camList[(int)curCam].GetComponent<CinemachineFreeLook>().m_YAxis;
 
-                if (axisY.Value < sholderAxisY_MaxUp) // 커서가 Max 위로 넘어감
+                if (axisY.Value <= sholderAxisY_MaxUp) // 커서가 Max 위로 넘어감
                 {
                     // axisY.m_InputAxisValue : 커서 위(1) ~ 아래(0)
                     // axisY.Value : 커서 위(-) ~ 아래 (+)
@@ -215,7 +216,7 @@ namespace YC.Camera_
 
                     }
                 }
-                else if (axisY.Value > sholderAxisY_MaxDown) // 커서가 Min 밑으로 내려감.
+                else if (axisY.Value >= sholderAxisY_MaxDown) // 커서가 Min 밑으로 내려감.
                 {
                     if (axisY.m_InputAxisValue > 0)
                     {

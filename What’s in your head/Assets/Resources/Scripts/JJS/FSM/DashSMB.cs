@@ -24,6 +24,7 @@ namespace JJS
         }
         void check(Animator animator)
         {
+            GetPlayerController(animator).InputJump();
             if (!GetPlayerController(animator).characterState.IsGrounded)
             {
                 animator.SetBool("isAir", true);
