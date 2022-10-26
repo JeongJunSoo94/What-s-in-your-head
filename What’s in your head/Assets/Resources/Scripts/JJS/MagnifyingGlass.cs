@@ -9,15 +9,12 @@ namespace JJS.Weapon
 {
     public class MagnifyingGlass : MonoBehaviour
     {
-        public GameObject particleGather;
-        public GameObject particleBeam;
-        public BoxCollider paticleBoxCollider;
-        public Camera mainCamera;
 
         Ray ray;
 
         Vector3 dir;
 
+        [Header("Beam Info")]
         public float beamWaitTime=2f;
 
         public float maxDistance;
@@ -26,21 +23,20 @@ namespace JJS.Weapon
         public float curveWidth;
         public LayerMask layerMask;
 
-
+        [Header("Don't Touch")]
+        public GameObject particleGather;
+        public GameObject particleBeam;
+        public BoxCollider paticleBoxCollider;
+        public Camera mainCamera;
         public GameObject targetIK;
         public GameObject direction;
         public GameObject hitPos;
         public GameObject mousePoint;
-
         public GameObject weapon;
         public GameObject startPos;
-
         public GameObject hitBox;
-
-        public LayerMask layer;
-
         public bool beaming;
-
+        public int lineCountCheck=0;
         private void Awake()
         {
         }
@@ -74,6 +70,7 @@ namespace JJS.Weapon
 
         public void EffectEnable(bool enable)
         {
+       
             particleGather.SetActive(enable);
         }
         public void StopBeam()
@@ -87,11 +84,13 @@ namespace JJS.Weapon
             {
                 beaming = false;
             }
+           
             EffectEnable(false);
             BeamEnable(false);
         }
         public void Shoot()
         {
+            lineCountCheck = 0;
             StartCoroutine("EffectCoroutine");
         }
 
@@ -144,8 +143,12 @@ namespace JJS.Weapon
                 hitPos.transform.position = hitPoint;
             }
             else
-            { 
-                hitPos.transform.position = mousePoint.transform.position;
+            {
+                if (lineCountCheck == 0)
+                {
+                    lineCountCheck++;
+                    hitPos.transform.position = mousePoint.transform.localPosition;
+                }
             }
 
             // hitPos.transform.position = hitPoint;

@@ -40,12 +40,15 @@ namespace JJS
         public float curCool=0f;
         public float swapCool=0.5f;
 
+        public bool notRotatoin;
+        
         private void Awake()
         {
             ableToLeft = false;
             ableToRight = false;
             canSwap = true;
             ik = GetComponent<IKController>();
+            notRotatoin = false;
         }
         public virtual void SetWeaponEnable(int weaponIndex, bool enable)
         {

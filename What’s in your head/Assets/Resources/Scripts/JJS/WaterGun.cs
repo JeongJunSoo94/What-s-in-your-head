@@ -28,7 +28,7 @@ namespace JJS.Weapon
         public int bulletCount = 0;
         public LayerMask layerMask;
 
-        [Header("Don't touch")]
+        [Header("Don't Touch")]
         public BezierCurve bezierCurveOrbit;
         public Camera mainCamera;
         public Spawner spawner;

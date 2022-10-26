@@ -323,6 +323,9 @@ namespace YC.Camera_
         // << : 스테디 빔 사용시, 스테디 Aim Attack State에서 호출
         public void SetSteadyBeam(bool isLock)
         {
+            // << : 탑뷰라면 리턴
+            if (GameManager.Instance.isTopView) return;
+            
             if(isLock)
             {
                 camList[(int)curCam].GetComponent<CinemachineFreeLook>().m_XAxis.m_InputAxisName = "";

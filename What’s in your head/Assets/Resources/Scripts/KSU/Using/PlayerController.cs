@@ -358,7 +358,8 @@ namespace KSU
 
             if (characterState.top)
             {
-                RotateTop();
+                if(!playerMouse.notRotatoin)
+                    RotateTop();
             }
             else if (characterState.aim)
             {

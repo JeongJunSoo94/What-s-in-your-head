@@ -20,6 +20,7 @@ namespace JJS
 
         PlayerController player;
 
+
         private void Awake()
         {
             if (PhotonNetwork.NetworkClientState == Photon.Realtime.ClientState.Joined)
@@ -40,6 +41,7 @@ namespace JJS
             photonView = GetComponent<PhotonView>();
             player = GetComponent<PlayerController>();
             canSwap = true;
+           
         }
 
         public override void AimUpdate(int type=0)
@@ -60,8 +62,8 @@ namespace JJS
             //}
             gun.ShootLine(type);
         }
-
-        private void Update()
+      
+        private void FixedUpdate()
         {
             if (photonView.IsMine)
             {
@@ -85,18 +87,13 @@ namespace JJS
                 }
             }
 
-
-
             //SetWeaponEnable(GetPlayerController(animator).playerMouse.GetUseWeapon(), false)
         }
+
 
         [PunRPC]
         public override void SetWeaponEnable(int weaponIndex,bool enable)
         {
-            //if (weaponInfo.Count != 0)
-            //{
-            //    weaponInfo[weaponIndex].weapon.SetActive(enable);
-            //}
             if (enable)
             {
                 gun.ShootStart();

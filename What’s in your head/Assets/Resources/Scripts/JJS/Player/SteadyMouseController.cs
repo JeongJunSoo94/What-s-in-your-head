@@ -60,10 +60,12 @@ namespace JJS
 
         public void StopBeam()
         {
+            notRotatoin = false;
             glass.StopBeam();
         }
         public void Shoot()
         {
+            notRotatoin = true;
             glass.Shoot();
         }
         public override void AimUpdate(int type = 0)

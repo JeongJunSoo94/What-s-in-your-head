@@ -27,7 +27,14 @@ namespace JJS
 
             if (GetPlayerController(animator).characterState.top)
             {
-                GetPlayerController(animator).playerMouse.AimUpdate(2);
+                if (GetPlayerController(animator).CompareTag("Steady"))
+                { 
+                    GetPlayerController(animator).playerMouse.AimUpdate(3);
+                } 
+                else
+                {
+                    GetPlayerController(animator).playerMouse.AimUpdate(2);
+                }
             }
             else
             {
