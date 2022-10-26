@@ -16,7 +16,7 @@ namespace JJS
             animator.SetLayerWeight(1, 1);
             index = GetPlayerController(animator).playerMouse.GetUseWeapon();
             GetPlayerController(animator).playerMouse.WeaponSwap();
-            if(GetPlayerController(animator).characterState.isMine)
+            if (GetPlayerController(animator).characterState.isMine)
             {
                 GetPlayerController(animator).gameObject.GetComponentInChildren<SwapItem>().SetSwap(GetPlayerController(animator).playerMouse.GetUseWeapon());
             }

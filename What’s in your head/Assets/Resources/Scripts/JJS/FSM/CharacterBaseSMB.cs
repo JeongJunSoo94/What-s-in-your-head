@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 using KSU;
+using JCW.UI.InGame;
 
 namespace JJS.CharacterSMB
 {

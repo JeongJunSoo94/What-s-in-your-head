@@ -34,9 +34,6 @@ namespace JCW.UI.InGame
         {
             mainCamera = transform.parent.GetComponent<CameraController>().FindCamera(); // ¸ÖÆ¼¿ë       
 
-            GetComponent<Canvas>().worldCamera = mainCamera;
-            GetComponent<Canvas>().planeDistance = 0.15f;
-
             photonView = GetComponent<PhotonView>();            
 
             itemUI_RT = transform.GetChild(0).gameObject.GetComponent<RectTransform>();

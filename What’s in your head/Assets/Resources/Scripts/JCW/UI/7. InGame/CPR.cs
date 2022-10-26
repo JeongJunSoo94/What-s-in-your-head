@@ -23,8 +23,6 @@ namespace JCW.UI.InGame
         GameObject curPlayer;
         Camera mainCam;
 
-        bool isTopView;
-
         Vector3 originalPos;
 
         private void Awake()
@@ -34,7 +32,6 @@ namespace JCW.UI.InGame
             curPlayer = transform.parent.parent.parent.parent.gameObject;
             if(photonView.IsMine)
                 mainCam = isNella ? CameraManager.Instance.cameras[0] : CameraManager.Instance.cameras[1];
-            isTopView = GameManager.Instance.isTopView;
             originalPos = transform.GetChild(2).gameObject.GetComponent<RectTransform>().position;
         }
 
@@ -45,20 +42,28 @@ namespace JCW.UI.InGame
             if(photonView.IsMine)
             {                
                 mainCam.GetComponent<CinemachineBrain>().enabled = false;
-                curPlayer.GetComponent<PlayerState>().isOutOfControl = true;
-                if(isTopView)
-                {
-                    transform.GetChild(0).gameObject.SetActive(false);
-                    transform.GetChild(1).gameObject.SetActive(false);
-                    Vector3 pos = originalPos;
-                    pos.x = isNella ? pos.x - 750f : pos.x + 750f;
-                    pos.y -= 300f;
-                    transform.GetChild(2).gameObject.GetComponent<RectTransform>().position = pos;
-                    transform.GetChild(2).gameObject.GetComponent<RectTransform>().localScale *= 0.7f;
-
-                }
+                curPlayer.GetComponent<PlayerState>().isOutOfControl = true;                
             }
-            
+            if (GameManager.Instance.isTopView)
+            {
+                // 블러와 검은 화면 꺼두기
+                transform.GetChild(0).gameObject.SetActive(false);
+                transform.GetChild(1).gameObject.SetActive(false);
+
+                // 
+                Vector3 pos = originalPos;
+                if (photonView.IsMine)
+                    pos.x = isNella ? pos.x - 100f : pos.x + 100f;
+                else
+                    pos.x = isNella ? pos.x + 100f : pos.x - 100f;
+                pos.y -= 300f;
+                transform.GetChild(2).gameObject.GetComponent<RectTransform>().position = pos;
+                transform.GetChild(2).gameObject.GetComponent<RectTransform>().localScale *= 0.7f;
+
+                // 아이템 UI
+                transform.parent.parent.parent.GetChild(0).gameObject.SetActive(false);
+            }
+
         }
 
         private void OnDisable()
@@ -68,12 +73,17 @@ namespace JCW.UI.InGame
             {
                 mainCam.GetComponent<CinemachineBrain>().enabled = true;
                 curPlayer.GetComponent<PlayerState>().isOutOfControl = false;
-                transform.GetChild(0).gameObject.SetActive(true);
-                transform.GetChild(1).gameObject.SetActive(true);
-                Debug.Log(transform.GetChild(2).gameObject.GetComponent<RectTransform>().position);
-                //transform.GetChild(2).gameObject.GetComponent<RectTransform>().position = new Vector3(0f,0f,0f);
-                transform.GetChild(2).gameObject.GetComponent<RectTransform>().localScale = new Vector3(1f, 1f, 1f);
             }
+
+            transform.GetChild(0).gameObject.SetActive(true);
+            transform.GetChild(1).gameObject.SetActive(true);
+            //Debug.Log(transform.GetChild(2).gameObject.GetComponent<RectTransform>().position);
+            //transform.GetChild(2).gameObject.GetComponent<RectTransform>().position = new Vector3(0f,0f,0f);
+            transform.GetChild(2).gameObject.GetComponent<RectTransform>().position = originalPos;
+            transform.GetChild(2).gameObject.GetComponent<RectTransform>().localScale = new Vector3(1f, 1f, 1f);
+
+            // 아이템 UI
+            transform.parent.parent.parent.GetChild(0).gameObject.SetActive(true);
         }
 
 
@@ -97,7 +107,7 @@ namespace JCW.UI.InGame
                 GameManager.Instance.SetAliveState(isNella, true);
                 heartGauge.fillAmount = 0f;
                 GameManager.Instance.MediateRevive(false);
-                CameraManager.Instance.ReviveCam();
+                //CameraManager.Instance.ReviveCam();
                 Resurrect();
             }
         }
