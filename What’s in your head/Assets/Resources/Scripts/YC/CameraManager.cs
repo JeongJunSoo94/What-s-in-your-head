@@ -64,17 +64,20 @@ namespace YC.CameraManager_
                 //      아래 함수 게임매니저 통해 플레이어들 불러오도록
                 //      플레이어 각각 NormalView함수 인풋 부분 수정(탑 스테이트로 바꾸는 부분)
 
-                if (GameManager.Instance.isTopView && wasTopView == false)
+                if (GameManager.Instance.isTopView)
                 {
                     // >> : 기존
                     //pv.RPC(nameof(InitCamera), RpcTarget.AllBuffered, (int)CharacterCamera.NELLA); 
                     //pv.RPC(nameof(SetDefenceModeCamera), RpcTarget.AllBuffered);
 
                     // >> : 수정
-                    pv.RPC(nameof(SetDefenceModeCamera), RpcTarget.AllBuffered);
-                    wasTopView = true;
+                    if(!wasTopView)
+                    {
+                        pv.RPC(nameof(SetDefenceModeCamera), RpcTarget.AllBuffered);
+                        wasTopView = true;
+                    }                    
                 }
-                else if (!GameManager.Instance.isTopView && wasTopView)
+                else if (wasTopView)
                 {
                     wasTopView = false;
                 }

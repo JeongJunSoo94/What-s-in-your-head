@@ -93,10 +93,10 @@ namespace JCW.UI.InGame
 
                     // 현재 캐릭터가 넬라라면 넬라의 살아있음을 false로, 스테디라면 스테디의 살아있음을 false로 바꿈.
                     GameManager.Instance.SetAliveState(isNella, false);
-                    if (isNella)
-                        CameraManager.Instance.NellaDeadCam();
-                    else
-                        CameraManager.Instance.SteadyDeadCam();
+                    //if (isNella)
+                    //    CameraManager.Instance.NellaDeadCam();
+                    //else
+                    //    CameraManager.Instance.SteadyDeadCam();
                     curHP = maxHP;
                     damageList.Clear();
                     Dead();

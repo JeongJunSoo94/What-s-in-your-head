@@ -15769,7 +15769,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2768079765323125470}
-  m_LocalRotation: {x: 0.12218324, y: -0.000000020854326, z: 0.0000000025672844, w: 0.9925076}
+  m_LocalRotation: {x: 0.122183286, y: -0.000000029579034, z: 0.0000000036413461, w: 0.9925076}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -26606,7 +26606,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4466008002002042145}
-  m_LocalRotation: {x: 0.2196362, y: 1.5576394e-15, z: -6.565204e-16, w: 0.9755819}
+  m_LocalRotation: {x: 0.21963622, y: -0.0000000045281094, z: 0.0000000010194291, w: 0.9755819}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -26684,7 +26684,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4466008002089088961}
-  m_LocalRotation: {x: 0.25492924, y: -0.00000002978957, z: 0.000000007853722, w: 0.9669597}
+  m_LocalRotation: {x: 0.2549292, y: 0.000000023346768, z: -0.00000000615514, w: 0.9669597}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -27325,6 +27325,7 @@ MonoBehaviour:
     m_Bits: 2048
   grappleSpawner: {fileID: 1911663723217604559}
   grappleObject: {fileID: 7909980709306676830, guid: c9b54073bf48f804ebee62282b5e85af, type: 3}
+  aimUI: {fileID: 8657421885556112005}
   grappleMoveSpeed: 10
   grappleSpeed: 10
   grappleDepartOffset: 0.5
@@ -27332,7 +27333,7 @@ MonoBehaviour:
   rangeRadius: 5
   rangeDistance: 20
   grapplingRange: 30
-  rangeAngle: 89
+  rangeAngle: 8
 --- !u!1 &4466008002735749242
 GameObject:
   m_ObjectHideFlags: 0
@@ -28202,7 +28203,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5527090705330568838}
-  m_LocalRotation: {x: 0.08604983, y: 1.7730625e-15, z: -1.3193875e-16, w: 0.99629086}
+  m_LocalRotation: {x: 0.08604983, y: -1.7730625e-15, z: 1.3193875e-16, w: 0.99629086}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -49357,7 +49358,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8521454003615948799}
-  m_LocalRotation: {x: 0.12218324, y: -0.000000020854326, z: 0.0000000025672844, w: 0.9925076}
+  m_LocalRotation: {x: 0.122183286, y: -0.000000029579034, z: 0.0000000036413461, w: 0.9925076}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -55564,6 +55565,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: AimUI
       objectReference: {fileID: 0}
+    - target: {fileID: 5536589947466532331, guid: d9ae6c359ed6b9b4fbc0438148b6bc30, type: 3}
+      propertyPath: targetingTime
+      value: 0.5
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d9ae6c359ed6b9b4fbc0438148b6bc30, type: 3}
 --- !u!224 &8384727844485658405 stripped
@@ -55571,6 +55576,17 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 4660158950712969291, guid: d9ae6c359ed6b9b4fbc0438148b6bc30, type: 3}
   m_PrefabInstance: {fileID: 3814756060233629550}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &8657421885556112005 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5536589947466532331, guid: d9ae6c359ed6b9b4fbc0438148b6bc30, type: 3}
+  m_PrefabInstance: {fileID: 3814756060233629550}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a35adc6c2d304da458ad65caca7ff534, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &4899569590300828417
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -55589,6 +55605,22 @@ PrefabInstance:
     - target: {fileID: 3223397313189112902, guid: 7c09f68c8d325854a9994c1eedab2b61, type: 3}
       propertyPath: m_Name
       value: SteadyUI
+      objectReference: {fileID: 0}
+    - target: {fileID: 3385047542785242384, guid: 7c09f68c8d325854a9994c1eedab2b61, type: 3}
+      propertyPath: m_Pivot.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3385047542785242384, guid: 7c09f68c8d325854a9994c1eedab2b61, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3385047542785242384, guid: 7c09f68c8d325854a9994c1eedab2b61, type: 3}
+      propertyPath: m_AnchorMin.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3385047542785242384, guid: 7c09f68c8d325854a9994c1eedab2b61, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4169757102892040759, guid: 7c09f68c8d325854a9994c1eedab2b61, type: 3}
       propertyPath: m_Pivot.x
