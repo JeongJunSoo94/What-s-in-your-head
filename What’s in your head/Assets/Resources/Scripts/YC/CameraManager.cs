@@ -18,10 +18,8 @@ namespace YC.CameraManager_
         PhotonView pv;
         public static CameraManager Instance = null;
 
-        float currentMiddleValue = 0.5f; // 현재 카메라 분할 중앙값
+        //float currentMiddleValue = 0.5f; // 현재 카메라 분할 중앙값
 
-        [SerializeField]
-        float defenceModeFOV = 60;
 
         [Header("<기획 편집 사항>")]
         [Header("보간 시간(디펜스 모드 카메라가 늘어나고 줄어드는 속도)")]

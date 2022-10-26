@@ -42,48 +42,60 @@ namespace YC.Camera_
         CinemachineVirtualCameraBase wallCam;
 
         enum CamState { back, wide, sholder, top, wall };
-        [SerializeField] CamState curCam;
-        [SerializeField] CamState preCam;
-        float originCurVirtualCam_XAxis;
-        float originCurVirtualCam_YAxis;
-        float originPreVirtualCam_XAxis;
-        float originPreVirtualCam_YAxis;
+        CamState curCam;
+        CamState preCam;
+        //float originCurVirtualCam_XAxis;
+        //float originCurVirtualCam_YAxis;
+        //float originPreVirtualCam_XAxis;
+        //float originPreVirtualCam_YAxis;
 
-        Transform lookatObj;
-        Transform followObj;
 
-        bool isOriginBlending = false;
+        //[SerializeField] Transform lookatObj_BackView;
+        //[SerializeField] Transform lookatObj_SholderView;
+        //[SerializeField] Transform followObj;
 
-        Vector3 originCurCam_Pos = new Vector3();
+        //bool isOriginBlending = false;
+
+        //Vector3 originCurCam_Pos = new Vector3();
 
         // Clone 
-        [Space]
-        [Space]
-        [SerializeField] CamState curCam_Clone;
-        [SerializeField] CamState blendingCam_Clone; // 블렌딩 목표 카메라
-        [SerializeField] CamState blendingPrevCam_Clone; // 블렌딩 이전목표 카메라(블렌딩 중 다시 카메라 변경)
-        [SerializeField] CamState preCam_Clone;
+
+        CamState curCam_Clone;
+        //[SerializeField] CamState blendingCam_Clone; // 블렌딩 목표 카메라
+        CamState blendingPrevCam_Clone; // 블렌딩 이전목표 카메라(블렌딩 중 다시 카메라 변경)
+        //[SerializeField] CamState preCam_Clone;
 
 
-        bool isBlendStart_Clone = false; // 클론 시네머신의 블렌드가 시작 시점 true
-        bool isBlending_Clone = false;  // 클론 시네머신 블렌딩 중인지
-        bool isActiveCB_Clone = false;  // 클론 시네커신 브레인 enable 여부
-        bool isActiveBT_Clone = false;  // 클론 시네커신 브레인 타겟 카메라 set 여부
+        //bool isBlendStart_Clone = false; // 클론 시네머신의 블렌드가 시작 시점 true
+        //bool isBlending_Clone = false;  // 클론 시네머신 블렌딩 중인지
+        //bool isActiveCB_Clone = false;  // 클론 시네커신 브레인 enable 여부
+        //bool isActiveBT_Clone = false;  // 클론 시네커신 브레인 타겟 카메라 set 여부
 
         // Option
-        [Tooltip("기본 카메라 감도")]
-        public float defaultCameraSensitivity = 20;
-        [Tooltip("조준 카메라 감도")]
-        public float sholderCameraSensitivity = 20;
+        [Header("[Back View 카메라 마우스 감도]")]
+        [SerializeField] [Range(0, 100)] float backView_MouseSensitivity;
+        [Header("[Back View 카메라 마우스 감도]")]
+        [SerializeField] [Range(0, 100)] float sholderView_MouseSensitivity;
+
 
         PlayerController player;
 
         float sholderViewMaxY;
-        [SerializeField] float sholderAxisY_MaxUp;
-        [SerializeField] float sholderAxisY_MaxDown;
+        [Header("[Sholder View Y궤도 Up 제한 값]")]
+        [SerializeField] float sholderAxisY_MaxUp = 0.3f;
+        [Header("[Sholder View Y궤도 Down 제한 값]")]
+        [SerializeField] float sholderAxisY_MaxDown = 0.5f;
 
-        bool isInitCamera = false;
 
+        [Header("[스테디 빔, 카메라 흔들림 진폭 크기]")]
+        [SerializeField] float AmplitudeGain = 3f;
+        [Header("[스테디 빔, 카메라 흔들림 빈도]")]
+        [SerializeField] float FrequebctGain = 3f;
+        //bool isInitCamera = false;
+        List<CinemachineBasicMultiChannelPerlin> listCBMCP;
+
+        bool wasShaked = false;
+        bool isShakedFade = true;
 
         void Awake()
         {
@@ -111,8 +123,8 @@ namespace YC.Camera_
             preCam = new CamState();
 
             curCam_Clone = new CamState();
-            preCam_Clone = new CamState();
-            blendingCam_Clone = new CamState();
+            //preCam_Clone = new CamState();
+            //blendingCam_Clone = new CamState();           
 
 
             sholderViewMaxY = sholderCam.GetComponent<CinemachineFreeLook>().m_YAxis.m_MaxValue;
@@ -122,8 +134,8 @@ namespace YC.Camera_
             if (!pv.IsMine)
             {
                 curCam_Clone = CamState.back;
-                preCam_Clone = curCam_Clone;
-                blendingCam_Clone = CamState.back;
+                //preCam_Clone = curCam_Clone;
+                //blendingCam_Clone = CamState.back;
                 OnOffCamera(camList[(int)curCam_Clone]);
             }
             else
@@ -147,6 +159,11 @@ namespace YC.Camera_
             // 만약 둘이서 멀티 진행했는데 Nella Remote 블렌딩 진행중 Steady Owner의 마우스 값이 Nella Remote에게 들어온다면
             // 시야각이 카메라끼리의 블렌딩 불가, 시야각을 위한 별도 설정 필요
             if (!pv.IsMine) cinemachineBrain.enabled = false;
+
+            listCBMCP = new List<CinemachineBasicMultiChannelPerlin>();
+
+            InitDefault();
+
         }
 
 
@@ -174,25 +191,70 @@ namespace YC.Camera_
             }
         }
 
-        
+       
+        void InitDefault()
+        {    
+            // backView_MouseSensitivity, sholderView_MouseSensitivity 두 변수는 1~100의 값을 갖는다 (찬우형 게임매니저로 부터 받아옴)
+            // 시네머신에서 최적의 마우스 스피드는 X : 100 ~ 300, Y : 1 ~ 3 정도이다.
+            // 감도 변수를 시네머신에 맞게 변환하여 세팅해준다       
 
-        void BlockMouseControlInBlending() // 블렌딩 도중 마우스 입력을 막는다
-        {
-            if (cinemachineBrain.IsBlending)
+            // << : 감도 관련
+            int defaulyX = 100;
+            int defaultY = 1;
+
+            if (backView_MouseSensitivity == 0) backView_MouseSensitivity = 25;
+
+            backCam.GetComponent<CinemachineFreeLook>().m_XAxis.m_MaxSpeed = defaulyX + backView_MouseSensitivity * 4;
+            backCam.GetComponent<CinemachineFreeLook>().m_YAxis.m_MaxSpeed = defaultY + backView_MouseSensitivity * 0.04f;
+
+            if (sholderView_MouseSensitivity == 0) sholderView_MouseSensitivity = 25;
+
+            sholderCam.GetComponent<CinemachineFreeLook>().m_XAxis.m_MaxSpeed = defaulyX + sholderView_MouseSensitivity * 4;
+            sholderCam.GetComponent<CinemachineFreeLook>().m_YAxis.m_MaxSpeed = defaultY + sholderView_MouseSensitivity * 0.04f;
+
+            // << : 숄더뷰 Y축 제한
+            if (sholderAxisY_MaxUp == 0) sholderAxisY_MaxUp = 0.2f;
+            if (sholderAxisY_MaxDown == 0) sholderAxisY_MaxDown = 0.5f;
+
+
+            // << : 스테디 빔 흔들림 변수 설정
+
+            if (AmplitudeGain == 0) AmplitudeGain = 1;
+            if (FrequebctGain == 0) FrequebctGain = 2;
+
+            if (this.gameObject.CompareTag("Steady"))
             {
-                camList[(int)preCam].GetComponent<CinemachineFreeLook>().m_XAxis.m_InputAxisName = "";
-                camList[(int)preCam].GetComponent<CinemachineFreeLook>().m_YAxis.m_InputAxisName = "";
-                camList[(int)curCam].GetComponent<CinemachineFreeLook>().m_XAxis.m_InputAxisName = "";
-                camList[(int)curCam].GetComponent<CinemachineFreeLook>().m_YAxis.m_InputAxisName = "";
-            }
-            else
-            {
-                camList[(int)preCam].GetComponent<CinemachineFreeLook>().m_XAxis.m_InputAxisName = "Mouse X";
-                camList[(int)preCam].GetComponent<CinemachineFreeLook>().m_YAxis.m_InputAxisName = "Mouse Y";
-                camList[(int)curCam].GetComponent<CinemachineFreeLook>().m_XAxis.m_InputAxisName = "Mouse X";
-                camList[(int)curCam].GetComponent<CinemachineFreeLook>().m_YAxis.m_InputAxisName = "Mouse Y";
+                for (int i = 0; i < 3; ++i)
+                {
+                    listCBMCP.Add(sholderCam.GetComponent<CinemachineFreeLook>().GetRig(i).GetCinemachineComponent<CinemachineBasicMultiChannelPerlin>());
+                }
+
+                for (int i = 0; i < 3; ++i)
+                {
+                    sholderCam.GetComponent<CinemachineFreeLook>().GetRig(i).GetCinemachineComponent<CinemachineBasicMultiChannelPerlin>().m_FrequencyGain = 0;
+                    sholderCam.GetComponent<CinemachineFreeLook>().GetRig(i).GetCinemachineComponent<CinemachineBasicMultiChannelPerlin>().m_AmplitudeGain = 0;
+                }
             }
         }
+
+
+        //void BlockMouseControlInBlending() // 블렌딩 도중 마우스 입력을 막는다
+        //{
+        //    if (cinemachineBrain.IsBlending)
+        //    {
+        //        camList[(int)preCam].GetComponent<CinemachineFreeLook>().m_XAxis.m_InputAxisName = "";
+        //        camList[(int)preCam].GetComponent<CinemachineFreeLook>().m_YAxis.m_InputAxisName = "";
+        //        camList[(int)curCam].GetComponent<CinemachineFreeLook>().m_XAxis.m_InputAxisName = "";
+        //        camList[(int)curCam].GetComponent<CinemachineFreeLook>().m_YAxis.m_InputAxisName = "";
+        //    }
+        //    else
+        //    {
+        //        camList[(int)preCam].GetComponent<CinemachineFreeLook>().m_XAxis.m_InputAxisName = "Mouse X";
+        //        camList[(int)preCam].GetComponent<CinemachineFreeLook>().m_YAxis.m_InputAxisName = "Mouse Y";
+        //        camList[(int)curCam].GetComponent<CinemachineFreeLook>().m_XAxis.m_InputAxisName = "Mouse X";
+        //        camList[(int)curCam].GetComponent<CinemachineFreeLook>().m_YAxis.m_InputAxisName = "Mouse Y";
+        //    }
+        //}
 
         void SetAimYAxis() // sholder View에서 YAxis Limit 설정.
         {
@@ -200,7 +262,7 @@ namespace YC.Camera_
             {
                 AxisState axisY = camList[(int)curCam].GetComponent<CinemachineFreeLook>().m_YAxis;
 
-                if (axisY.Value < sholderAxisY_MaxUp) // 커서가 Max 위로 넘어감
+                if (axisY.Value <= sholderAxisY_MaxUp) // 커서가 Max 위로 넘어감
                 {
                     // axisY.m_InputAxisValue : 커서 위(1) ~ 아래(0)
                     // axisY.Value : 커서 위(-) ~ 아래 (+)
@@ -215,7 +277,7 @@ namespace YC.Camera_
 
                     }
                 }
-                else if (axisY.Value > sholderAxisY_MaxDown) // 커서가 Min 밑으로 내려감.
+                else if (axisY.Value >= sholderAxisY_MaxDown) // 커서가 Min 밑으로 내려감.
                 {
                     if (axisY.m_InputAxisValue > 0)
                     {
@@ -229,46 +291,41 @@ namespace YC.Camera_
                 }
                 else
                 {
-                    axisY.m_MaxSpeed = 3;
+                    axisY.m_MaxSpeed = 
+                        sholderCam.GetComponent<CinemachineFreeLook>().m_YAxis.m_MaxSpeed = 1 + backView_MouseSensitivity * 0.02f;
                 }
                 camList[(int)curCam].GetComponent<CinemachineFreeLook>().m_YAxis = axisY;
-            }       
+            }
         }
 
         void SetCamera() // 플레이어 State 따라카메라 세팅 
         {
             if (GameManager.Instance.isTopView)
-            {
                 return;
-            }
+
+   
             if (curCam == CamState.back)
             {
-                //if(Input.GetMouseButtonDown(1))
                 if (player.characterState.aim) // back View -> sholder View
                 {
                     AxisState temp = backCam.GetComponent<CinemachineFreeLook>().m_XAxis;
 
                     preCam = curCam;
                     curCam = CamState.sholder;
+                    
+                    // << : 수정
+                    camList[(int)curCam].GetComponent<CinemachineFreeLook>().m_YAxis.Value = camList[(int)preCam].GetComponent<CinemachineFreeLook>().m_YAxis.Value;
 
-                    camList[(int)curCam].GetComponent<CinemachineFreeLook>().m_YAxis.Value = 0.5f;
+                    //if(!cinemachineBrain.IsBlending)
+                    //    camList[(int)curCam].GetComponent<CinemachineFreeLook>().m_YAxis.Value = 0.5f;
 
                     OnOffCamera(sholderCam);
 
                     sholderCam.GetComponent<CinemachineFreeLook>().m_XAxis = temp;
-                }
-                //else if (Input.GetKeyDown(KeyCode.Alpha1)) // back View -> Top View
-                //{
-                //    preCam = curCam;
-                //    curCam = CamState.top;
-
-
-                //    OnOffCamera(topCam);
-                //}
+                }           
             }
             else if (curCam == CamState.sholder)
             {
-                //if (Input.GetMouseButtonDown(1))
                 if (!player.characterState.aim) // sholder View -> back View
                 {
                     AxisState temp = sholderCam.GetComponent<CinemachineFreeLook>().m_XAxis;
@@ -276,24 +333,26 @@ namespace YC.Camera_
                     preCam = curCam;
                     curCam = CamState.back;
 
-                    camList[(int)curCam].GetComponent<CinemachineFreeLook>().m_YAxis.Value = 0.5f;
+                    // << : 수정
+                    camList[(int)curCam].GetComponent<CinemachineFreeLook>().m_YAxis.Value = camList[(int)preCam].GetComponent<CinemachineFreeLook>().m_YAxis.Value;
 
+                    //if (!cinemachineBrain.IsBlending)
+                    //    camList[(int)curCam].GetComponent<CinemachineFreeLook>().m_YAxis.Value = 0.5f;
 
+                    if (isShakedFade)
+                    {
+                        StopCoroutine("ShakeFadeOut");
+                        InitShakeFade();
+                    }
 
                     OnOffCamera(backCam);
 
                     backCam.GetComponent<CinemachineFreeLook>().m_XAxis = temp;
                 }
             }
-            else if (curCam == CamState.top)
-            {
-                //if (Input.GetKeyDown(KeyCode.Alpha1)) // Top View -> back View
-                //{
-                //    preCam = curCam;
-                //    curCam = CamState.back;
-                //    OnOffCamera(backCam);
-                //}
-            }
+
+
+         
         }
 
         public void SetDefenseMode()
@@ -323,118 +382,192 @@ namespace YC.Camera_
         // << : 스테디 빔 사용시, 스테디 Aim Attack State에서 호출
         public void SetSteadyBeam(bool isLock)
         {
-            // << : 탑뷰라면 리턴
+            // << : 탑뷰라면 리턴(준수형)
             if (GameManager.Instance.isTopView) return;
-            
+
             if(isLock)
             {
                 camList[(int)curCam].GetComponent<CinemachineFreeLook>().m_XAxis.m_InputAxisName = "";
                 camList[(int)curCam].GetComponent<CinemachineFreeLook>().m_YAxis.m_InputAxisName = "";
+
+                // << : 회전하면서 빔 사용시 삥삥 도는 문제
+                camList[(int)curCam].GetComponent<CinemachineFreeLook>().m_XAxis.m_InputAxisValue = 0;
+
             }
             else
             {
                 camList[(int)curCam].GetComponent<CinemachineFreeLook>().m_XAxis.m_InputAxisName = "Mouse X";
                 camList[(int)curCam].GetComponent<CinemachineFreeLook>().m_YAxis.m_InputAxisName = "Mouse Y";
-            }
 
+            }
         }
 
 
-        void CheckStartBlend_Clone() // Owner의 가상 카메라 전환 여부 체크 
+        public void ShakeCamera(bool isShake) // MagnifyingGlass 에서 센드메시지로 호출
         {
-            if (blendingPrevCam_Clone != blendingCam_Clone)
+            // if(옵션에서 흔들림 해제하면) return;
+
+            if (isShake)
             {
-                isBlendStart_Clone = true;
+                if (wasShaked) return;
+
+                foreach(CinemachineBasicMultiChannelPerlin CBMCP in listCBMCP)
+                {
+                    CBMCP.m_AmplitudeGain = AmplitudeGain;
+                    CBMCP.m_FrequencyGain = FrequebctGain;
+                }
+                wasShaked = true;
             }
-            blendingPrevCam_Clone = blendingCam_Clone;
+            else
+            {              
+                if (!wasShaked) return;
+
+                wasShaked = false;
+
+                isShakedFade = true;
+
+                float fadeLerpTime = 0.3f;
+
+                StartCoroutine(ShakeFadeOut(fadeLerpTime));
+            }          
         }
 
-        void SetCameraBlned_Clone() // Clone의 Cinemachine Brain과 Photon을 상황에 맞게 On Off
+        IEnumerator ShakeFadeOut(float LerpTime)
         {
-            if (isBlendStart_Clone && !cinemachineBrain.IsBlending) // 블렌딩 시작시
+            float initialVlaue = listCBMCP[0].m_AmplitudeGain;
+            float currentTime = 0;
+
+            while (initialVlaue > 0)
             {
-                // 1회 호출 : Remote의 현재 블렌딩 카메라에 Owner 카메라 값을 넣어준 뒤, Remote의 시네머신을 작동 시킨다.
-                if (isActiveCB_Clone)
+                initialVlaue -= Time.deltaTime * (AmplitudeGain);
+
+                currentTime += Time.deltaTime;
+                if (currentTime >= LerpTime) currentTime = LerpTime;
+
+                float curValue = Mathf.Lerp(initialVlaue, 0, currentTime / LerpTime);
+
+                if (curValue < 0)
+                    curValue = 0;
+
+                foreach (CinemachineBasicMultiChannelPerlin CBMCP in listCBMCP)
                 {
-                    if (curCam_Clone == CamState.back || curCam_Clone == CamState.wide || curCam_Clone == CamState.sholder)
-                    {
-                        camList[(int)blendingCam_Clone].GetComponent<CinemachineFreeLook>().m_XAxis.Value
-                                    = originCurVirtualCam_XAxis;
-
-                        camList[(int)blendingCam_Clone].GetComponent<CinemachineFreeLook>().m_YAxis.Value
-                                    = originCurVirtualCam_YAxis;
-
-                        camList[(int)blendingCam_Clone].GetComponent<CinemachineFreeLook>().transform.position = originCurCam_Pos;
-                    }
-                    preCam_Clone = curCam_Clone;
-                    curCam_Clone = blendingCam_Clone;
-
-                    OnOffCamera(camList[(int)curCam_Clone]);
-
-                    isBlendStart_Clone = false;
-                    isActiveCB_Clone = false;
+                    CBMCP.m_AmplitudeGain = curValue;
+                    CBMCP.m_FrequencyGain = curValue;
                 }
 
-                // 1회 호출 :  Remote의 Cinemachine Brain을 켜주고, Owner의 이전 카메라 Value 값을 받아 Remote의 이전 카메라 Value에 넣어준다.
-                if (isBlendStart_Clone)
-                {
-                    cinemachineBrain.enabled = true;
-
-                    if (curCam_Clone == CamState.back || curCam_Clone == CamState.wide || curCam_Clone == CamState.sholder)
-                    {
-                        camList[(int)curCam_Clone].GetComponent<CinemachineFreeLook>().m_XAxis.Value
-                                     = originPreVirtualCam_XAxis;
-                        camList[(int)curCam_Clone].GetComponent<CinemachineFreeLook>().m_YAxis.Value
-                                     = originPreVirtualCam_YAxis;
-                    }
-                    isActiveCB_Clone = true;
-                }
+                yield return null;
             }
-            else if (isBlendStart_Clone && cinemachineBrain.IsBlending) // 블렌딩 도중 취소시
-            {
-                ////preCam_Clone = curCam_Clone;
-                ////curCam_Clone = blendingCam_Clone;
-                //OnOffCamera(camList[(int)blendingCam_Clone]);
-                //isBlendStart_Clone = false;
-
-                // 1회 호출 : Remote의 현재 블렌딩 카메라에 Owner 카메라 값을 넣어준 뒤, Remote의 시네머신을 작동 시킨다.
-                if (isActiveCB_Clone)
-                {
-                    if (curCam_Clone == CamState.back || curCam_Clone == CamState.wide || curCam_Clone == CamState.sholder)
-                    {
-                        camList[(int)blendingCam_Clone].GetComponent<CinemachineFreeLook>().m_XAxis.Value
-                                    = originCurVirtualCam_XAxis;
-
-                        camList[(int)blendingCam_Clone].GetComponent<CinemachineFreeLook>().m_YAxis.Value
-                                    = originCurVirtualCam_YAxis;
-
-                        camList[(int)blendingCam_Clone].GetComponent<CinemachineFreeLook>().transform.position = originCurCam_Pos;
-                    }
-                    preCam_Clone = curCam_Clone;
-                    curCam_Clone = blendingCam_Clone;
-
-                    OnOffCamera(camList[(int)curCam_Clone]);
-
-                    isBlendStart_Clone = false;
-                    isActiveCB_Clone = false;
-                }
-
-                // 1회 호출 :  Remote의 Cinemachine Brain을 켜주고, Owner의 이전 카메라 Value 값을 받아 Remote의 이전 카메라 Value에 넣어준다.
-                if (isBlendStart_Clone)
-                {
-                    if (curCam_Clone == CamState.back || curCam_Clone == CamState.wide || curCam_Clone == CamState.sholder)
-                    {
-                        camList[(int)curCam_Clone].GetComponent<CinemachineFreeLook>().m_XAxis.Value
-                                     = originPreVirtualCam_XAxis;
-                        camList[(int)curCam_Clone].GetComponent<CinemachineFreeLook>().m_YAxis.Value
-                                     = originPreVirtualCam_YAxis;
-                    }
-                    isActiveCB_Clone = true;
-                }
-
-
-            }
+            isShakedFade = false;
         }
+
+        void InitShakeFade()
+        {
+            float initialVlaue = 0;
+
+            foreach (CinemachineBasicMultiChannelPerlin CBMCP in listCBMCP)
+            {
+                CBMCP.m_AmplitudeGain = initialVlaue;
+                CBMCP.m_FrequencyGain = initialVlaue;
+            }
+            isShakedFade = false;
+        }
+
+
+        //void CheckStartBlend_Clone() // Owner의 가상 카메라 전환 여부 체크 
+        //{
+        //    if (blendingPrevCam_Clone != blendingCam_Clone)
+        //    {
+        //        isBlendStart_Clone = true;
+        //    }
+        //    blendingPrevCam_Clone = blendingCam_Clone;
+        //}
+
+        //void SetCameraBlned_Clone() // Clone의 Cinemachine Brain과 Photon을 상황에 맞게 On Off
+        //{
+        //    if (isBlendStart_Clone && !cinemachineBrain.IsBlending) // 블렌딩 시작시
+        //    {
+        //        // 1회 호출 : Remote의 현재 블렌딩 카메라에 Owner 카메라 값을 넣어준 뒤, Remote의 시네머신을 작동 시킨다.
+        //        if (isActiveCB_Clone)
+        //        {
+        //            if (curCam_Clone == CamState.back || curCam_Clone == CamState.wide || curCam_Clone == CamState.sholder)
+        //            {
+        //                camList[(int)blendingCam_Clone].GetComponent<CinemachineFreeLook>().m_XAxis.Value
+        //                            = originCurVirtualCam_XAxis;
+
+        //                camList[(int)blendingCam_Clone].GetComponent<CinemachineFreeLook>().m_YAxis.Value
+        //                            = originCurVirtualCam_YAxis;
+
+        //                camList[(int)blendingCam_Clone].GetComponent<CinemachineFreeLook>().transform.position = originCurCam_Pos;
+        //            }
+        //            preCam_Clone = curCam_Clone;
+        //            curCam_Clone = blendingCam_Clone;
+
+        //            OnOffCamera(camList[(int)curCam_Clone]);
+
+        //            isBlendStart_Clone = false;
+        //            isActiveCB_Clone = false;
+        //        }
+
+        //        // 1회 호출 :  Remote의 Cinemachine Brain을 켜주고, Owner의 이전 카메라 Value 값을 받아 Remote의 이전 카메라 Value에 넣어준다.
+        //        if (isBlendStart_Clone)
+        //        {
+        //            cinemachineBrain.enabled = true;
+
+        //            if (curCam_Clone == CamState.back || curCam_Clone == CamState.wide || curCam_Clone == CamState.sholder)
+        //            {
+        //                camList[(int)curCam_Clone].GetComponent<CinemachineFreeLook>().m_XAxis.Value
+        //                             = originPreVirtualCam_XAxis;
+        //                camList[(int)curCam_Clone].GetComponent<CinemachineFreeLook>().m_YAxis.Value
+        //                             = originPreVirtualCam_YAxis;
+        //            }
+        //            isActiveCB_Clone = true;
+        //        }
+        //    }
+        //    else if (isBlendStart_Clone && cinemachineBrain.IsBlending) // 블렌딩 도중 취소시
+        //    {
+        //        ////preCam_Clone = curCam_Clone;
+        //        ////curCam_Clone = blendingCam_Clone;
+        //        //OnOffCamera(camList[(int)blendingCam_Clone]);
+        //        //isBlendStart_Clone = false;
+
+        //        // 1회 호출 : Remote의 현재 블렌딩 카메라에 Owner 카메라 값을 넣어준 뒤, Remote의 시네머신을 작동 시킨다.
+        //        if (isActiveCB_Clone)
+        //        {
+        //            if (curCam_Clone == CamState.back || curCam_Clone == CamState.wide || curCam_Clone == CamState.sholder)
+        //            {
+        //                camList[(int)blendingCam_Clone].GetComponent<CinemachineFreeLook>().m_XAxis.Value
+        //                            = originCurVirtualCam_XAxis;
+
+        //                camList[(int)blendingCam_Clone].GetComponent<CinemachineFreeLook>().m_YAxis.Value
+        //                            = originCurVirtualCam_YAxis;
+
+        //                camList[(int)blendingCam_Clone].GetComponent<CinemachineFreeLook>().transform.position = originCurCam_Pos;
+        //            }
+        //            preCam_Clone = curCam_Clone;
+        //            curCam_Clone = blendingCam_Clone;
+
+        //            OnOffCamera(camList[(int)curCam_Clone]);
+
+        //            isBlendStart_Clone = false;
+        //            isActiveCB_Clone = false;
+        //        }
+
+        //        // 1회 호출 :  Remote의 Cinemachine Brain을 켜주고, Owner의 이전 카메라 Value 값을 받아 Remote의 이전 카메라 Value에 넣어준다.
+        //        if (isBlendStart_Clone)
+        //        {
+        //            if (curCam_Clone == CamState.back || curCam_Clone == CamState.wide || curCam_Clone == CamState.sholder)
+        //            {
+        //                camList[(int)curCam_Clone].GetComponent<CinemachineFreeLook>().m_XAxis.Value
+        //                             = originPreVirtualCam_XAxis;
+        //                camList[(int)curCam_Clone].GetComponent<CinemachineFreeLook>().m_YAxis.Value
+        //                             = originPreVirtualCam_YAxis;
+        //            }
+        //            isActiveCB_Clone = true;
+        //        }
+
+
+        //    }
+        //}
 
         void OnOffCamera(CinemachineVirtualCameraBase curCam) // 매개변수로 받은 카메라 외에 다른 카메라는 끔
         {
@@ -495,7 +628,7 @@ namespace YC.Camera_
 
             }
             return mainCam;
-        }
+        }     
 
         public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info) // Photon 
         {
