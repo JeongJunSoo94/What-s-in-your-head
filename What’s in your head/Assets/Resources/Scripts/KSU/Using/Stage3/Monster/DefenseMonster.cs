@@ -17,7 +17,7 @@ namespace KSU.Monster
         protected GameObject detectedTarget;
         protected GameObject currentTarget;
         [SerializeField] protected float detectingRange;
-        [SerializeField] protected float detectingUIRange;
+        public float detectingUIRange;
         public float moveSpeed; //시리얼
         //public float stuckTime; //시리얼
         public float sturnTime; //시리얼
