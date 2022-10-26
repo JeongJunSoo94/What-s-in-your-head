@@ -107,7 +107,8 @@ namespace JCW.UI.InGame
                 GameManager.Instance.SetAliveState(isNella, true);
                 heartGauge.fillAmount = 0f;
                 GameManager.Instance.MediateRevive(false);
-                //CameraManager.Instance.ReviveCam();
+                if(!GameManager.Instance.isTopView && photonView.IsMine)
+                    CameraManager.Instance.ReviveCam(isNella);
                 Resurrect();
             }
         }
