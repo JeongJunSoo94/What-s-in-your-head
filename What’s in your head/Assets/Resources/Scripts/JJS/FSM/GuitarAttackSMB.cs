@@ -26,6 +26,7 @@ namespace JJS
         }
         public override void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
         {
+            GetPlayerController(animator).playerMouse.afterDelayTime = false;
             animator.SetBool("isAttack", false);
         }
         void Check(Animator animator)
@@ -49,7 +50,24 @@ namespace JJS
                     animator.SetBool("isAttackNext", true);
                 }
             }
+            if (GetPlayerController(animator).playerMouse.afterDelayTime)
+            {
+                GetPlayerController(animator).InputJump();
+                GetPlayerController(animator).InputDash();
+            }
+            if (GetPlayerController(animator).characterState.IsJumping)
+            {
+                animator.SetBool("isJump", true);
+                GetPlayerController(animator).InputMove();
+                return;
+            }
 
+            if (GetPlayerController(animator).characterState.IsDashing)
+            {
+                animator.SetBool("isDash", true);
+                GetPlayerController(animator).InputMove();
+                return;
+            }
         }
     }
 }

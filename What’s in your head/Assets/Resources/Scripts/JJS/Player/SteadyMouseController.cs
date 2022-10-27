@@ -15,7 +15,6 @@ namespace JJS
         public MagnifyingGlass glass;
         public SteadyGrappleAction grapple;
 
-        PlayerController player;
         //public SteadyGrappleAction grapple;
         private void Awake()
         {

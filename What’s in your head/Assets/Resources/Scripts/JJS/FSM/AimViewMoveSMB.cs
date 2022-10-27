@@ -25,10 +25,30 @@ namespace JJS
             GetPlayerController(animator).playerMouse.ik.enableIK = true;
             if (GetPlayerController(animator).characterState.isMine)
             {
-                GetPlayerController(animator).AimViewInputMove();
-                animator.SetFloat("MoveX", GetPlayerController(animator).moveDir.normalized.x * (GetPlayerController(animator).characterState.isMove ? 1.0f : 0.0f));
-                animator.SetFloat("MoveZ", GetPlayerController(animator).moveDir.normalized.z * (GetPlayerController(animator).characterState.isMove ? 1.0f : 0.0f));
-                GetPlayerController(animator).InputMove();
+
+                if (GetPlayerController(animator).CompareTag("Steady"))
+                {
+                    if (!animator.GetBool("AimAttack"))
+                    {
+                        GetPlayerController(animator).AimViewInputMove();
+                        animator.SetFloat("MoveX", GetPlayerController(animator).moveDir.normalized.x * (GetPlayerController(animator).characterState.isMove ? 1.0f : 0.0f));
+                        animator.SetFloat("MoveZ", GetPlayerController(animator).moveDir.normalized.z * (GetPlayerController(animator).characterState.isMove ? 1.0f : 0.0f));
+                        GetPlayerController(animator).InputMove();
+                    }
+                    else
+                    {
+                        animator.SetFloat("MoveX", 0);
+                        animator.SetFloat("MoveZ", 0);
+                        GetPlayerController(animator).MoveStop();
+                    }
+                }
+                else
+                {
+                    GetPlayerController(animator).AimViewInputMove();
+                    animator.SetFloat("MoveX", GetPlayerController(animator).moveDir.normalized.x * (GetPlayerController(animator).characterState.isMove ? 1.0f : 0.0f));
+                    animator.SetFloat("MoveZ", GetPlayerController(animator).moveDir.normalized.z * (GetPlayerController(animator).characterState.isMove ? 1.0f : 0.0f));
+                    GetPlayerController(animator).InputMove();
+                }
                 check(animator);
             }
 

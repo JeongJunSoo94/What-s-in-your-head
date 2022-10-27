@@ -81,7 +81,10 @@ namespace JJS
             if (GetPlayerController(animator))
             {
                 if (GetPlayerController(animator).CompareTag("Steady"))
+                { 
                     GetPlayerController(animator).GetComponent<CameraController>().SetSteadyBeam(false);
+                    
+                }
             }
         }
 

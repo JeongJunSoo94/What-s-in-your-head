@@ -79,7 +79,17 @@ namespace JJS
             }
 
             GetPlayerController(animator).InputRun();
-            GetPlayerController(animator).InputMove();
+            if (GetPlayerController(animator).CompareTag("Steady"))
+            {
+                if (!animator.GetBool("AimAttack"))
+                { 
+                    GetPlayerController(animator).InputMove();
+                }
+            }
+            else
+            {
+                GetPlayerController(animator).InputMove();
+            }
             //GetPlayerController(animator).InputJump();
             if (!GetPlayerController(animator).playerMouse.weaponInfo[GetPlayerController(animator).playerMouse.GetUseWeapon()].canAim
                 ||GetPlayerController(animator).characterState.top && !animator.GetBool("AimAttack")) /////////// 3스테이지 전용 코드
@@ -115,12 +125,11 @@ namespace JJS
                     }
                 }
             }
-            if (KeyManager.Instance.GetKeyDown(PlayerAction.Swap) && !GetPlayerController(animator).characterState.swap)
+            if (KeyManager.Instance.GetKeyDown(PlayerAction.Swap))
             {
                 if (!animator.GetBool("isAttack")&& GetPlayerController(animator).playerMouse.canSwap)
                 {
                     GetPlayerController(animator).characterState.swap = true;
-                    GetPlayerController(animator).playerMouse.SwapCoroutine();
                     animator.SetBool("WeaponSwap", true);
                 }
             }

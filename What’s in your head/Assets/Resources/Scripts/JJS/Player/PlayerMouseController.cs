@@ -4,6 +4,8 @@ using System;
 using Photon.Pun;
 using UnityEngine;
 using JCW.UI.Options.InputBindings;
+using JCW.UI.InGame;
+using KSU;
 namespace JJS
 {
     [RequireComponent(typeof(PhotonView))]
@@ -21,12 +23,12 @@ namespace JJS
 
         public GameObject point;
         public Camera cameraMain;
-        //public GameObject[] weapon;
-        //public bool[] weaponAimCheck;
+
+        protected PlayerController player;
         [Header("조준, 무조준 공격, 공격 중 이동")] public List<WeaponInfo> weaponInfo;
         public IKController ik;
 
-        [HideInInspector] public bool ableToLeft;
+        [HideInInspector] public bool afterDelayTime;
         [HideInInspector] public bool ableToRight;
 
         [HideInInspector] public bool clickLeft;
@@ -46,11 +48,13 @@ namespace JJS
         
         private void Awake()
         {
-            ableToLeft = false;
+            afterDelayTime = false;
             ableToRight = false;
             canSwap = true;
             ik = GetComponent<IKController>();
             notRotatoin = false;
+
+            player = GetComponent<PlayerController>();
         }
         public virtual void SetWeaponEnable(int weaponIndex, bool enable)
         {
@@ -86,6 +90,12 @@ namespace JJS
             }
         }
 
+        public virtual void WeaponSwapRPC()
+        {
+            photonView.RPC(nameof(WeaponSwap), RpcTarget.AllViaServer);
+        }
+
+        [PunRPC]
         public virtual void WeaponSwap()
         {
             if (weaponInfo.Count != 0)
@@ -95,6 +105,7 @@ namespace JJS
                     weaponInfo[i].weapon.SetActive(!weaponInfo[i].weapon.activeSelf);
                 }
             }
+            gameObject.GetComponentInChildren<SwapItem>().SetSwap(GetUseWeapon());
         }
 
         public void SwapCoroutine()
@@ -104,8 +115,6 @@ namespace JJS
                 StartCoroutine(SwapCoolTime());
             }
         }
-
-
 
         IEnumerator SwapCoolTime()
         {

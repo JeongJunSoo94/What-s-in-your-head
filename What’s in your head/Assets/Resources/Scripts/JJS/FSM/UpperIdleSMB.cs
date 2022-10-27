@@ -13,7 +13,7 @@ namespace JJS
             animator.SetLayerWeight(1, 0);
             if (!GetPlayerController(animator).characterState.top)
                 GetPlayerController(animator).characterState.aim = false;
-
+            GetPlayerController(animator).playerMouse.ik.enableIK = false;
             if (GetPlayerController(animator).playerMouse is SteadyMouseController)
             {
                 animator.SetBool("isShootingGrapple", false);
@@ -69,7 +69,8 @@ namespace JJS
                 {
                     if (GetPlayerController(animator).characterState.CanJump)
                     {
-                        animator.SetBool("Aim", KeyManager.Instance.GetKey(PlayerAction.Aim));
+                        if(!GetPlayerController(animator).characterState.swap)
+                            animator.SetBool("Aim", KeyManager.Instance.GetKey(PlayerAction.Aim));
                     }
                 }
             }

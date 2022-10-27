@@ -14,11 +14,12 @@ namespace JJS
         override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
         {
             animator.SetLayerWeight(1, 1);
-            index = GetPlayerController(animator).playerMouse.GetUseWeapon();
-            GetPlayerController(animator).playerMouse.WeaponSwap();
+            //index = GetPlayerController(animator).playerMouse.GetUseWeapon();
+            GetPlayerController(animator).playerMouse.SwapCoroutine();
             if(GetPlayerController(animator).characterState.isMine)
             {
-                GetPlayerController(animator).gameObject.GetComponentInChildren<SwapItem>().SetSwap(GetPlayerController(animator).playerMouse.GetUseWeapon());
+                GetPlayerController(animator).playerMouse.WeaponSwapRPC();
+                //GetPlayerController(animator).gameObject.GetComponentInChildren<SwapItem>().SetSwap(GetPlayerController(animator).playerMouse.GetUseWeapon());
             }
         }
         override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
@@ -31,9 +32,9 @@ namespace JJS
 
         override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
         {
-            GetPlayerController(animator).characterState.swap = false;
             animator.SetLayerWeight(1, 0);
             animator.SetBool("WeaponSwap", false);
+            GetPlayerController(animator).characterState.swap = false;
         }
 
     }

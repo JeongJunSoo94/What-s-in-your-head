@@ -39,7 +39,7 @@ namespace JJS.Weapon
         public GameObject weapon;
         public GameObject startPos;
         public GameObject bullet;
-        public bool startShoot;
+        public bool shootEnable;
         public float curShootCool;
         GameObject bulletSpawner;
         public int bulletCurCount = 0;
@@ -60,19 +60,19 @@ namespace JJS.Weapon
 
         public void ShootStart()
         {
-            startShoot = true;
+            shootEnable = true;
             StartCoroutine(ShootCoroutine());
         }
 
         public void ShootStop()
         {
-            startShoot = false;
+            shootEnable = false;
             StopCoroutine(ShootCoroutine());
         }
 
         IEnumerator ShootCoroutine()
         {
-            while (startShoot)
+            while (shootEnable)
             {
                 if (curShootCool == 0)
                 {
