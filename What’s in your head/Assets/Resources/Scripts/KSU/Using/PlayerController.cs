@@ -83,8 +83,6 @@ namespace KSU
         public Vector3 inertiaNormalVec = Vector3.zero; // 공중 상태에 사용할 관성 벡터
         #endregion
 
-        // 체크카운트 - JCW
-
         void Awake()
         {
             // >> : YC
@@ -106,9 +104,6 @@ namespace KSU
             mainCamera = this.gameObject.GetComponent<CameraController>().FindCamera(); // 멀티용
             if (mainCamera == null)
                 Debug.Log("카메라 NULL");
-
-
-
 
             characterState.isMine = photonView.IsMine;
             if (!photonView.IsMine)
