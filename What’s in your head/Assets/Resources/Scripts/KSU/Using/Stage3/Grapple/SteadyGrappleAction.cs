@@ -9,6 +9,7 @@ using YC.Camera_Single;
 
 
 using JCW.UI.InGame.Indicator;
+using JCW.UI.InGame;
 
 namespace KSU
 {
@@ -30,6 +31,7 @@ namespace KSU
         [SerializeField] GameObject grappleObject;
         SteadyGrapple grapple;
         Vector3 autoAimPosition;
+        [SerializeField] AimUI aimUI;
 
         [Header("_______변경 가능 값_______")]
         [Header("플레이어 날아가는 속력")]
@@ -72,6 +74,8 @@ namespace KSU
         Vector3 endLeft;
         Vector3 endRight;
         /// </summary>
+        /// 
+        PhotonView photonView;
 
 
         // Start is called before the first frame update
@@ -92,12 +96,14 @@ namespace KSU
             grapple.spawner = grappleSpawner;
 
             playerAnimator = GetComponent<Animator>();
+            photonView = GetComponent<PhotonView>();
         }
 
         void Update()
         {
             SearchGrappledObject();
-            SendInfoUI();
+            if(photonView.IsMine)
+                SendInfoUI();
             if (grappleSpawner.activeSelf && grappleSpawner.transform.parent.gameObject.activeSelf)
             {
                 MakeGizmoVecs();
@@ -149,6 +155,7 @@ namespace KSU
                             {
                                 if (Vector3.Angle(playerCamera.transform.forward, (_raycastHit.collider.gameObject.transform.position - rayOrigin)) < rangeAngle)
                                 {
+                                    aimUI.SetTarget(_raycastHit.collider.gameObject.transform, rangeAngle);
                                     autoAimPosition = _raycastHit.collider.gameObject.transform.position;
                                     steadyInteractionState.isGrappledObjectFounded = true;
                                     return;
@@ -157,6 +164,7 @@ namespace KSU
                         }
                     }
                 }
+                aimUI.SetTarget(null, rangeAngle);
                 steadyInteractionState.isGrappledObjectFounded = false;
             }
         }
@@ -271,6 +279,11 @@ namespace KSU
                     }
                 }
             }
+
+            //if(steadyInteractionState.isGrappledObjectFounded)
+            //{
+
+            //}
         }
 
         public void EscapeMoving()

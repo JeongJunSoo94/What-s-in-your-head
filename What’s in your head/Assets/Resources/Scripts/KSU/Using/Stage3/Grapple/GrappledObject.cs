@@ -14,8 +14,7 @@ namespace KSU
 
         private void Awake()
         {
-            //if (GameManager.Instance.characterOwner[PhotonNetwork.IsMasterClient])
-            //    transform.GetChild(2).gameObject.SetActive(false);
+            StartCoroutine(nameof(WaitForPlayer));
         }
 
         // Start is called before the first frame update
@@ -24,15 +23,20 @@ namespace KSU
             detectingTrigger.transform.localScale = new Vector3(1, 1, 1) * (detectingRange * 2f);
         }
 
-        // Update is called once per frame
-        void Update()
-        {
-
-        }
-
         public Vector3 GetOffsetPosition()
         {
             return offset.transform.position;
+        }
+
+        protected IEnumerator WaitForPlayer()
+        {
+            while (GameManager.Instance.characterOwner.Count <= 1)
+                yield return new WaitForSeconds(0.2f);
+
+            if (GameManager.Instance.characterOwner[PhotonNetwork.IsMasterClient])
+                transform.GetChild(2).gameObject.SetActive(false);
+
+            yield break;
         }
     }
 }
