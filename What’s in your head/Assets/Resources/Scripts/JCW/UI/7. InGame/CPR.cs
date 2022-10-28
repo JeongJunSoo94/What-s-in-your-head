@@ -25,6 +25,8 @@ namespace JCW.UI.InGame
 
         Vector3 originalPos;
 
+        RectTransform heartRect;
+
         private void Awake()
         {
             photonView = GetComponent<PhotonView>();
@@ -33,6 +35,7 @@ namespace JCW.UI.InGame
             if(photonView.IsMine)
                 mainCam = isNella ? CameraManager.Instance.cameras[0] : CameraManager.Instance.cameras[1];
             originalPos = transform.GetChild(2).gameObject.GetComponent<RectTransform>().position;
+            heartRect = transform.GetChild(2).gameObject.GetComponent<RectTransform>();
         }
 
         private void OnEnable()
@@ -57,12 +60,11 @@ namespace JCW.UI.InGame
                 else
                     pos.x = isNella ? pos.x + 100f : pos.x - 100f;
                 pos.y -= 300f;
-                transform.GetChild(2).gameObject.GetComponent<RectTransform>().position = pos;
-                transform.GetChild(2).gameObject.GetComponent<RectTransform>().localScale *= 0.7f;
-
-                // 아이템 UI
-                transform.parent.parent.parent.GetChild(0).gameObject.SetActive(false);
+                heartRect.position = pos;
+                heartRect.localScale *= 0.7f;
             }
+            // 아이템 UI
+            transform.parent.parent.parent.GetChild(0).gameObject.SetActive(false);
 
         }
 
@@ -77,10 +79,10 @@ namespace JCW.UI.InGame
 
             transform.GetChild(0).gameObject.SetActive(true);
             transform.GetChild(1).gameObject.SetActive(true);
-            //Debug.Log(transform.GetChild(2).gameObject.GetComponent<RectTransform>().position);
-            //transform.GetChild(2).gameObject.GetComponent<RectTransform>().position = new Vector3(0f,0f,0f);
+
             transform.GetChild(2).gameObject.GetComponent<RectTransform>().position = originalPos;
             transform.GetChild(2).gameObject.GetComponent<RectTransform>().localScale = new Vector3(1f, 1f, 1f);
+            heartRect.anchoredPosition = new Vector2(0, heartRect.anchoredPosition.y);
 
             // 아이템 UI
             transform.parent.parent.parent.GetChild(0).gameObject.SetActive(true);
