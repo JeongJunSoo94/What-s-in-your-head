@@ -31,7 +31,7 @@ namespace JJS
         }
         void check(Animator animator)
         {
-
+            GetPlayerController(animator).GetComponent<KSU.PlayerInteraction>().InputInteract();
             if (GetPlayerController(animator).characterState.RayCheck)
             {
                 float DistY = -(GetPlayerController(animator).moveVec.y) / 10.0f;

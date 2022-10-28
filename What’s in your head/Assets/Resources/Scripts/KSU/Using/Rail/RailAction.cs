@@ -16,6 +16,7 @@ namespace KSU
         PlayerController playerController;
         PlayerState playerState;
         PlayerInteractionState interactionState;
+        Animator animator;
 
         public Camera mainCamera;
         [SerializeField] GameObject lookAtObj;
@@ -66,6 +67,7 @@ namespace KSU
             playerController = GetComponent<PlayerController>();
             playerState = GetComponent<PlayerState>();
             interactionState = GetComponent<PlayerInteractionState>();
+            animator = GetComponent<Animator>();
 
             mainCamera = this.gameObject.GetComponent<CameraController>().FindCamera(); // ¸ÖÆ¼¿ë
             //layerForRail = ((1) + (1 << LayerMask.NameToLayer("Rail")));
@@ -157,9 +159,9 @@ namespace KSU
                         if (isRayChecked)
                         {
                             //Debug.Log("2 hit! : " + hit.collider.tag);
-                            if ((hit.collider.gameObject.transform.parent.gameObject != currentRail) || interactionState.isRailJumping)
+                            if (hit.collider.CompareTag("Rail"))
                             {
-                                if (hit.collider.CompareTag("Rail"))
+                                if ((hit.collider.gameObject.transform.parent.gameObject != currentRail) || interactionState.isRailJumping)
                                 {
                                     interactionState.isRailFounded = true;
                                     _raycastHit = hit;
@@ -177,9 +179,9 @@ namespace KSU
                         if (isRayChecked)
                         {
                             //Debug.Log("3 hit! : " + hit.collider.tag);
-                            if ((hit.collider.gameObject.transform.parent.gameObject != currentRail) || interactionState.isRailJumping)
+                            if (hit.collider.CompareTag("Rail"))
                             {
-                                if (hit.collider.CompareTag("Rail"))
+                                if ((hit.collider.gameObject.transform.parent.gameObject != currentRail) || interactionState.isRailJumping)
                                 {
                                     interactionState.isRailFounded = true;
                                     _raycastHit = hit;
@@ -200,9 +202,9 @@ namespace KSU
                         if (isRayChecked)
                         {
                             //Debug.Log("4 hit! : " + _raycastHit.collider.tag);
-                            if ((_raycastHit.collider.gameObject.transform.parent.gameObject != currentRail) || interactionState.isRailJumping)
+                            if (_raycastHit.collider.CompareTag("Rail"))
                             {
-                                if (_raycastHit.collider.CompareTag("Rail"))
+                                if ((_raycastHit.collider.gameObject.transform.parent.gameObject != currentRail) || interactionState.isRailJumping)
                                 {
                                     interactionState.isRailFounded = true;
                                     railStartPosiotion = _raycastHit.point;
@@ -238,9 +240,9 @@ namespace KSU
                         if (isRayChecked)
                         {
                             //Debug.Log("2 hit! : " + hit.collider.tag);
-                            if ((hit.collider.gameObject.transform.parent.gameObject != currentRail) || interactionState.isRailJumping)
+                            if (hit.collider.CompareTag("Rail"))
                             {
-                                if (hit.collider.CompareTag("Rail"))
+                                if ((hit.collider.gameObject.transform.parent.gameObject != currentRail) || interactionState.isRailJumping)
                                 {
                                     interactionState.isRailFounded = true;
                                     _raycastHit = hit;
@@ -257,10 +259,9 @@ namespace KSU
                         //Debug.Log("3 RayChecked : " + isRayChecked);
                         if (isRayChecked)
                         {
-                            //Debug.Log("3 hit! : " + hit.collider.tag);
-                            if ((hit.collider.gameObject.transform.parent.gameObject != currentRail) || interactionState.isRailJumping)
+                            if (hit.collider.CompareTag("Rail"))
                             {
-                                if (hit.collider.CompareTag("Rail"))
+                                if ((hit.collider.gameObject.transform.parent.gameObject != currentRail) || interactionState.isRailJumping)
                                 {
                                     interactionState.isRailFounded = true;
                                     _raycastHit = hit;
@@ -280,8 +281,20 @@ namespace KSU
 
                         if (isRayChecked)
                         {
-                            //Debug.Log("4 hit! : " + _raycastHit.collider.tag);
-                            if ((_raycastHit.collider.gameObject.transform.parent.gameObject != currentRail) || interactionState.isRailJumping)
+                            if (currentRail != null)
+                            {
+                                if (_raycastHit.collider.CompareTag("Rail"))
+                                {
+                                    if ((_raycastHit.collider.gameObject.transform.parent.gameObject != currentRail) || interactionState.isRailJumping)
+                                    {
+                                        interactionState.isRailFounded = true;
+                                        railStartPosiotion = _raycastHit.point;
+                                        railStartObject = _raycastHit.collider.gameObject;
+                                        return;
+                                    }
+                                }
+                            }
+                            else
                             {
                                 if (_raycastHit.collider.CompareTag("Rail"))
                                 {
@@ -299,19 +312,31 @@ namespace KSU
                     return;
                 }
             }
+            else
+            {
+                interactionState.isRailFounded = false;
+            }
         }
 
-        public void StartRailAction()
+        public bool GetWhetherFoundRail()
+        {
+            return interactionState.isRailFounded;
+        }
+
+        public float StartRailAction()
         {
             playerController.characterState.isRiding = true;
             playerRigidbody.velocity = Vector3.zero;
             playerState.IsDashing = false;
             playerState.IsAirJumping = false;
             playerState.WasAirDashing = false;
-            playerState.IsGrounded = false;
+            Vector3 lookVec = (railStartPosiotion - transform.position);
+            lookVec.y = 0;
+            transform.LookAt(transform.position + lookVec);
             currentRail = railStartObject.transform.parent.gameObject;
             interactionState.isMovingToRail = true;
             interactionState.isRailTriggered = true;
+            return Vector3.Distance(railStartPosiotion, transform.position)/movingToRailSpeed;
         }
 
         void MoveToRail()
@@ -326,28 +351,50 @@ namespace KSU
 
         void RideOnRail()
         {
+            animator.SetBool("isRidingRail", true);
+            animator.SetBool("isMoveToRail", false);
             interactionState.isRidingRail = true;
             railStartObject.transform.parent.gameObject.GetComponent<Rail>().RideOnRail(railStartPosiotion, railStartObject, this.gameObject);
             interactionState.isRailTriggered = false;
         }
         public void EscapeRailAction()
         {
-            playerState.IsGrounded = false;
-            currentRail.GetComponent<Rail>().EscapeRail(this.gameObject);
+            if(currentRail != null)
+            {
+                currentRail.GetComponent<Rail>().EscapeRail(this.gameObject, false);
+            }
+        }
+        public void SetBoolEscapeRail()
+        {
+            animator.SetBool("isRidingRail", false);
         }
 
-        public void SwapRail()
+        public float SwapRail()
         {
-            currentRail.GetComponent<Rail>().EscapeRail(this.gameObject);
-            StartRailAction();
+            if (currentRail != null)
+            {
+                currentRail.GetComponent<Rail>().EscapeRail(this.gameObject, true);
+                return StartRailAction();
+            }
+            return 1f;
         }
 
         public void StartRailJump()
         {
-            interactionState.isRailJumpingUp = true;
-            interactionState.isRailJumping = true;
+            if(!interactionState.isRailJumping)
+            {
+                animator.SetBool("isRailJump", true);
+                interactionState.isRailJumpingUp = true;
+                interactionState.isRailJumping = true;
+            }
         }
-            
+
+        public void ReSetRailJump()
+        {
+            animator.SetBool("isRailJump", false);
+            interactionState.isRailJumping = false;
+        }
+
         public void JumpOnRail()
         {
             Vector3 localPos = transform.localPosition;

@@ -22,7 +22,7 @@ namespace KSU
         //HookingRope grappleAction;
         RailAction railAction;
         RopeAction ropeAction;
-
+        Animator animator;
         // Start is called before the first frame update
         void Awake()
         {
@@ -33,81 +33,54 @@ namespace KSU
             //grappleAction = GetComponent<HookingRope>();
             railAction = GetComponent<RailAction>();
             ropeAction = GetComponent<RopeAction>();
+            animator = GetComponent<Animator>();
 
             //ray = Camera.main.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0f));
         }
 
         // Update is called once per frame
-        void Update()
-        {
-            if (playerState.isMine)
-                InputInteract();
-        }
+        //void Update()
+        //{
+        //    //if (playerState.isMine)
+        //    //    InputInteract();
+        //}
 
-        void InputInteract()
+        public void InputInteract()
         {
-            if (playerState.isOutOfControl || playerState.isStopped)
-                return;
-
             if (KeyManager.Instance.GetKeyDown(PlayerAction.Interaction))
             {
-                if (!interactionState.isRidingRope && !interactionState.isRidingRail)
+                if (interactionState.isRailFounded)
                 {
-                    if (interactionState.isRailFounded)
-                    {
-                        railAction.StartRailAction();
-                    }
-                    else
-                    {
-                        if (ropeAction.interactableRope != null)
-                        {
-                            ropeAction.RideRope();
-                        }
-                    }
+                    animator.SetFloat("moveToRailSpeed", 0.833f / railAction.StartRailAction());
+                    animator.SetBool("isMoveToRail",true);
+                    railAction.StartRailAction();
                 }
                 else
                 {
-                    if (interactionState.isRidingRail)
+                    if (ropeAction.interactableRope != null)
                     {
-                        if (!interactionState.isMovingToRail)
-                        {
-                            if (interactionState.isRailFounded)
-                            {
-                                railAction.SwapRail();
-                            }
-                            else if(!interactionState.isRailJumping)
-                            {
-                                railAction.EscapeRailAction();
-                            }
-                        }
-                    }
-
-                    if (interactionState.isRidingRope)
-                    {
-                        if (!interactionState.isMoveFromRope && !interactionState.isMoveToRope)
-                        {
-                            ropeAction.EscapeRope();
-                        }
+                        animator.SetBool("isMoveToRope", true);
+                        ropeAction.RideRope();
                     }
                 }
             }
-            if(KeyManager.Instance.GetKeyDown(PlayerAction.Jump))
-            {
-                if (interactionState.isRidingRail)
-                {
-                    if (!interactionState.isMovingToRail && !interactionState.isRailJumping)
-                    {
-                        railAction.StartRailJump();
-                    }
-                }
-                else if (interactionState.isRidingRope)
-                {
-                    if (!interactionState.isMoveFromRope && !interactionState.isMoveToRope)
-                    {
-                        ropeAction.EscapeRope();
-                    }
-                }
-            }
+            //if (KeyManager.Instance.GetKeyDown(PlayerAction.Jump))
+            //{
+            //    if (interactionState.isRidingRail)
+            //    {
+            //        if (!interactionState.isMovingToRail && !interactionState.isRailJumping)
+            //        {
+            //            railAction.StartRailJump();
+            //        }
+            //    }
+            //    else if (interactionState.isRidingRope)
+            //    {
+            //        if (!interactionState.isMoveFromRope && !interactionState.isMoveToRope)
+            //        {
+            //            ropeAction.EscapeRope();
+            //        }
+            //    }
+            //}
         }
     }
 }

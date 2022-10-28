@@ -27142,6 +27142,7 @@ MonoBehaviour:
   canSwap: 0
   curCool: 0
   swapCool: 0.5
+  notRotatoin: 0
   glass: {fileID: 8768540777746556850}
   grapple: {fileID: 2953762621103950369}
 --- !u!114 &8750876866218855433
@@ -49691,10 +49692,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e6554dc44fb331742a36f99e2020b610, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  particleGather: {fileID: 430488638613468360}
-  particleBeam: {fileID: 1972079448279023575}
-  paticleBoxCollider: {fileID: 2276343840837846358}
-  mainCamera: {fileID: 0}
   beamWaitTime: 2
   maxDistance: 30
   curDistance: 0
@@ -49703,6 +49700,10 @@ MonoBehaviour:
   layerMask:
     serializedVersion: 2
     m_Bits: 0
+  particleGather: {fileID: 430488638613468360}
+  particleBeam: {fileID: 1972079448279023575}
+  paticleBoxCollider: {fileID: 2276343840837846358}
+  mainCamera: {fileID: 0}
   targetIK: {fileID: 8768540777906838207}
   direction: {fileID: 8768540777832219447}
   hitPos: {fileID: 4230245179728156389}
@@ -49710,10 +49711,8 @@ MonoBehaviour:
   weapon: {fileID: 8770354767411689546}
   startPos: {fileID: 8768540777832219447}
   hitBox: {fileID: 8768540777832219447}
-  layer:
-    serializedVersion: 2
-    m_Bits: 0
   beaming: 0
+  lineCountCheck: 0
 --- !u!1 &8768540777832219447
 GameObject:
   m_ObjectHideFlags: 0

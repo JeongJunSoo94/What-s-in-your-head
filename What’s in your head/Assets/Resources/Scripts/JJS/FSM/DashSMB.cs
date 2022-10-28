@@ -24,6 +24,7 @@ namespace JJS
         }
         void check(Animator animator)
         {
+            GetPlayerController(animator).GetComponent<KSU.PlayerInteraction>().InputInteract();
             GetPlayerController(animator).InputJump();
             if (!GetPlayerController(animator).characterState.IsGrounded)
             {

@@ -90,6 +90,7 @@ namespace KSU
         {
             Vector3 playerVec = player.GetComponent<RailAction>().mainCamera.transform.forward;
             playerVec.y = 0;
+            cartSetUp.gameObject.SetActive(true);
             if (Vector3.Angle(cartSetUp.gameObject.transform.forward, playerVec) > 90f)
             {
                 cartSetUp.m_Speed = -railSpeed;
@@ -135,7 +136,7 @@ namespace KSU
                 player.transform.localPosition = Vector3.zero;
                 player.transform.localRotation = Quaternion.Euler(new Vector3(0, 0, 0));
             }
-            cartSetUp.gameObject.SetActive(true);
+            
             switch (player.tag)
             {
                 case "Nella":
@@ -203,7 +204,7 @@ namespace KSU
 
                 if (Mathf.Abs(NellaCart.GetComponent<Cinemachine.CinemachineDollyCart>().m_Position - NellaDestiation) < 0.2f)
                 {
-                    EscapeRail(Nella);
+                    EscapeRail(Nella, false);
                 }
             }
 
@@ -221,7 +222,7 @@ namespace KSU
 
                 if (Mathf.Abs(SteadyCart.GetComponent<Cinemachine.CinemachineDollyCart>().m_Position - SteadyDestiation) < 0.2f)
                 {
-                    EscapeRail(Steady);
+                    EscapeRail(Steady, false);
                 }
             }
         }
@@ -240,7 +241,7 @@ namespace KSU
 
         }
 
-        public void EscapeRail(GameObject player)
+        public void EscapeRail(GameObject player, bool isSwap)
         {
             player.GetComponent<RailAction>().currentRail = null;
             player.transform.parent = null;
@@ -272,6 +273,10 @@ namespace KSU
             playerController.moveVec = Vector3.up * playerController.jumpSpeed / 2f;
             playerController.characterState.isRiding = false;
             PlayerInteractionState interactionState = player.GetComponent<PlayerInteractionState>();
+            if (!isSwap)
+            {
+                player.GetComponent<RailAction>().SetBoolEscapeRail();
+            }
             interactionState.isRidingRail = false;
             interactionState.isRailJumping = false;
             interactionState.isRailJumpingUp = false;

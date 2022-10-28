@@ -12,6 +12,7 @@ namespace KSU
         [SerializeField] GameObject ropeAnchor;
         [SerializeField] GameObject rope;
         public GameObject player;
+        public RopeAction playerRopeAction;
 
         public float startXAngle = 0f;
         //public Direction targetDirection = Direction.Default;
@@ -195,6 +196,7 @@ namespace KSU
                 player.transform.localPosition = Vector3.zero;
                 player.transform.localRotation = Quaternion.Euler(Vector3.zero);
 
+                isSwingForward = true;
                 isRopeExisting = true;
                 isRotatingToDefault = true;
                 player.GetComponent<Rigidbody>().velocity = Vector3.zero;
@@ -237,6 +239,12 @@ namespace KSU
 
         void Swing()
         {
+            if(playerRopeAction == null)
+            {
+                playerRopeAction = player.GetComponent<RopeAction>();
+            }
+
+            //playerRopeAction.RecieveDirection(isSwingForward); /////////////////////////////////////////////
             //player.GetComponent<Rigidbody>().velocity = Vector3.zero;
             player.transform.localPosition = Vector3.zero;
 

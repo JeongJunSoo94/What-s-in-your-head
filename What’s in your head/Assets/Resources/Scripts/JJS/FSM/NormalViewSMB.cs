@@ -65,6 +65,7 @@ namespace JJS
 
         void InputCheck(Animator animator)
         {
+            GetPlayerController(animator).GetComponent<KSU.PlayerInteraction>().InputInteract();
             if (GameManager.Instance.isTopView)
             {
                 if (GetPlayerController(animator).CompareTag("Steady"))
