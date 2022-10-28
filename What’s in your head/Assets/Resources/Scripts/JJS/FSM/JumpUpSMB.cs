@@ -25,18 +25,18 @@ namespace JJS
                 GetPlayerController(animator).InputJump();
                 check(animator);
             }
-            float DistY = (GetPlayerController(animator).moveVec.y) / 10.0f;
-            if (DistY <= 0)
-            {
-                animator.SetTrigger("JumpDown");
-            }
         }
         override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
         {
         }
         void check(Animator animator)
         {
-           
+            GetPlayerController(animator).GetComponent<KSU.PlayerInteraction>().InputInteract();
+            float DistY = (GetPlayerController(animator).moveVec.y) / 10.0f;
+            if (DistY <= 0)
+            {
+                animator.SetBool("JumpDown", true);
+            }
             if (GetPlayerController(animator).characterState.IsGrounded)
             {
                 animator.SetBool("isAir", false);

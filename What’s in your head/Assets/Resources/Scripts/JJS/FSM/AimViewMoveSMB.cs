@@ -9,7 +9,6 @@ namespace JJS
     {
         override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
         {
-            animator.SetLayerWeight(1, 1);
             //if (GetPlayerController(animator).characterState.isMine)
             //{
             //    GetPlayerController(animator).characterState.aim = true;
@@ -18,11 +17,6 @@ namespace JJS
 
         override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
         {
-            if (!GetPlayerController(animator).characterState.top)
-            {
-                GetPlayerController(animator).playerMouse.AimUpdate(1);
-            }
-            GetPlayerController(animator).playerMouse.ik.enableIK = true;
             if (GetPlayerController(animator).characterState.isMine)
             {
 
@@ -37,9 +31,9 @@ namespace JJS
                     }
                     else
                     {
+                        GetPlayerController(animator).characterState.isOutOfControl = true;
                         animator.SetFloat("MoveX", 0);
                         animator.SetFloat("MoveZ", 0);
-                        GetPlayerController(animator).MoveStop();
                     }
                 }
                 else
@@ -56,11 +50,15 @@ namespace JJS
 
         public override void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
         {
-            //if (GetPlayerController(animator).characterState.isMine)
-            //{
-            //    GetPlayerController(animator).characterState.aim = false;
-            //}
-        }
+            if (GetPlayerController(animator).CompareTag("Steady"))
+            {
+                GetPlayerController(animator).characterState.isOutOfControl = false;
+            }
+                //if (GetPlayerController(animator).characterState.isMine)
+                //{
+                //    GetPlayerController(animator).characterState.aim = false;
+                //}
+            }
         void check(Animator animator)
         {
 

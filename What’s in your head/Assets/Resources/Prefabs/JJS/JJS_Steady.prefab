@@ -27002,9 +27002,6 @@ MonoBehaviour:
   - Type: 4
     SynchronizeType: 2
     Name: wasAirJump
-  - Type: 9
-    SynchronizeType: 2
-    Name: JumpDown
   - Type: 4
     SynchronizeType: 2
     Name: Aim
@@ -27029,6 +27026,18 @@ MonoBehaviour:
   - Type: 4
     SynchronizeType: 2
     Name: isGrappleMoving
+  - Type: 4
+    SynchronizeType: 0
+    Name: isRidingRail
+  - Type: 4
+    SynchronizeType: 0
+    Name: isTranferRail
+  - Type: 4
+    SynchronizeType: 0
+    Name: isRailJump
+  - Type: 4
+    SynchronizeType: 2
+    Name: JumpDown
   m_SynchronizeLayers:
   - SynchronizeType: 2
     LayerIndex: 0
@@ -27117,6 +27126,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 79eaf00710311bd4abc8301ba037e744, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  layerWeight: 0
   point: {fileID: 0}
   cameraMain: {fileID: 0}
   weaponInfo:
@@ -27140,6 +27150,9 @@ MonoBehaviour:
   canSwap: 0
   curCool: 0
   swapCool: 0.5
+  canAim: 0
+  curAimCool: 0
+  AimCool: 0.5
   notRotatoin: 0
   glass: {fileID: 8768540777746556850}
   grapple: {fileID: 2953762621103950369}

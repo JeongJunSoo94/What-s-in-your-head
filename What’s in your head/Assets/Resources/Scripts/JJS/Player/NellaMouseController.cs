@@ -37,7 +37,7 @@ namespace JJS
             photonView = GetComponent<PhotonView>();
             player = GetComponent<PlayerController>();
             canSwap = true;
-
+            canAim = true;
             player = GetComponent<PlayerController>();
         }
 
@@ -50,15 +50,43 @@ namespace JJS
         {
             if (photonView.IsMine)
             {
+                if (weaponInfo[GetUseWeapon()].canAim)
+                {
+                    if (KeyManager.Instance.GetKey(PlayerAction.Aim)
+                        && !player.characterState.swap
+                        && !player.characterState.IsJumping
+                        && !player.characterState.IsAirJumping
+                        && !player.characterState.IsDashing
+                        && !player.characterState.IsAirDashing)
+                    {
+                        if (!clickRight)
+                        {
+                            AimCoroutine();
+                            clickRight = true;
+                        }
+                        player.characterState.aim = true;
+                    }
+                    else
+                    {
+                        clickRight = false;
+                        player.characterState.aim = false;
+                    }
+
+                }
+               
                 if (player.characterState.aim)
                 {
                     if (!player.characterState.IsJumping && !player.characterState.IsAirJumping
                         && !player.characterState.IsDashing && !player.characterState.IsAirDashing)
                     {
-                        if (KeyManager.Instance.GetKey(PlayerAction.Fire) && GetUseWeapon() == 0)
+                        if (KeyManager.Instance.GetKey(PlayerAction.Fire) && weaponInfo[GetUseWeapon()].canAim)
                         {
-                            photonView.RPC(nameof(SetWeaponEnable), RpcTarget.AllViaServer, 0, true);
-                          
+                            if (gun.shootEnable&& canAim)
+                            {
+                              
+                                gun.ShootCoroutineEnable();
+                                photonView.RPC(nameof(SetWeaponEnable), RpcTarget.AllViaServer, 0, true);
+                            }
                         }
                         else
                         {
@@ -73,16 +101,19 @@ namespace JJS
                         if (clickLeft)
                         {
                             photonView.RPC(nameof(SetWeaponEnable), RpcTarget.AllViaServer, 0, false);
-                            clickLeft = false;
                         }
                     }
                 }
                 else
                 {
+                    if (KeyManager.Instance.GetKey(PlayerAction.Fire))
+                    {
+
+                    }
                     if (clickLeft)
                     {
                         photonView.RPC(nameof(SetWeaponEnable), RpcTarget.AllViaServer, 0, false);
-                        clickLeft = false;
+                      
                     }
                 }
 
@@ -107,7 +138,7 @@ namespace JJS
 
 
         [PunRPC]
-        public override void SetWeaponEnable(int weaponIndex,bool enable)
+        public override void SetWeaponEnable(int weaponIndex, bool enable)
         {
 
             if (enable)
@@ -116,12 +147,16 @@ namespace JJS
                 {
                     AimUpdate(2);
                 }
-                clickLeft = true;
+                else
+                {
+                    AimUpdate(1);
+                }
+               
                 gun.ShootStart();
             }
             else
             {
-                gun.ShootStop();
+                   //gun.ShootStop();
                 clickLeft = false;
             }
         }
@@ -131,7 +166,6 @@ namespace JJS
         //    gun.Shoot();
         //    bulletCount++;
         //}
-
         public void OnEnableObject(int index)
         {
             hitObjs[index].gameObject.SetActive(true);

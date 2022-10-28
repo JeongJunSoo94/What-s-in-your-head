@@ -9,6 +9,7 @@ using Photon.Pun;
 
 namespace JJS.Weapon
 {
+    [RequireComponent(typeof(PhotonView))]
     public class WaterGun : MonoBehaviour
     {
 
@@ -21,6 +22,7 @@ namespace JJS.Weapon
 
         [Header("WaterGunInfo")]
         public float shootMaxDistance;
+        public float shootMinDistrace;
         public float shootCurDistance;
         public float curveHeight=1f;
         public float curveWidth=0.5f;
@@ -43,6 +45,7 @@ namespace JJS.Weapon
         public float curShootCool;
         GameObject bulletSpawner;
         public int bulletCurCount = 0;
+
         private void Awake()
         {
             bezierCurveOrbit = gameObject.GetComponent<BezierCurve>();
@@ -53,6 +56,7 @@ namespace JJS.Weapon
             spawner.obj = bullet;
             spawner.count = bulletCount;
             spawner.spawnCount = 0;
+            shootEnable = true;
         }
         //void FixedUpdate()
         //{
@@ -60,39 +64,26 @@ namespace JJS.Weapon
 
         public void ShootStart()
         {
-            shootEnable = true;
-            StartCoroutine(ShootCoroutine());
+            Shoot();
+            bulletCurCount++;
         }
 
-        public void ShootStop()
+        public void ShootCoroutineEnable()
         {
-            shootEnable = false;
-            StopCoroutine(ShootCoroutine());
-        }
-
-        IEnumerator ShootCoroutine()
-        {
-            while (shootEnable)
-            {
-                if (curShootCool == 0)
-                {
-                    Shoot();
-                    bulletCurCount++;
-                    StartCoroutine(ShootCoolTime());
-                }
-                yield return new WaitForSeconds(shootSpeed -curShootCool);
-            }
-            yield break;
+            if(shootEnable)
+                StartCoroutine(ShootCoolTime());
         }
 
         IEnumerator ShootCoolTime()
         {
+            shootEnable = false;
             while (curShootCool< shootSpeed)
             {
                 curShootCool+= 0.01f;
                 yield return new WaitForSeconds(0.01f);
             }
             curShootCool = 0;
+            shootEnable = true;
             yield break;
         }
 
@@ -153,12 +144,21 @@ namespace JJS.Weapon
                 {
                     MaxPhysicsLine(startPos.transform.position, mainCamera.transform.forward);
                 }
-
             }
             else if (type == 2)
             {
-                dir = (mousePoint.transform.position - startPos.transform.position).normalized;
-                PhisicsShootLine(startPos.transform.position, dir);
+                //if (shootMinDistrace < Vector3.Distance(mousePoint.transform.position, startPos.transform.position))
+                //{
+                    dir = (mousePoint.transform.position - startPos.transform.position).normalized;
+                    PhisicsShootLine(startPos.transform.position, dir);
+                //}
+                //else
+                //{
+                //    Vector3 direction = transform.forward;
+                //    direction.y += (mousePoint.transform.position.y - startPos.transform.position.y);
+                //    dir = direction.normalized;
+                //    PhisicsShootLine(startPos.transform.position, dir);
+                //}
             }
 
             switch (type)
@@ -203,27 +203,53 @@ namespace JJS.Weapon
             if (Physics.Raycast(startPosition, rayDirection, out hit, shootMaxDistance, -1, QueryTriggerInteraction.Ignore))
             {
                 shootCurDistance = Vector3.Distance(startPosition, hit.point);
-                bezierCurveOrbit.p1 = startPosition;
-
-                float Height = hit.point.y - startPosition.y;
-                Height /= shootMaxDistance;
-                float width = curveWidth;
-                if (Height > 0)
+                if (shootCurDistance < shootMinDistrace)
                 {
-                    width -= Height * 0.25f;
+                    bezierCurveOrbit.p1 = startPosition;
+
+                    float Height = hit.point.y - startPosition.y;
+                    Height /= shootMaxDistance;
+                    float width = curveWidth;
+                    if (Height > 0)
+                    {
+                        width -= Height * 0.25f;
+                    }
+                    else
+                    {
+                        width -= Height * 0.25f;
+                        Height *= -1f;
+                    }
+
+                    Vector3 direction = (startPosition - hit.point) * width;
+
+                    bezierCurveOrbit.p2 = hit.point; 
+                    bezierCurveOrbit.p3 = hit.point;
+                    bezierCurveOrbit.p4 = hit.point;
                 }
                 else
                 {
-                    width -= Height * 0.25f;
-                    Height *= -1f;
+                    bezierCurveOrbit.p1 = startPosition;
+
+                    float Height = hit.point.y - startPosition.y;
+                    Height /= shootMaxDistance;
+                    float width = curveWidth;
+                    if (Height > 0)
+                    {
+                        width -= Height * 0.25f;
+                    }
+                    else
+                    {
+                        width -= Height * 0.25f;
+                        Height *= -1f;
+                    }
+
+                    Vector3 direction = (startPosition - hit.point) * width;
+
+                    direction.y += (1 - width) + Height * curveHeight;
+                    bezierCurveOrbit.p2 = hit.point + direction;
+                    bezierCurveOrbit.p3 = hit.point;
+                    bezierCurveOrbit.p4 = hit.point;
                 }
-
-                Vector3 direction = (startPosition - hit.point) * width;
-
-                direction.y += (1 - width) + Height * curveHeight;
-                bezierCurveOrbit.p2 = hit.point + direction;
-                bezierCurveOrbit.p3 = hit.point;
-                bezierCurveOrbit.p4 = hit.point;
                 return true;
             }
             return false;

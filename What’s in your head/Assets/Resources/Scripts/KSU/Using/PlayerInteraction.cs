@@ -44,7 +44,7 @@ namespace KSU
                 InputInteract();
         }
 
-        void InputInteract()
+        public void InputInteract()
         {
             if (playerState.isOutOfControl || playerState.isStopped)
                 return;

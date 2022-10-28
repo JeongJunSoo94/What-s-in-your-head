@@ -11,6 +11,7 @@ namespace JJS
             if (GetPlayerController(animator).characterState.isMine)
             {
                 GetPlayerController(animator).characterState.isRun = false;
+                animator.SetBool("JumpDown", false);
             }
         }
 
@@ -31,7 +32,7 @@ namespace JJS
         }
         void check(Animator animator)
         {
-
+            GetPlayerController(animator).GetComponent<KSU.PlayerInteraction>().InputInteract();
             if (GetPlayerController(animator).characterState.RayCheck)
             {
                 float DistY = -(GetPlayerController(animator).moveVec.y) / 10.0f;
@@ -41,6 +42,7 @@ namespace JJS
             }
             else
             {
+                animator.SetBool("JumpDown", false);
                 animator.SetFloat("DistY", 0.1f);
             }
 

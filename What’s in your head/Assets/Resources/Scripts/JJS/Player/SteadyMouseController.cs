@@ -27,7 +27,7 @@ namespace JJS
             }
             canSwap = true;
             photonView = GetComponent<PhotonView>();
-
+            canAim = true;
             player = GetComponent<PlayerController>();
         }
 
@@ -35,6 +35,30 @@ namespace JJS
         {
             if (photonView.IsMine)
             {
+                if (weaponInfo[GetUseWeapon()].canAim)
+                {
+                    if (KeyManager.Instance.GetKey(PlayerAction.Aim)
+                        && !player.characterState.swap
+                        && !player.characterState.IsJumping
+                        && !player.characterState.IsAirJumping
+                        && !player.characterState.IsDashing
+                        && !player.characterState.IsAirDashing)
+                    {
+                        if (!clickRight)
+                        {
+                            AimCoroutine();
+                            clickRight = true;
+                        }
+                        player.characterState.aim = true;
+                    }
+                    else
+                    {
+                        clickRight = false;
+                        player.characterState.aim = false;
+                    }
+
+                }
+
                 if (player.characterState.aim)
                 {
                     if (KeyManager.Instance.GetKey(PlayerAction.Fire) && GetUseWeapon() == 1)

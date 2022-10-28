@@ -8,7 +8,7 @@ public class SteadyUpperIdleSMB : CharacterBaseSMB
 {
     override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        GetPlayerController(animator).characterState.aim = false;
+        //GetPlayerController(animator).characterState.aim = false;
     }
 
     // OnStateUpdate is called on each Update frame between OnStateEnter and OnStateExit callbacks

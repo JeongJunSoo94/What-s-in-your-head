@@ -21,6 +21,8 @@ namespace JJS
         }
         protected PhotonView photonView;
 
+        public float layerWeight=0;
+
         public GameObject point;
         public Camera cameraMain;
 
@@ -44,6 +46,10 @@ namespace JJS
         public float curCool=0f;
         public float swapCool=0.5f;
 
+        public bool canAim;
+        public float curAimCool = 0f;
+        public float AimCool = 0.5f;
+
         public bool notRotatoin;
         
         private void Awake()
@@ -51,11 +57,14 @@ namespace JJS
             afterDelayTime = false;
             ableToRight = false;
             canSwap = true;
+            canAim = true;
             ik = GetComponent<IKController>();
             notRotatoin = false;
 
             player = GetComponent<PlayerController>();
+            layerWeight = 0;
         }
+
         public virtual void SetWeaponEnable(int weaponIndex, bool enable)
         {
 
@@ -128,6 +137,33 @@ namespace JJS
             canSwap = true;
             yield break;
         }
+        public void AimCoroutine()
+        {
+            if (canAim)
+            { 
+                StartCoroutine(AimCoolTime());
+            }
+            else 
+            {
+                StopCoroutine(AimCoolTime());
+                StartCoroutine(AimCoolTime());
+            }
+        }
+
+        IEnumerator AimCoolTime()
+        {
+            curAimCool = 0;
+            canAim = false;
+            while (curAimCool < AimCool)
+            {
+                curAimCool += 0.01f;
+                yield return new WaitForSeconds(0.01f);
+            }
+            curAimCool = 0;
+            canAim = true;
+            yield break;
+        }
+
 
         public virtual bool GetCustomInfo()
         {
