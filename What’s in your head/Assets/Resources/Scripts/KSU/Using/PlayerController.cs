@@ -130,7 +130,7 @@ namespace KSU
 
         private void FixedUpdate()
         {
-            if (!photonView.IsMine || characterState.isStopped || characterState.isRiding)
+            if (!photonView.IsMine || characterState.isStopped )
             {
                 playerRigidbody.velocity = Vector3.zero;
                 return;
