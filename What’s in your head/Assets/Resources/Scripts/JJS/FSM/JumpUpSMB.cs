@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using JJS.CharacterSMB;
+using YC.Camera_; // << : 찬 추가
 namespace JJS
 {
     public class JumpUpSMB : CharacterBaseSMB
@@ -12,6 +13,11 @@ namespace JJS
             if (GetPlayerController(animator).characterState.isMine)
             {
                 GetPlayerController(animator).characterState.isRun = false;
+
+                //Debug.Log("애니메이터 - 일반 점프 시작!");
+                GetPlayerController(animator).GetComponent<CameraController>().NormalJumpCameraInit(true); // << : 찬 추가
+
+
             }
         }
 
@@ -28,13 +34,14 @@ namespace JJS
         }
         override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
         {
+           
         }
         void check(Animator animator)
         {
             float DistY = (GetPlayerController(animator).moveVec.y) / 10.0f;
             if (DistY <= 0)
             {
-                animator.SetTrigger("JumpDown");
+                animator.SetTrigger("JumpDown"); // << : 점프의 상승 -> 하강 Change 포인트
             }
             if (GetPlayerController(animator).characterState.IsGrounded)
             {

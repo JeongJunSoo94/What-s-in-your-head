@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using JCW.UI.Options.InputBindings;
 using JJS.CharacterSMB;
+using YC.Camera_; // << : 찬 추가
 namespace JJS
 {
     public class NormalViewSMB : CharacterBaseSMB
@@ -14,6 +15,12 @@ namespace JJS
             animator.SetBool("isJump", false);
             animator.SetBool("isAttack", false);
             //GetPlayerController(animator).characterState.aim = false;
+
+            if (GetPlayerController(animator).characterState.isMine)
+            {
+                //Debug.Log("애니메이터 - 땅 도착!");
+                GetPlayerController(animator).GetComponent<CameraController>().NormalJumpCameraInit(false); // << : 찬 추가              
+            }
         }
 
         override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)

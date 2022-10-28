@@ -10,7 +10,7 @@ namespace JJS
         {
             if (GetPlayerController(animator).characterState.isMine)
             {
-                GetPlayerController(animator).characterState.isRun = false;
+                GetPlayerController(animator).characterState.isRun = false;          
             }
         }
 
@@ -28,6 +28,7 @@ namespace JJS
         }
         override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
         {
+            
         }
         void check(Animator animator)
         {
