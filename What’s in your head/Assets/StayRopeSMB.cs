@@ -1,22 +1,22 @@
-using JCW.UI.Options.InputBindings;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using JCW.UI.Options.InputBindings;
 
 namespace KSU.FSM
 {
-    public class EnterRailSMB : RailSMB
+    public class StayRopeSMB : RopeSMB
     {
         // OnStateEnter is called when a transition starts and the state machine starts to evaluate this state
         override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
         {
-            GetRailAction(animator).StartRailAction();
+            animator.SetBool("isMoveToRope", false);
         }
 
         // OnStateUpdate is called on each Update frame between OnStateEnter and OnStateExit callbacks
         override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
         {
-            //CheckState(animator);
+            CheckState(animator);
         }
 
         // OnStateExit is called when a transition ends and the state machine finishes evaluating this state
@@ -39,11 +39,16 @@ namespace KSU.FSM
 
         void CheckState(Animator animator)
         {
-             if (GetRailAction(animator).GetWhetherFailedRiding())
+            animator.SetBool("isAir", !GetPlayerController(animator).characterState.IsGrounded);
+
+            if(animator.GetBool("isRidingRope"))
             {
-                animator.SetBool("isMoveToRail", false);
+                if (KeyManager.Instance.GetKeyDown(PlayerAction.Jump) || KeyManager.Instance.GetKeyDown(PlayerAction.Interaction))
+                {
+                    animator.SetBool("isRidingRope", false);
+                    GetRopeAction(animator).EscapeRope();
+                }
             }
         }
     }
 }
-

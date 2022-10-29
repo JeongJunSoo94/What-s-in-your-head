@@ -72,13 +72,10 @@ namespace KSU
             FindInteractableRope();
             SendInfoUI();
 
-            if (interactionState.isRidingRope)
+            if (currentRidingRope != null)
             {
-                if(currentRidingRope != null)
-                {
-                    rope.SetPosition(0, hand.transform.position);
-                    rope.SetPosition(1, currentRidingRope.transform.position);
-                }
+                rope.SetPosition(0, hand.transform.position);
+                rope.SetPosition(1, currentRidingRope.transform.position);
             }
         }
 
@@ -199,6 +196,10 @@ namespace KSU
             rope.SetPosition(1, hand.transform.position);
             rope.enabled = true;
         }
+        public bool GetWhetherMovingToRope()
+        {
+            return !interactionState.isMoveToRope;
+        }
 
         public void RecieveDirection(float threshHold)
         {
@@ -206,8 +207,11 @@ namespace KSU
         }
         public void EscapeRope()
         {
-            StartCoroutine("DelayEscape");
-
+            StartCoroutine(nameof(DelayEscape));
+            if(currentRidingRope == null)
+            {
+                return;
+            }
             float jumpPower = currentRidingRope.GetComponent<RopeSpawner>().EndRopeAction(this.gameObject);
 
             Obj_Info node = detectedRopes.GetValueOrDefault(currentRidingRope);
@@ -234,6 +238,11 @@ namespace KSU
             yield return new WaitForSeconds(escapingRopeDelayTime);
             interactionState.isMoveFromRope = false;
             interactionState.isRidingRope = false;
+        }
+
+        public bool GetWhetherBeEscapeFromRope()
+        {
+            return interactionState.isMoveFromRope;
         }
 
         void SendInfoUI()

@@ -1,22 +1,21 @@
-using JCW.UI.Options.InputBindings;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 namespace KSU.FSM
 {
-    public class EnterRailSMB : RailSMB
+    public class EnterRopeSMB : RopeSMB
     {
         // OnStateEnter is called when a transition starts and the state machine starts to evaluate this state
-        override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
-        {
-            GetRailAction(animator).StartRailAction();
-        }
+        //override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
+        //{
+        //    
+        //}
 
         // OnStateUpdate is called on each Update frame between OnStateEnter and OnStateExit callbacks
         override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
         {
-            //CheckState(animator);
+            CheckState(animator);
         }
 
         // OnStateExit is called when a transition ends and the state machine finishes evaluating this state
@@ -36,14 +35,12 @@ namespace KSU.FSM
         //{
         //    // Implement code that sets up animation IK (inverse kinematics)
         //}
-
         void CheckState(Animator animator)
         {
-             if (GetRailAction(animator).GetWhetherFailedRiding())
+            if(GetRopeAction(animator).GetWhetherMovingToRope())
             {
-                animator.SetBool("isMoveToRail", false);
+                animator.SetBool("isRidingRope", true);
             }
         }
     }
 }
-

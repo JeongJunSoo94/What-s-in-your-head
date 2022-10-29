@@ -45,7 +45,7 @@ namespace KSU
         //    //    InputInteract();
         //}
 
-        public void InputInteract()
+        public bool InputInteract()
         {
             if (KeyManager.Instance.GetKeyDown(PlayerAction.Interaction))
             {
@@ -53,17 +53,21 @@ namespace KSU
                 {
                     animator.SetFloat("moveToRailSpeed", 0.833f / railAction.StartRailAction());
                     animator.SetBool("isMoveToRail",true);
-                    railAction.StartRailAction();
+                    interactionState.isRailTriggered = true;
+                    return true;
                 }
                 else
                 {
                     if (ropeAction.interactableRope != null)
                     {
-                        animator.SetBool("isMoveToRope", true);
+                        //animator.SetFloat("moveToRailSpeed", 2.033f / railAction.StartRailAction());
                         ropeAction.RideRope();
+                        animator.SetBool("isMoveToRope", true);
+                        return true;
                     }
                 }
             }
+            return false;
             //if (KeyManager.Instance.GetKeyDown(PlayerAction.Jump))
             //{
             //    if (interactionState.isRidingRail)

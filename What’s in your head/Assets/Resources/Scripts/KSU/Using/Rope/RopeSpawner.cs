@@ -7,8 +7,8 @@ namespace KSU
 {
     public class RopeSpawner : MonoBehaviour
     {
-        [SerializeField] GameObject NellaRopeCentor;
-        [SerializeField] GameObject SteadyRopeCentor;
+        [SerializeField] GameObject NellaRopeCenter;
+        [SerializeField] GameObject SteadyRopeCenter;
         [SerializeField] GameObject detector;
 
         //[Header("UI 콜라이더")] [SerializeField] private GameObject UIObj;
@@ -45,16 +45,26 @@ namespace KSU
             {
                 case "Nella":
                     {
-                        NellaRopeCentor.GetComponent<Rope>().player = player;
-                        NellaRopeCentor.GetComponent<Rope>().moveToRopeSpeed = moveToRopeSpeed;
-                        NellaRopeCentor.SetActive(true);
+                        if(NellaRopeCenter.activeSelf)
+                        {
+                            player.GetComponent<PlayerInteractionState>().isMoveToRope = false;
+                            return;
+                        }
+                        NellaRopeCenter.GetComponent<Rope>().player = player;
+                        NellaRopeCenter.GetComponent<Rope>().moveToRopeSpeed = moveToRopeSpeed;
+                        NellaRopeCenter.SetActive(true);
                     }
                     break;
                 case "Steady":
                     {
-                        SteadyRopeCentor.GetComponent<Rope>().player = player;
-                        SteadyRopeCentor.GetComponent<Rope>().moveToRopeSpeed = moveToRopeSpeed;
-                        SteadyRopeCentor.SetActive(true);
+                        if (SteadyRopeCenter.activeSelf)
+                        {
+                            player.GetComponent<PlayerInteractionState>().isMoveToRope = false;
+                            return;
+                        }
+                        SteadyRopeCenter.GetComponent<Rope>().player = player;
+                        SteadyRopeCenter.GetComponent<Rope>().moveToRopeSpeed = moveToRopeSpeed;
+                        SteadyRopeCenter.SetActive(true);
                     }
                     break;
             }
@@ -67,11 +77,11 @@ namespace KSU
 
                 case "Nella":
                     {
-                        return NellaRopeCentor.GetComponent<Rope>().DeacvtivateRope(player);
+                        return NellaRopeCenter.GetComponent<Rope>().DeacvtivateRope(player);
                     }
                 case "Steady":
                     {
-                        return SteadyRopeCentor.GetComponent<Rope>().DeacvtivateRope(player);
+                        return SteadyRopeCenter.GetComponent<Rope>().DeacvtivateRope(player);
                     }
                 default:
                     return 0f;

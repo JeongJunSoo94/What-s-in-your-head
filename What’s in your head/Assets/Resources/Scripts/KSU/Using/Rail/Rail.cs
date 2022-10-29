@@ -81,30 +81,29 @@ namespace KSU
             }
         }
 
-        public void RideOnRail(Vector3 startPos, GameObject startObj, GameObject player)
+        public void RideOnRail(Vector3 railStartPos, GameObject startObj, GameObject player)
         {
-            SetDestination(player, CreateCart(startPos, startObj, player));
+            SetDestination(player, startObj, CreateCart(railStartPos, startObj, player));
         }
 
-        void SetDestination(GameObject player, Cinemachine.CinemachineDollyCart cartSetUp)
+        void SetDestination(GameObject player, GameObject startObj, Cinemachine.CinemachineDollyCart cartSetUp)
         {
-            Vector3 playerVec = player.GetComponent<RailAction>().mainCamera.transform.forward;
-            playerVec.y = 0;
+            Vector3 playerVec = player.transform.forward;
             cartSetUp.gameObject.SetActive(true);
-            if (Vector3.Angle(cartSetUp.gameObject.transform.forward, playerVec) > 90f)
+            if (Vector3.Angle(startObj.transform.forward, playerVec) > 90f)
             {
                 cartSetUp.m_Speed = -railSpeed;
                 switch (player.tag)
                 {
                     case "Nella":
                         {
-                            NellaDestiation = 0.01f;
+                            NellaDestiation = 0.005f;
                             player.transform.parent = NellaCart.transform;
                         }
                         break;
                     case "Steady":
                         {
-                            SteadyDestiation = 0.01f;
+                            SteadyDestiation = 0.005f;
                             player.transform.parent = SteadyCart.transform;
                         }
                         break;
@@ -120,13 +119,13 @@ namespace KSU
                 {
                     case "Nella":
                         {
-                            NellaDestiation = (track.m_Waypoints.Length - 1.01f);
+                            NellaDestiation = (track.m_Waypoints.Length - 1.005f);
                             player.transform.parent = NellaCart.transform;
                         }
                         break;
                     case "Steady":
                         {
-                            SteadyDestiation = (track.m_Waypoints.Length - 1.01f);
+                            SteadyDestiation = (track.m_Waypoints.Length - 1.005f);
                             player.transform.parent = SteadyCart.transform;
                             player.transform.localPosition = Vector3.zero;
                         }
@@ -272,6 +271,9 @@ namespace KSU
             playerController.MakeinertiaVec(escapingRailSpeed, inertiaVec.normalized);
             playerController.moveVec = Vector3.up * playerController.jumpSpeed / 2f;
             playerController.characterState.isRiding = false;
+            playerController.characterState.IsDashing = false;
+            playerController.characterState.IsAirJumping = false;
+            playerController.characterState.WasAirDashing = false;
             PlayerInteractionState interactionState = player.GetComponent<PlayerInteractionState>();
             if (!isSwap)
             {

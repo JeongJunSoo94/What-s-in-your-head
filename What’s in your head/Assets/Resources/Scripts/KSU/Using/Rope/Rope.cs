@@ -201,26 +201,26 @@ namespace KSU
                 isRotatingToDefault = true;
                 player.GetComponent<Rigidbody>().velocity = Vector3.zero;
                 player.GetComponent<PlayerInteractionState>().isMoveToRope = false;
+                player.GetComponent<PlayerInteractionState>().isRidingRope = true;
             }
         }
 
-        void AcceptPlayer()
-        {
-            rope.transform.localRotation = Quaternion.Euler(Vector3.zero);
-            player.transform.parent = rope.transform;
-            player.transform.localPosition = Vector3.zero;
-            player.transform.localRotation = Quaternion.Euler(Vector3.zero);
+        //void AcceptPlayer()
+        //{
+        //    rope.transform.localRotation = Quaternion.Euler(Vector3.zero);
+        //    player.transform.parent = rope.transform;
+        //    player.transform.localPosition = Vector3.zero;
+        //    player.transform.localRotation = Quaternion.Euler(Vector3.zero);
 
-            isRopeExisting = true;
-            player.GetComponent<PlayerInteractionState>().isMoveToRope = false;
+        //    isRopeExisting = true;
+        //    player.GetComponent<PlayerInteractionState>().isMoveToRope = false;
 
-        }
+        //}
 
         public float DeacvtivateRope(GameObject player)
         {
             isRopeExisting = false;
             player.transform.parent = null;
-            this.gameObject.SetActive(false);
             if (!isSwingForward)
             {
                 if (rotationX > 0)
@@ -229,6 +229,7 @@ namespace KSU
                 }
             }
             isntSwing = false;
+            this.gameObject.SetActive(false);
             return -rotationX / spawner.swingAngle;
         }
 
@@ -243,7 +244,7 @@ namespace KSU
             {
                 playerRopeAction = player.GetComponent<RopeAction>();
             }
-
+            player.GetComponent<PlayerInteractionState>().isRidingRope = true;
             //playerRopeAction.RecieveDirection(isSwingForward); /////////////////////////////////////////////
             //player.GetComponent<Rigidbody>().velocity = Vector3.zero;
             player.transform.localPosition = Vector3.zero;

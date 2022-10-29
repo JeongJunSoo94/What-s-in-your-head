@@ -11,7 +11,6 @@ namespace KSU.FSM
         override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
         {
             animator.SetBool("isTransferRail", false);
-            animator.SetBool("isMoveToRail", false);
             animator.SetBool("isRailJump", false);
             GetRailAction(animator).ReSetRailJump();
         }
@@ -25,29 +24,32 @@ namespace KSU.FSM
         // OnStateExit is called when a transition ends and the state machine finishes evaluating this state
         override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
         {
-
+            
         }
 
         void CheckState(Animator animator)
         {
             animator.SetBool("isAir", !GetPlayerController(animator).characterState.IsGrounded);
 
-            if (KeyManager.Instance.GetKeyDown(PlayerAction.Jump))
-            {
-                GetRailAction(animator).StartRailJump();
-            }
-
             if (KeyManager.Instance.GetKeyDown(PlayerAction.Interaction))
             {
-                if (GetRailAction(animator).GetWhetherFoundRail())
+                if(!animator.GetBool("isRailJump"))
                 {
-                    animator.SetBool("isTransferRail", true);
-                    animator.SetFloat("moveToRailSpeed", 1.883f / GetRailAction(animator).SwapRail());
+                    if (GetRailAction(animator).GetWhetherFoundRail())
+                    {
+                        animator.SetBool("isTransferRail", true);
+                        animator.SetFloat("moveToRailSpeed", 1.883f / GetRailAction(animator).SwapRail());
+                    }
+                    else
+                    {
+                        GetRailAction(animator).EscapeRailAction();
+                    }
                 }
-                else
-                {
-                    GetRailAction(animator).EscapeRailAction();
-                }
+            }
+
+            if (animator.GetBool("isRidingRail") &&KeyManager.Instance.GetKeyDown(PlayerAction.Jump))
+            {
+                GetRailAction(animator).StartRailJump();
             }
             // OnStateMove is called right after Animator.OnAnimatorMove()
             //override public void OnStateMove(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)

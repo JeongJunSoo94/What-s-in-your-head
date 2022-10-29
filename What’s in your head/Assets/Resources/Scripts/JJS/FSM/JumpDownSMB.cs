@@ -41,7 +41,7 @@ namespace JJS
             }
             else
             {
-                animator.SetFloat("DistY", 0.1f);
+                animator.SetFloat("DistY", 0.2f);
             }
 
             if (GetPlayerController(animator).characterState.IsGrounded)
