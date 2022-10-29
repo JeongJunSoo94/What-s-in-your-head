@@ -20,12 +20,17 @@ namespace JCW.Object
         private void Awake()
         {
             projector = GetComponent<DecalProjector>();
-            projector.size = new Vector3(defaultShadowValue, defaultShadowValue, defaultShadowValue);
-                      
+            projector.size = new Vector3(defaultShadowValue, defaultShadowValue, defaultShadowValue);          
+
             playerState = transform.parent.GetComponent<PlayerState>();
 
             // 1.9은 playerState의 최대값 - 최소값을 임의로 해둔 값.
             scaleOffset = (maxShadowValue - defaultShadowValue) / 1.9f;
+        }
+
+        private void OnEnable()
+        {
+            projector.pivot = new Vector3(0, 0, maxShadowDepth / 2f);
         }
 
         void Update()

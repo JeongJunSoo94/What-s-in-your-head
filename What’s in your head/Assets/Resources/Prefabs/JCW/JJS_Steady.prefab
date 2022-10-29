@@ -27365,7 +27365,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   trailCount: 75
-  trailRemainTime: 0.5
+  trailRemainTime: 0.15
   trailSpawnTime: 0.01
   skinnedMeshRenderer: {fileID: 725354830659837064}
   mat: {fileID: 2100000, guid: 02bb375c5f6221a4a971ceaca93398a2, type: 2}
@@ -49645,7 +49645,7 @@ MeshRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8768540777006978773}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -55514,6 +55514,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: Shadow Projector
       objectReference: {fileID: 0}
+    - target: {fileID: 5400454082082379193, guid: cef12e2ad9ffb4b49972efec60460abe, type: 3}
+      propertyPath: m_Size.z
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 5400454082082379193, guid: cef12e2ad9ffb4b49972efec60460abe, type: 3}
+      propertyPath: m_Offset.z
+      value: 10
+      objectReference: {fileID: 0}
     - target: {fileID: 5400454082082379198, guid: cef12e2ad9ffb4b49972efec60460abe, type: 3}
       propertyPath: m_RootOrder
       value: 19
@@ -55811,6 +55819,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7396004162571028202, guid: 7c09f68c8d325854a9994c1eedab2b61, type: 3}
       propertyPath: m_OverrideSorting
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 9222505278508254701, guid: 7c09f68c8d325854a9994c1eedab2b61, type: 3}
+      propertyPath: m_PresetInfoIsWorld
       value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []

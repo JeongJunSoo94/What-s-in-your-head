@@ -5512,7 +5512,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   trailCount: 75
-  trailRemainTime: 0.5
+  trailRemainTime: 0.15
   trailSpawnTime: 0.01
   skinnedMeshRenderer: {fileID: 3124659200672395522}
   mat: {fileID: 2100000, guid: 02bb375c5f6221a4a971ceaca93398a2, type: 2}
@@ -6905,8 +6905,16 @@ PrefabInstance:
       value: Shadow Projector
       objectReference: {fileID: 0}
     - target: {fileID: 5400454082082379193, guid: cef12e2ad9ffb4b49972efec60460abe, type: 3}
+      propertyPath: m_Size.z
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 5400454082082379193, guid: cef12e2ad9ffb4b49972efec60460abe, type: 3}
       propertyPath: m_Enabled
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5400454082082379193, guid: cef12e2ad9ffb4b49972efec60460abe, type: 3}
+      propertyPath: m_Offset.z
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 5400454082082379198, guid: cef12e2ad9ffb4b49972efec60460abe, type: 3}
       propertyPath: m_RootOrder
