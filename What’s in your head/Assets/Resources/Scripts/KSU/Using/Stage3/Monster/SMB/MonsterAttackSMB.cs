@@ -4,16 +4,13 @@ using UnityEngine;
 
 namespace KSU.Monster
 {
-    public class MonsterSturnSBM : MonsterSMB
+    public class MonsterAttackSMB : MonsterSMB
     {
         // OnStateEnter is called when a transition starts and the state machine starts to evaluate this state
         override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
         {
-            if(!animator.GetBool("WasSturned"))
-            {
-                GetMonsterController(animator).StartSturn();
-            }
-            animator.SetBool("WasSturned", true);
+            GetMonsterController(animator).StartAttack();
+            GetMonsterController(animator).StartBiting();
         }
 
         // OnStateUpdate is called on each Update frame between OnStateEnter and OnStateExit callbacks
@@ -25,7 +22,8 @@ namespace KSU.Monster
         // OnStateExit is called when a transition ends and the state machine finishes evaluating this state
         override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
         {
-            
+            animator.SetBool("isAttacking", false);
+            GetMonsterController(animator).EndBiting();
         }
 
         // OnStateMove is called right after Animator.OnAnimatorMove()

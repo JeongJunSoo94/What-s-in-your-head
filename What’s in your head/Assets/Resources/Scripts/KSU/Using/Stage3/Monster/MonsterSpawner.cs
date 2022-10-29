@@ -11,8 +11,9 @@ namespace KSU
     {
         [SerializeField] float firstSpawnDelayTime;
         [SerializeField] float spawnDelayTime;
-        [SerializeField] float onceSpawnNum;
-        [SerializeField] float maxSpawnNum;
+        [SerializeField] int onceSpawnNum;
+        [SerializeField] int maxSpawnNum;
+        [SerializeField] GameObject spawnedObject;
 
         [SerializeField] List<GameObject> spawnPosition;
         [SerializeField] List<int> spawnPattern; // 패턴 배열은 한 요소가 6자리 int형 숫자(0 ~ 3)고, 스폰할때 그 위치에 맞는 곳에서 스폰
@@ -29,7 +30,8 @@ namespace KSU
         {
             var random = new System.Random(Guid.NewGuid().GetHashCode());
             spawner = GetComponentInChildren<Spawner>();
-            // spawner 에 접근해서 맥스 스폰갯수에 접근하면 좋을듯
+            spawner.count = maxSpawnNum;
+            spawner.obj = spawnedObject;
         }
 
         // Update is called once per frame

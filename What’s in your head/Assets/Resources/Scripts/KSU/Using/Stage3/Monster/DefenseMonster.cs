@@ -17,6 +17,7 @@ namespace KSU.Monster
         protected GameObject detectedTarget;
         protected GameObject currentTarget;
         [SerializeField] protected float detectingRange;
+        public float detectingUIRange;
         public float moveSpeed; //시리얼
         //public float stuckTime; //시리얼
         public float sturnTime; //시리얼
@@ -34,6 +35,7 @@ namespace KSU.Monster
         public bool isAttackDelayOn = false;
         public float attackDelayTime = 2f;
         [SerializeField] GameObject attackTrigger;
+        [SerializeField] GameObject detectingUITrigger;
 
         public bool isTargetFounded = false;
 
@@ -47,6 +49,7 @@ namespace KSU.Monster
             spawner = GetComponentInParent<Spawner>();
             monsterAnimator = GetComponent<Animator>();
             monsterRope = GetComponent<LineRenderer>();
+            detectingUITrigger.transform.localScale = Vector3.one * detectingUIRange * 2f;
             InitRope();
             //isDefenseMode = GameManger 에서 받기
         }
@@ -130,6 +133,9 @@ namespace KSU.Monster
 
         public void Chase()
         {
+            if (!monsterNavAgent.enabled)
+                monsterNavAgent.enabled = true;
+
             if (detectedTarget != null)
             {
                 if (currentTarget != detectedTarget)

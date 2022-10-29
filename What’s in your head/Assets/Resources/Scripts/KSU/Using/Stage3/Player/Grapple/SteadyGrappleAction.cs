@@ -9,6 +9,7 @@ using YC.Camera_Single;
 
 
 using JCW.UI.InGame.Indicator;
+using KSU.Monster;
 
 namespace KSU
 {
@@ -259,8 +260,19 @@ namespace KSU
             {
                 foreach (var grappledObject in grappledObjects)
                 {
-                    Vector3 directoin = (grappledObject.transform.parent.position - playerCamera.transform.position).normalized;
-                    bool rayCheck = Physics.Raycast(playerCamera.transform.position, directoin, grappledObject.GetComponentInParent<GrappledObject>().detectingRange * 1.5f, layerFilterForGrapple, QueryTriggerInteraction.Ignore);
+                    Vector3 direction = (grappledObject.transform.parent.position - playerCamera.transform.position).normalized;
+                    bool rayCheck = false;
+
+                    switch (grappledObject.tag)
+                    {
+                        case "GrappledObject":
+                            rayCheck = Physics.Raycast(playerCamera.transform.position, direction, grappledObject.GetComponentInParent<GrappledObject>().detectingRange * 1.5f, layerFilterForGrapple, QueryTriggerInteraction.Ignore);
+                            break;
+                        case "DefenseMonster":
+                            rayCheck = Physics.Raycast(playerCamera.transform.position, direction, grappledObject.GetComponentInParent<DefenseMonster>().detectingUIRange * 1.5f, layerFilterForGrapple, QueryTriggerInteraction.Ignore);
+                            break;
+                    }
+                    
                     if (rayCheck)
                     {
                         grappledObject.transform.parent.gameObject.GetComponentInChildren<OneIndicator>().SetUI(true);
@@ -339,15 +351,14 @@ namespace KSU
 
         private void OnTriggerEnter(Collider other)
         {
-
-            if ((other.gameObject.layer == LayerMask.NameToLayer("UITriggers")) && other.CompareTag("GrappledObject"))
+            if ((other.gameObject.layer == LayerMask.NameToLayer("UITriggers")) && (other.CompareTag("GrappledObject")|| other.CompareTag("DefenseMonster")))
             {
                 grappledObjects.Add(other.gameObject);
             }
         }
         private void OnTriggerExit(Collider other)
         {
-            if ((other.gameObject.layer == LayerMask.NameToLayer("UITriggers")) && other.CompareTag("GrappledObject"))
+            if ((other.gameObject.layer == LayerMask.NameToLayer("UITriggers")) && (other.CompareTag("GrappledObject") || other.CompareTag("DefenseMonster")))
             {
                 other.gameObject.transform.parent.gameObject.GetComponentInChildren<OneIndicator>().SetUI(false);
                 grappledObjects.Remove(other.gameObject);
