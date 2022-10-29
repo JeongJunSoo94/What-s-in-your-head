@@ -98,15 +98,12 @@ namespace KSU
 
         private void FixedUpdate()
         {
-            if (interactionState.isRailTriggered)
+            if (interactionState.isMovingToRail)
             {
-                if (interactionState.isMovingToRail)
-                {
-                    MoveToRail();
-                }
+                MoveToRail();
             }
 
-            if(interactionState.isRidingRail)
+            if (interactionState.isRidingRail)
             {
                 if (interactionState.isRailJumping)
                 {
@@ -366,7 +363,7 @@ namespace KSU
             transform.LookAt(transform.position + lookVec);
             currentRail = railStartObject.transform.parent.gameObject;
             interactionState.isMovingToRail = true;
-            //interactionState.isRailTriggered = true;
+            interactionState.isRailTriggered = true;
             interactionState.isRidingRail = false;
             return Vector3.Distance(railStartPosiotion, transform.position)/movingToRailSpeed;
         }

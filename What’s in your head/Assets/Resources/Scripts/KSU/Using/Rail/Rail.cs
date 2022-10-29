@@ -88,9 +88,31 @@ namespace KSU
 
         void SetDestination(GameObject player, GameObject startObj, Cinemachine.CinemachineDollyCart cartSetUp)
         {
-            Vector3 playerVec = player.transform.forward;
             cartSetUp.gameObject.SetActive(true);
-            if (Vector3.Angle(startObj.transform.forward, playerVec) > 90f)
+            if (cartSetUp.m_Position < 1)
+            {
+                cartSetUp.m_Speed = railSpeed;
+                switch (player.tag)
+                {
+                    case "Nella":
+                        {
+                            NellaDestiation = (track.m_Waypoints.Length - 1.005f);
+                            player.transform.parent = NellaCart.transform;
+                        }
+                        break;
+                    case "Steady":
+                        {
+                            SteadyDestiation = (track.m_Waypoints.Length - 1.005f);
+                            player.transform.parent = SteadyCart.transform;
+                            player.transform.localPosition = Vector3.zero;
+                        }
+                        break;
+                }
+                player.GetComponent<Rigidbody>().velocity = Vector3.zero;
+                player.transform.localPosition = Vector3.zero;
+                player.transform.localRotation = Quaternion.Euler(new Vector3(0, 0, 0));
+            }
+            else if (cartSetUp.m_Position > (track.m_Waypoints.Length - 2f))
             {
                 cartSetUp.m_Speed = -railSpeed;
                 switch (player.tag)
@@ -114,26 +136,52 @@ namespace KSU
             }
             else
             {
-                cartSetUp.m_Speed = railSpeed;
-                switch (player.tag)
+                Vector3 playerVec = player.transform.forward;
+                if (Vector3.Angle(startObj.transform.forward, playerVec) > 90f)
                 {
-                    case "Nella":
-                        {
-                            NellaDestiation = (track.m_Waypoints.Length - 1.005f);
-                            player.transform.parent = NellaCart.transform;
-                        }
-                        break;
-                    case "Steady":
-                        {
-                            SteadyDestiation = (track.m_Waypoints.Length - 1.005f);
-                            player.transform.parent = SteadyCart.transform;
-                            player.transform.localPosition = Vector3.zero;
-                        }
-                        break;
+                    cartSetUp.m_Speed = -railSpeed;
+                    switch (player.tag)
+                    {
+                        case "Nella":
+                            {
+                                NellaDestiation = 0.005f;
+                                player.transform.parent = NellaCart.transform;
+                            }
+                            break;
+                        case "Steady":
+                            {
+                                SteadyDestiation = 0.005f;
+                                player.transform.parent = SteadyCart.transform;
+                            }
+                            break;
+                    }
+                    player.GetComponent<Rigidbody>().velocity = Vector3.zero;
+                    player.transform.localPosition = Vector3.zero;
+                    player.transform.localRotation = Quaternion.Euler(new Vector3(0, 180, 0));
                 }
-                player.GetComponent<Rigidbody>().velocity = Vector3.zero;
-                player.transform.localPosition = Vector3.zero;
-                player.transform.localRotation = Quaternion.Euler(new Vector3(0, 0, 0));
+                else
+                {
+                    cartSetUp.m_Speed = railSpeed;
+                    switch (player.tag)
+                    {
+                        case "Nella":
+                            {
+                                NellaDestiation = (track.m_Waypoints.Length - 1.005f);
+                                player.transform.parent = NellaCart.transform;
+                            }
+                            break;
+                        case "Steady":
+                            {
+                                SteadyDestiation = (track.m_Waypoints.Length - 1.005f);
+                                player.transform.parent = SteadyCart.transform;
+                                player.transform.localPosition = Vector3.zero;
+                            }
+                            break;
+                    }
+                    player.GetComponent<Rigidbody>().velocity = Vector3.zero;
+                    player.transform.localPosition = Vector3.zero;
+                    player.transform.localRotation = Quaternion.Euler(new Vector3(0, 0, 0));
+                }
             }
             
             switch (player.tag)
