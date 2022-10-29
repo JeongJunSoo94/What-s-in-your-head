@@ -12,8 +12,8 @@ namespace JJS
             if (GetPlayerController(animator).characterState.isMine)
             {
                 animator.SetBool("wasAirJump", true);
-                //Debug.Log("애니메이터 - 공중 점프 시작!");
-                //GetPlayerController(animator).GetComponent<CameraController>().NormalJumpCameraInit(false); // << : 찬 추가
+
+                //GetPlayerController(animator).GetComponent<CameraController>().NormalJumpCameraInit(false); // << : 찬 추가     
             }
         }
 

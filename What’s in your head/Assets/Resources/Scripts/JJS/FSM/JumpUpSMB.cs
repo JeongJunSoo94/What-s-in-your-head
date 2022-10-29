@@ -14,7 +14,6 @@ namespace JJS
             {
                 GetPlayerController(animator).characterState.isRun = false;
 
-                //Debug.Log("애니메이터 - 일반 점프 시작!");
                 GetPlayerController(animator).GetComponent<CameraController>().NormalJumpCameraInit(true); // << : 찬 추가
 
 

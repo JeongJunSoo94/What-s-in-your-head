@@ -19,6 +19,7 @@ namespace JJS
             if (GetPlayerController(animator).characterState.isMine)
             {
                 //Debug.Log("애니메이터 - 땅 도착!");
+               
                 GetPlayerController(animator).GetComponent<CameraController>().NormalJumpCameraInit(false); // << : 찬 추가              
             }
         }
