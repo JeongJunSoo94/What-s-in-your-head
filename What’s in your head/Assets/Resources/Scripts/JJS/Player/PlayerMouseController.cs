@@ -27,7 +27,7 @@ namespace JJS
         public Camera cameraMain;
 
         protected PlayerController player;
-        [Header("조준, 무조준 공격, 공격 중 이동")] public List<WeaponInfo> weaponInfo;
+        [Header("조준, 무조준 공격, 공격 중 이동")] public WeaponInfo[] weaponInfo;
         public IKController ik;
 
         [HideInInspector] public bool afterDelayTime;
@@ -65,6 +65,7 @@ namespace JJS
             layerWeight = 0;
         }
 
+
         public virtual void SetWeaponEnable(int weaponIndex, bool enable)
         {
 
@@ -72,11 +73,11 @@ namespace JJS
 
         public virtual int GetUseWeapon()
         {
-            if (weaponInfo.Count != 0)
+            if (weaponInfo.Length != 0)
             {
-                for (int i = 0; i < weaponInfo.Count; ++i)
+                for (int i = 0; i < weaponInfo.Length; ++i)
                 {
-                    if (weaponInfo[i].weapon.activeSelf)
+                    if (weaponInfo[i].weapon!=null&& weaponInfo[i].weapon.activeSelf)
                     {
                         return i;
                     }
@@ -107,14 +108,23 @@ namespace JJS
         [PunRPC]
         public virtual void WeaponSwap()
         {
-            if (weaponInfo.Count != 0)
+            if (weaponInfo.Length != 0)
             {
-                for (int i = 0; i < weaponInfo.Count; ++i)
+                for (int i = 0; i < weaponInfo.Length; ++i)
                 {
                     weaponInfo[i].weapon.SetActive(!weaponInfo[i].weapon.activeSelf);
                 }
             }
             gameObject.GetComponentInChildren<SwapItem>().SetSwap(GetUseWeapon());
+        }
+
+        public bool SwapPossibleCheck()
+        {
+            if (weaponInfo.Length >= 2&& GetUseWeapon()!=-1)
+            {
+                return true;
+            }
+            return false;
         }
 
         public void SwapCoroutine()

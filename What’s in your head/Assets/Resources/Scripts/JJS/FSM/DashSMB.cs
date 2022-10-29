@@ -23,6 +23,11 @@ namespace JJS
                 check(animator);
             }
         }
+
+        public override void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
+        {
+            animator.SetBool("isDash", false);
+        }
         void check(Animator animator)
         {
             GetPlayerController(animator).gameObject.GetComponent<PlayerInteraction>().InputInteract();

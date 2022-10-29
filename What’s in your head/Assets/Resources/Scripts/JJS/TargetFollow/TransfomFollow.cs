@@ -14,7 +14,8 @@ namespace JJS
 
         void targetPositionFollow()
         {
-            transform.position = target.transform.position;
+            if(target!=null)
+                transform.position = target.transform.position;
         }
     }
 }

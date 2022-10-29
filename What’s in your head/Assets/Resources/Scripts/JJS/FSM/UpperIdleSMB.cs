@@ -11,8 +11,12 @@ namespace JJS
         {
             animator.SetLayerWeight(1, 0);
             //GetPlayerController(animator).characterState.aim = false;
-            if (!GetPlayerController(animator).playerMouse.weaponInfo[GetPlayerController(animator).playerMouse.GetUseWeapon()].canAim)
+            if (GetPlayerController(animator).playerMouse != null
+                && GetPlayerController(animator).playerMouse.SwapPossibleCheck()
+                && !GetPlayerController(animator).playerMouse.weaponInfo[GetPlayerController(animator).playerMouse.GetUseWeapon()].canAim)
+            { 
                 GetPlayerController(animator).playerMouse.ik.enableIK = false;
+            }
             if (GetPlayerController(animator).playerMouse is SteadyMouseController)
             {
                 animator.SetBool("isShootingGrapple", false);
@@ -21,7 +25,7 @@ namespace JJS
 
         override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
         {
-            if (GetPlayerController(animator).characterState.isMine)
+            if (GetPlayerController(animator).playerMouse != null&&GetPlayerController(animator).characterState.isMine)
                 check(animator);
         }
 
@@ -58,7 +62,7 @@ namespace JJS
         void check(Animator animator)
         {
             animator.SetLayerWeight(1, 0);
-            if (GetPlayerController(animator).playerMouse.weaponInfo[GetPlayerController(animator).playerMouse.GetUseWeapon()].canAim)
+            if (GetPlayerController(animator).playerMouse.SwapPossibleCheck() && GetPlayerController(animator).playerMouse.weaponInfo[GetPlayerController(animator).playerMouse.GetUseWeapon()].canAim)
             {
                 //if (GetPlayerController(animator).characterState.top)
                 //{

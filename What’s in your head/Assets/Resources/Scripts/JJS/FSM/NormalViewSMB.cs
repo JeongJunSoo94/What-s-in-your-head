@@ -93,57 +93,62 @@ namespace JJS
                 GetPlayerController(animator).InputMove();
             }
             //GetPlayerController(animator).InputJump();
-            if (!GetPlayerController(animator).playerMouse.weaponInfo[GetPlayerController(animator).playerMouse.GetUseWeapon()].canAim
-                || GetPlayerController(animator).characterState.top) /////////// 3스테이지 전용 코드
+            //if (!GetPlayerController(animator).playerMouse.weaponInfo[GetPlayerController(animator).playerMouse.GetUseWeapon()].canAim
+            //    || GetPlayerController(animator).characterState.top) /////////// 3스테이지 전용 코드
+            //{
+            //    if (!animator.GetBool("isAttack") && !animator.GetBool("AimAttack"))
+            //    {
+            //        GetPlayerController(animator).InputJump();
+            //        GetPlayerController(animator).InputDash();
+            //    }
+            //}
+            //else
+            //{
+            //    if (!animator.GetBool("Aim")&&!animator.GetBool("isAttack") && !animator.GetBool("AimAttack"))
+            //    {
+            //        GetPlayerController(animator).InputJump();
+            //        GetPlayerController(animator).InputDash();
+            //    }
+            //}
+
+            if (!animator.GetBool("Aim") && !animator.GetBool("isAttack") && !animator.GetBool("AimAttack"))
             {
-                if (!animator.GetBool("isAttack") && !animator.GetBool("AimAttack"))
-                {
-                    GetPlayerController(animator).InputJump();
-                    GetPlayerController(animator).InputDash();
-                }
+                GetPlayerController(animator).InputJump();
+                GetPlayerController(animator).InputDash();
             }
-            else
+            if (GetPlayerController(animator).playerMouse != null)
             {
-                if (!animator.GetBool("Aim")&&!animator.GetBool("isAttack") && !animator.GetBool("AimAttack"))
+                if (GetPlayerController(animator).playerMouse.clickLeft)
                 {
-                    GetPlayerController(animator).InputJump();
-                    GetPlayerController(animator).InputDash();
-                }
-            }
-           
-            if (KeyManager.Instance.GetKey(PlayerAction.Fire))
-            {
-                if (!animator.GetBool("WeaponSwap"))
-                {
-                    if (!GetPlayerController(animator).playerMouse.weaponInfo[GetPlayerController(animator).playerMouse.GetUseWeapon()].canAim)
+                    if (!animator.GetBool("WeaponSwap"))
                     {
-                        if(!GetPlayerController(animator).characterState.IsDashing&& !GetPlayerController(animator).characterState.IsJumping)
+                        if (!GetPlayerController(animator).playerMouse.weaponInfo[GetPlayerController(animator).playerMouse.GetUseWeapon()].canAim)
                         {
-                            animator.SetBool("isAttackNext", true);
-                            animator.SetBool("isAttack", true);
-                            return;
+                            if (!GetPlayerController(animator).characterState.IsDashing && !GetPlayerController(animator).characterState.IsJumping)
+                            {
+                                animator.SetBool("isAttackNext", true);
+                                animator.SetBool("isAttack", true);
+                                return;
+                            }
                         }
                     }
                 }
-            }
 
-            if (KeyManager.Instance.GetKeyDown(PlayerAction.Swap))
-            {
-                if (!animator.GetBool("isAttack")
-                    && !animator.GetBool("AimAttack") 
-                    && GetPlayerController(animator).playerMouse.canSwap 
-                    && !GetPlayerController(animator).characterState.aim)
+                if (GetPlayerController(animator).playerMouse.SwapPossibleCheck() && KeyManager.Instance.GetKeyDown(PlayerAction.Swap))
                 {
-                    GetPlayerController(animator).characterState.swap = true;
-                    animator.SetBool("WeaponSwap", true);
-                    return;
+                    if (!animator.GetBool("isAttack")
+                        && !animator.GetBool("AimAttack")
+                        && GetPlayerController(animator).playerMouse.canSwap
+                        && !GetPlayerController(animator).characterState.aim)
+                    {
+                        GetPlayerController(animator).characterState.swap = true;
+                        animator.SetBool("WeaponSwap", true);
+                        return;
+                    }
                 }
+
             }
 
-            //if (GetPlayerController(animator).playerMouse.weaponInfo[GetPlayerController(animator).playerMouse.GetUseWeapon()].canAim && !GetPlayerController(animator).characterState.top && KeyManager.Instance.GetKey(PlayerAction.Aim))
-            //{
-            //    animator.SetBool("Aim", true);
-            //}
         }
 
         void check(Animator animator)
@@ -202,11 +207,6 @@ namespace JJS
                 animator.SetBool("isDash", true);
                 return;
             }
-
-
-          
-
         }
     }
-
 }

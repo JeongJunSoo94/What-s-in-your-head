@@ -15,7 +15,6 @@ namespace JJS
         public MagnifyingGlass glass;
         public SteadyGrappleAction grapple;
 
-        //public SteadyGrappleAction grapple;
         private void Awake()
         {
             cameraMain = this.gameObject.transform.GetComponent<CameraController>().FindCamera(); // ¸ÖÆ¼¿ë
@@ -33,52 +32,60 @@ namespace JJS
 
         private void Update()
         {
+            InputUpdate();
+        }
+        public void InputUpdate()
+        {
             if (photonView.IsMine)
             {
-                if (weaponInfo[GetUseWeapon()].canAim)
+                if (GetUseWeapon() == -1)
                 {
-                    if (KeyManager.Instance.GetKey(PlayerAction.Aim)
-                        && !player.characterState.swap
-                        && !player.characterState.IsJumping
-                        && !player.characterState.IsAirJumping
-                        && !player.characterState.IsDashing
-                        && !player.characterState.IsAirDashing)
-                    {
-                        if (!clickRight)
-                        {
-                            AimCoroutine();
-                            clickRight = true;
-                        }
-                        player.characterState.aim = true;
-                    }
-                    else
-                    {
-                        clickRight = false;
-                        player.characterState.aim = false;
-                    }
-
                 }
-
-                if (player.characterState.aim)
+                else
                 {
-                    if (KeyManager.Instance.GetKey(PlayerAction.Fire) && GetUseWeapon() == 1)
+                    if (weaponInfo[GetUseWeapon()].canAim)
                     {
-                        clickLeft = true;
+                        if (KeyManager.Instance.GetKey(PlayerAction.Aim)
+                            && !player.characterState.swap
+                            && !player.characterState.IsJumping
+                            && !player.characterState.IsAirJumping
+                            && !player.characterState.IsDashing
+                            && !player.characterState.IsAirDashing)
+                        {
+                            if (!clickRight)
+                            {
+                                AimCoroutine();
+                                clickRight = true;
+                            }
+                            player.characterState.aim = true;
+                        }
+                        else
+                        {
+                            clickRight = false;
+                            player.characterState.aim = false;
+                        }
+
+                    }
+
+                    if (player.characterState.aim)
+                    {
+                        if (KeyManager.Instance.GetKey(PlayerAction.Fire) && GetUseWeapon() == 1)
+                        {
+                            clickLeft = true;
+                        }
+                        else
+                        {
+                            clickLeft = false;
+                        }
                     }
                     else
                     {
                         clickLeft = false;
                     }
                 }
-                else
-                {
-                    clickLeft = false;
-                }
             }
-
-            //SetWeaponEnable(GetPlayerController(animator).playerMouse.GetUseWeapon(), false)
+                
         }
-
         public void StopBeam()
         {
             notRotatoin = false;
@@ -99,37 +106,7 @@ namespace JJS
             return grapple.GetWhetherHit();
         }
 
-        //public virtual bool InputLeftMouseButton()
-        //{
-        //    if (KeyManager.Instance.GetKey(PlayerAction.Fire))
-        //    {
-
-        //    }
-        //}
-
-        //public virtual bool InputLeftMouseButtonDown()
-        //{
-        //    if (KeyManager.Instance.GetKeyDown(PlayerAction.Fire))
-        //    {
-
-        //    }
-        //}
-
-        //public virtual bool InputRightMouseButton()
-        //{
-        //    if (KeyManager.Instance.GetKeyDown(PlayerAction.Fire))
-        //    {
-
-        //    }
-        //}
-
-        //public virtual bool InputRightMouseButtonDown()
-        //{
-        //    if (KeyManager.Instance.GetKeyDown(PlayerAction.Fire))
-        //    {
-
-        //    }
-        //}
+       
     }
 
 }

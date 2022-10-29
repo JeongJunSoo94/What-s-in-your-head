@@ -5,11 +5,9 @@ using JCW.Spawner;
 
 using YC.Camera_;
 using YC.Camera_Single;
-using Photon.Pun;
 
 namespace JJS.Weapon
 {
-    [RequireComponent(typeof(PhotonView))]
     public class WaterGun : MonoBehaviour
     {
 
