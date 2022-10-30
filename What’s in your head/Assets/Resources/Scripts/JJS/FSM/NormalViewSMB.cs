@@ -126,8 +126,13 @@ namespace JJS
                         {
                             if (!GetPlayerController(animator).characterState.IsDashing && !GetPlayerController(animator).characterState.IsJumping)
                             {
-                                animator.SetBool("isAttackNext", true);
-                                animator.SetBool("isAttack", true);
+                                if (GetPlayerController(animator).playerMouse.weaponInfo[GetPlayerController(animator).playerMouse.GetUseWeapon()].weapon.name != "Mic")
+                                {
+                                    animator.SetBool("isAttackNext", true);
+                                    animator.SetBool("isAttack", true);
+                                    return;
+                                }
+                                animator.SetBool("isSinging", true);
                                 return;
                             }
                         }

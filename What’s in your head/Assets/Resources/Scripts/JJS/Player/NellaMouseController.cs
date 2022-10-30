@@ -10,12 +10,12 @@ using KSU;
 namespace JJS
 {
     [RequireComponent(typeof(PhotonView))]
-    public class NellaMouseController3 : PlayerMouseController
+    public class NellaMouseController : PlayerMouseController
     {
         public List<Discovery3D> hitObjs;
 
         public WaterGun gun;
-
+        
         private void Awake()
         {
 
@@ -32,6 +32,8 @@ namespace JJS
             player = GetComponent<PlayerController>();
             canSwap = true;
             canAim = true;
+            if (weaponInfo.Length!=0)
+                weaponInfo[0].weapon.SetActive(true);
         }
 
         public void wartergunInit()
@@ -97,14 +99,14 @@ namespace JJS
                                 if (gun.shootEnable && canAim)
                                 {
                                     gun.ShootCoroutineEnable();
-                                    photonView.RPC(nameof(SetWeaponEnable), RpcTarget.AllViaServer, 0, true);
+                                    photonView.RPC(nameof(SetWeaponEnable), RpcTarget.AllViaServer,true);
                                 }
                             }
                             else
                             {
                                 if (clickLeft)
                                 {
-                                    photonView.RPC(nameof(SetWeaponEnable), RpcTarget.AllViaServer, 0, false);
+                                    photonView.RPC(nameof(SetWeaponEnable), RpcTarget.AllViaServer,false);
                                 }
                             }
                         }
@@ -112,49 +114,55 @@ namespace JJS
                         {
                             if (clickLeft)
                             {
-                                photonView.RPC(nameof(SetWeaponEnable), RpcTarget.AllViaServer, 0, false);
+                                photonView.RPC(nameof(SetWeaponEnable), RpcTarget.AllViaServer, false);
                             }
                         }
                     }
                     else
                     {
-                        if (KeyManager.Instance.GetKey(PlayerAction.Fire))
+                        if (KeyManager.Instance.GetKey(PlayerAction.Fire) && !weaponInfo[GetUseWeapon()].canAim)
                         {
-                            clickLeft = true;
+                            photonView.RPC(nameof(SetWeaponEnable), RpcTarget.AllViaServer, true);
                         }
                         else
                         {
-                            clickLeft = false;
-                        }
-                        if (clickLeft)
-                        {
-                            photonView.RPC(nameof(SetWeaponEnable), RpcTarget.AllViaServer, 0, false);
-
+                            if (clickLeft)
+                            {
+                                photonView.RPC(nameof(SetWeaponEnable), RpcTarget.AllViaServer, false);
+                            }
                         }
                     }
                 }
             }
         }
         [PunRPC]
-        public override void SetWeaponEnable(int weaponIndex, bool enable)
+        public override void SetWeaponEnable(bool enable)
         {
-            if (enable)
+            if (weaponInfo[GetUseWeapon()].weapon.name == "WaterPistol")
             {
-                if (player.characterState.top)
+                if (enable)
                 {
-                    AimUpdate(2);
+                    if (player.characterState.top)
+                    {
+                        AimUpdate(2);
+                    }
+                    else
+                    {
+                        AimUpdate(1);
+                    }
+                    clickLeft = true;
+                    gun.ShootStart();
                 }
                 else
                 {
-                    AimUpdate(1);
+                    clickLeft = false;
                 }
-               
-                gun.ShootStart();
             }
             else
             {
-                clickLeft = false;
+                clickLeft = enable;
             }
+        
         }
 
         public void OnEnableObject(int index)

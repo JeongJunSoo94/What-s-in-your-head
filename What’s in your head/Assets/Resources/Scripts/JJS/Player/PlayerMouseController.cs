@@ -66,14 +66,14 @@ namespace JJS
         }
 
 
-        public virtual void SetWeaponEnable(int weaponIndex, bool enable)
+        public virtual void SetWeaponEnable( bool enable)
         {
 
         }
 
         public virtual int GetUseWeapon()
         {
-            if (weaponInfo.Length != 0)
+            if (weaponInfo.Length !=0)
             {
                 for (int i = 0; i < weaponInfo.Length; ++i)
                 {
@@ -108,14 +108,14 @@ namespace JJS
         [PunRPC]
         public virtual void WeaponSwap()
         {
-            if (weaponInfo.Length != 0)
+            if (weaponInfo.Length > 1)
             {
                 for (int i = 0; i < weaponInfo.Length; ++i)
                 {
                     weaponInfo[i].weapon.SetActive(!weaponInfo[i].weapon.activeSelf);
                 }
+                gameObject.GetComponentInChildren<SwapItem>().SetSwap(GetUseWeapon());
             }
-            gameObject.GetComponentInChildren<SwapItem>().SetSwap(GetUseWeapon());
         }
 
         public bool SwapPossibleCheck()

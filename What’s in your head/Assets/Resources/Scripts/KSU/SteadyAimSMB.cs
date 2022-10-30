@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using JCW.UI.Options.InputBindings;
 using JJS.CharacterSMB;
-namespace JJS
+namespace KSU
 {
     public class SteadyAimSMB : CharacterBaseSMB
     {

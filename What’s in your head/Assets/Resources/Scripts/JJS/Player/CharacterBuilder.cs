@@ -1,13 +1,46 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using KSU;
 namespace JJS
 { 
     public class CharacterBuilder : MonoBehaviour
     {
-        public GameObject nella;
-        public GameObject steady;
+        public bool single;
+        protected GameObject nella;
+        protected GameObject steady;
+        public MouseControllerWeaponData nellaMouseControllerData;
+        public MouseControllerWeaponData steadyMouseControllerData;
+
+        private void Update()
+        {
+            if (single)
+            {
+                if (nella == null && steady == null)
+                {
+                    FindCharacter();
+                }
+                if (nella != null || steady != null)
+                {
+                    SetCharacterComponent(nella, nellaMouseControllerData, "Hand_R");
+                    SetCharacterComponent(steady, steadyMouseControllerData, "Hand_R");
+                    gameObject.SetActive(false);
+                }
+            }
+            else
+            {
+                if (nella == null || steady == null)
+                {
+                    FindCharacter();
+                }
+                if (nella != null && steady != null)
+                {
+                    SetCharacterComponent(nella, nellaMouseControllerData, "Hand_R");
+                    SetCharacterComponent(steady, steadyMouseControllerData, "Hand_R");
+                    gameObject.SetActive(false);
+                }
+            }
+        }
 
         public void FindCharacter()
         {
@@ -15,9 +48,49 @@ namespace JJS
             steady = GameObject.FindWithTag("Steady");
         }
 
-        public virtual void SetCharacterComponent()
+        public virtual void SetCharacterComponent(GameObject player, MouseControllerWeaponData data,string findWeaponPath)
         {
+            if (player != null)
+            {
+                PlayerMouseController playerMouse = player.GetComponent<PlayerMouseController>();
+                if (playerMouse.GetUseWeapon() != -1)
+                    playerMouse.weaponInfo[playerMouse.GetUseWeapon()].weapon.SetActive(false);
+
+                if (data == null)
+                {
+                    playerMouse.weaponInfo = new PlayerMouseController.WeaponInfo[0];
+                    player.GetComponent<PlayerController>().playerMouse = null;
+                }
+                else
+                {
+                    int weaponCount = data.weaponInfo.Length;
+                    GameObject weaponStorage;
+                    SetCharacterGameObject(player, out weaponStorage, findWeaponPath);
+
+                    playerMouse.weaponInfo = new PlayerMouseController.WeaponInfo[weaponCount];
+                    for (int i = 0; i < playerMouse.weaponInfo.Length; i++)
+                    {
+                        GameObject cloneObj;
+                        SetWeaponGameObject(weaponStorage, out cloneObj, data.weaponInfo[i].weapon.name);
+                        if (cloneObj == null)
+                        {
+                            cloneObj = CreateWeapon(data.weaponInfo[i].weapon, weaponStorage.transform);
+                        }
+
+                        playerMouse.weaponInfo[i].weapon = cloneObj;
+                        playerMouse.weaponInfo[i].canAim = data.weaponInfo[i].canAim;
+                        playerMouse.weaponInfo[i].canMoveAttack = data.weaponInfo[i].canMoveAttack;
+                        playerMouse.weaponInfo[i].canNoAimAttack = data.weaponInfo[i].canNoAimAttack;
+                    }
+                    if (weaponCount != 0)
+                    {
+                        playerMouse.weaponInfo[0].weapon.SetActive(true);
+                    }
+                    player.GetComponent<PlayerController>().playerMouse = playerMouse;
+                }
+            }
         }
+
         public void SetCharacterGameObject(GameObject findObject,out GameObject discoverObject, string findName)
         {
             discoverObject = null;
@@ -31,9 +104,25 @@ namespace JJS
                 }
             }
         }
-        public virtual void SetCharacter()
+
+        public void SetWeaponGameObject(GameObject findObject, out GameObject discoverObject, string findName)
         {
-        
+            discoverObject =null;
+            Transform findObj = findObject.transform.Find(findName);
+            if (findObj!=null)
+            {
+                discoverObject = findObj.gameObject;
+            }
+        }
+
+        public GameObject CreateWeapon(GameObject weapon,Transform parent)
+        {
+            GameObject clone = Instantiate(weapon);
+            clone.name = weapon.name;
+            clone.transform.parent = parent;
+            clone.transform.localPosition = weapon.transform.position;
+            clone.transform.localRotation = weapon.transform.rotation;
+            return clone;
         }
     }
 }
