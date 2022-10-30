@@ -1155,7 +1155,7 @@ GameObject:
   - component: {fileID: 2288157919269734479}
   - component: {fileID: 2288157919268604559}
   m_Layer: 13
-  m_Name: Water Pistol Single L Joined
+  m_Name: WaterPistol
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2521,6 +2521,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speed: 20
   shootMaxDistance: 30
+  shootMinDistrace: 0
   shootCurDistance: 0
   curveHeight: 1
   curveWidth: 0.5
@@ -2539,7 +2540,7 @@ MonoBehaviour:
   weapon: {fileID: 3723959393930102280}
   startPos: {fileID: 3723959395216327100}
   bullet: {fileID: 2660365490216987232, guid: a0267121bd4e0054ab0964d04eafb129, type: 3}
-  startShoot: 0
+  shootEnable: 0
   curShootCool: 0
   bulletCurCount: 0
 --- !u!114 &4271477110735829085
@@ -5453,6 +5454,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 63cf26e97a25e2947b5a019e6d64a706, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  layerWeight: 0
   point: {fileID: 4999439549539787674, guid: 9c7a908f72dfae5408cf63c5507ba076, type: 3}
   cameraMain: {fileID: 0}
   weaponInfo:
@@ -5465,7 +5467,7 @@ MonoBehaviour:
     canNoAimAttack: 1
     canMoveAttack: 0
   ik: {fileID: 6125511999642235224}
-  ableToLeft: 0
+  afterDelayTime: 0
   ableToRight: 0
   clickLeft: 0
   clickRight: 0
@@ -5476,6 +5478,10 @@ MonoBehaviour:
   canSwap: 0
   curCool: 0
   swapCool: 0.5
+  canAim: 0
+  curAimCool: 0
+  AimCool: 0.5
+  notRotatoin: 0
   hitObjs:
   - {fileID: 1305514216266557921}
   - {fileID: 7656355952428297822}
@@ -5519,6 +5525,7 @@ MonoBehaviour:
   isMine: 0
   isOutOfControl: 0
   isStopped: 0
+  isRiding: 0
   deadDuration: 0
   aim: 0
   top: 0
@@ -5612,6 +5619,9 @@ MonoBehaviour:
   - Type: 4
     SynchronizeType: 2
     Name: isAttackNext
+  - Type: 4
+    SynchronizeType: 0
+    Name: isSinging
   m_SynchronizeLayers:
   - SynchronizeType: 2
     LayerIndex: 0
