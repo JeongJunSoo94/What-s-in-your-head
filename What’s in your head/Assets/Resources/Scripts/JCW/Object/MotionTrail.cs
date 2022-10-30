@@ -16,6 +16,7 @@ namespace JCW.Effect
         readonly Queue<GameObject> objQueue = new();
 
         int curSpawnIndex = 0;
+        Mesh curMesh;
 
         
 
@@ -62,9 +63,10 @@ namespace JCW.Effect
                     go.transform.SetPositionAndRotation(transform.position, transform.rotation);
                     go.SetActive(true);
 
-                    Mesh mesh = new Mesh();
-                    skinnedMeshRenderer.BakeMesh(mesh);
-                    go.GetComponent<MeshFilter>().mesh = mesh;
+                    if(curMesh == null)
+                        curMesh = new();
+                    skinnedMeshRenderer.BakeMesh(curMesh);
+                    go.GetComponent<MeshFilter>().mesh = curMesh;
                     StartCoroutine(DeleteTrail(go));
                     yield return new WaitForSeconds(trailSpawnTime);
                     if (++curSpawnIndex >= trailCount)
