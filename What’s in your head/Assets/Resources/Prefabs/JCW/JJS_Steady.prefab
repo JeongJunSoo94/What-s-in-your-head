@@ -27037,10 +27037,22 @@ MonoBehaviour:
     Name: isRidingRail
   - Type: 4
     SynchronizeType: 0
-    Name: isTranferRail
+    Name: isRailJump
   - Type: 4
     SynchronizeType: 0
-    Name: isRailJump
+    Name: isMoveToRope
+  - Type: 4
+    SynchronizeType: 0
+    Name: isRidingRope
+  - Type: 4
+    SynchronizeType: 0
+    Name: isMoveToRail
+  - Type: 4
+    SynchronizeType: 0
+    Name: isTransferRail
+  - Type: 1
+    SynchronizeType: 0
+    Name: moveToRailSpeed
   m_SynchronizeLayers:
   - SynchronizeType: 2
     LayerIndex: 0
@@ -27285,6 +27297,7 @@ MonoBehaviour:
   rangeRadius: 5
   rangeDistance: 5
   movingToRailSpeed: 10
+  departingRailOffset: 0.5
   railJumpHeight: 4
   railJumpSpeed: 6
 --- !u!114 &-8464429117851822576
@@ -27304,7 +27317,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 36353
   interactableRope: {fileID: 0}
-  moveToRopeSpeed: 6
+  moveToRopeSpeed: 12
   escapingRopeSpeed: 6
   escapingRopeDelayTime: 1
 --- !u!114 &8239392579310060931
