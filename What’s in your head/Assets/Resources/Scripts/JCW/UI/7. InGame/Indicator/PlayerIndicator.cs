@@ -44,8 +44,6 @@ namespace JCW.UI.InGame.Indicator
                 Destroy(this.gameObject);
                 return;
             }
-
-            //myTF = transform.parent;
         }
 
         protected override void Start()
@@ -142,10 +140,7 @@ namespace JCW.UI.InGame.Indicator
 
         IEnumerator Wait()
         {
-            while (!isStart)
-            {
-                yield return new WaitForSeconds(0.1f);
-            }
+            yield return new WaitUntil(() => isStart == true);
 
             myTF = GameManager.Instance.myPlayerTF;
 

@@ -6,9 +6,15 @@ namespace JCW.Object
 {
     public class RecieverMic : MonoBehaviour
     {
+        [Header("감지 범위")][SerializeField] float detectRange;
         [Header("상호작용할 수 있는 오브젝트들")] [SerializeField] List<PlayObject> objectList;
 
+
         //(대충 넬라 스크립트 자료형) (변수명);
+        private void Awake()
+        {
+            transform.GetChild(1).localScale = new Vector3(detectRange, detectRange, detectRange);
+        }
 
         int scriptNum = 0;
         private void OnTriggerEnter(Collider other)

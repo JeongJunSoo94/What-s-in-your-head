@@ -56,6 +56,11 @@ namespace JCW.UI.InGame
         [PunRPC]
         void SetScreenSize(bool _isNella)
         {
+            if (GameManager.Instance.isTopView)
+            {
+                isStop = true;
+                return;
+            }
             int index = _isNella ? 0 : 1;
             deadUI_Rect.sizeDelta = new Vector2(CameraManager.Instance.cameras[index].rect.width * 1920f , deadUI_Rect.rect.height);
             aliveUI_Rect.sizeDelta = new Vector2(CameraManager.Instance.cameras[index].rect.width * 1920f , aliveUI_Rect.rect.height);

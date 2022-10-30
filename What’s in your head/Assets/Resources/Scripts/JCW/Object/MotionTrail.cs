@@ -7,16 +7,14 @@ namespace JCW.Effect
     public class MotionTrail : MonoBehaviour
     {
         [Header("잔상 개수")] [SerializeField] int trailCount = 50;
-        [Header("잔상 남아있는 시간")] [SerializeField] float trailRemainTime = 1f;
+        [Header("잔상 남아있는 시간")] [SerializeField] float trailRemainTime = 0.15f;
         [Header("잔상 소환 시간 간격")] [SerializeField] float trailSpawnTime = 0.01f;
         [Header("잔상 메쉬 렌더러")] [SerializeField] SkinnedMeshRenderer skinnedMeshRenderer;
         [Header("적용할 메테리얼")] [SerializeField] Material mat;
 
         GameObject TrailContainer;
+        readonly Queue<GameObject> objQueue = new();
 
-        Queue<GameObject> objQueue = new();
-
-        float curTime = 0f;
         int curSpawnIndex = 0;
 
         
