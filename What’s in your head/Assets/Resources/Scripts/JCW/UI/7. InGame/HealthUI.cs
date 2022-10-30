@@ -69,10 +69,7 @@ namespace JCW.UI.InGame
         void Update()
         {
             if (!photonView.IsMine || !(bool)GameManager.Instance.isAlive[isNella])
-            {
-                Debug.Log("IsMine : " + photonView.IsMine + " / 현 캐릭 생존 상태 : " + (bool)GameManager.Instance.isAlive[isNella]);
                 return;
-            }
             // 테스트용 >>============================================================
             if (Input.GetKeyDown(KeyCode.KeypadMinus))
                 GameManager.Instance.curPlayerHP -= 4;
@@ -93,10 +90,9 @@ namespace JCW.UI.InGame
 
                     // 현재 캐릭터가 넬라라면 넬라의 살아있음을 false로, 스테디라면 스테디의 살아있음을 false로 바꿈.
                     GameManager.Instance.SetAliveState(isNella, false);
-                    if (isNella)
-                        CameraManager.Instance.NellaDeadCam();
-                    else
-                        CameraManager.Instance.SteadyDeadCam();
+                    if(!GameManager.Instance.isTopView)
+                        CameraManager.Instance.DeadCam(isNella);
+                    
                     curHP = maxHP;
                     damageList.Clear();
                     Dead();
@@ -104,7 +100,16 @@ namespace JCW.UI.InGame
 
                     // 넬라 & 스테디 둘 다 죽었으면
                     if (!(bool)GameManager.Instance.isAlive[true] && !(bool)GameManager.Instance.isAlive[false])
+                    {
                         GameManager.Instance.MediateRevive(false);
+                        GameManager.Instance.SetAliveState(isNella, true);
+                        GameManager.Instance.SetAliveState(!isNella, true);
+                        if (!GameManager.Instance.isTopView)
+                        {
+                            CameraManager.Instance.ReviveCam(isNella);
+                            CameraManager.Instance.ReviveCam(!isNella);
+                        }                            
+                    }                        
                     else
                         GameManager.Instance.MediateRevive(true);
                 }
@@ -227,6 +232,10 @@ namespace JCW.UI.InGame
                 stream.SendNext(bgImages[(int)BgState.NORMAL].enabled);
                 stream.SendNext(bgImages[(int)BgState.DAMAGED].enabled);
                 stream.SendNext(bgImages[(int)BgState.DANGEROUS].enabled);
+
+                //stream.SendNext(charHpUI.activeSelf);
+                //stream.SendNext(reviveUI.activeSelf);
+
             }
             // 받는 사람
             else
@@ -241,6 +250,9 @@ namespace JCW.UI.InGame
                 bgImages[(int)BgState.NORMAL].enabled       = (bool)stream.ReceiveNext();
                 bgImages[(int)BgState.DAMAGED].enabled      = (bool)stream.ReceiveNext();
                 bgImages[(int)BgState.DANGEROUS].enabled    = (bool)stream.ReceiveNext();
+
+                //charHpUI.SetActive((bool)stream.ReceiveNext());
+                //reviveUI.SetActive((bool)stream.ReceiveNext());
             }
         }
     }

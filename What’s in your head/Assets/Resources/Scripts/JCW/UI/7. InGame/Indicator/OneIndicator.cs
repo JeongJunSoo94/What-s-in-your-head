@@ -105,10 +105,7 @@ namespace JCW.UI.InGame.Indicator
 
         IEnumerator Wait()
         {
-            while (!isStart)
-            {
-                yield return new WaitForSeconds(0.1f);
-            }
+            yield return new WaitUntil(() => isStart == true);
             interactiveImg.sprite = isNella ? nella_DetectSprite : steady_DetectSprite;
             yield break;
         }

@@ -112,8 +112,9 @@ namespace JCW.UI.InGame.Indicator
 
         protected IEnumerator WaitForPlayer()
         {
-            while (GameManager.Instance.characterOwner.Count <= 1)
-                yield return new WaitForSeconds(0.2f);
+            yield return new WaitUntil(() => GameManager.Instance.characterOwner.Count >= 2);
+            //while (GameManager.Instance.characterOwner.Count <= 1)
+            //    yield return new WaitForSeconds(0.2f);
 
             isNella = GameManager.Instance.characterOwner[PhotonNetwork.IsMasterClient];
             isStart = true;

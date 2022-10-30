@@ -32,7 +32,7 @@ public class GameManager : MonoBehaviour, IPunObservable
     [Header("테스트용")] public bool isTest;
 
     // 랜덤시드
-    int randomSeed;
+    [HideInInspector] public int randomSeed { get; private set; }
 
     public int curPlayerHP = 12;
 
@@ -51,6 +51,13 @@ public class GameManager : MonoBehaviour, IPunObservable
 
         photonView = GetComponent<PhotonView>();
 
+        //{
+        //    GameObject obj = new GameObject("_GameManager");
+        //    photonView = obj.AddComponent<PhotonView>();
+        //    photonView.ViewID = PhotonNetwork.AllocateViewID(0);
+        //    photonView.observableSearch = PhotonView.ObservableSearch.AutoFindAll;
+        //}
+
         curStageIndex = 0;
         curSection = 0;
     }
@@ -63,14 +70,14 @@ public class GameManager : MonoBehaviour, IPunObservable
 
     public void SetRandomSeed()
     {
-        if (photonView.IsMine)
-            photonView.RPC(nameof(SetRandomSeed_RPC), RpcTarget.AllViaServer, Random.Range(0, 2147483640));
+        photonView.RPC(nameof(SetRandomSeed_RPC), RpcTarget.AllViaServer, Random.Range(0, 2147483640));
     }
 
     [PunRPC]
     void SetRandomSeed_RPC(int seed)
     {
-        randomSeed = seed;
+        if(PhotonNetwork.IsMasterClient)
+            randomSeed = seed;
     }
 
     public void SectionUP() { ++curSection;  }

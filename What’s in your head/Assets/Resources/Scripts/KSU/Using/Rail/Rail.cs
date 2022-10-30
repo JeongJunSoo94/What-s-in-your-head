@@ -6,6 +6,7 @@ using Cinemachine.Utility;
 
 using YC.Camera_;
 using YC.Camera_Single;
+using JCW.Effect;
 
 namespace KSU
 {
@@ -83,6 +84,7 @@ namespace KSU
 
         public void RideOnRail(Vector3 startPos, GameObject startObj, GameObject player)
         {
+            player.GetComponent<MotionTrail>().enabled = true;
             SetDestination(player, CreateCart(startPos, startObj, player));
         }
 
@@ -242,6 +244,7 @@ namespace KSU
 
         public void EscapeRail(GameObject player)
         {
+            player.GetComponent<MotionTrail>().enabled = false;
             player.GetComponent<RailAction>().currentRail = null;
             player.transform.parent = null;
             Camera camera;            
@@ -252,7 +255,6 @@ namespace KSU
                     {
                         NellaCart.SetActive(false);
                         isNellaCartActive = false;
-
                     }
                     break;
                 case "Steady":
