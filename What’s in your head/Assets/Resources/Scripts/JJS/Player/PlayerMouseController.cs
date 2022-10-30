@@ -4,6 +4,8 @@ using System;
 using Photon.Pun;
 using UnityEngine;
 using JCW.UI.Options.InputBindings;
+using JCW.UI.InGame;
+using KSU;
 namespace JJS
 {
     [RequireComponent(typeof(PhotonView))]
@@ -19,14 +21,16 @@ namespace JJS
         }
         protected PhotonView photonView;
 
+        public float layerWeight=0;
+
         public GameObject point;
         public Camera cameraMain;
-        //public GameObject[] weapon;
-        //public bool[] weaponAimCheck;
-        [Header("조준, 무조준 공격, 공격 중 이동")] public List<WeaponInfo> weaponInfo;
+
+        protected PlayerController player;
+        [Header("조준, 무조준 공격, 공격 중 이동")] public WeaponInfo[] weaponInfo;
         public IKController ik;
 
-        [HideInInspector] public bool ableToLeft;
+        [HideInInspector] public bool afterDelayTime;
         [HideInInspector] public bool ableToRight;
 
         [HideInInspector] public bool clickLeft;
@@ -42,28 +46,38 @@ namespace JJS
         public float curCool=0f;
         public float swapCool=0.5f;
 
+        public bool canAim;
+        public float curAimCool = 0f;
+        public float AimCool = 0.5f;
+
         public bool notRotatoin;
         
         private void Awake()
         {
-            ableToLeft = false;
+            afterDelayTime = false;
             ableToRight = false;
             canSwap = true;
+            canAim = true;
             ik = GetComponent<IKController>();
             notRotatoin = false;
+
+            player = GetComponent<PlayerController>();
+            layerWeight = 0;
         }
-        public virtual void SetWeaponEnable(int weaponIndex, bool enable)
+
+
+        public virtual void SetWeaponEnable( bool enable)
         {
 
         }
 
         public virtual int GetUseWeapon()
         {
-            if (weaponInfo.Count != 0)
+            if (weaponInfo.Length !=0)
             {
-                for (int i = 0; i < weaponInfo.Count; ++i)
+                for (int i = 0; i < weaponInfo.Length; ++i)
                 {
-                    if (weaponInfo[i].weapon.activeSelf)
+                    if (weaponInfo[i].weapon!=null&& weaponInfo[i].weapon.activeSelf)
                     {
                         return i;
                     }
@@ -86,15 +100,31 @@ namespace JJS
             }
         }
 
+        public virtual void WeaponSwapRPC()
+        {
+            photonView.RPC(nameof(WeaponSwap), RpcTarget.AllViaServer);
+        }
+
+        [PunRPC]
         public virtual void WeaponSwap()
         {
-            if (weaponInfo.Count != 0)
+            if (weaponInfo.Length > 1)
             {
-                for (int i = 0; i < weaponInfo.Count; ++i)
+                for (int i = 0; i < weaponInfo.Length; ++i)
                 {
                     weaponInfo[i].weapon.SetActive(!weaponInfo[i].weapon.activeSelf);
                 }
+                gameObject.GetComponentInChildren<SwapItem>().SetSwap(GetUseWeapon());
             }
+        }
+
+        public bool SwapPossibleCheck()
+        {
+            if (weaponInfo.Length >= 2&& GetUseWeapon()!=-1)
+            {
+                return true;
+            }
+            return false;
         }
 
         public void SwapCoroutine()
@@ -104,8 +134,6 @@ namespace JJS
                 StartCoroutine(SwapCoolTime());
             }
         }
-
-
 
         IEnumerator SwapCoolTime()
         {
@@ -119,6 +147,33 @@ namespace JJS
             canSwap = true;
             yield break;
         }
+        public void AimCoroutine()
+        {
+            if (canAim)
+            { 
+                StartCoroutine(AimCoolTime());
+            }
+            else 
+            {
+                StopCoroutine(AimCoolTime());
+                StartCoroutine(AimCoolTime());
+            }
+        }
+
+        IEnumerator AimCoolTime()
+        {
+            curAimCool = 0;
+            canAim = false;
+            while (curAimCool < AimCool)
+            {
+                curAimCool += 0.01f;
+                yield return new WaitForSeconds(0.01f);
+            }
+            curAimCool = 0;
+            canAim = true;
+            yield break;
+        }
+
 
         public virtual bool GetCustomInfo()
         {

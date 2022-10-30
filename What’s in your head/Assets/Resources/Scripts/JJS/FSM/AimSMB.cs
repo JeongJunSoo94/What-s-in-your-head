@@ -7,15 +7,15 @@ namespace JJS
 {
     public class AimSMB : CharacterBaseSMB
     {
+
         override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
         {
-            GetPlayerController(animator).characterState.aim = true;
         }
 
         // OnStateUpdate is called on each Update frame between OnStateEnter and OnStateExit callbacks
         override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
         {
-            
+           
             WeaponCheck(animator);
             if (GetPlayerController(animator).characterState.isMine)
             {
@@ -25,30 +25,36 @@ namespace JJS
 
         override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
         {
-
+            if (!animator.GetBool("AimAttack"))
+                GetPlayerController(animator).playerMouse.ik.enableIK = false;
+           
         }
 
         void WeaponCheck(Animator animator)
         {
-            if(GetPlayerController(animator).characterState.top)
-                GetPlayerController(animator).playerMouse.ik.enableIK = false;
-            if (GetPlayerController(animator).playerMouse.weaponInfo[GetPlayerController(animator).playerMouse.GetUseWeapon()].canAim)
+            GetPlayerController(animator).playerMouse.ik.enableIK = true;
+            if (GetPlayerController(animator).characterState.top)
             {
-                if (GetPlayerController(animator).characterState.top)
+                if (GetPlayerController(animator).CompareTag("Steady"))
                 {
-                    animator.SetLayerWeight(1, 0);
+                    GetPlayerController(animator).playerMouse.AimUpdate(3);
                 }
                 else
                 {
-                    animator.SetLayerWeight(1, 1);
+                    GetPlayerController(animator).playerMouse.AimUpdate(2);
                 }
             }
             else
             {
-                if (animator.GetLayerWeight(1) == 1)
-                {
-                    animator.SetLayerWeight(1, 0);
-                }
+                GetPlayerController(animator).playerMouse.AimUpdate(1);
+            }
+            if (GetPlayerController(animator).playerMouse.weaponInfo[GetPlayerController(animator).playerMouse.GetUseWeapon()].canAim)
+            {
+                animator.SetLayerWeight(1, 1);
+            }
+            else
+            {
+                animator.SetBool("Aim", false);
             }
         }
 
@@ -56,7 +62,7 @@ namespace JJS
         {
             if (GetPlayerController(animator).playerMouse.weaponInfo[GetPlayerController(animator).playerMouse.GetUseWeapon()].canAim)
             {
-                if (GetPlayerController(animator).characterState.aim|| GetPlayerController(animator).characterState.top)
+                //if (GetPlayerController(animator).characterState.aim)
                 {
                     if (!GetPlayerController(animator).characterState.IsJumping&& !GetPlayerController(animator).characterState.IsAirJumping
                         &&!GetPlayerController(animator).characterState.IsDashing && !GetPlayerController(animator).characterState.IsAirDashing)
@@ -69,17 +75,33 @@ namespace JJS
                 }
             }
 
-
-            if (GetPlayerController(animator).playerMouse.weaponInfo[GetPlayerController(animator).playerMouse.GetUseWeapon()].canAim)
+            if (GetPlayerController(animator).characterState.isMine)
             {
-                if (GetPlayerController(animator).characterState.top)
+                if (!GetPlayerController(animator).characterState.IsJumping
+                    && !GetPlayerController(animator).characterState.IsAirJumping
+                    && !GetPlayerController(animator).characterState.IsDashing
+                    && !GetPlayerController(animator).characterState.IsAirDashing
+                    && !GetPlayerController(animator).characterState.swap
+                    && !animator.GetBool("isAttack"))
                 {
-                    animator.SetBool("Aim", true);
-                    animator.SetBool("Top", true);
-                    return;
+                    animator.SetBool("Aim", GetPlayerController(animator).characterState.aim);
                 }
-                animator.SetBool("Aim", KeyManager.Instance.GetKey(PlayerAction.Aim));
+                else
+                {
+                    animator.SetBool("Aim", false);
+                }
             }
+
+            //if (GetPlayerController(animator).playerMouse.weaponInfo[GetPlayerController(animator).playerMouse.GetUseWeapon()].canAim)
+            //{
+            //    if (GetPlayerController(animator).characterState.top)
+            //    {
+            //        animator.SetBool("Aim", true);
+            //        animator.SetBool("Top", true);
+            //        return;
+            //    }
+            //    animator.SetBool("Aim", KeyManager.Instance.GetKey(PlayerAction.Aim));
+            //}
         }
 
         // OnStateMove is called right after Animator.OnAnimatorMove()
@@ -88,10 +110,6 @@ namespace JJS
         //    // Implement code that processes and affects root motion
         //}
 
-        // OnStateIK is called right after Animator.OnAnimatorIK()
-        override public void OnStateIK(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
-        {
-        }
     }
 
 }

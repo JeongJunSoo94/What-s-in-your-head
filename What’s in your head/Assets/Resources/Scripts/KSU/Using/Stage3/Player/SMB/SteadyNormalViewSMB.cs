@@ -134,7 +134,7 @@ namespace JJS
                 animator.SetBool("isAir", true);
                 if (!GetPlayerController(animator).characterState.IsJumping)
                 {
-                    animator.SetTrigger("JumpDown");
+                    animator.SetBool("JumpDown",true);
                     return;
                 }
             }

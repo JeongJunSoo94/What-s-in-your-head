@@ -9,7 +9,6 @@ namespace JJS
     {
         override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
         {
-            animator.SetLayerWeight(1, 1);
             //if (GetPlayerController(animator).characterState.isMine)
             //{
             //    GetPlayerController(animator).characterState.aim = true;
@@ -18,17 +17,32 @@ namespace JJS
 
         override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
         {
-            if (!GetPlayerController(animator).characterState.top)
-            {
-                GetPlayerController(animator).playerMouse.AimUpdate(1);
-            }
-            GetPlayerController(animator).playerMouse.ik.enableIK = true;
             if (GetPlayerController(animator).characterState.isMine)
             {
-                GetPlayerController(animator).AimViewInputMove();
-                animator.SetFloat("MoveX", GetPlayerController(animator).moveDir.normalized.x * (GetPlayerController(animator).characterState.isMove ? 1.0f : 0.0f));
-                animator.SetFloat("MoveZ", GetPlayerController(animator).moveDir.normalized.z * (GetPlayerController(animator).characterState.isMove ? 1.0f : 0.0f));
-                GetPlayerController(animator).InputMove();
+
+                if (GetPlayerController(animator).CompareTag("Steady"))
+                {
+                    if (!animator.GetBool("AimAttack"))
+                    {
+                        GetPlayerController(animator).AimViewInputMove();
+                        animator.SetFloat("MoveX", GetPlayerController(animator).moveDir.normalized.x * (GetPlayerController(animator).characterState.isMove ? 1.0f : 0.0f));
+                        animator.SetFloat("MoveZ", GetPlayerController(animator).moveDir.normalized.z * (GetPlayerController(animator).characterState.isMove ? 1.0f : 0.0f));
+                        GetPlayerController(animator).InputMove();
+                    }
+                    else
+                    {
+                        GetPlayerController(animator).characterState.isOutOfControl = true;
+                        animator.SetFloat("MoveX", 0);
+                        animator.SetFloat("MoveZ", 0);
+                    }
+                }
+                else
+                {
+                    GetPlayerController(animator).AimViewInputMove();
+                    animator.SetFloat("MoveX", GetPlayerController(animator).moveDir.normalized.x * (GetPlayerController(animator).characterState.isMove ? 1.0f : 0.0f));
+                    animator.SetFloat("MoveZ", GetPlayerController(animator).moveDir.normalized.z * (GetPlayerController(animator).characterState.isMove ? 1.0f : 0.0f));
+                    GetPlayerController(animator).InputMove();
+                }
                 check(animator);
             }
 
@@ -36,11 +50,15 @@ namespace JJS
 
         public override void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
         {
-            //if (GetPlayerController(animator).characterState.isMine)
-            //{
-            //    GetPlayerController(animator).characterState.aim = false;
-            //}
-        }
+            if (GetPlayerController(animator).CompareTag("Steady"))
+            {
+                GetPlayerController(animator).characterState.isOutOfControl = false;
+            }
+                //if (GetPlayerController(animator).characterState.isMine)
+                //{
+                //    GetPlayerController(animator).characterState.aim = false;
+                //}
+            }
         void check(Animator animator)
         {
 

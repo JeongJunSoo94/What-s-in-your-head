@@ -56,8 +56,6 @@ namespace YC.Photon
             PhotonNetwork.SendRate = 60;
             PhotonNetwork.SerializationRate = 30;
 
-            Debug.Log(PhotonNetwork.SendRate);
-
             // 서버 접속
             PhotonNetwork.ConnectUsingSettings();
 
@@ -66,10 +64,10 @@ namespace YC.Photon
         // 포톤 서버에 접속시 호출되는 콜백 함수
         public override void OnConnectedToMaster()
         {
-            Debug.Log("Conntected to Master!");
+            //Debug.Log("Conntected to Master!");
 
             // 로비 입장 여부를 로그로 띄움 (아직 로비 입장 전이니 당연히 false)
-            Debug.Log($"PhotonNetwork.InLobby = {PhotonNetwork.InLobby}");
+            //Debug.Log($"PhotonNetwork.InLobby = {PhotonNetwork.InLobby}");
 
             // 로비 입장
             PhotonNetwork.JoinLobby();
@@ -78,7 +76,7 @@ namespace YC.Photon
         // 로비 입장시 호출되는 콜백 함수
         public override void OnJoinedLobby()
         {
-            Debug.Log($"PhotonNetwork.InLobby = {PhotonNetwork.InLobby}"); // true;
+            //Debug.Log($"PhotonNetwork.InLobby = {PhotonNetwork.InLobby}"); // true;
 
             // 생성되어 있는 룸들 중에서 랜덤하게 입장 (랜덤 매치메이킹 기능)
             //PhotonNetwork.JoinRandomRoom();
@@ -94,7 +92,7 @@ namespace YC.Photon
         // 랜덤 매치메이킹 실패시 호출되는 콜백 함수
         public override void OnJoinRandomFailed(short returnCode, string message)
         {
-            Debug.Log($"JoinRandom Failed {returnCode} : {message}");
+            //Debug.Log($"JoinRandom Failed {returnCode} : {message}");
 
             // 룸의 속성 정의
             RoomOptions ro = new RoomOptions();
@@ -109,15 +107,15 @@ namespace YC.Photon
         // 룸 생성이 완료시 호출되는 콜백 함수
         public override void OnCreatedRoom()
         {
-            Debug.Log("Created Room");
-            Debug.Log($"Room Name = {PhotonNetwork.CurrentRoom.Name}");
+            //Debug.Log("Created Room");
+            //Debug.Log($"Room Name = {PhotonNetwork.CurrentRoom.Name}");
         }
 
         // 룸에 입장시 호출되는 콜백 함수
         public override void OnJoinedRoom()
         {
-            Debug.Log($"PhotonNetwork.InRoom = {PhotonNetwork.InRoom}");
-            Debug.Log($"PlayerCount = {PhotonNetwork.CurrentRoom.PlayerCount}");
+            //Debug.Log($"PhotonNetwork.InRoom = {PhotonNetwork.InRoom}");
+            //Debug.Log($"PlayerCount = {PhotonNetwork.CurrentRoom.PlayerCount}");
 
             // 룸에 접속한 사용자 정보 확인
             foreach (var player in PhotonNetwork.CurrentRoom.Players)

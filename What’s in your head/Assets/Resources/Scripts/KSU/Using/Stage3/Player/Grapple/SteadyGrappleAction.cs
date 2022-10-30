@@ -9,7 +9,7 @@ using YC.Camera_Single;
 
 
 using JCW.UI.InGame.Indicator;
-using KSU.Monster;
+using JCW.UI.InGame;
 
 namespace KSU
 {
@@ -31,6 +31,7 @@ namespace KSU
         [SerializeField] GameObject grappleObject;
         SteadyGrapple grapple;
         Vector3 autoAimPosition;
+        [SerializeField] AimUI aimUI;
 
         [Header("_______변경 가능 값_______")]
         [Header("플레이어 날아가는 속력")]
@@ -73,6 +74,8 @@ namespace KSU
         Vector3 endLeft;
         Vector3 endRight;
         /// </summary>
+        /// 
+        PhotonView photonView;
 
 
         // Start is called before the first frame update
@@ -93,12 +96,14 @@ namespace KSU
             grapple.spawner = grappleSpawner;
 
             playerAnimator = GetComponent<Animator>();
+            photonView = GetComponent<PhotonView>();
         }
 
         void Update()
         {
             SearchGrappledObject();
-            SendInfoUI();
+            if(photonView.IsMine)
+                SendInfoUI();
             if (grappleSpawner.activeSelf && grappleSpawner.transform.parent.gameObject.activeSelf)
             {
                 MakeGizmoVecs();
@@ -150,6 +155,7 @@ namespace KSU
                             {
                                 if (Vector3.Angle(playerCamera.transform.forward, (_raycastHit.collider.gameObject.transform.position - rayOrigin)) < rangeAngle)
                                 {
+                                    aimUI.SetTarget(_raycastHit.collider.gameObject.transform, rangeAngle);
                                     autoAimPosition = _raycastHit.collider.gameObject.transform.position;
                                     steadyInteractionState.isGrappledObjectFounded = true;
                                     return;
@@ -158,6 +164,7 @@ namespace KSU
                         }
                     }
                 }
+                aimUI.SetTarget(null, rangeAngle);
                 steadyInteractionState.isGrappledObjectFounded = false;
             }
         }
@@ -260,19 +267,8 @@ namespace KSU
             {
                 foreach (var grappledObject in grappledObjects)
                 {
-                    Vector3 direction = (grappledObject.transform.parent.position - playerCamera.transform.position).normalized;
-                    bool rayCheck = false;
-
-                    switch (grappledObject.tag)
-                    {
-                        case "GrappledObject":
-                            rayCheck = Physics.Raycast(playerCamera.transform.position, direction, grappledObject.GetComponentInParent<GrappledObject>().detectingRange * 1.5f, layerFilterForGrapple, QueryTriggerInteraction.Ignore);
-                            break;
-                        case "DefenseMonster":
-                            rayCheck = Physics.Raycast(playerCamera.transform.position, direction, grappledObject.GetComponentInParent<DefenseMonster>().detectingUIRange * 1.5f, layerFilterForGrapple, QueryTriggerInteraction.Ignore);
-                            break;
-                    }
-                    
+                    Vector3 directoin = (grappledObject.transform.parent.position - playerCamera.transform.position).normalized;
+                    bool rayCheck = Physics.Raycast(playerCamera.transform.position, directoin, grappledObject.GetComponentInParent<GrappledObject>().detectingRange * 1.5f, layerFilterForGrapple, QueryTriggerInteraction.Ignore);
                     if (rayCheck)
                     {
                         grappledObject.transform.parent.gameObject.GetComponentInChildren<OneIndicator>().SetUI(true);
@@ -283,6 +279,11 @@ namespace KSU
                     }
                 }
             }
+
+            //if(steadyInteractionState.isGrappledObjectFounded)
+            //{
+
+            //}
         }
 
         public void EscapeMoving()
@@ -351,14 +352,15 @@ namespace KSU
 
         private void OnTriggerEnter(Collider other)
         {
-            if ((other.gameObject.layer == LayerMask.NameToLayer("UITriggers")) && (other.CompareTag("GrappledObject")|| other.CompareTag("DefenseMonster")))
+
+            if ((other.gameObject.layer == LayerMask.NameToLayer("UITriggers")) && other.CompareTag("GrappledObject"))
             {
                 grappledObjects.Add(other.gameObject);
             }
         }
         private void OnTriggerExit(Collider other)
         {
-            if ((other.gameObject.layer == LayerMask.NameToLayer("UITriggers")) && (other.CompareTag("GrappledObject") || other.CompareTag("DefenseMonster")))
+            if ((other.gameObject.layer == LayerMask.NameToLayer("UITriggers")) && other.CompareTag("GrappledObject"))
             {
                 other.gameObject.transform.parent.gameObject.GetComponentInChildren<OneIndicator>().SetUI(false);
                 grappledObjects.Remove(other.gameObject);

@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using JJS.CharacterSMB;
+using KSU;
 namespace JJS
 {
     public class DashSMB : CharacterBaseSMB
@@ -22,9 +23,14 @@ namespace JJS
                 check(animator);
             }
         }
+
+        public override void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
+        {
+            animator.SetBool("isDash", false);
+        }
         void check(Animator animator)
         {
-            GetPlayerController(animator).GetComponent<KSU.PlayerInteraction>().InputInteract();
+            GetPlayerController(animator).gameObject.GetComponent<PlayerInteraction>().InputInteract();
             GetPlayerController(animator).InputJump();
             if (!GetPlayerController(animator).characterState.IsGrounded)
             {

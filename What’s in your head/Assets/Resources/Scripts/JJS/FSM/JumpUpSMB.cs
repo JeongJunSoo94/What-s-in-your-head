@@ -9,6 +9,7 @@ namespace JJS
         // OnStateEnter is called when a transition starts and the state machine starts to evaluate this state
         override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
         {
+            animator.SetBool("isJump", false);
             if (GetPlayerController(animator).characterState.isMine)
             {
                 GetPlayerController(animator).characterState.isRun = false;
@@ -25,11 +26,6 @@ namespace JJS
                 GetPlayerController(animator).InputJump();
                 check(animator);
             }
-            float DistY = (GetPlayerController(animator).moveVec.y) / 10.0f;
-            if (DistY <= 0)
-            {
-                animator.SetTrigger("JumpDown");
-            }
         }
         override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
         {
@@ -37,6 +33,11 @@ namespace JJS
         void check(Animator animator)
         {
             GetPlayerController(animator).GetComponent<KSU.PlayerInteraction>().InputInteract();
+            float DistY = (GetPlayerController(animator).moveVec.y) / 10.0f;
+            if (DistY <= 0)
+            {
+                animator.SetBool("JumpDown", true);
+            }
             if (GetPlayerController(animator).characterState.IsGrounded)
             {
                 animator.SetBool("isAir", false);

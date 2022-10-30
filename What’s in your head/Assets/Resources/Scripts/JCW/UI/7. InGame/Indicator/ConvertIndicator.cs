@@ -112,19 +112,15 @@ namespace JCW.UI.InGame.Indicator
             {
                 videoPlayer.targetCamera = mainCamera;
                 SetSreenInfo();
+                // 게이지 필요 없으면 실행 X / 거리에 따라 게이지 줄어들게끔
+                if (gauge != null && !isSetOn)
+                    gauge.fillAmount = 1f - (distance - interactableRange) / (detectRange - interactableRange);
+
                 // 상호작용 범위 밖->안 & 안->밖 들어갔을 때만 애니메이션 재생과 함께 스프라이트 변경
                 if (isInteractable != isSetOn)
                 {
                     isInteractable = isSetOn;
                     ConvertVideo(isInteractable);
-                }
-
-                // 게이지 필요 없으면 실행 X
-                if (gauge != null && !isSetOn)
-                {                    
-                    // 거리에 따라 게이지 줄어들게 끔 해주기
-                    // 1 - (_dist-상호작용 범위)/(감지범위 - 상호작용 범위) == FillValue에 넣어줌.
-                    gauge.fillAmount = 1f - (distance - interactableRange) / (detectRange - interactableRange);
                 }
             }
         }
@@ -132,11 +128,12 @@ namespace JCW.UI.InGame.Indicator
         public void ConvertVideo(bool _isSetOn)
         {
             // 이미지를 잠깐 꺼주고 동영상 켜주기
-            if(gauge != null)
-                gauge.enabled = !_isSetOn;
+            if (gauge != null && _isSetOn)
+                gauge.enabled = false;
+
             interactiveImg.enabled = false;
             videoPlayer.Stop();
-            StopCoroutine(nameof(PlayVideoClip));
+            StopAllCoroutines();
             videoPlayer.gameObject.GetComponent<RawImage>().enabled = true;
             if (isNella)
                 videoPlayer.clip = _isSetOn ? nella_SetOnClip : nella_SetOffClip;
@@ -148,9 +145,10 @@ namespace JCW.UI.InGame.Indicator
 
         IEnumerator PlayVideoClip(bool _isSetOn)
         {
+            videoPlayer.Prepare();
+            yield return new WaitUntil(() => videoPlayer.isPrepared);
             videoPlayer.Play();
-            yield return new WaitForSeconds(1f);
-            videoPlayer.Stop();
+            yield return new WaitUntil(() => !videoPlayer.isPlaying);
             if (isNella)
                 interactiveImg.sprite = _isSetOn ? nella_InteractableSprite : nella_DetectSprite;
             else
@@ -160,16 +158,15 @@ namespace JCW.UI.InGame.Indicator
             videoPlayer.gameObject.GetComponent<RawImage>().enabled = false;
             interactiveImg.enabled = true;
 
+            if (gauge != null && !_isSetOn)
+                gauge.enabled = true;
 
-            yield return null;
+            yield break;
         }
 
         IEnumerator Wait()
         {
-            while (!isStart)
-            {
-                yield return new WaitForSeconds(0.1f);
-            }
+            yield return new WaitUntil(() => isStart == true);
             interactiveImg.sprite = isNella ? nella_DetectSprite : steady_DetectSprite;
             yield break;
         }

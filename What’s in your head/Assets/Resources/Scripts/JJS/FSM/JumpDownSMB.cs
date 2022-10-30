@@ -11,6 +11,7 @@ namespace JJS
             if (GetPlayerController(animator).characterState.isMine)
             {
                 GetPlayerController(animator).characterState.isRun = false;
+                animator.SetBool("JumpDown", false);
             }
         }
 
@@ -41,7 +42,8 @@ namespace JJS
             }
             else
             {
-                animator.SetFloat("DistY", 0.2f);
+                animator.SetBool("JumpDown", false);
+                animator.SetFloat("DistY", 0.1f);
             }
 
             if (GetPlayerController(animator).characterState.IsGrounded)

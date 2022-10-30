@@ -7,31 +7,45 @@ namespace JJS
 {
     public class UpperIdleSMB : CharacterBaseSMB
     {
-        // OnStateEnter is called when a transition starts and the state machine starts to evaluate this state
         override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
         {
             animator.SetLayerWeight(1, 0);
-            if (!GetPlayerController(animator).characterState.top)
-                GetPlayerController(animator).characterState.aim = false;
-
+            //GetPlayerController(animator).characterState.aim = false;
+            if (GetPlayerController(animator).playerMouse != null
+                && GetPlayerController(animator).playerMouse.SwapPossibleCheck()
+                && !GetPlayerController(animator).playerMouse.weaponInfo[GetPlayerController(animator).playerMouse.GetUseWeapon()].canAim)
+            { 
+                GetPlayerController(animator).playerMouse.ik.enableIK = false;
+            }
             if (GetPlayerController(animator).playerMouse is SteadyMouseController)
             {
                 animator.SetBool("isShootingGrapple", false);
             }
         }
 
-        // OnStateUpdate is called on each Update frame between OnStateEnter and OnStateExit callbacks
         override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
         {
-
-            check(animator);
+            if (GetPlayerController(animator).playerMouse != null&&GetPlayerController(animator).characterState.isMine)
+                check(animator);
         }
 
-        // OnStateExit is called when a transition ends and the state machine finishes evaluating this state
-        //override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
-        //{
-        //    
-        //}
+        override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
+        {
+            if (animator.GetBool("Aim"))
+            {
+                GetPlayerController(animator).playerMouse.ik.enableIK = true;
+
+                if (GetPlayerController(animator).playerMouse.weaponInfo[GetPlayerController(animator).playerMouse.GetUseWeapon()].canAim)
+                {
+                    animator.SetLayerWeight(1, 1);
+                }
+            }
+            else
+            {
+                GetPlayerController(animator).playerMouse.ik.enableIK = false;
+            }
+        }
+
 
         // OnStateMove is called right after Animator.OnAnimatorMove()
         //override public void OnStateMove(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
@@ -47,29 +61,26 @@ namespace JJS
 
         void check(Animator animator)
         {
-            //if (GetPlayerController(animator).playerMouse.weaponInfo[GetPlayerController(animator).playerMouse.GetUseWeapon()].canAim)
-            //{
-            //    if (GetPlayerController(animator).characterState.top)
-            //    {
-            //        animator.SetBool("Aim", true);
-            //        animator.SetBool("Top", true);
-            //    }
-            //}
-
-            if (GetPlayerController(animator).playerMouse.weaponInfo[GetPlayerController(animator).playerMouse.GetUseWeapon()].canAim)
+            animator.SetLayerWeight(1, 0);
+            if (GetPlayerController(animator).playerMouse.SwapPossibleCheck() && GetPlayerController(animator).playerMouse.weaponInfo[GetPlayerController(animator).playerMouse.GetUseWeapon()].canAim)
             {
-                if (GetPlayerController(animator).characterState.top)
-                {
-                    animator.SetBool("Aim", true);
-                    animator.SetBool("Top", true);
-                    return;
-                }
+                //if (GetPlayerController(animator).characterState.top)
+                //{
+                //    animator.SetBool("Aim", true);
+                //    animator.SetBool("Top", true);
+                //    return;
+                //}
 
                 if (GetPlayerController(animator).characterState.isMine)
                 {
-                    if (GetPlayerController(animator).characterState.CanJump)
+                    if (!GetPlayerController(animator).characterState.IsJumping
+                        && !GetPlayerController(animator).characterState.IsAirJumping
+                        && !GetPlayerController(animator).characterState.IsDashing
+                        && !GetPlayerController(animator).characterState.IsAirDashing
+                        && !GetPlayerController(animator).characterState.swap
+                        && !animator.GetBool("isAttack"))
                     {
-                        animator.SetBool("Aim", KeyManager.Instance.GetKey(PlayerAction.Aim));
+                            animator.SetBool("Aim", KeyManager.Instance.GetKey(PlayerAction.Aim));
                     }
                 }
             }

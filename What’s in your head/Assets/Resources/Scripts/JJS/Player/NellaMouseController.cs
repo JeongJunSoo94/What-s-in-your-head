@@ -15,116 +15,155 @@ namespace JJS
         public List<Discovery3D> hitObjs;
 
         public WaterGun gun;
-
-        PlayerController player;
-
-
+        
         private void Awake()
         {
+
             if (PhotonNetwork.NetworkClientState == Photon.Realtime.ClientState.Joined)
             {
-                gun.mainCamera = this.gameObject.transform.GetComponent<CameraController>().FindCamera(); // 멀티용
                 cameraMain = this.gameObject.transform.GetComponent<CameraController>().FindCamera(); // 멀티용
             }
             else
             {
-                gun.mainCamera = this.gameObject.transform.GetComponent<CameraController_Single>().FindCamera(); // 싱글용
                 cameraMain = this.gameObject.transform.GetComponent<CameraController_Single>().FindCamera(); // 싱글용
             }
-            if (point == null)
-            {
-                point = GameObject.FindGameObjectWithTag("NellaMousePoint");
-                gun.mousePoint = point;
-            }
+            wartergunInit();
             photonView = GetComponent<PhotonView>();
             player = GetComponent<PlayerController>();
             canSwap = true;
+            canAim = true;
+            if (weaponInfo.Length!=0)
+                weaponInfo[0].weapon.SetActive(true);
         }
 
-        public override void AimUpdate(int type=0)
+        public void wartergunInit()
         {
-            //Vector3 mousePos = Input.mousePosition;
-            //float x = mousePos.x * (1 - cameraMain.rect.width);
-            //mousePos.x -= x;
-            //ray = cameraMain.ScreenPointToRay(mousePos);
-            //int layerMask = (-1) - (1 << LayerMask.NameToLayer("Player"));
-            //if (Physics.Raycast(ray, out hit, 100, layerMask, QueryTriggerInteraction.Ignore))
-            //{
-            //    point.transform.position = hit.point;
-            //}
-            //else
-            //{
-            //    Vector3 dir = cameraMain.transform.forward;
-            //    point.transform.position = gun.startPos.transform.position + dir * gun.shootMaxDistance;
-            //}
+            point = GameObject.FindGameObjectWithTag("NellaMousePoint");
+            if (gun != null)
+            { 
+                gun.mainCamera = cameraMain;
+                gun.mousePoint = point;
+            }
+        }
+
+        public override void AimUpdate(int type = 0)
+        {
             gun.ShootLine(type);
         }
-      
+
         private void FixedUpdate()
+        {
+            InputUpdate();
+        }
+
+        public void InputUpdate()
         {
             if (photonView.IsMine)
             {
-                if (player.characterState.aim)
+                if (GetUseWeapon() == -1)
                 {
-                    if (!player.characterState.IsJumping && !player.characterState.IsAirJumping
-                        && !player.characterState.IsDashing && !player.characterState.IsAirDashing)
+                }
+                else
+                {
+                    if (weaponInfo[GetUseWeapon()].canAim)
                     {
-                        if (KeyManager.Instance.GetKey(PlayerAction.Fire) && GetUseWeapon() == 0)
+                        if (KeyManager.Instance.GetKey(PlayerAction.Aim)
+                            && !player.characterState.swap
+                            && !player.characterState.IsJumping
+                            && !player.characterState.IsAirJumping
+                            && !player.characterState.IsDashing
+                            && !player.characterState.IsAirDashing)
                         {
-                            photonView.RPC(nameof(SetWeaponEnable), RpcTarget.AllViaServer, 0, true);
-                            clickLeft = true;
+                            if (!clickRight)
+                            {
+                                AimCoroutine();
+                                clickRight = true;
+                            }
+                            player.characterState.aim = true;
                         }
                         else
                         {
-                            photonView.RPC(nameof(SetWeaponEnable), RpcTarget.AllViaServer, 0, false);
-                            clickLeft = false;
+                            clickRight = false;
+                            player.characterState.aim = false;
+                        }
+
+                    }
+
+                    if (player.characterState.aim)
+                    {
+                        if (!player.characterState.IsJumping && !player.characterState.IsAirJumping
+                            && !player.characterState.IsDashing && !player.characterState.IsAirDashing)
+                        {
+                            if (KeyManager.Instance.GetKey(PlayerAction.Fire) && weaponInfo[GetUseWeapon()].canAim)
+                            {
+                                if (gun.shootEnable && canAim)
+                                {
+                                    gun.ShootCoroutineEnable();
+                                    photonView.RPC(nameof(SetWeaponEnable), RpcTarget.AllViaServer,true);
+                                }
+                            }
+                            else
+                            {
+                                if (clickLeft)
+                                {
+                                    photonView.RPC(nameof(SetWeaponEnable), RpcTarget.AllViaServer,false);
+                                }
+                            }
+                        }
+                        else
+                        {
+                            if (clickLeft)
+                            {
+                                photonView.RPC(nameof(SetWeaponEnable), RpcTarget.AllViaServer, false);
+                            }
                         }
                     }
                     else
                     {
-                        photonView.RPC(nameof(SetWeaponEnable), RpcTarget.AllViaServer, 0, false);
-                        clickLeft = false;
+                        if (KeyManager.Instance.GetKey(PlayerAction.Fire) && !weaponInfo[GetUseWeapon()].canAim)
+                        {
+                            photonView.RPC(nameof(SetWeaponEnable), RpcTarget.AllViaServer, true);
+                        }
+                        else
+                        {
+                            if (clickLeft)
+                            {
+                                photonView.RPC(nameof(SetWeaponEnable), RpcTarget.AllViaServer, false);
+                            }
+                        }
                     }
+                }
+            }
+        }
+        [PunRPC]
+        public override void SetWeaponEnable(bool enable)
+        {
+            if (weaponInfo[GetUseWeapon()].weapon.name == "WaterPistol")
+            {
+                if (enable)
+                {
+                    if (player.characterState.top)
+                    {
+                        AimUpdate(2);
+                    }
+                    else
+                    {
+                        AimUpdate(1);
+                    }
+                    clickLeft = true;
+                    gun.ShootStart();
                 }
                 else
                 {
-                    photonView.RPC(nameof(SetWeaponEnable), RpcTarget.AllViaServer, 0, false);
                     clickLeft = false;
                 }
-
-                if (KeyManager.Instance.GetKey(PlayerAction.Swap))
-                {
-                    photonView.RPC(nameof(WeaponSwap), RpcTarget.AllViaServer, 0, true);
-                }
-            }
-
-            //SetWeaponEnable(GetPlayerController(animator).playerMouse.GetUseWeapon(), false)
-        }
-
-
-        [PunRPC]
-        public override void SetWeaponEnable(int weaponIndex,bool enable)
-        {
-            
-            if (enable)
-            {
-                if (player.characterState.top)
-                {
-                    AimUpdate(2);
-                }
-                gun.ShootStart();
             }
             else
             {
-                gun.ShootStop();
+                clickLeft = enable;
             }
+        
         }
-
-        //public void Shoot()
-        //{
-        //    gun.Shoot();
-        //    bulletCount++;
-        //}
 
         public void OnEnableObject(int index)
         {
@@ -136,9 +175,10 @@ namespace JJS
             hitObjs[index].gameObject.SetActive(false);
         }
 
-        public void AttackTime()
+        public void AfterDelayTime(int index)
         {
-            ableToLeft = !ableToLeft;
+            afterDelayTime = !afterDelayTime;
+            OnDisableObject(index);
         }
 
 

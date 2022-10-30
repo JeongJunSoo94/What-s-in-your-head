@@ -14,6 +14,12 @@ namespace JJS
         {
             animator.SetLayerWeight(1, 0);
             onClick = false;
+            
+                if (GetPlayerController(animator).characterState.isMine)
+                {
+                    GetPlayerController(animator).InputMove();
+                    GetPlayerController(animator).MoveStop();
+                }
         }
 
         // OnStateUpdate is called on each Update frame between OnStateEnter and OnStateExit callbacks
@@ -26,6 +32,7 @@ namespace JJS
         }
         public override void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
         {
+            GetPlayerController(animator).playerMouse.afterDelayTime = false;
             animator.SetBool("isAttack", false);
         }
         void Check(Animator animator)
@@ -49,7 +56,24 @@ namespace JJS
                     animator.SetBool("isAttackNext", true);
                 }
             }
+            if (GetPlayerController(animator).playerMouse.afterDelayTime)
+            {
+                GetPlayerController(animator).InputMove();
+                GetPlayerController(animator).InputJump();
+                GetPlayerController(animator).InputDash();
+                GetPlayerController(animator).MoveStop();
+            }
+            if (GetPlayerController(animator).characterState.IsJumping)
+            {
+                animator.SetBool("isJump", true);
+                return;
+            }
 
+            if (GetPlayerController(animator).characterState.IsDashing)
+            {
+                animator.SetBool("isDash", true);
+                return;
+            }
         }
     }
 }

@@ -26,19 +26,23 @@ namespace JCW.UI.Options
         private Text functionName;
         private Slider slider;
 
-        private Text sliderValueOnUI;
+        //private Text sliderValueOnUI;
+        private InputField sliderValueOnUI;
+        private Text sliderValueText;
 
         // 버튼의 현재 위치
         private int index = 0;
+
+        int curValue = 0;
 
         private Image hoveringImg;
 
         override protected void Awake()
         {
-            textName = gameObject.transform.GetChild((int)FuncChild.Name).gameObject.GetComponent<Text>();
-            leftButton = gameObject.transform.GetChild((int)FuncChild.Left).gameObject.GetComponent<Button>();
-            rightButton = gameObject.transform.GetChild((int)FuncChild.Right).gameObject.GetComponent<Button>();
-            funcValue = gameObject.transform.GetChild((int)FuncChild.Func).gameObject;
+            textName = transform.GetChild((int)FuncChild.Name).GetComponent<Text>();
+            leftButton = transform.GetChild((int)FuncChild.Left).GetComponent<Button>();
+            rightButton = transform.GetChild((int)FuncChild.Right).GetComponent<Button>();
+            funcValue = transform.GetChild((int)FuncChild.Func).gameObject;
 
             isSlider = funcTexts.Count==0;
 
@@ -48,7 +52,18 @@ namespace JCW.UI.Options
                 slider = funcValue.GetComponent<Slider>();
                 slider.minValue = min;
                 slider.maxValue = max;
-                sliderValueOnUI = slider.gameObject.transform.GetChild(0).gameObject.GetComponent<Text>();
+                //sliderValueOnUI = slider.transform.GetChild(0).GetComponentInChildren<Text>();
+                sliderValueOnUI = slider.transform.GetChild(0).GetComponent<InputField>();
+                sliderValueText = sliderValueOnUI.GetComponentInChildren<Text>();
+                sliderValueOnUI.onEndEdit.AddListener((string _text) =>
+                {
+                    int tempValue = int.Parse(_text);
+                    if (tempValue > 100)
+                        tempValue = 100;
+                    else if (tempValue < 0)
+                        tempValue = 0;
+                    slider.value = tempValue;
+                });
             }
             else
                 functionName = funcValue.GetComponent<Text>();
@@ -76,6 +91,7 @@ namespace JCW.UI.Options
                 {
                     slider.value -= 1;
                     index = (int)(slider.value);
+                    sliderValueOnUI.text = index.ToString();
                 }
                 else { functionName.text = funcTexts[--index]; }
 
@@ -90,6 +106,7 @@ namespace JCW.UI.Options
                 {
                     slider.value += 1;
                     index = (int)(slider.value);
+                    sliderValueOnUI.text = index.ToString();
                 }
                 else { functionName.text = funcTexts[++index]; }
 
@@ -110,7 +127,7 @@ namespace JCW.UI.Options
 
         private void Update()
         {
-            if (isSlider)
+            if (isSlider && index != (int)slider.value)
             {
                 index = (int)slider.value;
                 sliderValueOnUI.text = index.ToString();
@@ -124,7 +141,7 @@ namespace JCW.UI.Options
             if (!isSlider)
                 functionName.color = textName.color;
             else
-                sliderValueOnUI.color = textName.color;
+                sliderValueText.color = textName.color;
         }
     }
 }

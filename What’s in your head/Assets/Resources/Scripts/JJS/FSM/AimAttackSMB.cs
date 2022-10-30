@@ -15,8 +15,11 @@ namespace JJS
             // << : 찬 수정 (스테디가 빔으로 공격할시, 공격이 끝날때 까지 마우스 인풋을 막는다)
             if(GetPlayerController(animator))
             {
-                if(GetPlayerController(animator).CompareTag("Steady"))
+                if (GetPlayerController(animator).CompareTag("Steady"))
+                { 
                     GetPlayerController(animator).GetComponent<CameraController>().SetSteadyBeam(true);
+                    GetPlayerController(animator).characterState.isOutOfControl = true;
+                }
             }
         }
 
@@ -28,8 +31,12 @@ namespace JJS
             if (GetPlayerController(animator).characterState.top)
             {
                 if (GetPlayerController(animator).CompareTag("Steady"))
-                { 
+                {
                     GetPlayerController(animator).playerMouse.AimUpdate(3);
+                }
+                else
+                {
+                    GetPlayerController(animator).playerMouse.AimUpdate(2);
                 }
             }
             else
@@ -38,7 +45,6 @@ namespace JJS
             }
             if (GetPlayerController(animator).characterState.isMine)
             {
-
                 check(animator);
             }
         }
@@ -81,7 +87,11 @@ namespace JJS
             if (GetPlayerController(animator))
             {
                 if (GetPlayerController(animator).CompareTag("Steady"))
+                {
+                    GetPlayerController(animator).characterState.isOutOfControl = false;
                     GetPlayerController(animator).GetComponent<CameraController>().SetSteadyBeam(false);
+                    
+                }
             }
         }
 
