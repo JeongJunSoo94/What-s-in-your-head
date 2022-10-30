@@ -16,7 +16,6 @@ namespace JJS
 
                 GetPlayerController(animator).GetComponent<CameraController>().NormalJumpCameraInit(true); // << : Âù Ãß°¡
 
-
             }
         }
 

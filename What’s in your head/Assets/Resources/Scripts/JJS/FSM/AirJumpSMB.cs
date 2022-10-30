@@ -13,7 +13,7 @@ namespace JJS
             {
                 animator.SetBool("wasAirJump", true);
 
-                //GetPlayerController(animator).GetComponent<CameraController>().NormalJumpCameraInit(false); // << : 찬 추가     
+                GetPlayerController(animator).GetComponent<CameraController>().NormalJumpCameraInit(false); // << : 찬 추가     
             }
         }
 
