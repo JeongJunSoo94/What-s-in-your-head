@@ -54,6 +54,7 @@ namespace KSU
 
         public void InitGrapple(Vector3 startPos, Vector3 endPos, float grappleSpeed, float Offset)
         {
+            MakeRope();
             grappleRigidbody.velocity = Vector3.zero;
             transform.position = startPos;
             endPosistion = endPos;

@@ -359,46 +359,52 @@ namespace YC.Camera_
             }
         }
 
-        void SetCamera() // 플레이어 State 따라카메라 세팅 
+        void SetCamera() // 플레이어 State에 따라 카메라 세팅  
         {
-            if (GameManager.Instance.isTopView)
-                return;
+            if (GameManager.Instance.isTopView) return;
 
-
-            if (curCam == CamState.back)
+            if (curCam == CamState.back) // Back View -> Sholder View
             {
-                if (player.characterState.aim) // back View -> sholder View
+                if (player.characterState.aim)
                 {
-                    AxisState temp = backCam.GetComponent<CinemachineFreeLook>().m_XAxis;
+                    AxisState preCamAxisX = backCam.GetComponent<CinemachineFreeLook>().m_XAxis;
 
                     preCam = curCam;
                     curCam = CamState.sholder;
 
-                    if (camList[(int)preCam].GetComponent<CinemachineFreeLook>().m_YAxis.Value < sholderAxisY_MaxUp)
-                        camList[(int)preCam].GetComponent<CinemachineFreeLook>().m_YAxis.Value = sholderAxisY_MaxUp;
+                    if (camList[(int)preCam].GetComponent<CinemachineFreeLook>().m_YAxis.Value <= sholderAxisY_MaxUp)
+                    {
+                        sholderCam.GetComponent<CinemachineFreeLook>().m_YAxis.Value
+                            = sholderAxisY_MaxUp;
+                    }
 
-                    if (camList[(int)preCam].GetComponent<CinemachineFreeLook>().m_YAxis.Value > sholderAxisY_MaxDown)
-                        camList[(int)preCam].GetComponent<CinemachineFreeLook>().m_YAxis.Value = sholderAxisY_MaxDown;
+                    if (camList[(int)preCam].GetComponent<CinemachineFreeLook>().m_YAxis.Value >= sholderAxisY_MaxDown)
+                    {
+                        sholderCam.GetComponent<CinemachineFreeLook>().m_YAxis.Value
+                            = sholderAxisY_MaxDown;
+                    }
 
+                    camList[(int)curCam].GetComponent<CinemachineFreeLook>().m_XAxis.Value
+                                    = camList[(int)preCam].GetComponent<CinemachineFreeLook>().m_XAxis.Value;
 
-                    camList[(int)curCam].GetComponent<CinemachineFreeLook>().m_XAxis.Value = camList[(int)preCam].GetComponent<CinemachineFreeLook>().m_XAxis.Value;
-                    camList[(int)curCam].GetComponent<CinemachineFreeLook>().m_YAxis.Value = camList[(int)preCam].GetComponent<CinemachineFreeLook>().m_YAxis.Value;
                     OnOffCamera(sholderCam);
 
-                    sholderCam.GetComponent<CinemachineFreeLook>().m_XAxis = temp;
+                    sholderCam.GetComponent<CinemachineFreeLook>().m_XAxis = preCamAxisX;
                 }
             }
-            else if (curCam == CamState.sholder)
+            else if (curCam == CamState.sholder) // Sholder View -> Back View
             {
-                if (!player.characterState.aim) // sholder View -> back View
+                if (!player.characterState.aim)
                 {
-                    AxisState temp = sholderCam.GetComponent<CinemachineFreeLook>().m_XAxis;
+                    AxisState preCamAxisX = sholderCam.GetComponent<CinemachineFreeLook>().m_XAxis;
 
                     preCam = curCam;
                     curCam = CamState.back;
 
-                    camList[(int)curCam].GetComponent<CinemachineFreeLook>().m_XAxis.Value = camList[(int)preCam].GetComponent<CinemachineFreeLook>().m_XAxis.Value;
-                    camList[(int)curCam].GetComponent<CinemachineFreeLook>().m_YAxis.Value = camList[(int)preCam].GetComponent<CinemachineFreeLook>().m_YAxis.Value;
+                    camList[(int)curCam].GetComponent<CinemachineFreeLook>().m_XAxis.Value
+                                    = camList[(int)preCam].GetComponent<CinemachineFreeLook>().m_XAxis.Value;
+                    camList[(int)curCam].GetComponent<CinemachineFreeLook>().m_YAxis.Value
+                                    = camList[(int)preCam].GetComponent<CinemachineFreeLook>().m_YAxis.Value;
 
                     if (isShakedFade)
                     {
@@ -408,7 +414,7 @@ namespace YC.Camera_
 
                     OnOffCamera(backCam);
 
-                    backCam.GetComponent<CinemachineFreeLook>().m_XAxis = temp;
+                    backCam.GetComponent<CinemachineFreeLook>().m_XAxis = preCamAxisX;
                 }
             }
         }

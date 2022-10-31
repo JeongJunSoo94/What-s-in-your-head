@@ -51,7 +51,6 @@ namespace KSU.FSM
             {
                 if (KeyManager.Instance.GetKeyDown(PlayerAction.Jump) || KeyManager.Instance.GetKeyDown(PlayerAction.Interaction))
                 {
-                    animator.SetBool("isRidingRope", false);
                     GetRopeAction(animator).EscapeRope();
                 }
             }

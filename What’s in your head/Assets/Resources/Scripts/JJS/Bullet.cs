@@ -10,17 +10,17 @@ namespace JJS
         public float speed= 1f;
         public BezierCurve curve;
         public Spawner spawner;
-        //public TrailRenderer trail;
+        public TrailRenderer trail;
         private void Awake()
         {
             spawner = this.transform.parent.gameObject.GetComponent<Spawner>();
             curve = gameObject.GetComponent<BezierCurve>();
             bulletRange = 0f;
-            //trail = GetComponent<TrailRenderer>();
+            trail = GetComponentInChildren<TrailRenderer>();
         }
         private void OnEnable()
         {
-            //trail.time = 0.4f;
+            trail.Clear();
             bulletRange = 0f;
             curve.range = 0;
         }

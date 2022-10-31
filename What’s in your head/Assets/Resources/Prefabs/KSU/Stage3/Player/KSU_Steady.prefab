@@ -25330,6 +25330,12 @@ MonoBehaviour:
   - Type: 1
     SynchronizeType: 2
     Name: moveToRailSpeed
+  - Type: 4
+    SynchronizeType: 0
+    Name: isAttacked
+  - Type: 4
+    SynchronizeType: 0
+    Name: isDead
   m_SynchronizeLayers:
   - SynchronizeType: 2
     LayerIndex: 0
@@ -25539,6 +25545,7 @@ MonoBehaviour:
   isMovingToRail: 0
   isRailJumpingUp: 0
   isRailJumping: 0
+  isMoveFromRail: 0
 --- !u!114 &-2992445003819170954
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -25563,6 +25570,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cbbcf1fce5f3fb7419efc97b38b925f8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  interactionState: {fileID: 0}
   mainCamera: {fileID: 0}
   lookAtObj: {fileID: 2713921362035335090}
   layerFilterForRail:
@@ -25595,6 +25603,7 @@ MonoBehaviour:
   layerFilterForRope:
     serializedVersion: 2
     m_Bits: 36353
+  currentRidingRope: {fileID: 0}
   interactableRope: {fileID: 0}
   moveToRopeSpeed: 12
   escapingRopeSpeed: 6

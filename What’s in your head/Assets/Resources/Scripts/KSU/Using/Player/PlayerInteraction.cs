@@ -57,11 +57,11 @@ namespace KSU
                 }
                 else
                 {
-                    if (ropeAction.interactableRope != null)
+                    if (ropeAction.interactableRope != null && !interactionState.isMoveFromRope && !interactionState.isRopeEscapeDelayOn)
                     {
                         //animator.SetFloat("moveToRailSpeed", 2.033f / railAction.StartRailAction());
-                        ropeAction.RideRope();
-                        animator.SetBool("isMoveToRope", true);
+                        //ropeAction.RideRope();
+                        animator.SetBool("isMoveToRope", ropeAction.RideRope());
                         return true;
                     }
                 }
