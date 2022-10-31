@@ -46,17 +46,14 @@ namespace YC_OBJ
             meshCollider.enabled = false;
             boxCollider.enabled = false;
 
-            Debug.Log("¹ÞÀ½!");
 
             StartCoroutine(nameof(EffectShader), delayTime);
         }
 
         IEnumerator EffectShader(float delayTime)
         {
-            Debug.Log("µô·¹ÀÌ ½ÃÀÛ!");
+           
             yield return new WaitForSeconds(delayTime);
-            Debug.Log("ÀÌÆåÆ®!!");
-            Debug.Log(delayTime);
             float curSplitValue = ren.material.GetFloat("_SplitValue");
             float minSplitValur = -0.1f;
             while (curSplitValue > minSplitValur)
