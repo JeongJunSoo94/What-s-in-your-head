@@ -345,7 +345,6 @@ GameObject:
   - component: {fileID: 714993349138671499}
   - component: {fileID: 714993349138671502}
   - component: {fileID: 714993349138671501}
-  - component: {fileID: 714993349138671500}
   m_Layer: 3
   m_Name: MapObj_PotFlower
   m_TagString: Untagged
@@ -424,6 +423,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   MaxTime: 2
+  GrappleObj: {fileID: 5361808170944181583}
 --- !u!114 &714993349138671501
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -442,32 +442,10 @@ MonoBehaviour:
   Synchronization: 3
   OwnershipTransfer: 0
   observableSearch: 2
-  ObservedComponents:
-  - {fileID: 714993349138671500}
+  ObservedComponents: []
   sceneViewId: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0
---- !u!114 &714993349138671500
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 714993349138671498}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9b8c4a61274f60b4ea5fb4299cfdbf14, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  ShowLayerWeightsInspector: 1
-  ShowParameterInspector: 1
-  m_SynchronizeParameters:
-  - Type: 4
-    SynchronizeType: 2
-    Name: isBoom
-  m_SynchronizeLayers:
-  - SynchronizeType: 2
-    LayerIndex: 0
 --- !u!1 &916917482437335574
 GameObject:
   m_ObjectHideFlags: 0
@@ -2120,5 +2098,10 @@ PrefabInstance:
 --- !u!4 &5361808170944181578 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 8477004906290916616, guid: edf477c300adcd546b6bf8c358ecc0c3, type: 3}
+  m_PrefabInstance: {fileID: 4597233019690719298}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &5361808170944181583 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8477004906290916621, guid: edf477c300adcd546b6bf8c358ecc0c3, type: 3}
   m_PrefabInstance: {fileID: 4597233019690719298}
   m_PrefabAsset: {fileID: 0}

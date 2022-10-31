@@ -41,6 +41,8 @@ namespace YC_OBJ
         Animator animator;
         PhotonView pv;
 
+        [SerializeField] GameObject GrappleObj;
+
         private void Awake()
         {
             maxTime = MaxTime;
@@ -67,8 +69,10 @@ namespace YC_OBJ
                 {
                     curTime = maxTime;
 
-                    if (pv.IsMine)
-                        animator.SetBool("isBoom", true);
+                    //if (pv.IsMine)
+                    //    animator.SetBool("isBoom", true);
+
+                    pv.RPC(nameof(SetGrapple), RpcTarget.AllViaServer);
 
                     isTrigger = true;
                 }
@@ -113,6 +117,12 @@ namespace YC_OBJ
             }
         }
 
-        
+
+        [PunRPC]
+        void SetGrapple()
+        {
+            animator.SetBool("isBoom", true);
+            GrappleObj.SetActive(true);
+        }
     }
 }

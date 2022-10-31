@@ -655,7 +655,6 @@ GameObject:
   - component: {fileID: 5742636976243588062}
   - component: {fileID: 5742636976243588035}
   - component: {fileID: 5742636976243588032}
-  - component: {fileID: 5742636976243588033}
   m_Layer: 3
   m_Name: corrupt_bottom
   m_TagString: Untagged
@@ -717,35 +716,10 @@ MonoBehaviour:
   Synchronization: 3
   OwnershipTransfer: 0
   observableSearch: 2
-  ObservedComponents:
-  - {fileID: 5742636976243588033}
+  ObservedComponents: []
   sceneViewId: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0
---- !u!114 &5742636976243588033
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5742636976243588063}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9b8c4a61274f60b4ea5fb4299cfdbf14, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  ShowLayerWeightsInspector: 1
-  ShowParameterInspector: 1
-  m_SynchronizeParameters:
-  - Type: 4
-    SynchronizeType: 2
-    Name: isDestroy
-  - Type: 4
-    SynchronizeType: 2
-    Name: isCreate
-  m_SynchronizeLayers:
-  - SynchronizeType: 2
-    LayerIndex: 0
 --- !u!1 &5742636976260488482
 GameObject:
   m_ObjectHideFlags: 0
@@ -788,6 +762,7 @@ GameObject:
   - component: {fileID: 8312462143629303091}
   - component: {fileID: 8312462143629303090}
   - component: {fileID: 4389388546332522373}
+  - component: {fileID: 731994265}
   m_Layer: 3
   m_Name: MapObj_FakeTree2
   m_TagString: Untagged
@@ -854,3 +829,18 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 126
   m_CollisionDetection: 0
+--- !u!114 &731994265
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8651446682595641225}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b89214824ec370246bf078ccad878192, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  MaxTime: 5
+  maxPureTime: 5
+  animationSpeed: 1

@@ -418,7 +418,6 @@ GameObject:
   - component: {fileID: 6857080619562412584}
   - component: {fileID: 6387097145343513273}
   - component: {fileID: 6080685035425099916}
-  - component: {fileID: 6080685035425099923}
   - component: {fileID: 6080685035425099917}
   m_Layer: 3
   m_Name: MapObj_WoodButton
@@ -482,35 +481,10 @@ MonoBehaviour:
   Synchronization: 3
   OwnershipTransfer: 0
   observableSearch: 2
-  ObservedComponents:
-  - {fileID: 6080685035425099923}
+  ObservedComponents: []
   sceneViewId: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0
---- !u!114 &6080685035425099923
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6080685035425099922}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9b8c4a61274f60b4ea5fb4299cfdbf14, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  ShowLayerWeightsInspector: 1
-  ShowParameterInspector: 1
-  m_SynchronizeParameters:
-  - Type: 4
-    SynchronizeType: 2
-    Name: isDown
-  - Type: 4
-    SynchronizeType: 2
-    Name: isUp
-  m_SynchronizeLayers:
-  - SynchronizeType: 2
-    LayerIndex: 0
 --- !u!114 &6080685035425099917
 MonoBehaviour:
   m_ObjectHideFlags: 0
