@@ -183,7 +183,7 @@ namespace KSU
             localRot.x = startXAngle;
             ropeAnchor.transform.localRotation = Quaternion.Euler(localRot);
 
-            SoundManager.Instance.PlayEffect("RopeThrow2");
+            SoundManager.Instance.PlayEffect("RopeThrow");
             isReadyToRide = true;
         }
 
@@ -456,6 +456,11 @@ namespace KSU
         private void OnEnable()
         {
             MakeRope();
+        }
+
+        private void OnDisable()
+        {
+            SoundManager.Instance.StopEffect();
         }
     }
 }

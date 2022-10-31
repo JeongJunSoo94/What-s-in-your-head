@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
-
+using JCW.AudioCtrl;
 
 /// <summary> 
 /// 
@@ -38,13 +38,13 @@ namespace YC_OBJ
 
             pv = this.gameObject.GetComponent<PhotonView>();
         }
-
-        private void Start() { }
-
         public void SetOpen(bool _isOpen)
         {
-            if(pv.IsMine)
+            if (pv.IsMine)
+            {
                 animator.SetBool("isOpen", _isOpen);
+                SoundManager.Instance.PlayEffect_RPC("DoorOpen");
+            }
         }     
     }
 }

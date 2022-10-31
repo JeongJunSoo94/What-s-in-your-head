@@ -1,3 +1,4 @@
+using JCW.AudioCtrl;
 using Photon.Pun;
 using System;
 using System.Collections;
@@ -130,6 +131,7 @@ namespace JCW.Object
         void SetPurifiedRPC(int myIndex)
         {
             Debug.Log("정화시킬 인덱스 : " + myIndex);
+            SoundManager.Instance.PlayEffect_RPC("ContaminationFieldPurified");
             transform.GetChild(myIndex).gameObject.GetComponent<HostField>().enabled = false;
             transform.GetChild(myIndex).gameObject.SetActive(false);
             transform.GetChild(myIndex - 1).gameObject.SetActive(true);
@@ -141,6 +143,11 @@ namespace JCW.Object
             GameObject nextTargetBeforeObj = transform.GetChild(indexs[0] + indexs[1] -1).gameObject;
             GameObject nextTargetAfterObj = transform.GetChild(indexs[0] + indexs[1]).gameObject;
 
+            HostField nextHostField = nextTargetAfterObj.GetComponent<HostField>();
+
+            if (nextHostField.isPurified)
+                yield break;
+
             Color color1 = new(1f,1f,1f,1f);
             Color color2 = new(1f,0.7f,0.7f,1f);
             bool isChange = false;
@@ -151,22 +158,23 @@ namespace JCW.Object
                 // 이미 오염된 적 있으면 감염 안시킴
                 if (!transform.GetChild(indexs[0]).gameObject.activeSelf
                     || !nextTargetBeforeObj.gameObject.activeSelf)
-                {
+                {                    
                     mat.color = color1;
                     yield break;
                 }
                 curTime+= flickTime / 2f;
                 mat.color = isChange ? color1 : color2;
                 isChange = !isChange;
+                SoundManager.Instance.PlayEffect_RPC("ContaminationFieldWarn");
                 yield return new WaitForSeconds(0.5f);
             }
                 
             if (transform.GetChild(indexs[0]).gameObject.activeSelf)
             {
-                // 오염 필드 켜주기
+                // 오염 필드 켜주기                
                 nextTargetAfterObj.SetActive(true);
-                nextTargetAfterObj.SendMessage("SetIndex", indexs[0] + indexs[1]);
-                nextTargetAfterObj.SendMessage("DeleteHost", indexs[0]);
+                nextHostField.SetIndex(indexs[0] + indexs[1]);
+                nextHostField.DeleteHost(indexs[0]);
 
 
                 // 기존 필드 꺼주기

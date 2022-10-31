@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using JCW.AudioCtrl;
 using UnityEngine;
 
 namespace KSU
@@ -140,6 +141,7 @@ namespace KSU
                 {
                     case "GrappledObject":
                         {
+                            SoundManager.Instance.PlayEffect("GrappleSound");
                             player.RecieveGrappleInfo(true, other.gameObject);
                             isSucceeded = true;
                             grappleRigidbody.velocity = Vector3.zero;

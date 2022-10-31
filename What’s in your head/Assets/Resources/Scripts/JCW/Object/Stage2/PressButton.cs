@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using JCW.AudioCtrl;
 using UnityEngine;
 
 
@@ -35,6 +36,7 @@ namespace JCW.Object
                 {
                     if (!isMatChanged)
                     {
+                        SoundManager.Instance.PlayEffect_RPC("ButtonTurnOn");
                         meshRenderer.material = activeMat;
                         isMatChanged = true;
                     }

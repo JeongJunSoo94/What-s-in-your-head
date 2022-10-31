@@ -16,7 +16,8 @@ namespace JCW.AudioCtrl
     [RequireComponent(typeof(PhotonView))]
     public class SoundManager : MonoBehaviour
     {
-        [Header("효과음 목록")] [SerializeField] List<AudioClip> prevAudioClips = new();
+        [Header("거리 무관 효과음 목록")] [SerializeField] List<AudioClip> prevAudioClips = new();
+        [Header("거리에 따른 효과음 목록")] [SerializeField] List<AudioClip> prev3DClips = new();
         [Header("UI 효과음 목록")] [SerializeField] List<AudioClip> prevUIClips = new();
 
         // 오디오 재생기
@@ -25,6 +26,7 @@ namespace JCW.AudioCtrl
         // 오디오 클립
         readonly Dictionary<string, AudioClip> audioClips = new();
         readonly Dictionary<string, AudioClip> UIClips = new();
+        readonly Dictionary<string, AudioClip> threeDimesionClips = new();
 
         PhotonView photonView;
 
@@ -121,13 +123,17 @@ namespace JCW.AudioCtrl
 
         public void SetUp()
         {
-            foreach (AudioClip clip in prevAudioClips)
+            for (int i = 0 ; i<prevAudioClips.Count ; ++i)
             {
-                SetEffectAudioClip("Sounds/EFFECT/" + clip.name);
+                SetEffectAudioClip("Sounds/EFFECT/" + prevAudioClips[i].name);
             }
-            foreach (AudioClip clip in prevUIClips)
+            for (int i = 0 ; i<prevUIClips.Count ; ++i)
             {
-                SetUIAudioClip("Sounds/UI/" + clip.name);
+                SetEffectAudioClip("Sounds/UI/" + prevUIClips[i].name);
+            }
+            for (int i = 0 ; i<prev3DClips.Count ; ++i)
+            {
+                SetEffectAudioClip("Sounds/3D/" + prev3DClips[i].name);
             }
         }
 
@@ -135,7 +141,7 @@ namespace JCW.AudioCtrl
         {
             photonView.RPC(nameof(PlayEffect), RpcTarget.AllViaServer, path);
         }
-       
+
         // 효과음 재생
         [PunRPC]
         public void PlayEffect(string path)
@@ -146,9 +152,23 @@ namespace JCW.AudioCtrl
                 Debug.Log("NULL로 저장된 오디오 클립입니다");
                 return;
             }
-            Debug.Log("효과음을 재생합니다");
+            //Debug.Log("효과음을 재생합니다");
             audioSources[(int)Sound.Effect].PlayOneShot(audioClip);
         }
+
+        public void StopEffect_RPC()
+        {
+            photonView.RPC(nameof(StopEffect), RpcTarget.AllViaServer);
+        }
+
+        [PunRPC]
+        public void StopEffect()
+        {
+            if (audioSources[(int)Sound.Effect].isPlaying)
+                audioSources[(int)Sound.Effect].Stop();
+        }
+       
+        
 
         public void PlayEffectNoOverlap_RPC(string path)
         {
@@ -168,7 +188,7 @@ namespace JCW.AudioCtrl
 
             if (!audioSources[(int)Sound.Effect].isPlaying)
             {
-                Debug.Log("효과음을 재생합니다");
+                //Debug.Log("효과음을 재생합니다");
                 audioSources[(int)Sound.Effect].PlayOneShot(audioClip);
             }
         }
@@ -225,7 +245,46 @@ namespace JCW.AudioCtrl
             photonView.RPC(nameof(PlayUI), RpcTarget.AllViaServer, path);
         }
 
-        // 효과음 재생
+        public void Play3D_RPC(string path)
+        {
+            photonView.RPC(nameof(Play3D), RpcTarget.AllViaServer, path);
+        }
+        // 3D 재생
+        [PunRPC]
+        public void Play3D(string path, Vector3 pos)
+        {
+            AudioClip audioClip = Get3DClips(path);
+            if (audioClip == null)
+            {
+                Debug.Log("NULL로 저장된 오디오 클립입니다");
+                return;
+            }
+
+            //특정 거리에서 사운드 재생 (3D 사운드, 단 재생 후 자동으로 사라짐 )
+            //AudioSource.PlayClipAtPoint(audioClip, pos);            
+            audioSources[(int)Sound.Sound3D].PlayOneShot(audioClip);
+        }
+        public AudioClip Get3DClips(string name)
+        {
+            string clipName = name;
+            if (!name.Contains("Sounds/3D"))
+                clipName = $"Sounds/3D/{name}";
+
+            return threeDimesionClips[clipName];
+        }
+        void Set3DAudioClip(string path)
+        {
+            if (!path.Contains("Sounds/3D"))
+                path = $"Sounds/3D/{path}";
+            if (threeDimesionClips.ContainsKey(path))
+                Debug.Log("이미 저장된 오디오 클립입니다");
+            else
+                threeDimesionClips.Add(path, Resources.Load<AudioClip>(path));
+        }
+
+        
+
+        // UI음 재생
         [PunRPC]
         public void PlayUI(string path)
         {
@@ -235,7 +294,7 @@ namespace JCW.AudioCtrl
                 Debug.Log("NULL로 저장된 오디오 클립입니다");
                 return;
             }
-            Debug.Log("UI음을 재생합니다");
+            //Debug.Log("UI음을 재생합니다");
             audioSources[(int)Sound.UI].PlayOneShot(audioClip);
         }
         public AudioClip GetUIClips(string name)

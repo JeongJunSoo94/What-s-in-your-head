@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 using KSU;
-
+using JCW.AudioCtrl;
 
 namespace JCW.Object
 {
@@ -17,7 +17,7 @@ namespace JCW.Object
         [Header("물총에 닿을 시 받는 데미지 (기본 10)")] [SerializeField] [Range(0,100)] float damage = 10;
         [Header("감염 가능 여부")] [SerializeField] bool canInfect = true;
 
-        bool isPurified = false;
+        public bool isPurified = false;
         int myIndex;
 
         float elapsedTime = 0f;
@@ -56,7 +56,16 @@ namespace JCW.Object
         private void OnEnable()
         {
             if (isPurified)
+            {
+                Debug.Log("이미 정화되었음");
                 this.gameObject.SetActive(false);
+            }
+        }
+
+        private void OnDisable()
+        {
+            Debug.Log("정화됨");
+            isPurified = true;
         }
 
 
@@ -66,8 +75,8 @@ namespace JCW.Object
                 return;
             if (isPurified)
             {
-                Debug.Log("정화되었음");
                 this.gameObject.SetActive(false);
+                return;
             }
             else if (nextTargetOffset.Count != 0 && PhotonNetwork.IsMasterClient)
             {
@@ -126,15 +135,16 @@ namespace JCW.Object
             {
                 SetIndex(index);
                 isStart = true;
+                SoundManager.Instance.PlayEffect_RPC("ContaminationFieldCreated");
             }
             
         }
 
-        public void SetPurified()
-        {
-            isPurified = true;
-            mediator.SetPurified(myIndex);
-        }
+        //public void SetPurified()
+        //{
+        //    isPurified = true;
+        //    mediator.SetPurified(myIndex);
+        //}
 
         private void OnTriggerEnter(Collider other)
         {
@@ -150,9 +160,9 @@ namespace JCW.Object
         public void GetDamaged()
         {
             curHP -= damage;
-            Debug.Log(curHP);
+            //Debug.Log(curHP);
             if (curHP <= 0)
-                SetPurified();
+                mediator.SetPurified(myIndex);            
         }
     }
 }

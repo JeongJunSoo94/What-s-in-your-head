@@ -25,6 +25,11 @@ namespace JCW.Object
         }
         void Update()
         {
+            if (Application.isPlaying)
+            {
+                this.enabled = false;
+                return;
+            }
             // 에디터 상에서 만들어둘 수 있게 미리 생성해두기
             if (create)
             {

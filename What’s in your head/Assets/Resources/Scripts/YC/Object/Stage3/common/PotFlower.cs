@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
+using JCW.AudioCtrl;
 
 /// <summary> 
 /// 
@@ -68,7 +69,10 @@ namespace YC_OBJ
                     curTime = maxTime;
 
                     if (pv.IsMine)
+                    {
                         animator.SetBool("isBoom", true);
+                        SoundManager.Instance.PlayEffect_RPC("PlantGrow");
+                    }
 
                     isTrigger = true;
                 }

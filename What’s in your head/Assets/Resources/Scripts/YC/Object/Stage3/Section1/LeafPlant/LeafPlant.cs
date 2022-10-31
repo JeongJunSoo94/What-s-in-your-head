@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
 using JCW.UI.InGame.Indicator;
+using JCW.AudioCtrl;
 
 /// <summary> 
 /// 
@@ -220,6 +221,9 @@ namespace YC_OBJ
         [PunRPC]
         public void SetGrow_RPC()
         {
+            //SoundManager.Instance.PlayEffect("PlantGrow");
+            GetComponent<AudioSource>().Stop();
+            GetComponent<AudioSource>().Play();
             curTime = maxTime;
             isGrowed = true;
             curTime = 0;
