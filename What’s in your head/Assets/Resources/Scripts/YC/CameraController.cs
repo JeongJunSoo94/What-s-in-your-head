@@ -181,7 +181,7 @@ namespace YC.Camera_
             if (player.characterState.IsJumping && isAirJump && endCor)
                 AirJumpCameraSet();
 
-            Debug.Log(followObj.transform.position.y * 100);
+            //Debug.Log(followObj.transform.position.y * 100);
         }
 
         bool wasLerped = false;
