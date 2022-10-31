@@ -5,6 +5,7 @@ using JCW.Spawner;
 
 using YC.Camera_;
 using YC.Camera_Single;
+using JCW.AudioCtrl;
 
 namespace JJS.Weapon
 {
@@ -88,6 +89,7 @@ namespace JJS.Weapon
         void Shoot()
         {
             GameObject bullet=spawner.Respawn(startPos.transform.position, Quaternion.LookRotation(bezierCurveOrbit.p2 - startPos.transform.position));
+            SoundManager.Instance.PlayEffect_RPC("Watergun");
             if (bullet != null)
             {
                 Bullet bulletInfo = bullet.GetComponent<Bullet>();

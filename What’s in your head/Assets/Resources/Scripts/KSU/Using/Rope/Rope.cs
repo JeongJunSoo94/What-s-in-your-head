@@ -1,3 +1,4 @@
+using JCW.AudioCtrl;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -182,6 +183,7 @@ namespace KSU
             localRot.x = startXAngle;
             ropeAnchor.transform.localRotation = Quaternion.Euler(localRot);
 
+            SoundManager.Instance.PlayEffect("RopeThrow2");
             isReadyToRide = true;
         }
 
@@ -251,21 +253,24 @@ namespace KSU
 
             // -180 < rot X <= 180 사이로 고정 
             rotationX = FitInHalfDegree(ropeAnchor.transform.localRotation.eulerAngles.x);
+            
 
             if (isSwingForward) // 앞으로 갈지 뒤로갈지 결정
-            {
+            {                
                 rotationX -= spawner.swingSpeed * Time.fixedDeltaTime * ((Mathf.Abs(spawner.swingAngle)- Mathf.Abs(rotationX)) * spawner.SwingDeltaSpeed / spawner.swingAngle + ( 1 - spawner.SwingDeltaSpeed));
                 if (rotationX < -spawner.swingAngle)
                 {
+                    SoundManager.Instance.PlayEffectNO("RopeTighten2");
                     isSwingForward = false;
                     StartCoroutine(nameof(StopSwingInMoment));
                 }
             }
             else
-            {
+            {                
                 rotationX += spawner.swingSpeed * Time.fixedDeltaTime * ((Mathf.Abs(spawner.swingAngle) - Mathf.Abs(rotationX)) * spawner.SwingDeltaSpeed / spawner.swingAngle + (1 - spawner.SwingDeltaSpeed));
                 if (rotationX > spawner.swingAngle)
                 {
+                    SoundManager.Instance.PlayEffectNO("RopeTighten1");
                     isSwingForward = true;
                     StartCoroutine(nameof(StopSwingInMoment));
                 }
