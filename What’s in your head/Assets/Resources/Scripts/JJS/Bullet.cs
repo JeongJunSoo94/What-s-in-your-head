@@ -53,7 +53,6 @@ namespace JJS
             if (other.gameObject.CompareTag("ContaminationField"))
                 other.gameObject.SendMessage("GetDamaged");
 
-            Debug.Log(other.gameObject.name);
             if(!(other.gameObject.layer == LayerMask.NameToLayer("UITriggers")))
             {
                 spawner.Despawn(this.gameObject);

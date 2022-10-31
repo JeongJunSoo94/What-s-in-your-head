@@ -4,6 +4,7 @@ using UnityEngine;
 using JCW.UI.Options.InputBindings;
 using JJS.CharacterSMB;
 using KSU;
+using YC.Camera_; // << : 찬 추가
 namespace JJS
 {
     public class NormalViewSMB : CharacterBaseSMB
@@ -15,6 +16,10 @@ namespace JJS
             animator.SetBool("isJump", false);
             animator.SetBool("isAttack", false);
             //GetPlayerController(animator).characterState.aim = false;
+            if (GetPlayerController(animator).characterState.isMine)
+            {
+                GetPlayerController(animator).GetComponent<CameraController>().JumpInit(false); // << : 찬 추가
+            }
         }
 
         override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)

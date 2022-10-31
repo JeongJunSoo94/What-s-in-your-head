@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using JJS.CharacterSMB;
+using YC.Camera_; // << : 찬 추가
 namespace JJS
 {
     public class JumpUpSMB : CharacterBaseSMB
@@ -13,6 +14,8 @@ namespace JJS
             if (GetPlayerController(animator).characterState.isMine)
             {
                 GetPlayerController(animator).characterState.isRun = false;
+
+                GetPlayerController(animator).GetComponent<CameraController>().JumpInit(true); // << : 찬 추가
             }
         }
 
