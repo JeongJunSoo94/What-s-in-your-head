@@ -17,5 +17,18 @@ namespace KSU
         public bool isMovingToRail = false;
         public bool isRailJumpingUp = false;
         public bool isRailJumping = false;
+        public bool isMoveFromRail = false;
+
+        public bool GetWhetherHasParent()
+        {
+            if (transform.parent == null)
+            {
+                return false;
+            }
+            else
+            {
+                return true;
+            }
+        }
     }
 }
