@@ -440,6 +440,8 @@ namespace YC.Camera_
             // << : 탑뷰라면 리턴(준수형)
             if (GameManager.Instance.isTopView) return;
 
+            if (!pv.IsMine) return;
+
             if (isLock)
             {
                 camList[(int)curCam].GetComponent<CinemachineFreeLook>().m_XAxis.m_InputAxisName = "";
