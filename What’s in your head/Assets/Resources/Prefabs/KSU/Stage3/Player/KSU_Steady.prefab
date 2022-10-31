@@ -27031,6 +27031,27 @@ MonoBehaviour:
   - Type: 4
     SynchronizeType: 2
     Name: isGrappleMoving
+  - Type: 4
+    SynchronizeType: 0
+    Name: isMoveToRope
+  - Type: 4
+    SynchronizeType: 0
+    Name: isRidingRope
+  - Type: 4
+    SynchronizeType: 0
+    Name: isMoveToRail
+  - Type: 4
+    SynchronizeType: 0
+    Name: isRidingRail
+  - Type: 4
+    SynchronizeType: 0
+    Name: isTransferRail
+  - Type: 4
+    SynchronizeType: 0
+    Name: isRailJump
+  - Type: 1
+    SynchronizeType: 0
+    Name: moveToRailSpeed
   m_SynchronizeLayers:
   - SynchronizeType: 2
     LayerIndex: 0
@@ -27119,6 +27140,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 79eaf00710311bd4abc8301ba037e744, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  layerWeight: 0
   point: {fileID: 8939535261352753444, guid: ee0a33d1c4c620c49a258063353353d8, type: 3}
   cameraMain: {fileID: 0}
   weaponInfo:
@@ -27131,7 +27153,7 @@ MonoBehaviour:
     canNoAimAttack: 0
     canMoveAttack: 1
   ik: {fileID: 6988878118824629920}
-  ableToLeft: 0
+  afterDelayTime: 0
   ableToRight: 0
   clickLeft: 0
   clickRight: 0
@@ -27142,6 +27164,10 @@ MonoBehaviour:
   canSwap: 0
   curCool: 0
   swapCool: 0.5
+  canAim: 0
+  curAimCool: 0
+  AimCool: 0.5
+  notRotatoin: 0
   glass: {fileID: 8768540777746556850}
   grapple: {fileID: 2953762621103950369}
 --- !u!114 &8750876866218855433
@@ -27270,6 +27296,7 @@ MonoBehaviour:
   rangeRadius: 5
   rangeDistance: 5
   movingToRailSpeed: 10
+  departingRailOffset: 0.5
   railJumpHeight: 4
   railJumpSpeed: 6
 --- !u!114 &-8464429117851822576
@@ -27328,6 +27355,7 @@ MonoBehaviour:
     m_Bits: 2048
   grappleSpawner: {fileID: 1911663723217604559}
   grappleObject: {fileID: 7909980709306676830, guid: c9b54073bf48f804ebee62282b5e85af, type: 3}
+  aimUI: {fileID: 0}
   grappleMoveSpeed: 10
   grappleSpeed: 10
   grappleDepartOffset: 0.5
@@ -49691,10 +49719,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e6554dc44fb331742a36f99e2020b610, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  particleGather: {fileID: 430488638613468360}
-  particleBeam: {fileID: 1972079448279023575}
-  paticleBoxCollider: {fileID: 2276343840837846358}
-  mainCamera: {fileID: 0}
   beamWaitTime: 2
   maxDistance: 30
   curDistance: 0
@@ -49703,6 +49727,10 @@ MonoBehaviour:
   layerMask:
     serializedVersion: 2
     m_Bits: 0
+  particleGather: {fileID: 430488638613468360}
+  particleBeam: {fileID: 1972079448279023575}
+  paticleBoxCollider: {fileID: 2276343840837846358}
+  mainCamera: {fileID: 0}
   targetIK: {fileID: 8768540777906838207}
   direction: {fileID: 8768540777832219447}
   hitPos: {fileID: 4230245179728156389}
@@ -49710,10 +49738,8 @@ MonoBehaviour:
   weapon: {fileID: 8770354767411689546}
   startPos: {fileID: 8768540777832219447}
   hitBox: {fileID: 8768540777832219447}
-  layer:
-    serializedVersion: 2
-    m_Bits: 0
   beaming: 0
+  lineCountCheck: 0
 --- !u!1 &8768540777832219447
 GameObject:
   m_ObjectHideFlags: 0

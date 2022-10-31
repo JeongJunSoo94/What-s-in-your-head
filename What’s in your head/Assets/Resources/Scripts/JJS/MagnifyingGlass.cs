@@ -37,6 +37,9 @@ namespace JJS.Weapon
         public GameObject hitBox;
         public bool beaming;
         public int lineCountCheck=0;
+
+        CameraController cameraController; // << : 찬 수정 
+
         private void Awake()
         {
         }
@@ -44,6 +47,8 @@ namespace JJS.Weapon
         void Start()
         {
             mainCamera = this.gameObject.transform.parent.GetComponent<CameraController>().FindCamera(); // 멀티용
+            cameraController = this.gameObject.transform.parent.GetComponent<CameraController>(); // << : 찬 수정 
+
         }
 
 
@@ -66,6 +71,9 @@ namespace JJS.Weapon
         public void BeamEnable(bool enable)
         {
             particleBeam.SetActive(enable);
+
+            if(this.gameObject.transform.parent.GetComponent<PhotonView>().IsMine)
+                cameraController.SendMessage(nameof(CameraController.ShakeCamera), enable); // << : 찬 수정 (빔 종료시, 준수 : 이펙트 페이드아웃 고려)
         }
 
         public void EffectEnable(bool enable)

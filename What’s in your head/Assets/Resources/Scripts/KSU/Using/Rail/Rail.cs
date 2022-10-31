@@ -6,7 +6,6 @@ using Cinemachine.Utility;
 
 using YC.Camera_;
 using YC.Camera_Single;
-using JCW.Effect;
 
 namespace KSU
 {
@@ -82,30 +81,51 @@ namespace KSU
             }
         }
 
-        public void RideOnRail(Vector3 startPos, GameObject startObj, GameObject player)
+        public void RideOnRail(Vector3 railStartPos, GameObject startObj, GameObject player)
         {
-            player.GetComponent<MotionTrail>().enabled = true;
-            SetDestination(player, CreateCart(startPos, startObj, player));
+            SetDestination(player, startObj, CreateCart(railStartPos, startObj, player));
         }
 
-        void SetDestination(GameObject player, Cinemachine.CinemachineDollyCart cartSetUp)
+        void SetDestination(GameObject player, GameObject startObj, Cinemachine.CinemachineDollyCart cartSetUp)
         {
-            Vector3 playerVec = player.GetComponent<RailAction>().mainCamera.transform.forward;
-            playerVec.y = 0;
-            if (Vector3.Angle(cartSetUp.gameObject.transform.forward, playerVec) > 90f)
+            cartSetUp.gameObject.SetActive(true);
+            if (cartSetUp.m_Position < 1)
+            {
+                cartSetUp.m_Speed = railSpeed;
+                switch (player.tag)
+                {
+                    case "Nella":
+                        {
+                            NellaDestiation = (track.m_Waypoints.Length - 1.005f);
+                            player.transform.parent = NellaCart.transform;
+                        }
+                        break;
+                    case "Steady":
+                        {
+                            SteadyDestiation = (track.m_Waypoints.Length - 1.005f);
+                            player.transform.parent = SteadyCart.transform;
+                            player.transform.localPosition = Vector3.zero;
+                        }
+                        break;
+                }
+                player.GetComponent<Rigidbody>().velocity = Vector3.zero;
+                player.transform.localPosition = Vector3.zero;
+                player.transform.localRotation = Quaternion.Euler(new Vector3(0, 0, 0));
+            }
+            else if (cartSetUp.m_Position > (track.m_Waypoints.Length - 2f))
             {
                 cartSetUp.m_Speed = -railSpeed;
                 switch (player.tag)
                 {
                     case "Nella":
                         {
-                            NellaDestiation = 0.01f;
+                            NellaDestiation = 0.005f;
                             player.transform.parent = NellaCart.transform;
                         }
                         break;
                     case "Steady":
                         {
-                            SteadyDestiation = 0.01f;
+                            SteadyDestiation = 0.005f;
                             player.transform.parent = SteadyCart.transform;
                         }
                         break;
@@ -116,28 +136,54 @@ namespace KSU
             }
             else
             {
-                cartSetUp.m_Speed = railSpeed;
-                switch (player.tag)
+                Vector3 playerVec = player.transform.forward;
+                if (Vector3.Angle(startObj.transform.forward, playerVec) > 90f)
                 {
-                    case "Nella":
-                        {
-                            NellaDestiation = (track.m_Waypoints.Length - 1.01f);
-                            player.transform.parent = NellaCart.transform;
-                        }
-                        break;
-                    case "Steady":
-                        {
-                            SteadyDestiation = (track.m_Waypoints.Length - 1.01f);
-                            player.transform.parent = SteadyCart.transform;
-                            player.transform.localPosition = Vector3.zero;
-                        }
-                        break;
+                    cartSetUp.m_Speed = -railSpeed;
+                    switch (player.tag)
+                    {
+                        case "Nella":
+                            {
+                                NellaDestiation = 0.005f;
+                                player.transform.parent = NellaCart.transform;
+                            }
+                            break;
+                        case "Steady":
+                            {
+                                SteadyDestiation = 0.005f;
+                                player.transform.parent = SteadyCart.transform;
+                            }
+                            break;
+                    }
+                    player.GetComponent<Rigidbody>().velocity = Vector3.zero;
+                    player.transform.localPosition = Vector3.zero;
+                    player.transform.localRotation = Quaternion.Euler(new Vector3(0, 180, 0));
                 }
-                player.GetComponent<Rigidbody>().velocity = Vector3.zero;
-                player.transform.localPosition = Vector3.zero;
-                player.transform.localRotation = Quaternion.Euler(new Vector3(0, 0, 0));
+                else
+                {
+                    cartSetUp.m_Speed = railSpeed;
+                    switch (player.tag)
+                    {
+                        case "Nella":
+                            {
+                                NellaDestiation = (track.m_Waypoints.Length - 1.005f);
+                                player.transform.parent = NellaCart.transform;
+                            }
+                            break;
+                        case "Steady":
+                            {
+                                SteadyDestiation = (track.m_Waypoints.Length - 1.005f);
+                                player.transform.parent = SteadyCart.transform;
+                                player.transform.localPosition = Vector3.zero;
+                            }
+                            break;
+                    }
+                    player.GetComponent<Rigidbody>().velocity = Vector3.zero;
+                    player.transform.localPosition = Vector3.zero;
+                    player.transform.localRotation = Quaternion.Euler(new Vector3(0, 0, 0));
+                }
             }
-            cartSetUp.gameObject.SetActive(true);
+            
             switch (player.tag)
             {
                 case "Nella":
@@ -205,7 +251,7 @@ namespace KSU
 
                 if (Mathf.Abs(NellaCart.GetComponent<Cinemachine.CinemachineDollyCart>().m_Position - NellaDestiation) < 0.2f)
                 {
-                    EscapeRail(Nella);
+                    EscapeRail(Nella, false);
                 }
             }
 
@@ -223,7 +269,7 @@ namespace KSU
 
                 if (Mathf.Abs(SteadyCart.GetComponent<Cinemachine.CinemachineDollyCart>().m_Position - SteadyDestiation) < 0.2f)
                 {
-                    EscapeRail(Steady);
+                    EscapeRail(Steady, false);
                 }
             }
         }
@@ -242,9 +288,8 @@ namespace KSU
 
         }
 
-        public void EscapeRail(GameObject player)
+        public void EscapeRail(GameObject player, bool isSwap)
         {
-            player.GetComponent<MotionTrail>().enabled = false;
             player.GetComponent<RailAction>().currentRail = null;
             player.transform.parent = null;
             Camera camera;            
@@ -255,6 +300,7 @@ namespace KSU
                     {
                         NellaCart.SetActive(false);
                         isNellaCartActive = false;
+
                     }
                     break;
                 case "Steady":
@@ -273,7 +319,14 @@ namespace KSU
             playerController.MakeinertiaVec(escapingRailSpeed, inertiaVec.normalized);
             playerController.moveVec = Vector3.up * playerController.jumpSpeed / 2f;
             playerController.characterState.isRiding = false;
+            playerController.characterState.IsDashing = false;
+            playerController.characterState.IsAirJumping = false;
+            playerController.characterState.WasAirDashing = false;
             PlayerInteractionState interactionState = player.GetComponent<PlayerInteractionState>();
+            if (!isSwap)
+            {
+                player.GetComponent<RailAction>().SetBoolEscapeRail();
+            }
             interactionState.isRidingRail = false;
             interactionState.isRailJumping = false;
             interactionState.isRailJumpingUp = false;

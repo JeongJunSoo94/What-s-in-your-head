@@ -32,6 +32,7 @@ namespace KSU
         PlayerController playerController;
         PlayerState playerState;
         PlayerInteractionState interactionState;
+        Animator animator;
 
         LineRenderer rope;
         [SerializeField] GameObject hand;
@@ -57,6 +58,7 @@ namespace KSU
             playerController = GetComponent<PlayerController>();
             playerState = GetComponent<PlayerState>();
             interactionState = GetComponent<PlayerInteractionState>();
+            animator = GetComponent<Animator>();
             mainCamera = GetComponent<CameraController>().FindCamera(); // ¸ÖÆ¼¿ë
 
             if (mainCamera == null)
@@ -70,13 +72,10 @@ namespace KSU
             FindInteractableRope();
             SendInfoUI();
 
-            if (interactionState.isRidingRope)
+            if (currentRidingRope != null)
             {
-                if(currentRidingRope != null)
-                {
-                    rope.SetPosition(0, hand.transform.position);
-                    rope.SetPosition(1, currentRidingRope.transform.position);
-                }
+                rope.SetPosition(0, hand.transform.position);
+                rope.SetPosition(1, currentRidingRope.transform.position);
             }
         }
 
@@ -197,10 +196,22 @@ namespace KSU
             rope.SetPosition(1, hand.transform.position);
             rope.enabled = true;
         }
+        public bool GetWhetherMovingToRope()
+        {
+            return !interactionState.isMoveToRope;
+        }
+
+        public void RecieveDirection(float threshHold)
+        {
+            animator.SetFloat("RopeSwing",threshHold);
+        }
         public void EscapeRope()
         {
-            StartCoroutine("DelayEscape");
-
+            StartCoroutine(nameof(DelayEscape));
+            if(currentRidingRope == null)
+            {
+                return;
+            }
             float jumpPower = currentRidingRope.GetComponent<RopeSpawner>().EndRopeAction(this.gameObject);
 
             Obj_Info node = detectedRopes.GetValueOrDefault(currentRidingRope);
@@ -227,6 +238,11 @@ namespace KSU
             yield return new WaitForSeconds(escapingRopeDelayTime);
             interactionState.isMoveFromRope = false;
             interactionState.isRidingRope = false;
+        }
+
+        public bool GetWhetherBeEscapeFromRope()
+        {
+            return interactionState.isMoveFromRope;
         }
 
         void SendInfoUI()

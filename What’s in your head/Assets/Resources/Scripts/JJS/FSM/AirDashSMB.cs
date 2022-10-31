@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using JJS.CharacterSMB;
+
 namespace JJS
 {
     public class AirDashSMB : CharacterBaseSMB
