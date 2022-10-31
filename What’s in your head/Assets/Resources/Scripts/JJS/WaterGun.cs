@@ -215,11 +215,11 @@ namespace JJS.Weapon
                     else
                     {
                         width -= Height * 0.25f;
-                        Height *= -1f;
                     }
 
                     Vector3 direction = (startPosition - hit.point) * width;
 
+                    direction.y += (1 - width) + Height * curveHeight;
                     bezierCurveOrbit.p2 = hit.point; 
                     bezierCurveOrbit.p3 = hit.point;
                     bezierCurveOrbit.p4 = hit.point;

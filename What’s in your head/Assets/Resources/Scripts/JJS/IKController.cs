@@ -12,6 +12,7 @@ public class IKController : MonoBehaviour
     public Transform leftHandFollowObj;
     public Transform rightHandFollowObj;
     public Transform hitpos;
+    public Transform weapon;
 
     [SerializeField]
     protected Animator animator;
@@ -50,7 +51,8 @@ public class IKController : MonoBehaviour
         animator.SetIKPosition(AvatarIKGoal.LeftHand, leftHandFollowObj.position);
 
         //Transform leftHandTransform = animator.GetBoneTransform(HumanBodyBones.LeftHand);
-        //animator.SetIKPosition(AvatarIKGoal.LeftHand, leftHandTransform.position);
+        //handRotation = Quaternion.LookRotation((leftHandFollowObj.position - rightHandFollowObj.position).normalized+ leftHandTransform.right*-1, leftHandTransform.forward*-1);
+        //animator.SetIKRotation(AvatarIKGoal.LeftHand, handRotation);
 
     }
 }
