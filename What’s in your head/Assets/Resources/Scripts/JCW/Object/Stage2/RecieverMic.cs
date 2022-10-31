@@ -16,7 +16,7 @@ namespace JCW.Object
             transform.GetChild(1).localScale = new Vector3(detectRange, detectRange, detectRange);
         }
 
-        int scriptNum = 0;
+        //int scriptNum = 0;
         private void OnTriggerEnter(Collider other)
         {
             if (other.CompareTag("Nella"))
