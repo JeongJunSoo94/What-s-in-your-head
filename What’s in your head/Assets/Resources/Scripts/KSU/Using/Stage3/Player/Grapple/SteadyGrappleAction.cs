@@ -220,6 +220,8 @@ namespace KSU
             if (isSuceeded)
             {
                 grappledTarget = targetObj;
+                //if (targetObj.CompareTag("grappledObjects"))
+                //    Hook();
             }
             else
             {
@@ -234,6 +236,7 @@ namespace KSU
 
         public void Hook()
         {
+            Debug.Log("¤§¤·¤¡");
             playerController.characterState.isRiding = true;
             playerState.IsAirJumping = false;
             playerState.WasAirDashing = false;

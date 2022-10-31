@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using JJS.CharacterSMB;
+using YC.Camera_; // << : 찬 추가
 namespace JJS
 {
     public class AirJumpSMB : CharacterBaseSMB
@@ -11,6 +12,8 @@ namespace JJS
             if (GetPlayerController(animator).characterState.isMine)
             {
                 animator.SetBool("wasAirJump", true);
+
+                GetPlayerController(animator).GetComponent<CameraController>().NormalJumpCameraInit(false); // << : 찬 추가     
             }
         }
 
@@ -29,6 +32,8 @@ namespace JJS
             if (GetPlayerController(animator).characterState.isMine)
             {
                 animator.SetBool("isAirJump", false);
+
+                //GetPlayerController(animator).GetComponent<CameraController>().NormalJumpCameraInit(false); // << : 찬 추가
             }
         }
         void check(Animator animator)
