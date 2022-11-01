@@ -19,7 +19,7 @@ namespace KSU
         Animator animator;
 
         public Camera mainCamera;
-        [SerializeField] GameObject lookAtObj;
+        [SerializeField] Transform lookAtObj;
         Dictionary <GameObject, int> detectedRail = new();
         RaycastHit _raycastHit;
         [SerializeField] LayerMask layerFilterForRail;
@@ -71,6 +71,7 @@ namespace KSU
             animator = GetComponent<Animator>();
 
             mainCamera = this.gameObject.GetComponent<CameraController>().FindCamera(); // ¸ÖÆ¼¿ë
+            lookAtObj = this.gameObject.GetComponent<CameraController>().lookatBackObj;
             //layerForRail = ((1) + (1 << LayerMask.NameToLayer("Rail")));
             //layerFilterForRail = ((-1) - (1 << LayerMask.NameToLayer("Player")));
         }
