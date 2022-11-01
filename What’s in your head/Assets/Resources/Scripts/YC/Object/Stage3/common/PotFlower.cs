@@ -21,6 +21,7 @@ using JCW.AudioCtrl;
 
 namespace YC_OBJ
 {
+    [RequireComponent(typeof(AudioSource))]
     public class PotFlower : MonoBehaviour
     {
         [Header("<기획 편집 사항>")]
@@ -41,6 +42,7 @@ namespace YC_OBJ
 
         Animator animator;
         PhotonView pv;
+        AudioSource audioSource;
 
         private void Awake()
         {
@@ -49,6 +51,8 @@ namespace YC_OBJ
             animator = this.gameObject.GetComponent<Animator>();
 
             pv = this.gameObject.GetComponent<PhotonView>();
+            audioSource = GetComponent<AudioSource>();
+            JCW.AudioCtrl.AudioSettings.SetAudio(audioSource);
         }
 
         void Update()
@@ -71,7 +75,7 @@ namespace YC_OBJ
                     if (pv.IsMine)
                     {
                         animator.SetBool("isBoom", true);
-                        SoundManager.Instance.PlayEffect_RPC("PlantGrow");
+                        SoundManager.Instance.Play3D_RPC("PlantGrow", audioSource);
                     }
 
                     isTrigger = true;

@@ -8,10 +8,12 @@ namespace JCW.Object
 {
     public class PressButton : MonoBehaviour
     {
-        [Header("버튼 내려가는 속도")] [SerializeField] float pressedSpeed = 5f;
-        [Header("버튼 올라오는 속도")] [SerializeField] float releaseSpeed = 5f;
+        [Header("버튼 들어가는 속도")] [SerializeField] float pressedSpeed = 5f;
+        [Header("버튼 나오는 속도")] [SerializeField] float releaseSpeed = 5f;
+        [Header("(심벌즈) 버튼 해제되는 시간")] [SerializeField] float releaseTime = 5f;
         [Header("평상 시 버튼 메테리얼")] [SerializeField] Material normalMat;
         [Header("작동 시 버튼 메테리얼")] [SerializeField] Material activeMat;
+        [Header("영구적인 버튼 여부")] [SerializeField] bool isPermanent;
 
         bool isPressed;
         float pressed_Ratio = 0f;
@@ -42,7 +44,11 @@ namespace JCW.Object
                     }
                     pressed_Ratio = Mathf.Lerp(pressed_Ratio, 0, pressedSpeed * Time.deltaTime);
                     if (pressed_Ratio < 0.01f)
+                    {
                         pressed_Ratio = 0f;
+                        if (isPermanent)
+                            Destroy(this);
+                    }
                     anim.SetFloat("pressed_ratio", pressed_Ratio);
                     anim.Play("Press Blend Tree");
                 }                
@@ -68,24 +74,46 @@ namespace JCW.Object
 
         private void OnCollisionEnter(Collision collision)
         {
-            if(collision.gameObject.CompareTag("Nella") || collision.gameObject.CompareTag("Steady"))
+            switch(collision.gameObject.tag)
             {
-                isPressed = true;
-                collision.gameObject.transform.parent = this.transform;
-                ++curPressCount;
+                case "Nella":
+                case "Steady":
+                    isPressed = true;
+                    collision.gameObject.transform.parent = this.transform;
+                    ++curPressCount;
+                    break;
+                case "Cymbals":
+                    StopAllCoroutines();
+                    isPressed = true;
+                    if(!isPermanent)
+                        StartCoroutine(nameof(ReleaseTime));
+                    break;
+                default:
+                    break;
             }
                 
         }
 
         private void OnCollisionExit(Collision collision)
         {
-            if (collision.gameObject.CompareTag("Nella") || collision.gameObject.CompareTag("Steady"))
+            switch (collision.gameObject.tag)
             {
-                --curPressCount;
-                collision.gameObject.transform.parent = null;
-                if(curPressCount==0)
-                    isPressed = false;
+                case "Nella":
+                case "Steady":
+                    --curPressCount;
+                    collision.gameObject.transform.parent = null;
+                    if (curPressCount == 0)
+                        isPressed = false;
+                    break;
+                default:
+                    break;
             }
+        }
+
+        IEnumerator ReleaseTime()
+        {
+            yield return new WaitForSeconds(releaseTime);
+            isPressed = false;
         }
     }
 }

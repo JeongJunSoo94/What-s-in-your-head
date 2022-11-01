@@ -9,6 +9,7 @@ using JCW.AudioCtrl;
 
 namespace JCW.Object
 {
+    [RequireComponent(typeof(AudioSource))]
     public class HostField : MonoBehaviour
     {
         [Header("다음 감염시킬 필드 찾는 시간")] [SerializeField] [Range(0, 13)] float infectTime = 5f;
@@ -37,7 +38,7 @@ namespace JCW.Object
         MakeHostField mediator;
 
         float curHP;
-
+        AudioSource audioSource;
 
         private void Awake()
         {
@@ -46,6 +47,8 @@ namespace JCW.Object
             mediator = transform.parent.gameObject.GetComponent<MakeHostField>();
             convertIndex = transform.parent.gameObject.GetComponent<ContaminationFieldSetting>().count;
             nextTargetOffset = new() { 2, -2, 2 * convertIndex, -2 * convertIndex };
+            audioSource = GetComponent<AudioSource>();
+            AudioCtrl.AudioSettings.SetAudio(audioSource, 1f, 60f);
             if (!canInfect)
             {
                 nextTargetOffset.Clear();
@@ -135,16 +138,11 @@ namespace JCW.Object
             {
                 SetIndex(index);
                 isStart = true;
-                SoundManager.Instance.PlayEffect_RPC("ContaminationFieldCreated");
+                audioSource.Play();
+                SoundManager.Instance.Play3D_RPC("ContaminationFieldCreated", audioSource);
             }
             
         }
-
-        //public void SetPurified()
-        //{
-        //    isPurified = true;
-        //    mediator.SetPurified(myIndex);
-        //}
 
         private void OnTriggerEnter(Collider other)
         {
@@ -162,7 +160,10 @@ namespace JCW.Object
             curHP -= damage;
             //Debug.Log(curHP);
             if (curHP <= 0)
-                mediator.SetPurified(myIndex);            
+            {
+                SoundManager.Instance.Play3D_RPC("ContaminationFieldPurified", audioSource);
+                mediator.SetPurified(myIndex);
+            }
         }
     }
 }

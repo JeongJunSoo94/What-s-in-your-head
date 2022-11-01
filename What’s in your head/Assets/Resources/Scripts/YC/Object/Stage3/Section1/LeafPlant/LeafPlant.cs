@@ -27,6 +27,7 @@ using JCW.AudioCtrl;
 
 namespace YC_OBJ
 {
+    [RequireComponent(typeof(AudioSource))]
     public class LeafPlant : MonoBehaviour
     {
 
@@ -67,6 +68,8 @@ namespace YC_OBJ
 
         Vector3 tempPos = Vector3.zero;
 
+        AudioSource audioSource;
+
 
         void Awake()
         {
@@ -77,7 +80,8 @@ namespace YC_OBJ
             maxTime = MaxTime;
 
             pv = this.gameObject.GetComponent<PhotonView>();
-
+            audioSource = GetComponent<AudioSource>();
+            JCW.AudioCtrl.AudioSettings.SetAudio(audioSource);
         }
 
         void Update()
@@ -221,9 +225,7 @@ namespace YC_OBJ
         [PunRPC]
         public void SetGrow_RPC()
         {
-            //SoundManager.Instance.PlayEffect("PlantGrow");
-            GetComponent<AudioSource>().Stop();
-            GetComponent<AudioSource>().Play();
+            audioSource.Play();
             curTime = maxTime;
             isGrowed = true;
             curTime = 0;

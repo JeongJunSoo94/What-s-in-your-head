@@ -8,6 +8,7 @@ using UnityEngine;
 namespace JCW.Object
 {
     [RequireComponent(typeof(PhotonView))]
+    [RequireComponent(typeof(AudioSource))]
     public class MakeHostField : MonoBehaviour
     {
         [Header("===========시작 후===========")]
@@ -25,6 +26,7 @@ namespace JCW.Object
         int randomIndex = 0;
 
         PhotonView photonView;
+        AudioSource audioSource;
 
         private void Awake()
         {
@@ -46,6 +48,9 @@ namespace JCW.Object
                 randomIndex = random.Next(0, 4);
                 photonView.RPC(nameof(Init), RpcTarget.AllViaServer, randomIndex);
             }
+            audioSource = GetComponent<AudioSource>();
+            Debug.Log(Vector3.Distance(this.transform.position, transform.GetChild(0).position) + 30f);
+            AudioCtrl.AudioSettings.SetAudio(audioSource, 1f, Vector3.Distance(this.transform.position, transform.GetChild(0).position) + 30f);
         }
 
         void Update()
@@ -131,7 +136,6 @@ namespace JCW.Object
         void SetPurifiedRPC(int myIndex)
         {
             Debug.Log("정화시킬 인덱스 : " + myIndex);
-            SoundManager.Instance.PlayEffect_RPC("ContaminationFieldPurified");
             transform.GetChild(myIndex).gameObject.GetComponent<HostField>().enabled = false;
             transform.GetChild(myIndex).gameObject.SetActive(false);
             transform.GetChild(myIndex - 1).gameObject.SetActive(true);
@@ -165,7 +169,7 @@ namespace JCW.Object
                 curTime+= flickTime / 2f;
                 mat.color = isChange ? color1 : color2;
                 isChange = !isChange;
-                SoundManager.Instance.PlayEffect_RPC("ContaminationFieldWarn");
+                SoundManager.Instance.Play3D_RPC("ContaminationFieldWarn", audioSource);
                 yield return new WaitForSeconds(0.5f);
             }
                 
