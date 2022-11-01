@@ -20,7 +20,6 @@ namespace KSU.FSM
         // OnStateUpdate is called on each Update frame between OnStateEnter and OnStateExit callbacks
         override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
         {
-            //ResetPosition(animator);
             CheckState(animator);
         }
 
@@ -29,12 +28,6 @@ namespace KSU.FSM
         {
             GetPlayerController(animator).gameObject.GetComponent<MotionTrail>().enabled = false;
         }
-
-        void ResetPosition(Animator animator)
-        {
-            GetPlayerController(animator).ResetPosition();
-        }
-
         void CheckState(Animator animator)
         {
             animator.SetBool("isAir", !GetPlayerController(animator).characterState.IsGrounded);

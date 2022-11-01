@@ -10,9 +10,10 @@ namespace KSU.Monster
     public class DefenseMonster : MonoBehaviour
     {
         [SerializeField] protected int maxHP;
-        protected int currentHP;
+        public int currentHP;
         public float attackRange = 1f;
-        public int attackPower;
+        public int attackDamage;
+        [SerializeField] LayerMask chaseLayerFiter;
         [SerializeField] protected GameObject targetObject;
         protected GameObject detectedTarget;
         protected GameObject currentTarget;
@@ -67,7 +68,8 @@ namespace KSU.Monster
             monsterNavAgent.speed = moveSpeed;
             monsterAnimator.SetBool("isAttacked", false);
             monsterAnimator.SetBool("isDead", false);
-            monsterAnimator.SetBool("isSturn", false);
+            monsterAnimator.SetBool("isStunned", false);
+            monsterAnimator.SetBool("WasStunned", false);
             monsterAnimator.SetBool("isChasing", false);
             monsterAnimator.SetBool("isAttacking", false);
         }
@@ -93,11 +95,14 @@ namespace KSU.Monster
 
         public virtual void GetDamage(int damage)
         {
-            currentHP -= damage;
-            monsterAnimator.SetBool("isAttacked", true);
-            if (currentHP < 0)
+            if(!monsterAnimator.GetBool("isAttacked") && !monsterAnimator.GetBool("isDead"))
             {
-                monsterAnimator.SetBool("isDead", true);
+                currentHP -= damage;
+                monsterAnimator.SetBool("isAttacked", true);
+                if (currentHP <= 0)
+                {
+                    monsterAnimator.SetBool("isDead", true);
+                }
             }
         }
 
@@ -179,10 +184,15 @@ namespace KSU.Monster
             {
                 foreach (var collider in detectedColliders)
                 {
-                    if (collider.gameObject.layer == LayerMask.NameToLayer("Player"))
+                    RaycastHit hit;
+                    bool rayChecked = Physics.Raycast(transform.position + Vector3.up * 0.5f, (collider.gameObject.transform.position - transform.position).normalized, out hit, detectingRange, chaseLayerFiter, QueryTriggerInteraction.Ignore);
+                    if (rayChecked)
                     {
-                        detectedTarget = collider.gameObject;
-                        monsterAnimator.SetBool("isChasing", true);
+                        if (hit.collider.gameObject.layer == LayerMask.NameToLayer("Player"))
+                        {
+                            detectedTarget = collider.gameObject;
+                            monsterAnimator.SetBool("isChasing", true);
+                        }
                     }
                 }
             }

@@ -7,6 +7,8 @@ using Photon.Pun;
 using JJS.Weapon;
 using JCW.UI.Options.InputBindings;
 using KSU;
+using KSU.Monster;
+
 namespace JJS
 {
     [RequireComponent(typeof(PhotonView))]
@@ -193,10 +195,20 @@ namespace JJS
                     {
                         for (int j = 0; j < hitObjs[i].HitColliders.Length; j++)
                         {
-                            // << : 찬 수정, 부쉬 오브젝트 관련
-                            if (hitObjs[i].HitColliders[j].gameObject.CompareTag("Bush"))
+                            // << : 찬, 성운 수정, 부쉬 오브젝트 관련
+                            switch (hitObjs[i].HitColliders[j].gameObject.tag)
                             {
-                                hitObjs[i].HitColliders[j].gameObject.SendMessage("Attacked", 0.01f);
+                                case "Bush":
+                                    {
+                                        hitObjs[i].HitColliders[j].gameObject.SendMessage("Attacked", 0.01f);
+                                    }
+                                    break;
+                                case "PoisonSnake":
+                                case "TrippleHeadSnake":
+                                    {
+                                        hitObjs[i].HitColliders[j].gameObject.GetComponent<DefenseMonster>().GetDamage(10);
+                                    }
+                                    break;
                             }
                         }
                     }

@@ -30,7 +30,7 @@ namespace KSU
         [SerializeField] GameObject grappleSpawner;
         [SerializeField] GameObject grappleObject;
         SteadyGrapple grapple;
-        Vector3 autoAimPosition;
+        Transform autoAimPosition;
         [SerializeField] AimUI aimUI;
 
         [Header("_______변경 가능 값_______")]
@@ -133,7 +133,7 @@ namespace KSU
         //}
         public void SearchGrappledObject()
         {
-            if (!playerAnimator.GetBool("isShootingGrapple"))
+            if (!playerAnimator.GetBool("isShootingGrapple") && grappleSpawner.activeSelf)
             {
                 if (playerState.aim)
                 {
@@ -150,13 +150,12 @@ namespace KSU
                         isRayChecked = Physics.SphereCast(rayOrigin, 0.2f, direction, out _raycastHit, (rangeDistance + rangeRadius * 2f), layerFilterForGrapple, QueryTriggerInteraction.Ignore);
                         if (isRayChecked)
                         {
-                            Debug.Log("_raycastHit.collider.gameObject.layer:" + _raycastHit.collider.gameObject.layer);
                             if (_raycastHit.collider.gameObject.layer == LayerMask.NameToLayer("AutoAimedObject"))
                             {
                                 if (Vector3.Angle(playerCamera.transform.forward, (_raycastHit.collider.gameObject.transform.position - rayOrigin)) < rangeAngle)
                                 {
-                                    aimUI.SetTarget(_raycastHit.collider.gameObject.transform, rangeAngle);
-                                    autoAimPosition = _raycastHit.collider.gameObject.transform.position;
+                                    //aimUI.SetTarget(_raycastHit.collider.gameObject.transform, rangeAngle);
+                                    //autoAimPosition = _raycastHit.collider.gameObject.transform.position;
                                     steadyInteractionState.isGrappledObjectFounded = true;
                                     return;
                                 }
@@ -164,8 +163,20 @@ namespace KSU
                         }
                     }
                 }
-                aimUI.SetTarget(null, rangeAngle);
+                //aimUI.SetTarget(null, rangeAngle);
                 steadyInteractionState.isGrappledObjectFounded = false;
+            }
+        }
+
+        public void SendInfoAImUI()
+        {
+            if(steadyInteractionState.isGrappledObjectFounded && grappleSpawner.activeSelf)
+            {
+                aimUI.SetTarget(autoAimPosition, rangeAngle);
+            }
+            else
+            {
+                aimUI.SetTarget(null, rangeAngle);
             }
         }
 
@@ -184,7 +195,6 @@ namespace KSU
                         ///////////////// 선택지 2: 여기에 마우스 거리 만큼의 위치까지 쏘는 갈고리 발사
                         Vector3 forward = (playerController.playerMouse.point.transform.position - grappleSpawner.transform.position);
                         forward.y = 0;
-                        Debug.Log("forward.magnitude: " + forward.magnitude);
                         if (forward.magnitude > grapplingRange)
                             forward = forward.normalized * grapplingRange;
                         grapple.InitGrapple(grappleSpawner.transform.position, (grappleSpawner.transform.position + forward), grappleSpeed, grappleDepartOffset);
@@ -192,7 +202,7 @@ namespace KSU
                     else if (steadyInteractionState.isGrappledObjectFounded)
                     {
                         // 도착 위치: autoAimPosition
-                        grapple.InitGrapple(grappleSpawner.transform.position, autoAimPosition, grappleSpeed, grappleDepartOffset);
+                        grapple.InitGrapple(grappleSpawner.transform.position, autoAimPosition.position, grappleSpeed, grappleDepartOffset);
                     }
                     else
                     {
@@ -236,14 +246,10 @@ namespace KSU
 
         public void Hook()
         {
-            Debug.Log("ㄷㅇㄱ");
             playerController.characterState.isRiding = true;
             playerState.IsAirJumping = false;
             playerState.WasAirDashing = false;
             playerState.IsGrounded = false;
-            Debug.Log("targetObj: " + grappledTarget.name);
-            Debug.Log("targetObj.GetComponent<GrappledObject>() : " + grappledTarget.GetComponent<GrappledObject>());
-            Debug.Log("offset: " + grappledTarget.GetComponent<GrappledObject>().GetOffsetPosition());
             targetPosition = grappledTarget.GetComponent<GrappledObject>().GetOffsetPosition();
             grappleVec = (targetPosition - transform.position).normalized * grappleMoveSpeed;
             Vector3 lookVec = grappleVec;
@@ -363,7 +369,7 @@ namespace KSU
         }
         private void OnTriggerExit(Collider other)
         {
-            if ((other.gameObject.layer == LayerMask.NameToLayer("UITriggers")) && other.CompareTag("GrappledObject"))
+            if ((other.gameObject.layer == LayerMask.NameToLayer("UITriggers")) && (other.CompareTag("GrappledObject") || other.CompareTag("GrappledObject")))
             {
                 other.gameObject.transform.parent.gameObject.GetComponentInChildren<OneIndicator>().SetUI(false);
                 grappledObjects.Remove(other.gameObject);

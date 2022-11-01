@@ -15,7 +15,7 @@ namespace KSU
         [SerializeField] int maxSpawnNum;
         [SerializeField] GameObject spawnedObject;
 
-        [SerializeField] List<GameObject> spawnPosition;
+        [SerializeField] List<Vector3> spawnPosition;
         [SerializeField] List<int> spawnPattern; // 패턴 배열은 한 요소가 6자리 int형 숫자(0 ~ 3)고, 스폰할때 그 위치에 맞는 곳에서 스폰
         int patternCount;
 
@@ -26,12 +26,13 @@ namespace KSU
         bool isGameEnd = false;
 
         // Start is called before the first frame update
-        void Start()
+        void Awake()
         {
             var random = new System.Random(Guid.NewGuid().GetHashCode());
             spawner = GetComponentInChildren<Spawner>();
             spawner.count = maxSpawnNum;
             spawner.obj = spawnedObject;
+            spawner.SpawnInit();
         }
 
         // Update is called once per frame
@@ -81,7 +82,7 @@ namespace KSU
                         if (spawner.spawnCount == maxSpawnNum)
                             break;
                         
-                        spawner.Respawn(spawnPosition[(spawnPatternNum % 10) % spawnPosition.Count].transform.position);
+                        spawner.Respawn(spawnPosition[(spawnPatternNum % 10) % spawnPosition.Count]);
                         spawnPatternNum /= 10;
                     }
                     yield return new WaitForSeconds(spawnDelayTime);

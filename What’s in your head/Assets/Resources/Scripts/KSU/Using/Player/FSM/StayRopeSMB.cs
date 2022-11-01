@@ -16,7 +16,6 @@ namespace KSU.FSM
         // OnStateUpdate is called on each Update frame between OnStateEnter and OnStateExit callbacks
         override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
         {
-            //ResetPosition(animator);
             CheckState(animator);
         }
 
@@ -37,11 +36,6 @@ namespace KSU.FSM
         //{
         //    // Implement code that sets up animation IK (inverse kinematics)
         //}
-
-        void ResetPosition(Animator animator)
-        {
-            GetPlayerController(animator).ResetPosition();
-        }
 
         void CheckState(Animator animator)
         {

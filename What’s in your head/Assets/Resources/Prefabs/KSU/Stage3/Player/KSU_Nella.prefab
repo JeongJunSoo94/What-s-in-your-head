@@ -856,7 +856,7 @@ MonoBehaviour:
   _viewDirection: 16
   viewTargetMask:
     serializedVersion: 2
-    m_Bits: 2147483656
+    m_Bits: 2147485704
   targetObj: []
 --- !u!1 &3693833533141761998
 GameObject:
@@ -1148,7 +1148,7 @@ MonoBehaviour:
   _viewDirection: 18
   viewTargetMask:
     serializedVersion: 2
-    m_Bits: 2147483656
+    m_Bits: 2147485704
   targetObj: []
 --- !u!1 &5036784022295094508
 GameObject:
@@ -1331,7 +1331,7 @@ MonoBehaviour:
   _viewDirection: 7
   viewTargetMask:
     serializedVersion: 2
-    m_Bits: 2147483656
+    m_Bits: 2147485704
   targetObj: []
 --- !u!1 &5494585534409937223
 GameObject:
@@ -2614,7 +2614,7 @@ CapsuleCollider:
   m_Radius: 0.2
   m_Height: 1.6
   m_Direction: 1
-  m_Center: {x: 0, y: 0.77, z: 0}
+  m_Center: {x: 0, y: 0.8, z: 0}
 --- !u!54 &8914183395468562453
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -2744,11 +2744,13 @@ MonoBehaviour:
   gravity: -9.81
   gravityCofactor: 10
   terminalSpeed: -10
+  knockBackVerticalSpeed: 10
   rotationSpeed: 720
   moveVec: {x: 0, y: 0, z: 0}
   moveDir: {x: 0, y: 0, z: 0}
   dashVec: {x: 0, y: 0, z: 0}
   inertiaNormalVec: {x: 0, y: 0, z: 0}
+  knockBackVec: {x: 0, y: 0, z: 0}
 --- !u!114 &5027572550733305681
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2833,7 +2835,7 @@ MonoBehaviour:
   isOutOfControl: 0
   isStopped: 0
   isRiding: 0
-  deadDuration: 0
+  CanResetKnockBack: 1
   aim: 0
   top: 0
   swap: 0
@@ -2956,6 +2958,18 @@ MonoBehaviour:
   - Type: 4
     SynchronizeType: 0
     Name: isDead
+  - Type: 4
+    SynchronizeType: 0
+    Name: isKnockBack
+  - Type: 4
+    SynchronizeType: 0
+    Name: AttackedTrigger
+  - Type: 4
+    SynchronizeType: 0
+    Name: DeadTrigger
+  - Type: 4
+    SynchronizeType: 0
+    Name: KnockBackTrigger
   m_SynchronizeLayers:
   - SynchronizeType: 2
     LayerIndex: 0

@@ -8,11 +8,11 @@ namespace KSU.Monster
     {
         [SerializeField] float readyToRushTime = 2f;
         [SerializeField] float rushTime = 2f;
-        [SerializeField] float rushSpeed;
+        public float rushSpeed;
         [SerializeField] float rotationSpeed;
         GameObject rushTarget;
         [SerializeField] GameObject rushTrigger;
-        [SerializeField] int rushDamage;
+        public int rushDamage;
 
         bool isRushDelayOn = false;
         public float rushDelayTime = 10f;
@@ -136,7 +136,14 @@ namespace KSU.Monster
             monsterNavAgent.enabled = false;
             monsterNavAgent.speed = moveSpeed;
             rushTrigger.SetActive(false);
-            
+        }
+
+        private void OnCollisionEnter(Collision collision)
+        {
+            if(collision.collider.tag != "Nella" && collision.collider.tag != "Steady")
+            {
+                EndRush();
+            }
         }
     }
 }

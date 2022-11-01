@@ -47,9 +47,9 @@ public class PlayerState : MonoBehaviour
     // 수평 이동 변수
     #region
     [Tooltip("방향키 입력 상태")]
-    public bool isMove;
+    public bool isMove = false;
     [Tooltip("달리기 토글 ON/OFF 상태")]
-    public bool isRun;
+    public bool isRun = false;
     #endregion
 
     // 점프 변수
@@ -79,8 +79,9 @@ public class PlayerState : MonoBehaviour
     public bool isOutOfControl = false;
     public bool isStopped = false;
     public bool isRiding = false;
-    public float deadDuration;
     #endregion
+
+    public bool CanResetKnockBack = true;
 
     public bool aim = false;
     public bool top = false;
@@ -95,6 +96,34 @@ public class PlayerState : MonoBehaviour
     public float dashTime = 1f;
     [Header("공중 대시 지속 시간")]
     public float airDashTime = 0.5f;
+
+    public void InitState(bool isNotMove, bool isNotTop)
+    {
+        aim = false;
+        swap = false;
+        CanResetKnockBack = true;
+        
+        if (!isNotMove)
+        {
+            isFowardBlock = false;
+            isOverAngleForSlope = false;
+            isMove = false;
+            isRun = false;
+            CanJump = true;
+            IsJumping = false;
+            IsAirJumping = false;
+            IsDashing = false;
+            IsAirDashing = false;
+            WasAirDashing = false;
+            IsGrounded = false;
+        }
+        if (!isNotTop)
+        {
+            top = false;
+        }
+    }
+
+    
 
     // 지면 체크 함수(지면 각도에 따라서 지면체크 거리 안에 안들어올 수 있기에 보정 필요)
     #region
@@ -253,6 +282,7 @@ public class PlayerState : MonoBehaviour
 
     // 점프 함수
     #region
+
     public void ResetJump()
     {
         IsJumping = false;
@@ -264,6 +294,7 @@ public class PlayerState : MonoBehaviour
         yield return new WaitForSeconds(jumpCoolTime);
         CanJump = true;
     }
+
     public void CheckJump()
     {
         // 지면 위 상태이고 점프 쿨타임()이 돌아있을 때, 점프 중이 아닐 때만
