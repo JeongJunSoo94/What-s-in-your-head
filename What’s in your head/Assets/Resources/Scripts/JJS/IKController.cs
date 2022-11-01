@@ -50,9 +50,5 @@ public class IKController : MonoBehaviour
         animator.SetIKRotationWeight(AvatarIKGoal.LeftHand, rotWeight);
         animator.SetIKPosition(AvatarIKGoal.LeftHand, leftHandFollowObj.position);
 
-        //Transform leftHandTransform = animator.GetBoneTransform(HumanBodyBones.LeftHand);
-        //handRotation = Quaternion.LookRotation((leftHandFollowObj.position - rightHandFollowObj.position).normalized+ leftHandTransform.right*-1, leftHandTransform.forward*-1);
-        //animator.SetIKRotation(AvatarIKGoal.LeftHand, handRotation);
-
     }
 }

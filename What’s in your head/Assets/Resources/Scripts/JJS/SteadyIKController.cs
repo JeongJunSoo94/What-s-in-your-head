@@ -18,14 +18,13 @@ namespace JJS
 
             Transform rightHandTransform = animator.GetBoneTransform(HumanBodyBones.RightHand);
             Vector3 rightHandPos = hitpos.position - rightHandFollowObj.position;
-            Quaternion handRotation = Quaternion.LookRotation(rightHandPos.normalized, rightHandTransform.forward * -1);
+            Quaternion handRotation = Quaternion.LookRotation(rightHandPos, (rightHandTransform.forward * -1));
             animator.SetIKRotation(AvatarIKGoal.RightHand, handRotation);
 
 
             animator.SetIKPositionWeight(AvatarIKGoal.LeftHand, posWeight);
             animator.SetIKRotationWeight(AvatarIKGoal.LeftHand, rotWeight);
             animator.SetIKPosition(AvatarIKGoal.LeftHand, leftHandFollowObj.position);
-            //Transform leftHandTransform = animator.GetBoneTransform(HumanBodyBones.LeftHand);
 
         }
     }

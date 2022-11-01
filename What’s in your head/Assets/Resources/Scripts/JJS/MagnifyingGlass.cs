@@ -125,12 +125,12 @@ namespace JJS.Weapon
                     }
                     else
                     {
-                        hitPoint = MaxPhysicsLine(startPos.transform.position, mainCamera.transform.forward);
+                        hitPoint = MaxPhysicsLine(mainCamera.transform.position, mainCamera.transform.forward);
                     }
                 }
                 else
                 {
-                    hitPoint = MaxPhysicsLine(startPos.transform.position, mainCamera.transform.forward);
+                    hitPoint = MaxPhysicsLine(mainCamera.transform.position, mainCamera.transform.forward);
                 }
             }
             else
