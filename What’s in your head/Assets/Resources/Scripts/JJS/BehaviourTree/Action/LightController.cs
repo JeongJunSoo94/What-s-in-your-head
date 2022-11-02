@@ -9,12 +9,14 @@ namespace JJS.BT
         Flashlight find;
         public bool fake=false;
         public bool enable =false;
+        public Color color;
         protected override void OnStart()
         {
             if (find == null)
             {
                 find = objectInfo.PrefabObject.GetComponent<Flashlight>();
             }
+            
         }
 
         protected override void OnStop()
@@ -25,6 +27,7 @@ namespace JJS.BT
         {
             if(fake)
                 enable = !enable;
+            find.SetLightColor(color);
             find.LightEnable(enable);
             return State.Success;
         }
