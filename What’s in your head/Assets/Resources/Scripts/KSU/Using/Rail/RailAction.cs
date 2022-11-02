@@ -119,7 +119,7 @@ namespace KSU
 
         void SearchRail()
         {
-            MakeGizmoVecs();
+            MakeGizmoVecs(); 
             SearchWithSphereCast();
         }
 

@@ -136,7 +136,7 @@ namespace YC.Photon
                 {
                     PhotonNetwork.Instantiate("Prefabs/YC/MainCamera_Nella", new Vector3(0, 0, 0), Quaternion.identity, 0);
                     PhotonNetwork.Instantiate("Prefabs/JCW/NellaMousePoint", new Vector3(0, 0, 0), Quaternion.identity, 0);
-                    PhotonNetwork.Instantiate(nellaPrefabDirectory, new Vector3(-5, 0, -5), Quaternion.identity, 0);
+                    PhotonNetwork.Instantiate(nellaPrefabDirectory, new Vector3(-5, 0, 0), Quaternion.identity, 0);
                     GameManager.Instance.characterOwner.Add(true, true);
                     GameManager.Instance.characterOwner.Add(false, false);
                     GameManager.Instance.isAlive.Add(true, true);
@@ -146,7 +146,7 @@ namespace YC.Photon
                 {
                     PhotonNetwork.Instantiate("Prefabs/YC/MainCamera_Steady", new Vector3(0, 0, 0), Quaternion.identity, 0);
                     PhotonNetwork.Instantiate("Prefabs/JCW/SteadyMousePoint", new Vector3(0, 0, 0), Quaternion.identity, 0);
-                    PhotonNetwork.Instantiate(steadyPrefabDirectory, new Vector3(5, 0, -5), Quaternion.identity, 0);
+                    PhotonNetwork.Instantiate(steadyPrefabDirectory, new Vector3(5, 0, 0), Quaternion.identity, 0);
                     GameManager.Instance.characterOwner.Add(true, false);
                     GameManager.Instance.characterOwner.Add(false, true);
                     GameManager.Instance.isAlive.Add(true, true);
@@ -168,7 +168,7 @@ namespace YC.Photon
                 {
                     PhotonNetwork.Instantiate("Prefabs/YC/MainCamera_Steady", new Vector3(0, 0, 0), Quaternion.identity, 0);
                     PhotonNetwork.Instantiate("Prefabs/JCW/SteadyMousePoint", new Vector3(0, 0, 0), Quaternion.identity, 0);
-                    PhotonNetwork.Instantiate(steadyPrefabDirectory, new Vector3(5, 0, -5), Quaternion.identity, 0);
+                    PhotonNetwork.Instantiate(steadyPrefabDirectory, new Vector3(5, 0, 0), Quaternion.identity, 0);
                     GameManager.Instance.characterOwner.Add(false, false);
                     GameManager.Instance.characterOwner.Add(true, true);
                     GameManager.Instance.isAlive.Add(true, true);
@@ -178,7 +178,7 @@ namespace YC.Photon
                 {
                     PhotonNetwork.Instantiate("Prefabs/YC/MainCamera_Nella", new Vector3(0, 0, 0), Quaternion.identity, 0);
                     PhotonNetwork.Instantiate("Prefabs/JCW/NellaMousePoint", new Vector3(0, 0, 0), Quaternion.identity, 0);
-                    PhotonNetwork.Instantiate(nellaPrefabDirectory, new Vector3(-5, 0, -5), Quaternion.identity, 0);
+                    PhotonNetwork.Instantiate(nellaPrefabDirectory, new Vector3(-5, 0, 0), Quaternion.identity, 0);
                     GameManager.Instance.characterOwner.Add(true, false);
                     GameManager.Instance.characterOwner.Add(false, true);
                     GameManager.Instance.isAlive.Add(true, true);

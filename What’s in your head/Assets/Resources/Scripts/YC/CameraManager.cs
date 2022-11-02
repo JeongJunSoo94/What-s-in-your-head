@@ -106,13 +106,15 @@ namespace YC.CameraManager_
             {
                 //pv.RPC(nameof(InitCamera), RpcTarget.AllBuffered, (int)CharacterCamera.NELLA);
                 InitCamera((int)CharacterCamera.NELLA);
-                GameObject.FindGameObjectWithTag("Nella").GetComponent<CameraController>().SetDefenseMode();
+                //GameObject.FindGameObjectWithTag("Nella").GetComponent<CameraController>().SetDefenseMode(); // << : TopView
+                GameObject.FindGameObjectWithTag("Nella").GetComponent<CameraController>().SetSideScrollMode(); // << : SideView
             }
             else // 스테디라면
             {
                 //pv.RPC(nameof(InitCamera), RpcTarget.AllBuffered, (int)CharacterCamera.STEADY);
                 InitCamera((int)CharacterCamera.STEADY);
-                GameObject.FindGameObjectWithTag("Steady").GetComponent<CameraController>().SetDefenseMode();
+                //GameObject.FindGameObjectWithTag("Nella").GetComponent<CameraController>().SetDefenseMode(); // << : TopView
+                GameObject.FindGameObjectWithTag("Steady").GetComponent<CameraController>().SetSideScrollMode(); // << : SideView
             }
         }
 

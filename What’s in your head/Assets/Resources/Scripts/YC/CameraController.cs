@@ -9,6 +9,7 @@ using JCW.UI.Options.InputBindings;
 using YC.CameraManager_;
 using UnityEngine.Rendering.Universal;
 using KSU;
+using System;
 
 namespace YC.Camera_
 {
@@ -33,6 +34,7 @@ namespace YC.Camera_
         CinemachineVirtualCameraBase backCam;
         CinemachineVirtualCameraBase sholderCam;
         CinemachineVirtualCameraBase topCam;
+        CinemachineVirtualCameraBase sideCam;
 
         // 가상 카메라 enum State
         enum CamState { back, sholder, top};
@@ -67,18 +69,36 @@ namespace YC.Camera_
         [Header("[스테디 빔, 카메라 흔들림 빈도]")]
         [SerializeField] [Range(0, 5)] float FrequebctGain = 3f;
 
-        List<CinemachineBasicMultiChannelPerlin> listCBMCP;
+        List<CinemachineBasicMultiChannelPerlin> listSteadyCBMCP;
 
         [HideInInspector] public bool canShake = true; // 옵션 스테디 흔들림 여부
         bool wasShaked = false;
-        bool isShakedFade = true;
+        bool isShakedFade = false;
         [Space] [Space]
-
-        
 
         // ============  FOV  ============ //
         float backViewFOV = 50;
+        float topViewFOV = 60;
+        float sideScrollViewFOV = 60;
 
+        // ============  사이드뷰 변수  ============ //
+        [Header("[사이드 뷰, 카메라 흔들림 진폭 크기]")]
+        [SerializeField] [Range(0, 5)] float AmplitudeGainSide = 3f;
+
+        [Header("[사이드 뷰, 카메라 흔들림 빈도]")]
+        [SerializeField] [Range(0, 5)] float FrequebctGainSide = 3f;
+
+        [Header("[사이드 뷰, 카메라 흔들림 지속 시간]")]
+        [SerializeField] [Range(0, 5)] float ShakeTimeSide = 3f;
+
+        CinemachineBasicMultiChannelPerlin SideCBMCP;
+
+        bool isSideView = false;
+        List<Transform> targets;
+        GameObject lookAndFollow;
+        float minZoom;
+        float maxZoom;
+        [Space] [Space]
 
         // ============  점프 보간 변수들  ============ //
         [Header("[점프 후, 플랫폼 착지시 보간 시간]")]
@@ -99,7 +119,7 @@ namespace YC.Camera_
         bool isJumping = false;
         bool isLerp = false;
         bool isAirJumpLerpEnd = false;
-        bool isDebugLog = true;
+        bool isDebugLog = false;
         bool isRiding = false; // 라이딩 시작부터, 그라운드 착지시까지 true;
 
 
@@ -130,6 +150,17 @@ namespace YC.Camera_
         {
             if (!pv.IsMine) return;
 
+            if (isSideView)
+            {
+                if (Input.GetKeyDown(KeyCode.Keypad9))
+                    ShakeCameraInSideView();
+
+                MoveInSideView();
+                ZoomInSideView();
+                return;
+            }
+
+
             SetCamera();
             SetAimYAxis();
 
@@ -154,15 +185,18 @@ namespace YC.Camera_
             {
                 SetCineObjPos();
             }
-           
+
+
+            //Debug.Log("Back FOV : " + backCam.GetComponent<CinemachineFreeLook>().m_YAxis.Value);
+            //Debug.Log("Sholder FOV : " + sholderCam.GetComponent<CinemachineFreeLook>().m_YAxis.Value);
         }
 
 
 
-        // ====================  [Awake()에서 진행하는 초기화]  ==================== //
+        // ====================  [Awake에서 진행하는 초기화]  ==================== //
 
         void InitVirtualCamera() // Virtual Camera 생성 및 초기화  
-        {
+        {           
             if (!pv.IsMine) return;
 
             camList = new List<CinemachineVirtualCameraBase>();
@@ -180,16 +214,10 @@ namespace YC.Camera_
                 sholderCam = Instantiate(CineSteadySholder, Vector3.zero, Quaternion.identity).GetComponent<CinemachineVirtualCameraBase>();
             }
 
-            // 가상 카메라에 대한 Look 및 Follow 오브젝트를 설정한다.
-            //followObj = transform.Find("Cine_followObj").gameObject.transform;
-            //lookatBackObj = transform.Find("Cine_lookatObj_Back").gameObject.transform;
-            //lookatObjOriginY = lookatBackObj.transform.position.y;
-            //lookatSholderObj = transform.Find("Cine_lookatObj_Sholder").gameObject.transform;
-
             followObj = Instantiate(CineFollowObj_Back, player.transform.position + CineFollowObj_Back.transform.position, player.transform.rotation).GetComponent<Transform>();
             lookatBackObj = Instantiate(CineLookObj_Back, player.transform.position + CineLookObj_Back.transform.position, player.transform.rotation).GetComponent<Transform>();
             lookatSholderObj = transform.Find("Cine_lookatObj_Sholder").gameObject.transform;
-            lookatObjOriginY = lookatBackObj.transform.position.y; ;
+            lookatObjOriginY = lookatBackObj.transform.position.y; 
 
             backCam.GetComponent<CinemachineFreeLook>().m_Follow = followObj;
             backCam.GetComponent<CinemachineFreeLook>().m_LookAt = lookatBackObj;
@@ -199,6 +227,8 @@ namespace YC.Camera_
             // 가상 카메라 리스트에 넣어준다.
             camList.Add(backCam);
             camList.Add(sholderCam);
+
+            backCam.GetComponent<CinemachineFreeLook>().m_Lens.FieldOfView = backViewFOV;
         }
 
         void InitDefault()  // 기타 초기화  
@@ -216,16 +246,16 @@ namespace YC.Camera_
             if (sholderAxisY_MaxDown == 0) sholderAxisY_MaxDown = 0.5f;
 
             // << : 스테디 빔 흔들림 설정
-            listCBMCP = new List<CinemachineBasicMultiChannelPerlin>();
-
-            if (AmplitudeGain == 0) AmplitudeGain = 1;
-            if (FrequebctGain == 0) FrequebctGain = 2;
-
             if (this.gameObject.CompareTag("Steady"))
             {
+                listSteadyCBMCP = new List<CinemachineBasicMultiChannelPerlin>();
+
+                if (AmplitudeGain == 0) AmplitudeGain = 1;
+                if (FrequebctGain == 0) FrequebctGain = 2;
+
                 for (int i = 0; i < 3; ++i)
                 {
-                    listCBMCP.Add(sholderCam.GetComponent<CinemachineFreeLook>().GetRig(i).GetCinemachineComponent<CinemachineBasicMultiChannelPerlin>());
+                    listSteadyCBMCP.Add(sholderCam.GetComponent<CinemachineFreeLook>().GetRig(i).GetCinemachineComponent<CinemachineBasicMultiChannelPerlin>());
                 }
 
                 for (int i = 0; i < 3; ++i)
@@ -288,19 +318,23 @@ namespace YC.Camera_
                     preCam = curCam;
                     curCam = CamState.sholder;
 
-                    if (camList[(int)preCam].GetComponent<CinemachineFreeLook>().m_YAxis.Value <= sholderAxisY_MaxUp)
-                    {                     
-                        sholderCam.GetComponent<CinemachineFreeLook>().m_YAxis.Value
-                            = sholderAxisY_MaxUp;                       
-                    }
-                    else if (camList[(int)preCam].GetComponent<CinemachineFreeLook>().m_YAxis.Value >= sholderAxisY_MaxDown)
-                    {                     
-                        sholderCam.GetComponent<CinemachineFreeLook>().m_YAxis.Value
-                            = sholderAxisY_MaxDown;
-                    }
-
                     camList[(int)curCam].GetComponent<CinemachineFreeLook>().m_XAxis.Value
-                                    = camList[(int)preCam].GetComponent<CinemachineFreeLook>().m_XAxis.Value;         
+                                   = camList[(int)preCam].GetComponent<CinemachineFreeLook>().m_XAxis.Value;
+                    camList[(int)curCam].GetComponent<CinemachineFreeLook>().m_YAxis.Value
+                                    = camList[(int)preCam].GetComponent<CinemachineFreeLook>().m_YAxis.Value;
+                    //if (camList[(int)preCam].GetComponent<CinemachineFreeLook>().m_YAxis.Value <= sholderAxisY_MaxUp)
+                    //{                     
+                    //    sholderCam.GetComponent<CinemachineFreeLook>().m_YAxis.Value
+                    //        = sholderAxisY_MaxUp;                       
+                    //}
+                    //else if (camList[(int)preCam].GetComponent<CinemachineFreeLook>().m_YAxis.Value >= sholderAxisY_MaxDown)
+                    //{                     
+                    //    sholderCam.GetComponent<CinemachineFreeLook>().m_YAxis.Value
+                    //        = sholderAxisY_MaxDown;
+                    //}
+
+                    //camList[(int)curCam].GetComponent<CinemachineFreeLook>().m_XAxis.Value
+                    //                = camList[(int)preCam].GetComponent<CinemachineFreeLook>().m_XAxis.Value;         
 
                     OnOffCamera(sholderCam);
 
@@ -373,34 +407,13 @@ namespace YC.Camera_
                 }
                 camList[(int)curCam].GetComponent<CinemachineFreeLook>().m_YAxis = axisY;
             }
-        }
+        }  
 
-        public void SetDefenseMode() // 디펜스 모드 때 설정  
-        {
-            if (pv.IsMine)
-            {
-                topCam = GameObject.FindWithTag("Cine_DefenseCam").GetComponent<CinemachineVirtualCameraBase>();
-                topCam.GetComponent<CinemachineVirtualCamera>().enabled = true;
-                camList.Add(topCam);
-
-                preCam = curCam;
-                curCam = CamState.top;
-
-                OnOffCamera(topCam);
-
-                camList[(int)curCam].GetComponent<CinemachineVirtualCamera>().m_Lens.FieldOfView = 60;
-            }
-            else
-            {
-                mainCam.fieldOfView = 60;
-            }
-        }
-
-        void OnOffCamera(CinemachineVirtualCameraBase curCam) // 매개변수로 받은 카메라 외에 다른 카메라는 Off  
+        void OnOffCamera(CinemachineVirtualCameraBase curCam) // 매개변수로 받은 카메라 외에 다른 카메라는 Off (인자가 null이라면 모든 가상카메라를 끈다)
         {
             foreach (CinemachineVirtualCameraBase cam in camList)
             {
-                if (cam == curCam)
+                if (curCam && (cam == curCam)) // << : null 체크
                 {
                     curCam.enabled = true;
                     continue;
@@ -451,10 +464,175 @@ namespace YC.Camera_
             //else {}
         }
 
+        void InitSceneChange() // Scene이 변경될 시 다시 카메라를 원상태 (BackView)로 복귀  
+        {
+            if (!pv.IsMine) return;
+
+            float defaultAxisValue = 0.5f;
+
+            preCam = CamState.back;
+            curCam = CamState.back;
+
+            camList[(int)curCam].GetComponent<CinemachineFreeLook>().m_XAxis.Value = defaultAxisValue;
+            camList[(int)curCam].GetComponent<CinemachineFreeLook>().m_YAxis.Value = defaultAxisValue;
+
+            mainCam.fieldOfView = backViewFOV;
+            camList[(int)curCam].GetComponent<CinemachineFreeLook>().m_Lens.FieldOfView = backViewFOV;
+
+            OnOffCamera(backCam);
+        }
+
+
+        // ====================  [Top View 함수]  ==================== //
+        
+        public void SetDefenseMode() // 디펜스 모드 설정  
+        {
+            if (pv.IsMine)
+            {
+                topCam = GameObject.FindWithTag("Cine_DefenseCam").GetComponent<CinemachineVirtualCameraBase>();
+                topCam.GetComponent<CinemachineVirtualCamera>().enabled = true;
+
+                OnOffCamera(null);
+
+                topCam.GetComponent<CinemachineVirtualCamera>().m_Lens.FieldOfView = topViewFOV;
+            }
+            else
+            {
+                mainCam.fieldOfView = topViewFOV;
+            }
+        }
+
+
+        // ====================  [Side View 함수]  ==================== //
+
+        public void SetSideScrollMode() // 사이드뷰 모드 설정  
+        {
+            isSideView = true;
+            
+            if (pv.IsMine)
+            {
+                // 가상 카메라 생성 및 초기화
+                sideCam = GameObject.FindWithTag("Cine_SideScrollCam").GetComponent<CinemachineVirtualCameraBase>();
+                sideCam.GetComponent<CinemachineVirtualCamera>().enabled = true;
+                sideCam.GetComponent<CinemachineVirtualCamera>().m_Lens.FieldOfView = sideScrollViewFOV;
+
+                lookAndFollow = new GameObject();
+                lookAndFollow.name = "Cine_SideScrollObj";
+                sideCam.Follow = lookAndFollow.transform;
+                sideCam.LookAt = lookAndFollow.transform;
+               
+                OnOffCamera(null);
+
+                // 타겟 설정 
+                targets = new List<Transform>();
+                targets.Add(GameObject.FindWithTag("Nella").GetComponent<Transform>());
+                targets.Add(GameObject.FindWithTag("Steady").GetComponent<Transform>());
+
+                minZoom = sideScrollViewFOV + 15f; // 시야각 최대 넓음
+                maxZoom = sideScrollViewFOV; // 시야각 최대 좁음 = 최초 시야각 값
+            }
+            else
+            {
+                mainCam.fieldOfView = sideScrollViewFOV;
+            }
+        }
+
+        void MoveInSideView() // 사이브 뷰 카메라 이동 
+        {
+            // 만약 한명이 죽었다면 바로 리턴
+
+            Vector3 centerPoint = GetCenterPoint();
+
+            lookAndFollow.transform.position = new Vector3(centerPoint.x, 0f, centerPoint.z);
+        }
+
+        void ZoomInSideView() // 사이드 뷰 카메라 줌  
+        {
+            float newZoom = Mathf.Lerp(maxZoom, minZoom, (GetDistance() / minZoom));
+
+            sideCam.GetComponent<CinemachineVirtualCamera>().m_Lens.FieldOfView = newZoom;
+        }
+
+        float GetDistance() // 두 플레이어 간 거리를 구한다  
+        {
+            // if, 현재 살아있는 플레이어가 한명
+            // 리턴, 그 한명의 포지션
+
+            var bounds = new Bounds(targets[0].position, Vector3.zero); // 넬라의 센터를 기준으로하는 경계상자 생성
+            bounds.Encapsulate(targets[1].position); // 위 경계상자가 스테디를 포함하도록 한다
+
+            return bounds.size.x;
+        }
+
+        Vector3 GetCenterPoint() // 두 플레이어 사이 포지션 값을 구한다  
+        {
+            // if, 현재 살아있는 플레이어가 한명
+            // 리턴, 그 한명의 포지션
+
+            var bounds = new Bounds(targets[0].position, Vector3.zero); // 넬라의 센터를 기준으로하는 경계상자 생성
+            bounds.Encapsulate(targets[1].position); // 위 경계상자가 스테디를 포함하도록 한다
+
+            return bounds.center;
+        }
+
+        public void ShakeCameraInSideView() // 플레이어 사망시, 카메라 흔들림 세팅 (외부에서 센드메시지로 호출)  
+        {
+            if (!canShake) return;
+
+            if (!SideCBMCP)
+            {
+                SideCBMCP = new CinemachineBasicMultiChannelPerlin();
+
+                if (AmplitudeGainSide == 0) AmplitudeGainSide = 1;
+                if (AmplitudeGainSide == 0) AmplitudeGainSide = 2;
+
+                SideCBMCP = sideCam.GetComponent<CinemachineVirtualCamera>().GetCinemachineComponent<CinemachineBasicMultiChannelPerlin>();
+                sideCam.GetComponent<CinemachineVirtualCamera>().GetCinemachineComponent<CinemachineBasicMultiChannelPerlin>().m_FrequencyGain = 0;
+                sideCam.GetComponent<CinemachineVirtualCamera>().GetCinemachineComponent<CinemachineBasicMultiChannelPerlin>().m_AmplitudeGain = 0;
+            }
+
+            StartCoroutine(ShakingCameraInSideView());
+        }
+
+        IEnumerator ShakingCameraInSideView() // 일정시간 동안 카메라 흔들림  
+        {
+            SideCBMCP.m_AmplitudeGain = AmplitudeGainSide;
+            SideCBMCP.m_FrequencyGain = FrequebctGainSide;
+          
+            yield return new WaitForSeconds(ShakeTimeSide);
+
+            float fadeLerpTime = 0.5f;
+            StartCoroutine(ShakeCameraSideFadeOutInSideView(fadeLerpTime));
+        }
+
+        IEnumerator ShakeCameraSideFadeOutInSideView(float LerpTime) // 일정 시간 뒤, 흔들림 페이드 아웃  
+        {
+            float initialVlaue = SideCBMCP.m_AmplitudeGain;
+            float currentTime = 0;
+
+            while (initialVlaue > 0)
+            {
+                initialVlaue -= Time.deltaTime * (AmplitudeGainSide);
+
+                currentTime += Time.deltaTime;
+                if (currentTime >= LerpTime) currentTime = LerpTime;
+
+                float curValue = Mathf.Lerp(initialVlaue, 0, currentTime / LerpTime);
+
+                if (curValue < 0)
+                    curValue = 0;
+
+                SideCBMCP.m_AmplitudeGain = curValue;
+                SideCBMCP.m_FrequencyGain = curValue;
+
+                yield return null;
+            }
+        }
+
 
         // ====================  [점프 보간 함수]  ==================== //
 
-        void SetCineObjPos() // Look과 Follow의 x, y값 업데이트
+        void SetCineObjPos() // Look과 Follow의 x, y값 업데이트  
         {
             if (isDebugLog) Debug.Log("호출 : 점프 대기 상태 - x, z 업데이트중");
 
@@ -728,7 +906,7 @@ namespace YC.Camera_
             if (isDebugLog) Debug.Log("호출 - 일반 코루틴 Lerp 종료");
         }
 
-        public void RidingInit() // 라이딩(로프, 레일)진행시 각각의 SMB에서 해당 함수를 호출한다  (갈고리 제외)
+        public void RidingInit() // 라이딩(로프, 레일)진행시 각각의 SMB에서 해당 함수를 호출한다 (갈고리 제외)  
         {
             if (isLerp)
             {
@@ -756,24 +934,26 @@ namespace YC.Camera_
         }
 
 
+
         // ====================  [스테디 전용 함수]  ==================== //
 
         public void SetSteadyBeam(bool isLock) // 스테디 빔 사용시, 카메라 Lock (Aim Attack State에서 호출)  
         {
             if (GameManager.Instance.isTopView || !pv.IsMine) return;
 
+            CinemachineFreeLook cam = camList[(int)curCam].GetComponent<CinemachineFreeLook>();
+
             if (isLock)
             {
-                camList[(int)curCam].GetComponent<CinemachineFreeLook>().m_XAxis.m_InputAxisName = "";
-                camList[(int)curCam].GetComponent<CinemachineFreeLook>().m_YAxis.m_InputAxisName = "";
+                cam.m_XAxis.m_InputAxisName = "";
+                cam.m_YAxis.m_InputAxisName = "";
 
-                // << : 회전하면서 빔 사용시 삥삥 도는 문제
-                camList[(int)curCam].GetComponent<CinemachineFreeLook>().m_XAxis.m_InputAxisValue = 0;
+                cam.m_XAxis.m_InputAxisValue = 0;  // << : 회전하면서 빔 사용시 삥삥 도는 문제
             }
             else
             {
-                camList[(int)curCam].GetComponent<CinemachineFreeLook>().m_XAxis.m_InputAxisName = "Mouse X";
-                camList[(int)curCam].GetComponent<CinemachineFreeLook>().m_YAxis.m_InputAxisName = "Mouse Y";
+                cam.m_XAxis.m_InputAxisName = "Mouse X";
+                cam.m_YAxis.m_InputAxisName = "Mouse Y";
             }
         }
 
@@ -785,12 +965,13 @@ namespace YC.Camera_
             {
                 if (wasShaked) return;
 
-                foreach (CinemachineBasicMultiChannelPerlin CBMCP in listCBMCP)
+                foreach (CinemachineBasicMultiChannelPerlin CBMCP in listSteadyCBMCP)
                 {
                     CBMCP.m_AmplitudeGain = AmplitudeGain;
                     CBMCP.m_FrequencyGain = FrequebctGain;
                 }
                 wasShaked = true;
+
             }
             else
             {
@@ -808,7 +989,7 @@ namespace YC.Camera_
 
         IEnumerator ShakeFadeOut(float LerpTime) // 스테디 빔 종료시, 흔들림 페이드 아웃  
         {
-            float initialVlaue = listCBMCP[0].m_AmplitudeGain;
+            float initialVlaue = listSteadyCBMCP[0].m_AmplitudeGain;
             float currentTime = 0;
 
             while (initialVlaue > 0)
@@ -823,7 +1004,7 @@ namespace YC.Camera_
                 if (curValue < 0)
                     curValue = 0;
 
-                foreach (CinemachineBasicMultiChannelPerlin CBMCP in listCBMCP)
+                foreach (CinemachineBasicMultiChannelPerlin CBMCP in listSteadyCBMCP)
                 {
                     CBMCP.m_AmplitudeGain = curValue;
                     CBMCP.m_FrequencyGain = curValue;
@@ -838,7 +1019,7 @@ namespace YC.Camera_
         {
             float initialVlaue = 0;
 
-            foreach (CinemachineBasicMultiChannelPerlin CBMCP in listCBMCP)
+            foreach (CinemachineBasicMultiChannelPerlin CBMCP in listSteadyCBMCP)
             {
                 CBMCP.m_AmplitudeGain = initialVlaue;
                 CBMCP.m_FrequencyGain = initialVlaue;
