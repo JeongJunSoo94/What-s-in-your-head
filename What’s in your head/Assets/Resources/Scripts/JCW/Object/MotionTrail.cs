@@ -18,12 +18,12 @@ namespace JCW.Effect
         int curSpawnIndex = 0;
         Mesh curMesh;
 
-
+        
 
         private void Awake()
         {
             TrailContainer = new("TrailContainer");
-            for (int i = 0; i < trailCount; ++i)
+            for (int i= 0 ; i<trailCount ; ++i)
             {
                 GameObject go = new("Trail" + i);
                 go.transform.parent = TrailContainer.transform;
@@ -44,7 +44,7 @@ namespace JCW.Effect
         {
             StopAllCoroutines();
             objQueue.Clear();
-            for (int i = 0; i < trailCount; ++i)
+            for (int i=0 ; i<trailCount ; ++i)
             {
                 GameObject go = TrailContainer.transform.GetChild(i).gameObject;
                 go.SetActive(false);
@@ -63,7 +63,7 @@ namespace JCW.Effect
                     go.transform.SetPositionAndRotation(transform.position, transform.rotation);
                     go.SetActive(true);
 
-                    if (curMesh == null)
+                    if(curMesh == null)
                         curMesh = new();
                     skinnedMeshRenderer.BakeMesh(curMesh);
                     go.GetComponent<MeshFilter>().mesh = curMesh;

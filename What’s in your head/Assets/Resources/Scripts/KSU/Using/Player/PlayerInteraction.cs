@@ -49,11 +49,10 @@ namespace KSU
         {
             if (KeyManager.Instance.GetKeyDown(PlayerAction.Interaction))
             {
-                if (interactionState.isRailFounded)
+                if (interactionState.isRailFounded && !animator.GetBool("isMoveToRail") && !interactionState.GetWhetherHasParent())
                 {
                     animator.SetFloat("moveToRailSpeed", 0.833f / railAction.StartRailAction());
                     animator.SetBool("isMoveToRail",true);
-                    interactionState.isRailTriggered = true;
                     return true;
                 }
                 else

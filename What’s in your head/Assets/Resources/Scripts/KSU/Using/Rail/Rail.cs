@@ -108,8 +108,6 @@ namespace KSU
                         }
                         break;
                 }
-                player.GetComponent<Rigidbody>().velocity = Vector3.zero;
-                player.transform.localPosition = Vector3.zero;
                 player.transform.localRotation = Quaternion.Euler(new Vector3(0, 0, 0));
             }
             else if (cartSetUp.m_Position > (track.m_Waypoints.Length - 2f))
@@ -130,8 +128,6 @@ namespace KSU
                         }
                         break;
                 }
-                player.GetComponent<Rigidbody>().velocity = Vector3.zero;
-                player.transform.localPosition = Vector3.zero;
                 player.transform.localRotation = Quaternion.Euler(new Vector3(0, 180, 0));
             }
             else
@@ -155,8 +151,6 @@ namespace KSU
                             }
                             break;
                     }
-                    player.GetComponent<Rigidbody>().velocity = Vector3.zero;
-                    player.transform.localPosition = Vector3.zero;
                     player.transform.localRotation = Quaternion.Euler(new Vector3(0, 180, 0));
                 }
                 else
@@ -178,12 +172,12 @@ namespace KSU
                             }
                             break;
                     }
-                    player.GetComponent<Rigidbody>().velocity = Vector3.zero;
-                    player.transform.localPosition = Vector3.zero;
                     player.transform.localRotation = Quaternion.Euler(new Vector3(0, 0, 0));
                 }
             }
-            
+            player.GetComponent<Rigidbody>().velocity = Vector3.zero;
+            player.transform.localPosition = Vector3.zero;
+
             switch (player.tag)
             {
                 case "Nella":
@@ -204,7 +198,6 @@ namespace KSU
             if (track.m_Waypoints.Length > 0)
             {
                 int startIndex = int.Parse(startObj.name);
-                //Debug.Log("startIndex: " + startIndex);
                 GameObject cart = null;
                 player.GetComponent<PlayerController>().characterState.isRiding = true;
                 switch (player.tag)
@@ -219,15 +212,11 @@ namespace KSU
                         break;
                 }
                 float totalLength = Vector3.Distance(track.m_Waypoints[startIndex].position, track.m_Waypoints[startIndex + 1].position);
-                //Debug.Log("totalLength: " + totalLength);
                 float startLength = Vector3.Distance(track.m_Waypoints[startIndex].position + offset, startPos);
-                //Debug.Log("startLength: " + startLength);
                 float rate = startLength / totalLength;
 
                 Cinemachine.CinemachineDollyCart cartSetUp = cart.GetComponent<Cinemachine.CinemachineDollyCart>();
                 cartSetUp.m_Position = startIndex + rate;
-               // Debug.Log("cartSetUp.m_Position: " + cartSetUp.m_Position);
-
 
                 return cartSetUp;
             }

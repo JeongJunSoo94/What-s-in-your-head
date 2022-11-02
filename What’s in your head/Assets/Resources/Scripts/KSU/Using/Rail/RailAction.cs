@@ -15,7 +15,7 @@ namespace KSU
         Rigidbody playerRigidbody;
         PlayerController playerController;
         PlayerState playerState;
-        PlayerInteractionState interactionState;
+        public PlayerInteractionState interactionState;
         Animator animator;
 
         public Camera mainCamera;
@@ -25,6 +25,7 @@ namespace KSU
         [SerializeField] LayerMask layerFilterForRail;
         [SerializeField] LayerMask layerForRail;
 
+        float escapingRailDelayTime = 0.7f;
         public GameObject currentRail;
         public GameObject railStartObject;
         Vector3 railStartPosiotion = Vector3.zero;
@@ -126,7 +127,7 @@ namespace KSU
         {
             if (interactionState.railTriggerDetectionNum > 0)
             {
-                if (!interactionState.isRailTriggered)
+                if (!interactionState.isRailTriggered && !interactionState.isMoveFromRail)
                 {
                     if (playerState.aim)
                     {
@@ -375,6 +376,7 @@ namespace KSU
                 animator.SetBool("isRidingRail", true);
                 interactionState.isMovingToRail = false;
                 interactionState.isRidingRail = true;
+                playerRigidbody.velocity = Vector3.zero;
                 railStartObject.transform.parent.gameObject.GetComponent<Rail>().RideOnRail(railStartPosiotion, railStartObject, this.gameObject);
                 interactionState.isRailTriggered = false;
                 return;
@@ -396,9 +398,19 @@ namespace KSU
         {
             if(currentRail != null)
             {
+                StopCoroutine(nameof(DelayEscape));
+                StartCoroutine(nameof(DelayEscape));
                 currentRail.GetComponent<Rail>().EscapeRail(this.gameObject, false);
             }
         }
+
+        IEnumerator DelayEscape()
+        {
+            interactionState.isMoveFromRail = true;
+            yield return new WaitForSeconds(escapingRailDelayTime);
+            interactionState.isMoveFromRail = false;
+        }
+
         public void SetBoolEscapeRail()
         {
             animator.SetBool("isMoveToRail", false);
@@ -433,27 +445,27 @@ namespace KSU
 
         public void JumpOnRail()
         {
-            Vector3 localPos = transform.localPosition;
+            float localPosY = transform.localPosition.y;
 
             if(interactionState.isRailJumpingUp)
             {
-                localPos.y += railJumpSpeed * Time.fixedDeltaTime;
-                if (localPos.y > railJumpHeight)
+                localPosY += railJumpSpeed * Time.fixedDeltaTime;
+                if (localPosY > railJumpHeight)
                 {
                     interactionState.isRailJumpingUp = false;
                 }
             }
             else
             {
-                localPos.y -= railJumpSpeed * Time.fixedDeltaTime;
-                if (localPos.y < departingRailOffset)
+                localPosY -= railJumpSpeed * Time.fixedDeltaTime;
+                if (localPosY < departingRailOffset)
                 {
-                    localPos.y = 0;
+                    localPosY = 0;
                     interactionState.isRailJumping = false;
                 }
             }
 
-            transform.localPosition = localPos;
+            transform.localPosition = Vector3.up * localPosY;
         }
 
         void SendInfoUI()

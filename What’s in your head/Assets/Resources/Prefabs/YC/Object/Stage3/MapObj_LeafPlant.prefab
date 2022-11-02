@@ -843,7 +843,6 @@ GameObject:
   - component: {fileID: 6168626102713073873}
   - component: {fileID: 5913760384084586054}
   - component: {fileID: 8339824717891918473}
-  - component: {fileID: 8339824717891918474}
   - component: {fileID: 6832115036360153704}
   - component: {fileID: 6832115036360153705}
   m_Layer: 3
@@ -912,35 +911,10 @@ MonoBehaviour:
   Synchronization: 3
   OwnershipTransfer: 0
   observableSearch: 2
-  ObservedComponents:
-  - {fileID: 8339824717891918474}
+  ObservedComponents: []
   sceneViewId: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0
---- !u!114 &8339824717891918474
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6832115036360153707}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9b8c4a61274f60b4ea5fb4299cfdbf14, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  ShowLayerWeightsInspector: 1
-  ShowParameterInspector: 1
-  m_SynchronizeParameters:
-  - Type: 4
-    SynchronizeType: 2
-    Name: isGrow
-  - Type: 4
-    SynchronizeType: 2
-    Name: isLess
-  m_SynchronizeLayers:
-  - SynchronizeType: 2
-    LayerIndex: 0
 --- !u!54 &6832115036360153704
 Rigidbody:
   m_ObjectHideFlags: 0

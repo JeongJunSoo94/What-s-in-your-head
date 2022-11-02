@@ -45,7 +45,7 @@ namespace YC_OBJ
         public float curTime { get; private set; } = 0; // 현재 시간 게이지
         bool isCurHit = false;
         int curHitCount = 0;
-        float delayTime = 0.3f; // 총알을 현재 맞고 있는지를 몇 초 전과 비교할 것인지 (총알 발사 속도와 연관)
+        float delayTime = 0.2f; // 총알을 현재 맞고 있는지를 몇 초 전과 비교할 것인지 (총알 발사 속도와 연관)
 
         string interactionObjTag = "NellaWater";
 
@@ -86,23 +86,15 @@ namespace YC_OBJ
 
                 if (curPureTime > maxPureTime)
                 {
-
                     if (pv.IsMine)
                     {
-                        animator.SetBool("isCreate", true);
-                        animator.SetBool("isDestroy", false);
-                        animator2.SetBool("isCreate", true);
-                        animator2.SetBool("isDestroy", false);
-
                         pv.RPC(nameof(SetState_RPC), RpcTarget.AllViaServer, false);
                     }
                 }
             }
             else
             {
-
                 SetCurTime();
-
             }
         }
 
@@ -114,14 +106,19 @@ namespace YC_OBJ
 
             if (pure) // 오염 -> 정화
             {
-                
+                animator.SetBool("isDestroy", true);
+                animator.SetBool("isCreate", false);
+                animator2.SetBool("isDestroy", true);
+                animator2.SetBool("isCreate", false);
                 curTime = 0;              
             }
             else // 정화 -> 오염
             {
-                
+                animator.SetBool("isCreate", true);
+                animator.SetBool("isDestroy", false);
+                animator2.SetBool("isCreate", true);
+                animator2.SetBool("isDestroy", false);
                 curPureTime = 0;
-             
             }
         }
    
@@ -134,16 +131,10 @@ namespace YC_OBJ
                 if (curTime > maxTime)
                 {
                     if (pv.IsMine)
-                    {
-                        animator.SetBool("isDestroy", true);
-                        animator.SetBool("isCreate", false);
-                        animator2.SetBool("isDestroy", true);
-                        animator2.SetBool("isCreate", false);
-
+                    {                     
                         pv.RPC(nameof(SetState_RPC), RpcTarget.AllViaServer, true);
                     }
                 }
-
             }
             else
             {

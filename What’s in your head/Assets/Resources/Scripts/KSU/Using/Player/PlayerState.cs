@@ -271,6 +271,7 @@ public class PlayerState : MonoBehaviour
         {
             // 점프 쿨타임이 돌아가기 시작, Jumping상태 true
             IsJumping = true;
+            StopCoroutine(nameof(JumpCool));
             StartCoroutine(nameof(JumpCool));
         }
     }
@@ -281,6 +282,7 @@ public class PlayerState : MonoBehaviour
         {
             // 점프 쿨타임이 돌아가기 시작, AirJumping상태 true
             IsAirJumping = true;
+            StopCoroutine(nameof(JumpCool));
             StartCoroutine(nameof(JumpCool));
         }
     }

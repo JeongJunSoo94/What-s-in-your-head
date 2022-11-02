@@ -1,11 +1,9 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using UnityEngine.EventSystems;
 
 namespace JCW.UI.Options
-{    
+{
     public class SelectFunc : FontColorShift
     {
         protected enum FuncChild { Name, Left, Func, Right };
@@ -32,8 +30,6 @@ namespace JCW.UI.Options
 
         // 버튼의 현재 위치
         private int index = 0;
-
-        int curValue = 0;
 
         private Image hoveringImg;
 

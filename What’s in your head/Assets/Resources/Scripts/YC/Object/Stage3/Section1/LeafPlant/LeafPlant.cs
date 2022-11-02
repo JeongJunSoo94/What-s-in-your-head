@@ -46,7 +46,7 @@ namespace YC_OBJ
         public float curTime { get; private set; } = 0; // 현재 시간 게이지
         bool isCurHit = false;
         int curHitCount = 0;
-        float delayTime = 0.3f; // 총알을 현재 맞고 있는지를 몇 초 전과 비교할 것인지 (총알 발사 속도와 연관)
+        float delayTime = 0.2f; // 총알을 현재 맞고 있는지를 몇 초 전과 비교할 것인지 (총알 발사 속도와 연관)
 
 
         string interactionObjTag = "NellaWater";
@@ -89,9 +89,9 @@ namespace YC_OBJ
                 {                   
                     if (pv.IsMine)
                     {
-                        animator.SetBool("isLess", true);
-                        animator.SetBool("isGrow", false);
-                        indicator.gameObject.SetActive(true);
+                        //animator.SetBool("isLess", true);
+                        //animator.SetBool("isGrow", false);
+                        //indicator.gameObject.SetActive(true);
                         pv.RPC(nameof(SetLess_RPC), RpcTarget.AllViaServer);
                     }
                 }
@@ -184,9 +184,9 @@ namespace YC_OBJ
                 {                  
                     if (pv.IsMine)
                     {
-                        animator.SetBool("isGrow", true);
-                        animator.SetBool("isLess", false);
-                        indicator.gameObject.SetActive(false);
+                        //animator.SetBool("isGrow", true);
+                        //animator.SetBool("isLess", false);
+                        //indicator.gameObject.SetActive(false);
                         pv.RPC(nameof(SetGrow_RPC), RpcTarget.AllViaServer);
                     }
                 }
@@ -220,6 +220,11 @@ namespace YC_OBJ
         [PunRPC]
         public void SetGrow_RPC()
         {
+
+            animator.SetBool("isGrow", true);
+            animator.SetBool("isLess", false);
+            indicator.gameObject.SetActive(false);
+
             curTime = maxTime;
             isGrowed = true;
             curTime = 0;
@@ -228,6 +233,10 @@ namespace YC_OBJ
         [PunRPC]
         public void SetLess_RPC()
         {
+            animator.SetBool("isLess", true);
+            animator.SetBool("isGrow", false);
+            indicator.gameObject.SetActive(true);
+
             isGrowed = false;
             growTime = 0;
         }

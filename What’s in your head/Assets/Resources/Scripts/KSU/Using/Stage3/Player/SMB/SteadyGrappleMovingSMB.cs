@@ -13,7 +13,7 @@ namespace JJS
         {
             isMovingToTarget = false;
             animator.SetBool("Aim", false);
-            //GetPlayerController(animator).characterState.aim = false;
+            GetPlayerController(animator).characterState.aim = false;
         }
 
         // OnStateUpdate is called on each Update frame between OnStateEnter and OnStateExit callbacks

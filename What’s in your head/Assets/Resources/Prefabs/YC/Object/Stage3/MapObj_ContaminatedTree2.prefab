@@ -224,7 +224,6 @@ GameObject:
   - component: {fileID: 5258156244018867854}
   - component: {fileID: 5258156244018867853}
   - component: {fileID: 5258156244018867843}
-  - component: {fileID: 5258156244018867852}
   m_Layer: 3
   m_Name: MapObj_ContaminatedTree2
   m_TagString: Untagged
@@ -321,35 +320,10 @@ MonoBehaviour:
   Synchronization: 3
   OwnershipTransfer: 0
   observableSearch: 2
-  ObservedComponents:
-  - {fileID: 5258156244018867852}
+  ObservedComponents: []
   sceneViewId: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0
---- !u!114 &5258156244018867852
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5258156244018867855}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9b8c4a61274f60b4ea5fb4299cfdbf14, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  ShowLayerWeightsInspector: 1
-  ShowParameterInspector: 1
-  m_SynchronizeParameters:
-  - Type: 4
-    SynchronizeType: 2
-    Name: isDestroy
-  - Type: 4
-    SynchronizeType: 2
-    Name: isCreate
-  m_SynchronizeLayers:
-  - SynchronizeType: 2
-    LayerIndex: 0
 --- !u!1 &5298505553113869728
 GameObject:
   m_ObjectHideFlags: 0
@@ -873,7 +847,6 @@ GameObject:
   - component: {fileID: 7215955933155890084}
   - component: {fileID: 7215955933155890137}
   - component: {fileID: 7215955933155890138}
-  - component: {fileID: 7215955933155890139}
   m_Layer: 3
   m_Name: corrupt_bottom
   m_TagString: Untagged
@@ -935,32 +908,7 @@ MonoBehaviour:
   Synchronization: 3
   OwnershipTransfer: 0
   observableSearch: 2
-  ObservedComponents:
-  - {fileID: 7215955933155890139}
+  ObservedComponents: []
   sceneViewId: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0
---- !u!114 &7215955933155890139
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7215955933155890085}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9b8c4a61274f60b4ea5fb4299cfdbf14, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  ShowLayerWeightsInspector: 1
-  ShowParameterInspector: 1
-  m_SynchronizeParameters:
-  - Type: 4
-    SynchronizeType: 2
-    Name: isDestroy
-  - Type: 4
-    SynchronizeType: 2
-    Name: isCreate
-  m_SynchronizeLayers:
-  - SynchronizeType: 2
-    LayerIndex: 0
