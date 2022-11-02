@@ -3,18 +3,22 @@ using System.Collections.Generic;
 using UnityEngine;
 using JCW.UI.Options.InputBindings;
 using JJS.CharacterSMB;
+using KSU;
 
-namespace JJS
+namespace KSU.FSM
 {
-    public class SteadyShootingGrappleSMB : CharacterBaseSMB
+    public class SteadyShootingGrappleSMB : SteadyGrappleSMB
     {
-        bool isSuceededInHit = false;
+        bool isSuceededInGrapple = false;
+        bool isSuceededInGrab = false;
         bool isFired = false;
         override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
         {
+            GetPlayerController(animator).playerMouse.ik.enabled = false;
             animator.SetLayerWeight(1, 1);
             animator.SetBool("Aim", false);
-            isSuceededInHit = false;
+            isSuceededInGrapple = false;
+            isSuceededInGrab = false;
             isFired = false;
         }
 
@@ -45,28 +49,34 @@ namespace JJS
 
         void check(Animator animator)
         {
-            isSuceededInHit = GetPlayerController(animator).playerMouse.GetCustomInfo();
+            isSuceededInGrapple = GetPlayerController(animator).playerMouse.GetCustomInfo(GrappleTargetType.GrappledObject);
+            isSuceededInGrab = GetPlayerController(animator).playerMouse.GetCustomInfo(GrappleTargetType.Monster);
             //animator.SetBool("isGrappleMoving", GetPlayerController(animator).playerMouse.GetCustomInfo());
             if (!isFired)
             {
                 if (!GetPlayerController(animator).playerMouse.weaponInfo[0].weapon.transform.GetChild(0).gameObject.activeSelf)
                 {
-                    Debug.Log("이벤트 잘됌");
                     isFired = true;
                 }
             }
             else
             {
-                if(isSuceededInHit)
+                if(isSuceededInGrapple)
                 {
                     animator.SetBool("isShootingGrapple", false);
                     animator.SetBool("isGrappleMoving", true);
                 }
+                else if (isSuceededInGrab)
+                {
+                    animator.SetBool("isShootingGrapple", false);
+                    animator.SetBool("isGrabMonster", true);
+                }
                 else if(GetPlayerController(animator).playerMouse.weaponInfo[0].weapon.transform.GetChild(0).gameObject.activeSelf)
                 {
-                    Debug.Log("안켜짐");
                     animator.SetBool("isShootingGrapple", false);
                     animator.SetBool("isGrappleMoving", false);
+                    animator.SetBool("isGrabMonster", false);
+                    GetPlayerController(animator).playerMouse.ik.enabled = true;
                 }
             }
         }

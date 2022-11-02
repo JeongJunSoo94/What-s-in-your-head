@@ -9,6 +9,7 @@ namespace KSU
         public bool isGrappledObjectFounded = false;
         public bool isSucceededInGrappling = false;
         public bool isGrappling = false;
+        public bool isGrabMonster = false;
 
         // Start is called before the first frame update
         void Start()

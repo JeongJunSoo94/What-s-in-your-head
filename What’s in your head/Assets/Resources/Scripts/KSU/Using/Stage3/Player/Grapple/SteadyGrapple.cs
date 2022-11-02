@@ -1,3 +1,4 @@
+using KSU.Monster;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -111,15 +112,24 @@ namespace KSU
             }
             if (this.gameObject.activeSelf)
             {
-                player.RecieveGrappleInfo(false, null);
+                player.RecieveGrappleInfo(false, null, GrappleTargetType.Null);
             }
             this.gameObject.SetActive(false);
+        }
+
+        IEnumerator DelayGrabMonster(DefenseMonster monster)
+        {
+            monster.GetStun();
+            yield return new WaitForSeconds(monster.stunTime);
+            monster.EndStun();
+            gameObject.SetActive(false);
         }
 
         private void OnTriggerEnter(Collider other)
         {
             // 이거 불렛처럼 트리거로 콜라이더 해야하고 그래플드 오브젝트의 디텍팅 트리거 태그는 그래플드 오브젝트와 구분해줘야함
-
+            if (isSucceeded)
+                return;
             if((other.gameObject.layer != LayerMask.NameToLayer("UITriggers")) && (other.gameObject.layer != LayerMask.NameToLayer("Player")) && (other.gameObject.layer != LayerMask.NameToLayer("Bullet")))
             {
                 //if(other.CompareTag("GrappledObject"))
@@ -139,7 +149,7 @@ namespace KSU
                 {
                     case "GrappledObject":
                         {
-                            player.RecieveGrappleInfo(true, other.gameObject);
+                            player.RecieveGrappleInfo(true, other.gameObject, GrappleTargetType.GrappledObject);
                             isSucceeded = true;
                             grappleRigidbody.velocity = Vector3.zero;
                             //StopCoroutine(nameof(DelayDeactivation));///////////////// 이거 왜해놨더라
@@ -147,23 +157,25 @@ namespace KSU
                         break;
                     case "PoisonSnake":
                         {
-                            player.RecieveGrappleInfo(true, other.gameObject);
+                            player.RecieveGrappleInfo(true, other.gameObject, GrappleTargetType.Monster);
                             isSucceeded = true;
                             grappleRigidbody.velocity = Vector3.zero;
+                            StartCoroutine(nameof(DelayGrabMonster), other.GetComponent<DefenseMonster>());
                             //StopCoroutine(nameof(DelayDeactivation));
                         }
                         break;
                     case "TrippleHeadSnake":
                         {
-                            player.RecieveGrappleInfo(true, other.gameObject);
+                            player.RecieveGrappleInfo(true, other.gameObject, GrappleTargetType.Monster);
                             isSucceeded = true;
                             grappleRigidbody.velocity = Vector3.zero;
+                            StartCoroutine(nameof(DelayGrabMonster), other.GetComponent<DefenseMonster>());
                             //StopCoroutine(nameof(DelayDeactivation));
                         }
                         break;
                     default:
                         {
-                            player.RecieveGrappleInfo(false, null);
+                            player.RecieveGrappleInfo(false, null, GrappleTargetType.Null);
                             this.gameObject.SetActive(false);
                         }
                         break;

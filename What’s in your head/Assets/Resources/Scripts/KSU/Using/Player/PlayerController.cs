@@ -254,7 +254,7 @@ namespace KSU
 
         public void InputMove()
         {
-            if (characterState.isOutOfControl || characterState.isStopped)
+            if (characterState.isOutOfControl || characterState.isStopped || characterState.isRiding)
                 return;
             moveDir =
               mainCamera.transform.forward * ((KeyManager.Instance.GetKey(PlayerAction.MoveForward) ? 1 : 0) + (KeyManager.Instance.GetKey(PlayerAction.MoveBackward) ? -1 : 0))
@@ -273,11 +273,12 @@ namespace KSU
         public void MoveStop()
         {
             moveDir = Vector3.zero;
+            playerRigidbody.velocity = Vector3.zero;
         }
 
         public void AimViewInputMove()
         {
-            if (characterState.isOutOfControl || characterState.isStopped)
+            if (characterState.isOutOfControl || characterState.isStopped || characterState.isRiding)
                 return;
             moveDir.z = ((KeyManager.Instance.GetKey(PlayerAction.MoveForward) ? 1 : 0) + (KeyManager.Instance.GetKey(PlayerAction.MoveBackward) ? -1 : 0));
             moveDir.x = ((KeyManager.Instance.GetKey(PlayerAction.MoveRight) ? 1 : 0) + (KeyManager.Instance.GetKey(PlayerAction.MoveLeft) ? -1 : 0));
@@ -285,7 +286,7 @@ namespace KSU
 
         public void InputJump()
         {
-            if (characterState.isOutOfControl || characterState.isStopped)
+            if (characterState.isOutOfControl || characterState.isStopped || characterState.isRiding)
                 return;
             if (KeyManager.Instance.GetKeyDown(PlayerAction.Jump))
             {
@@ -327,7 +328,7 @@ namespace KSU
         }
         public void InputDash()
         {
-            if (characterState.isOutOfControl || characterState.isStopped)
+            if (characterState.isOutOfControl || characterState.isStopped || characterState.isRiding)
                 return;
             if (KeyManager.Instance.GetKeyDown(PlayerAction.Dash))
             {

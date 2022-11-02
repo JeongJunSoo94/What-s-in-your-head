@@ -26,7 +26,7 @@ namespace JJS
                 case "PoisonSnake":
                 case "TrippleHeadSnake":
                     {
-                        other.gameObject.GetComponent<DefenseMonster>().GetDamage(10);
+                        other.gameObject.GetComponent<DefenseMonster>().GetDamage(30);
                     }
                     break;
             }

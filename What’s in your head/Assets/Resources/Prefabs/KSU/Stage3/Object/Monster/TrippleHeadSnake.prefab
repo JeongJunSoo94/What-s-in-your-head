@@ -28,7 +28,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7884222142170559979}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 49.3, y: 0, z: 49.66}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -50,7 +50,7 @@ NavMeshAgent:
   m_GameObject: {fileID: 7884222142170559979}
   m_Enabled: 1
   m_AgentTypeID: 0
-  m_Radius: 1.2
+  m_Radius: 1.4
   m_Speed: 3.5
   m_Acceleration: 8
   avoidancePriority: 50
@@ -60,7 +60,7 @@ NavMeshAgent:
   m_AutoBraking: 1
   m_AutoRepath: 1
   m_Height: 2
-  m_BaseOffset: 0
+  m_BaseOffset: 1
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
 --- !u!136 &7884222142170559990
@@ -74,9 +74,9 @@ CapsuleCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   m_Radius: 1.2
-  m_Height: 4
+  m_Height: 3
   m_Direction: 1
-  m_Center: {x: 0, y: 1.6, z: 0}
+  m_Center: {x: 0, y: 0.7, z: 0}
 --- !u!95 &7884222142170559989
 Animator:
   serializedVersion: 4
@@ -210,16 +210,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxHP: 60
   currentHP: 0
-  attackRange: 1
+  attackRange: 1.5
   attackDamage: 0
   chaseLayerFiter:
     serializedVersion: 2
     m_Bits: 72
   targetObject: {fileID: 0}
   detectingRange: 10
-  detectingUIRange: 15
+  detectingUIRange: 30
   moveSpeed: 2.5
-  sturnTime: 0
+  stunTime: 4
   ropeRadius: 1
   ropeVertexes: 50
   isAttackDelayOn: 0
@@ -455,7 +455,7 @@ GameObject:
   - component: {fileID: 7884222142860801187}
   m_Layer: 12
   m_Name: DetectingTrigger
-  m_TagString: Untagged
+  m_TagString: TrippleHeadSnake
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -652,7 +652,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5366632779147167230, guid: fdacaae60b920e24fa18970e6f402660, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: -1
       objectReference: {fileID: 0}
     - target: {fileID: 5366632779147167230, guid: fdacaae60b920e24fa18970e6f402660, type: 3}
       propertyPath: m_LocalPosition.z
@@ -775,7 +775,7 @@ PrefabInstance:
     - target: {fileID: 5582064560307982608, guid: 6ba817f87c030e844ac3b627626672b2, type: 3}
       propertyPath: target
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 7884222142170559976}
     - target: {fileID: 5582064560307982608, guid: 6ba817f87c030e844ac3b627626672b2, type: 3}
       propertyPath: nella_DetectSprite
       value: 

@@ -21,7 +21,7 @@ namespace KSU.Monster
         public float detectingUIRange;
         public float moveSpeed; //시리얼
         //public float stuckTime; //시리얼
-        public float sturnTime; //시리얼
+        public float stunTime;
         public float ropeRadius = 1f;
         public int ropeVertexes = 50;
 
@@ -30,17 +30,17 @@ namespace KSU.Monster
         protected NavMeshAgent monsterNavAgent;
         protected Animator monsterAnimator;
         protected LineRenderer monsterRope;
+        protected CapsuleCollider monsterCollider;
 
         protected Spawner spawner;
 
         public bool isAttackDelayOn = false;
         public float attackDelayTime = 2f;
-        [SerializeField] GameObject attackTrigger;
-        [SerializeField] GameObject detectingUITrigger;
+        [SerializeField] protected GameObject attackTrigger;
+        [SerializeField] protected GameObject detectingUITrigger;
 
         public bool isTargetFounded = false;
 
-        bool isDefenseMode = false;
 
         // Start is called before the first frame update
         void Awake()
@@ -50,9 +50,9 @@ namespace KSU.Monster
             spawner = GetComponentInParent<Spawner>();
             monsterAnimator = GetComponent<Animator>();
             monsterRope = GetComponent<LineRenderer>();
+            monsterCollider = GetComponent<CapsuleCollider>();
             detectingUITrigger.transform.localScale = Vector3.one * detectingUIRange * 2f;
             InitRope();
-            //isDefenseMode = GameManger 에서 받기
         }
 
         //private void OnDisable()
@@ -72,6 +72,9 @@ namespace KSU.Monster
             monsterAnimator.SetBool("WasStunned", false);
             monsterAnimator.SetBool("isChasing", false);
             monsterAnimator.SetBool("isAttacking", false);
+            monsterNavAgent.enabled = true;
+            monsterCollider.enabled = true;
+            detectingUITrigger.SetActive(true);
         }
 
         void InitRope()
@@ -107,32 +110,36 @@ namespace KSU.Monster
         }
 
 
-        public void GetSturn()
+        public void GetStun()
         {
-            monsterAnimator.SetBool("isSturn", true);
+            monsterAnimator.SetBool("isStunned", true);
         }
-        public void StartSturn()
+        public void StartStun()
         {
-            StartCoroutine(nameof(DelaySturn));
             monsterRope.enabled = true;
             // 스턴 이펙트 켜기
         }
 
-        IEnumerator DelaySturn()
-        {
-            yield return new WaitForSeconds(sturnTime);
-            monsterAnimator.SetBool("isSturn", false);
-        }
-
-        public void EndSturn()
+        public void EndStun()
         {
             monsterRope.enabled = false;
+            monsterAnimator.SetBool("isStunned", false);
+            monsterAnimator.SetBool("WasStunned", false);
             // 스턴 이펙트 끄기
         }
 
-        public void Dead()
+        public virtual void Dead()
         {
             StopAllCoroutines();
+            attackTrigger.SetActive(false);
+            detectingUITrigger.SetActive(false);
+            monsterNavAgent.enabled = false;
+            monsterRope.enabled = false;
+            monsterCollider.enabled = false;
+        }
+
+        public void Disappear()
+        {
             spawner.Despawn(this.gameObject);
         }
 
@@ -148,7 +155,7 @@ namespace KSU.Monster
                     currentTarget = detectedTarget;
                 }
             }
-            else if (isDefenseMode)
+            else if (GameManager.Instance.isTopView)
             {
                 currentTarget = targetObject;
             }
@@ -196,7 +203,7 @@ namespace KSU.Monster
                     }
                 }
             }
-            else if (isDefenseMode)
+            else if (GameManager.Instance.isTopView)
             {
                 detectedTarget = null;
                 monsterAnimator.SetBool("isChasing", true);

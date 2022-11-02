@@ -25339,6 +25339,18 @@ MonoBehaviour:
   - Type: 4
     SynchronizeType: 0
     Name: isKnockBack
+  - Type: 4
+    SynchronizeType: 0
+    Name: isGrabMonster
+  - Type: 4
+    SynchronizeType: 0
+    Name: KnockBackTrigger
+  - Type: 4
+    SynchronizeType: 0
+    Name: DeadTrigger
+  - Type: 4
+    SynchronizeType: 0
+    Name: AttackedTrigger
   m_SynchronizeLayers:
   - SynchronizeType: 2
     LayerIndex: 0
@@ -25630,6 +25642,7 @@ MonoBehaviour:
   isGrappledObjectFounded: 0
   isSucceededInGrappling: 0
   isGrappling: 0
+  isGrabMonster: 0
 --- !u!114 &2953762621103950369
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -25653,7 +25666,7 @@ MonoBehaviour:
   grappleObject: {fileID: 7909980709306676830, guid: c9b54073bf48f804ebee62282b5e85af, type: 3}
   aimUI: {fileID: 8657421885556112005}
   grappleMoveSpeed: 10
-  grappleSpeed: 10
+  grappleSpeed: 30
   grappleDepartOffset: 0.5
   escapeGrapplePower: 10
   rangeRadius: 5

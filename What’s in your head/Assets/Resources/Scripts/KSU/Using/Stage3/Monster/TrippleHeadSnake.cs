@@ -42,7 +42,8 @@ namespace KSU.Monster
             monsterNavAgent.speed = moveSpeed;
             monsterAnimator.SetBool("isAttacked", false);
             monsterAnimator.SetBool("isDead", false);
-            monsterAnimator.SetBool("isSturn", false);
+            monsterAnimator.SetBool("isStunned", false);
+            monsterAnimator.SetBool("WasStunned", false);
             monsterAnimator.SetBool("isChasing", false);
             monsterAnimator.SetBool("isAttacking", false);
             monsterAnimator.SetBool("isReadyToRush", false);
@@ -52,14 +53,16 @@ namespace KSU.Monster
 
         public override void GetDamage(int damage)
         {
-
-            if(monsterAnimator.GetBool("isSturn"))
+            if (!monsterAnimator.GetBool("isAttacked") && !monsterAnimator.GetBool("isDead"))
             {
-                currentHP -= damage;
-                monsterAnimator.SetBool("isAttacked", true);
-                if (currentHP < 0)
+                if (monsterAnimator.GetBool("isStunned"))
                 {
-                    monsterAnimator.SetBool("isDead", true);
+                    currentHP -= damage;
+                    monsterAnimator.SetBool("isAttacked", true);
+                    if (currentHP < 0)
+                    {
+                        monsterAnimator.SetBool("isDead", true);
+                    }
                 }
             }
         }
@@ -136,6 +139,17 @@ namespace KSU.Monster
             monsterNavAgent.enabled = false;
             monsterNavAgent.speed = moveSpeed;
             rushTrigger.SetActive(false);
+        }
+
+        public override void Dead()
+        {
+            StopAllCoroutines();
+            attackTrigger.SetActive(false);// 위 아래 둘다 필요 없을지도 그렇다면 가상함수도 필요 ㄴㄴ
+            rushTrigger.SetActive(false); //
+            detectingUITrigger.SetActive(false);
+            monsterNavAgent.enabled = false;
+            monsterRope.enabled = false;
+            monsterCollider.enabled = false;
         }
 
         private void OnCollisionEnter(Collision collision)

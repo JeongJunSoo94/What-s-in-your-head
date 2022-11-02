@@ -20,7 +20,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1954949541875803145
 Transform:
   m_ObjectHideFlags: 0
@@ -28,7 +28,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1954949541875803146}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 1.62, y: 0, z: 49.66}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -50,10 +50,10 @@ CapsuleCollider:
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 1
-  m_Radius: 0.5
-  m_Height: 1
+  m_Radius: 1
+  m_Height: 2.8
   m_Direction: 1
-  m_Center: {x: 0, y: 0.5, z: 0}
+  m_Center: {x: 0, y: 0.4, z: 0}
 --- !u!195 &1954949541875803151
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -73,7 +73,7 @@ NavMeshAgent:
   m_AutoBraking: 1
   m_AutoRepath: 1
   m_Height: 2
-  m_BaseOffset: 0
+  m_BaseOffset: 1
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
 --- !u!95 &1954949541875803149
@@ -218,9 +218,9 @@ MonoBehaviour:
     m_Bits: 72
   targetObject: {fileID: 0}
   detectingRange: 10
-  detectingUIRange: 15
+  detectingUIRange: 30
   moveSpeed: 3
-  sturnTime: 0
+  stunTime: 4
   ropeRadius: 1
   ropeVertexes: 20
   isAttackDelayOn: 0
@@ -339,7 +339,7 @@ GameObject:
   - component: {fileID: 1954949542200541772}
   m_Layer: 12
   m_Name: DetectingTrigger
-  m_TagString: Untagged
+  m_TagString: PoisonSnake
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -496,7 +496,7 @@ PrefabInstance:
     - target: {fileID: 5582064560307982608, guid: 6ba817f87c030e844ac3b627626672b2, type: 3}
       propertyPath: target
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 1954949541875803145}
     - target: {fileID: 5582064560307982608, guid: 6ba817f87c030e844ac3b627626672b2, type: 3}
       propertyPath: nella_DetectSprite
       value: 
@@ -553,7 +553,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 499360, guid: d80d4b6f7248c7249b08fd77553a3206, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: -1
       objectReference: {fileID: 0}
     - target: {fileID: 499360, guid: d80d4b6f7248c7249b08fd77553a3206, type: 3}
       propertyPath: m_LocalPosition.z

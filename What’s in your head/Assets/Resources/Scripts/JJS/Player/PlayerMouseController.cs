@@ -175,7 +175,7 @@ namespace JJS
         }
 
 
-        public virtual bool GetCustomInfo()
+        public virtual bool GetCustomInfo(GrappleTargetType grappleTargetType)
         {
             return false;
         }

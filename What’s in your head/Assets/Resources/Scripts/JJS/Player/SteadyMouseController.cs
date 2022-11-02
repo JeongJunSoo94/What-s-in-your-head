@@ -51,7 +51,8 @@ namespace JJS
                             && !player.characterState.IsAirJumping
                             && !player.characterState.IsDashing
                             && !player.characterState.IsAirDashing
-                            && !GetComponent<SteadyInteractionState>().isGrappling)
+                            && !GetComponent<SteadyInteractionState>().isGrappling
+                            && !GetComponent<SteadyInteractionState>().isGrabMonster)
                         {
                             if (!clickRight)
                             {
@@ -102,9 +103,9 @@ namespace JJS
             glass.HitLine(type);
         }
 
-        public override bool GetCustomInfo()
+        public override bool GetCustomInfo(GrappleTargetType grappleTargetType)
         {
-            return grapple.GetWhetherHit();
+            return grapple.GetWhetherHit(grappleTargetType);
         }
 
        
