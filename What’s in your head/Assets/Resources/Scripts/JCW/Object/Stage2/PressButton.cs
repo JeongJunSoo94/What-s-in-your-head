@@ -6,6 +6,7 @@ using UnityEngine;
 
 namespace JCW.Object
 {
+    [RequireComponent(typeof(AudioSource))]
     public class PressButton : MonoBehaviour
     {
         [Header("버튼 들어가는 속도")] [SerializeField] float pressedSpeed = 5f;
@@ -23,11 +24,15 @@ namespace JCW.Object
 
         int curPressCount = 0;
 
+        AudioSource audioSource;
+
         private void Awake()
         {
             anim = transform.parent.parent.parent.GetComponent<Animator>();
             meshRenderer = transform.parent.GetChild(1).GetComponent<MeshRenderer>();
             meshRenderer.material = normalMat;
+            audioSource = GetComponent<AudioSource>();
+            AudioCtrl.AudioSettings.SetAudio(audioSource, 1f, 50f);
         }
 
         void Update()
@@ -38,7 +43,7 @@ namespace JCW.Object
                 {
                     if (!isMatChanged)
                     {
-                        SoundManager.Instance.PlayEffect_RPC("ButtonTurnOn");
+                        SoundManager.Instance.Play3D_RPC("ButtonTurnOn", audioSource);
                         meshRenderer.material = activeMat;
                         isMatChanged = true;
                     }

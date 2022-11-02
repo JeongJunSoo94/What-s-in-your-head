@@ -92,24 +92,17 @@ namespace JCW.Object
         [PunRPC]
         void SpawnFirst()
         {
-            transform.GetChild(firstSpawnPlace[0] - 1).gameObject.SetActive(false);
-            transform.GetChild(firstSpawnPlace[0]).gameObject.SetActive(true);
-            transform.GetChild(firstSpawnPlace[0]).gameObject.SendMessage("SetStart", firstSpawnPlace[0]);
+            transform.GetChild(firstSpawnPlace[0]).GetComponent<HostField>().SetStart(firstSpawnPlace[0]);
 
-            transform.GetChild(firstSpawnPlace[1] - 1).gameObject.SetActive(false);
-            transform.GetChild(firstSpawnPlace[1]).gameObject.SetActive(true);
-            transform.GetChild(firstSpawnPlace[1]).gameObject.SendMessage("SetStart", firstSpawnPlace[1]);
+            transform.GetChild(firstSpawnPlace[1]).GetComponent<HostField>().SetStart(firstSpawnPlace[1]);
 
             firstSpawnPlace.RemoveRange(0, 2);
-            //++curPhase;
         }
 
         [PunRPC]
         void SpawnSecond()
         {
-            transform.GetChild(firstSpawnPlace[0] - 1).gameObject.SetActive(false);
-            transform.GetChild(firstSpawnPlace[0]).gameObject.SetActive(true);
-            transform.GetChild(firstSpawnPlace[0]).gameObject.SendMessage("SetStart", firstSpawnPlace[0]);
+            transform.GetChild(firstSpawnPlace[0]).GetComponent<HostField>().SetStart(firstSpawnPlace[0]);
             firstSpawnPlace.Clear();
 
             ++curPhase;
@@ -136,15 +129,14 @@ namespace JCW.Object
         void SetPurifiedRPC(int myIndex)
         {
             Debug.Log("정화시킬 인덱스 : " + myIndex);
-            transform.GetChild(myIndex).gameObject.GetComponent<HostField>().enabled = false;
-            transform.GetChild(myIndex).gameObject.SetActive(false);
-            transform.GetChild(myIndex - 1).gameObject.SetActive(true);
+            transform.GetChild(myIndex).GetComponent<HostField>().Purified();
         }
 
         IEnumerator WarnInfection(List<int> indexs)
         {
             float curTime = 0f;
             GameObject nextTargetBeforeObj = transform.GetChild(indexs[0] + indexs[1] -1).gameObject;
+            GameObject nextTargetBeforeObj_ready = nextTargetBeforeObj.transform.GetChild(0).gameObject;
             GameObject nextTargetAfterObj = transform.GetChild(indexs[0] + indexs[1]).gameObject;
 
             HostField nextHostField = nextTargetAfterObj.GetComponent<HostField>();
@@ -152,23 +144,22 @@ namespace JCW.Object
             if (nextHostField.isPurified)
                 yield break;
 
-            Color color1 = new(1f,1f,1f,1f);
-            Color color2 = new(1f,0.7f,0.7f,1f);
-            bool isChange = false;
-            Material mat = nextTargetBeforeObj.GetComponent<MeshRenderer>().material;
+            bool isStart = false;
             while (curTime<infectTime)
             {
-                // 내가 이미 정화되었으면 감염 더 이상 안시킴
-                // 이미 오염된 적 있으면 감염 안시킴
+                // 다음 타겟이 이미 오염되어 있거나, 내가 이미 정화되어있으면 감염 더 이상 안 시킴.
                 if (!transform.GetChild(indexs[0]).gameObject.activeSelf
                     || !nextTargetBeforeObj.gameObject.activeSelf)
-                {                    
-                    mat.color = color1;
-                    yield break;
+                {
+                    nextTargetBeforeObj_ready.SetActive(false);
+                    break;
                 }
                 curTime+= flickTime / 2f;
-                mat.color = isChange ? color1 : color2;
-                isChange = !isChange;
+                if(!isStart)
+                {
+                    isStart = true;
+                    nextTargetBeforeObj_ready.SetActive(true);
+                }
                 SoundManager.Instance.Play3D_RPC("ContaminationFieldWarn", audioSource);
                 yield return new WaitForSeconds(0.5f);
             }
@@ -179,11 +170,11 @@ namespace JCW.Object
                 nextTargetAfterObj.SetActive(true);
                 nextHostField.SetIndex(indexs[0] + indexs[1]);
                 nextHostField.DeleteHost(indexs[0]);
+            }
 
-
-                // 기존 필드 꺼주기
-                nextTargetBeforeObj.gameObject.SetActive(false);
-            }            
+            nextTargetBeforeObj_ready.SetActive(false);
+            indexs.Clear();
+            yield break;
         }
     }
 }

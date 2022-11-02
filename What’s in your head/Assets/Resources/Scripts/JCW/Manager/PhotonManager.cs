@@ -5,6 +5,7 @@ using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using Photon.Pun;
 using Photon.Realtime;
+using JCW.UI;
 
 // MonoBehaviourPun : Callback 함수 같은것들을 오버라이드 할 수 없음
 namespace JCW.Network
@@ -14,7 +15,7 @@ namespace JCW.Network
     {
         [Header("ID 길이")] [SerializeField] [Range(1,8)] private uint LengthID = 6;
         [Header("친구와 만났을 때 열릴 UI")] [SerializeField] private GameObject readyUI = null;      
-        [Header("초대장")]   [SerializeField] private GameObject InvitationUI;
+        [Header("초대장")]   [SerializeField] private Invitation InvitationUI;
         [Header("해상도")]   [SerializeField] private int width = 1920;
                             [SerializeField] private int height = 1080;
                             [SerializeField] private bool isFullScreen = true;
@@ -113,7 +114,7 @@ namespace JCW.Network
             //StartCoroutine(nameof(MakeChar));
         }
         public void ChangeStage()
-        {
+        {            
             PhotonNetwork.LoadLevel(++GameManager.Instance.curStageIndex);
             if (GameManager.Instance.curStageIndex == 1)
                 StartCoroutine(nameof(MakeChar));
@@ -121,18 +122,10 @@ namespace JCW.Network
             //myPhotonView.RPC(nameof(ChangeStageRPC), RpcTarget.AllViaServer);
         }
 
-        [PunRPC]
-        public void ChangeStageRPC()
-        {
-            PhotonNetwork.LoadLevel(++GameManager.Instance.curStageIndex);
-            if (GameManager.Instance.curStageIndex == 1)
-                StartCoroutine(nameof(MakeChar));
-        }
-
         // 친구 검색창에서 돋보기 버튼 누르면 작동
         public void TryMakeRoom(string friendName)
         {
-            photonView.RPC("GetInvitation", RpcTarget.Others, friendName, PhotonNetwork.LocalPlayer.NickName);
+            photonView.RPC(nameof(GetInvitation), RpcTarget.Others, friendName, PhotonNetwork.LocalPlayer.NickName);
         }
 
 
@@ -142,8 +135,8 @@ namespace JCW.Network
         {
             if (inviteeName == PhotonNetwork.LocalPlayer.NickName)
             {
-                InvitationUI.SetActive(true);
-                InvitationUI.SendMessage("SetMasterName", masterName);
+                InvitationUI.gameObject.SetActive(true);
+                InvitationUI.SetMasterName(masterName);
             }
         }
 
@@ -154,9 +147,9 @@ namespace JCW.Network
 
         [PunRPC]
         void MakeRoom(string masterName)
-        {
+        {            
             if (masterName == PhotonNetwork.LocalPlayer.NickName)
-            {
+            {                
                 PhotonNetwork.LeaveRoom();
                 StartCoroutine(nameof(WaitForRoom), masterName);
             }
@@ -185,21 +178,16 @@ namespace JCW.Network
                 Debug.Log("넬라 생성");
                 PhotonNetwork.Instantiate("Prefabs/YC/MainCamera_Nella", new Vector3(0, 0, 0), Quaternion.identity, 0);
                 PhotonNetwork.Instantiate("Prefabs/JJS/NellaMousePoint", new Vector3(-10, 0, -5), Quaternion.identity);
-                //PhotonNetwork.Instantiate("Prefabs/JCW/NellaJCW", new Vector3(-10, 0, -5), Quaternion.identity);
-                PhotonNetwork.Instantiate("Prefabs/JJS/JJS_Nella", new Vector3(-10, 0, -5), Quaternion.identity);
+                PhotonNetwork.Instantiate("Prefabs/JJS/JJS_Nella", new Vector3(-5, 0, 0), Quaternion.identity);
             }
             else
             {
                 Debug.Log("스테디 생성");
                 PhotonNetwork.Instantiate("Prefabs/YC/MainCamera_Steady", new Vector3(0, 0, 0), Quaternion.identity, 0);
                 PhotonNetwork.Instantiate("Prefabs/JJS/SteadyMousePoint", new Vector3(10, 0, -5), Quaternion.identity);
-                //PhotonNetwork.Instantiate("Prefabs/JCW/SteadyJCW", new Vector3(10, 0, -5), Quaternion.identity);
-                PhotonNetwork.Instantiate("Prefabs/JJS/JJS_Steady", new Vector3(-10, 0, -5), Quaternion.identity);
-            }            
-
-            //PhotonNetwork.Instantiate("Prefabs/JCW/SoundManager/SoundManager", Vector3.zero, Quaternion.identity);
-            //PhotonNetwork.Instantiate("Prefabs/JCW/Photon/Player", Vector3.zero, Quaternion.identity);
-            StopCoroutine(nameof(MakeChar));
+                PhotonNetwork.Instantiate("Prefabs/JJS/JJS_Steady", new Vector3(5, 0, 0), Quaternion.identity);
+            }
+            StopAllCoroutines();
         }
     }
 

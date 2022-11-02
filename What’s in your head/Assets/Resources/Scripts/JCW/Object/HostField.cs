@@ -33,27 +33,32 @@ namespace JCW.Object
         int convertIndex;
 
         bool isStart = false;
+        bool isDead = false;
 
         // 오염된 필드 스포너로 하여금 간접 실행
         MakeHostField mediator;
 
         float curHP;
         AudioSource audioSource;
+        Animator animator;
 
         private void Awake()
         {
-            curHP = maxHP;
-            parentObj = transform.parent.gameObject.transform;
-            mediator = transform.parent.gameObject.GetComponent<MakeHostField>();
-            convertIndex = transform.parent.gameObject.GetComponent<ContaminationFieldSetting>().count;
-            nextTargetOffset = new() { 2, -2, 2 * convertIndex, -2 * convertIndex };
+            curHP = maxHP;            
             audioSource = GetComponent<AudioSource>();
             AudioCtrl.AudioSettings.SetAudio(audioSource, 1f, 60f);
             if (!canInfect)
-            {
-                nextTargetOffset.Clear();
+            {                
                 myIndex = transform.GetSiblingIndex();
             }
+            else
+            {
+                parentObj = transform.parent.gameObject.transform;
+                mediator = transform.parent.gameObject.GetComponent<MakeHostField>();
+                convertIndex = transform.parent.gameObject.GetComponent<ContaminationFieldSetting>().count;
+                nextTargetOffset = new() { 2, -2, 2 * convertIndex, -2 * convertIndex };
+            }
+            animator = GetComponent<Animator>();
         }
 
         private void OnEnable()
@@ -136,6 +141,7 @@ namespace JCW.Object
         {
             if (!isPurified)
             {
+                gameObject.SetActive(true);
                 SetIndex(index);
                 isStart = true;
                 audioSource.Play();
@@ -159,11 +165,31 @@ namespace JCW.Object
         {
             curHP -= damage;
             //Debug.Log(curHP);
-            if (curHP <= 0)
+            if (curHP <= 0 && !isDead)
             {
-                SoundManager.Instance.Play3D_RPC("ContaminationFieldPurified", audioSource);
+                isDead = true;
+                animator.Play("Destroy");
                 mediator.SetPurified(myIndex);
             }
+        }
+
+        public void Purified()
+        {
+            if(gameObject.activeSelf)
+                StartCoroutine(nameof(CheckAnimEnd));
+        }
+
+        IEnumerator CheckAnimEnd()
+        {            
+            WaitForSeconds ws = new(0.1f);
+            SoundManager.Instance.Play3D_RPC("ContaminationFieldPurified", audioSource);
+            while (animator.GetCurrentAnimatorStateInfo(0).normalizedTime < 1f)
+            {
+                yield return ws;
+            }            
+            this.enabled = false;
+            this.gameObject.SetActive(false);
+            yield break;
         }
     }
 }
