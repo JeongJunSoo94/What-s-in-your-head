@@ -20,6 +20,23 @@ namespace KSU
         public bool isRailJumping = false;
         public bool isMoveFromRail = false;
 
+        public void InitInteractionState()
+        {
+            isRidingRope = false;
+            isMoveToRope = false;
+            isMoveFromRope = false;
+            isRopeEscapeDelayOn = false;
+
+            railTriggerDetectionNum = 0;
+            isRailFounded = false;
+            isRailTriggered = false;
+            isRidingRail = false;
+            isMovingToRail = false;
+            isRailJumpingUp = false;
+            isRailJumping = false;
+            isMoveFromRail = false;
+        }
+
         public bool GetWhetherHasParent()
         {
             if (transform.parent == null)

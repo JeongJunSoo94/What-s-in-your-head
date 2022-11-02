@@ -37,7 +37,7 @@ namespace KSU
         #region
         [Header("움직임")]
         [Tooltip("현재 이동 속력")]
-        public float moveSpeed = 0f;
+        float moveSpeed = 0f;
         [Tooltip("걷는 속력")]
         public float walkSpeed = 4f;
         [Tooltip("달리는 속력")]
@@ -155,6 +155,55 @@ namespace KSU
             playerRigidbody.velocity = Vector3.zero;
         }
 
+        public void InitAnimatorParam(bool initTop)
+        {
+            playerAnimator.SetBool("isAir", false);
+            playerAnimator.SetBool("isAirDash", false);
+            playerAnimator.SetBool("isAirJump", false);
+            playerAnimator.SetBool("WasAirJump", false);
+            playerAnimator.SetBool("isAttack", false);
+            playerAnimator.SetBool("isAttackNext", false);
+            playerAnimator.SetBool("Aim", false);
+            playerAnimator.SetBool("AimAttack", false);
+            playerAnimator.SetBool("WeaponSwap", false);
+            playerAnimator.SetBool("isMoveToRope", false);
+            playerAnimator.SetBool("isRidingRope", false);
+            playerAnimator.SetBool("isMoveToRail", false);
+            playerAnimator.SetBool("isRidingRail", false);
+            playerAnimator.SetBool("isRailJump", false);
+            playerAnimator.SetBool("isTransferRail", false);
+            playerAnimator.SetBool("isAttacked", false);
+            playerAnimator.SetBool("AttackedTrigger", false);
+            playerAnimator.SetBool("isKnockBack", false);
+            playerAnimator.SetBool("KnockBackTrigger", false);
+            playerAnimator.SetFloat("MoveX", 0f);
+            playerAnimator.SetFloat("MoveZ", 0f);
+            playerAnimator.SetFloat("HorizonVelocity", 0f);
+            playerAnimator.SetFloat("DistY", 0f);
+            playerAnimator.SetFloat("moveToRailSpeed", 0f);
+            if (initTop)
+                playerAnimator.SetBool("Top", false);
+            switch (this.gameObject.tag)
+            {
+                case "Nella":
+                    playerAnimator.SetBool("isSinging", false);
+                    break;
+                case "Steady":
+                    {
+                        playerAnimator.SetBool("isShootingGrapple", false);
+                        playerAnimator.SetBool("isGrappleMoving", false);
+                        playerAnimator.SetBool("isGrabMonster", false);
+                    }
+                    break;
+            }
+        }
+
+        void InitInteraction()
+        {
+            
+            GetComponent<PlayerInteraction>().InitInteraction();
+        }
+
         private void CheckState()
         {
             if (characterState.IsGrounded)
@@ -200,6 +249,9 @@ namespace KSU
         }
         public void Resurrect()
         {
+            InitInteraction();
+            InitController();
+            characterState.InitState(true, false);
             if (!File.Exists(Application.dataPath + "/Resources/CheckPointInfo/Stage" +
                 GameManager.Instance.curStageIndex + "/Section" + GameManager.Instance.curSection + ".json"))
             {
@@ -535,7 +587,7 @@ namespace KSU
 
         public void StartDeath()
         {
-            characterState.isOutOfControl = true;
+            characterState.isStopped = true;
             InitController();
             playerCapsuleCollider.enabled = false;
         }
@@ -543,7 +595,8 @@ namespace KSU
         public void EndDeath()
         {
             playerCapsuleCollider.enabled = true;
-            characterState.isOutOfControl = false;
+            characterState.isStopped = false;
+            Resurrect();
         }
 
         private void OnTriggerEnter(Collider other)

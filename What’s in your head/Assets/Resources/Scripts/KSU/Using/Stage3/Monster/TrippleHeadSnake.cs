@@ -1,3 +1,4 @@
+using Photon.Pun;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -10,7 +11,7 @@ namespace KSU.Monster
         [SerializeField] float rushTime = 2f;
         public float rushSpeed;
         [SerializeField] float rotationSpeed;
-        GameObject rushTarget;
+        Transform rushTarget;
         [SerializeField] GameObject rushTrigger;
         public int rushDamage;
 
@@ -53,16 +54,12 @@ namespace KSU.Monster
 
         public override void GetDamage(int damage)
         {
-            if (!monsterAnimator.GetBool("isAttacked") && !monsterAnimator.GetBool("isDead"))
+            
+            if (pv.IsMine && !monsterAnimator.GetBool("isAttacked") && !monsterAnimator.GetBool("isDead"))
             {
                 if (monsterAnimator.GetBool("isStunned"))
                 {
-                    currentHP -= damage;
-                    monsterAnimator.SetBool("isAttacked", true);
-                    if (currentHP < 0)
-                    {
-                        monsterAnimator.SetBool("isDead", true);
-                    }
+                    pv.RPC("SetDamage", RpcTarget.AllViaServer, damage);
                 }
             }
         }

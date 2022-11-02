@@ -71,6 +71,11 @@ namespace JJS
 
         }
 
+        public virtual void InitMouseController()
+        {
+
+        }
+
         public virtual int GetUseWeapon()
         {
             if (weaponInfo.Length !=0)

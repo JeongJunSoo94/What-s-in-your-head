@@ -97,13 +97,13 @@ public class PlayerState : MonoBehaviour
     [Header("공중 대시 지속 시간")]
     public float airDashTime = 0.5f;
 
-    public void InitState(bool isNotMove, bool isNotTop)
+    public void InitState(bool initMove, bool initTop)
     {
         aim = false;
         swap = false;
         CanResetKnockBack = true;
-        
-        if (!isNotMove)
+
+        if (initMove)
         {
             isFowardBlock = false;
             isOverAngleForSlope = false;
@@ -116,14 +116,15 @@ public class PlayerState : MonoBehaviour
             IsAirDashing = false;
             WasAirDashing = false;
             IsGrounded = false;
+            isRiding = false;
         }
-        if (!isNotTop)
+        if (initTop)
         {
             top = false;
         }
     }
 
-    
+
 
     // 지면 체크 함수(지면 각도에 따라서 지면체크 거리 안에 안들어올 수 있기에 보정 필요)
     #region

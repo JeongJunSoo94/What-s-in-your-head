@@ -206,7 +206,7 @@ namespace JJS
                                 case "PoisonSnake":
                                 case "TrippleHeadSnake":
                                     {
-                                        hitObjs[i].HitColliders[j].gameObject.GetComponent<DefenseMonster>().GetDamage(10);
+                                        hitObjs[i].HitColliders[j].gameObject.GetComponent<DefenseMonster>().GetDamage(1);
                                     }
                                     break;
                             }

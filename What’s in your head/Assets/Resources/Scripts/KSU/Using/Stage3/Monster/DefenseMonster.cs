@@ -4,19 +4,22 @@ using UnityEngine;
 using UnityEngine.AI;
 
 using JCW.Spawner;
+using Photon.Pun;
 
 namespace KSU.Monster
 {
     public class DefenseMonster : MonoBehaviour
     {
+        protected PhotonView pv;
+
         [SerializeField] protected int maxHP;
         public int currentHP;
         public float attackRange = 1f;
         public int attackDamage;
         [SerializeField] LayerMask chaseLayerFiter;
-        [SerializeField] protected GameObject targetObject;
-        protected GameObject detectedTarget;
-        protected GameObject currentTarget;
+        [SerializeField] protected Transform targetObject;
+        protected Transform detectedTarget;
+        protected Transform currentTarget;
         [SerializeField] protected float detectingRange;
         public float detectingUIRange;
         public float moveSpeed; //시리얼
@@ -32,10 +35,11 @@ namespace KSU.Monster
         protected LineRenderer monsterRope;
         protected CapsuleCollider monsterCollider;
 
-        protected Spawner spawner;
+        protected MonsterSpawner spawner;
 
         public bool isAttackDelayOn = false;
-        public float attackDelayTime = 2f;
+        [Header("공격하기 전 딜레이 시간")] public float attackDelayTimeBefore = 2f;
+        [Header("공격한 후 딜레이 시간")] public float attackDelayTimeAfter = 2f;
         [SerializeField] protected GameObject attackTrigger;
         [SerializeField] protected GameObject detectingUITrigger;
 
@@ -45,9 +49,9 @@ namespace KSU.Monster
         // Start is called before the first frame update
         void Awake()
         {
-            //monsterRigidBody = GetComponent<Rigidbody>();
+            pv = PhotonView.Get(this);
             monsterNavAgent = GetComponent<NavMeshAgent>();
-            spawner = GetComponentInParent<Spawner>();
+            spawner = GetComponentInParent<MonsterSpawner>();
             monsterAnimator = GetComponent<Animator>();
             monsterRope = GetComponent<LineRenderer>();
             monsterCollider = GetComponent<CapsuleCollider>();
@@ -72,7 +76,8 @@ namespace KSU.Monster
             monsterAnimator.SetBool("WasStunned", false);
             monsterAnimator.SetBool("isChasing", false);
             monsterAnimator.SetBool("isAttacking", false);
-            monsterNavAgent.enabled = true;
+            if(pv.IsMine)
+                monsterNavAgent.enabled = true;
             monsterCollider.enabled = true;
             detectingUITrigger.SetActive(true);
         }
@@ -98,22 +103,39 @@ namespace KSU.Monster
 
         public virtual void GetDamage(int damage)
         {
-            if(!monsterAnimator.GetBool("isAttacked") && !monsterAnimator.GetBool("isDead"))
+            if(pv.IsMine && !monsterAnimator.GetBool("isAttacked") && !monsterAnimator.GetBool("isDead"))
             {
-                currentHP -= damage;
-                monsterAnimator.SetBool("isAttacked", true);
-                if (currentHP <= 0)
-                {
-                    monsterAnimator.SetBool("isDead", true);
-                }
+                pv.RPC(nameof(SetDamage), RpcTarget.AllViaServer, damage);
+            }
+        }
+
+        [PunRPC]
+        protected void SetDamage(int damage)
+        {
+            currentHP -= damage;
+            monsterAnimator.SetBool("isAttacked", true);
+            if (currentHP <= 0)
+            {
+                monsterAnimator.SetBool("isDead", true);
             }
         }
 
 
         public void GetStun()
         {
+            if (pv.IsMine && !monsterAnimator.GetBool("isAttacked") && !monsterAnimator.GetBool("isDead"))
+            {
+                pv.RPC(nameof(SetStun), RpcTarget.AllViaServer);
+            }
+        }
+
+        [PunRPC]
+        protected void SetStun()
+        {
             monsterAnimator.SetBool("isStunned", true);
         }
+
+
         public void StartStun()
         {
             monsterRope.enabled = true;
@@ -140,97 +162,148 @@ namespace KSU.Monster
 
         public void Disappear()
         {
+            if(pv.IsMine)
+            {
+                pv.RPC(nameof(Despawn), RpcTarget.AllViaServer);
+            }
+        }
+
+        [PunRPC]
+        protected void Despawn()
+        {
+            if(spawner == null)
+            {
+                spawner = GetComponentInParent<MonsterSpawner>();
+            }
             spawner.Despawn(this.gameObject);
         }
 
         public void Chase()
         {
-            if (!monsterNavAgent.enabled)
-                monsterNavAgent.enabled = true;
-
-            if (detectedTarget != null)
+            if(pv.IsMine)
             {
-                if (currentTarget != detectedTarget)
+                if (!monsterNavAgent.enabled)
+                    monsterNavAgent.enabled = true;
+
+                if (detectedTarget != null)
                 {
-                    currentTarget = detectedTarget;
+                    if (currentTarget != detectedTarget)
+                    {
+                        currentTarget = detectedTarget;
+                    }
                 }
-            }
-            else if (GameManager.Instance.isTopView)
-            {
-                currentTarget = targetObject;
-            }
+                else if (GameManager.Instance.isTopView)
+                {
+                    currentTarget = targetObject;
+                }
 
-            if (currentTarget != null)
-            {
-                monsterNavAgent.destination = currentTarget.transform.position;
-                isTargetFounded = true;
-            }
-            else
-            {
-                isTargetFounded = false;
+                if (currentTarget != null)
+                {
+                    monsterNavAgent.destination = currentTarget.transform.position;
+                    isTargetFounded = true;
+                }
+                else
+                {
+                    isTargetFounded = false;
+                }
             }
         }
 
         public void StopChasing()
         {
-            monsterNavAgent.enabled = false;
+            if (pv.IsMine)
+            {
+                pv.RPC(nameof(SetChasing), RpcTarget.AllViaServer, false);
+            }
         }
 
         public void StartChasing()
         {
-            monsterNavAgent.enabled = true;
+            if (pv.IsMine)
+            {
+                pv.RPC(nameof(SetChasing), RpcTarget.AllViaServer, true);
+            }
+        }
+
+        [PunRPC]
+        protected void SetChasing(bool isChasing)
+        {
+            monsterNavAgent.enabled = isChasing;
         }
 
         protected void Detect()
         {
-            if (detectedTarget != null)
-                return;
-
-            detectedColliders = Physics.OverlapSphere(transform.position, detectingRange);
-            if (detectedColliders.Length > 0)
+            if(pv.IsMine)
             {
-                foreach (var collider in detectedColliders)
+                if (detectedTarget != null)
+                    return;
+
+                detectedColliders = Physics.OverlapSphere(transform.position, detectingRange);
+                if (detectedColliders.Length > 0)
                 {
-                    RaycastHit hit;
-                    bool rayChecked = Physics.Raycast(transform.position + Vector3.up * 0.5f, (collider.gameObject.transform.position - transform.position).normalized, out hit, detectingRange, chaseLayerFiter, QueryTriggerInteraction.Ignore);
-                    if (rayChecked)
+                    foreach (var collider in detectedColliders)
                     {
-                        if (hit.collider.gameObject.layer == LayerMask.NameToLayer("Player"))
+                        RaycastHit hit;
+                        bool rayChecked = Physics.Raycast(transform.position + Vector3.up * 0.5f, (collider.gameObject.transform.position - transform.position).normalized, out hit, detectingRange, chaseLayerFiter, QueryTriggerInteraction.Ignore);
+                        if (rayChecked)
                         {
-                            detectedTarget = collider.gameObject;
-                            monsterAnimator.SetBool("isChasing", true);
+                            if (hit.collider.gameObject.layer == LayerMask.NameToLayer("Player"))
+                            {
+                                detectedTarget = collider.gameObject.transform;
+                                //detectedTarget = collider.gameObject;
+                                monsterAnimator.SetBool("isChasing", true);
+                            }
                         }
                     }
                 }
-            }
-            else if (GameManager.Instance.isTopView)
-            {
-                detectedTarget = null;
-                monsterAnimator.SetBool("isChasing", true);
+                else if (GameManager.Instance.isTopView)
+                {
+                    detectedTarget = null;
+                    //detectedTarget = null;
+                    monsterAnimator.SetBool("isChasing", true);
+                }
             }
         }
 
         public bool IsReadyToAttck()
         {
-            if(!isAttackDelayOn && (attackRange > Vector3.Distance(transform.position, currentTarget.transform.position)))
+            Vector3 distVec = transform.position - currentTarget.transform.position;
+            distVec.y = 0;
+            if (!isAttackDelayOn && (attackRange > distVec.magnitude))
             {
+                Debug.Log("어택 하니");
                 return true;
             }
             else
             {
+                Debug.Log("어택 안하니");
                 return false;
+            }
+        }
+
+        public void PrepareAttack()
+        {
+            StartCoroutine(nameof(DelayAttackBefore));
+        }
+
+        IEnumerator DelayAttackBefore()
+        {
+            yield return new WaitForSeconds(attackDelayTimeBefore);
+            if(!monsterAnimator.GetBool("isStunned") || !monsterAnimator.GetBool("isAttacked"))
+            {
+                monsterAnimator.SetBool("isAttacking", true);
             }
         }
 
         public void StartAttack()
         {
-            StartCoroutine(nameof(DelayAttack));
+            StartCoroutine(nameof(DelayAttackAfter));
         }
 
-        IEnumerator DelayAttack()
+        IEnumerator DelayAttackAfter()
         {
             isAttackDelayOn = true;
-            yield return new WaitForSeconds(attackDelayTime);
+            yield return new WaitForSeconds(attackDelayTimeAfter);
             isAttackDelayOn = false;
         }
 

@@ -9,6 +9,7 @@ namespace KSU.Monster
         // OnStateEnter is called when a transition starts and the state machine starts to evaluate this state
         override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
         {
+            animator.SetBool("isDead", false);
             GetMonsterController(animator).Dead();
         }
 
@@ -20,7 +21,6 @@ namespace KSU.Monster
 
         override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
         {
-            animator.SetBool("isDead", false);
             GetMonsterController(animator).Disappear();
         }
 
