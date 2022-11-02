@@ -1,0 +1,24 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="True">
+    <Style src="project://database/Assets/Editor/NodeViewStyle.uss?fileID=7433441132597879392&amp;guid=402b49bc3c61acb40966029c6ecb3e18&amp;type=3#NodeViewStyle" />
+    <ui:VisualElement name="node-state" />
+    <ui:VisualElement name="node-border">
+        <ui:VisualElement name="contents">
+            <ui:VisualElement name="top">
+                <ui:VisualElement name="input" usage-hints="None" style="position: relative; min-width: auto; min-height: auto; align-items: center; border-left-width: 0; border-right-width: 0; border-top-width: 0; border-bottom-width: 0; border-top-left-radius: 0; border-bottom-left-radius: 0; border-top-right-radius: 0; border-bottom-right-radius: 0;" />
+                <ui:VisualElement name="divider" class="vertical" />
+                <ui:VisualElement name="title">
+                    <ui:Label name="title-label" text="SequenceNode" class="unity-text-element unity-label" style="height: 14px;" />
+                    <ui:VisualElement name="title-button-container">
+                        <ui:VisualElement name="collapse-button">
+                            <ui:VisualElement name="icon" />
+                        </ui:VisualElement>
+                    </ui:VisualElement>
+                </ui:VisualElement>
+                <ui:Label text="This is a desScription" display-tooltip-when-elided="true" name="description" />
+                <ui:VisualElement name="divider" class="horizontal" />
+                <ui:VisualElement name="output" />
+            </ui:VisualElement>
+        </ui:VisualElement>
+    </ui:VisualElement>
+    <ui:VisualElement name="selection-border" picking-mode="Ignore" />
+</ui:UXML>

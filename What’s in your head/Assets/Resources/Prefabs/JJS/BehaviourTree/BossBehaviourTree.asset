@@ -1,0 +1,204 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &-5319053967210956260
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e67eac7f72407ca46b107edb1ebc19aa, type: 3}
+  m_Name: RootNode
+  m_EditorClassIdentifier: 
+  state: 0
+  started: 0
+  guid: 2c4b48655fafd884282cbef35e514eec
+  position: {x: 23, y: -26.160004}
+  objectInfo: {fileID: 0}
+  description: 
+  child: {fileID: 8738393494528436503}
+--- !u!114 &-4465051086467046357
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 578f2733e38934b48942241d7f4df0aa, type: 3}
+  m_Name: SelectorNode
+  m_EditorClassIdentifier: 
+  state: 0
+  started: 0
+  guid: 387e108b5a38daa4891a7b1a1c5f824f
+  position: {x: 20, y: 337.44}
+  objectInfo: {fileID: 0}
+  description: 
+  children:
+  - {fileID: -2389498128415976929}
+  - {fileID: -3562736955869028360}
+--- !u!114 &-3562736955869028360
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d8ce159fcde8ffe4ab42eb0652da7b6b, type: 3}
+  m_Name: SequenceNode
+  m_EditorClassIdentifier: 
+  state: 0
+  started: 0
+  guid: 21465b4eb3a8bbc43892536da4abe4db
+  position: {x: 280, y: 548}
+  objectInfo: {fileID: 0}
+  description: 
+  children:
+  - {fileID: 3323376478314976863}
+  - {fileID: 8616764421602849698}
+--- !u!114 &-2389498128415976929
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d8ce159fcde8ffe4ab42eb0652da7b6b, type: 3}
+  m_Name: SequenceNode
+  m_EditorClassIdentifier: 
+  state: 0
+  started: 0
+  guid: 102350218497fdd498fa7a938a7db9b0
+  position: {x: -178, y: 558}
+  objectInfo: {fileID: 0}
+  description: 
+  children:
+  - {fileID: 7781374671712145459}
+  - {fileID: 5881447635507890913}
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 836440a63851e2a4ea23a0abcb72a98b, type: 3}
+  m_Name: BossBehaviourTree
+  m_EditorClassIdentifier: 
+  rootNode: {fileID: -5319053967210956260}
+  treeState: 0
+  nodes:
+  - {fileID: -5319053967210956260}
+  - {fileID: 8738393494528436503}
+  - {fileID: -4465051086467046357}
+  - {fileID: -2389498128415976929}
+  - {fileID: -3562736955869028360}
+  - {fileID: 7781374671712145459}
+  - {fileID: 5881447635507890913}
+  - {fileID: 8616764421602849698}
+  - {fileID: 3323376478314976863}
+--- !u!114 &3323376478314976863
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d6360b999060ffe47bcd950acbbc77fc, type: 3}
+  m_Name: LightController
+  m_EditorClassIdentifier: 
+  state: 0
+  started: 0
+  guid: cba3d5ff75e6ecd4fb3a07d383b82fe2
+  position: {x: 186.80066, y: 736.9999}
+  objectInfo: {fileID: 0}
+  description: 
+  fake: 1
+  enable: 0
+--- !u!114 &5881447635507890913
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d6360b999060ffe47bcd950acbbc77fc, type: 3}
+  m_Name: LightController
+  m_EditorClassIdentifier: 
+  state: 0
+  started: 0
+  guid: ee7df4832d5ffd14c8ae41d9f4595c74
+  position: {x: -87, y: 741.28}
+  objectInfo: {fileID: 0}
+  description: 
+  fake: 0
+  enable: 1
+--- !u!114 &7781374671712145459
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e5b542c576ebbf641af149744f763116, type: 3}
+  m_Name: FindTarget
+  m_EditorClassIdentifier: 
+  state: 0
+  started: 0
+  guid: fc19e28fb4fbf6442a3bd15026a29f4b
+  position: {x: -332.04, y: 737.84}
+  objectInfo: {fileID: 0}
+  description: 
+--- !u!114 &8616764421602849698
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2cd03952173e1cd4d950aadad63b2a5e, type: 3}
+  m_Name: WaitNode
+  m_EditorClassIdentifier: 
+  state: 0
+  started: 0
+  guid: 17003efb5fbc085479c011c6683c5ed3
+  position: {x: 377.05566, y: 731.25494}
+  objectInfo: {fileID: 0}
+  description: 
+  duration: 1
+--- !u!114 &8738393494528436503
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8223f4859d36aa24da30aba51917b94b, type: 3}
+  m_Name: RepeatNode
+  m_EditorClassIdentifier: 
+  state: 0
+  started: 0
+  guid: b37891a09a6ca5b4b906fc0fbb2f1b03
+  position: {x: 20.626158, y: 123.632324}
+  objectInfo: {fileID: 0}
+  description: 
+  child: {fileID: -4465051086467046357}

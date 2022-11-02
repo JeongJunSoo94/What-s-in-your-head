@@ -1,16 +1,29 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
-public class Flashlight : MonoBehaviour
+namespace JJS
 {
-    ConeFindTarget find;
-    private void Awake()
+    public class Flashlight : MonoBehaviour
     {
-        find=GetComponent<ConeFindTarget>();
+        public GameObject light;
+        public ConeFindTarget finder;
+        private void Awake()
+        {
+        }
+        private void Update()
+        {
+
+        }
+
+        public void LightEnable(bool enable)
+        {
+            light.SetActive(enable);
+        }
+
+        public bool TargetCheck()
+        {
+            return finder.DiscoveryTargetBool() ? true : false;
+        }
     }
-    private void Update()
-    {
-        
-    }
+
 }
