@@ -64,15 +64,11 @@ namespace JCW.Object
         private void OnEnable()
         {
             if (isPurified)
-            {
-                Debug.Log("이미 정화되었음");
                 this.gameObject.SetActive(false);
-            }
         }
 
         private void OnDisable()
         {
-            Debug.Log("정화됨");
             isPurified = true;
         }
 
@@ -169,7 +165,10 @@ namespace JCW.Object
             {
                 isDead = true;
                 animator.Play("Destroy");
-                mediator.SetPurified(myIndex);
+                if (mediator)
+                    mediator.SetPurified(myIndex);
+                else
+                    StartCoroutine(nameof(CheckAnimEnd));
             }
         }
 

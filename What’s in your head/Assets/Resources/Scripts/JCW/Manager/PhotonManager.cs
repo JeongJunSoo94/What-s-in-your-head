@@ -75,7 +75,15 @@ namespace JCW.Network
 
             // 유저 아이디 할당
             userID = random.ToString();
-
+            for (int i = 0 ; i< PhotonNetwork.PlayerListOthers.Length ; ++i)
+            {
+                if (PhotonNetwork.PlayerListOthers[i].NickName == userID)
+                {
+                    userID = (random - 1).ToString();
+                    break;
+                }
+            }
+            
             PhotonNetwork.LocalPlayer.NickName = userID;
 
             // 서버 접속
@@ -142,7 +150,7 @@ namespace JCW.Network
 
         public void LetMasterMakeRoom(string masterName)
         {
-            photonView.RPC("MakeRoom", RpcTarget.Others, masterName);
+            photonView.RPC(nameof(MakeRoom), RpcTarget.Others, masterName);
         }
 
         [PunRPC]
@@ -178,14 +186,14 @@ namespace JCW.Network
                 Debug.Log("넬라 생성");
                 PhotonNetwork.Instantiate("Prefabs/YC/MainCamera_Nella", new Vector3(0, 0, 0), Quaternion.identity, 0);
                 PhotonNetwork.Instantiate("Prefabs/JJS/NellaMousePoint", new Vector3(-10, 0, -5), Quaternion.identity);
-                PhotonNetwork.Instantiate("Prefabs/JJS/JJS_Nella", new Vector3(-5, 0, 0), Quaternion.identity);
+                PhotonNetwork.Instantiate("Prefabs/JCW/JJS_Nella", new Vector3(-5, 0, 0), Quaternion.identity);
             }
             else
             {
                 Debug.Log("스테디 생성");
                 PhotonNetwork.Instantiate("Prefabs/YC/MainCamera_Steady", new Vector3(0, 0, 0), Quaternion.identity, 0);
                 PhotonNetwork.Instantiate("Prefabs/JJS/SteadyMousePoint", new Vector3(10, 0, -5), Quaternion.identity);
-                PhotonNetwork.Instantiate("Prefabs/JJS/JJS_Steady", new Vector3(5, 0, 0), Quaternion.identity);
+                PhotonNetwork.Instantiate("Prefabs/JCW/JJS_Steady", new Vector3(5, 0, 0), Quaternion.identity);
             }
             StopAllCoroutines();
         }
