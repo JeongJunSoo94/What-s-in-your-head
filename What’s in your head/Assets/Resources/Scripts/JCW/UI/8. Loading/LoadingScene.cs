@@ -49,8 +49,14 @@ namespace JCW.UI
         void StartLoading()
         {
             isLoading = true;
-            if(PhotonNetwork.IsMasterClient)
+            if (PhotonNetwork.IsMasterClient)
+            {
                 PhotonNetwork.LoadLevel(++GameManager.Instance.curStageIndex);
+
+                // 플레이어들의 위치값 특정 위치로 옮기기.
+                //GameManager.Instance.otherPlayerTF.position =                 
+                //GameManager.Instance.myPlayerTF.position = 
+            }
         }
     }
 }
