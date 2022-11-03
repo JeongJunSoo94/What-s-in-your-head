@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace JJS.BT
 {
-    public class LightController : ActionNode
+    public class LightControllerNode : ActionNode
     {
         Flashlight find;
         public bool fake=false;

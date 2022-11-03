@@ -1,16 +1,19 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using JJS;
 namespace JJS.BT
 {
-    public class FailNode : ActionNode
+    public class FindTargetNode : ActionNode
     {
-
+        Flashlight find;
         protected override void OnStart()
         {
-           
+            if (find==null)
+            {
+                find = objectInfo.PrefabObject.GetComponent<Flashlight>();
+            }
         }
-    
 
         protected override void OnStop()
         {
@@ -18,7 +21,7 @@ namespace JJS.BT
 
         protected override State OnUpdate()
         {
-            if (objectInfo.photonView.IsMine)
+            if (find.TargetCheck())
             {
                 return State.Success;
             }
