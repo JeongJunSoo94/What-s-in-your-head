@@ -1,0 +1,18 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../UIElementsSchema/UIElements.xsd" editor-extension-mode="True">
+    <Style src="project://database/Assets/Editor/BehaviourTreeEditor.uss?fileID=7433441132597879392&amp;guid=d4d70bd85c67b8f46972d08e8fc1d06d&amp;type=3#BehaviourTreeEditor" />
+    <uie:Toolbar>
+        <uie:ToolbarMenu display-tooltip-when-elided="true" text="Assets" />
+    </uie:Toolbar>
+    <JJS.BT.SplitView fixed-pane-initial-dimension="300" style="width: auto;">
+        <ui:VisualElement name="left-panel" style="width: auto; max-width: none; min-width: auto; min-height: auto; justify-content: flex-start; flex-shrink: 0;">
+            <ui:VisualElement name="inspector-container" style="height: auto;">
+                <ui:Label text="Inspector" display-tooltip-when-elided="true" style="background-color: rgb(0, 0, 0);" />
+                <JJS.BT.InspectorView />
+            </ui:VisualElement>
+        </ui:VisualElement>
+        <ui:VisualElement name="right-panel" style="width: auto; justify-content: flex-start; left: auto; min-width: auto; min-height: auto;">
+            <ui:Label text="Tree View" display-tooltip-when-elided="true" style="background-color: rgb(0, 0, 0);" />
+            <JJS.BT.BehaviourTreeView focusable="true" style="flex-direction: column-reverse; flex-grow: 1; justify-content: space-around;" />
+        </ui:VisualElement>
+    </JJS.BT.SplitView>
+</ui:UXML>

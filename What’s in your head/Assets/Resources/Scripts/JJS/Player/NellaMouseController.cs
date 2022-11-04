@@ -17,7 +17,8 @@ namespace JJS
         public List<Discovery3D> hitObjs;
 
         public WaterGun gun;
-        
+        public Singing singing;
+
         private void Awake()
         {
 
@@ -122,9 +123,20 @@ namespace JJS
                     }
                     else
                     {
-                        if (KeyManager.Instance.GetKey(PlayerAction.Fire) && !weaponInfo[GetUseWeapon()].canAim)
+                        if (!player.characterState.IsJumping && !player.characterState.IsAirJumping
+                              && !player.characterState.IsDashing && !player.characterState.IsAirDashing)
                         {
-                            photonView.RPC(nameof(SetWeaponEnable), RpcTarget.AllViaServer, true);
+                            if (KeyManager.Instance.GetKey(PlayerAction.Fire) && !weaponInfo[GetUseWeapon()].canAim)
+                            {
+                                photonView.RPC(nameof(SetWeaponEnable), RpcTarget.AllViaServer, true);
+                            }
+                            else
+                            {
+                                if (clickLeft)
+                                {
+                                    photonView.RPC(nameof(SetWeaponEnable), RpcTarget.AllViaServer, false);
+                                }
+                            }
                         }
                         else
                         {
@@ -133,10 +145,12 @@ namespace JJS
                                 photonView.RPC(nameof(SetWeaponEnable), RpcTarget.AllViaServer, false);
                             }
                         }
+
                     }
                 }
             }
         }
+
         [PunRPC]
         public override void SetWeaponEnable(bool enable)
         {
@@ -156,15 +170,12 @@ namespace JJS
                     gun.ShootStart();
                 }
                 else
-                {
                     clickLeft = false;
-                }
             }
+            else if (weaponInfo[GetUseWeapon()].weapon.name == "Mic")
+                singing.enabled = clickLeft = enable;
             else
-            {
                 clickLeft = enable;
-            }
-        
         }
 
         public void OnEnableObject(int index)

@@ -12,6 +12,7 @@ public class IKController : MonoBehaviour
     public Transform leftHandFollowObj;
     public Transform rightHandFollowObj;
     public Transform hitpos;
+    public Transform weapon;
 
     [SerializeField]
     protected Animator animator;
@@ -48,9 +49,6 @@ public class IKController : MonoBehaviour
         animator.SetIKPositionWeight(AvatarIKGoal.LeftHand, posWeight);
         animator.SetIKRotationWeight(AvatarIKGoal.LeftHand, rotWeight);
         animator.SetIKPosition(AvatarIKGoal.LeftHand, leftHandFollowObj.position);
-
-        //Transform leftHandTransform = animator.GetBoneTransform(HumanBodyBones.LeftHand);
-        //animator.SetIKPosition(AvatarIKGoal.LeftHand, leftHandTransform.position);
 
     }
 }

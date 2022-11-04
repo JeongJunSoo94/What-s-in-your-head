@@ -39,8 +39,8 @@ public class Discovery3D : MonoBehaviour
     void OnDrawGizmosRay()
     {
         Vector3 originPos = transform.position;
-        Vector3 RightDir = AngleToDirX(-_viewAngle + _viewDirection);
-        Vector3 LeftDir = AngleToDirX(_viewAngle + _viewDirection);
+        Vector3 RightDir = AngleToDirY(-_viewAngle + _viewDirection);
+        Vector3 LeftDir = AngleToDirY(_viewAngle + _viewDirection);
         Vector3 lookDir = transform.forward;
 
         ray[0].origin = transform.position;
@@ -54,12 +54,33 @@ public class Discovery3D : MonoBehaviour
         Debug.DrawRay(ray[0].origin, ray[0].direction * _discoveryRadius, Color.red);
         Debug.DrawRay(ray[1].origin, ray[1].direction * _discoveryRadius, Color.red);
         Debug.DrawRay(ray[2].origin, ray[2].direction * _discoveryRadius, Color.green);
+
+        //RightDir = AngleToDirY(-_viewAngle + _viewDirection);
+        //LeftDir = AngleToDirY(_viewAngle + _viewDirection);
+        //lookDir = transform.forward;
+
+        //ray[0].origin = transform.position;
+        //ray[0].direction = LeftDir;
+        //ray[1].origin = transform.position;
+        //ray[1].direction = RightDir;
+        //ray[2].origin = transform.position;
+        //ray[2].direction = lookDir;
+
+        //Debug.DrawRay(ray[0].origin, ray[0].direction * _discoveryRadius, Color.red);
+        //Debug.DrawRay(ray[1].origin, ray[1].direction * _discoveryRadius, Color.red);
+        //Debug.DrawRay(ray[2].origin, ray[2].direction * _discoveryRadius, Color.green);
+    }
+
+    private Vector3 AngleToDirY(float angleInDegree)
+    {
+        float radian = (angleInDegree - transform.eulerAngles.y) * Mathf.Deg2Rad;//호도법 계산식
+        return new Vector3(Mathf.Sin(-radian), 0, Mathf.Cos(-radian));
     }
 
     private Vector3 AngleToDirX(float angleInDegree)
     {
-        float radian = (angleInDegree - transform.eulerAngles.y) * Mathf.Deg2Rad;//호도법 계산식
-        return new Vector3(Mathf.Sin(-radian), 0, Mathf.Cos(-radian));
+        float radian = (angleInDegree - transform.eulerAngles.x) * Mathf.Deg2Rad;//호도법 계산식
+        return new Vector3(0, Mathf.Sin(radian), Mathf.Cos(radian));
     }
 
     public bool DiscoveryTargetBool3D()
@@ -77,7 +98,7 @@ public class Discovery3D : MonoBehaviour
             {
                 Vector3 targetPos = hitColliders[index].transform.position;
                 Vector3 dir = (targetPos - originPos).normalized;//(타겟의 위치값 - 오브젝트의 위치값).백터값
-                Vector3 lookDir = AngleToDirX(_viewDirection);
+                Vector3 lookDir = AngleToDirY(_viewDirection);
 
                 // float angle = Vector3.Angle(lookDir, dir)
                 // 아래 두 줄은 위의 코드와 동일하게 동작함. 내부 구현도 동일

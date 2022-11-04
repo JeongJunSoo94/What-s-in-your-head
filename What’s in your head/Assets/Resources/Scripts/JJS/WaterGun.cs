@@ -201,53 +201,30 @@ namespace JJS.Weapon
             if (Physics.Raycast(startPosition, rayDirection, out hit, shootMaxDistance, -1, QueryTriggerInteraction.Ignore))
             {
                 shootCurDistance = Vector3.Distance(startPosition, hit.point);
-                if (shootCurDistance < shootMinDistrace)
+
+                bezierCurveOrbit.p1 = startPosition;
+
+                float Height = hit.point.y - startPosition.y;//위쪽값 양수 아래값 음수
+                shootCurDistance = Vector3.Distance(startPosition, hit.point);
+                Height /= shootCurDistance;
+                float width = curveWidth;
+                Vector3 direction;
+                if (Height > 0)
                 {
-                    bezierCurveOrbit.p1 = startPosition;
-
-                    float Height = hit.point.y - startPosition.y;
-                    Height /= shootMaxDistance;
-                    float width = curveWidth;
-                    if (Height > 0)
-                    {
-                        width -= Height * 0.25f;
-                    }
-                    else
-                    {
-                        width -= Height * 0.25f;
-                        Height *= -1f;
-                    }
-
-                    Vector3 direction = (startPosition - hit.point) * width;
-
-                    bezierCurveOrbit.p2 = hit.point; 
-                    bezierCurveOrbit.p3 = hit.point;
-                    bezierCurveOrbit.p4 = hit.point;
+                    width -= Height * 0.25f;
+                    direction = (startPosition - hit.point) * width;
+                    direction.y += (curveHeight + Height * curveHeight);
                 }
                 else
                 {
-                    bezierCurveOrbit.p1 = startPosition;
-
-                    float Height = hit.point.y - startPosition.y;
-                    Height /= shootMaxDistance;
-                    float width = curveWidth;
-                    if (Height > 0)
-                    {
-                        width -= Height * 0.25f;
-                    }
-                    else
-                    {
-                        width -= Height * 0.25f;
-                        Height *= -1f;
-                    }
-
-                    Vector3 direction = (startPosition - hit.point) * width;
-
-                    direction.y += (1 - width) + Height * curveHeight;
-                    bezierCurveOrbit.p2 = hit.point + direction;
-                    bezierCurveOrbit.p3 = hit.point;
-                    bezierCurveOrbit.p4 = hit.point;
+                    width -= Height * 0.25f;
+                    direction = (startPosition - hit.point) * width;
+                    direction.y += (curveHeight + Height * 2 * curveHeight);
                 }
+
+                bezierCurveOrbit.p2 = hit.point + direction;
+                bezierCurveOrbit.p3 = hit.point;
+                bezierCurveOrbit.p4 = hit.point;
                 return true;
             }
             return false;
@@ -255,14 +232,14 @@ namespace JJS.Weapon
 
         void MaxPhysicsLine(Vector3 startPosition, Vector3 rayDirection)
         {
-            Vector3 maxPos = startPosition + rayDirection * shootMaxDistance;
+            Vector3 maxPos = mainCamera.transform.position + rayDirection * shootMaxDistance;
             shootCurDistance = Vector3.Distance(startPosition, maxPos);
             bezierCurveOrbit.p1 = startPosition;
             bezierCurveOrbit.p3 = maxPos;
             bezierCurveOrbit.p4 = maxPos;
 
             float Height = maxPos.y - startPosition.y;
-            Height /= shootMaxDistance;
+            Height /= shootCurDistance;
             float width = curveWidth;
             if (Height > 0)
             {
@@ -271,11 +248,10 @@ namespace JJS.Weapon
             else
             {
                 width -= Height * 0.25f;
-                Height *= -1f;
             }
 
             Vector3 direction = (startPosition - maxPos) * width;
-            direction.y += 1f + Height * curveHeight;
+            direction.y += (curveHeight*3 + Height * curveHeight*3);
             bezierCurveOrbit.p2 = maxPos + direction;
         }
     }

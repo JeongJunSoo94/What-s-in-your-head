@@ -1,0 +1,484 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &-8291656695409881088
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2cd03952173e1cd4d950aadad63b2a5e, type: 3}
+  m_Name: WaitNode
+  m_EditorClassIdentifier: 
+  state: 0
+  started: 0
+  guid: fa9c1f94e95c1564887e7568ef0def66
+  position: {x: 943, y: 562}
+  objectInfo: {fileID: 0}
+  description: 
+  duration: 3
+--- !u!114 &-6025881976402060092
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2cd03952173e1cd4d950aadad63b2a5e, type: 3}
+  m_Name: WaitNode
+  m_EditorClassIdentifier: 
+  state: 0
+  started: 0
+  guid: 63b80f42d0373444ab1e5b0423ed97db
+  position: {x: -33, y: 597}
+  objectInfo: {fileID: 0}
+  description: 
+  duration: 3
+--- !u!114 &-5319053967210956260
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e67eac7f72407ca46b107edb1ebc19aa, type: 3}
+  m_Name: RootNode
+  m_EditorClassIdentifier: 
+  state: 0
+  started: 0
+  guid: 2c4b48655fafd884282cbef35e514eec
+  position: {x: -213, y: -255}
+  objectInfo: {fileID: 0}
+  description: 
+  child: {fileID: 8738393494528436503}
+--- !u!114 &-4867592281140859084
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d6360b999060ffe47bcd950acbbc77fc, type: 3}
+  m_Name: LightController
+  m_EditorClassIdentifier: 
+  state: 0
+  started: 0
+  guid: 2dc96b47f50e5fd439b877ca11dc9dbe
+  position: {x: -1285, y: 582}
+  objectInfo: {fileID: 0}
+  description: 
+  fake: 0
+  enable: 0
+  color: {r: 0, g: 0, b: 0, a: 0}
+--- !u!114 &-4401697377931378006
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 84666459cbcf422438fa8cf31054792b, type: 3}
+  m_Name: PhotonSyncNode
+  m_EditorClassIdentifier: 
+  state: 0
+  started: 0
+  guid: 2d25d692d58fd714cbd9ff508e859abc
+  position: {x: 1113, y: 576}
+  objectInfo: {fileID: 0}
+  description: 
+  local: 1
+  syncChange: 0
+--- !u!114 &-3562736955869028360
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d8ce159fcde8ffe4ab42eb0652da7b6b, type: 3}
+  m_Name: SequenceNode
+  m_EditorClassIdentifier: 
+  state: 0
+  started: 0
+  guid: 21465b4eb3a8bbc43892536da4abe4db
+  position: {x: -221, y: 326}
+  objectInfo: {fileID: 0}
+  description: 
+  children:
+  - {fileID: -2064444731002051840}
+  - {fileID: 3323376478314976863}
+  - {fileID: 7069071012856373616}
+  - {fileID: -6025881976402060092}
+  - {fileID: 4765584726654114090}
+--- !u!114 &-3455936397465937733
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d8ce159fcde8ffe4ab42eb0652da7b6b, type: 3}
+  m_Name: SequenceNode
+  m_EditorClassIdentifier: 
+  state: 0
+  started: 0
+  guid: 516eb6246bed96548b54ef3a23d4b13c
+  position: {x: -1098.027, y: 355.06088}
+  objectInfo: {fileID: 0}
+  description: 
+  children:
+  - {fileID: 7716726380748338856}
+  - {fileID: -4867592281140859084}
+  - {fileID: 4068049782416355673}
+  - {fileID: 4691944221124333756}
+  - {fileID: 5569529561820145817}
+--- !u!114 &-2389498128415976929
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d8ce159fcde8ffe4ab42eb0652da7b6b, type: 3}
+  m_Name: SequenceNode
+  m_EditorClassIdentifier: 
+  state: 0
+  started: 0
+  guid: 102350218497fdd498fa7a938a7db9b0
+  position: {x: 851.53143, y: 353.19147}
+  objectInfo: {fileID: 0}
+  description: 
+  children:
+  - {fileID: 110189319089763966}
+  - {fileID: 5881447635507890913}
+  - {fileID: 5825587929002480540}
+  - {fileID: -8291656695409881088}
+  - {fileID: -4401697377931378006}
+  - {fileID: 7781374671712145459}
+--- !u!114 &-2064444731002051840
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 84666459cbcf422438fa8cf31054792b, type: 3}
+  m_Name: PhotonSyncNode
+  m_EditorClassIdentifier: 
+  state: 0
+  started: 0
+  guid: 9f8bd3eaad1b339419abfff84858ad44
+  position: {x: -570, y: 588}
+  objectInfo: {fileID: 0}
+  description: 
+  local: 0
+  syncChange: 1
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 836440a63851e2a4ea23a0abcb72a98b, type: 3}
+  m_Name: BossBehaviourTree
+  m_EditorClassIdentifier: 
+  rootNode: {fileID: -5319053967210956260}
+  treeState: 0
+  nodes:
+  - {fileID: -5319053967210956260}
+  - {fileID: 8738393494528436503}
+  - {fileID: -2389498128415976929}
+  - {fileID: -3562736955869028360}
+  - {fileID: 7781374671712145459}
+  - {fileID: 5881447635507890913}
+  - {fileID: 3323376478314976863}
+  - {fileID: -3455936397465937733}
+  - {fileID: -4867592281140859084}
+  - {fileID: 4691944221124333756}
+  - {fileID: -6025881976402060092}
+  - {fileID: -8291656695409881088}
+  - {fileID: 7716726380748338856}
+  - {fileID: -2064444731002051840}
+  - {fileID: 110189319089763966}
+  - {fileID: 4443187108027085670}
+  - {fileID: 5569529561820145817}
+  - {fileID: 4765584726654114090}
+  - {fileID: -4401697377931378006}
+  - {fileID: 4068049782416355673}
+  - {fileID: 7069071012856373616}
+  - {fileID: 5825587929002480540}
+--- !u!114 &110189319089763966
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 84666459cbcf422438fa8cf31054792b, type: 3}
+  m_Name: PhotonSyncNode
+  m_EditorClassIdentifier: 
+  state: 0
+  started: 0
+  guid: 733ace97ffc2fdf4db64a41792a32d8e
+  position: {x: 388, y: 585}
+  objectInfo: {fileID: 0}
+  description: 
+  local: 0
+  syncChange: 2
+--- !u!114 &3323376478314976863
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d6360b999060ffe47bcd950acbbc77fc, type: 3}
+  m_Name: LightController
+  m_EditorClassIdentifier: 
+  state: 0
+  started: 0
+  guid: cba3d5ff75e6ecd4fb3a07d383b82fe2
+  position: {x: -396, y: 589}
+  objectInfo: {fileID: 0}
+  description: 
+  fake: 0
+  enable: 1
+  color: {r: 0.96860325, g: 1, b: 0, a: 0}
+--- !u!114 &4068049782416355673
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c026f54b315d70e47962350acc0a0e3f, type: 3}
+  m_Name: RunNode
+  m_EditorClassIdentifier: 
+  state: 0
+  started: 0
+  guid: 6a189d84e407fa04a8740683f3ff59c5
+  position: {x: -1100, y: 579}
+  objectInfo: {fileID: 0}
+  description: 
+--- !u!114 &4443187108027085670
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 578f2733e38934b48942241d7f4df0aa, type: 3}
+  m_Name: SelectorNode
+  m_EditorClassIdentifier: 
+  state: 0
+  started: 0
+  guid: 7a412f48c232be343b3fb806e138417c
+  position: {x: -213, y: 70}
+  objectInfo: {fileID: 0}
+  description: 
+  children:
+  - {fileID: -3455936397465937733}
+  - {fileID: -3562736955869028360}
+  - {fileID: -2389498128415976929}
+--- !u!114 &4691944221124333756
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2cd03952173e1cd4d950aadad63b2a5e, type: 3}
+  m_Name: WaitNode
+  m_EditorClassIdentifier: 
+  state: 0
+  started: 0
+  guid: 04b77e5bdc8dd0946ba112a9c782d91c
+  position: {x: -934, y: 579}
+  objectInfo: {fileID: 0}
+  description: 
+  duration: 3
+--- !u!114 &4765584726654114090
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 84666459cbcf422438fa8cf31054792b, type: 3}
+  m_Name: PhotonSyncNode
+  m_EditorClassIdentifier: 
+  state: 0
+  started: 0
+  guid: 7507fea58bae12841b6b657b94ed4436
+  position: {x: 144, y: 600}
+  objectInfo: {fileID: 0}
+  description: 
+  local: 1
+  syncChange: 2
+--- !u!114 &5569529561820145817
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 84666459cbcf422438fa8cf31054792b, type: 3}
+  m_Name: PhotonSyncNode
+  m_EditorClassIdentifier: 
+  state: 0
+  started: 0
+  guid: d183e6066b62b7641839646d3e5e73c7
+  position: {x: -765, y: 580}
+  objectInfo: {fileID: 0}
+  description: 
+  local: 1
+  syncChange: 1
+--- !u!114 &5825587929002480540
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c026f54b315d70e47962350acc0a0e3f, type: 3}
+  m_Name: RunNode
+  m_EditorClassIdentifier: 
+  state: 0
+  started: 0
+  guid: 42f6280154619104a8496a756ecb04b8
+  position: {x: 746, y: 574}
+  objectInfo: {fileID: 0}
+  description: 
+--- !u!114 &5881447635507890913
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d6360b999060ffe47bcd950acbbc77fc, type: 3}
+  m_Name: LightController
+  m_EditorClassIdentifier: 
+  state: 0
+  started: 0
+  guid: ee7df4832d5ffd14c8ae41d9f4595c74
+  position: {x: 566, y: 572}
+  objectInfo: {fileID: 0}
+  description: 
+  fake: 0
+  enable: 1
+  color: {r: 1, g: 0, b: 0, a: 0}
+--- !u!114 &7069071012856373616
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c026f54b315d70e47962350acc0a0e3f, type: 3}
+  m_Name: RunNode
+  m_EditorClassIdentifier: 
+  state: 0
+  started: 0
+  guid: 1eaddd62fe25c1e45a71f06c8c24bce9
+  position: {x: -214, y: 593}
+  objectInfo: {fileID: 0}
+  description: 
+--- !u!114 &7716726380748338856
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 84666459cbcf422438fa8cf31054792b, type: 3}
+  m_Name: PhotonSyncNode
+  m_EditorClassIdentifier: 
+  state: 0
+  started: 0
+  guid: 39d3d52940a6ddd448acf71fbe4318e9
+  position: {x: -1456, y: 582}
+  objectInfo: {fileID: 0}
+  description: 
+  local: 0
+  syncChange: 0
+--- !u!114 &7781374671712145459
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e5b542c576ebbf641af149744f763116, type: 3}
+  m_Name: FindTarget
+  m_EditorClassIdentifier: 
+  state: 0
+  started: 0
+  guid: fc19e28fb4fbf6442a3bd15026a29f4b
+  position: {x: 1287, y: 576}
+  objectInfo: {fileID: 0}
+  description: 
+--- !u!114 &8738393494528436503
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8223f4859d36aa24da30aba51917b94b, type: 3}
+  m_Name: RepeatNode
+  m_EditorClassIdentifier: 
+  state: 0
+  started: 0
+  guid: b37891a09a6ca5b4b906fc0fbb2f1b03
+  position: {x: -217, y: -88}
+  objectInfo: {fileID: 0}
+  description: 
+  child: {fileID: 4443187108027085670}
