@@ -30,6 +30,7 @@ public class GameManager : MonoBehaviour, IPunObservable
     // 현재 탑뷰인지
     [Header("탑뷰")] public bool isTopView;
     [Header("테스트용")] public bool isTest;
+    [Header("정지용")] public bool isPause;
 
     // 랜덤시드
     [HideInInspector] public int randomSeed { get; private set; }
@@ -155,6 +156,19 @@ public class GameManager : MonoBehaviour, IPunObservable
             isTopView                                   = (bool)stream.ReceiveNext();
             curStageIndex                               = (int)stream.ReceiveNext();
             curSection                                  = (int)stream.ReceiveNext();
+        }
+    }
+
+    public void PauseActive(bool pause)
+    {
+        isPause = pause;
+        if (isPause)
+        {
+            Time.timeScale = 0;
+        }
+        else
+        {
+            Time.timeScale = 1;
         }
     }
 }

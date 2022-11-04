@@ -167,7 +167,6 @@ namespace JJS
             }
             else
             {
-                Cursor.lockState = CursorLockMode.Locked;
                 GetPlayerController(animator).characterState.top = false;
             }
             animator.SetBool("Top", GetPlayerController(animator).characterState.top);

@@ -9,14 +9,17 @@ namespace JJS
         public Light spot;
         public Light point;
         public ConeFindTarget finder;
+        public int a=0;
         private void Awake()
         {
             spot = light.transform.GetChild(0).GetComponent<Light>();
             point = light.transform.GetChild(1).GetComponent<Light>();
+            
         }
+
         private void Update()
         {
-
+            
         }
 
         public void LightEnable(bool enable)
