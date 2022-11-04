@@ -5,9 +5,11 @@ using JCW.Spawner;
 
 using YC.Camera_;
 using YC.Camera_Single;
+using JCW.AudioCtrl;
 
 namespace JJS.Weapon
 {
+    [RequireComponent(typeof(AudioSource))]
     public class WaterGun : MonoBehaviour
     {
 
@@ -44,6 +46,8 @@ namespace JJS.Weapon
         GameObject bulletSpawner;
         public int bulletCurCount = 0;
 
+        AudioSource audioSource;
+
         private void Awake()
         {
             bezierCurveOrbit = gameObject.GetComponent<BezierCurve>();
@@ -55,6 +59,8 @@ namespace JJS.Weapon
             spawner.count = bulletCount;
             spawner.spawnCount = 0;
             shootEnable = true;
+            audioSource = GetComponent<AudioSource>();
+            JCW.AudioCtrl.AudioSettings.SetAudio(audioSource, 1f, 40f);
         }
         //void FixedUpdate()
         //{
@@ -62,6 +68,7 @@ namespace JJS.Weapon
 
         public void ShootStart()
         {
+            SoundManager.Instance.Play3D_RPC("Watergun", audioSource);
             Shoot();
             bulletCurCount++;
         }
@@ -86,7 +93,7 @@ namespace JJS.Weapon
         }
 
         void Shoot()
-        {
+        {            
             GameObject bullet=spawner.Respawn(startPos.transform.position, Quaternion.LookRotation(bezierCurveOrbit.p2 - startPos.transform.position));
             if (bullet != null)
             {

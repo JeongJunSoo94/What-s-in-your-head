@@ -41,7 +41,6 @@ namespace JCW.UI.InGame
         private void OnEnable()
         {
             // 여기서 카메라나 플레이어 움직임 막아야함
-            //curPlayer.GetComponent<>
             if(photonView.IsMine)
             {                
                 mainCam.GetComponent<CinemachineBrain>().enabled = false;

@@ -7,6 +7,8 @@ using Photon.Pun;
 using JJS.Weapon;
 using JCW.UI.Options.InputBindings;
 using KSU;
+using JCW.AudioCtrl;
+
 namespace JJS
 {
     [RequireComponent(typeof(PhotonView))]
@@ -179,6 +181,7 @@ namespace JJS
         public void OnEnableObject(int index)
         {
             hitObjs[index].gameObject.SetActive(true);
+            SoundManager.Instance.PlayEffect_RPC("GuitarAttack");
         }
 
         public void OnDisableObject(int index)

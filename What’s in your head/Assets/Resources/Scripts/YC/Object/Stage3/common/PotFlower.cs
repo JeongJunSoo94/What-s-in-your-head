@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
+using JCW.AudioCtrl;
 
 /// <summary> 
 /// 
@@ -20,6 +21,7 @@ using Photon.Pun;
 
 namespace YC_OBJ
 {
+    [RequireComponent(typeof(AudioSource))]
     public class PotFlower : MonoBehaviour
     {
         [Header("<기획 편집 사항>")]
@@ -40,8 +42,7 @@ namespace YC_OBJ
 
         Animator animator;
         PhotonView pv;
-
-        [SerializeField] GameObject GrappleObj;
+        AudioSource audioSource;
 
         private void Awake()
         {
@@ -50,6 +51,8 @@ namespace YC_OBJ
             animator = this.gameObject.GetComponent<Animator>();
 
             pv = this.gameObject.GetComponent<PhotonView>();
+            audioSource = GetComponent<AudioSource>();
+            JCW.AudioCtrl.AudioSettings.SetAudio(audioSource);
         }
 
         void Update()
@@ -69,10 +72,11 @@ namespace YC_OBJ
                 {
                     curTime = maxTime;
 
-                    //if (pv.IsMine)
-                    //    animator.SetBool("isBoom", true);
-
-                    pv.RPC(nameof(SetGrapple), RpcTarget.AllViaServer);
+                    if (pv.IsMine)
+                    {
+                        animator.SetBool("isBoom", true);
+                        SoundManager.Instance.Play3D_RPC("PlantGrow", audioSource);
+                    }
 
                     isTrigger = true;
                 }
@@ -117,12 +121,6 @@ namespace YC_OBJ
             }
         }
 
-
-        [PunRPC]
-        void SetGrapple()
-        {
-            animator.SetBool("isBoom", true);
-            GrappleObj.SetActive(true);
-        }
+        
     }
 }

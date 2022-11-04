@@ -1,9 +1,11 @@
 using System.Collections;
 using System.Collections.Generic;
+using JCW.AudioCtrl;
 using UnityEngine;
 
 namespace KSU
 {
+    [RequireComponent(typeof(AudioSource))]
     public class SteadyGrapple : MonoBehaviour
     {
         public SteadyGrappleAction player; // ½ºÅ×µð
@@ -26,12 +28,15 @@ namespace KSU
         public float delayDeactivationTime = 1f;
 
         Vector3 noAimRot = new Vector3(-7.631f, 181.991f, 91.828f);
+        AudioSource audioSource;
 
         // Start is called before the first frame update
         void Awake()
         {
             grappleRigidbody = GetComponent<Rigidbody>();
             grappleRope = GetComponent<LineRenderer>();
+            audioSource = GetComponent<AudioSource>();
+            JCW.AudioCtrl.AudioSettings.SetAudio(audioSource, 1f, 50f);
         }
 
         // Update is called once per frame
@@ -140,6 +145,7 @@ namespace KSU
                 {
                     case "GrappledObject":
                         {
+                            SoundManager.Instance.Play3D_RPC("GrappleSound", audioSource);
                             player.RecieveGrappleInfo(true, other.gameObject);
                             isSucceeded = true;
                             grappleRigidbody.velocity = Vector3.zero;

@@ -1,3 +1,4 @@
+using JCW.AudioCtrl;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -19,6 +20,7 @@ namespace JCW.UI.Options
 
         virtual public void OnPointerEnter(PointerEventData eventData)
         {
+            SoundManager.Instance.PlayUI("hoveringtest");
             InvertFont();
         }
 

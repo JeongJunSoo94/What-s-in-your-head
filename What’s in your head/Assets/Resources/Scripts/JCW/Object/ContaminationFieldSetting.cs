@@ -13,19 +13,32 @@ namespace JCW.Object
         [Header("오염 필드")][SerializeField] GameObject hostField;
         [Header("전염 되는 필드")][SerializeField] GameObject carrierField;
         [Header("생성 시키기")] public bool create = true;
+        [Header("지우기")] public bool clear = false;
         [Header("감염 가능 여부")] public bool canInfect = true;
-
-
+        //[Header("간격 (기본값 5)")] [SerializeField]
         float gap = 5f;
-
 
         private void Awake()
         {
-            gap = this.gameObject.transform.localScale.x;            
+            gap = 0.9f * transform.localScale.x;            
         }
         void Update()
         {
+            if (Application.isPlaying)
+            {
+                this.enabled = false;
+                return;
+            }
             // 에디터 상에서 만들어둘 수 있게 미리 생성해두기
+            if( clear)
+            {
+                for (int k = transform.childCount - 1 ; k >= 0 ; --k)
+                {
+                    DestroyImmediate(transform.GetChild(k).gameObject);
+                }
+                clear = false;
+            }
+
             if (create)
             {
                 for (int k = transform.childCount-1 ; k>=0; --k)
@@ -43,11 +56,13 @@ namespace JCW.Object
                         if (canInfect)
                         {
                             Instantiate(carrierField, curTransform, this.transform.rotation, this.transform).SetActive(true);
+                            curTransform.y += 0.2f;
                             Instantiate(hostField, curTransform, this.transform.rotation, this.transform).SetActive(false);
                         }
                         else
                         {
                             Instantiate(carrierField, curTransform, this.transform.rotation, this.transform).SetActive(false);
+                            curTransform.y += 0.2f;
                             Instantiate(hostField, curTransform, this.transform.rotation, this.transform).SetActive(true);
                         }
                         

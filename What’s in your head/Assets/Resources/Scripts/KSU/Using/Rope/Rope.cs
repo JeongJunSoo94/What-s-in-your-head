@@ -1,9 +1,11 @@
+using JCW.AudioCtrl;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 namespace KSU
 {
+    [RequireComponent(typeof(AudioSource))]
     public class Rope : MonoBehaviour
     {
         //public enum Direction { F, FR, R, BR, B, BL, L, FL, Default }
@@ -36,12 +38,14 @@ namespace KSU
 
         public float moveToRopeSpeed = 4f;
 
-
+        AudioSource audioSource;
 
         void Start()
         {
             spawner = GetComponentInParent<RopeSpawner>();
             rotationTolerance = spawner.rotationOffset;
+            audioSource = spawner.GetComponent<AudioSource>();
+            JCW.AudioCtrl.AudioSettings.SetAudio(audioSource, 1f, 80f);
         }
 
         //void Update()
@@ -170,6 +174,7 @@ namespace KSU
 
         void MakeRope()
         {
+            SoundManager.Instance.PlayEffect("RopeThrow");
             FindStartPoints();
 
             ropeAnchor.transform.localScale = new Vector3(1, 1, 1) * (1f / spawner.transform.localScale.x);
@@ -251,21 +256,24 @@ namespace KSU
 
             // -180 < rot X <= 180 사이로 고정 
             rotationX = FitInHalfDegree(ropeAnchor.transform.localRotation.eulerAngles.x);
+            
 
             if (isSwingForward) // 앞으로 갈지 뒤로갈지 결정
-            {
+            {                
                 rotationX -= spawner.swingSpeed * Time.fixedDeltaTime * ((Mathf.Abs(spawner.swingAngle)- Mathf.Abs(rotationX)) * spawner.SwingDeltaSpeed / spawner.swingAngle + ( 1 - spawner.SwingDeltaSpeed));
                 if (rotationX < -spawner.swingAngle)
                 {
+                    SoundManager.Instance.Play3D_RPC("RopeTighten2", audioSource);
                     isSwingForward = false;
                     StartCoroutine(nameof(StopSwingInMoment));
                 }
             }
             else
-            {
+            {                
                 rotationX += spawner.swingSpeed * Time.fixedDeltaTime * ((Mathf.Abs(spawner.swingAngle) - Mathf.Abs(rotationX)) * spawner.SwingDeltaSpeed / spawner.swingAngle + (1 - spawner.SwingDeltaSpeed));
                 if (rotationX > spawner.swingAngle)
                 {
+                    SoundManager.Instance.Play3D_RPC("RopeTighten1", audioSource);
                     isSwingForward = true;
                     StartCoroutine(nameof(StopSwingInMoment));
                 }
@@ -451,6 +459,11 @@ namespace KSU
         private void OnEnable()
         {
             MakeRope();
+        }
+
+        private void OnDisable()
+        {
+            SoundManager.Instance.StopEffect();
         }
     }
 }

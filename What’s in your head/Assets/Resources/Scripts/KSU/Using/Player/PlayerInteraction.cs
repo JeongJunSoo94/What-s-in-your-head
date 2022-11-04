@@ -57,7 +57,7 @@ namespace KSU
                 }
                 else
                 {
-                    if (ropeAction.interactableRope != null)
+                    if (ropeAction.interactableRope != null && !interactionState.isMoveFromRope)
                     {
                         //animator.SetFloat("moveToRailSpeed", 2.033f / railAction.StartRailAction());
                         ropeAction.RideRope();

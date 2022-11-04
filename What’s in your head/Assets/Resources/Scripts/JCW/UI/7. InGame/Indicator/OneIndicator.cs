@@ -40,9 +40,7 @@ namespace JCW.UI.InGame.Indicator
 
         private void Update()
         {
-            if (isStart == false)
-                return;
-            if (!isActive)
+            if (!isStart || !isActive || !mainCamera)
                 return;
             Vector3 indicatorPosition = mainCamera.WorldToScreenPoint(target.position);
 
