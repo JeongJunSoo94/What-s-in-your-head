@@ -122,7 +122,7 @@ namespace JCW.Object
                 Transform playerTF = collision.gameObject.transform;
                 if (isLethal)
                     playerTF.GetComponent<PlayerController>().Resurrect();
-                if (playerTF.position.y >= this.transform.position.y)
+                else if (playerTF.position.y >= this.transform.position.y)
                     playerTF.parent = this.transform;
             }
         }

@@ -1,10 +1,11 @@
-using KSU.Monster;
 using System.Collections;
 using System.Collections.Generic;
+using JCW.AudioCtrl;
 using UnityEngine;
 
 namespace KSU
 {
+    [RequireComponent(typeof(AudioSource))]
     public class SteadyGrapple : MonoBehaviour
     {
         public SteadyGrappleAction player; // 스테디
@@ -26,11 +27,16 @@ namespace KSU
 
         public float delayDeactivationTime = 1f;
 
+        Vector3 noAimRot = new Vector3(-7.631f, 181.991f, 91.828f);
+        AudioSource audioSource;
+
         // Start is called before the first frame update
         void Awake()
         {
             grappleRigidbody = GetComponent<Rigidbody>();
             grappleRope = GetComponent<LineRenderer>();
+            audioSource = GetComponent<AudioSource>();
+            JCW.AudioCtrl.AudioSettings.SetAudio(audioSource, 1f, 50f);
         }
 
         // Update is called once per frame
@@ -53,7 +59,6 @@ namespace KSU
 
         public void InitGrapple(Vector3 startPos, Vector3 endPos, float grappleSpeed, float Offset)
         {
-            MakeRope();
             grappleRigidbody.velocity = Vector3.zero;
             transform.position = startPos;
             endPosistion = endPos;
@@ -112,24 +117,15 @@ namespace KSU
             }
             if (this.gameObject.activeSelf)
             {
-                player.RecieveGrappleInfo(false, null, GrappleTargetType.Null);
+                player.RecieveGrappleInfo(false, null);
             }
             this.gameObject.SetActive(false);
-        }
-
-        IEnumerator DelayGrabMonster(DefenseMonster monster)
-        {
-            monster.GetStun();
-            yield return new WaitForSeconds(monster.stunTime);
-            monster.EndStun();
-            gameObject.SetActive(false);
         }
 
         private void OnTriggerEnter(Collider other)
         {
             // 이거 불렛처럼 트리거로 콜라이더 해야하고 그래플드 오브젝트의 디텍팅 트리거 태그는 그래플드 오브젝트와 구분해줘야함
-            if (isSucceeded)
-                return;
+
             if((other.gameObject.layer != LayerMask.NameToLayer("UITriggers")) && (other.gameObject.layer != LayerMask.NameToLayer("Player")) && (other.gameObject.layer != LayerMask.NameToLayer("Bullet")))
             {
                 //if(other.CompareTag("GrappledObject"))
@@ -149,7 +145,8 @@ namespace KSU
                 {
                     case "GrappledObject":
                         {
-                            player.RecieveGrappleInfo(true, other.gameObject, GrappleTargetType.GrappledObject);
+                            SoundManager.Instance.Play3D_RPC("GrappleSound", audioSource);
+                            player.RecieveGrappleInfo(true, other.gameObject);
                             isSucceeded = true;
                             grappleRigidbody.velocity = Vector3.zero;
                             //StopCoroutine(nameof(DelayDeactivation));///////////////// 이거 왜해놨더라
@@ -157,25 +154,23 @@ namespace KSU
                         break;
                     case "PoisonSnake":
                         {
-                            player.RecieveGrappleInfo(true, other.gameObject, GrappleTargetType.Monster);
+                            player.RecieveGrappleInfo(true, other.gameObject);
                             isSucceeded = true;
                             grappleRigidbody.velocity = Vector3.zero;
-                            StartCoroutine(nameof(DelayGrabMonster), other.GetComponent<DefenseMonster>());
                             //StopCoroutine(nameof(DelayDeactivation));
                         }
                         break;
                     case "TrippleHeadSnake":
                         {
-                            player.RecieveGrappleInfo(true, other.gameObject, GrappleTargetType.Monster);
+                            player.RecieveGrappleInfo(true, other.gameObject);
                             isSucceeded = true;
                             grappleRigidbody.velocity = Vector3.zero;
-                            StartCoroutine(nameof(DelayGrabMonster), other.GetComponent<DefenseMonster>());
                             //StopCoroutine(nameof(DelayDeactivation));
                         }
                         break;
                     default:
                         {
-                            player.RecieveGrappleInfo(false, null, GrappleTargetType.Null);
+                            player.RecieveGrappleInfo(false, null);
                             this.gameObject.SetActive(false);
                         }
                         break;

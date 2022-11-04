@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using JCW.UI.Options.InputBindings;
 using JJS.CharacterSMB;
+using JCW.AudioCtrl;
+
 namespace JJS
 {
     public class GuitarAttackSMB : CharacterBaseSMB

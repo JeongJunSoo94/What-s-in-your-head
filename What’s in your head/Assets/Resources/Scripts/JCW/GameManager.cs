@@ -153,9 +153,9 @@ public class GameManager : MonoBehaviour, IPunObservable
         // 받는 사람
         else
         {
-            isTopView                                   = (bool)stream.ReceiveNext();
-            curStageIndex                               = (int)stream.ReceiveNext();
-            curSection                                  = (int)stream.ReceiveNext();
+            isTopView     = (bool)stream.ReceiveNext();
+            curStageIndex = (int)stream.ReceiveNext();
+            curSection    = (int)stream.ReceiveNext();
         }
     }
 }

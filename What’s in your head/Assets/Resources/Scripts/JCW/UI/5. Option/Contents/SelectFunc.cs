@@ -1,3 +1,4 @@
+using JCW.AudioCtrl;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -133,7 +134,7 @@ namespace JCW.UI.Options
         override public void InvertFont(bool isDefault = true)
         {
             base.InvertFont(isDefault);
-            hoveringImg.color = GetInvertVisible(hoveringImg.color, isDefault);
+            hoveringImg.color = GetInvertVisible(hoveringImg.color, isDefault);            
             if (!isSlider)
                 functionName.color = textName.color;
             else

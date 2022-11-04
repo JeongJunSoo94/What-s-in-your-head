@@ -10,14 +10,15 @@ GameObject:
   m_Component:
   - component: {fileID: 2952905316322709738}
   - component: {fileID: 14910816605226765}
+  - component: {fileID: 3133294681233075554}
   - component: {fileID: 4634165882922518414}
   - component: {fileID: 8225198470325158219}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: ContaminationSpawner
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &2952905316322709738
 Transform:
@@ -56,6 +57,102 @@ MonoBehaviour:
   sceneViewId: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0
+--- !u!82 &3133294681233075554
+AudioSource:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 333340742350002244}
+  m_Enabled: 1
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: 0}
+  m_audioClip: {fileID: 0}
+  m_PlayOnAwake: 1
+  m_Volume: 1
+  m_Pitch: 1
+  Loop: 0
+  Mute: 0
+  Spatialize: 0
+  SpatializePostEffects: 0
+  Priority: 128
+  DopplerLevel: 1
+  MinDistance: 1
+  MaxDistance: 500
+  Pan2D: 0
+  rolloffMode: 1
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  reverbZoneMixCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
 --- !u!114 &4634165882922518414
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -68,10 +165,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a2714831ffd241144a633828ce8ba368, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  count: 6
-  hostField: {fileID: 1097004686809977119, guid: 799ab68f9e947ff45acb6fbf429e298c, type: 3}
+  count: 5
+  hostField: {fileID: 6258832000072115270, guid: 98a6cf549f5ddda4fa32e85df1f4563c, type: 3}
   carrierField: {fileID: 8040359031097257454, guid: 87f500e215cee234ba2198e206cfdf98, type: 3}
   create: 0
+  clear: 0
   canInfect: 1
 --- !u!114 &8225198470325158219
 MonoBehaviour:
@@ -85,8 +183,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1433449a121368849be98273262484d5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  firstSpawnTime: 1
-  secondSpawnTime: 30
+  firstSpawnTime: 2
+  secondSpawnTime: 10
   flickTime: 1
   infectTime: 5
   canInfect: 1

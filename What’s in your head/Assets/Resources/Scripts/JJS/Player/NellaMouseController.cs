@@ -7,7 +7,7 @@ using Photon.Pun;
 using JJS.Weapon;
 using JCW.UI.Options.InputBindings;
 using KSU;
-using KSU.Monster;
+using JCW.AudioCtrl;
 
 namespace JJS
 {
@@ -181,6 +181,7 @@ namespace JJS
         public void OnEnableObject(int index)
         {
             hitObjs[index].gameObject.SetActive(true);
+            SoundManager.Instance.PlayEffect_RPC("GuitarAttack");
         }
 
         public void OnDisableObject(int index)
@@ -206,20 +207,10 @@ namespace JJS
                     {
                         for (int j = 0; j < hitObjs[i].HitColliders.Length; j++)
                         {
-                            // << : 찬, 성운 수정, 부쉬 오브젝트 관련
-                            switch (hitObjs[i].HitColliders[j].gameObject.tag)
+                            // << : 찬 수정, 부쉬 오브젝트 관련
+                            if (hitObjs[i].HitColliders[j].gameObject.CompareTag("Bush"))
                             {
-                                case "Bush":
-                                    {
-                                        hitObjs[i].HitColliders[j].gameObject.SendMessage("Attacked", 0.01f);
-                                    }
-                                    break;
-                                case "PoisonSnake":
-                                case "TrippleHeadSnake":
-                                    {
-                                        hitObjs[i].HitColliders[j].gameObject.GetComponent<DefenseMonster>().GetDamage(1);
-                                    }
-                                    break;
+                                hitObjs[i].HitColliders[j].gameObject.SendMessage("Attacked", 0.01f);
                             }
                         }
                     }

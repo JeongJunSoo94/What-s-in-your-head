@@ -5,10 +5,11 @@ using System.Collections.Generic;
 using UnityEngine;
 
 using KSU;
-
+using JCW.AudioCtrl;
 
 namespace JCW.Object
 {
+    [RequireComponent(typeof(AudioSource))]
     public class HostField : MonoBehaviour
     {
         [Header("다음 감염시킬 필드 찾는 시간")] [SerializeField] [Range(0, 13)] float infectTime = 5f;
@@ -17,7 +18,7 @@ namespace JCW.Object
         [Header("물총에 닿을 시 받는 데미지 (기본 10)")] [SerializeField] [Range(0,100)] float damage = 10;
         [Header("감염 가능 여부")] [SerializeField] bool canInfect = true;
 
-        bool isPurified = false;
+        public bool isPurified = false;
         int myIndex;
 
         float elapsedTime = 0f;
@@ -32,31 +33,43 @@ namespace JCW.Object
         int convertIndex;
 
         bool isStart = false;
+        bool isDead = false;
 
         // 오염된 필드 스포너로 하여금 간접 실행
         MakeHostField mediator;
 
         float curHP;
-
+        AudioSource audioSource;
+        Animator animator;
 
         private void Awake()
         {
-            curHP = maxHP;
-            parentObj = transform.parent.gameObject.transform;
-            mediator = transform.parent.gameObject.GetComponent<MakeHostField>();
-            convertIndex = transform.parent.gameObject.GetComponent<ContaminationFieldSetting>().count;
-            nextTargetOffset = new() { 2, -2, 2 * convertIndex, -2 * convertIndex };
+            curHP = maxHP;            
+            audioSource = GetComponent<AudioSource>();
+            AudioCtrl.AudioSettings.SetAudio(audioSource, 1f, 60f);
             if (!canInfect)
-            {
-                nextTargetOffset.Clear();
+            {                
                 myIndex = transform.GetSiblingIndex();
             }
+            else
+            {
+                parentObj = transform.parent.gameObject.transform;
+                mediator = transform.parent.gameObject.GetComponent<MakeHostField>();
+                convertIndex = transform.parent.gameObject.GetComponent<ContaminationFieldSetting>().count;
+                nextTargetOffset = new() { 2, -2, 2 * convertIndex, -2 * convertIndex };
+            }
+            animator = GetComponent<Animator>();
         }
 
         private void OnEnable()
         {
             if (isPurified)
                 this.gameObject.SetActive(false);
+        }
+
+        private void OnDisable()
+        {
+            isPurified = true;
         }
 
 
@@ -66,8 +79,8 @@ namespace JCW.Object
                 return;
             if (isPurified)
             {
-                Debug.Log("정화되었음");
                 this.gameObject.SetActive(false);
+                return;
             }
             else if (nextTargetOffset.Count != 0 && PhotonNetwork.IsMasterClient)
             {
@@ -124,16 +137,13 @@ namespace JCW.Object
         {
             if (!isPurified)
             {
+                gameObject.SetActive(true);
                 SetIndex(index);
                 isStart = true;
+                audioSource.Play();
+                SoundManager.Instance.Play3D_RPC("ContaminationFieldCreated", audioSource);
             }
             
-        }
-
-        public void SetPurified()
-        {
-            isPurified = true;
-            mediator.SetPurified(myIndex);
         }
 
         private void OnTriggerEnter(Collider other)
@@ -150,9 +160,35 @@ namespace JCW.Object
         public void GetDamaged()
         {
             curHP -= damage;
-            Debug.Log(curHP);
-            if (curHP <= 0)
-                SetPurified();
+            //Debug.Log(curHP);
+            if (curHP <= 0 && !isDead)
+            {
+                isDead = true;
+                animator.Play("Destroy");
+                if (mediator)
+                    mediator.SetPurified(myIndex);
+                else
+                    StartCoroutine(nameof(CheckAnimEnd));
+            }
+        }
+
+        public void Purified()
+        {
+            if(gameObject.activeSelf)
+                StartCoroutine(nameof(CheckAnimEnd));
+        }
+
+        IEnumerator CheckAnimEnd()
+        {            
+            WaitForSeconds ws = new(0.1f);
+            SoundManager.Instance.Play3D_RPC("ContaminationFieldPurified", audioSource);
+            while (animator.GetCurrentAnimatorStateInfo(0).normalizedTime < 1f)
+            {
+                yield return ws;
+            }            
+            this.enabled = false;
+            this.gameObject.SetActive(false);
+            yield break;
         }
     }
 }

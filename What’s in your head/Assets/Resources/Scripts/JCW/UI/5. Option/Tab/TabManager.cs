@@ -1,3 +1,4 @@
+using JCW.AudioCtrl;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -40,6 +41,7 @@ namespace JCW.UI.Options
                 // ¥≠∑¡¡¯ ≈«¿ª ≤®¡÷±‚
                 if (tabButtons[i] == _button)
                 {
+                    SoundManager.Instance.PlayUI("category_change");
                     curTabIndex = i;
                     _button.interactable = false;
                     _button.gameObject.transform.GetChild(1).gameObject.SetActive(true);
