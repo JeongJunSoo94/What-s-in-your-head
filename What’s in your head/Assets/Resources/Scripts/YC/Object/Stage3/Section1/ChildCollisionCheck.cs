@@ -12,22 +12,20 @@ namespace YC_OBJ
         [SerializeField] float changeValue = 1.2f;
 
         string interactionTag1 = "SteadyBeam";
-        Bush parentObj;
+        [SerializeField] Bush bushObj;
+        [SerializeField] GameObject upCollider;
 
         Renderer ren;
         MeshCollider meshCollider;
-        BoxCollider boxCollider;
 
         bool isHit = false;
 
         void Start() 
         {
-            parentObj = transform.root.GetComponent<Bush>();
 
             ren = this.gameObject.GetComponent<MeshRenderer>();
 
             meshCollider = this.gameObject.GetComponent<MeshCollider>();
-            boxCollider = transform.root.GetChild(0).GetComponent<BoxCollider>();      
         }
 
         private void OnTriggerEnter(Collider other)
@@ -44,7 +42,7 @@ namespace YC_OBJ
 
             isHit = true;
             meshCollider.enabled = false;
-            boxCollider.enabled = false;
+            upCollider.GetComponent<BoxCollider>().enabled = false;
 
 
             StartCoroutine(nameof(EffectShader), delayTime);
@@ -68,7 +66,7 @@ namespace YC_OBJ
 
                 yield return null;
 
-                parentObj.SendMessage(nameof(parentObj.Destroy_Cor));
+                bushObj.SendMessage(nameof(bushObj.Destroy_Cor));
             }
         }
     }

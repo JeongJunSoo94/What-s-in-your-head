@@ -107,6 +107,8 @@ namespace JCW.UI.InGame.Indicator
 
         protected void SetCam()
         {
+            if (GameManager.Instance.characterOwner.Count < 2)
+                return;
             mainCamera = isNella ? CameraManager.Instance.cameras[0] : CameraManager.Instance.cameras[1];
         }
 

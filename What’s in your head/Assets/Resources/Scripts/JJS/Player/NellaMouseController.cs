@@ -198,7 +198,6 @@ namespace JJS
 
         public void TargetUpdate()
         {
-
             for (int i = 0; i < hitObjs.Count; i++)
             {
                 if (hitObjs[i].gameObject.activeSelf)

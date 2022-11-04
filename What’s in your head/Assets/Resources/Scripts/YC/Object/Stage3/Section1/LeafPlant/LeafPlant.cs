@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
 using JCW.UI.InGame.Indicator;
-using JCW.AudioCtrl;
 
 /// <summary> 
 /// 
@@ -27,10 +26,8 @@ using JCW.AudioCtrl;
 
 namespace YC_OBJ
 {
-    [RequireComponent(typeof(AudioSource))]
     public class LeafPlant : MonoBehaviour
     {
-
         [Header("<기획 편집 사항>")]
         [Space]
 
@@ -48,7 +45,7 @@ namespace YC_OBJ
         public float curTime { get; private set; } = 0; // 현재 시간 게이지
         bool isCurHit = false;
         int curHitCount = 0;
-        float delayTime = 0.3f; // 총알을 현재 맞고 있는지를 몇 초 전과 비교할 것인지 (총알 발사 속도와 연관)
+        float delayTime = 0.2f; // 총알을 현재 맞고 있는지를 몇 초 전과 비교할 것인지 (총알 발사 속도와 연관)
 
 
         string interactionObjTag = "NellaWater";
@@ -61,15 +58,11 @@ namespace YC_OBJ
 
         PhotonView pv;
 
-        //string GrowedAniStateName = "Growed";
-        //string LessingAniStateName = "Lessing";
-
         [SerializeField] LiftPlayer LiftObj;
 
         Vector3 tempPos = Vector3.zero;
 
-        AudioSource audioSource;
-
+        AnimatorStateInfo animatorStateInfo;
 
         void Awake()
         {
@@ -80,8 +73,8 @@ namespace YC_OBJ
             maxTime = MaxTime;
 
             pv = this.gameObject.GetComponent<PhotonView>();
-            audioSource = GetComponent<AudioSource>();
-            JCW.AudioCtrl.AudioSettings.SetAudio(audioSource);
+
+            animatorStateInfo = animator.GetCurrentAnimatorStateInfo(0);
         }
 
         void Update()
@@ -93,10 +86,7 @@ namespace YC_OBJ
                 if (growTime > maxGrowedTime)
                 {                   
                     if (pv.IsMine)
-                    {
-                        animator.SetBool("isLess", true);
-                        animator.SetBool("isGrow", false);
-                        indicator.gameObject.SetActive(true);
+                    {                     
                         pv.RPC(nameof(SetLess_RPC), RpcTarget.AllViaServer);
                     }
                 }
@@ -107,10 +97,7 @@ namespace YC_OBJ
 
                 indicator.SetGauge(curTime / maxTime);
             }
-
-
-            //BlockPlayerMove();
-
+            BlockPlayerMove();
         }
 
         private void OnTriggerEnter(Collider other)
@@ -127,8 +114,8 @@ namespace YC_OBJ
 
         bool CheckAnimation() // 현재 성장 혹은 줄어듦 애니메이션이 진행 중인지 체크한다
         {
-            if (((animator.GetCurrentAnimatorStateInfo(0).IsName("Lessing") || animator.GetCurrentAnimatorStateInfo(0).IsName("Growed")) && 
-                animator.GetCurrentAnimatorStateInfo(0).normalizedTime < 1.0f))
+            if (((animatorStateInfo.IsName("Lessing") || animatorStateInfo.IsName("Growed")) &&
+                animatorStateInfo.normalizedTime < 1.0f))
             {
                 //Debug.Log("진행중!");
                 if(tempPos == Vector3.zero)
@@ -163,8 +150,6 @@ namespace YC_OBJ
                 LiftObj.player.GetComponent<PlayerState>().isOutOfControl = false;
 
                 //LiftObj.GetComponent<MeshCollider>().enabled = true;
-
-
             }
             else
             {
@@ -173,11 +158,9 @@ namespace YC_OBJ
                 LiftObj.player.transform.localPosition = tempPos;
 
                 //LiftObj.GetComponent<MeshCollider>().enabled = false;
-
                 //LiftObj.player.GetComponent<Rigidbody>().velocity = Vector3.zero;
             }
         }
-        // >> :
 
         void SetCurTime()
         {
@@ -189,9 +172,6 @@ namespace YC_OBJ
                 {                  
                     if (pv.IsMine)
                     {
-                        animator.SetBool("isGrow", true);
-                        animator.SetBool("isLess", false);
-                        indicator.gameObject.SetActive(false);
                         pv.RPC(nameof(SetGrow_RPC), RpcTarget.AllViaServer);
                     }
                 }
@@ -225,7 +205,10 @@ namespace YC_OBJ
         [PunRPC]
         public void SetGrow_RPC()
         {
-            audioSource.Play();
+            animator.SetBool("isGrow", true);
+            animator.SetBool("isLess", false);
+            indicator.gameObject.SetActive(false);
+
             curTime = maxTime;
             isGrowed = true;
             curTime = 0;
@@ -234,6 +217,10 @@ namespace YC_OBJ
         [PunRPC]
         public void SetLess_RPC()
         {
+            animator.SetBool("isLess", true);
+            animator.SetBool("isGrow", false);
+            indicator.gameObject.SetActive(true);
+
             isGrowed = false;
             growTime = 0;
         }
