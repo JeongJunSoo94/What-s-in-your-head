@@ -659,6 +659,12 @@ namespace KSU
                             }
                         }
                         break;
+                    case "DeadZone":
+                        {
+                            GameManager.Instance.curPlayerHP = 0;
+                            playerAnimator.SetBool("DeadTrigger", true);
+                        }
+                        break;
                 }
             }
         }
