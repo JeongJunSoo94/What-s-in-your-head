@@ -143,10 +143,10 @@ namespace KSU
         {
             if (!playerAnimator.GetBool("isShootingGrapple") && grappleSpawner.transform.parent.gameObject.activeSelf && grappleSpawner.activeSelf)
             {
-                Debug.Log("검사 시작");
+                //Debug.Log("검사 시작");
                 if (playerState.aim)
                 {
-                    Debug.Log("에임 중");
+                    //Debug.Log("에임 중");
                     Vector3 cameraForwardXZ = playerCamera.transform.forward;
                     cameraForwardXZ.y = 0;
                     Vector3 rayOrigin = playerCamera.transform.position;
@@ -156,7 +156,7 @@ namespace KSU
 
                     if (isRayChecked)
                     {
-                        Debug.Log("있나");
+                        //Debug.Log("있나");
                         direction = (_raycastHit.collider.gameObject.transform.position - rayOrigin).normalized;
                         isRayChecked = Physics.SphereCast(rayOrigin, 0.2f, direction, out _raycastHit, (rangeDistance + rangeRadius * 2f), layerFilterForGrapple, QueryTriggerInteraction.Ignore);
                         if (isRayChecked)
@@ -165,7 +165,7 @@ namespace KSU
                             {
                                 if (Vector3.Angle(playerCamera.transform.forward, (_raycastHit.collider.gameObject.transform.position - rayOrigin)) < rangeAngle)
                                 {
-                                    Debug.Log("오토 타겟");
+                                    //Debug.Log("오토 타겟");
                                     //aimUI.SetTarget(_raycastHit.collider.gameObject.transform, rangeAngle);
                                     autoAimPosition = _raycastHit.collider.gameObject.transform;
                                     steadyInteractionState.isGrappledObjectFounded = true;
