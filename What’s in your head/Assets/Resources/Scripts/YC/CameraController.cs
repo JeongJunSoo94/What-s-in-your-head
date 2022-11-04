@@ -728,7 +728,7 @@ namespace YC.Camera_
             }
         }
 
-        public void NormalJump_FixY() // 플레이어가 일반 점프 중일 때, 외부 오브젝트의 Y값을 고정시킨다  
+        void NormalJump_FixY() // 플레이어가 일반 점프 중일 때, 외부 오브젝트의 Y값을 고정시킨다  
         {
             if (isDebugLog) Debug.Log("호출 - 일반 점프 Y값 고정중");
 
