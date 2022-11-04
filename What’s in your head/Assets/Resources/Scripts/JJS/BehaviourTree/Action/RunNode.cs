@@ -5,22 +5,27 @@ namespace JJS.BT
 {
     public class RunNode : ActionNode
     {
-        public string message;
+        int syncCheck;
         protected override void OnStart()
         {
-            Debug.Log($"OnStart{message}");
+            syncCheck = objectInfo.syncIndex;
         }
 
         protected override void OnStop()
         {
-            Debug.Log($"OnStop{message}");
         }
 
         protected override State OnUpdate()
         {
-            Debug.Log($"OnUpdate{message}");
-
-            return State.Running;
+            if (objectInfo.photonView.IsMine)
+            {
+                return State.Success;
+            }
+            if (objectInfo.syncIndex == syncCheck)
+            {
+                return State.Running;
+            } 
+            return State.Failure;
         }
     }
 }

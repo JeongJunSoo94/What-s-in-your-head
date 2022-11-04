@@ -236,14 +236,13 @@ namespace KSU
 
         public void Hook()
         {
-            Debug.Log("¤§¤·¤¡");
             playerController.characterState.isRiding = true;
             playerState.IsAirJumping = false;
             playerState.WasAirDashing = false;
             playerState.IsGrounded = false;
-            Debug.Log("targetObj: " + grappledTarget.name);
-            Debug.Log("targetObj.GetComponent<GrappledObject>() : " + grappledTarget.GetComponent<GrappledObject>());
-            Debug.Log("offset: " + grappledTarget.GetComponent<GrappledObject>().GetOffsetPosition());
+            //Debug.Log("targetObj: " + grappledTarget.name);
+            //Debug.Log("targetObj.GetComponent<GrappledObject>() : " + grappledTarget.GetComponent<GrappledObject>());
+            //Debug.Log("offset: " + grappledTarget.GetComponent<GrappledObject>().GetOffsetPosition());
             targetPosition = grappledTarget.GetComponent<GrappledObject>().GetOffsetPosition();
             grappleVec = (targetPosition - transform.position).normalized * grappleMoveSpeed;
             Vector3 lookVec = grappleVec;

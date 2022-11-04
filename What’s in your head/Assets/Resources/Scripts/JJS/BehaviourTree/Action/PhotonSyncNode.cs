@@ -17,10 +17,9 @@ namespace JJS.BT
             {
                 if (local)
                 {
-                    objectInfo.syncIndex = syncChange;
+                    objectInfo.photonView.RPC(nameof(objectInfo.SyncCheck), RpcTarget.AllViaServer, syncChange);
                 }
             }
-
         }
    
         protected override void OnStop()
