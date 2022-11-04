@@ -11,13 +11,14 @@ GameObject:
   - component: {fileID: 492698}
   - component: {fileID: 3314732}
   - component: {fileID: 2336020}
-  - component: {fileID: 6429336}
-  m_Layer: 0
+  - component: {fileID: 3129714530701173595}
+  - component: {fileID: 7458664063326191341}
+  m_Layer: 3
   m_Name: mazeCornerLongTall_base
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &492698
 Transform:
@@ -84,8 +85,8 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!64 &6429336
-MeshCollider:
+--- !u!65 &3129714530701173595
+BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -94,10 +95,22 @@ MeshCollider:
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 1
-  serializedVersion: 4
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 4300000, guid: 1f745c4839fb9564ca75a1feb0275e6d, type: 3}
+  serializedVersion: 2
+  m_Size: {x: 0.41369814, y: 3, z: 3}
+  m_Center: {x: -2.793072, y: 1.5, z: 1.6}
+--- !u!65 &7458664063326191341
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 116866}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 2.9551346, y: 3, z: 0.5257593}
+  m_Center: {x: -1.4481605, y: 1.5, z: 0.45}
 --- !u!1 &187192
 GameObject:
   m_ObjectHideFlags: 0
@@ -108,12 +121,12 @@ GameObject:
   m_Component:
   - component: {fileID: 498874}
   - component: {fileID: 205196809705814090}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: mazeCornerLongTall
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &498874
 Transform:
@@ -146,12 +159,12 @@ LODGroup:
   m_AnimateCrossFading: 0
   m_LastLODIsBillboard: 0
   m_LODs:
-  - screenRelativeHeight: 0.11817104
+  - screenRelativeHeight: 0.90656626
     fadeTransitionWidth: 0
     renderers:
     - renderer: {fileID: 2336020}
     - renderer: {fileID: 2341820}
-  - screenRelativeHeight: 0.046638653
+  - screenRelativeHeight: 0.3850159
     fadeTransitionWidth: 0
     renderers:
     - renderer: {fileID: 2336020}
@@ -167,12 +180,12 @@ GameObject:
   - component: {fileID: 460242}
   - component: {fileID: 3390096}
   - component: {fileID: 2341820}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: mazeCornerLongTall_leafs
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &460242
 Transform:

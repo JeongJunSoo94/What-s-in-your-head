@@ -10,12 +10,12 @@ GameObject:
   m_Component:
   - component: {fileID: 404208}
   - component: {fileID: 205233493447962242}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: mazeWallUnit10Tall
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &404208
 Transform:
@@ -48,12 +48,12 @@ LODGroup:
   m_AnimateCrossFading: 0
   m_LastLODIsBillboard: 0
   m_LODs:
-  - screenRelativeHeight: 0.21567054
+  - screenRelativeHeight: 0.17331327
     fadeTransitionWidth: 0
     renderers:
     - renderer: {fileID: 2364338}
     - renderer: {fileID: 2378720}
-  - screenRelativeHeight: 0.088067025
+  - screenRelativeHeight: 0.12161787
     fadeTransitionWidth: 0
     renderers:
     - renderer: {fileID: 2364338}
@@ -69,12 +69,12 @@ GameObject:
   - component: {fileID: 424858}
   - component: {fileID: 3342704}
   - component: {fileID: 2378720}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: mazeWallUnit10Tall_leafs
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &424858
 Transform:
@@ -152,13 +152,13 @@ GameObject:
   - component: {fileID: 440718}
   - component: {fileID: 3343474}
   - component: {fileID: 2364338}
-  - component: {fileID: 6429202}
-  m_Layer: 0
+  - component: {fileID: 5418010172436036743}
+  m_Layer: 3
   m_Name: mazeWallUnit10Tall_base
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &440718
 Transform:
@@ -225,8 +225,8 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!64 &6429202
-MeshCollider:
+--- !u!65 &5418010172436036743
+BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -235,7 +235,6 @@ MeshCollider:
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 1
-  serializedVersion: 4
-  m_Convex: 1
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 4300000, guid: 328b72463646d824fbbbe304124d2933, type: 3}
+  serializedVersion: 2
+  m_Size: {x: 5.9999995, y: 3.4384847, z: 0.74999994}
+  m_Center: {x: -2.9998772, y: 1.4558729, z: 0.3749695}

@@ -58,15 +58,15 @@ namespace JJS.BT
         {
             if (node is ActionNode)
             {
-                input = InstantiatePort(Orientation.Vertical, Direction.Input, Port.Capacity.Single, typeof(bool));
+                input = InstantiatePort(Orientation.Vertical, UnityEditor.Experimental.GraphView.Direction.Input, Port.Capacity.Single, typeof(bool));
             }
             else if (node is CompositeNode)
             {
-                input = InstantiatePort(Orientation.Vertical, Direction.Input, Port.Capacity.Single, typeof(bool));
+                input = InstantiatePort(Orientation.Vertical, UnityEditor.Experimental.GraphView.Direction.Input, Port.Capacity.Single, typeof(bool));
             }
             else if (node is DecoratorNode)
             {
-                input = InstantiatePort(Orientation.Vertical, Direction.Input, Port.Capacity.Single, typeof(bool));
+                input = InstantiatePort(Orientation.Vertical, UnityEditor.Experimental.GraphView.Direction.Input, Port.Capacity.Single, typeof(bool));
             }
             else if (node is RootNode)
             {
@@ -86,15 +86,15 @@ namespace JJS.BT
             }
             else if (node is CompositeNode)
             {
-                output = InstantiatePort(Orientation.Vertical, Direction.Output, Port.Capacity.Multi, typeof(bool));
+                output = InstantiatePort(Orientation.Vertical, UnityEditor.Experimental.GraphView.Direction.Output, Port.Capacity.Multi, typeof(bool));
             }
             else if (node is DecoratorNode)
             {
-                output = InstantiatePort(Orientation.Vertical, Direction.Output, Port.Capacity.Single, typeof(bool));
+                output = InstantiatePort(Orientation.Vertical, UnityEditor.Experimental.GraphView.Direction.Output, Port.Capacity.Single, typeof(bool));
             }
             else if (node is RootNode)
             {
-                output = InstantiatePort(Orientation.Vertical, Direction.Output, Port.Capacity.Single, typeof(bool));
+                output = InstantiatePort(Orientation.Vertical, UnityEditor.Experimental.GraphView.Direction.Output, Port.Capacity.Single, typeof(bool));
             }
 
             if (output != null)
