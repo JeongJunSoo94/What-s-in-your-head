@@ -97,7 +97,7 @@ namespace YC_OBJ
 
                 indicator.SetGauge(curTime / maxTime);
             }
-            //BlockPlayerMove();
+            BlockPlayerMove();
         }
 
         private void OnTriggerEnter(Collider other)

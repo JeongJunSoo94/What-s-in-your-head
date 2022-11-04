@@ -9,12 +9,12 @@ namespace YC_OBJ
         string interactionTag1 = "Nella";
         string interactionTag2 = "Steady";
 
-        WoodButton Parent;
+        [SerializeField] WoodButton woodButton;
         int count = 0;
 
         void Start()
         {
-            Parent = transform.root.gameObject.GetComponent<WoodButton>();
+            
         }
    
         private void OnTriggerEnter(Collider other)
@@ -22,7 +22,7 @@ namespace YC_OBJ
             if (other.gameObject.CompareTag(interactionTag1) || other.gameObject.CompareTag(interactionTag2))
             {
                 count++;
-                Parent.SendMessage(nameof(Parent.SetAnimation), count);
+                woodButton.SendMessage(nameof(woodButton.SetAnimation), count);
             }
         }
         private void OnTriggerExit(Collider other)
@@ -30,7 +30,7 @@ namespace YC_OBJ
             if (other.gameObject.CompareTag(interactionTag1) || other.gameObject.CompareTag(interactionTag2))
             {
                 count--;
-                Parent.SendMessage(nameof(Parent.SetAnimation), count);
+                woodButton.SendMessage(nameof(woodButton.SetAnimation), count);
             }
         }
 

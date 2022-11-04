@@ -148,6 +148,8 @@ namespace YC.Camera_
 
         void FixedUpdate()
         {
+            if (isDebugLog) Debug.Log("FixedUpdate");
+
             if (!pv.IsMine) return;
 
             if (isSideView)
@@ -159,7 +161,6 @@ namespace YC.Camera_
                 ZoomInSideView();
                 return;
             }
-
 
             SetCamera();
             SetAimYAxis();
@@ -185,12 +186,7 @@ namespace YC.Camera_
             {
                 SetCineObjPos();
             }
-
-
-            //Debug.Log("Back FOV : " + backCam.GetComponent<CinemachineFreeLook>().m_YAxis.Value);
-            //Debug.Log("Sholder FOV : " + sholderCam.GetComponent<CinemachineFreeLook>().m_YAxis.Value);
         }
-
 
 
         // ====================  [Awake에서 진행하는 초기화]  ==================== //
@@ -278,7 +274,7 @@ namespace YC.Camera_
         }
 
 
-        // ====================  [Option 관련 함수]  ==================== //
+        // ====================  [Option 관련 함수 (찬우형)]  ==================== //
 
         public void Option_SetShake(bool on) // 스테디 카메라 흔들림 사용 여부  
         {
@@ -287,7 +283,7 @@ namespace YC.Camera_
 
         public void Option_SetSensitivity(float backSensitivity, float sholderSensitivity) // 마우스 민감도 설정  
         {
-            int defaulyX = 100;
+            int defaulyX = 200;
             int defaultY = 1;
 
             if (backView_MouseSensitivity == 0) backSensitivity = 25;
@@ -302,9 +298,9 @@ namespace YC.Camera_
             curSholderMaxSpeedY = sholderCam.GetComponent<CinemachineFreeLook>().m_YAxis.m_MaxSpeed;
         }
 
-        
-        // ====================  [넬라 스테디 공용 함수]  ==================== //
 
+        // ====================  [넬라 스테디 공용 함수]  ==================== //
+      
         void SetCamera() // 플레이어 State에 따라 카메라 세팅  
         {
             if (GameManager.Instance.isTopView) return;
@@ -318,42 +314,45 @@ namespace YC.Camera_
                     preCam = curCam;
                     curCam = CamState.sholder;
 
+                    if (camList[(int)preCam].GetComponent<CinemachineFreeLook>().m_YAxis.Value <= sholderAxisY_MaxUp ||
+                        camList[(int)curCam].GetComponent<CinemachineFreeLook>().m_YAxis.Value <= sholderAxisY_MaxUp)
+                    {
+                        sholderCam.GetComponent<CinemachineFreeLook>().m_YAxis.Value
+                            = sholderAxisY_MaxUp;
+                    }
+                    else if (camList[(int)preCam].GetComponent<CinemachineFreeLook>().m_YAxis.Value >= sholderAxisY_MaxDown
+                        || camList[(int)curCam].GetComponent<CinemachineFreeLook>().m_YAxis.Value >= sholderAxisY_MaxDown)
+                    {
+                        sholderCam.GetComponent<CinemachineFreeLook>().m_YAxis.Value
+                            = sholderAxisY_MaxDown;
+                    }
+                    else
+                    {
+                        camList[(int)curCam].GetComponent<CinemachineFreeLook>().m_YAxis.Value
+                                        = camList[(int)preCam].GetComponent<CinemachineFreeLook>().m_YAxis.Value;
+                    }
+
                     camList[(int)curCam].GetComponent<CinemachineFreeLook>().m_XAxis.Value
-                                   = camList[(int)preCam].GetComponent<CinemachineFreeLook>().m_XAxis.Value;
-                    camList[(int)curCam].GetComponent<CinemachineFreeLook>().m_YAxis.Value
-                                    = camList[(int)preCam].GetComponent<CinemachineFreeLook>().m_YAxis.Value;
-                    //if (camList[(int)preCam].GetComponent<CinemachineFreeLook>().m_YAxis.Value <= sholderAxisY_MaxUp)
-                    //{                     
-                    //    sholderCam.GetComponent<CinemachineFreeLook>().m_YAxis.Value
-                    //        = sholderAxisY_MaxUp;                       
-                    //}
-                    //else if (camList[(int)preCam].GetComponent<CinemachineFreeLook>().m_YAxis.Value >= sholderAxisY_MaxDown)
-                    //{                     
-                    //    sholderCam.GetComponent<CinemachineFreeLook>().m_YAxis.Value
-                    //        = sholderAxisY_MaxDown;
-                    //}
+                                    = camList[(int)preCam].GetComponent<CinemachineFreeLook>().m_XAxis.Value;
 
-                    //camList[(int)curCam].GetComponent<CinemachineFreeLook>().m_XAxis.Value
-                    //                = camList[(int)preCam].GetComponent<CinemachineFreeLook>().m_XAxis.Value;         
+                    OnOffCamera(camList[(int)curCam]);
 
-                    OnOffCamera(sholderCam);
-
-                    sholderCam.GetComponent<CinemachineFreeLook>().m_XAxis = preCamAxisX;
+                    sholderCam.GetComponent<CinemachineFreeLook>().m_XAxis = preCamAxisX;                   
                 }
             }
             else if (curCam == CamState.sholder) // Sholder View -> Back View
             {
-                if (!playerController.characterState.aim) 
+                if (!playerController.characterState.aim)
                 {
                     AxisState preCamAxisX = sholderCam.GetComponent<CinemachineFreeLook>().m_XAxis;
-
+                   
                     preCam = curCam;
                     curCam = CamState.back;
 
                     camList[(int)curCam].GetComponent<CinemachineFreeLook>().m_XAxis.Value
                                     = camList[(int)preCam].GetComponent<CinemachineFreeLook>().m_XAxis.Value;
                     camList[(int)curCam].GetComponent<CinemachineFreeLook>().m_YAxis.Value
-                                    = camList[(int)preCam].GetComponent<CinemachineFreeLook>().m_YAxis.Value;
+                                      = camList[(int)preCam].GetComponent<CinemachineFreeLook>().m_YAxis.Value;
 
                     if (isShakedFade)
                     {
@@ -361,7 +360,7 @@ namespace YC.Camera_
                         InitShakeFade();
                     }
 
-                    OnOffCamera(backCam);
+                    OnOffCamera(camList[(int)curCam]);
 
                     backCam.GetComponent<CinemachineFreeLook>().m_XAxis = preCamAxisX;
                 }
@@ -745,7 +744,7 @@ namespace YC.Camera_
 
         void LowerPlayerFollow() // 일반 점프 후 플레이어가, 점프 시작시 위치보다 아래에 있다면 카메라가 플레이어를 쫓는다  
         {
-            if (player.transform.position.y < followObj.transform.position.y) // 현재 플레이어의 높이가, followObj 높이보다 낮다면
+            if (player.transform.position.y <= followObj.transform.position.y) // 현재 플레이어의 높이가, followObj 높이보다 낮다면
             {
                 wasEndSet = true;
 
@@ -755,6 +754,7 @@ namespace YC.Camera_
                                         player.transform.position.y + lookatObjOriginY,
                                         player.transform.position.z);
 
+
                 followObj.position
                             = new Vector3(player.transform.position.x,
                                         player.transform.position.y,
@@ -762,7 +762,7 @@ namespace YC.Camera_
             }
         }
 
-        void AirJumpPlayerFollow() // 공중 점프 보간 후 플레이어 위치 따라감
+        void AirJumpPlayerFollow() // 공중 점프 보간 후 플레이어 위치 따라감  
         {
             if (isDebugLog) Debug.Log("호출 - 공중 점프 보간 후, 플레이어 위치 따라가는 중");
 
