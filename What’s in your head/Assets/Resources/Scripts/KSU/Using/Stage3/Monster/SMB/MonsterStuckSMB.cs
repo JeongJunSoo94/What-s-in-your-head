@@ -22,6 +22,7 @@ namespace KSU.Monster
         override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
         {
             animator.SetBool("isAttacked", false);
+            //GetMonsterController(animator).ResetAttackDelay();
         }
 
         // OnStateMove is called right after Animator.OnAnimatorMove()

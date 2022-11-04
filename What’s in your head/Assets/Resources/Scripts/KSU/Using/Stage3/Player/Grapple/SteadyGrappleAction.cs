@@ -197,10 +197,11 @@ namespace KSU
             if (playerState.isOutOfControl || playerState.isStopped)
                 return;
 
-            if (grappleSpawner.transform.parent.gameObject.activeSelf   )
+            if (grappleSpawner.transform.parent.gameObject.activeSelf)
             {
                 if (!grapple.gameObject.activeSelf)
                 {
+                    steadyInteractionState.isSucceededInGrappling = false;
                     grappleSpawner.SetActive(false);
                     if(GameManager.Instance.isTopView)
                     {
@@ -288,7 +289,6 @@ namespace KSU
             playerState.isRiding = true;
             playerState.IsAirJumping = false;
             playerState.WasAirDashing = false;
-            playerState.IsGrounded = false;
             targetPosition = grappledTarget.GetComponent<GrappledObject>().GetOffsetPosition();
             grappleVec = (targetPosition - transform.position).normalized * grappleMoveSpeed;
             Vector3 lookVec = grappleVec;

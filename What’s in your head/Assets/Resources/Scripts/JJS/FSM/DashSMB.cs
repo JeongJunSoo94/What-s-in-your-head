@@ -32,6 +32,12 @@ namespace JJS
         {
             GetPlayerController(animator).gameObject.GetComponent<PlayerInteraction>().InputInteract();
             GetPlayerController(animator).InputJump();
+            if (GetPlayerController(animator).characterState.IsJumping)
+            {
+                animator.SetBool("isJump", true);
+                animator.SetBool("isAir", true);
+                return;
+            }
             if (!GetPlayerController(animator).characterState.IsGrounded)
             {
                 animator.SetBool("isAir", true);

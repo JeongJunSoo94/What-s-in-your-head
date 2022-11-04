@@ -27,6 +27,7 @@ namespace KSU.Monster
         public float stunTime;
         public float ropeRadius = 1f;
         public int ropeVertexes = 50;
+        Animator playerAnimator;
 
         protected Collider[] detectedColliders;
 
@@ -44,6 +45,13 @@ namespace KSU.Monster
         [SerializeField] protected GameObject detectingUITrigger;
 
         public bool isTargetFounded = false;
+
+
+
+
+
+
+        bool isTopView = true;
 
 
         // Start is called before the first frame update
@@ -66,20 +74,35 @@ namespace KSU.Monster
 
         protected virtual void InitMonster()
         {
+            StopAllCoroutines();
             currentHP = maxHP;
             detectedTarget = null;
             currentTarget = null;
-            monsterNavAgent.speed = moveSpeed;
             monsterAnimator.SetBool("isAttacked", false);
             monsterAnimator.SetBool("isDead", false);
             monsterAnimator.SetBool("isStunned", false);
             monsterAnimator.SetBool("WasStunned", false);
             monsterAnimator.SetBool("isChasing", false);
             monsterAnimator.SetBool("isAttacking", false);
-            if(pv.IsMine)
+            if (pv.IsMine)
+            {
+                monsterNavAgent.speed = moveSpeed;
                 monsterNavAgent.enabled = true;
+            }
             monsterCollider.enabled = true;
+            attackTrigger.SetActive(false);
             detectingUITrigger.SetActive(true);
+        }
+
+        public void ActiveMonster(Vector3 position)
+        {
+            pv.RPC(nameof(ActiveThis), RpcTarget.AllViaServer, position);
+        }
+        [PunRPC]
+        protected void ActiveThis(Vector3 position)
+        {
+            transform.position = position;
+            this.gameObject.SetActive(true);
         }
 
         void InitRope()
@@ -171,11 +194,21 @@ namespace KSU.Monster
         [PunRPC]
         protected void Despawn()
         {
+            if (transform.parent == null)
+            {
+                this.gameObject.SetActive(false);
+                return;
+            }
             if(spawner == null)
             {
                 spawner = GetComponentInParent<MonsterSpawner>();
             }
             spawner.Despawn(this.gameObject);
+        }
+
+        public void SetTargetObject(Transform targetObj)
+        {
+            targetObject = targetObj.transform;
         }
 
         public void Chase()
@@ -192,7 +225,7 @@ namespace KSU.Monster
                         currentTarget = detectedTarget;
                     }
                 }
-                else if (GameManager.Instance.isTopView)
+                else if (isTopView)
                 {
                     currentTarget = targetObject;
                 }
@@ -236,9 +269,22 @@ namespace KSU.Monster
             if(pv.IsMine)
             {
                 if (detectedTarget != null)
+                {
+                    if(playerAnimator == null)
+                    {
+                        playerAnimator = detectedTarget.gameObject.GetComponent<Animator>();
+                    }
+
+                    if(playerAnimator.GetBool("isDead"))
+                    {
+                        detectedTarget = null;
+                        playerAnimator = null;
+                    }
                     return;
+                }
 
                 detectedColliders = Physics.OverlapSphere(transform.position, detectingRange);
+                bool foundPlayer = false;
                 if (detectedColliders.Length > 0)
                 {
                     foreach (var collider in detectedColliders)
@@ -250,16 +296,16 @@ namespace KSU.Monster
                             if (hit.collider.gameObject.layer == LayerMask.NameToLayer("Player"))
                             {
                                 detectedTarget = collider.gameObject.transform;
-                                //detectedTarget = collider.gameObject;
+                                foundPlayer = true;
                                 monsterAnimator.SetBool("isChasing", true);
                             }
                         }
                     }
                 }
-                else if (GameManager.Instance.isTopView)
+
+                if (!foundPlayer && isTopView)
                 {
                     detectedTarget = null;
-                    //detectedTarget = null;
                     monsterAnimator.SetBool("isChasing", true);
                 }
             }
@@ -267,16 +313,21 @@ namespace KSU.Monster
 
         public bool IsReadyToAttck()
         {
-            Vector3 distVec = transform.position - currentTarget.transform.position;
-            distVec.y = 0;
-            if (!isAttackDelayOn && (attackRange > distVec.magnitude))
+            if(pv.IsMine)
             {
-                Debug.Log("어택 하니");
-                return true;
+                Vector3 distVec = transform.position - currentTarget.transform.position;
+                distVec.y = 0;
+                if (!isAttackDelayOn && (attackRange > distVec.magnitude))
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
             }
             else
             {
-                Debug.Log("어택 안하니");
                 return false;
             }
         }
@@ -295,7 +346,7 @@ namespace KSU.Monster
             }
         }
 
-        public void StartAttack()
+        public void ResetAttackDelay()
         {
             StartCoroutine(nameof(DelayAttackAfter));
         }

@@ -7,6 +7,8 @@ using JCW.Spawner;
 using Photon.Pun;
 using JCW.Network;
 using YC.Photon;
+using KSU.Monster;
+using JCW.UI.Options.InputBindings;
 
 namespace KSU
 {
@@ -33,18 +35,21 @@ namespace KSU
         bool isGameEnd = false;
         PhotonView photonView;
 
+        bool hasStarted = false;
+
+        [SerializeField] GameObject alice;
+
         // Start is called before the first frame update
         private void Awake()
         {
             photonView = PhotonView.Get(this);
-            StartCoroutine(nameof(InitSpwanerCo));
         }
-        
+
         IEnumerator InitSpwanerCo()
         {
             yield return new WaitUntil(() => GameManager.Instance != null);
             yield return new WaitUntil(() => GameManager.Instance.characterOwner.Count >= 1);
-            if (GameManager.Instance.characterOwner[PhotonNetwork.IsMasterClient])
+            if (PhotonNetwork.IsMasterClient)
             {
                 InitSpawner();
                 StartSpawn();
@@ -54,7 +59,7 @@ namespace KSU
            //     yield return new WaitForSeconds(2f);
            //     if(GameManager.Instance != null)
            //     {
-           //         if (GameManager.Instance.characterOwner[PhotonNetwork.IsMasterClient])
+           //         if (PhotonNetwork.IsMasterClient)
            //         {
            //             InitSpawner();
            //             StartSpawn();
@@ -79,11 +84,19 @@ namespace KSU
             {
                 this.gameObject.SetActive(false);
             }
+
+            if (Input.GetKeyDown(KeyCode.F9))
+            {
+                if (PhotonNetwork.IsMasterClient)
+                {
+                    StartCoroutine(nameof(InitSpwanerCo));
+                }
+            }
         }
 
         public void StartSpawn()
         {
-            if (GameManager.Instance.characterOwner[PhotonNetwork.IsMasterClient])
+            if (PhotonNetwork.IsMasterClient)
             {
                 ResetSpawner();
                 StartCoroutine(nameof(DelayStart));
@@ -92,7 +105,7 @@ namespace KSU
 
         public void EndSpawn()
         {
-            if (GameManager.Instance.characterOwner[PhotonNetwork.IsMasterClient])
+            if (PhotonNetwork.IsMasterClient)
             {
                 StopAllCoroutines();
                 StopSpawn();
@@ -107,12 +120,12 @@ namespace KSU
             {
                 GameObject monster = PhotonNetwork.Instantiate(spawnedObjectDirectory, this.transform.position, this.transform.rotation, 0);
                 monster.transform.parent = this.gameObject.transform;
-                monster.SetActive(false);
+                monster.GetComponent<DefenseMonster>().Disappear();
+                monster.GetComponent<DefenseMonster>().SetTargetObject(alice.transform);
                 monsterList.Add(monster);
                 DespawnedMonsterQueue.Enqueue(monster);
             }
         }
-
         void ResetSpawner()
         {
             curSpawnCount = 0;
@@ -158,9 +171,11 @@ namespace KSU
         void Respawn(Vector3 spawnPosition)
         {
             curSpawnCount++;
-            GameObject monster = DespawnedMonsterQueue.Dequeue();
-            monster.transform.position = spawnPosition;
-            monster.SetActive(true);
+            if(PhotonNetwork.IsMasterClient)
+            {
+                GameObject monster = DespawnedMonsterQueue.Dequeue();
+                monster.GetComponent<DefenseMonster>().ActiveMonster(spawnPosition);
+            }
         }
         [PunRPC]
         void Spawn(Vector3 spawnPosition)
@@ -172,17 +187,25 @@ namespace KSU
         {
             monster.SetActive(false);
             monster.transform.position = this.transform.position;
-            DespawnedMonsterQueue.Enqueue(monster);
+            if(PhotonNetwork.IsMasterClient)
+            {
+                DespawnedMonsterQueue.Enqueue(monster);
+            }
             curSpawnCount--;
+            if (curSpawnCount < 0)
+                curSpawnCount = 0;
         }
 
         void StopSpawn()
         {
-            for (int i = 0; i < maxSpawnNum; ++i)
+            if(PhotonNetwork.IsMasterClient)
             {
-                if(monsterList[i].activeSelf)
+                for (int i = 0; i < maxSpawnNum; ++i)
                 {
-                    Despawn(monsterList[i]);
+                    if (monsterList[i].activeSelf)
+                    {
+                        monsterList[i].GetComponent<DefenseMonster>().Disappear();
+                    }
                 }
             }
         }

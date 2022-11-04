@@ -37,10 +37,10 @@ namespace KSU.Monster
 
         protected override void InitMonster()
         {
+            StopAllCoroutines();
             currentHP = maxHP;
             detectedTarget = null;
             currentTarget = null;
-            monsterNavAgent.speed = moveSpeed;
             monsterAnimator.SetBool("isAttacked", false);
             monsterAnimator.SetBool("isDead", false);
             monsterAnimator.SetBool("isStunned", false);
@@ -49,6 +49,14 @@ namespace KSU.Monster
             monsterAnimator.SetBool("isAttacking", false);
             monsterAnimator.SetBool("isReadyToRush", false);
             monsterAnimator.SetBool("isRushing", false);
+            if (pv.IsMine)
+            {
+                monsterNavAgent.speed = moveSpeed;
+                monsterNavAgent.enabled = true;
+            }
+            attackTrigger.SetActive(false);
+            rushTrigger.SetActive(false);
+            detectingUITrigger.SetActive(true);
             isRushDelayOn = false;
         }
 
@@ -78,8 +86,11 @@ namespace KSU.Monster
 
         public void SetRushTaget()
         {
-            rushTarget = currentTarget;
-            StartCoroutine(nameof(MaintainReadyToRush));
+            if (pv.IsMine)
+            {
+                rushTarget = currentTarget;
+                StartCoroutine(nameof(MaintainReadyToRush));
+            }
         }
 
         IEnumerator MaintainReadyToRush()
@@ -90,19 +101,26 @@ namespace KSU.Monster
 
         public void RotateForRush()
         {
-            Vector3 direction = (rushTarget.transform.position - transform.position);
-            Vector3 forward = Vector3.Slerp(transform.forward, direction.normalized, rotationSpeed * Time.deltaTime / Vector3.Angle(transform.forward, direction.normalized));
-            forward.y = 0;
-            transform.LookAt(transform.position + forward);
+            if(pv.IsMine)
+            {
+                Vector3 direction = (rushTarget.transform.position - transform.position);
+                Vector3 forward = Vector3.Slerp(transform.forward, direction.normalized, rotationSpeed * Time.deltaTime / Vector3.Angle(transform.forward, direction.normalized));
+                forward.y = 0;
+                transform.LookAt(transform.position + forward);
+            }
         }
         public void StartRush()
         {
-            StartCoroutine(nameof(DelayRush));
-            StartCoroutine(nameof(MaintainRush));
             ActivateRush();
-            monsterNavAgent.speed = rushSpeed;
-            monsterNavAgent.enabled = true;
-            Rush();
+
+            if (pv.IsMine)
+            {
+                StartCoroutine(nameof(DelayRush));
+                StartCoroutine(nameof(MaintainRush));
+                monsterNavAgent.speed = rushSpeed;
+                monsterNavAgent.enabled = true;
+                Rush();
+            }
         }
 
         IEnumerator MaintainRush()
@@ -121,7 +139,10 @@ namespace KSU.Monster
 
         public void Rush()
         {
-            monsterNavAgent.destination = (transform.position + transform.forward * 10f);
+            if (pv.IsMine)
+            {
+                monsterNavAgent.destination = (transform.position + transform.forward * 10f);
+            }
         }
 
         void ActivateRush()
@@ -131,10 +152,13 @@ namespace KSU.Monster
 
         public void EndRush()
         {
-            rushTarget = null;
-            monsterNavAgent.destination = transform.position;
-            monsterNavAgent.enabled = false;
-            monsterNavAgent.speed = moveSpeed;
+            if (pv.IsMine)
+            {
+                rushTarget = null;
+                monsterNavAgent.destination = transform.position;
+                monsterNavAgent.enabled = false;
+                monsterNavAgent.speed = moveSpeed;
+            }
             rushTrigger.SetActive(false);
         }
 

@@ -28,7 +28,7 @@ namespace KSU
         Animator playerAnimator;
         CapsuleCollider playerCapsuleCollider;
         public Camera mainCamera;
-        Rigidbody playerRigidbody;
+        public Rigidbody playerRigidbody;
         //[Header("키 설정")] [SerializeField] private GameObject UI_BG;    
         PhotonView photonView;
         #endregion
@@ -251,6 +251,7 @@ namespace KSU
         {
             InitInteraction();
             InitController();
+            GameManager.Instance.curPlayerHP = 12;
             characterState.InitState(true, false);
             if (!File.Exists(Application.dataPath + "/Resources/CheckPointInfo/Stage" +
                 GameManager.Instance.curStageIndex + "/Section" + GameManager.Instance.curSection + ".json"))
@@ -380,7 +381,7 @@ namespace KSU
         }
         public void InputDash()
         {
-            if (characterState.isOutOfControl || characterState.isStopped || characterState.isRiding)
+            if (characterState.isOutOfControl || characterState.isStopped || characterState.isRiding || !characterState.CanJump)
                 return;
             if (KeyManager.Instance.GetKeyDown(PlayerAction.Dash))
             {
@@ -478,12 +479,32 @@ namespace KSU
                 {
                     moveVec.y = terminalSpeed;
                 }
+
+                if(characterState.isAirBlocked)
+                {
+                    playerRigidbody.velocity = Vector3.up * moveVec.y;
+                }
+                else
+                {
+                    playerRigidbody.velocity = moveVec;
+                }
                 playerRigidbody.velocity = moveVec;
                 return;
             }
 
             if (!characterState.IsGrounded || !characterState.CanJump)
             {
+                if (characterState.isAirBlocked)
+                {
+                    moveVec.y += gravity * Time.fixedDeltaTime;
+                    if (moveVec.y < terminalSpeed)
+                    {
+                        moveVec.y = terminalSpeed;
+                    }
+                    playerRigidbody.velocity = Vector3.up * moveVec.y;
+                    return;
+                }
+
                 if (characterState.IsAirDashing) // 공중대시 중일 때
                 {
                     moveVec = transform.forward.normalized * airDashSpeed;

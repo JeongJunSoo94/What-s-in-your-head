@@ -2732,6 +2732,7 @@ MonoBehaviour:
   characterState: {fileID: 4557260369275093484}
   playerMouse: {fileID: 5027572550733305681}
   mainCamera: {fileID: 0}
+  playerRigidbody: {fileID: 0}
   walkSpeed: 4
   runSpeed: 7
   dashSpeed: 10
@@ -2821,10 +2822,12 @@ MonoBehaviour:
   slopeAngleCofacter: 0
   IsGrounded: 0
   isFowardBlock: 0
+  isAirBlocked: 0
   isOverAngleForSlope: 0
   isMove: 0
   isRun: 0
   CanJump: 1
+  isDelayingDashJump: 0
   IsJumping: 0
   IsAirJumping: 0
   IsDashing: 0
@@ -2952,22 +2955,22 @@ MonoBehaviour:
     SynchronizeType: 2
     Name: moveToRailSpeed
   - Type: 4
-    SynchronizeType: 0
+    SynchronizeType: 2
     Name: isAttacked
   - Type: 4
-    SynchronizeType: 0
+    SynchronizeType: 2
     Name: isDead
   - Type: 4
-    SynchronizeType: 0
+    SynchronizeType: 2
     Name: isKnockBack
   - Type: 4
-    SynchronizeType: 0
+    SynchronizeType: 2
     Name: AttackedTrigger
   - Type: 4
-    SynchronizeType: 0
+    SynchronizeType: 2
     Name: DeadTrigger
   - Type: 4
-    SynchronizeType: 0
+    SynchronizeType: 2
     Name: KnockBackTrigger
   m_SynchronizeLayers:
   - SynchronizeType: 2

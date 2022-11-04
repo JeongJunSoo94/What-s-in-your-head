@@ -34,7 +34,7 @@ namespace JJS
         {
             GetPlayerController(animator).GetComponent<KSU.PlayerInteraction>().InputInteract();
             float DistY = (GetPlayerController(animator).moveVec.y) / 10.0f;
-            if (DistY <= 0)
+            if (DistY <= 0.1f)
             {
                 animator.SetBool("JumpDown", true);
             }

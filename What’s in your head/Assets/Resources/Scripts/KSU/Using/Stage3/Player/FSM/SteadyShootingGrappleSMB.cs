@@ -14,18 +14,17 @@ namespace KSU.FSM
         bool isFired = false;
         override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
         {
+            isFired = false;
+            isSuceededInGrapple = false;
+            isSuceededInGrab = false;
             GetPlayerController(animator).playerMouse.ik.enabled = false;
             animator.SetLayerWeight(1, 1);
             animator.SetBool("Aim", false);
-            isSuceededInGrapple = false;
-            isSuceededInGrab = false;
-            isFired = false;
         }
 
         // OnStateUpdate is called on each Update frame between OnStateEnter and OnStateExit callbacks
         override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
         {
-
             check(animator);
         }
 
