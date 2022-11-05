@@ -1,4 +1,5 @@
 using JJS.CharacterSMB;
+using KSU.AutoAim.Player;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -7,6 +8,7 @@ namespace KSU.FSM
 {
     public class SteadyGrappleSMB : CharacterBaseSMB
     {
+        // ¹ö±×
         SteadyGrappleAction grappleAction;
         public SteadyGrappleAction GetGrappleAction(Animator animator)
         {

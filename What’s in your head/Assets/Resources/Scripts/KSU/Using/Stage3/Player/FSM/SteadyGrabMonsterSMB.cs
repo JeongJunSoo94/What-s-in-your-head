@@ -45,10 +45,11 @@ namespace KSU.FSM
         void check(Animator animator)
         {
             animator.SetFloat("HorizonVelocity", 0f);
-            if (!GetGrappleAction(animator).GetWhetherGrappleActived())
-            {
-                animator.SetBool("isGrabMonster", false);
-            }
+            // ¹ö±×
+            //if (!GetGrappleAction(animator).GetWhetherGrappleActived())
+            //{
+            //    animator.SetBool("isGrabMonster", false);
+            //}
         }
     }
 }

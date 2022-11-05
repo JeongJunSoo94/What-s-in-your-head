@@ -48,8 +48,9 @@ namespace KSU.FSM
 
         void check(Animator animator)
         {
-            isSuceededInGrapple = GetPlayerController(animator).playerMouse.GetCustomInfo(GrappleTargetType.GrappledObject);
-            isSuceededInGrab = GetPlayerController(animator).playerMouse.GetCustomInfo(GrappleTargetType.Monster);
+            // ¹ö±×
+            //isSuceededInGrapple = GetPlayerController(animator).playerMouse.GetCustomInfo(GrappleTargetType.GrappledObject);
+            //isSuceededInGrab = GetPlayerController(animator).playerMouse.GetCustomInfo(GrappleTargetType.Monster);
             //animator.SetBool("isGrappleMoving", GetPlayerController(animator).playerMouse.GetCustomInfo());
             if (!isFired)
             {

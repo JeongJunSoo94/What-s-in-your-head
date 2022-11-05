@@ -11,8 +11,11 @@ using YC.Camera_Single;
 using JCW.UI.InGame.Indicator;
 using JCW.UI.InGame;
 using KSU.Monster;
+using KSU.AutoAim.Player.Object;
+using KSU.AutoAim.Object;
+using KSU.AutoAim.Object.Monster;
 
-namespace KSU
+namespace KSU.AutoAim.Player
 {
     public enum GrappleTargetType { GrappledObject, Monster, Null};
     public class SteadyGrappleAction : MonoBehaviour
@@ -63,22 +66,6 @@ namespace KSU
 
         List<GameObject> grappledObjects = new();
 
-        /// <summary> Gizmo
-        Vector3 startCenter;
-        Vector3 startUp;
-        Vector3 startDown;
-        Vector3 startLeft;
-        Vector3 startRight;
-
-        Vector3 hVision;
-
-        Vector3 endCenter;
-        Vector3 endUp;
-        Vector3 endDown;
-        Vector3 endLeft;
-        Vector3 endRight;
-        /// </summary>
-        /// 
         PhotonView photonView;
 
 
@@ -96,7 +83,8 @@ namespace KSU
             grappleObject = Instantiate(grappleObject);
             grappleObject.SetActive(false);
             grapple = grappleObject.GetComponent<SteadyGrapple>();
-            grapple.player = this;
+            // 버그
+            //grapple.player = this;
             grapple.spawner = grappleSpawner;
 
             playerAnimator = GetComponent<Animator>();
@@ -114,39 +102,18 @@ namespace KSU
             
             if (grappleSpawner.transform.parent.gameObject.activeSelf && grappleSpawner.transform.parent.gameObject.activeSelf)
             {
-                MakeGizmoVecs();
+                
             }
             MoveToTarget();
         }
-        // 스테디 전용 스킬 클래스로
-        //void HookOrEscape()
-        //{
-        //    if (steadyInteractionState.isHookableObjectFounded)
-        //    {
-        //        if (steadyInteractionState.isRidingHookingRope)
-        //        {
-        //            if (KeyManager.Instance.GetKeyDown(PlayerAction.Jump))
-        //            {
-        //                EscapeMoving();
-        //            }
-        //        }
-        //        else
-        //        {
-        //            if (KeyManager.Instance.GetKeyDown(PlayerAction.Fire))
-        //            {
-        //                Hook(hookableTarget);
-        //            }
-        //        }
-        //    }
-        //}
+
+
         public void SearchGrappledObject()
         {
             if (!playerAnimator.GetBool("isShootingGrapple") && grappleSpawner.transform.parent.gameObject.activeSelf && grappleSpawner.activeSelf)
             {
-                Debug.Log("검사 시작");
                 if (playerState.aim)
                 {
-                    Debug.Log("에임 중");
                     Vector3 cameraForwardXZ = playerCamera.transform.forward;
                     cameraForwardXZ.y = 0;
                     Vector3 rayOrigin = playerCamera.transform.position;
@@ -156,7 +123,6 @@ namespace KSU
 
                     if (isRayChecked)
                     {
-                        Debug.Log("있나");
                         direction = (_raycastHit.collider.gameObject.transform.position - rayOrigin).normalized;
                         isRayChecked = Physics.SphereCast(rayOrigin, 0.2f, direction, out _raycastHit, (rangeDistance + rangeRadius * 2f), layerFilterForGrapple, QueryTriggerInteraction.Ignore);
                         if (isRayChecked)
@@ -165,24 +131,21 @@ namespace KSU
                             {
                                 if (Vector3.Angle(playerCamera.transform.forward, (_raycastHit.collider.gameObject.transform.position - rayOrigin)) < rangeAngle)
                                 {
-                                    Debug.Log("오토 타겟");
-                                    //aimUI.SetTarget(_raycastHit.collider.gameObject.transform, rangeAngle);
                                     autoAimPosition = _raycastHit.collider.gameObject.transform;
-                                    steadyInteractionState.isGrappledObjectFounded = true;
+                                    steadyInteractionState.isAutoAimObjectFounded = true;
                                     return;
                                 }
                             }
                         }
                     }
                 }
-                //aimUI.SetTarget(null, rangeAngle);
-                steadyInteractionState.isGrappledObjectFounded = false;
+                steadyInteractionState.isAutoAimObjectFounded = false;
             }
         }
 
         public void SendInfoAImUI()
         {
-            if(steadyInteractionState.isGrappledObjectFounded)
+            if(steadyInteractionState.isAutoAimObjectFounded)
             {
                 aimUI.SetTarget(autoAimPosition, rangeAngle);
             }
@@ -201,7 +164,7 @@ namespace KSU
             {
                 if (!grapple.gameObject.activeSelf)
                 {
-                    steadyInteractionState.isSucceededInGrappling = false;
+                    steadyInteractionState.isSucceededInHittingTaget = false;
                     grappleSpawner.SetActive(false);
                     if(GameManager.Instance.isTopView)
                     {
@@ -210,12 +173,12 @@ namespace KSU
                         forward.y = 0;
                         if (forward.magnitude > grapplingRange)
                             forward = forward.normalized * grapplingRange;
-                        grapple.InitGrapple(grappleSpawner.transform.position, (grappleSpawner.transform.position + forward), grappleSpeed, grappleDepartOffset);
+                        grapple.InitObject(grappleSpawner.transform.position, (grappleSpawner.transform.position + forward), grappleSpeed, grappleDepartOffset);
                     }
-                    else if (steadyInteractionState.isGrappledObjectFounded)
+                    else if (steadyInteractionState.isAutoAimObjectFounded)
                     {
                         // 도착 위치: autoAimPosition
-                        grapple.InitGrapple(grappleSpawner.transform.position, autoAimPosition.position, grappleSpeed, grappleDepartOffset);
+                        grapple.InitObject(grappleSpawner.transform.position, autoAimPosition.position, grappleSpeed, grappleDepartOffset);
                     }
                     else
                     {
@@ -224,14 +187,12 @@ namespace KSU
                         bool rayCheck = Physics.Raycast(playerCamera.transform.position, playerCamera.transform.forward, out hit, grapplingRange,-1,QueryTriggerInteraction.Ignore);
                         if(rayCheck && (hit.distance > Vector3.Distance(transform.position, playerCamera.transform.position)))
                         {
-                            grapple.InitGrapple(grappleSpawner.transform.position, hit.point, grappleSpeed, grappleDepartOffset);
+                            grapple.InitObject(grappleSpawner.transform.position, hit.point, grappleSpeed, grappleDepartOffset);
                         }
                         else
                         {
-                            grapple.InitGrapple(grappleSpawner.transform.position, (playerCamera.transform.position + playerCamera.transform.forward * grapplingRange), grappleSpeed, grappleDepartOffset);
+                            grapple.InitObject  (grappleSpawner.transform.position, (playerCamera.transform.position + playerCamera.transform.forward * grapplingRange), grappleSpeed, grappleDepartOffset);
                         }
-                        //grapple.InitGrapple(grappleSpawner.transform.position, (playerCamera.transform.position + playerCamera.transform.forward * grapplingRange), grappleSpeed, grappleDepartOffset);
-
                     }
                 }
             }
@@ -240,13 +201,11 @@ namespace KSU
         public void RecieveGrappleInfo(bool isSuceeded, GameObject targetObj, GrappleTargetType grappleTargetType)
         {
             curTargetType = grappleTargetType;
-            steadyInteractionState.isSucceededInGrappling = isSuceeded;
+            steadyInteractionState.isSucceededInHittingTaget = isSuceeded;
 
             if (isSuceeded)
             {
                 grappledTarget = targetObj;
-                //if (targetObj.CompareTag("grappledObjects"))
-                //    Hook();
             }
             else
             {
@@ -258,7 +217,7 @@ namespace KSU
         {
             if((grappleTargetType == curTargetType))
             {
-                return steadyInteractionState.isSucceededInGrappling;
+                return steadyInteractionState.isSucceededInHittingTaget;
             }
             return false;
         }
@@ -322,7 +281,7 @@ namespace KSU
                     {
                         case "GrappledObject":
                             {
-                                rayCheck = Physics.Raycast(playerCamera.transform.position, directoin, out hit, grappledObject.GetComponentInParent<GrappledObject>().detectingRange * 1.5f, layerFilterForGrapple, QueryTriggerInteraction.Ignore);
+                                rayCheck = Physics.Raycast(playerCamera.transform.position, directoin, out hit, grappledObject.GetComponentInParent<GrappledObject>().detectingUIRange * 1.5f, layerFilterForGrapple, QueryTriggerInteraction.Ignore);
                                 if (rayCheck)
                                 {
                                     if (hit.collider.CompareTag("GrappledObject"))
@@ -380,17 +339,12 @@ namespace KSU
                     }
                 }
             }
-
-            //if(steadyInteractionState.isGrappledObjectFounded)
-            //{
-
-            //}
         }
 
         public void EscapeMoving()
         {
             grappledTarget = null;
-            steadyInteractionState.isSucceededInGrappling = false;
+            steadyInteractionState.isSucceededInHittingTaget = false;
             grappleSpawner.SetActive(true);
             steadyInteractionState.isGrappling = false;
             Vector3 inertiaVec = grappleVec;
@@ -402,54 +356,6 @@ namespace KSU
             playerController.characterState.isRiding = false;
             grapple.gameObject.SetActive(false);
         }
-
-        void MakeGizmoVecs()
-        {
-            if (playerState.aim)
-            {
-                hVision = playerCamera.transform.forward;
-
-                startCenter = playerCamera.transform.position;
-
-                startUp = startCenter + playerCamera.transform.up * rangeRadius;
-                startDown = startCenter - playerCamera.transform.up * rangeRadius;
-                startLeft = startCenter - playerCamera.transform.right * rangeRadius;
-                startRight = startCenter + playerCamera.transform.right * rangeRadius;
-
-                endCenter = startCenter + hVision * rangeDistance;
-
-                endUp = endCenter + playerCamera.transform.up * rangeRadius;
-                endDown = endCenter - playerCamera.transform.up * rangeRadius;
-                endLeft = endCenter - playerCamera.transform.right * rangeRadius;
-                endRight = endCenter + playerCamera.transform.right * rangeRadius;
-            }
-        }
-
-        //private void OnDrawGizmos()
-        //{
-        //    if (playerState.aim)
-        //    {
-        //        if (_raycastHit.point != null)
-        //        {
-        //            Gizmos.color = Color.red;
-        //            Gizmos.DrawSphere(_raycastHit.point, 1f);
-        //        }
-
-        //        Gizmos.DrawLine(startUp, endUp);
-        //        Gizmos.DrawLine(startDown, endDown);
-        //        Gizmos.DrawLine(startRight, endRight);
-        //        Gizmos.DrawLine(startLeft, endLeft);
-
-        //        Gizmos.DrawWireSphere(startCenter, rangeRadius);
-        //        Gizmos.DrawWireSphere(endCenter, rangeRadius);
-        //    }
-        //    Vector3 rayOrigin = grappleSpawner.transform.position;
-        //    Vector3 rayEnd = (playerCamera.transform.position + playerCamera.transform.forward * (rangeDistance + rangeRadius * 2f));
-
-        //    //sphere.transform.position = rayEnd;
-
-        //    Gizmos.DrawLine(rayOrigin, rayEnd);
-        //}
 
         private void OnTriggerEnter(Collider other)
         {

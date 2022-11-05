@@ -25128,8 +25128,12 @@ GameObject:
   - component: {fileID: 8239392579310060931}
   - component: {fileID: 2953762621103950369}
   - component: {fileID: 5821330284378002438}
+  - component: {fileID: 5783218222808257875}
+  - component: {fileID: 6281689782277993454}
+  - component: {fileID: 2400329828055406285}
+  - component: {fileID: 17429620065079624}
   m_Layer: 6
-  m_Name: JJS_Steady
+  m_Name: KSU_Steady
   m_TagString: Steady
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -25169,7 +25173,7 @@ CapsuleCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4466008002383961549}
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 13400000, guid: e95ff48113628b14f9cf06b2cc75d36e, type: 2}
   m_IsTrigger: 0
   m_Enabled: 1
   m_Radius: 0.2
@@ -25421,7 +25425,7 @@ MonoBehaviour:
   airMoveSpeed: 5
   jumpSpeed: 20
   airJumpSpeed: 12
-  gravity: -20
+  gravity: -19.6
   gravityCofactor: 10
   terminalSpeed: -20
   knockBackVerticalSpeed: 16
@@ -25644,8 +25648,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 579bab751d308f040bfbbe0c7f21e5da, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isGrappledObjectFounded: 0
-  isSucceededInGrappling: 0
+  isAutoAimObjectFounded: 0
+  isSucceededInHittingTaget: 0
   isGrappling: 0
   isGrabMonster: 0
 --- !u!114 &2953762621103950369
@@ -25670,10 +25674,10 @@ MonoBehaviour:
   grappleSpawner: {fileID: 1911663723217604559}
   grappleObject: {fileID: 7909980709306676830, guid: c9b54073bf48f804ebee62282b5e85af, type: 3}
   aimUI: {fileID: 8657421885556112005}
-  grappleMoveSpeed: 10
-  grappleSpeed: 30
+  grappleMoveSpeed: 25
+  grappleSpeed: 40
   grappleDepartOffset: 0.5
-  escapeGrapplePower: 10
+  escapeGrapplePower: 15
   rangeRadius: 5
   rangeDistance: 20
   grapplingRange: 30
@@ -25695,6 +25699,91 @@ MonoBehaviour:
   trailSpawnTime: 0.01
   skinnedMeshRenderer: {fileID: 725354830659837064}
   mat: {fileID: 2100000, guid: 02bb375c5f6221a4a971ceaca93398a2, type: 2}
+--- !u!114 &5783218222808257875
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4466008002383961549}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c49e76deed5f5aa4ab12234fed8a2938, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  lookAtObj: {fileID: 0}
+  layerFilterForCymbals:
+    serializedVersion: 2
+    m_Bits: 0
+  layerForCymbals:
+    serializedVersion: 2
+    m_Bits: 0
+  cymbalsSpawner: {fileID: 0}
+  cymbalsObject: {fileID: 0}
+  aimUI: {fileID: 0}
+  cymbalsSpeed: 10
+  cymbalsDepartOffset: 0.5
+  rangeRadius: 5
+  rangeDistance: 15
+  grapplingRange: 30
+  rangeAngle: 30
+--- !u!114 &6281689782277993454
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4466008002383961549}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bb61df2b062c5884a8b1ae05e5a05b1a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  lookAtObj: {fileID: 0}
+  layerFilterForAutoAim:
+    serializedVersion: 2
+    m_Bits: 0
+  layerForAutoAim:
+    serializedVersion: 2
+    m_Bits: 0
+  autoAimObjectSpawner: {fileID: 0}
+  autoAimObject: {fileID: 0}
+  aimUI: {fileID: 0}
+  cymbalsSpeed: 10
+  cymbalsDepartOffset: 0.5
+  rangeRadius: 5
+  rangeDistance: 15
+  grapplingRange: 30
+  rangeAngle: 30
+--- !u!114 &2400329828055406285
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4466008002383961549}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 05aa2724f4e539b4f995ca75a18a0e5f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  detectingUIRange: 0
+--- !u!114 &17429620065079624
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4466008002383961549}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 039c01f1299219b4c94b67106c050724, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  player: {fileID: 0}
+  spawner: {fileID: 0}
+  isEndPosition: 0
+  isSucceeded: 0
 --- !u!1 &4482534781309066923
 GameObject:
   m_ObjectHideFlags: 0

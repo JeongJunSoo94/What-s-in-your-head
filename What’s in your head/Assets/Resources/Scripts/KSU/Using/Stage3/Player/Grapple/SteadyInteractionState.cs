@@ -6,8 +6,9 @@ namespace KSU
 {
     public class SteadyInteractionState : MonoBehaviour
     {
-        public bool isGrappledObjectFounded = false;
-        public bool isSucceededInGrappling = false;
+        public bool isAutoAimObjectFounded = false;
+        public bool isSucceededInHittingTaget = false;
+
         public bool isGrappling = false;
         public bool isGrabMonster = false;
 

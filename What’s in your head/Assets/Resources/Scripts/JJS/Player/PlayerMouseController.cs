@@ -179,11 +179,11 @@ namespace JJS
             yield break;
         }
 
-
-        public virtual bool GetCustomInfo(GrappleTargetType grappleTargetType)
-        {
-            return false;
-        }
+        // ¹ö±×
+        //public virtual bool GetCustomInfo(GrappleTargetType grappleTargetType)
+        //{
+        //    return false;
+        //}
 
         //public virtual bool InputLeftMouseButton()
         //{
