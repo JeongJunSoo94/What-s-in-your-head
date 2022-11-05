@@ -4,54 +4,67 @@ using UnityEngine;
 using UnityEngine.AI;
 
 using JCW.Spawner;
+using Photon.Pun;
 
 namespace KSU.Monster
 {
     public class DefenseMonster : MonoBehaviour
     {
+        protected PhotonView pv;
+
         [SerializeField] protected int maxHP;
-        protected int currentHP;
+        public int currentHP;
         public float attackRange = 1f;
-        public int attackPower;
-        [SerializeField] protected GameObject targetObject;
-        protected GameObject detectedTarget;
-        protected GameObject currentTarget;
+        public int attackDamage;
+        [SerializeField] LayerMask chaseLayerFiter;
+        [SerializeField] protected Transform targetObject;
+        protected Transform detectedTarget;
+        protected Transform currentTarget;
         [SerializeField] protected float detectingRange;
         public float detectingUIRange;
         public float moveSpeed; //시리얼
         //public float stuckTime; //시리얼
-        public float sturnTime; //시리얼
+        public float stunTime;
         public float ropeRadius = 1f;
         public int ropeVertexes = 50;
+        Animator playerAnimator;
 
         protected Collider[] detectedColliders;
 
         protected NavMeshAgent monsterNavAgent;
         protected Animator monsterAnimator;
         protected LineRenderer monsterRope;
+        protected CapsuleCollider monsterCollider;
 
-        protected Spawner spawner;
+        protected MonsterSpawner spawner;
 
         public bool isAttackDelayOn = false;
-        public float attackDelayTime = 2f;
-        [SerializeField] GameObject attackTrigger;
-        [SerializeField] GameObject detectingUITrigger;
+        [Header("공격하기 전 딜레이 시간")] public float attackDelayTimeBefore = 2f;
+        [Header("공격한 후 딜레이 시간")] public float attackDelayTimeAfter = 2f;
+        [SerializeField] protected GameObject attackTrigger;
+        [SerializeField] protected GameObject detectingUITrigger;
 
         public bool isTargetFounded = false;
 
-        bool isDefenseMode = false;
+
+
+
+
+
+        bool isTopView = true;
+
 
         // Start is called before the first frame update
         void Awake()
         {
-            //monsterRigidBody = GetComponent<Rigidbody>();
+            pv = PhotonView.Get(this);
             monsterNavAgent = GetComponent<NavMeshAgent>();
-            spawner = GetComponentInParent<Spawner>();
+            spawner = GetComponentInParent<MonsterSpawner>();
             monsterAnimator = GetComponent<Animator>();
             monsterRope = GetComponent<LineRenderer>();
+            monsterCollider = GetComponent<CapsuleCollider>();
             detectingUITrigger.transform.localScale = Vector3.one * detectingUIRange * 2f;
             InitRope();
-            //isDefenseMode = GameManger 에서 받기
         }
 
         //private void OnDisable()
@@ -61,15 +74,35 @@ namespace KSU.Monster
 
         protected virtual void InitMonster()
         {
+            StopAllCoroutines();
             currentHP = maxHP;
             detectedTarget = null;
             currentTarget = null;
-            monsterNavAgent.speed = moveSpeed;
             monsterAnimator.SetBool("isAttacked", false);
             monsterAnimator.SetBool("isDead", false);
-            monsterAnimator.SetBool("isSturn", false);
+            monsterAnimator.SetBool("isStunned", false);
+            monsterAnimator.SetBool("WasStunned", false);
             monsterAnimator.SetBool("isChasing", false);
             monsterAnimator.SetBool("isAttacking", false);
+            if (pv.IsMine)
+            {
+                monsterNavAgent.speed = moveSpeed;
+                monsterNavAgent.enabled = true;
+            }
+            monsterCollider.enabled = true;
+            attackTrigger.SetActive(false);
+            detectingUITrigger.SetActive(true);
+        }
+
+        public void ActiveMonster(Vector3 position)
+        {
+            pv.RPC(nameof(ActiveThis), RpcTarget.AllViaServer, position);
+        }
+        [PunRPC]
+        protected void ActiveThis(Vector3 position)
+        {
+            transform.position = position;
+            this.gameObject.SetActive(true);
         }
 
         void InitRope()
@@ -93,111 +126,205 @@ namespace KSU.Monster
 
         public virtual void GetDamage(int damage)
         {
+            if(pv.IsMine && !monsterAnimator.GetBool("isAttacked") && !monsterAnimator.GetBool("isDead"))
+            {
+                pv.RPC(nameof(SetDamage), RpcTarget.AllViaServer, damage);
+            }
+        }
+
+        [PunRPC]
+        protected void SetDamage(int damage)
+        {
             currentHP -= damage;
             monsterAnimator.SetBool("isAttacked", true);
-            if (currentHP < 0)
+            if (currentHP <= 0)
             {
                 monsterAnimator.SetBool("isDead", true);
             }
         }
 
 
-        public void GetSturn()
+        public void GetStun()
         {
-            monsterAnimator.SetBool("isSturn", true);
+            if (pv.IsMine && !monsterAnimator.GetBool("isAttacked") && !monsterAnimator.GetBool("isDead"))
+            {
+                pv.RPC(nameof(SetStun), RpcTarget.AllViaServer);
+            }
         }
-        public void StartSturn()
+
+        [PunRPC]
+        protected void SetStun()
         {
-            StartCoroutine(nameof(DelaySturn));
+            monsterAnimator.SetBool("isStunned", true);
+        }
+
+
+        public void StartStun()
+        {
             monsterRope.enabled = true;
             // 스턴 이펙트 켜기
         }
 
-        IEnumerator DelaySturn()
-        {
-            yield return new WaitForSeconds(sturnTime);
-            monsterAnimator.SetBool("isSturn", false);
-        }
-
-        public void EndSturn()
+        public void EndStun()
         {
             monsterRope.enabled = false;
+            monsterAnimator.SetBool("isStunned", false);
+            monsterAnimator.SetBool("WasStunned", false);
             // 스턴 이펙트 끄기
         }
 
-        public void Dead()
+        public virtual void Dead()
         {
             StopAllCoroutines();
+            attackTrigger.SetActive(false);
+            detectingUITrigger.SetActive(false);
+            monsterNavAgent.enabled = false;
+            monsterRope.enabled = false;
+            monsterCollider.enabled = false;
+        }
+
+        public void Disappear()
+        {
+            if(pv.IsMine)
+            {
+                pv.RPC(nameof(Despawn), RpcTarget.AllViaServer);
+            }
+        }
+
+        [PunRPC]
+        protected void Despawn()
+        {
+            if (transform.parent == null)
+            {
+                this.gameObject.SetActive(false);
+                return;
+            }
+            if(spawner == null)
+            {
+                spawner = GetComponentInParent<MonsterSpawner>();
+            }
             spawner.Despawn(this.gameObject);
+        }
+
+        public void SetTargetObject(Transform targetObj)
+        {
+            targetObject = targetObj.transform;
         }
 
         public void Chase()
         {
-            if (!monsterNavAgent.enabled)
-                monsterNavAgent.enabled = true;
-
-            if (detectedTarget != null)
+            if(pv.IsMine)
             {
-                if (currentTarget != detectedTarget)
+                if (!monsterNavAgent.enabled)
+                    monsterNavAgent.enabled = true;
+
+                if (detectedTarget != null)
                 {
-                    currentTarget = detectedTarget;
+                    if (currentTarget != detectedTarget)
+                    {
+                        currentTarget = detectedTarget;
+                    }
                 }
-            }
-            else if (isDefenseMode)
-            {
-                currentTarget = targetObject;
-            }
+                else if (isTopView)
+                {
+                    currentTarget = targetObject;
+                }
 
-            if (currentTarget != null)
-            {
-                monsterNavAgent.destination = currentTarget.transform.position;
-                isTargetFounded = true;
-            }
-            else
-            {
-                isTargetFounded = false;
+                if (currentTarget != null)
+                {
+                    monsterNavAgent.destination = currentTarget.transform.position;
+                    isTargetFounded = true;
+                }
+                else
+                {
+                    isTargetFounded = false;
+                }
             }
         }
 
         public void StopChasing()
         {
-            monsterNavAgent.enabled = false;
+            if (pv.IsMine)
+            {
+                pv.RPC(nameof(SetChasing), RpcTarget.AllViaServer, false);
+            }
         }
 
         public void StartChasing()
         {
-            monsterNavAgent.enabled = true;
+            if (pv.IsMine)
+            {
+                pv.RPC(nameof(SetChasing), RpcTarget.AllViaServer, true);
+            }
+        }
+
+        [PunRPC]
+        protected void SetChasing(bool isChasing)
+        {
+            monsterNavAgent.enabled = isChasing;
         }
 
         protected void Detect()
         {
-            if (detectedTarget != null)
-                return;
-
-            detectedColliders = Physics.OverlapSphere(transform.position, detectingRange);
-            if (detectedColliders.Length > 0)
+            if(pv.IsMine)
             {
-                foreach (var collider in detectedColliders)
+                if (detectedTarget != null)
                 {
-                    if (collider.gameObject.layer == LayerMask.NameToLayer("Player"))
+                    if(playerAnimator == null)
                     {
-                        detectedTarget = collider.gameObject;
-                        monsterAnimator.SetBool("isChasing", true);
+                        playerAnimator = detectedTarget.gameObject.GetComponent<Animator>();
+                    }
+
+                    if(playerAnimator.GetBool("isDead"))
+                    {
+                        detectedTarget = null;
+                        playerAnimator = null;
+                    }
+                    return;
+                }
+
+                detectedColliders = Physics.OverlapSphere(transform.position, detectingRange);
+                bool foundPlayer = false;
+                if (detectedColliders.Length > 0)
+                {
+                    foreach (var collider in detectedColliders)
+                    {
+                        RaycastHit hit;
+                        bool rayChecked = Physics.Raycast(transform.position + Vector3.up * 0.5f, (collider.gameObject.transform.position - transform.position).normalized, out hit, detectingRange, chaseLayerFiter, QueryTriggerInteraction.Ignore);
+                        if (rayChecked)
+                        {
+                            if (hit.collider.gameObject.layer == LayerMask.NameToLayer("Player"))
+                            {
+                                detectedTarget = collider.gameObject.transform;
+                                foundPlayer = true;
+                                monsterAnimator.SetBool("isChasing", true);
+                            }
+                        }
                     }
                 }
-            }
-            else if (isDefenseMode)
-            {
-                detectedTarget = null;
-                monsterAnimator.SetBool("isChasing", true);
+
+                if (!foundPlayer && isTopView)
+                {
+                    detectedTarget = null;
+                    monsterAnimator.SetBool("isChasing", true);
+                }
             }
         }
 
         public bool IsReadyToAttck()
         {
-            if(!isAttackDelayOn && (attackRange > Vector3.Distance(transform.position, currentTarget.transform.position)))
+            if(pv.IsMine)
             {
-                return true;
+                Vector3 distVec = transform.position - currentTarget.transform.position;
+                distVec.y = 0;
+                if (!isAttackDelayOn && (attackRange > distVec.magnitude))
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
             }
             else
             {
@@ -205,15 +332,29 @@ namespace KSU.Monster
             }
         }
 
-        public void StartAttack()
+        public void PrepareAttack()
         {
-            StartCoroutine(nameof(DelayAttack));
+            StartCoroutine(nameof(DelayAttackBefore));
         }
 
-        IEnumerator DelayAttack()
+        IEnumerator DelayAttackBefore()
+        {
+            yield return new WaitForSeconds(attackDelayTimeBefore);
+            if(!monsterAnimator.GetBool("isStunned") || !monsterAnimator.GetBool("isAttacked"))
+            {
+                monsterAnimator.SetBool("isAttacking", true);
+            }
+        }
+
+        public void ResetAttackDelay()
+        {
+            StartCoroutine(nameof(DelayAttackAfter));
+        }
+
+        IEnumerator DelayAttackAfter()
         {
             isAttackDelayOn = true;
-            yield return new WaitForSeconds(attackDelayTime);
+            yield return new WaitForSeconds(attackDelayTimeAfter);
             isAttackDelayOn = false;
         }
 

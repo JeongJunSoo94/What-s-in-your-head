@@ -21,13 +21,13 @@ namespace JCW.UI
             // 현재 있는 로비 방을 나간 후, 방장 방에 접속
             acceptButton.onClick.AddListener(() =>
             {
-                PhotonManager.Instance.gameObject.SendMessage("LetMasterMakeRoom", masterID);
+                PhotonManager.Instance.LetMasterMakeRoom(masterID);
                 PhotonNetwork.LeaveRoom();
                 StartCoroutine(nameof(WaitForRoom), masterID);
             });
             declineButton.onClick.AddListener(() => {  this.gameObject.SetActive(false); });
         }
-        void SetMasterName(string masterName)
+        public void SetMasterName(string masterName)
         {
             masterID = masterName;
             masterText.text = "ID : " + masterName;

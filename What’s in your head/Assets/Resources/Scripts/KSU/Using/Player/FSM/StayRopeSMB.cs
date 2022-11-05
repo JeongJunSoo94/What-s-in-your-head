@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using JCW.UI.Options.InputBindings;
+using YC.Camera_; // << : 찬 추가
 
 namespace KSU.FSM
 {
@@ -11,12 +12,16 @@ namespace KSU.FSM
         override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
         {
             animator.SetBool("isMoveToRope", false);
+
+            if (GetPlayerController(animator))
+            {
+                GetPlayerController(animator).GetComponent<CameraController>().RidingInit(); // << : 찬 추가
+            }
         }
 
         // OnStateUpdate is called on each Update frame between OnStateEnter and OnStateExit callbacks
         override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
         {
-            //ResetPosition(animator);
             CheckState(animator);
         }
 
@@ -38,11 +43,6 @@ namespace KSU.FSM
         //    // Implement code that sets up animation IK (inverse kinematics)
         //}
 
-        void ResetPosition(Animator animator)
-        {
-            GetPlayerController(animator).ResetPosition();
-        }
-
         void CheckState(Animator animator)
         {
             animator.SetBool("isAir", !GetPlayerController(animator).characterState.IsGrounded);
@@ -51,7 +51,6 @@ namespace KSU.FSM
             {
                 if (KeyManager.Instance.GetKeyDown(PlayerAction.Jump) || KeyManager.Instance.GetKeyDown(PlayerAction.Interaction))
                 {
-                    animator.SetBool("isRidingRope", false);
                     GetRopeAction(animator).EscapeRope();
                 }
             }

@@ -40,6 +40,10 @@ public class PlayerState : MonoBehaviour
     public bool IsGrounded = false;
     [Tooltip("전방 막힘 상태")]
     public bool isFowardBlock = false;
+    [Tooltip("공중 막힘 상태")]
+    public bool isAirBlocked = false;
+    //[Tooltip("공중 막힘 오브젝트 수")]
+    //public int airBlockNum = 0;
     [Tooltip("최대 경사각 초과 상태")]
     public bool isOverAngleForSlope = false;
     #endregion
@@ -47,15 +51,17 @@ public class PlayerState : MonoBehaviour
     // 수평 이동 변수
     #region
     [Tooltip("방향키 입력 상태")]
-    public bool isMove;
+    public bool isMove = false;
     [Tooltip("달리기 토글 ON/OFF 상태")]
-    public bool isRun;
+    public bool isRun = false;
     #endregion
 
     // 점프 변수
     #region
     [Tooltip("점프 쿨이 돌았을 때 TRUE")]
     public bool CanJump = true;
+    [Tooltip("대시 후 즉시 점프 불가")]
+    public bool isDelayingDashJump = false;
     [Tooltip("지면에서 점프한 상태")]
     public bool IsJumping = false;
     [Tooltip("공중에서 점프한 상태")]
@@ -79,8 +85,9 @@ public class PlayerState : MonoBehaviour
     public bool isOutOfControl = false;
     public bool isStopped = false;
     public bool isRiding = false;
-    public float deadDuration;
     #endregion
+
+    public bool CanResetKnockBack = true;
 
     public bool aim = false;
     public bool top = false;
@@ -96,57 +103,39 @@ public class PlayerState : MonoBehaviour
     [Header("공중 대시 지속 시간")]
     public float airDashTime = 0.5f;
 
+    public void InitState(bool initMove, bool initTop)
+    {
+        aim = false;
+        swap = false;
+        CanResetKnockBack = true;
+
+        if (initMove)
+        {
+            isFowardBlock = false;
+            isOverAngleForSlope = false;
+            isMove = false;
+            isRun = false;
+            CanJump = true;
+            IsJumping = false;
+            IsAirJumping = false;
+            IsDashing = false;
+            IsAirDashing = false;
+            WasAirDashing = false;
+            IsGrounded = false;
+            isRiding = false;
+        }
+        if (initTop)
+        {
+            top = false;
+        }
+    }
+
+
+
     // 지면 체크 함수(지면 각도에 따라서 지면체크 거리 안에 안들어올 수 있기에 보정 필요)
     #region
-    //public void CheckGround(float sphereRadius)
-    //{
-    //    IsGrounded = Physics.SphereCast(transform.position + Vector3.up * sphereRadius, sphereRadius, Vector3.down, out groundRaycastHit, sphereRadius + groundCheckDistance, groundLayerMask, QueryTriggerInteraction.Ignore);
-
-    //    if (IsGrounded)
-    //    {
-    //        //Vector3 lookVec = transform.forward;
-    //        //lookVec.y = 0;
-    //        //lookVec = lookVec.normalized;
-    //        slopeAngle = Vector3.Angle(Vector3.up, groundRaycastHit.normal);
-    //        Debug.Log("slopeAngle " + slopeAngle);
-    //        if (Mathf.Abs(slopeAngle) >= maxSlopeAngle)
-    //        {
-    //            IsGrounded = false;
-    //            isRun = false;
-    //        }
-    //        else
-    //        {
-    //            float uSlopeAngleCofacter = Mathf.Tan(slopeAngle * Mathf.PI / 180);
-    //            float height = (transform.position - groundRaycastHit.point).y;
-    //            //Debug.Log(height + " " + (groundCheckThreshold + Mathf.Abs(uSlopeAngleCofacter)));
-    //            //if (height < Mathf.Epsilon)
-    //            //    height = 0.01f;
-
-    //            if (height <= (groundCheckThreshold + Mathf.Abs(uSlopeAngleCofacter)))
-    //            {
-    //                slopeAngle = Vector3.Angle(transform.forward, groundRaycastHit.normal) - 90f;
-    //                slopeAngleCofacter = Mathf.Tan(slopeAngle * Mathf.PI / 180);
-    //                ResetJump();
-    //                ResetAirDash();
-    //            }
-    //            else
-    //            {
-    //                slopeAngleCofacter = 0f;
-    //                IsGrounded = false;
-    //                isRun = false;
-    //            }
-    //        }
-    //    }
-    //}
-
     public void CheckGround(float sphereRadius)
     {
-        //if (isGroundDelayOn)
-        //{
-        //    IsGrounded = true;
-        //    return;
-        //}
-
         RayCheck = Physics.SphereCast(transform.position + Vector3.up * (sphereRadius * 1.5f + Physics.defaultContactOffset), (sphereRadius - Physics.defaultContactOffset), Vector3.down, out groundRaycastHit, groundCheckDistance + sphereRadius * 0.5f + Physics.defaultContactOffset, groundLayerMask, QueryTriggerInteraction.Ignore);
         
         if (RayCheck)
@@ -187,11 +176,8 @@ public class PlayerState : MonoBehaviour
             bool rayChecked = Physics.SphereCast(transform.position + Vector3.up * (sphereRadius + Physics.defaultContactOffset) - transform.forward * Physics.defaultContactOffset, (sphereRadius - Physics.defaultContactOffset), transform.forward, out fowardRaycastHit, 0.2f, groundLayerMask, QueryTriggerInteraction.Ignore);
             if(rayChecked)
             {
-                //Debug.Log("fowardRaycastHit.point: " + fowardRaycastHit.point);
-                //Debug.Log("groundRaycastHit.point: " + groundRaycastHit.point);
                 float forwardAngle = Vector3.Angle(Vector3.up, fowardRaycastHit.normal);
-                //Vector3 start = transform.position + Vector3.up * fowardRaycastHit.point.y;
-                //float distance = Vector3.Distance(start, fowardRaycastHit.point);
+                
                 if (forwardAngle > maxSlopeAngle)
                 {
                     isFowardBlock = true;
@@ -205,9 +191,7 @@ public class PlayerState : MonoBehaviour
                     slopeAngleCofacter = forwardblockingMinHeight;
                     IsGrounded = true;
                     isFowardBlock = false;
-                    //StartCoroutine(nameof(StartGroundDelay));
                 }
-                //Debug.Log("isFowardBlock: " + isFowardBlock);
             }
             else
             {
@@ -218,20 +202,8 @@ public class PlayerState : MonoBehaviour
         {
             isOverAngleForSlope = false;
             IsGrounded = false;
-            //Debug.Log("RayCheck 실패");
         }
-        //if(!IsGrounded)
-        //{
-        //    Debug.Log("지면체크: " + IsGrounded);
-        //}
     }
-
-    //IEnumerator StartGroundDelay()
-    //{
-    //    isGroundDelayOn = true;
-    //    yield return new WaitForSeconds(groundDelayTime);
-    //    isGroundDelayOn = false;
-    //}
     #endregion
 
     //달리기 함수
@@ -253,6 +225,7 @@ public class PlayerState : MonoBehaviour
 
     // 점프 함수
     #region
+
     public void ResetJump()
     {
         IsJumping = false;
@@ -264,6 +237,7 @@ public class PlayerState : MonoBehaviour
         yield return new WaitForSeconds(jumpCoolTime);
         CanJump = true;
     }
+
     public void CheckJump()
     {
         // 지면 위 상태이고 점프 쿨타임()이 돌아있을 때, 점프 중이 아닐 때만
@@ -302,6 +276,7 @@ public class PlayerState : MonoBehaviour
         if (IsGrounded)
         {
             StartCoroutine(nameof(StartDashTimer));
+            //StartCoroutine(nameof(DelayJump));
             IsDashing = true;
         }
     }
@@ -316,6 +291,13 @@ public class PlayerState : MonoBehaviour
             WasAirDashing = true;
         }
     }
+
+    //IEnumerator DelayJump()
+    //{
+    //    isDelayingDashJump = true;
+    //    yield return new WaitForSeconds(0.1f);
+    //    isDelayingDashJump = false;
+    //}
     private IEnumerator StartDashTimer()
     {
         if (IsGrounded)
@@ -337,5 +319,25 @@ public class PlayerState : MonoBehaviour
     {
         Gizmos.color = Color.red;
         Gizmos.DrawSphere(fowardRaycastHit.point, 0.1f);
+    }
+
+    private void OnCollisionStay(Collision collision)
+    {
+        if(IsGrounded || !CanJump)
+        {
+            isAirBlocked = false;
+        }
+        else
+        {
+            isAirBlocked = true;
+        }
+    }
+
+    private void OnCollisionExit(Collision collision)
+    {
+        if (!IsGrounded)
+        {
+            isAirBlocked = false;
+        }
     }
 }

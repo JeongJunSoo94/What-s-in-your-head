@@ -182,6 +182,7 @@ namespace KSU
             localRot.x = startXAngle;
             ropeAnchor.transform.localRotation = Quaternion.Euler(localRot);
 
+            isntSwing = false;
             isReadyToRide = true;
         }
 
@@ -196,6 +197,7 @@ namespace KSU
                 player.transform.localPosition = Vector3.zero;
                 player.transform.localRotation = Quaternion.Euler(Vector3.zero);
 
+                isReadyToRide = false;
                 isSwingForward = true;
                 isRopeExisting = true;
                 isRotatingToDefault = true;
@@ -219,8 +221,16 @@ namespace KSU
 
         public float DeacvtivateRope(GameObject player)
         {
+            Debug.Log("로프");
             isRopeExisting = false;
             player.transform.parent = null;
+            if(player.transform.parent != null)
+            {
+                Debug.Log("player.transform.parent: " + player.transform.parent.name);
+            }
+            isntSwing = false;
+            this.gameObject.SetActive(false);
+            Debug.Log("로프 해제");
             if (!isSwingForward)
             {
                 if (rotationX > 0)
@@ -228,8 +238,6 @@ namespace KSU
                     return rotationX / spawner.swingAngle;
                 }
             }
-            isntSwing = false;
-            this.gameObject.SetActive(false);
             return -rotationX / spawner.swingAngle;
         }
 
@@ -244,7 +252,7 @@ namespace KSU
             {
                 playerRopeAction = player.GetComponent<RopeAction>();
             }
-            player.GetComponent<PlayerInteractionState>().isRidingRope = true;
+            //player.GetComponent<PlayerInteractionState>().isRidingRope = true;
             //playerRopeAction.RecieveDirection(isSwingForward); /////////////////////////////////////////////
             //player.GetComponent<Rigidbody>().velocity = Vector3.zero;
             player.transform.localPosition = Vector3.zero;
@@ -254,7 +262,7 @@ namespace KSU
 
             if (isSwingForward) // 앞으로 갈지 뒤로갈지 결정
             {
-                rotationX -= spawner.swingSpeed * Time.fixedDeltaTime * ((Mathf.Abs(spawner.swingAngle)- Mathf.Abs(rotationX)) * spawner.SwingDeltaSpeed / spawner.swingAngle + ( 1 - spawner.SwingDeltaSpeed));
+                rotationX -= spawner.swingSpeed * Time.fixedDeltaTime * Mathf.Abs(Mathf.Abs(spawner.swingAngle) - Mathf.Abs(rotationX)) * spawner.SwingDeltaSpeed / spawner.swingAngle + ( 1 - spawner.SwingDeltaSpeed);
                 if (rotationX < -spawner.swingAngle)
                 {
                     isSwingForward = false;
@@ -263,7 +271,7 @@ namespace KSU
             }
             else
             {
-                rotationX += spawner.swingSpeed * Time.fixedDeltaTime * ((Mathf.Abs(spawner.swingAngle) - Mathf.Abs(rotationX)) * spawner.SwingDeltaSpeed / spawner.swingAngle + (1 - spawner.SwingDeltaSpeed));
+                rotationX += spawner.swingSpeed * Time.fixedDeltaTime * Mathf.Abs(Mathf.Abs(spawner.swingAngle) - Mathf.Abs(rotationX)) * spawner.SwingDeltaSpeed / spawner.swingAngle + (1 - spawner.SwingDeltaSpeed);
                 if (rotationX > spawner.swingAngle)
                 {
                     isSwingForward = true;

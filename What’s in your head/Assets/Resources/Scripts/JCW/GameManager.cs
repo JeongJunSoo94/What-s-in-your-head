@@ -35,6 +35,7 @@ public class GameManager : MonoBehaviour, IPunObservable
     [HideInInspector] public int randomSeed { get; private set; }
 
     public int curPlayerHP = 12;
+    public int aliceHP = 30;
 
     PhotonView photonView;
 
@@ -152,9 +153,9 @@ public class GameManager : MonoBehaviour, IPunObservable
         // 받는 사람
         else
         {
-            isTopView                                   = (bool)stream.ReceiveNext();
-            curStageIndex                               = (int)stream.ReceiveNext();
-            curSection                                  = (int)stream.ReceiveNext();
+            isTopView     = (bool)stream.ReceiveNext();
+            curStageIndex = (int)stream.ReceiveNext();
+            curSection    = (int)stream.ReceiveNext();
         }
     }
 

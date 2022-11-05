@@ -6,11 +6,12 @@ namespace KSU.Monster
 {
     public class MonsterChaseSMB : MonsterSMB
     {
-
+        bool willAttack = false;
         // OnStateEnter is called when a transition starts and the state machine starts to evaluate this state
         override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
         {
-            animator.SetBool("WasSturned", false);
+            willAttack = false;
+            animator.SetBool("WasStunned", false);
             GetMonsterController(animator).StartChasing();
         }
 
@@ -41,20 +42,24 @@ namespace KSU.Monster
 
         void CheckState(Animator animator)
         {
-            if(GetMonsterController(animator) is TrippleHeadSnake)
+            if(!willAttack)
             {
-                TrippleHeadSnake trippleHeadSnake = (GetMonsterController(animator) as TrippleHeadSnake);
-                if(trippleHeadSnake.IsReadyToRush())
+                if (GetMonsterController(animator) is TrippleHeadSnake)
                 {
-                    animator.SetBool("isReadyToRush", true);
-                    return;
+                    TrippleHeadSnake trippleHeadSnake = (GetMonsterController(animator) as TrippleHeadSnake);
+                    if (trippleHeadSnake.IsReadyToRush())
+                    {
+                        animator.SetBool("isReadyToRush", true);
+                        return;
+                    }
                 }
-            }
 
 
-            if (GetMonsterController(animator).IsReadyToAttck())
-            {
-                animator.SetBool("isAttacking", true);
+                if (GetMonsterController(animator).IsReadyToAttck())
+                {
+                    willAttack = true;
+                    GetMonsterController(animator).PrepareAttack();
+                }
             }
         }
     }

@@ -8,7 +8,7 @@ namespace JCW.Spawner
     {
         [SerializeField] [Header("스폰 시간")] [Range(0.0f, 10.0f)] private float spawnTime = 2.5f;
         [SerializeField] [Header("스폰할 오브젝트")] public GameObject obj = null;
-        [SerializeField] [Header("최대 오브젝트 수")] [Range(0, 50)] public int count = 20;
+        [Header("최대 오브젝트 수")] [Range(0, 50)] public int count = 20;
 
         Queue<GameObject> objQueue;
         /*[HideInInspector]*/
@@ -61,6 +61,8 @@ namespace JCW.Spawner
         // 미리 오브젝트를 생성해서 자식으로 담아둠.
         public void SpawnInit()
         {
+            if (objQueue != null)
+                return;
             objQueue = new Queue<GameObject>();
             for (int i = 0 ; i < count ; ++i)
             {

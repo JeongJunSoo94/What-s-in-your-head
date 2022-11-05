@@ -40,8 +40,10 @@ namespace KSU
         RaycastHit _raycastHit;
         [SerializeField] LayerMask layerFilterForRope;
 
-        GameObject currentRidingRope;
+        public GameObject currentRidingRope;
         public GameObject interactableRope;
+        public float ridingRopeDelayTime = 0.5f;
+
 
         Dictionary<GameObject, Obj_Info> detectedRopes = new Dictionary<GameObject, Obj_Info>();
 
@@ -173,11 +175,16 @@ namespace KSU
             }
         }
 
-        public void RideRope()
+        public bool RideRope()
         {
+            if(currentRidingRope != null)
+            {
+                Debug.Log("currentRidingRope != null");
+                return false;
+            }
             playerState.IsAirJumping = false;
             playerState.WasAirDashing = false;
-            interactionState.isRidingRope = true;
+            //interactionState.isRidingRope = true;
             interactionState.isMoveToRope = true;
 
             GetComponent<Rigidbody>().velocity = Vector3.zero;
@@ -190,15 +197,31 @@ namespace KSU
             node.isInteractable = false;
             detectedRopes[currentRidingRope] = node;
 
-            currentRidingRope.GetComponent<RopeSpawner>().StartRopeAction(this.gameObject, moveToRopeSpeed);
-
-            rope.SetPosition(0, hand.transform.position);
-            rope.SetPosition(1, hand.transform.position);
-            rope.enabled = true;
+            if (currentRidingRope.GetComponent<RopeSpawner>().StartRopeAction(this.gameObject, moveToRopeSpeed))
+            {
+                rope.SetPosition(0, hand.transform.position);
+                rope.SetPosition(1, hand.transform.position);
+                rope.enabled = true;
+                Debug.Log("StartRopeAction == true");
+                StartCoroutine(nameof(DelayRide));
+                return true;
+            }
+            else
+            {
+                Debug.Log("StartRopeAction == false");
+                return false;
+            }
         }
         public bool GetWhetherMovingToRope()
         {
             return !interactionState.isMoveToRope;
+        }
+
+        IEnumerator DelayRide()
+        {
+            interactionState.isRopeEscapeDelayOn = true;
+            yield return new WaitForSeconds(ridingRopeDelayTime);
+            interactionState.isRopeEscapeDelayOn = false;
         }
 
         public void RecieveDirection(float threshHold)
@@ -207,13 +230,17 @@ namespace KSU
         }
         public void EscapeRope()
         {
+            StopCoroutine(nameof(DelayEscape));
             StartCoroutine(nameof(DelayEscape));
             if(currentRidingRope == null)
             {
                 return;
             }
+            animator.SetBool("isRidingRope", false);
+            Debug.Log("파라미터 변화");
+            Debug.Log("로프 해제 진입");
             float jumpPower = currentRidingRope.GetComponent<RopeSpawner>().EndRopeAction(this.gameObject);
-
+            Debug.Log("jumpPower: " + jumpPower);
             Obj_Info node = detectedRopes.GetValueOrDefault(currentRidingRope);
             node.isUIActive = true;
             node.isInteractable = false;

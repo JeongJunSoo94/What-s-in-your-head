@@ -71,6 +71,11 @@ namespace JJS
 
         }
 
+        public virtual void InitMouseController()
+        {
+
+        }
+
         public virtual int GetUseWeapon()
         {
             if (weaponInfo.Length !=0)
@@ -175,7 +180,7 @@ namespace JJS
         }
 
 
-        public virtual bool GetCustomInfo()
+        public virtual bool GetCustomInfo(GrappleTargetType grappleTargetType)
         {
             return false;
         }

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using JCW.UI.Options.InputBindings;
 using JCW.Effect;
-
+using YC.Camera_; // << : Âù Ãß°¡
 namespace KSU.FSM
 {
     public class StayRailSMB : RailSMB
@@ -20,8 +20,12 @@ namespace KSU.FSM
         // OnStateUpdate is called on each Update frame between OnStateEnter and OnStateExit callbacks
         override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
         {
-            //ResetPosition(animator);
             CheckState(animator);
+
+            if (GetPlayerController(animator).characterState.isMine)
+            {
+                GetPlayerController(animator).GetComponent<CameraController>().RidingInit();
+            }
         }
 
         // OnStateExit is called when a transition ends and the state machine finishes evaluating this state
@@ -29,12 +33,6 @@ namespace KSU.FSM
         {
             GetPlayerController(animator).gameObject.GetComponent<MotionTrail>().enabled = false;
         }
-
-        void ResetPosition(Animator animator)
-        {
-            GetPlayerController(animator).ResetPosition();
-        }
-
         void CheckState(Animator animator)
         {
             animator.SetBool("isAir", !GetPlayerController(animator).characterState.IsGrounded);

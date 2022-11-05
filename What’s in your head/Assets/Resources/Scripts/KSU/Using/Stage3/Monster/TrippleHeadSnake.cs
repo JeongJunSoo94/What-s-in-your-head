@@ -1,3 +1,4 @@
+using Photon.Pun;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -8,11 +9,11 @@ namespace KSU.Monster
     {
         [SerializeField] float readyToRushTime = 2f;
         [SerializeField] float rushTime = 2f;
-        [SerializeField] float rushSpeed;
+        public float rushSpeed;
         [SerializeField] float rotationSpeed;
-        GameObject rushTarget;
+        Transform rushTarget;
         [SerializeField] GameObject rushTrigger;
-        [SerializeField] int rushDamage;
+        public int rushDamage;
 
         bool isRushDelayOn = false;
         public float rushDelayTime = 10f;
@@ -36,30 +37,37 @@ namespace KSU.Monster
 
         protected override void InitMonster()
         {
+            StopAllCoroutines();
             currentHP = maxHP;
             detectedTarget = null;
             currentTarget = null;
-            monsterNavAgent.speed = moveSpeed;
             monsterAnimator.SetBool("isAttacked", false);
             monsterAnimator.SetBool("isDead", false);
-            monsterAnimator.SetBool("isSturn", false);
+            monsterAnimator.SetBool("isStunned", false);
+            monsterAnimator.SetBool("WasStunned", false);
             monsterAnimator.SetBool("isChasing", false);
             monsterAnimator.SetBool("isAttacking", false);
             monsterAnimator.SetBool("isReadyToRush", false);
             monsterAnimator.SetBool("isRushing", false);
+            if (pv.IsMine)
+            {
+                monsterNavAgent.speed = moveSpeed;
+                monsterNavAgent.enabled = true;
+            }
+            attackTrigger.SetActive(false);
+            rushTrigger.SetActive(false);
+            detectingUITrigger.SetActive(true);
             isRushDelayOn = false;
         }
 
         public override void GetDamage(int damage)
         {
-
-            if(monsterAnimator.GetBool("isSturn"))
+            
+            if (pv.IsMine && !monsterAnimator.GetBool("isAttacked") && !monsterAnimator.GetBool("isDead"))
             {
-                currentHP -= damage;
-                monsterAnimator.SetBool("isAttacked", true);
-                if (currentHP < 0)
+                if (monsterAnimator.GetBool("isStunned"))
                 {
-                    monsterAnimator.SetBool("isDead", true);
+                    pv.RPC("SetDamage", RpcTarget.AllViaServer, damage);
                 }
             }
         }
@@ -78,8 +86,11 @@ namespace KSU.Monster
 
         public void SetRushTaget()
         {
-            rushTarget = currentTarget;
-            StartCoroutine(nameof(MaintainReadyToRush));
+            if (pv.IsMine)
+            {
+                rushTarget = currentTarget;
+                StartCoroutine(nameof(MaintainReadyToRush));
+            }
         }
 
         IEnumerator MaintainReadyToRush()
@@ -90,19 +101,26 @@ namespace KSU.Monster
 
         public void RotateForRush()
         {
-            Vector3 direction = (rushTarget.transform.position - transform.position);
-            Vector3 forward = Vector3.Slerp(transform.forward, direction.normalized, rotationSpeed * Time.deltaTime / Vector3.Angle(transform.forward, direction.normalized));
-            forward.y = 0;
-            transform.LookAt(transform.position + forward);
+            if(pv.IsMine)
+            {
+                Vector3 direction = (rushTarget.transform.position - transform.position);
+                Vector3 forward = Vector3.Slerp(transform.forward, direction.normalized, rotationSpeed * Time.deltaTime / Vector3.Angle(transform.forward, direction.normalized));
+                forward.y = 0;
+                transform.LookAt(transform.position + forward);
+            }
         }
         public void StartRush()
         {
-            StartCoroutine(nameof(DelayRush));
-            StartCoroutine(nameof(MaintainRush));
             ActivateRush();
-            monsterNavAgent.speed = rushSpeed;
-            monsterNavAgent.enabled = true;
-            Rush();
+
+            if (pv.IsMine)
+            {
+                StartCoroutine(nameof(DelayRush));
+                StartCoroutine(nameof(MaintainRush));
+                monsterNavAgent.speed = rushSpeed;
+                monsterNavAgent.enabled = true;
+                Rush();
+            }
         }
 
         IEnumerator MaintainRush()
@@ -121,7 +139,10 @@ namespace KSU.Monster
 
         public void Rush()
         {
-            monsterNavAgent.destination = (transform.position + transform.forward * 10f);
+            if (pv.IsMine)
+            {
+                monsterNavAgent.destination = (transform.position + transform.forward * 10f);
+            }
         }
 
         void ActivateRush()
@@ -131,12 +152,33 @@ namespace KSU.Monster
 
         public void EndRush()
         {
-            rushTarget = null;
-            monsterNavAgent.destination = transform.position;
-            monsterNavAgent.enabled = false;
-            monsterNavAgent.speed = moveSpeed;
+            if (pv.IsMine)
+            {
+                rushTarget = null;
+                monsterNavAgent.destination = transform.position;
+                monsterNavAgent.enabled = false;
+                monsterNavAgent.speed = moveSpeed;
+            }
             rushTrigger.SetActive(false);
-            
+        }
+
+        public override void Dead()
+        {
+            StopAllCoroutines();
+            attackTrigger.SetActive(false);// 위 아래 둘다 필요 없을지도 그렇다면 가상함수도 필요 ㄴㄴ
+            rushTrigger.SetActive(false); //
+            detectingUITrigger.SetActive(false);
+            monsterNavAgent.enabled = false;
+            monsterRope.enabled = false;
+            monsterCollider.enabled = false;
+        }
+
+        private void OnCollisionEnter(Collision collision)
+        {
+            if(collision.collider.tag != "Nella" && collision.collider.tag != "Steady")
+            {
+                EndRush();
+            }
         }
     }
 }

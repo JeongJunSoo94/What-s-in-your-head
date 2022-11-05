@@ -7,25 +7,33 @@ namespace JCW.AudioCtrl
     public enum Sound
     {
         BGM,
-        Effect,
-        Sound3D,
+        EFFECT,
+        DISTANCE,
+        UI,
         End,
     }
     
     [RequireComponent(typeof(PhotonView))]
     public class SoundManager : MonoBehaviour
     {
-        [Header("효과음 목록")] [SerializeField] List<AudioClip> prevAudioClips = new();
+        [Header("거리 무관 효과음 목록")] [SerializeField] List<AudioClip> prevAudioClips = new();
+        [Header("거리에 따른 효과음 목록")] [SerializeField] List<AudioClip> prev3DClips = new();
+        [Header("UI 효과음 목록")] [SerializeField] List<AudioClip> prevUIClips = new();
 
         // 오디오 재생기
         readonly AudioSource[] audioSources = new AudioSource[(int)Sound.End];
 
         // 오디오 클립
         readonly Dictionary<string, AudioClip> audioClips = new();
+        readonly Dictionary<string, AudioClip> UIClips = new();
+        readonly Dictionary<string, AudioClip> threeDimesionClips = new();
 
         PhotonView photonView;
+        AudioSource otherSource;
 
         private bool isPause = false;
+
+        string[] soundTypes;
 
         public static SoundManager Instance;
         private void Awake()
@@ -43,16 +51,17 @@ namespace JCW.AudioCtrl
         // Sound 종류에 해당하는 오브젝트들을 만들어주고, 사운드 매니저 오브젝트에 자식으로 달아준다.
         private void OnEnable()
         {
-            string[] soundNames = System.Enum.GetNames(typeof(JCW.AudioCtrl.Sound));
+            soundTypes = System.Enum.GetNames(typeof(JCW.AudioCtrl.Sound));
             for (int i = 0 ; i < (int)Sound.End ; ++i)
             {
-                GameObject obj = new() { name = soundNames[i] };
+                GameObject obj = new() { name = soundTypes[i] };
                 audioSources[i] = obj.AddComponent<AudioSource>();
                 obj.transform.parent = this.transform;
             }
             audioSources[(int)Sound.BGM].loop = true;
             SetUp();
         }
+
         // 비우기
         public void Clear()
         {
@@ -62,25 +71,133 @@ namespace JCW.AudioCtrl
                 audioSources[i].Stop();                
             }
             audioClips.Clear();
+            UIClips.Clear();
+            threeDimesionClips.Clear();
         }
-        public void PauseResumeBGM_RPC()
+
+        public AudioClip GetAudioClips(string name, JCW.AudioCtrl.Sound soundType)
         {
-            photonView.RPC("PauseResumeBGM", RpcTarget.AllViaServer);
+            string clipName = name;
+            if (!name.Contains($"Sounds/{soundTypes[(int)soundType]}"))
+                clipName = $"Sounds/{soundTypes[(int)soundType]}/{name}";
+
+            switch(soundType)
+            {
+                case Sound.EFFECT:
+                    return audioClips[clipName];
+                case Sound.DISTANCE:
+                    return threeDimesionClips[clipName];
+                case Sound.UI:
+                    return UIClips[clipName];
+                default:
+                    return audioClips[clipName];
+            }
+        }
+        void SetAudioClip(string path, JCW.AudioCtrl.Sound soundType)
+        {
+            if (!path.Contains($"Sounds/{soundTypes[(int)soundType]}"))
+                path = $"Sounds/{soundTypes[(int)soundType]}/{path}";
+            switch (soundType)
+            {
+                case Sound.BGM:
+                default:
+                    break;
+
+                case Sound.DISTANCE:
+                    if (threeDimesionClips.ContainsKey(path))
+                        Debug.Log("이미 저장된 오디오 클립입니다");
+                    else
+                        threeDimesionClips.Add(path, Resources.Load<AudioClip>(path));
+                    break;
+
+                case Sound.UI:
+                    if (UIClips.ContainsKey(path))
+                        Debug.Log("이미 저장된 오디오 클립입니다");
+                    else
+                        UIClips.Add(path, Resources.Load<AudioClip>(path));
+                    break;
+
+                case Sound.EFFECT:
+                    if (audioClips.ContainsKey(path))
+                        Debug.Log("이미 저장된 오디오 클립입니다");
+                    else
+                        audioClips.Add(path, Resources.Load<AudioClip>(path));
+                    break;
+            }
+        }
+        public void SetUp()
+        {
+            for (int i = 0 ; i<prevAudioClips.Count ; ++i)
+            {
+                SetAudioClip("Sounds/EFFECT/" + prevAudioClips[i].name, Sound.EFFECT);
+            }
+            for (int i = 0 ; i<prevUIClips.Count ; ++i)
+            {
+                SetAudioClip("Sounds/UI/" + prevUIClips[i].name, Sound.UI);
+            }
+            for (int i = 0 ; i<prev3DClips.Count ; ++i)
+            {
+                SetAudioClip("Sounds/DISTANCE/" + prev3DClips[i].name, Sound.DISTANCE);
+            }
+        }
+
+        // EFFECT ==========================================================================
+        #region 
+
+        public void PlayEffect_RPC(string path)
+        {
+            photonView.RPC(nameof(PlayEffect), RpcTarget.AllViaServer, path);
+        }
+
+        // 효과음 재생
+        [PunRPC]
+        public void PlayEffect(string path)
+        {
+            AudioClip audioClip = GetAudioClips(path, Sound.EFFECT);
+            if (audioClip == null)
+            {
+                Debug.Log("NULL로 저장된 오디오 클립입니다");
+                return;
+            }
+            //Debug.Log("효과음을 재생합니다");
+            audioSources[(int)Sound.EFFECT].PlayOneShot(audioClip);
+        }
+
+        public void StopEffect_RPC()
+        {
+            photonView.RPC(nameof(StopEffect), RpcTarget.AllViaServer);
         }
 
         [PunRPC]
-        public void PauseResumeBGM()
+        public void StopEffect()
         {
-            if (isPause)
+            if (audioSources[(int)Sound.EFFECT].isPlaying)
+                audioSources[(int)Sound.EFFECT].Stop();
+        }
+       
+        
+
+        public void PlayEffectNoOverlap_RPC(string path)
+        {
+            photonView.RPC(nameof(PlayEffectNO), RpcTarget.AllViaServer, path);
+        }
+
+        // 효과음 재생
+        [PunRPC]
+        public void PlayEffectNO(string path)
+        {
+            AudioClip audioClip = GetAudioClips(path, Sound.EFFECT);
+            if (audioClip == null)
             {
-                audioSources[(int)Sound.BGM].UnPause();
-                isPause = false;
+                Debug.Log("NULL로 저장된 오디오 클립입니다");
+                return;
             }
-            else
+
+            if (!audioSources[(int)Sound.EFFECT].isPlaying)
             {
-                audioSources[(int)Sound.BGM].Pause();
-                isPause = true;
-            }                
+                //Debug.Log("효과음을 재생합니다");
+                audioSources[(int)Sound.EFFECT].PlayOneShot(audioClip);
+            }
         }
 
         // 효과음 제거
@@ -93,40 +210,16 @@ namespace JCW.AudioCtrl
                 audioClips.Remove(clipName);
             else
                 Debug.Log("삭제하려는 효과음이 존재하지 않습니다.");
-
-
         }
 
-        public void SetUp()
-        {
-            foreach (AudioClip clip in prevAudioClips)
-            {
-                SetEffectAudioClip("Sounds/EFFECT/" + clip.name);
-            }
-        }
+        #endregion
 
-        public void PlayEffect_RPC(string path)
-        {
-            photonView.RPC("PlayEffect", RpcTarget.AllViaServer, path);
-        }
-       
-        // 효과음 재생
-        [PunRPC]
-        public void PlayEffect(string path)
-        {
-            AudioClip audioClip = GetEffectClips(path);
-            if (audioClip == null)
-            {
-                Debug.Log("NULL로 저장된 오디오 클립입니다");
-                return;
-            }
-            Debug.Log("효과음을 재생합니다");
-            audioSources[(int)Sound.Effect].PlayOneShot(audioClip);
-        }
 
+        // BGM ==========================================================================
+        #region
         public void PlayBGM_RPC(string path)
         {
-            photonView.RPC("PlayBGM", RpcTarget.AllViaServer, path);
+            photonView.RPC(nameof(PlayBGM), RpcTarget.AllViaServer, path);
         }
         // 배경음 재생
         [PunRPC]
@@ -152,25 +245,74 @@ namespace JCW.AudioCtrl
             curAudio.Play();
         }
 
-        public AudioClip GetEffectClips(string name)
+        public void PauseResumeBGM_RPC()
         {
-            string clipName = name;
-            if (!name.Contains("Sounds/EFFECT"))
-                clipName = $"Sounds/EFFECT/{name}";
-
-            return audioClips[clipName];
+            photonView.RPC("PauseResumeBGM", RpcTarget.AllViaServer);
         }
-        void SetEffectAudioClip(string path)
+
+        [PunRPC]
+        public void PauseResumeBGM()
         {
-            if (!path.Contains("Sounds/EFFECT"))
-                path = $"Sounds/EFFECT/{path}";
-            if (audioClips.ContainsKey(path))
-                Debug.Log("이미 저장된 오디오 클립입니다");
+            if (isPause)
+            {
+                audioSources[(int)Sound.BGM].UnPause();
+                isPause = false;
+            }
             else
-                audioClips.Add(path, Resources.Load<AudioClip>(path));
-            //특정 거리에서 사운드 재생 (3D 사운드, 단 재생 후 자동으로 사라짐 )
-            //AudioSource.PlayClipAtPoint(audioClip, new Vector3(5, 1, 2));
+            {
+                audioSources[(int)Sound.BGM].Pause();
+                isPause = true;
+            }
+        }
+
+        #endregion
+
+
+        // 3D Sound ==========================================================================
+        #region
+
+        public void Play3D_RPC(string path, AudioSource source)
+        {
+            otherSource = source;
+            photonView.RPC(nameof(Play3D), RpcTarget.AllViaServer, path);
+        }
+
+        [PunRPC]
+        public void Play3D(string path)
+        {            
+            AudioClip audioClip = GetAudioClips(path, Sound.DISTANCE);
+            if (audioClip == null)
+            {
+                Debug.Log("NULL로 저장된 오디오 클립입니다");
+                return;
+            }
+            // 해당 음원 위치에서 클립 재생
+            otherSource.PlayOneShot(audioClip);            
         }
         
+        #endregion
+
+
+        // UI ==========================================================================
+        #region
+        public void PlayUI_RPC(string path)
+        {
+            photonView.RPC(nameof(PlayUI), RpcTarget.AllViaServer, path);
+        }
+
+        [PunRPC]
+        public void PlayUI(string path)
+        {
+            AudioClip audioClip = GetAudioClips(path, Sound.UI);
+            if (audioClip == null)
+            {
+                Debug.Log("NULL로 저장된 오디오 클립입니다");
+                return;
+            }
+            //Debug.Log("UI음을 재생합니다");
+            audioSources[(int)Sound.UI].PlayOneShot(audioClip);
+        }
+        #endregion
+
     }
 }

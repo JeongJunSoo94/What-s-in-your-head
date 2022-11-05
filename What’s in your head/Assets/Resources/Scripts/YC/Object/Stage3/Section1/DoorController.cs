@@ -1,6 +1,8 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Photon.Pun;
+using JCW.AudioCtrl;
 
 /// <summary> 
 /// 
@@ -18,6 +20,7 @@ using UnityEngine;
 
 namespace YC_OBJ
 {
+    [RequireComponent(typeof(AudioSource))]
     public class DoorController : MonoBehaviour
     {
         [Header("<기획 편집 사항>")]
@@ -25,40 +28,27 @@ namespace YC_OBJ
         [Header("[애니메이션 속도 (0 ~ 1.5 추천)]")]
         [SerializeField] float animationSpeed = 0.3f;
 
-        [Header("[문이 열리기 전 딜레이]")]
-        [SerializeField] float openDelay = 0.5f;
-
-        [Header("[문이 닫히기 전 딜레이]")]
-        [SerializeField] float closeDelay = 1.0f;
-
         Animator animator;
+        PhotonView pv;
+        AudioSource audioSource;
 
         private void Awake()
         {
             animator = this.gameObject.GetComponent<Animator>();
 
             animator.speed = animationSpeed;
-        }
 
+            pv = this.gameObject.GetComponent<PhotonView>();
+            audioSource = GetComponent<AudioSource>();
+            JCW.AudioCtrl.AudioSettings.SetAudio(audioSource);
+        }
         public void SetOpen(bool _isOpen)
         {
-          
-            StartCoroutine(SetAnimation(_isOpen));
-        }
-
-        IEnumerator SetAnimation(bool isOpen)
-        {
-            if(isOpen)
+            if (pv.IsMine)
             {
-                yield return new WaitForSeconds(openDelay);
-                animator.SetBool("isOpen", isOpen);
+                animator.SetBool("isOpen", _isOpen);
+                SoundManager.Instance.Play3D_RPC("DoorOpen", audioSource);
             }
-            else
-            {
-                yield return new WaitForSeconds(closeDelay);
-                animator.SetBool("isOpen", isOpen);
-            }
-        }
-      
+        }     
     }
 }

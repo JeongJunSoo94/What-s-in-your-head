@@ -11,7 +11,7 @@ using YC.Camera_;
 using YC.Camera_Single;
 using JCW.Object;
 using JJS;
-
+using KSU.Monster;
 
 namespace KSU
 {
@@ -25,10 +25,10 @@ namespace KSU
 
         // 유니티 제공 Components
         #region
-        //Animator _animator;
+        Animator playerAnimator;
         CapsuleCollider playerCapsuleCollider;
         public Camera mainCamera;
-        Rigidbody playerRigidbody;
+        public Rigidbody playerRigidbody;
         //[Header("키 설정")] [SerializeField] private GameObject UI_BG;    
         PhotonView photonView;
         #endregion
@@ -37,7 +37,7 @@ namespace KSU
         #region
         [Header("움직임")]
         [Tooltip("현재 이동 속력")]
-        public float moveSpeed = 0f;
+        float moveSpeed = 0f;
         [Tooltip("걷는 속력")]
         public float walkSpeed = 4f;
         [Tooltip("달리는 속력")]
@@ -50,6 +50,8 @@ namespace KSU
         public float inertiaSpeed = 0f;
         [Tooltip("공중 이동 속력")]
         public float airMoveSpeed = 1f;
+        //[Tooltip("넉백 수평 속력")]
+        //public float knockBackHorizonSpeed = 6f;
         #endregion
 
         // 수직 Speed
@@ -63,6 +65,8 @@ namespace KSU
         public float gravityCofactor = 0.8f;
         [Range(-20f, -1f), Tooltip("종단속도")]
         public float terminalSpeed = -10f;
+        [Tooltip("넉백 수직 속력")]
+        public float knockBackVerticalSpeed = 8f;
         #endregion
 
         // 회전 Speed
@@ -81,6 +85,8 @@ namespace KSU
         public Vector3 dashVec = Vector3.zero; // dash또는 airdash중에 사용할 벡터
         [Tooltip("관성 노말 벡터")]
         public Vector3 inertiaNormalVec = Vector3.zero; // 공중 상태에 사용할 관성 벡터
+        [Tooltip("넉백 벡터")]
+        public Vector3 knockBackVec = Vector3.zero;
         #endregion
 
         void Awake()
@@ -91,7 +97,7 @@ namespace KSU
             // << :
 
             characterState = GetComponent<PlayerState>();
-            //_animator = GetComponent<Animator>();
+            playerAnimator = GetComponent<Animator>();
             playerCapsuleCollider = GetComponent<CapsuleCollider>();
             playerRigidbody = GetComponent<Rigidbody>();
             playerMouse = GetComponent<PlayerMouseController>();
@@ -109,7 +115,7 @@ namespace KSU
             if (!photonView.IsMine)
             {
                 GameManager.Instance.otherPlayerTF = this.transform;
-                mainCamera.GetComponent<AudioListener>().enabled = false;
+                GetComponent<AudioListener>().enabled = false;
             }
             else
                 GameManager.Instance.myPlayerTF = this.transform;
@@ -123,9 +129,6 @@ namespace KSU
         void Update()
         {
             CheckState();
-            //if (!photonView.IsMine)
-            //    return;
-            //CheckKeyInput(); // 이건 animator의  fsm으로 한다고 했으나 여기에 모아서 사용해둠(fsm으로 이동 될 것들)
         }
 
         private void FixedUpdate()
@@ -142,6 +145,65 @@ namespace KSU
             TakeRotation();
             Move();
         }
+
+        public void InitController()
+        {
+            moveSpeed = 0f;
+            moveVec = Vector3.zero;
+            inertiaNormalVec = Vector3.zero;
+            inertiaSpeed = 0f;
+            playerRigidbody.velocity = Vector3.zero;
+        }
+
+        public void InitAnimatorParam(bool initTop)
+        {
+            playerAnimator.SetBool("isAir", false);
+            playerAnimator.SetBool("isAirDash", false);
+            playerAnimator.SetBool("isAirJump", false);
+            playerAnimator.SetBool("WasAirJump", false);
+            playerAnimator.SetBool("isAttack", false);
+            playerAnimator.SetBool("isAttackNext", false);
+            playerAnimator.SetBool("Aim", false);
+            playerAnimator.SetBool("AimAttack", false);
+            playerAnimator.SetBool("WeaponSwap", false);
+            playerAnimator.SetBool("isMoveToRope", false);
+            playerAnimator.SetBool("isRidingRope", false);
+            playerAnimator.SetBool("isMoveToRail", false);
+            playerAnimator.SetBool("isRidingRail", false);
+            playerAnimator.SetBool("isRailJump", false);
+            playerAnimator.SetBool("isTransferRail", false);
+            playerAnimator.SetBool("isAttacked", false);
+            playerAnimator.SetBool("AttackedTrigger", false);
+            playerAnimator.SetBool("isKnockBack", false);
+            playerAnimator.SetBool("KnockBackTrigger", false);
+            playerAnimator.SetFloat("MoveX", 0f);
+            playerAnimator.SetFloat("MoveZ", 0f);
+            playerAnimator.SetFloat("HorizonVelocity", 0f);
+            playerAnimator.SetFloat("DistY", 0f);
+            playerAnimator.SetFloat("moveToRailSpeed", 0f);
+            if (initTop)
+                playerAnimator.SetBool("Top", false);
+            switch (this.gameObject.tag)
+            {
+                case "Nella":
+                    playerAnimator.SetBool("isSinging", false);
+                    break;
+                case "Steady":
+                    {
+                        playerAnimator.SetBool("isShootingGrapple", false);
+                        playerAnimator.SetBool("isGrappleMoving", false);
+                        playerAnimator.SetBool("isGrabMonster", false);
+                    }
+                    break;
+            }
+        }
+
+        void InitInteraction()
+        {
+            
+            GetComponent<PlayerInteraction>().InitInteraction();
+        }
+
         private void CheckState()
         {
             if (characterState.IsGrounded)
@@ -160,8 +222,9 @@ namespace KSU
             }
             characterState.CheckMove(playerRigidbody.velocity);
         }
+        
 
-        public void ResetPosition()
+        public void ResetLocalPosition()
         {
             transform.localPosition = Vector3.zero;
         }
@@ -170,14 +233,6 @@ namespace KSU
         {
             inertiaSpeed = speed;
             inertiaNormalVec = nomalVec;
-        }
-        private void CheckKeyInput()
-        {
-            InputRun();
-            InputMove();
-            InputJump();
-            InputDash();
-            InputSoundTest();
         }
 
 
@@ -194,6 +249,10 @@ namespace KSU
         }
         public void Resurrect()
         {
+            InitInteraction();
+            InitController();
+            GameManager.Instance.curPlayerHP = 12;
+            characterState.InitState(true, false);
             if (!File.Exists(Application.dataPath + "/Resources/CheckPointInfo/Stage" +
                 GameManager.Instance.curStageIndex + "/Section" + GameManager.Instance.curSection + ".json"))
             {
@@ -248,7 +307,7 @@ namespace KSU
 
         public void InputMove()
         {
-            if (characterState.isOutOfControl || characterState.isStopped)
+            if (characterState.isOutOfControl || characterState.isStopped || characterState.isRiding)
                 return;
             moveDir =
               mainCamera.transform.forward * ((KeyManager.Instance.GetKey(PlayerAction.MoveForward) ? 1 : 0) + (KeyManager.Instance.GetKey(PlayerAction.MoveBackward) ? -1 : 0))
@@ -267,11 +326,12 @@ namespace KSU
         public void MoveStop()
         {
             moveDir = Vector3.zero;
+            playerRigidbody.velocity = Vector3.zero;
         }
 
         public void AimViewInputMove()
         {
-            if (characterState.isOutOfControl || characterState.isStopped)
+            if (characterState.isOutOfControl || characterState.isStopped || characterState.isRiding)
                 return;
             moveDir.z = ((KeyManager.Instance.GetKey(PlayerAction.MoveForward) ? 1 : 0) + (KeyManager.Instance.GetKey(PlayerAction.MoveBackward) ? -1 : 0));
             moveDir.x = ((KeyManager.Instance.GetKey(PlayerAction.MoveRight) ? 1 : 0) + (KeyManager.Instance.GetKey(PlayerAction.MoveLeft) ? -1 : 0));
@@ -279,7 +339,7 @@ namespace KSU
 
         public void InputJump()
         {
-            if (characterState.isOutOfControl || characterState.isStopped)
+            if (characterState.isOutOfControl || characterState.isStopped || characterState.isRiding)
                 return;
             if (KeyManager.Instance.GetKeyDown(PlayerAction.Jump))
             {
@@ -321,7 +381,7 @@ namespace KSU
         }
         public void InputDash()
         {
-            if (characterState.isOutOfControl || characterState.isStopped)
+            if (characterState.isOutOfControl || characterState.isStopped || characterState.isRiding || !characterState.CanJump)
                 return;
             if (KeyManager.Instance.GetKeyDown(PlayerAction.Dash))
             {
@@ -351,7 +411,7 @@ namespace KSU
 
         public void TakeRotation()
         {
-            if (characterState.isOutOfControl || characterState.isStopped)
+            if (characterState.isOutOfControl)
             {
                 return;
             }
@@ -412,12 +472,36 @@ namespace KSU
 
         private void Move()
         {
+            if (characterState.isOutOfControl)
+            {
+                moveVec.y += gravity * Time.fixedDeltaTime;
+                if (moveVec.y < terminalSpeed)
+                {
+                    moveVec.y = terminalSpeed;
+                }
+
+                if(characterState.isAirBlocked)
+                {
+                    playerRigidbody.velocity = Vector3.up * moveVec.y;
+                }
+                else
+                {
+                    playerRigidbody.velocity = moveVec;
+                }
+                playerRigidbody.velocity = moveVec;
+                return;
+            }
+
             if (!characterState.IsGrounded || !characterState.CanJump)
             {
-                if (characterState.isOutOfControl)
+                if (characterState.isAirBlocked)
                 {
-                    moveVec = Vector3.up * (moveVec.y + gravity * Time.fixedDeltaTime);
-                    playerRigidbody.velocity = moveVec;
+                    moveVec.y += gravity * Time.fixedDeltaTime;
+                    if (moveVec.y < terminalSpeed)
+                    {
+                        moveVec.y = terminalSpeed;
+                    }
+                    playerRigidbody.velocity = Vector3.up * moveVec.y;
                     return;
                 }
 
@@ -442,14 +526,6 @@ namespace KSU
             }
             else
             {
-                if (characterState.isOutOfControl)
-                {
-                    moveVec = Vector3.zero;
-                    playerRigidbody.velocity = moveVec;
-                    return;
-                }
-
-
                 if (characterState.IsDashing) // 대시 중일 때
                 {
                     moveSpeed = dashSpeed;
@@ -496,5 +572,101 @@ namespace KSU
             playerRigidbody.velocity = moveVec;
         }
 
+        public void MakeKnockBackVec(Vector3 horVec, float rushSpeed)
+        {
+            knockBackVec = horVec.normalized * rushSpeed * 1.3f + Vector3.up * knockBackVerticalSpeed;
+        }
+
+        public void StartKnockBack()
+        {
+            InitController();
+            moveVec = knockBackVec;
+            characterState.IsJumping = true;
+            characterState.isOutOfControl = true;
+        }
+        public IEnumerator DelayResetKnockBack()
+        {
+            characterState.CanResetKnockBack = false;
+            yield return new WaitForSeconds(0.2f);
+            characterState.CanResetKnockBack = true;
+        }
+
+        public void EndKnockBack()
+        {
+            characterState.isOutOfControl = false;
+        }
+
+        public void StartAttacked()
+        {
+            characterState.isOutOfControl = true;
+        }
+
+        public void EndAttacked()
+        {
+            characterState.isOutOfControl = false;
+        }
+
+        public void StartDeath()
+        {
+            characterState.isStopped = true;
+            InitController();
+            playerCapsuleCollider.enabled = false;
+        }
+
+        public void EndDeath()
+        {
+            playerCapsuleCollider.enabled = true;
+            characterState.isStopped = false;
+            Resurrect();
+        }
+
+        private void OnTriggerEnter(Collider other)
+        {
+            if(!playerAnimator.GetBool("isAttacked") && !playerAnimator.GetBool("isKnockBack") && !playerAnimator.GetBool("isDead"))
+            {
+                switch (other.tag)
+                {
+                    case "MonsterAttack":
+                        {
+                            GameManager.Instance.curPlayerHP -= other.GetComponentInParent<DefenseMonster>().attackDamage;
+                            if (GameManager.Instance.curPlayerHP < 0)
+                            {
+                                GameManager.Instance.curPlayerHP = 0;
+                                playerAnimator.SetBool("DeadTrigger", true);
+                            }
+                            else
+                            {
+                                GetComponent<Animator>().SetBool("AttackedTrigger", true);
+                            }
+                        }
+                        break;
+                    case "MonsterRush":
+                        {
+                            GameManager.Instance.curPlayerHP -= other.GetComponentInParent<TrippleHeadSnake>().rushDamage;
+                            if (GameManager.Instance.curPlayerHP < 0)
+                            {
+                                GameManager.Instance.curPlayerHP = 0;
+                                playerAnimator.SetBool("DeadTrigger", true);
+                            }
+                            else
+                            {
+                                Vector3 knockBackHorVec = (transform.position - other.transform.position);
+                                knockBackHorVec.y = 0;
+                                transform.LookAt(transform.position - knockBackHorVec);
+                                MakeKnockBackVec(knockBackHorVec, other.GetComponentInParent<TrippleHeadSnake>().rushSpeed);
+                                StartCoroutine(nameof(DelayResetKnockBack));
+                                playerAnimator.SetBool("KnockBackTrigger", true);
+                            }
+                        }
+                        break;
+                    case "DeadZone":
+                        {
+                            GameManager.Instance.curPlayerHP = 0;
+                            playerAnimator.SetBool("DeadTrigger", true);
+                        }
+                        break;
+                }
+            }
+        }
     }
 }

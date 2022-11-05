@@ -39,7 +39,7 @@ namespace KSU
             transform.GetChild(3).GetComponent<ConvertIndicator>().SetInteractableRange(detectingRange, interactableRange);
         }
 
-        public void StartRopeAction(GameObject player, float moveToRopeSpeed)
+        public bool StartRopeAction(GameObject player, float moveToRopeSpeed)
         {
             switch (player.tag)
             {
@@ -48,7 +48,8 @@ namespace KSU
                         if(NellaRopeCenter.activeSelf)
                         {
                             player.GetComponent<PlayerInteractionState>().isMoveToRope = false;
-                            return;
+                            Debug.Log("NellaRopeCenter.activeSelf == true");
+                            return false;
                         }
                         NellaRopeCenter.GetComponent<Rope>().player = player;
                         NellaRopeCenter.GetComponent<Rope>().moveToRopeSpeed = moveToRopeSpeed;
@@ -60,7 +61,7 @@ namespace KSU
                         if (SteadyRopeCenter.activeSelf)
                         {
                             player.GetComponent<PlayerInteractionState>().isMoveToRope = false;
-                            return;
+                            return false;
                         }
                         SteadyRopeCenter.GetComponent<Rope>().player = player;
                         SteadyRopeCenter.GetComponent<Rope>().moveToRopeSpeed = moveToRopeSpeed;
@@ -68,13 +69,13 @@ namespace KSU
                     }
                     break;
             }
+            return true;
         }
 
         public float EndRopeAction(GameObject player)
         {
             switch (player.tag)
             {
-
                 case "Nella":
                     {
                         return NellaRopeCenter.GetComponent<Rope>().DeacvtivateRope(player);
