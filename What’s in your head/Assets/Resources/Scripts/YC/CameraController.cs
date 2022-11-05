@@ -212,8 +212,8 @@ namespace YC.Camera_
 
             followObj = Instantiate(CineFollowObj_Back, player.transform.position + CineFollowObj_Back.transform.position, player.transform.rotation).GetComponent<Transform>();
             lookatBackObj = Instantiate(CineLookObj_Back, player.transform.position + CineLookObj_Back.transform.position, player.transform.rotation).GetComponent<Transform>();
-            lookatSholderObj = transform.Find("Cine_lookatObj_Sholder").gameObject.transform;
-            lookatObjOriginY = lookatBackObj.transform.position.y; 
+            lookatSholderObj = transform.Find("Cine_lookatObj_Sholder").gameObject.transform;            
+            lookatObjOriginY = CineLookObj_Back.transform.position.y;
 
             backCam.GetComponent<CinemachineFreeLook>().m_Follow = followObj;
             backCam.GetComponent<CinemachineFreeLook>().m_LookAt = lookatBackObj;
