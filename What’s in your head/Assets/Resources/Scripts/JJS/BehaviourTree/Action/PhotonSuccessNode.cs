@@ -3,13 +3,14 @@ using System.Collections.Generic;
 using UnityEngine;
 namespace JJS.BT
 {
-    public class RunNode : ActionNode
+    public class PhotonSuccessNode : ActionNode
     {
-        int syncCheck;
+        public bool local;
         protected override void OnStart()
         {
-            syncCheck = objectInfo.syncIndex;
+
         }
+
 
         protected override void OnStop()
         {
@@ -17,14 +18,12 @@ namespace JJS.BT
 
         protected override State OnUpdate()
         {
+            if (local)
+                return State.Success;
             if (objectInfo.photonView.IsMine)
             {
                 return State.Success;
             }
-            if (objectInfo.syncIndex == syncCheck)
-            {
-                return State.Running;
-            } 
             return State.Failure;
         }
     }

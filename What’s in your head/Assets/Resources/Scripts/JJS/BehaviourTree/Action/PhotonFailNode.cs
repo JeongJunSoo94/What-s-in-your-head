@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 namespace JJS.BT
 {
-    public class FailNode : ActionNode
+    public class PhotonFailNode : ActionNode
     {
-
+        public bool local;
         protected override void OnStart()
         {
            
@@ -18,6 +18,8 @@ namespace JJS.BT
 
         protected override State OnUpdate()
         {
+            if(local)
+                return State.Failure;
             if (objectInfo.photonView.IsMine)
             {
                 return State.Success;
