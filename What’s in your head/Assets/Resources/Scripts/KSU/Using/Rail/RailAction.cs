@@ -77,6 +77,10 @@ namespace KSU
             //layerFilterForRail = ((-1) - (1 << LayerMask.NameToLayer("Player")));
         }
 
+        public void InitDictionary()
+        {
+            detectedRail.Clear();
+        }
         private void Update()
         {
             SearchRail();

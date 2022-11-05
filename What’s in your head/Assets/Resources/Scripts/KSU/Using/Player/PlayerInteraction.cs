@@ -53,10 +53,12 @@ namespace KSU
             if (interactionState.isRidingRail)
             {
                 railAction.EscapeRailAction();
+                railAction.InitDictionary();
             }
             else if (interactionState.isRidingRope)
             {
                 ropeAction.EscapeRope();
+                ropeAction.InitDictionary();
             }
             interactionState.InitInteractionState();
         }

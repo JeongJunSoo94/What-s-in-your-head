@@ -15,6 +15,7 @@ using KSU.Monster;
 
 namespace KSU
 {
+    public enum DamageType { Attacked, KnockBack, Dead };
     public class PlayerController : MonoBehaviour
     {
         //  Scripts Components
@@ -609,7 +610,6 @@ namespace KSU
         public void StartDeath()
         {
             characterState.isStopped = true;
-            InitController();
             playerCapsuleCollider.enabled = false;
         }
 
@@ -628,44 +628,85 @@ namespace KSU
                 {
                     case "MonsterAttack":
                         {
-                            GameManager.Instance.curPlayerHP -= other.GetComponentInParent<DefenseMonster>().attackDamage;
-                            if (GameManager.Instance.curPlayerHP < 0)
-                            {
-                                GameManager.Instance.curPlayerHP = 0;
-                                playerAnimator.SetBool("DeadTrigger", true);
-                            }
-                            else
-                            {
-                                GetComponent<Animator>().SetBool("AttackedTrigger", true);
-                            }
+                            GetDamage(other.GetComponentInParent<DefenseMonster>().attackDamage, DamageType.Attacked);
                         }
                         break;
                     case "MonsterRush":
                         {
-                            GameManager.Instance.curPlayerHP -= other.GetComponentInParent<TrippleHeadSnake>().rushDamage;
-                            if (GameManager.Instance.curPlayerHP < 0)
-                            {
-                                GameManager.Instance.curPlayerHP = 0;
-                                playerAnimator.SetBool("DeadTrigger", true);
-                            }
-                            else
-                            {
-                                Vector3 knockBackHorVec = (transform.position - other.transform.position);
-                                knockBackHorVec.y = 0;
-                                transform.LookAt(transform.position - knockBackHorVec);
-                                MakeKnockBackVec(knockBackHorVec, other.GetComponentInParent<TrippleHeadSnake>().rushSpeed);
-                                StartCoroutine(nameof(DelayResetKnockBack));
-                                playerAnimator.SetBool("KnockBackTrigger", true);
-                            }
+                            GetDamage(other.GetComponentInParent<TrippleHeadSnake>().rushDamage, DamageType.KnockBack, other.transform.position, other.GetComponentInParent<TrippleHeadSnake>().rushSpeed);
                         }
                         break;
                     case "DeadZone":
                         {
-                            GameManager.Instance.curPlayerHP = 0;
-                            playerAnimator.SetBool("DeadTrigger", true);
+                            GetDamage(12, DamageType.Dead);
                         }
                         break;
                 }
+            }
+        }
+
+        public void GetDamage(int damage, DamageType type, Vector3 colliderPos, float knockBackSpeed)
+        {
+            string damageTirgger = "DeadTrigger";
+            switch(type)
+            {
+                case DamageType.Attacked:
+                    damageTirgger = "AttackedTrigger";
+                    break;
+                case DamageType.KnockBack:
+                    damageTirgger = "KnockBackTrigger";
+                    break;
+                case DamageType.Dead:
+                    damageTirgger = "DeadTrigger";
+                    break;
+            }
+
+            GameManager.Instance.curPlayerHP -= damage;
+            if (GameManager.Instance.curPlayerHP < 0)
+            {
+                GameManager.Instance.curPlayerHP = 0;
+                playerAnimator.SetBool("DeadTrigger", true);
+            }
+            else
+            {
+                if(damageTirgger == "KnockBackTrigger")
+                {
+                    Vector3 knockBackHorVec = (transform.position - colliderPos);
+                    knockBackHorVec.y = 0;
+                    transform.LookAt(transform.position - knockBackHorVec);
+                    MakeKnockBackVec(knockBackHorVec, knockBackSpeed);
+                    StartCoroutine(nameof(DelayResetKnockBack));
+                }
+
+                playerAnimator.SetBool(damageTirgger, true);
+            }
+        }
+
+        public void GetDamage(int damage, DamageType type)
+        {
+            string damageTirgger = "DeadTrigger";
+            switch (type)
+            {
+                case DamageType.Attacked:
+                    damageTirgger = "AttackedTrigger";
+                    break;
+                case DamageType.KnockBack:
+                    damageTirgger = "KnockBackTrigger";
+                    break;
+                case DamageType.Dead:
+                    damageTirgger = "DeadTrigger";
+                    break;
+            }
+
+            GameManager.Instance.curPlayerHP -= damage;
+            if (GameManager.Instance.curPlayerHP <= 0)
+            {
+                GameManager.Instance.curPlayerHP = 0;
+                playerAnimator.SetBool("DeadTrigger", true);
+            }
+            else
+            {
+                playerAnimator.SetBool(damageTirgger, true);
             }
         }
     }
