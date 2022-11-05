@@ -1233,3 +1233,551 @@ JJS.BT.Node.Update () (at Assets/Resources/Scripts/JJS/BehaviourTree/Node.cs:31)
 JJS.BT.BehaviourTree.Update () (at Assets/Resources/Scripts/JJS/BehaviourTree/BehaviourTree.cs:22)
 JJS.BT.BehaviourTreeRunner.Update () (at Assets/Resources/Scripts/JJS/BehaviourTree/BehaviourTreeRunner.cs:18)
 
+[2022-11-05 오전 9:04:13]DontDestroyOnLoad only works for root GameObjects or components on root GameObjects.UnityEngine.StackTraceUtility:ExtractStackTrace ()
+GameManager:Awake () (at Assets/Resources/Scripts/JCW/GameManager.cs:48)
+
+[2022-11-05 오전 9:04:13]DontDestroyOnLoad only works for root GameObjects or components on root GameObjects.UnityEngine.StackTraceUtility:ExtractStackTrace ()
+YC.CameraManager_.CameraManager:Awake () (at Assets/Resources/Scripts/YC/CameraManager.cs:41)
+
+[2022-11-05 오전 9:04:13]DontDestroyOnLoad only works for root GameObjects or components on root GameObjects.UnityEngine.StackTraceUtility:ExtractStackTrace ()
+JCW.AudioCtrl.SoundManager:Awake () (at Assets/Resources/Scripts/JCW/Manager/SoundManager.cs:36)
+
+[2022-11-05 오전 9:04:14]There are no audio listeners in the scene. Please ensure there is always one audio listener in the scene
+[2022-11-05 오전 9:04:14]There are no audio listeners in the scene. Please ensure there is always one audio listener in the scene
+[2022-11-05 오전 9:04:15]Mary, 1UnityEngine.Debug:Log (object)
+Debug:Log (object) (at Assets/Resources/Scripts/JCW/Debug.cs:60)
+YC.Photon.TempPhotonManager:OnJoinedRoom () (at Assets/Resources/Scripts/YC/TempPhotonManager.cs:123)
+Photon.Realtime.MatchMakingCallbacksContainer:OnJoinedRoom () (at Assets/AddOn/Photon/PhotonRealtime/Code/LoadBalancingClient.cs:4202)
+Photon.Realtime.LoadBalancingClient:OnEvent (ExitGames.Client.Photon.EventData) (at Assets/AddOn/Photon/PhotonRealtime/Code/LoadBalancingClient.cs:3236)
+ExitGames.Client.Photon.PeerBase:DeserializeMessageAndCallback (ExitGames.Client.Photon.StreamBuffer)
+ExitGames.Client.Photon.EnetPeer:DispatchIncomingCommands ()
+ExitGames.Client.Photon.PhotonPeer:DispatchIncomingCommands ()
+Photon.Pun.PhotonHandler:Dispatch () (at Assets/AddOn/Photon/PhotonUnityNetworking/Code/PhotonHandler.cs:226)
+Photon.Pun.PhotonHandler:FixedUpdate () (at Assets/AddOn/Photon/PhotonUnityNetworking/Code/PhotonHandler.cs:145)
+
+[2022-11-05 오전 9:04:15]트리거 엔터 : Rope (1) (UnityEngine.GameObject)UnityEngine.Debug:Log (object)
+Debug:Log (object) (at Assets/Resources/Scripts/JCW/Debug.cs:60)
+KSU.RopeAction:OnTriggerEnter (UnityEngine.Collider) (at Assets/Resources/Scripts/KSU/Using/Rope/RopeAction.cs:266)
+
+[2022-11-05 오전 9:04:21]MissingReferenceException: The object of type 'PhotonView' has been destroyed but you are still trying to access it.
+Your script should either check if it is null or you should not destroy the object.Photon.Pun.PhotonNetwork.LocalCleanupAnythingInstantiated (System.Boolean destroyInstantiatedGameObjects) (at Assets/AddOn/Photon/PhotonUnityNetworking/Code/PhotonNetworkPart.cs:302)
+Photon.Pun.PhotonNetwork.LeftRoomCleanup () (at Assets/AddOn/Photon/PhotonUnityNetworking/Code/PhotonNetworkPart.cs:277)
+Photon.Pun.PhotonNetwork.OnClientStateChanged (Photon.Realtime.ClientState previousState, Photon.Realtime.ClientState state) (at Assets/AddOn/Photon/PhotonUnityNetworking/Code/PhotonNetworkPart.cs:2500)
+Photon.Realtime.LoadBalancingClient.set_State (Photon.Realtime.ClientState value) (at Assets/AddOn/Photon/PhotonRealtime/Code/LoadBalancingClient.cs:456)
+Photon.Realtime.LoadBalancingClient.Disconnect (Photon.Realtime.DisconnectCause cause) (at Assets/AddOn/Photon/PhotonRealtime/Code/LoadBalancingClient.cs:1289)
+Photon.Realtime.ConnectionHandler.OnDisable () (at Assets/AddOn/Photon/PhotonRealtime/Code/ConnectionHandler.cs:115)
+Photon.Pun.PhotonHandler.OnDisable () (at Assets/AddOn/Photon/PhotonUnityNetworking/Code/PhotonHandler.cs:131)
+
+[2022-11-05 오전 9:05:06]DontDestroyOnLoad only works for root GameObjects or components on root GameObjects.UnityEngine.StackTraceUtility:ExtractStackTrace ()
+GameManager:Awake () (at Assets/Resources/Scripts/JCW/GameManager.cs:48)
+
+[2022-11-05 오전 9:05:06]DontDestroyOnLoad only works for root GameObjects or components on root GameObjects.UnityEngine.StackTraceUtility:ExtractStackTrace ()
+YC.CameraManager_.CameraManager:Awake () (at Assets/Resources/Scripts/YC/CameraManager.cs:41)
+
+[2022-11-05 오전 9:05:06]DontDestroyOnLoad only works for root GameObjects or components on root GameObjects.UnityEngine.StackTraceUtility:ExtractStackTrace ()
+JCW.AudioCtrl.SoundManager:Awake () (at Assets/Resources/Scripts/JCW/Manager/SoundManager.cs:36)
+
+[2022-11-05 오전 9:05:07]There are no audio listeners in the scene. Please ensure there is always one audio listener in the scene
+[2022-11-05 오전 9:05:07]There are no audio listeners in the scene. Please ensure there is always one audio listener in the scene
+[2022-11-05 오전 9:05:08]Mary, 1UnityEngine.Debug:Log (object)
+Debug:Log (object) (at Assets/Resources/Scripts/JCW/Debug.cs:60)
+YC.Photon.TempPhotonManager:OnJoinedRoom () (at Assets/Resources/Scripts/YC/TempPhotonManager.cs:123)
+Photon.Realtime.MatchMakingCallbacksContainer:OnJoinedRoom () (at Assets/AddOn/Photon/PhotonRealtime/Code/LoadBalancingClient.cs:4202)
+Photon.Realtime.LoadBalancingClient:OnEvent (ExitGames.Client.Photon.EventData) (at Assets/AddOn/Photon/PhotonRealtime/Code/LoadBalancingClient.cs:3236)
+ExitGames.Client.Photon.PeerBase:DeserializeMessageAndCallback (ExitGames.Client.Photon.StreamBuffer)
+ExitGames.Client.Photon.EnetPeer:DispatchIncomingCommands ()
+ExitGames.Client.Photon.PhotonPeer:DispatchIncomingCommands ()
+Photon.Pun.PhotonHandler:Dispatch () (at Assets/AddOn/Photon/PhotonUnityNetworking/Code/PhotonHandler.cs:226)
+Photon.Pun.PhotonHandler:FixedUpdate () (at Assets/AddOn/Photon/PhotonUnityNetworking/Code/PhotonHandler.cs:145)
+
+[2022-11-05 오전 9:05:08]트리거 엔터 : Rope (1) (UnityEngine.GameObject)UnityEngine.Debug:Log (object)
+Debug:Log (object) (at Assets/Resources/Scripts/JCW/Debug.cs:60)
+KSU.RopeAction:OnTriggerEnter (UnityEngine.Collider) (at Assets/Resources/Scripts/KSU/Using/Rope/RopeAction.cs:266)
+
+[2022-11-05 오전 9:08:18]DontDestroyOnLoad only works for root GameObjects or components on root GameObjects.UnityEngine.StackTraceUtility:ExtractStackTrace ()
+GameManager:Awake () (at Assets/Resources/Scripts/JCW/GameManager.cs:48)
+
+[2022-11-05 오전 9:08:18]DontDestroyOnLoad only works for root GameObjects or components on root GameObjects.UnityEngine.StackTraceUtility:ExtractStackTrace ()
+YC.CameraManager_.CameraManager:Awake () (at Assets/Resources/Scripts/YC/CameraManager.cs:41)
+
+[2022-11-05 오전 9:08:18]DontDestroyOnLoad only works for root GameObjects or components on root GameObjects.UnityEngine.StackTraceUtility:ExtractStackTrace ()
+JCW.AudioCtrl.SoundManager:Awake () (at Assets/Resources/Scripts/JCW/Manager/SoundManager.cs:36)
+
+[2022-11-05 오전 9:08:18]There are no audio listeners in the scene. Please ensure there is always one audio listener in the scene
+[2022-11-05 오전 9:08:18]There are no audio listeners in the scene. Please ensure there is always one audio listener in the scene
+[2022-11-05 오전 9:08:20]Mary, 1UnityEngine.Debug:Log (object)
+Debug:Log (object) (at Assets/Resources/Scripts/JCW/Debug.cs:60)
+YC.Photon.TempPhotonManager:OnJoinedRoom () (at Assets/Resources/Scripts/YC/TempPhotonManager.cs:123)
+Photon.Realtime.MatchMakingCallbacksContainer:OnJoinedRoom () (at Assets/AddOn/Photon/PhotonRealtime/Code/LoadBalancingClient.cs:4202)
+Photon.Realtime.LoadBalancingClient:OnEvent (ExitGames.Client.Photon.EventData) (at Assets/AddOn/Photon/PhotonRealtime/Code/LoadBalancingClient.cs:3236)
+ExitGames.Client.Photon.PeerBase:DeserializeMessageAndCallback (ExitGames.Client.Photon.StreamBuffer)
+ExitGames.Client.Photon.EnetPeer:DispatchIncomingCommands ()
+ExitGames.Client.Photon.PhotonPeer:DispatchIncomingCommands ()
+Photon.Pun.PhotonHandler:Dispatch () (at Assets/AddOn/Photon/PhotonUnityNetworking/Code/PhotonHandler.cs:226)
+Photon.Pun.PhotonHandler:FixedUpdate () (at Assets/AddOn/Photon/PhotonUnityNetworking/Code/PhotonHandler.cs:145)
+
+[2022-11-05 오전 9:08:20]트리거 엔터 : Rope (1) (UnityEngine.GameObject)UnityEngine.Debug:Log (object)
+Debug:Log (object) (at Assets/Resources/Scripts/JCW/Debug.cs:60)
+KSU.RopeAction:OnTriggerEnter (UnityEngine.Collider) (at Assets/Resources/Scripts/KSU/Using/Rope/RopeAction.cs:266)
+
+[2022-11-05 오전 9:08:28]DontDestroyOnLoad only works for root GameObjects or components on root GameObjects.UnityEngine.StackTraceUtility:ExtractStackTrace ()
+GameManager:Awake () (at Assets/Resources/Scripts/JCW/GameManager.cs:48)
+
+[2022-11-05 오전 9:08:28]DontDestroyOnLoad only works for root GameObjects or components on root GameObjects.UnityEngine.StackTraceUtility:ExtractStackTrace ()
+YC.CameraManager_.CameraManager:Awake () (at Assets/Resources/Scripts/YC/CameraManager.cs:41)
+
+[2022-11-05 오전 9:08:28]DontDestroyOnLoad only works for root GameObjects or components on root GameObjects.UnityEngine.StackTraceUtility:ExtractStackTrace ()
+JCW.AudioCtrl.SoundManager:Awake () (at Assets/Resources/Scripts/JCW/Manager/SoundManager.cs:36)
+
+[2022-11-05 오전 9:08:28]There are no audio listeners in the scene. Please ensure there is always one audio listener in the scene
+[2022-11-05 오전 9:08:28]There are no audio listeners in the scene. Please ensure there is always one audio listener in the scene
+[2022-11-05 오전 9:08:29]Mary, 1UnityEngine.Debug:Log (object)
+Debug:Log (object) (at Assets/Resources/Scripts/JCW/Debug.cs:60)
+YC.Photon.TempPhotonManager:OnJoinedRoom () (at Assets/Resources/Scripts/YC/TempPhotonManager.cs:123)
+Photon.Realtime.MatchMakingCallbacksContainer:OnJoinedRoom () (at Assets/AddOn/Photon/PhotonRealtime/Code/LoadBalancingClient.cs:4202)
+Photon.Realtime.LoadBalancingClient:OnEvent (ExitGames.Client.Photon.EventData) (at Assets/AddOn/Photon/PhotonRealtime/Code/LoadBalancingClient.cs:3236)
+ExitGames.Client.Photon.PeerBase:DeserializeMessageAndCallback (ExitGames.Client.Photon.StreamBuffer)
+ExitGames.Client.Photon.EnetPeer:DispatchIncomingCommands ()
+ExitGames.Client.Photon.PhotonPeer:DispatchIncomingCommands ()
+Photon.Pun.PhotonHandler:Dispatch () (at Assets/AddOn/Photon/PhotonUnityNetworking/Code/PhotonHandler.cs:226)
+Photon.Pun.PhotonHandler:FixedUpdate () (at Assets/AddOn/Photon/PhotonUnityNetworking/Code/PhotonHandler.cs:145)
+
+[2022-11-05 오전 9:08:29]트리거 엔터 : Rope (1) (UnityEngine.GameObject)UnityEngine.Debug:Log (object)
+Debug:Log (object) (at Assets/Resources/Scripts/JCW/Debug.cs:60)
+KSU.RopeAction:OnTriggerEnter (UnityEngine.Collider) (at Assets/Resources/Scripts/KSU/Using/Rope/RopeAction.cs:266)
+
+[2022-11-05 오전 9:09:02]DontDestroyOnLoad only works for root GameObjects or components on root GameObjects.UnityEngine.StackTraceUtility:ExtractStackTrace ()
+GameManager:Awake () (at Assets/Resources/Scripts/JCW/GameManager.cs:48)
+
+[2022-11-05 오전 9:09:02]DontDestroyOnLoad only works for root GameObjects or components on root GameObjects.UnityEngine.StackTraceUtility:ExtractStackTrace ()
+YC.CameraManager_.CameraManager:Awake () (at Assets/Resources/Scripts/YC/CameraManager.cs:41)
+
+[2022-11-05 오전 9:09:02]DontDestroyOnLoad only works for root GameObjects or components on root GameObjects.UnityEngine.StackTraceUtility:ExtractStackTrace ()
+JCW.AudioCtrl.SoundManager:Awake () (at Assets/Resources/Scripts/JCW/Manager/SoundManager.cs:36)
+
+[2022-11-05 오전 9:09:03]There are no audio listeners in the scene. Please ensure there is always one audio listener in the scene
+[2022-11-05 오전 9:09:03]There are no audio listeners in the scene. Please ensure there is always one audio listener in the scene
+[2022-11-05 오전 9:09:04]Mary, 1UnityEngine.Debug:Log (object)
+Debug:Log (object) (at Assets/Resources/Scripts/JCW/Debug.cs:60)
+YC.Photon.TempPhotonManager:OnJoinedRoom () (at Assets/Resources/Scripts/YC/TempPhotonManager.cs:123)
+Photon.Realtime.MatchMakingCallbacksContainer:OnJoinedRoom () (at Assets/AddOn/Photon/PhotonRealtime/Code/LoadBalancingClient.cs:4202)
+Photon.Realtime.LoadBalancingClient:OnEvent (ExitGames.Client.Photon.EventData) (at Assets/AddOn/Photon/PhotonRealtime/Code/LoadBalancingClient.cs:3236)
+ExitGames.Client.Photon.PeerBase:DeserializeMessageAndCallback (ExitGames.Client.Photon.StreamBuffer)
+ExitGames.Client.Photon.EnetPeer:DispatchIncomingCommands ()
+ExitGames.Client.Photon.PhotonPeer:DispatchIncomingCommands ()
+Photon.Pun.PhotonHandler:Dispatch () (at Assets/AddOn/Photon/PhotonUnityNetworking/Code/PhotonHandler.cs:226)
+Photon.Pun.PhotonHandler:FixedUpdate () (at Assets/AddOn/Photon/PhotonUnityNetworking/Code/PhotonHandler.cs:145)
+
+[2022-11-05 오전 9:09:04]트리거 엔터 : Rope (1) (UnityEngine.GameObject)UnityEngine.Debug:Log (object)
+Debug:Log (object) (at Assets/Resources/Scripts/JCW/Debug.cs:60)
+KSU.RopeAction:OnTriggerEnter (UnityEngine.Collider) (at Assets/Resources/Scripts/KSU/Using/Rope/RopeAction.cs:266)
+
+[2022-11-05 오전 9:09:47]DontDestroyOnLoad only works for root GameObjects or components on root GameObjects.UnityEngine.StackTraceUtility:ExtractStackTrace ()
+GameManager:Awake () (at Assets/Resources/Scripts/JCW/GameManager.cs:48)
+
+[2022-11-05 오전 9:09:47]DontDestroyOnLoad only works for root GameObjects or components on root GameObjects.UnityEngine.StackTraceUtility:ExtractStackTrace ()
+YC.CameraManager_.CameraManager:Awake () (at Assets/Resources/Scripts/YC/CameraManager.cs:41)
+
+[2022-11-05 오전 9:09:47]DontDestroyOnLoad only works for root GameObjects or components on root GameObjects.UnityEngine.StackTraceUtility:ExtractStackTrace ()
+JCW.AudioCtrl.SoundManager:Awake () (at Assets/Resources/Scripts/JCW/Manager/SoundManager.cs:36)
+
+[2022-11-05 오전 9:09:47]There are no audio listeners in the scene. Please ensure there is always one audio listener in the scene
+[2022-11-05 오전 9:09:47]There are no audio listeners in the scene. Please ensure there is always one audio listener in the scene
+[2022-11-05 오전 9:09:49]Mary, 1UnityEngine.Debug:Log (object)
+Debug:Log (object) (at Assets/Resources/Scripts/JCW/Debug.cs:60)
+YC.Photon.TempPhotonManager:OnJoinedRoom () (at Assets/Resources/Scripts/YC/TempPhotonManager.cs:123)
+Photon.Realtime.MatchMakingCallbacksContainer:OnJoinedRoom () (at Assets/AddOn/Photon/PhotonRealtime/Code/LoadBalancingClient.cs:4202)
+Photon.Realtime.LoadBalancingClient:OnEvent (ExitGames.Client.Photon.EventData) (at Assets/AddOn/Photon/PhotonRealtime/Code/LoadBalancingClient.cs:3236)
+ExitGames.Client.Photon.PeerBase:DeserializeMessageAndCallback (ExitGames.Client.Photon.StreamBuffer)
+ExitGames.Client.Photon.EnetPeer:DispatchIncomingCommands ()
+ExitGames.Client.Photon.PhotonPeer:DispatchIncomingCommands ()
+Photon.Pun.PhotonHandler:Dispatch () (at Assets/AddOn/Photon/PhotonUnityNetworking/Code/PhotonHandler.cs:226)
+Photon.Pun.PhotonHandler:FixedUpdate () (at Assets/AddOn/Photon/PhotonUnityNetworking/Code/PhotonHandler.cs:145)
+
+[2022-11-05 오전 9:09:49]트리거 엔터 : Rope (1) (UnityEngine.GameObject)UnityEngine.Debug:Log (object)
+Debug:Log (object) (at Assets/Resources/Scripts/JCW/Debug.cs:60)
+KSU.RopeAction:OnTriggerEnter (UnityEngine.Collider) (at Assets/Resources/Scripts/KSU/Using/Rope/RopeAction.cs:266)
+
+[2022-11-05 오전 9:10:33]DontDestroyOnLoad only works for root GameObjects or components on root GameObjects.UnityEngine.StackTraceUtility:ExtractStackTrace ()
+GameManager:Awake () (at Assets/Resources/Scripts/JCW/GameManager.cs:48)
+
+[2022-11-05 오전 9:10:34]DontDestroyOnLoad only works for root GameObjects or components on root GameObjects.UnityEngine.StackTraceUtility:ExtractStackTrace ()
+YC.CameraManager_.CameraManager:Awake () (at Assets/Resources/Scripts/YC/CameraManager.cs:41)
+
+[2022-11-05 오전 9:10:34]DontDestroyOnLoad only works for root GameObjects or components on root GameObjects.UnityEngine.StackTraceUtility:ExtractStackTrace ()
+JCW.AudioCtrl.SoundManager:Awake () (at Assets/Resources/Scripts/JCW/Manager/SoundManager.cs:36)
+
+[2022-11-05 오전 9:10:34]There are no audio listeners in the scene. Please ensure there is always one audio listener in the scene
+[2022-11-05 오전 9:10:34]There are no audio listeners in the scene. Please ensure there is always one audio listener in the scene
+[2022-11-05 오전 9:10:35]Mary, 1UnityEngine.Debug:Log (object)
+Debug:Log (object) (at Assets/Resources/Scripts/JCW/Debug.cs:60)
+YC.Photon.TempPhotonManager:OnJoinedRoom () (at Assets/Resources/Scripts/YC/TempPhotonManager.cs:123)
+Photon.Realtime.MatchMakingCallbacksContainer:OnJoinedRoom () (at Assets/AddOn/Photon/PhotonRealtime/Code/LoadBalancingClient.cs:4202)
+Photon.Realtime.LoadBalancingClient:OnEvent (ExitGames.Client.Photon.EventData) (at Assets/AddOn/Photon/PhotonRealtime/Code/LoadBalancingClient.cs:3236)
+ExitGames.Client.Photon.PeerBase:DeserializeMessageAndCallback (ExitGames.Client.Photon.StreamBuffer)
+ExitGames.Client.Photon.EnetPeer:DispatchIncomingCommands ()
+ExitGames.Client.Photon.PhotonPeer:DispatchIncomingCommands ()
+Photon.Pun.PhotonHandler:Dispatch () (at Assets/AddOn/Photon/PhotonUnityNetworking/Code/PhotonHandler.cs:226)
+Photon.Pun.PhotonHandler:FixedUpdate () (at Assets/AddOn/Photon/PhotonUnityNetworking/Code/PhotonHandler.cs:145)
+
+[2022-11-05 오전 9:10:35]트리거 엔터 : Rope (1) (UnityEngine.GameObject)UnityEngine.Debug:Log (object)
+Debug:Log (object) (at Assets/Resources/Scripts/JCW/Debug.cs:60)
+KSU.RopeAction:OnTriggerEnter (UnityEngine.Collider) (at Assets/Resources/Scripts/KSU/Using/Rope/RopeAction.cs:266)
+
+[2022-11-05 오전 9:10:38]MissingReferenceException: The object of type 'PhotonView' has been destroyed but you are still trying to access it.
+Your script should either check if it is null or you should not destroy the object.Photon.Pun.PhotonNetwork.LocalCleanupAnythingInstantiated (System.Boolean destroyInstantiatedGameObjects) (at Assets/AddOn/Photon/PhotonUnityNetworking/Code/PhotonNetworkPart.cs:302)
+Photon.Pun.PhotonNetwork.LeftRoomCleanup () (at Assets/AddOn/Photon/PhotonUnityNetworking/Code/PhotonNetworkPart.cs:277)
+Photon.Pun.PhotonNetwork.OnClientStateChanged (Photon.Realtime.ClientState previousState, Photon.Realtime.ClientState state) (at Assets/AddOn/Photon/PhotonUnityNetworking/Code/PhotonNetworkPart.cs:2500)
+Photon.Realtime.LoadBalancingClient.set_State (Photon.Realtime.ClientState value) (at Assets/AddOn/Photon/PhotonRealtime/Code/LoadBalancingClient.cs:456)
+Photon.Realtime.LoadBalancingClient.Disconnect (Photon.Realtime.DisconnectCause cause) (at Assets/AddOn/Photon/PhotonRealtime/Code/LoadBalancingClient.cs:1289)
+Photon.Realtime.ConnectionHandler.OnDisable () (at Assets/AddOn/Photon/PhotonRealtime/Code/ConnectionHandler.cs:115)
+Photon.Pun.PhotonHandler.OnDisable () (at Assets/AddOn/Photon/PhotonUnityNetworking/Code/PhotonHandler.cs:131)
+
+[2022-11-05 오전 9:10:50]DontDestroyOnLoad only works for root GameObjects or components on root GameObjects.UnityEngine.StackTraceUtility:ExtractStackTrace ()
+GameManager:Awake () (at Assets/Resources/Scripts/JCW/GameManager.cs:48)
+
+[2022-11-05 오전 9:10:50]DontDestroyOnLoad only works for root GameObjects or components on root GameObjects.UnityEngine.StackTraceUtility:ExtractStackTrace ()
+YC.CameraManager_.CameraManager:Awake () (at Assets/Resources/Scripts/YC/CameraManager.cs:41)
+
+[2022-11-05 오전 9:10:50]DontDestroyOnLoad only works for root GameObjects or components on root GameObjects.UnityEngine.StackTraceUtility:ExtractStackTrace ()
+JCW.AudioCtrl.SoundManager:Awake () (at Assets/Resources/Scripts/JCW/Manager/SoundManager.cs:36)
+
+[2022-11-05 오전 9:10:50]There are no audio listeners in the scene. Please ensure there is always one audio listener in the scene
+[2022-11-05 오전 9:10:50]There are no audio listeners in the scene. Please ensure there is always one audio listener in the scene
+[2022-11-05 오전 9:10:52]Mary, 1UnityEngine.Debug:Log (object)
+Debug:Log (object) (at Assets/Resources/Scripts/JCW/Debug.cs:60)
+YC.Photon.TempPhotonManager:OnJoinedRoom () (at Assets/Resources/Scripts/YC/TempPhotonManager.cs:123)
+Photon.Realtime.MatchMakingCallbacksContainer:OnJoinedRoom () (at Assets/AddOn/Photon/PhotonRealtime/Code/LoadBalancingClient.cs:4202)
+Photon.Realtime.LoadBalancingClient:OnEvent (ExitGames.Client.Photon.EventData) (at Assets/AddOn/Photon/PhotonRealtime/Code/LoadBalancingClient.cs:3236)
+ExitGames.Client.Photon.PeerBase:DeserializeMessageAndCallback (ExitGames.Client.Photon.StreamBuffer)
+ExitGames.Client.Photon.EnetPeer:DispatchIncomingCommands ()
+ExitGames.Client.Photon.PhotonPeer:DispatchIncomingCommands ()
+Photon.Pun.PhotonHandler:Dispatch () (at Assets/AddOn/Photon/PhotonUnityNetworking/Code/PhotonHandler.cs:226)
+Photon.Pun.PhotonHandler:FixedUpdate () (at Assets/AddOn/Photon/PhotonUnityNetworking/Code/PhotonHandler.cs:145)
+
+[2022-11-05 오전 9:10:52]트리거 엔터 : Rope (1) (UnityEngine.GameObject)UnityEngine.Debug:Log (object)
+Debug:Log (object) (at Assets/Resources/Scripts/JCW/Debug.cs:60)
+KSU.RopeAction:OnTriggerEnter (UnityEngine.Collider) (at Assets/Resources/Scripts/KSU/Using/Rope/RopeAction.cs:266)
+
+[2022-11-05 오전 9:11:12]DontDestroyOnLoad only works for root GameObjects or components on root GameObjects.UnityEngine.StackTraceUtility:ExtractStackTrace ()
+GameManager:Awake () (at Assets/Resources/Scripts/JCW/GameManager.cs:48)
+
+[2022-11-05 오전 9:11:12]DontDestroyOnLoad only works for root GameObjects or components on root GameObjects.UnityEngine.StackTraceUtility:ExtractStackTrace ()
+YC.CameraManager_.CameraManager:Awake () (at Assets/Resources/Scripts/YC/CameraManager.cs:41)
+
+[2022-11-05 오전 9:11:12]DontDestroyOnLoad only works for root GameObjects or components on root GameObjects.UnityEngine.StackTraceUtility:ExtractStackTrace ()
+JCW.AudioCtrl.SoundManager:Awake () (at Assets/Resources/Scripts/JCW/Manager/SoundManager.cs:36)
+
+[2022-11-05 오전 9:11:12]There are no audio listeners in the scene. Please ensure there is always one audio listener in the scene
+[2022-11-05 오전 9:11:12]There are no audio listeners in the scene. Please ensure there is always one audio listener in the scene
+[2022-11-05 오전 9:11:13]Mary, 1UnityEngine.Debug:Log (object)
+Debug:Log (object) (at Assets/Resources/Scripts/JCW/Debug.cs:60)
+YC.Photon.TempPhotonManager:OnJoinedRoom () (at Assets/Resources/Scripts/YC/TempPhotonManager.cs:123)
+Photon.Realtime.MatchMakingCallbacksContainer:OnJoinedRoom () (at Assets/AddOn/Photon/PhotonRealtime/Code/LoadBalancingClient.cs:4202)
+Photon.Realtime.LoadBalancingClient:OnEvent (ExitGames.Client.Photon.EventData) (at Assets/AddOn/Photon/PhotonRealtime/Code/LoadBalancingClient.cs:3236)
+ExitGames.Client.Photon.PeerBase:DeserializeMessageAndCallback (ExitGames.Client.Photon.StreamBuffer)
+ExitGames.Client.Photon.EnetPeer:DispatchIncomingCommands ()
+ExitGames.Client.Photon.PhotonPeer:DispatchIncomingCommands ()
+Photon.Pun.PhotonHandler:Dispatch () (at Assets/AddOn/Photon/PhotonUnityNetworking/Code/PhotonHandler.cs:226)
+Photon.Pun.PhotonHandler:FixedUpdate () (at Assets/AddOn/Photon/PhotonUnityNetworking/Code/PhotonHandler.cs:145)
+
+[2022-11-05 오전 9:11:13]트리거 엔터 : Rope (1) (UnityEngine.GameObject)UnityEngine.Debug:Log (object)
+Debug:Log (object) (at Assets/Resources/Scripts/JCW/Debug.cs:60)
+KSU.RopeAction:OnTriggerEnter (UnityEngine.Collider) (at Assets/Resources/Scripts/KSU/Using/Rope/RopeAction.cs:266)
+
+[2022-11-05 오전 9:11:27]MissingReferenceException: The object of type 'PhotonView' has been destroyed but you are still trying to access it.
+Your script should either check if it is null or you should not destroy the object.Photon.Pun.PhotonNetwork.LocalCleanupAnythingInstantiated (System.Boolean destroyInstantiatedGameObjects) (at Assets/AddOn/Photon/PhotonUnityNetworking/Code/PhotonNetworkPart.cs:302)
+Photon.Pun.PhotonNetwork.LeftRoomCleanup () (at Assets/AddOn/Photon/PhotonUnityNetworking/Code/PhotonNetworkPart.cs:277)
+Photon.Pun.PhotonNetwork.OnClientStateChanged (Photon.Realtime.ClientState previousState, Photon.Realtime.ClientState state) (at Assets/AddOn/Photon/PhotonUnityNetworking/Code/PhotonNetworkPart.cs:2500)
+Photon.Realtime.LoadBalancingClient.set_State (Photon.Realtime.ClientState value) (at Assets/AddOn/Photon/PhotonRealtime/Code/LoadBalancingClient.cs:456)
+Photon.Realtime.LoadBalancingClient.Disconnect (Photon.Realtime.DisconnectCause cause) (at Assets/AddOn/Photon/PhotonRealtime/Code/LoadBalancingClient.cs:1289)
+Photon.Realtime.ConnectionHandler.OnDisable () (at Assets/AddOn/Photon/PhotonRealtime/Code/ConnectionHandler.cs:115)
+Photon.Pun.PhotonHandler.OnDisable () (at Assets/AddOn/Photon/PhotonUnityNetworking/Code/PhotonHandler.cs:131)
+
+[2022-11-05 오전 9:11:41]DontDestroyOnLoad only works for root GameObjects or components on root GameObjects.UnityEngine.StackTraceUtility:ExtractStackTrace ()
+GameManager:Awake () (at Assets/Resources/Scripts/JCW/GameManager.cs:48)
+
+[2022-11-05 오전 9:11:41]DontDestroyOnLoad only works for root GameObjects or components on root GameObjects.UnityEngine.StackTraceUtility:ExtractStackTrace ()
+YC.CameraManager_.CameraManager:Awake () (at Assets/Resources/Scripts/YC/CameraManager.cs:41)
+
+[2022-11-05 오전 9:11:41]DontDestroyOnLoad only works for root GameObjects or components on root GameObjects.UnityEngine.StackTraceUtility:ExtractStackTrace ()
+JCW.AudioCtrl.SoundManager:Awake () (at Assets/Resources/Scripts/JCW/Manager/SoundManager.cs:36)
+
+[2022-11-05 오전 9:11:41]There are no audio listeners in the scene. Please ensure there is always one audio listener in the scene
+[2022-11-05 오전 9:11:41]There are no audio listeners in the scene. Please ensure there is always one audio listener in the scene
+[2022-11-05 오전 9:11:42]Mary, 1UnityEngine.Debug:Log (object)
+Debug:Log (object) (at Assets/Resources/Scripts/JCW/Debug.cs:60)
+YC.Photon.TempPhotonManager:OnJoinedRoom () (at Assets/Resources/Scripts/YC/TempPhotonManager.cs:123)
+Photon.Realtime.MatchMakingCallbacksContainer:OnJoinedRoom () (at Assets/AddOn/Photon/PhotonRealtime/Code/LoadBalancingClient.cs:4202)
+Photon.Realtime.LoadBalancingClient:OnEvent (ExitGames.Client.Photon.EventData) (at Assets/AddOn/Photon/PhotonRealtime/Code/LoadBalancingClient.cs:3236)
+ExitGames.Client.Photon.PeerBase:DeserializeMessageAndCallback (ExitGames.Client.Photon.StreamBuffer)
+ExitGames.Client.Photon.EnetPeer:DispatchIncomingCommands ()
+ExitGames.Client.Photon.PhotonPeer:DispatchIncomingCommands ()
+Photon.Pun.PhotonHandler:Dispatch () (at Assets/AddOn/Photon/PhotonUnityNetworking/Code/PhotonHandler.cs:226)
+Photon.Pun.PhotonHandler:FixedUpdate () (at Assets/AddOn/Photon/PhotonUnityNetworking/Code/PhotonHandler.cs:145)
+
+[2022-11-05 오전 9:11:42]트리거 엔터 : Rope (1) (UnityEngine.GameObject)UnityEngine.Debug:Log (object)
+Debug:Log (object) (at Assets/Resources/Scripts/JCW/Debug.cs:60)
+KSU.RopeAction:OnTriggerEnter (UnityEngine.Collider) (at Assets/Resources/Scripts/KSU/Using/Rope/RopeAction.cs:266)
+
+[2022-11-05 오전 9:12:12]DontDestroyOnLoad only works for root GameObjects or components on root GameObjects.UnityEngine.StackTraceUtility:ExtractStackTrace ()
+GameManager:Awake () (at Assets/Resources/Scripts/JCW/GameManager.cs:48)
+
+[2022-11-05 오전 9:12:12]DontDestroyOnLoad only works for root GameObjects or components on root GameObjects.UnityEngine.StackTraceUtility:ExtractStackTrace ()
+YC.CameraManager_.CameraManager:Awake () (at Assets/Resources/Scripts/YC/CameraManager.cs:41)
+
+[2022-11-05 오전 9:12:12]DontDestroyOnLoad only works for root GameObjects or components on root GameObjects.UnityEngine.StackTraceUtility:ExtractStackTrace ()
+JCW.AudioCtrl.SoundManager:Awake () (at Assets/Resources/Scripts/JCW/Manager/SoundManager.cs:36)
+
+[2022-11-05 오전 9:12:12]There are no audio listeners in the scene. Please ensure there is always one audio listener in the scene
+[2022-11-05 오전 9:12:12]There are no audio listeners in the scene. Please ensure there is always one audio listener in the scene
+[2022-11-05 오전 9:12:14]Mary, 1UnityEngine.Debug:Log (object)
+Debug:Log (object) (at Assets/Resources/Scripts/JCW/Debug.cs:60)
+YC.Photon.TempPhotonManager:OnJoinedRoom () (at Assets/Resources/Scripts/YC/TempPhotonManager.cs:123)
+Photon.Realtime.MatchMakingCallbacksContainer:OnJoinedRoom () (at Assets/AddOn/Photon/PhotonRealtime/Code/LoadBalancingClient.cs:4202)
+Photon.Realtime.LoadBalancingClient:OnEvent (ExitGames.Client.Photon.EventData) (at Assets/AddOn/Photon/PhotonRealtime/Code/LoadBalancingClient.cs:3236)
+ExitGames.Client.Photon.PeerBase:DeserializeMessageAndCallback (ExitGames.Client.Photon.StreamBuffer)
+ExitGames.Client.Photon.EnetPeer:DispatchIncomingCommands ()
+ExitGames.Client.Photon.PhotonPeer:DispatchIncomingCommands ()
+Photon.Pun.PhotonHandler:Dispatch () (at Assets/AddOn/Photon/PhotonUnityNetworking/Code/PhotonHandler.cs:226)
+Photon.Pun.PhotonHandler:FixedUpdate () (at Assets/AddOn/Photon/PhotonUnityNetworking/Code/PhotonHandler.cs:145)
+
+[2022-11-05 오전 9:12:14]트리거 엔터 : Rope (1) (UnityEngine.GameObject)UnityEngine.Debug:Log (object)
+Debug:Log (object) (at Assets/Resources/Scripts/JCW/Debug.cs:60)
+KSU.RopeAction:OnTriggerEnter (UnityEngine.Collider) (at Assets/Resources/Scripts/KSU/Using/Rope/RopeAction.cs:266)
+
+[2022-11-05 오전 9:15:41]DontDestroyOnLoad only works for root GameObjects or components on root GameObjects.UnityEngine.StackTraceUtility:ExtractStackTrace ()
+GameManager:Awake () (at Assets/Resources/Scripts/JCW/GameManager.cs:48)
+
+[2022-11-05 오전 9:15:41]DontDestroyOnLoad only works for root GameObjects or components on root GameObjects.UnityEngine.StackTraceUtility:ExtractStackTrace ()
+YC.CameraManager_.CameraManager:Awake () (at Assets/Resources/Scripts/YC/CameraManager.cs:41)
+
+[2022-11-05 오전 9:15:41]DontDestroyOnLoad only works for root GameObjects or components on root GameObjects.UnityEngine.StackTraceUtility:ExtractStackTrace ()
+JCW.AudioCtrl.SoundManager:Awake () (at Assets/Resources/Scripts/JCW/Manager/SoundManager.cs:36)
+
+[2022-11-05 오전 9:15:42]There are no audio listeners in the scene. Please ensure there is always one audio listener in the scene
+[2022-11-05 오전 9:15:42]There are no audio listeners in the scene. Please ensure there is always one audio listener in the scene
+[2022-11-05 오전 9:15:43]Mary, 1UnityEngine.Debug:Log (object)
+Debug:Log (object) (at Assets/Resources/Scripts/JCW/Debug.cs:60)
+YC.Photon.TempPhotonManager:OnJoinedRoom () (at Assets/Resources/Scripts/YC/TempPhotonManager.cs:123)
+Photon.Realtime.MatchMakingCallbacksContainer:OnJoinedRoom () (at Assets/AddOn/Photon/PhotonRealtime/Code/LoadBalancingClient.cs:4202)
+Photon.Realtime.LoadBalancingClient:OnEvent (ExitGames.Client.Photon.EventData) (at Assets/AddOn/Photon/PhotonRealtime/Code/LoadBalancingClient.cs:3236)
+ExitGames.Client.Photon.PeerBase:DeserializeMessageAndCallback (ExitGames.Client.Photon.StreamBuffer)
+ExitGames.Client.Photon.EnetPeer:DispatchIncomingCommands ()
+ExitGames.Client.Photon.PhotonPeer:DispatchIncomingCommands ()
+Photon.Pun.PhotonHandler:Dispatch () (at Assets/AddOn/Photon/PhotonUnityNetworking/Code/PhotonHandler.cs:226)
+Photon.Pun.PhotonHandler:FixedUpdate () (at Assets/AddOn/Photon/PhotonUnityNetworking/Code/PhotonHandler.cs:145)
+
+[2022-11-05 오전 9:15:43]트리거 엔터 : Rope (1) (UnityEngine.GameObject)UnityEngine.Debug:Log (object)
+Debug:Log (object) (at Assets/Resources/Scripts/JCW/Debug.cs:60)
+KSU.RopeAction:OnTriggerEnter (UnityEngine.Collider) (at Assets/Resources/Scripts/KSU/Using/Rope/RopeAction.cs:266)
+
+[2022-11-05 오전 9:34:09]DontDestroyOnLoad only works for root GameObjects or components on root GameObjects.UnityEngine.StackTraceUtility:ExtractStackTrace ()
+GameManager:Awake () (at Assets/Resources/Scripts/JCW/GameManager.cs:47)
+
+[2022-11-05 오전 9:34:09]DontDestroyOnLoad only works for root GameObjects or components on root GameObjects.UnityEngine.StackTraceUtility:ExtractStackTrace ()
+YC.CameraManager_.CameraManager:Awake () (at Assets/Resources/Scripts/YC/CameraManager.cs:41)
+
+[2022-11-05 오전 9:34:09]DontDestroyOnLoad only works for root GameObjects or components on root GameObjects.UnityEngine.StackTraceUtility:ExtractStackTrace ()
+JCW.AudioCtrl.SoundManager:Awake () (at Assets/Resources/Scripts/JCW/Manager/SoundManager.cs:36)
+
+[2022-11-05 오전 9:34:09]There are no audio listeners in the scene. Please ensure there is always one audio listener in the scene
+[2022-11-05 오전 9:34:09]There are no audio listeners in the scene. Please ensure there is always one audio listener in the scene
+[2022-11-05 오전 9:34:11]Mary, 1UnityEngine.Debug:Log (object)
+Debug:Log (object) (at Assets/Resources/Scripts/JCW/Debug.cs:60)
+YC.Photon.TempPhotonManager:OnJoinedRoom () (at Assets/Resources/Scripts/YC/TempPhotonManager.cs:123)
+Photon.Realtime.MatchMakingCallbacksContainer:OnJoinedRoom () (at Assets/AddOn/Photon/PhotonRealtime/Code/LoadBalancingClient.cs:4202)
+Photon.Realtime.LoadBalancingClient:OnEvent (ExitGames.Client.Photon.EventData) (at Assets/AddOn/Photon/PhotonRealtime/Code/LoadBalancingClient.cs:3236)
+ExitGames.Client.Photon.PeerBase:DeserializeMessageAndCallback (ExitGames.Client.Photon.StreamBuffer)
+ExitGames.Client.Photon.EnetPeer:DispatchIncomingCommands ()
+ExitGames.Client.Photon.PhotonPeer:DispatchIncomingCommands ()
+Photon.Pun.PhotonHandler:Dispatch () (at Assets/AddOn/Photon/PhotonUnityNetworking/Code/PhotonHandler.cs:226)
+Photon.Pun.PhotonHandler:FixedUpdate () (at Assets/AddOn/Photon/PhotonUnityNetworking/Code/PhotonHandler.cs:145)
+
+[2022-11-05 오전 9:34:11]트리거 엔터 : Rope (1) (UnityEngine.GameObject)UnityEngine.Debug:Log (object)
+Debug:Log (object) (at Assets/Resources/Scripts/JCW/Debug.cs:60)
+KSU.RopeAction:OnTriggerEnter (UnityEngine.Collider) (at Assets/Resources/Scripts/KSU/Using/Rope/RopeAction.cs:266)
+
+[2022-11-05 오전 9:37:23]트리거 탈출 : Rope (1) (UnityEngine.GameObject)UnityEngine.Debug:Log (object)
+Debug:Log (object) (at Assets/Resources/Scripts/JCW/Debug.cs:60)
+KSU.RopeAction:OnTriggerExit (UnityEngine.Collider) (at Assets/Resources/Scripts/KSU/Using/Rope/RopeAction.cs:275)
+
+[2022-11-05 오전 9:37:25]트리거 엔터 : Rope (1) (UnityEngine.GameObject)UnityEngine.Debug:Log (object)
+Debug:Log (object) (at Assets/Resources/Scripts/JCW/Debug.cs:60)
+KSU.RopeAction:OnTriggerEnter (UnityEngine.Collider) (at Assets/Resources/Scripts/KSU/Using/Rope/RopeAction.cs:266)
+
+[2022-11-05 오전 9:54:03]Disconnecting PUN due to recompile. Exit PlayMode.UnityEngine.Debug:LogWarning (object)
+Photon.Pun.PhotonEditor:OnCompileStarted (string) (at Assets/AddOn/Photon/PhotonUnityNetworking/Code/Editor/PhotonEditor.cs:268)
+Photon.Pun.PhotonEditor:OnCompileStarted21 (object) (at Assets/AddOn/Photon/PhotonUnityNetworking/Code/Editor/PhotonEditor.cs:257)
+UnityEditor.Scripting.ScriptCompilation.EditorCompilationInterface:TickCompilationPipeline (UnityEditor.Scripting.ScriptCompilation.EditorScriptCompilationOptions,UnityEditor.BuildTargetGroup,UnityEditor.BuildTarget,int,string[])
+
+[2022-11-05 오전 9:54:03]MissingReferenceException: The object of type 'Camera' has been destroyed but you are still trying to access it.
+Your script should either check if it is null or you should not destroy the object.UnityEngine.Camera.get_rect () (at <c6b52566f59b49fc861a7812a1ea2f6b>:0)
+JCW.UI.InGame.Indicator.ConvertIndicator.Update () (at Assets/Resources/Scripts/JCW/UI/7. InGame/Indicator/ConvertIndicator.cs:65)
+
+[2022-11-05 오전 9:54:19]DontDestroyOnLoad only works for root GameObjects or components on root GameObjects.
+[2022-11-05 오전 9:54:19]DontDestroyOnLoad only works for root GameObjects or components on root GameObjects.
+[2022-11-05 오전 9:54:19]DontDestroyOnLoad only works for root GameObjects or components on root GameObjects.
+[2022-11-05 오전 9:54:19]There are no audio listeners in the scene. Please ensure there is always one audio listener in the scene
+[2022-11-05 오전 9:54:19]There are no audio listeners in the scene. Please ensure there is always one audio listener in the scene
+[2022-11-05 오전 9:54:21]Mary, 1
+[2022-11-05 오전 9:54:21]트리거 엔터 : Rope (1) (UnityEngine.GameObject)
+[2022-11-05 오전 9:55:08]트리거 탈출 : Rope (1) (UnityEngine.GameObject)
+[2022-11-05 오전 9:55:10]트리거 엔터 : Rope (1) (UnityEngine.GameObject)
+[2022-11-05 오전 9:55:55]DontDestroyOnLoad only works for root GameObjects or components on root GameObjects.
+[2022-11-05 오전 9:55:55]DontDestroyOnLoad only works for root GameObjects or components on root GameObjects.
+[2022-11-05 오전 9:55:55]DontDestroyOnLoad only works for root GameObjects or components on root GameObjects.
+[2022-11-05 오전 9:55:56]There are no audio listeners in the scene. Please ensure there is always one audio listener in the scene
+[2022-11-05 오전 9:55:56]There are no audio listeners in the scene. Please ensure there is always one audio listener in the scene
+[2022-11-05 오전 9:55:57]Mary, 1
+[2022-11-05 오전 9:55:57]트리거 엔터 : Rope (1) (UnityEngine.GameObject)
+[2022-11-05 오전 9:56:06]트리거 탈출 : Rope (1) (UnityEngine.GameObject)
+[2022-11-05 오전 9:56:06]트리거 엔터 : Rope (1) (UnityEngine.GameObject)
+[2022-11-05 오전 9:56:08]트리거 탈출 : Rope (1) (UnityEngine.GameObject)
+[2022-11-05 오전 9:56:09]트리거 엔터 : Rope (1) (UnityEngine.GameObject)
+[2022-11-05 오전 9:56:10]트리거 탈출 : Rope (1) (UnityEngine.GameObject)
+[2022-11-05 오전 9:56:10]트리거 엔터 : Rope (1) (UnityEngine.GameObject)
+[2022-11-05 오전 9:56:15]트리거 탈출 : Rope (1) (UnityEngine.GameObject)
+[2022-11-05 오전 9:56:16]트리거 엔터 : Rope (1) (UnityEngine.GameObject)
+[2022-11-05 오전 9:56:17]트리거 탈출 : Rope (1) (UnityEngine.GameObject)
+[2022-11-05 오전 9:56:17]트리거 엔터 : Rope (1) (UnityEngine.GameObject)
+[2022-11-05 오전 9:56:18]트리거 탈출 : Rope (1) (UnityEngine.GameObject)
+[2022-11-05 오전 9:56:19]트리거 엔터 : Rope (1) (UnityEngine.GameObject)
+[2022-11-05 오전 9:56:20]트리거 탈출 : Rope (1) (UnityEngine.GameObject)
+[2022-11-05 오전 9:56:21]트리거 엔터 : Rope (1) (UnityEngine.GameObject)
+[2022-11-05 오전 9:56:21]트리거 탈출 : Rope (1) (UnityEngine.GameObject)
+[2022-11-05 오전 9:56:24]트리거 엔터 : Rope (1) (UnityEngine.GameObject)
+[2022-11-05 오전 9:56:24]트리거 탈출 : Rope (1) (UnityEngine.GameObject)
+[2022-11-05 오전 9:56:25]트리거 엔터 : Rope (1) (UnityEngine.GameObject)
+[2022-11-05 오전 9:56:26]트리거 탈출 : Rope (1) (UnityEngine.GameObject)
+[2022-11-05 오전 9:56:26]트리거 엔터 : Rope (1) (UnityEngine.GameObject)
+[2022-11-05 오전 9:56:27]트리거 탈출 : Rope (1) (UnityEngine.GameObject)
+[2022-11-05 오전 9:56:27]트리거 엔터 : Rope (1) (UnityEngine.GameObject)
+[2022-11-05 오전 9:56:28]트리거 탈출 : Rope (1) (UnityEngine.GameObject)
+[2022-11-05 오전 9:56:28]트리거 엔터 : Rope (1) (UnityEngine.GameObject)
+[2022-11-05 오전 9:56:29]트리거 탈출 : Rope (1) (UnityEngine.GameObject)
+[2022-11-05 오전 9:56:29]트리거 엔터 : Rope (1) (UnityEngine.GameObject)
+[2022-11-05 오전 9:56:30]트리거 탈출 : Rope (1) (UnityEngine.GameObject)
+[2022-11-05 오전 9:56:30]트리거 엔터 : Rope (1) (UnityEngine.GameObject)
+[2022-11-05 오전 9:56:31]트리거 탈출 : Rope (1) (UnityEngine.GameObject)
+[2022-11-05 오전 9:56:31]트리거 엔터 : Rope (1) (UnityEngine.GameObject)
+[2022-11-05 오전 9:56:32]트리거 탈출 : Rope (1) (UnityEngine.GameObject)
+[2022-11-05 오전 9:56:32]트리거 엔터 : Rope (1) (UnityEngine.GameObject)
+[2022-11-05 오전 9:56:33]트리거 탈출 : Rope (1) (UnityEngine.GameObject)
+[2022-11-05 오전 9:56:33]트리거 엔터 : Rope (1) (UnityEngine.GameObject)
+[2022-11-05 오전 9:56:33]트리거 탈출 : Rope (1) (UnityEngine.GameObject)
+[2022-11-05 오전 9:56:34]트리거 엔터 : Rope (1) (UnityEngine.GameObject)
+[2022-11-05 오전 9:56:34]트리거 탈출 : Rope (1) (UnityEngine.GameObject)
+[2022-11-05 오전 9:56:35]트리거 엔터 : Rope (1) (UnityEngine.GameObject)
+[2022-11-05 오전 9:56:35]트리거 탈출 : Rope (1) (UnityEngine.GameObject)
+[2022-11-05 오전 9:56:35]트리거 엔터 : Rope (1) (UnityEngine.GameObject)
+[2022-11-05 오전 9:56:36]트리거 탈출 : Rope (1) (UnityEngine.GameObject)
+[2022-11-05 오전 9:56:36]트리거 엔터 : Rope (1) (UnityEngine.GameObject)
+[2022-11-05 오전 9:56:37]트리거 탈출 : Rope (1) (UnityEngine.GameObject)
+[2022-11-05 오전 9:56:37]트리거 엔터 : Rope (1) (UnityEngine.GameObject)
+[2022-11-05 오전 9:56:38]트리거 탈출 : Rope (1) (UnityEngine.GameObject)
+[2022-11-05 오전 9:56:38]트리거 엔터 : Rope (1) (UnityEngine.GameObject)
+[2022-11-05 오전 9:56:42]트리거 탈출 : Rope (1) (UnityEngine.GameObject)
+[2022-11-05 오전 11:34:01]DontDestroyOnLoad only works for root GameObjects or components on root GameObjects.
+[2022-11-05 오전 11:34:01]DontDestroyOnLoad only works for root GameObjects or components on root GameObjects.
+[2022-11-05 오전 11:34:01]DontDestroyOnLoad only works for root GameObjects or components on root GameObjects.
+[2022-11-05 오전 11:34:01]There are no audio listeners in the scene. Please ensure there is always one audio listener in the scene
+[2022-11-05 오전 11:34:01]There are no audio listeners in the scene. Please ensure there is always one audio listener in the scene
+[2022-11-05 오전 11:34:03]Mary, 1
+[2022-11-05 오전 11:34:03]트리거 엔터 : Rope (1) (UnityEngine.GameObject)
+[2022-11-05 오전 11:34:18]트리거 탈출 : Rope (1) (UnityEngine.GameObject)
+[2022-11-05 오전 11:34:21]트리거 엔터 : Rope (1) (UnityEngine.GameObject)
+[2022-11-05 오전 11:34:24]트리거 탈출 : Rope (1) (UnityEngine.GameObject)
+[2022-11-05 오전 11:34:25]트리거 엔터 : Rope (1) (UnityEngine.GameObject)
+[2022-11-05 오전 11:34:31]트리거 탈출 : Rope (1) (UnityEngine.GameObject)
+[2022-11-05 오전 11:34:33]트리거 엔터 : Rope (1) (UnityEngine.GameObject)
+[2022-11-05 오전 11:34:34]트리거 탈출 : Rope (1) (UnityEngine.GameObject)
+[2022-11-05 오전 11:35:10]MissingReferenceException: The object of type 'PhotonView' has been destroyed but you are still trying to access it.
+Your script should either check if it is null or you should not destroy the object.Photon.Pun.PhotonNetwork.LocalCleanupAnythingInstantiated (System.Boolean destroyInstantiatedGameObjects) (at Assets/AddOn/Photon/PhotonUnityNetworking/Code/PhotonNetworkPart.cs:302)
+Photon.Pun.PhotonNetwork.LeftRoomCleanup () (at Assets/AddOn/Photon/PhotonUnityNetworking/Code/PhotonNetworkPart.cs:277)
+Photon.Pun.PhotonNetwork.OnClientStateChanged (Photon.Realtime.ClientState previousState, Photon.Realtime.ClientState state) (at Assets/AddOn/Photon/PhotonUnityNetworking/Code/PhotonNetworkPart.cs:2500)
+Photon.Realtime.LoadBalancingClient.set_State (Photon.Realtime.ClientState value) (at Assets/AddOn/Photon/PhotonRealtime/Code/LoadBalancingClient.cs:456)
+Photon.Realtime.LoadBalancingClient.Disconnect (Photon.Realtime.DisconnectCause cause) (at Assets/AddOn/Photon/PhotonRealtime/Code/LoadBalancingClient.cs:1289)
+Photon.Realtime.ConnectionHandler.OnDisable () (at Assets/AddOn/Photon/PhotonRealtime/Code/ConnectionHandler.cs:115)
+Photon.Pun.PhotonHandler.OnDisable () (at Assets/AddOn/Photon/PhotonUnityNetworking/Code/PhotonHandler.cs:131)
+
+[2022-11-05 오전 11:36:37]DontDestroyOnLoad only works for root GameObjects or components on root GameObjects.
+[2022-11-05 오전 11:36:37]DontDestroyOnLoad only works for root GameObjects or components on root GameObjects.
+[2022-11-05 오전 11:36:37]DontDestroyOnLoad only works for root GameObjects or components on root GameObjects.
+[2022-11-05 오전 11:36:37]There are no audio listeners in the scene. Please ensure there is always one audio listener in the scene
+[2022-11-05 오전 11:36:37]There are no audio listeners in the scene. Please ensure there is always one audio listener in the scene
+[2022-11-05 오전 11:36:39]Mary, 1
+[2022-11-05 오전 11:36:39]트리거 엔터 : Rope (1) (UnityEngine.GameObject)
+[2022-11-05 오전 11:36:42]트리거 탈출 : Rope (1) (UnityEngine.GameObject)
+[2022-11-05 오전 11:36:46]트리거 엔터 : Rope (1) (UnityEngine.GameObject)
+[2022-11-05 오전 11:36:50]트리거 탈출 : Rope (1) (UnityEngine.GameObject)
+[2022-11-05 오전 11:36:51]트리거 엔터 : Rope (1) (UnityEngine.GameObject)
+[2022-11-05 오전 11:36:53]트리거 탈출 : Rope (1) (UnityEngine.GameObject)
+[2022-11-05 오전 11:36:53]트리거 엔터 : Rope (1) (UnityEngine.GameObject)
+[2022-11-05 오전 11:36:56]트리거 탈출 : Rope (1) (UnityEngine.GameObject)
+[2022-11-05 오전 11:36:56]트리거 엔터 : Rope (1) (UnityEngine.GameObject)
+[2022-11-05 오전 11:36:58]트리거 탈출 : Rope (1) (UnityEngine.GameObject)
+[2022-11-05 오전 11:36:58]트리거 엔터 : Rope (1) (UnityEngine.GameObject)
+[2022-11-05 오전 11:37:01]트리거 탈출 : Rope (1) (UnityEngine.GameObject)
+[2022-11-05 오전 11:37:01]트리거 엔터 : Rope (1) (UnityEngine.GameObject)
+[2022-11-05 오전 11:39:57]There are no audio listeners in the scene. Please ensure there is always one audio listener in the scene
+[2022-11-05 오전 11:39:57]There are no audio listeners in the scene. Please ensure there is always one audio listener in the scene
+[2022-11-05 오전 11:39:59]Mary, 1
+[2022-11-05 오전 11:39:59]트리거 엔터 : Rope (1) (UnityEngine.GameObject)
+[2022-11-05 오전 11:43:22]DontDestroyOnLoad only works for root GameObjects or components on root GameObjects.
+[2022-11-05 오전 11:43:22]DontDestroyOnLoad only works for root GameObjects or components on root GameObjects.
+[2022-11-05 오전 11:43:22]DontDestroyOnLoad only works for root GameObjects or components on root GameObjects.
+[2022-11-05 오전 11:43:22]There are no audio listeners in the scene. Please ensure there is always one audio listener in the scene
+[2022-11-05 오전 11:43:22]There are no audio listeners in the scene. Please ensure there is always one audio listener in the scene
+[2022-11-05 오전 11:43:24]Mary, 1
+[2022-11-05 오전 11:43:24]트리거 엔터 : Rope (1) (UnityEngine.GameObject)
+[2022-11-05 오전 11:45:43]DontDestroyOnLoad only works for root GameObjects or components on root GameObjects.
+[2022-11-05 오전 11:45:43]DontDestroyOnLoad only works for root GameObjects or components on root GameObjects.
+[2022-11-05 오전 11:45:43]DontDestroyOnLoad only works for root GameObjects or components on root GameObjects.
+[2022-11-05 오전 11:45:43]There are no audio listeners in the scene. Please ensure there is always one audio listener in the scene
+[2022-11-05 오전 11:45:43]There are no audio listeners in the scene. Please ensure there is always one audio listener in the scene
+[2022-11-05 오전 11:45:46]Mary, 1
+[2022-11-05 오전 11:45:46]트리거 엔터 : Rope (1) (UnityEngine.GameObject)
+[2022-11-05 오전 11:45:53]트리거 탈출 : Rope (1) (UnityEngine.GameObject)
+[2022-11-05 오전 11:46:17]MissingReferenceException: The object of type 'PhotonView' has been destroyed but you are still trying to access it.
+Your script should either check if it is null or you should not destroy the object.Photon.Pun.PhotonNetwork.LocalCleanupAnythingInstantiated (System.Boolean destroyInstantiatedGameObjects) (at Assets/AddOn/Photon/PhotonUnityNetworking/Code/PhotonNetworkPart.cs:302)
+Photon.Pun.PhotonNetwork.LeftRoomCleanup () (at Assets/AddOn/Photon/PhotonUnityNetworking/Code/PhotonNetworkPart.cs:277)
+Photon.Pun.PhotonNetwork.OnClientStateChanged (Photon.Realtime.ClientState previousState, Photon.Realtime.ClientState state) (at Assets/AddOn/Photon/PhotonUnityNetworking/Code/PhotonNetworkPart.cs:2500)
+Photon.Realtime.LoadBalancingClient.set_State (Photon.Realtime.ClientState value) (at Assets/AddOn/Photon/PhotonRealtime/Code/LoadBalancingClient.cs:456)
+Photon.Realtime.LoadBalancingClient.Disconnect (Photon.Realtime.DisconnectCause cause) (at Assets/AddOn/Photon/PhotonRealtime/Code/LoadBalancingClient.cs:1289)
+Photon.Realtime.ConnectionHandler.OnDisable () (at Assets/AddOn/Photon/PhotonRealtime/Code/ConnectionHandler.cs:115)
+Photon.Pun.PhotonHandler.OnDisable () (at Assets/AddOn/Photon/PhotonUnityNetworking/Code/PhotonHandler.cs:131)
+
+[2022-11-05 오전 11:48:12]DontDestroyOnLoad only works for root GameObjects or components on root GameObjects.
+[2022-11-05 오전 11:48:12]DontDestroyOnLoad only works for root GameObjects or components on root GameObjects.
+[2022-11-05 오전 11:48:12]DontDestroyOnLoad only works for root GameObjects or components on root GameObjects.
+[2022-11-05 오전 11:48:12]There are no audio listeners in the scene. Please ensure there is always one audio listener in the scene
+[2022-11-05 오전 11:48:12]There are no audio listeners in the scene. Please ensure there is always one audio listener in the scene
+[2022-11-05 오전 11:48:14]Mary, 1
+[2022-11-05 오전 11:48:14]트리거 엔터 : Rope (1) (UnityEngine.GameObject)
+[2022-11-05 오전 11:53:18]DontDestroyOnLoad only works for root GameObjects or components on root GameObjects.
+[2022-11-05 오전 11:53:18]DontDestroyOnLoad only works for root GameObjects or components on root GameObjects.
+[2022-11-05 오전 11:53:18]DontDestroyOnLoad only works for root GameObjects or components on root GameObjects.
+[2022-11-05 오전 11:53:19]There are no audio listeners in the scene. Please ensure there is always one audio listener in the scene
+[2022-11-05 오전 11:53:19]There are no audio listeners in the scene. Please ensure there is always one audio listener in the scene
+[2022-11-05 오전 11:53:20]Mary, 2
+[2022-11-05 오전 11:53:20]Mary, 1
+[2022-11-05 오전 11:53:20]트리거 엔터 : Rope (1) (UnityEngine.GameObject)
+[2022-11-05 오전 11:53:20]트리거 엔터 : Rope (1) (UnityEngine.GameObject)
+[2022-11-05 오전 11:53:20]PhotonAnimatorView: When using triggers, make sure this component is last in the stack.
+If you still experience issues, implement triggers as a regular RPC 
+or in custom IPunObservable component instead
+[2022-11-05 오전 11:58:19]DontDestroyOnLoad only works for root GameObjects or components on root GameObjects.
+[2022-11-05 오전 11:58:19]DontDestroyOnLoad only works for root GameObjects or components on root GameObjects.
+[2022-11-05 오전 11:58:19]DontDestroyOnLoad only works for root GameObjects or components on root GameObjects.
+[2022-11-05 오전 11:58:20]There are no audio listeners in the scene. Please ensure there is always one audio listener in the scene
+[2022-11-05 오전 11:58:20]There are no audio listeners in the scene. Please ensure there is always one audio listener in the scene
+[2022-11-05 오전 11:58:21]Mary, 1
+[2022-11-05 오전 11:58:21]트리거 엔터 : Rope (1) (UnityEngine.GameObject)
+[2022-11-05 오전 11:58:31]DontDestroyOnLoad only works for root GameObjects or components on root GameObjects.
+[2022-11-05 오전 11:58:31]DontDestroyOnLoad only works for root GameObjects or components on root GameObjects.
+[2022-11-05 오전 11:58:31]DontDestroyOnLoad only works for root GameObjects or components on root GameObjects.
+[2022-11-05 오전 11:58:32]There are no audio listeners in the scene. Please ensure there is always one audio listener in the scene
+[2022-11-05 오전 11:58:32]There are no audio listeners in the scene. Please ensure there is always one audio listener in the scene
+[2022-11-05 오전 11:58:33]Mary, 1
+[2022-11-05 오전 11:58:33]트리거 엔터 : Rope (1) (UnityEngine.GameObject)

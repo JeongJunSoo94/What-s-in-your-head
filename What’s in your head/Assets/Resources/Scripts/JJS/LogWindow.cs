@@ -6,7 +6,9 @@ using System;
 using System.IO;
 public class LogWindow : MonoBehaviour
 {
-    public string m_FilePath = @"PlayerLog.txt";
+    bool use;
+    public string m_FilePath1 = @"PlayerLog.txt";
+    public string m_FilePath2 = @"PlayerExceptionLog.txt";
     Text logText;
     Text exceptionText;
     ScrollRect scrollRect;
@@ -14,7 +16,9 @@ public class LogWindow : MonoBehaviour
     GameObject exceptionObj;
     GameObject scroll;
     GameObject canvasObj;
-    StreamWriter sw;
+    StreamWriter sw1;
+    StreamWriter sw2;
+    public GameObject button;
     private void Awake()
     {
         SetGameObject(gameObject,out logObj, "LogText");
@@ -26,52 +30,64 @@ public class LogWindow : MonoBehaviour
         SetGameObject(gameObject, out canvasObj, "Canvas");
         canvasObj.SetActive(false);
 
-        sw = new StreamWriter(m_FilePath, true);
+        sw1 = new StreamWriter(m_FilePath1, true);
+        sw2 = new StreamWriter(m_FilePath2, true);
         Application.logMessageReceived += SetLog;
+
+        //scroll.transform.position= new Vector3(0, 0,0);
     }
 
     private void Update()
     {
         if (Input.GetKeyDown(KeyCode.BackQuote))
         {
-            OnConsole();
+            use = !use;
+            UseWindow(use);
         }
     }
-
-    void OnConsole()
-    {
-        GameManager.Instance.isPause = !GameManager.Instance.isPause;
-        GameManager.Instance.PauseActive(GameManager.Instance.isPause);
-        UseWindow(GameManager.Instance.isPause);
-    }
-
 
     public void SetLog(string logString, string stackTrace, LogType type)
     {
         string str = "["+DateTime.Now.ToString()+ "]";
         str += logString;
-        str += stackTrace;
-        logText.text += str+ "\n";
-        sw.WriteLine(str);
-        scrollRect.verticalNormalizedPosition = 0.0f;
         if (LogType.Exception == type)
         {
-            OnConsole();
+            str += stackTrace;
+            UseWindow(true);
             logObj.SetActive(false);
             exceptionObj.SetActive(true);
-            exceptionText.text= str;
+            exceptionText.color = Color.red;
+            exceptionText.text = str;
+            sw2.WriteLine(str);
         }
+        else
+        {
+            logText.text += str+"\n";
+            sw1.WriteLine(str);
+        }
+        scrollRect.verticalNormalizedPosition = 0.0f;
+
     }
 
     void OnDisable()
     {
         Application.logMessageReceived -= SetLog;
-        sw.Close();
+        sw1.Flush();
+        sw2.Flush();
+        sw1.Close();
+        sw2.Close();
     }
 
     public void UseWindow(bool enable)
     {
         canvasObj.SetActive(enable);
+        CursorUse(enable);
+        use = enable;
+    }
+
+    public void CursorUse(bool enable)
+    {
+        button.SetActive(enable);
         if (enable)
         {
             Cursor.lockState = CursorLockMode.Confined;
