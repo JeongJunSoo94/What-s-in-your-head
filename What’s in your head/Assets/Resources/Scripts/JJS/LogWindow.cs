@@ -30,8 +30,6 @@ public class LogWindow : MonoBehaviour
         SetGameObject(gameObject, out canvasObj, "Canvas");
         canvasObj.SetActive(false);
 
-        sw1 = new StreamWriter(m_FilePath1, true);
-        sw2 = new StreamWriter(m_FilePath2, true);
         Application.logMessageReceived += SetLog;
 
         //scroll.transform.position= new Vector3(0, 0,0);
@@ -48,6 +46,8 @@ public class LogWindow : MonoBehaviour
 
     public void SetLog(string logString, string stackTrace, LogType type)
     {
+        sw1 = new StreamWriter(m_FilePath1, true);
+        sw2 = new StreamWriter(m_FilePath2, true);
         string str = "["+DateTime.Now.ToString()+ "]";
         str += logString;
         if (LogType.Exception == type)
@@ -66,11 +66,14 @@ public class LogWindow : MonoBehaviour
             sw1.WriteLine(str);
         }
         scrollRect.verticalNormalizedPosition = 0.0f;
-
+        sw1.Close();
+        sw2.Close();
     }
 
     void OnDisable()
     {
+        sw1 = new StreamWriter(m_FilePath1, true);
+        sw2 = new StreamWriter(m_FilePath2, true);
         Application.logMessageReceived -= SetLog;
         sw1.Flush();
         sw2.Flush();
