@@ -1,0 +1,18 @@
+[2022-11-05 오후 2:08:08]MissingReferenceException: The variable CineNellaBack of CameraController doesn't exist anymore.
+You probably need to reassign the CineNellaBack variable of the 'CameraController' script in the inspector.UnityEngine.Object.Internal_InstantiateSingle (UnityEngine.Object data, UnityEngine.Vector3 pos, UnityEngine.Quaternion rot) (at <c6b52566f59b49fc861a7812a1ea2f6b>:0)
+UnityEngine.Object.Instantiate (UnityEngine.Object original, UnityEngine.Vector3 position, UnityEngine.Quaternion rotation) (at <c6b52566f59b49fc861a7812a1ea2f6b>:0)
+UnityEngine.Object.Instantiate[T] (T original, UnityEngine.Vector3 position, UnityEngine.Quaternion rotation) (at <c6b52566f59b49fc861a7812a1ea2f6b>:0)
+YC.Camera_.CameraController.InitVirtualCamera () (at Assets/Resources/Scripts/YC/CameraController.cs:203)
+YC.Camera_.CameraController.Awake () (at Assets/Resources/Scripts/YC/CameraController.cs:145)
+UnityEngine.GameObject:SetActive(GameObject, Boolean)
+Photon.Pun.PhotonNetwork:NetworkInstantiate(InstantiateParameters, Boolean, Boolean) (at Assets/AddOn/Photon/PhotonUnityNetworking/Code/PhotonNetwork.cs:2650)
+Photon.Pun.PhotonNetwork:Instantiate(String, Vector3, Quaternion, Byte, Object[]) (at Assets/AddOn/Photon/PhotonUnityNetworking/Code/PhotonNetwork.cs:2482)
+YC.Photon.TempPhotonManager:OnJoinedRoom() (at Assets/Resources/Scripts/YC/TempPhotonManager.cs:139)
+Photon.Realtime.MatchMakingCallbacksContainer:OnJoinedRoom() (at Assets/AddOn/Photon/PhotonRealtime/Code/LoadBalancingClient.cs:4202)
+Photon.Realtime.LoadBalancingClient:OnEvent(EventData) (at Assets/AddOn/Photon/PhotonRealtime/Code/LoadBalancingClient.cs:3236)
+ExitGames.Client.Photon.PeerBase:DeserializeMessageAndCallback(StreamBuffer)
+ExitGames.Client.Photon.EnetPeer:DispatchIncomingCommands()
+ExitGames.Client.Photon.PhotonPeer:DispatchIncomingCommands()
+Photon.Pun.PhotonHandler:Dispatch() (at Assets/AddOn/Photon/PhotonUnityNetworking/Code/PhotonHandler.cs:226)
+Photon.Pun.PhotonHandler:FixedUpdate() (at Assets/AddOn/Photon/PhotonUnityNetworking/Code/PhotonHandler.cs:145)
+
