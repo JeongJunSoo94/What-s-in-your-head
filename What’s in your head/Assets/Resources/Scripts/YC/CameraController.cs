@@ -10,6 +10,7 @@ using YC.CameraManager_;
 using UnityEngine.Rendering.Universal;
 using KSU;
 using System;
+using System.Reflection;
 
 namespace YC.Camera_
 {
@@ -119,8 +120,8 @@ namespace YC.Camera_
         bool isJumping = false;
         bool isLerp = false;
         bool isAirJumpLerpEnd = false;
-        bool isDebugLog = false;
-        bool isRiding = false; // 라이딩 시작부터, 그라운드 착지시까지 true;
+        bool isRiding = false; // 라이딩 시작부터, 그라운드 착지시까지 true
+        bool isLower = false; // 일반 점프후 플레이어가 점프 시작 전 높이보다 낮다면 true
 
 
         // ============  인스펙터 프리팹  ============ //
@@ -130,6 +131,18 @@ namespace YC.Camera_
         [SerializeField] CinemachineVirtualCameraBase CineSteadySholder;
         [SerializeField] GameObject CineLookObj_Back;
         [SerializeField] GameObject CineFollowObj_Back;
+
+        // ============  디버그 로그  ============ //
+        bool isDebugLog = false;
+        void DebugLogToggle()  
+        {
+            var assembly = Assembly.GetAssembly(typeof(UnityEditor.Editor));
+            var type = assembly.GetType("UnityEditor.LogEntries");
+            var method = type.GetMethod("Clear");
+            method.Invoke(new object(), null);
+
+            isDebugLog = !isDebugLog;
+        }
 
 
         void Awake()  
@@ -146,8 +159,12 @@ namespace YC.Camera_
             InitDefault();
         }
 
+
         void FixedUpdate()
         {
+            if (Input.GetKeyDown(KeyCode.R))
+                DebugLogToggle();
+
             if (isDebugLog) Debug.Log("FixedUpdate");
 
             if (!pv.IsMine) return;
@@ -176,11 +193,16 @@ namespace YC.Camera_
                 if (!wasEndSet)
                     NormalJump_FixY();
 
-                if (!playerState.IsAirJumping)
-                    LowerPlayerFollow();
+                if (!playerState.IsAirJumping && !isLower)
+                    CheckLowerPlayer();
 
                 if (playerState.IsAirJumping && isAirJumpLerpEnd)
                     AirJumpPlayerFollow();
+
+                if (wasEndSet && playerState.IsAirDashing)
+                    AirDashFollow();
+
+                if (isLower) LowerPlayerFollow();
             }
             else if (!isJumping && !isLerp)
             {
@@ -213,7 +235,8 @@ namespace YC.Camera_
             followObj = Instantiate(CineFollowObj_Back, player.transform.position + CineFollowObj_Back.transform.position, player.transform.rotation).GetComponent<Transform>();
             lookatBackObj = Instantiate(CineLookObj_Back, player.transform.position + CineLookObj_Back.transform.position, player.transform.rotation).GetComponent<Transform>();
             lookatSholderObj = transform.Find("Cine_lookatObj_Sholder").gameObject.transform;
-            lookatObjOriginY = lookatBackObj.transform.position.y; 
+
+            lookatObjOriginY = CineLookObj_Back.transform.position.y;
 
             backCam.GetComponent<CinemachineFreeLook>().m_Follow = followObj;
             backCam.GetComponent<CinemachineFreeLook>().m_LookAt = lookatBackObj;
@@ -408,7 +431,7 @@ namespace YC.Camera_
             }
         }  
 
-        void OnOffCamera(CinemachineVirtualCameraBase curCam) // 매개변수로 받은 카메라 외에 다른 카메라는 Off (인자가 null이라면 모든 가상카메라를 끈다)
+        void OnOffCamera(CinemachineVirtualCameraBase curCam) // 매개변수로 받은 카메라 외에 다른 카메라는 Off (인자가 null이라면 모든 가상카메라를 끈다)  
         {
             foreach (CinemachineVirtualCameraBase cam in camList)
             {
@@ -662,6 +685,7 @@ namespace YC.Camera_
                 isJumping = true;
                 wasEndSet = false;
                 isAirJumpLerpEnd = false;
+                isLower = false;
 
                 // << : 점프 시작시 오브젝트들의 포지션 저장
                 orgLookY = lookatBackObj.transform.position.y;
@@ -674,6 +698,7 @@ namespace YC.Camera_
             {
                 if (isDebugLog) Debug.Log("호출 - 착지");
                 isJumping = false;
+
 
                 if (playerState.IsGrounded)
                 {
@@ -742,24 +767,47 @@ namespace YC.Camera_
                                     player.transform.position.z);
         }
 
-        void LowerPlayerFollow() // 일반 점프 후 플레이어가, 점프 시작시 위치보다 아래에 있다면 카메라가 플레이어를 쫓는다  
+        void AirDashFollow() // 일반 점프후 에어 대쉬에서, 플레이어 위치를 따라감  
         {
-            if (player.transform.position.y <= followObj.transform.position.y) // 현재 플레이어의 높이가, followObj 높이보다 낮다면
-            {
-                wasEndSet = true;
-
-                if (isDebugLog) Debug.Log("호출 - 일반 점프 후, 플레이어 위치 따라가는 중");
-                lookatBackObj.position
+            lookatBackObj.position
                             = new Vector3(player.transform.position.x,
                                         player.transform.position.y + lookatObjOriginY,
                                         player.transform.position.z);
 
+            followObj.position
+                        = new Vector3(player.transform.position.x,
+                                    player.transform.position.y,
+                                    player.transform.position.z);
 
-                followObj.position
-                            = new Vector3(player.transform.position.x,
-                                        player.transform.position.y,
-                                        player.transform.position.z);
+            if (isDebugLog) Debug.Log("호출 - 일반 점프 후 에어 대쉬, 플레이어 위치 따라가는 중");
+        }
+
+        void CheckLowerPlayer() // 점프 시작 때 높이보다, 점프 종료후 높이가 낮다면 True  
+        {
+            if (playerState.IsAirDashing) return;
+           
+            if (player.transform.position.y < followObj.transform.position.y - 0.5f) // 0.5하면 떨어질 때 오류, -0.5 안 하면 점프 종료후 일반 대쉬 못따라감
+            {
+                wasEndSet = true;
+
+                isLower = true;
+                if (isDebugLog) Debug.Log("호출 - 일반 점프후, 플레이어 높이가 시작 높이보다 낮음 체크");
             }
+        }
+
+        void LowerPlayerFollow() // 위 함수를 통해 isLower가 true라면 플레이어를 쫓는다  
+        {
+            if (isDebugLog) Debug.Log("호출 - 일반 점프 후, 플레이어 위치 따라가는 중");
+
+            lookatBackObj.position
+                        = new Vector3(player.transform.position.x,
+                                    player.transform.position.y + lookatObjOriginY,
+                                    player.transform.position.z);
+
+            followObj.position
+                        = new Vector3(player.transform.position.x,
+                                    player.transform.position.y,
+                                    player.transform.position.z);
         }
 
         void AirJumpPlayerFollow() // 공중 점프 보간 후 플레이어 위치 따라감  
@@ -796,7 +844,7 @@ namespace YC.Camera_
         {
             if (isDebugLog) Debug.Log("호출 - 공중 점프 코루틴 시작");
 
-            float initYpos = followObj.transform.position.y; // 점프 시작시 플레이어 Y 값
+            float initYpos = followObj.transform.position.y; // 현재 FollowObj의 Y 값
             float lerpYpos = initYpos;  // 보간이 이루어지고 있는 y 값
 
             float currentTime = 0;
@@ -808,8 +856,8 @@ namespace YC.Camera_
             {
                 //if (isDebugLog) Debug.Log("호출 - 공중점프 코루틴 Lerp 진행중");
 
-                float curPlayerYpos = player.transform.position.y;
                 float curFollowYpos = followObj.transform.position.y;
+                float curPlayerYpos = player.transform.position.y;
 
                 currentTime += Time.deltaTime;
                 if (currentTime >= LerpTime) currentTime = LerpTime;
@@ -820,11 +868,11 @@ namespace YC.Camera_
 
                 lerpYpos = Mathf.Lerp(curFollowYpos, curPlayerYpos, t);
                 if (lerpYpos > curPlayerYpos) lerpYpos = curPlayerYpos;
-
+                //if (isDebugLog) Debug.Log("호출 - 보간값 : " + lerpYpos);
 
                 lookatBackObj.position = new Vector3(player.transform.position.x, lerpYpos + lookatObjOriginY, player.transform.position.z);
                 followObj.position = new Vector3(player.transform.position.x, lerpYpos, player.transform.position.z);
-
+                if (isDebugLog) Debug.Log("호출 - 공중 점프 코루틴 Lerp 진행중");
                 yield return null;
             }
 
@@ -870,7 +918,7 @@ namespace YC.Camera_
 
                     lookatBackObj.position = new Vector3(player.transform.position.x, lerpYpos + lookatObjOriginY, player.transform.position.z);
                     followObj.position = new Vector3(player.transform.position.x, lerpYpos, player.transform.position.z);
-
+                    //if (isDebugLog) Debug.Log("호출 - 일반 코루틴 Lerp 진행중");
                     yield return null;
                 }
             }
@@ -932,7 +980,6 @@ namespace YC.Camera_
                                     player.transform.position.y,
                                     player.transform.position.z);
         }
-
 
 
         // ====================  [스테디 전용 함수]  ==================== //
