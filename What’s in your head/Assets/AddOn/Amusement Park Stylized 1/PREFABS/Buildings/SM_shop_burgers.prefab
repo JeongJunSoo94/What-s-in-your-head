@@ -11,8 +11,8 @@ GameObject:
   - component: {fileID: 2874088814984537998}
   - component: {fileID: 1174607283844065323}
   - component: {fileID: 4011014364114738401}
-  - component: {fileID: 627934664177324209}
-  m_Layer: 0
+  - component: {fileID: 7897273233576643573}
+  m_Layer: 3
   m_Name: SM_shop_burgers
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -29,6 +29,7 @@ Transform:
   m_LocalRotation: {x: 0.000000021855694, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -52,6 +53,7 @@ MeshRenderer:
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
@@ -83,17 +85,17 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!64 &627934664177324209
-MeshCollider:
+--- !u!136 &7897273233576643573
+CapsuleCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3218103546920828212}
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 13400000, guid: e95ff48113628b14f9cf06b2cc75d36e, type: 2}
   m_IsTrigger: 0
   m_Enabled: 1
-  serializedVersion: 4
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: -3216758059836361224, guid: ef4e17b41160baf4f869d9d2e48330e9, type: 3}
+  m_Radius: 2.274199
+  m_Height: 3.3615656
+  m_Direction: 1
+  m_Center: {x: 0.00000023841858, y: 1.6302698, z: -0.6551443}
