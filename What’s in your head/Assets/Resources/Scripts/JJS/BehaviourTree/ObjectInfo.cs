@@ -11,12 +11,13 @@ namespace JJS.BT
         GameObject prefabObject;
         public PhotonView photonView;
         public int syncIndex;
-
+        public bool delayEnable;
         private void Awake()
         {
             prefabObject = gameObject;
             photonView = GetComponent<PhotonView>();
             syncIndex =0;
+            delayEnable = false;
         }
         public GameObject PrefabObject
         {
@@ -45,6 +46,37 @@ namespace JJS.BT
             {
                 syncIndex = (int)stream.ReceiveNext();
             }
+        }
+
+        public void DelayCoroutin(bool enable,float delayTime)
+        {
+            if (enable)
+            {
+                delayEnable = true;
+                StartCoroutine(Delay(delayTime));
+            }
+            else
+            {
+                if (delayEnable)
+                {
+                    delayEnable = false;
+                }
+                else
+                {
+                    StopCoroutine(Delay(delayTime));
+                }
+            }
+        }
+        IEnumerator Delay(float delayTime)
+        {
+            float curCool = 0;
+            while (curCool < delayTime)
+            {
+                curCool += 0.01f;
+                yield return new WaitForSeconds(0.01f);
+            }
+            delayEnable = false;
+            yield break;
         }
     }
 }

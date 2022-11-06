@@ -78,6 +78,7 @@ namespace JJS
                         && !GetPlayerController(animator).characterState.IsDashing
                         && !GetPlayerController(animator).characterState.IsAirDashing
                         && !GetPlayerController(animator).characterState.swap
+                        && !animator.GetBool("isDead")
                         && !animator.GetBool("isAttack"))
                     {
                             animator.SetBool("Aim", KeyManager.Instance.GetKey(PlayerAction.Aim));

@@ -21,7 +21,7 @@ namespace JJS.BT
 
         protected override State OnUpdate()
         {
-            if (find.TargetCheck())
+            if (find.SpotTargetCheck())
             {
                 return State.Success;
             }

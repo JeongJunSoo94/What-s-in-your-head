@@ -52,7 +52,8 @@ namespace JJS
                             && !player.characterState.IsDashing
                             && !player.characterState.IsAirDashing
                             && !GetComponent<SteadyInteractionState>().isGrappling
-                            && !GetComponent<SteadyInteractionState>().isGrabMonster)
+                            && !GetComponent<SteadyInteractionState>().isGrabMonster
+                            && !player.playerAnimator.GetBool("isDead"))
                         {
                             if (!clickRight)
                             {

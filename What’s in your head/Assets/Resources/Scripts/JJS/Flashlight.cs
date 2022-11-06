@@ -9,12 +9,11 @@ namespace JJS
         public Light spot;
         public Light point;
         public ConeFindTarget finder;
-        public int a=0;
+        public ConeFindTarget finderSpot;
         private void Awake()
         {
             spot = light.transform.GetChild(0).GetComponent<Light>();
             point = light.transform.GetChild(1).GetComponent<Light>();
-            
         }
 
         private void Update()
@@ -30,6 +29,11 @@ namespace JJS
         public bool TargetCheck()
         {
             return finder.DiscoveryTargetBool() ? true : false;
+        }
+
+        public bool SpotTargetCheck()
+        {
+            return finderSpot.DiscoveryTargetBool() ? true : false;
         }
 
         public void SetLightColor(Color color)

@@ -10,7 +10,6 @@ namespace JJS.BT
         bool isRun;
         protected override void OnStart()
         {
-            current = 0;
         }
 
         protected override void OnStop()
@@ -19,7 +18,10 @@ namespace JJS.BT
 
         protected override State OnUpdate()
         {
-            //while (current != children.Count)
+            current = 0;
+            isFail = false;
+            isRun = false;
+            while (current < children.Count)
             {
                 var child = children[current];
                 switch (child.Update())

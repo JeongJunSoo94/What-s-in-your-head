@@ -26,12 +26,12 @@ namespace KSU
 
         // 유니티 제공 Components
         #region
-        Animator playerAnimator;
+        public Animator playerAnimator;
         CapsuleCollider playerCapsuleCollider;
         public Camera mainCamera;
         public Rigidbody playerRigidbody;
         //[Header("키 설정")] [SerializeField] private GameObject UI_BG;    
-        PhotonView photonView;
+        public PhotonView photonView;
         #endregion
 
         // 수평 Speed
@@ -681,7 +681,7 @@ namespace KSU
                 playerAnimator.SetBool(damageTirgger, true);
             }
         }
-
+        [PunRPC]
         public void GetDamage(int damage, DamageType type)
         {
             string damageTirgger = "DeadTrigger";

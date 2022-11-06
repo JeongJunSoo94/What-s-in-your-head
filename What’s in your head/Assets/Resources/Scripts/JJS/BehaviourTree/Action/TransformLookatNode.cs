@@ -2,14 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using JJS;
-using KSU;
-using Photon.Pun;
 namespace JJS.BT
 {
-    
-    public class InflictDamageNode : ActionNode
+    public class TransformLookatNode : ActionNode
     {
-        public int damage;
         Flashlight find;
         protected override void OnStart()
         {
@@ -25,12 +21,18 @@ namespace JJS.BT
 
         protected override State OnUpdate()
         {
-            for (int i = 0; i<find.finder.targetObj.Count; i++)
+            if (find.TargetCheck())
             {
-                PlayerController player = find.finder.targetObj[i].GetComponent<PlayerController>();
-                player.photonView.RPC(nameof(player.GetDamage), RpcTarget.AllViaServer, damage, DamageType.Attacked);
+                if (find.finder.targetObj.Count != 0)
+                {
+                    objectInfo.PrefabObject.transform.LookAt(find.finder.targetObj[0].transform);
+                }
+                return State.Success;
             }
-            return State.Success;
+            else
+            {
+                return State.Failure;
+            }
         }
     }
 }
