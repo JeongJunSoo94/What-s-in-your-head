@@ -2,29 +2,26 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace KSU.Monster
+namespace KSU.AutoAim.Object.Monster.FSM
 {
     public class MonsterSetRushTargetSMB : MonsterSMB
     {
-        // 버그
-        //TrippleHeadSnake trippleHeadSnake;
-        //// OnStateEnter is called when a transition starts and the state machine starts to evaluate this state
-        //override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
-        //{
-        //    if (trippleHeadSnake == null)
-        //    {
-        //        trippleHeadSnake = (GetMonsterController(animator) as TrippleHeadSnake);
-        //    }
-        //    trippleHeadSnake.SetRushTaget();
-        //}
+        TrippleHeadSnake trippleHeadSnake;
+        // OnStateEnter is called when a transition starts and the state machine starts to evaluate this state
+        override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
+        {
+            if (trippleHeadSnake == null)
+            {
+                trippleHeadSnake = (GetMonsterController(animator) as TrippleHeadSnake);
+            }
+            trippleHeadSnake.SetRushTaget();
+        }
 
         // OnStateUpdate is called on each Update frame between OnStateEnter and OnStateExit callbacks
-
-        // 버그
-        //override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
-        //{
-        //    trippleHeadSnake.RotateForRush();
-        //}
+        override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
+        {
+            trippleHeadSnake.RotateForRush();
+        }
 
         // OnStateExit is called when a transition ends and the state machine finishes evaluating this state
         //override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)

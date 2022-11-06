@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace KSU.Monster
+namespace KSU.AutoAim.Object.Monster.FSM
 {
     public class MonsterDeadSMB : MonsterSMB
     {

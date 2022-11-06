@@ -1,18 +1,13 @@
-using KSU.AutoAim.Object.Monster;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace KSU.Monster
+namespace KSU.AutoAim.Object.Monster.FSM
 {
     public class MonsterSMB : StateMachineBehaviour
     {
-        // 버그
         DefenseMonster monsterController;
         
-
-
-        //버그
         protected DefenseMonster GetMonsterController(Animator animator)
         {
             if(monsterController == null)

@@ -103,11 +103,10 @@ namespace JJS
         {
             glass.HitLine(type);
         }
-        // ¹ö±×
-        //public override bool GetCustomInfo(AutoAimTargetType grappleTargetType)
-        //{
-        //    return grapple.GetWhetherHit(grappleTargetType);
-        //}
+        public override bool GetCustomInfo(AutoAimTargetType grappleTargetType)
+        {
+            return grapple.GetWhetherHit(grappleTargetType);
+        }
 
        
     }

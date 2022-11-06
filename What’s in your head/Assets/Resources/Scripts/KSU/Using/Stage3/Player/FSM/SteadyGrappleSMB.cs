@@ -8,7 +8,6 @@ namespace KSU.FSM
 {
     public class SteadyGrappleSMB : CharacterBaseSMB
     {
-        // ¹ö±×
         SteadyGrappleAction grappleAction;
         public SteadyGrappleAction GetGrappleAction(Animator animator)
         {

@@ -9,7 +9,6 @@ using YC.Camera_Single;
 
 using JCW.UI.InGame.Indicator;
 using JCW.UI.InGame;
-using KSU.Monster;
 using KSU.AutoAim.Object;
 
 namespace KSU.AutoAim.Player
@@ -20,6 +19,7 @@ namespace KSU.AutoAim.Player
         protected SteadyInteractionState steadyInteractionState;
         protected PlayerState playerState;
         protected Animator playerAnimator;
+        protected PhotonView photonView;
 
         protected Camera playerCamera;
         [SerializeField] protected GameObject lookAtObj;
@@ -31,8 +31,8 @@ namespace KSU.AutoAim.Player
         [SerializeField] protected GameObject autoAimObject;
         protected GameObject hitTarget;
 
-        Transform autoAimPosition;
-        [SerializeField] AimUI aimUI;
+        protected Transform autoAimPosition;
+        [SerializeField] protected AimUI aimUI;
 
         [Header("_______변경 가능 값_______")]
         [Header("투사체 날아가는 속력")]
@@ -48,33 +48,13 @@ namespace KSU.AutoAim.Player
         [Header("오토 타겟팅 탐지 범위 (각도)"), Range(1f, 89f)]
         public float rangeAngle = 30f;
 
-        GameObject autoAimTarget;
-        Vector3 targetPosition;
+        protected GameObject autoAimTarget;
+        protected Vector3 targetPosition;
 
-        Vector3 autoAimObjectVec;
-        AutoAimTargetType curTargetType = AutoAimTargetType.Null;
+        protected AutoAimTargetType curTargetType = AutoAimTargetType.Null;
 
-        List<GameObject> autoAimTargetObjects = new();
+        protected List<GameObject> autoAimTargetObjects = new();
 
-        void Awake()
-        {
-            steadyInteractionState = GetComponent<SteadyInteractionState>();
-            playerCamera = this.gameObject.GetComponent<CameraController>().FindCamera(); // 멀티용
-            playerAnimator = GetComponent<Animator>();
-
-            autoAimObject = Instantiate(autoAimObject);
-            autoAimObject.SetActive(false);
-        }
-
-        void Update()
-        {
-            SearchAutoAimTargetdObject();
-            if (playerState.isMine)
-            {
-                SendInfoUI();
-                SendInfoAImUI();
-            }
-        }
         public void SearchAutoAimTargetdObject()
         {
             if (!playerAnimator.GetBool("isShootingCymbals") && autoAimObjectSpawner.transform.parent.gameObject.activeSelf && autoAimObjectSpawner.activeSelf)
@@ -122,7 +102,7 @@ namespace KSU.AutoAim.Player
             }
         }
 
-        void SendInfoUI()
+        protected void SendInfoUI()
         {
             if (autoAimTargetObjects.Count > 0)
             {
@@ -172,49 +152,6 @@ namespace KSU.AutoAim.Player
             }
         }
 
-        //public void InputFire()
-        //{
-        //    if (playerState.isOutOfControl || playerState.isStopped)
-        //        return;
-
-        //    if (cymbalsSpawner.transform.parent.gameObject.activeSelf)
-        //    {
-        //        if (!cymbals.gameObject.activeSelf)
-        //        {
-        //            steadyInteractionState.isSucceededInHittingTaget = false;
-        //            cymbalsSpawner.SetActive(false);
-        //            if (GameManager.Instance.isTopView)
-        //            {
-        //                ///////////////// 선택지 2: 여기에 마우스 거리 만큼의 위치까지 쏘는 갈고리 발사
-        //                Vector3 forward = (playerController.playerMouse.point.transform.position - cymbalsSpawner.transform.position);
-        //                forward.y = 0;
-        //                if (forward.magnitude > grapplingRange)
-        //                    forward = forward.normalized * grapplingRange;
-        //                cymbals.InitCymbals(cymbalsSpawner.transform.position, (cymbalsSpawner.transform.position + forward), cymbalsSpeed, cymbalsDepartOffset);
-        //            }
-        //            else if (steadyInteractionState.isAutoAimObjectFounded)
-        //            {
-        //                // 도착 위치: autoAimPosition
-        //                cymbals.InitCymbals(cymbalsSpawner.transform.position, autoAimPosition.position, cymbalsSpeed, cymbalsDepartOffset);
-        //            }
-        //            else
-        //            {
-        //                // 도착위치: 화면 중앙에 레이 쏴서 도착하는 곳
-        //                RaycastHit hit;
-        //                bool rayCheck = Physics.Raycast(playerCamera.transform.position, playerCamera.transform.forward, out hit, grapplingRange, -1, QueryTriggerInteraction.Ignore);
-        //                if (rayCheck && (hit.distance > Vector3.Distance(transform.position, playerCamera.transform.position)))
-        //                {
-        //                    cymbals.InitObject(cymbalsSpawner.transform.position, hit.point, cymbalsSpeed, cymbalsDepartOffset);
-        //                }
-        //                else
-        //                {
-        //                    cymbals.InitObject(cymbalsSpawner.transform.position, (playerCamera.transform.position + playerCamera.transform.forward * grapplingRange), cymbalsSpeed, cymbalsDepartOffset);
-        //                }
-        //            }
-        //        }
-        //    }
-        //}
-
         //public void RecieveCymbalsInfo(bool isSuceeded, GameObject targetObj)
         //{
         //    steadyInteractionState.isSucceededInHittingTaget = isSuceeded;
@@ -236,27 +173,11 @@ namespace KSU.AutoAim.Player
         //    return steadyInteractionState.isSucceededInHittingTaget;
         //}
 
-        //public bool GetWhetherCymbalsActived()
-        //{
-        //    return cymbals.gameObject.activeSelf;
-        //}
-
-        private void OnTriggerEnter(Collider other)
+        public bool GetWhetherautoAimObjectActived()
         {
+            return autoAimObject.activeSelf;
+        }
 
-            if ((other.gameObject.layer == LayerMask.NameToLayer("UITriggers")) && (other.CompareTag("CymbalsdObject") || other.CompareTag("PoisonSnake") || other.CompareTag("TrippleHeadSnake")))
-            {
-                autoAimTargetObjects.Add(other.gameObject);
-            }
-        }
-        private void OnTriggerExit(Collider other)
-        {
-            if ((other.gameObject.layer == LayerMask.NameToLayer("UITriggers")) && (other.CompareTag("CymbalsdObject") || other.CompareTag("PoisonSnake") || other.CompareTag("TrippleHeadSnake")))
-            {
-                other.gameObject.transform.parent.gameObject.GetComponentInChildren<OneIndicator>().SetUI(false);
-                autoAimTargetObjects.Remove(other.gameObject);
-            }
-        }
     }
 }
 

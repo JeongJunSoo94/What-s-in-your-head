@@ -9,9 +9,8 @@ namespace KSU.AutoAim.Player.Object
     public class SteadyGrapple : AutoAimObject
     {
         //public GameObject spawner; //스테디 손 위치에 있는 그래플, 그래플을 던지면 손에있는 그래플이 꺼지고 이 스크립트 달린 그래플이 켜지면서 날아감
-        //SteadyGrappleAction playerGrappleAction; // 스테디
+        SteadyGrappleAction playerGrappleAction; // 스테디
         LineRenderer grappleRope;
-
         //float moveSpeed = 15f;
         //Vector3 endPosistion;
         //float departingOffset = 0.2f;
@@ -93,37 +92,61 @@ namespace KSU.AutoAim.Player.Object
             grappleRope.SetPosition(1, transform.position);
         }
 
+        protected void MoveToEndPosition()
+        {
+            //1.리지드바디 추가해서 벨로시티로움직이기
+            if (Vector3.Distance(endPosistion, transform.position) < departingOffset)
+            {
+                isEndPosition = true;
+                if (this.gameObject.activeSelf)
+                {
+                    playerGrappleAction.RecieveAutoAimObjectInfo(false, null, AutoAimTargetType.Null);
+                }
+                this.gameObject.SetActive(false);
+            }
+            else
+            {
+                isEndPosition = false;
+            }
+            transform.LookAt(endPosistion);
+            Vector3 dir = (endPosistion - transform.position).normalized;
+            objectRigidbody.velocity = dir * moveSpeed;
+        }
+
         private void OnTriggerEnter(Collider other)
         {
             if((other.gameObject.layer != LayerMask.NameToLayer("UITriggers")) && (other.gameObject.layer != LayerMask.NameToLayer("Player")) && (other.gameObject.layer != LayerMask.NameToLayer("Bullet")))
             {
-                switch(other.tag)
+                if (playerGrappleAction == null)
+                    playerGrappleAction = player.GetComponent<SteadyGrappleAction>();
+
+                    switch (other.tag)
                 {
                     case "GrappledObject":
                         {
                             SoundManager.Instance.Play3D_RPC("GrappleSound", audioSource);
-                            player.RecieveAutoAimObjectInfo(true, other.gameObject, AutoAimTargetType.GrappledObject);
+                            playerGrappleAction.RecieveAutoAimObjectInfo(true, other.gameObject, AutoAimTargetType.GrappledObject);
                             isSucceeded = true;
                             objectRigidbody.velocity = Vector3.zero;
                         }
                         break;
                     case "PoisonSnake":
                         {
-                            player.RecieveAutoAimObjectInfo(true, other.gameObject, AutoAimTargetType.Monster);
+                            playerGrappleAction.RecieveAutoAimObjectInfo(true, other.gameObject, AutoAimTargetType.Monster);
                             isSucceeded = true;
                             objectRigidbody.velocity = Vector3.zero;
                         }
                         break;
                     case "TrippleHeadSnake":
                         {
-                            player.RecieveAutoAimObjectInfo(true, other.gameObject, AutoAimTargetType.Monster);
+                            playerGrappleAction.RecieveAutoAimObjectInfo(true, other.gameObject, AutoAimTargetType.Monster);
                             isSucceeded = true;
                             objectRigidbody.velocity = Vector3.zero;
                         }
                         break;
                     default:
                         {
-                            player.RecieveAutoAimObjectInfo(false, null, AutoAimTargetType.Null);
+                            playerGrappleAction.RecieveAutoAimObjectInfo(false, null, AutoAimTargetType.Null);
                             this.gameObject.SetActive(false);
                         }
                         break;

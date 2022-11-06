@@ -6,6 +6,8 @@ using UnityEngine;
 using JCW.UI.Options.InputBindings;
 using JCW.UI.InGame;
 using KSU;
+using KSU.AutoAim.Player;
+
 namespace JJS
 {
     [RequireComponent(typeof(PhotonView))]
@@ -179,11 +181,10 @@ namespace JJS
             yield break;
         }
 
-        // ¹ö±×
-        //public virtual bool GetCustomInfo(GrappleTargetType grappleTargetType)
-        //{
-        //    return false;
-        //}
+        public virtual bool GetCustomInfo(AutoAimTargetType autoAimTargetType)
+        {
+            return false;
+        }
 
         //public virtual bool InputLeftMouseButton()
         //{

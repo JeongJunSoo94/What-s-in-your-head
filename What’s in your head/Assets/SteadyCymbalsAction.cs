@@ -7,14 +7,12 @@ using Photon.Pun;
 using YC.Camera_;
 using YC.Camera_Single;
 
-
 using JCW.UI.InGame.Indicator;
 using JCW.UI.InGame;
-using KSU.Monster;
 
-namespace KSU
+namespace KSU.AutoAim.Player
 {
-    public class SteadyCymbalsAction : MonoBehaviour
+    public class SteadyCymbalsAction : AutoAimObject
     {
         SteadyInteractionState steadyInteractionState;
         PlayerController playerController;

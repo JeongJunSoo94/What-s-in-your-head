@@ -4,6 +4,7 @@ using UnityEngine;
 using JCW.UI.Options.InputBindings;
 using JJS.CharacterSMB;
 using KSU;
+using KSU.AutoAim.Player;
 
 namespace KSU.FSM
 {
@@ -48,9 +49,8 @@ namespace KSU.FSM
 
         void check(Animator animator)
         {
-            // ¹ö±×
-            //isSuceededInGrapple = GetPlayerController(animator).playerMouse.GetCustomInfo(GrappleTargetType.GrappledObject);
-            //isSuceededInGrab = GetPlayerController(animator).playerMouse.GetCustomInfo(GrappleTargetType.Monster);
+            isSuceededInGrapple = GetPlayerController(animator).playerMouse.GetCustomInfo(AutoAimTargetType.GrappledObject);
+            isSuceededInGrab = GetPlayerController(animator).playerMouse.GetCustomInfo(AutoAimTargetType.Monster);
             //animator.SetBool("isGrappleMoving", GetPlayerController(animator).playerMouse.GetCustomInfo());
             if (!isFired)
             {
