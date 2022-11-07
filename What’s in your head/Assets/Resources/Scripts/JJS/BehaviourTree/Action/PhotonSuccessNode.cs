@@ -24,7 +24,7 @@ namespace JJS.BT
             {
                 return State.Success;
             }
-            return State.Failure;
+            return State.Success;
         }
     }
 }

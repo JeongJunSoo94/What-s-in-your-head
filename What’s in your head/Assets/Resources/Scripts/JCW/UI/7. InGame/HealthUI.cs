@@ -44,11 +44,11 @@ namespace JCW.UI.InGame
         void Awake()
         {
             photonView = GetComponent<PhotonView>();
-
-            if (!GameManager.Instance.isTest)
-                isNella = GameManager.Instance.characterOwner[PhotonNetwork.IsMasterClient];
-            else
-                isNella = TempPhotonManager.Instance.isNella;
+            isNella = GameManager.Instance.characterOwner[PhotonNetwork.IsMasterClient];
+            //if (!GameManager.Instance.isTest)
+            //    isNella = GameManager.Instance.characterOwner[PhotonNetwork.IsMasterClient];
+            //else
+            //    isNella = TempPhotonManager.Instance.isNella;
 
             if (photonView.IsMine)
                 GameManager.Instance.reviveAllPairs.Add(isNella, this);

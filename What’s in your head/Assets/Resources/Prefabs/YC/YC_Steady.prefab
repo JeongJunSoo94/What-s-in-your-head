@@ -5148,7 +5148,7 @@ GameObject:
   m_Component:
   - component: {fileID: 9040750791968921938}
   m_Layer: 14
-  m_Name: Hook
+  m_Name: WeaponSpawner
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -25130,7 +25130,7 @@ GameObject:
   - component: {fileID: 5821330284378002438}
   - component: {fileID: 2879575967534713463}
   m_Layer: 6
-  m_Name: JJS_Steady
+  m_Name: YC_Steady
   m_TagString: Steady
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -25665,16 +25665,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bc8bd3eaf0d7d5f44a968f46cbb73a7c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  lookAtObj: {fileID: 0}
+  lookAtObj: {fileID: 2713921362035335090, guid: afc9727a139e5874f86ed8923a44d1ed, type: 3}
   layerFilterForAutoAim:
     serializedVersion: 2
     m_Bits: 101896
   layerForAutoAim:
     serializedVersion: 2
     m_Bits: 2048
-  autoAimObjectSpawner: {fileID: 1911663723217604559, guid: a04cce2527fd1a440840cfa515d60c17, type: 3}
+  autoAimObjectSpawner: {fileID: 1911663723217604559}
   autoAimObject: {fileID: 7909980709306676830, guid: c9b54073bf48f804ebee62282b5e85af, type: 3}
-  aimUI: {fileID: 8657421885556112005, guid: a04cce2527fd1a440840cfa515d60c17, type: 3}
+  aimUI: {fileID: 8657421885556112005}
   cymbalsSpeed: 10
   cymbalsDepartOffset: 0.5
   rangeRadius: 10
@@ -25752,7 +25752,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6709380369866019142}
   m_Layer: 14
-  m_Name: Hook
+  m_Name: WeaponPosition
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -52225,6 +52225,17 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 4660158950712969291, guid: d9ae6c359ed6b9b4fbc0438148b6bc30, type: 3}
   m_PrefabInstance: {fileID: 3814756060233629550}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &8657421885556112005 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5536589947466532331, guid: d9ae6c359ed6b9b4fbc0438148b6bc30, type: 3}
+  m_PrefabInstance: {fileID: 3814756060233629550}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a35adc6c2d304da458ad65caca7ff534, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &4683547804405353619
 PrefabInstance:
   m_ObjectHideFlags: 0

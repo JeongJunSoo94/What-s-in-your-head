@@ -17,11 +17,15 @@ namespace JJS
         public Text textMax;
         public Text textCur;
         public Text textMin;
+        public GameObject canvas;
+        public GameObject panel;
         private void Awake()
         {
             curfps = 0;
             minfps = 400f;
             maxfps = 0;
+            CanvasScaler canvasScaler = canvas.GetComponent<CanvasScaler>();
+            canvasScaler.referenceResolution = new Vector2(Screen.width, Screen.height);
         }
         // Update is called once per frame
         void Update()

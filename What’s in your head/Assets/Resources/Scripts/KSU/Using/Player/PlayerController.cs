@@ -252,13 +252,17 @@ namespace KSU
         {
             InitInteraction();
             InitController();
-            GameManager.Instance.curPlayerHP = 12;
+            if (photonView.IsMine)
+            { 
+                GameManager.Instance.curPlayerHP = 12;
+            }
+
             characterState.InitState(true, false);
             if (!File.Exists(Application.dataPath + "/Resources/CheckPointInfo/Stage" +
                 GameManager.Instance.curStageIndex + "/Section" + GameManager.Instance.curSection + ".json"))
             {
-                Debug.Log(GameManager.Instance.curSection);
-                Debug.Log("체크포인트 불러오기 실패");
+                //Debug.Log(GameManager.Instance.curSection);
+                //Debug.Log("체크포인트 불러오기 실패");
                 return;
             }
 
@@ -644,7 +648,7 @@ namespace KSU
                 }
             }
         }
-
+        [PunRPC]
         public void GetDamage(int damage, DamageType type, Vector3 colliderPos, float knockBackSpeed)
         {
             string damageTirgger = "DeadTrigger";
@@ -681,9 +685,12 @@ namespace KSU
                 playerAnimator.SetBool(damageTirgger, true);
             }
         }
+        
         [PunRPC]
         public void GetDamage(int damage, DamageType type)
         {
+            if (!photonView.IsMine)
+                return;
             string damageTirgger = "DeadTrigger";
             switch (type)
             {
@@ -697,17 +704,27 @@ namespace KSU
                     damageTirgger = "DeadTrigger";
                     break;
             }
+            if (!playerAnimator.GetBool("isAttacked") && !playerAnimator.GetBool("isKnockBack") && !playerAnimator.GetBool("isDead"))
+            {
+                GameManager.Instance.curPlayerHP -= damage;
+                if (GameManager.Instance.curPlayerHP <= 0)
+                {
+                    GameManager.Instance.curPlayerHP = 0;
+                    //playerAnimator.SetBool("DeadTrigger", true);
+                    photonView.RPC(nameof(SetAnimatorBool), RpcTarget.AllViaServer, "DeadTrigger", true);
+                }
+                else
+                {
+                    photonView.RPC(nameof(SetAnimatorBool), RpcTarget.AllViaServer, damageTirgger, true);
+                    //playerAnimator.SetBool(damageTirgger, true);
+                }
+            }
+        }
 
-            GameManager.Instance.curPlayerHP -= damage;
-            if (GameManager.Instance.curPlayerHP <= 0)
-            {
-                GameManager.Instance.curPlayerHP = 0;
-                playerAnimator.SetBool("DeadTrigger", true);
-            }
-            else
-            {
-                playerAnimator.SetBool(damageTirgger, true);
-            }
+        [PunRPC]
+        public void SetAnimatorBool(string name, bool enable)
+        {
+            playerAnimator.SetBool(name, enable);
         }
     }
 }

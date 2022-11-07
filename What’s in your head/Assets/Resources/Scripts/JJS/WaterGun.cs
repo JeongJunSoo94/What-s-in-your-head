@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using JCW.Spawner;
-
+using JCW.UI.Options.InputBindings;
 using YC.Camera_;
 using YC.Camera_Single;
 using JCW.AudioCtrl;
@@ -14,7 +14,6 @@ namespace JJS.Weapon
     {
 
         Ray ray;
-
         Vector3 dir;
 
         [Header("BulletInfo")]
@@ -24,8 +23,8 @@ namespace JJS.Weapon
         public float shootMaxDistance;
         public float shootMinDistrace;
         public float shootCurDistance;
-        public float curveHeight=1f;
-        public float curveWidth=0.5f;
+        public float curveHeight = 1f;
+        public float curveWidth = 0.5f;
         public float shootSpeed = 0.5f;
         public int bulletCount = 0;
         public LayerMask layerMask;
@@ -45,7 +44,7 @@ namespace JJS.Weapon
         public float curShootCool;
         GameObject bulletSpawner;
         public int bulletCurCount = 0;
-
+        public Rigidbody rigid;
         AudioSource audioSource;
 
         private void Awake()
@@ -61,6 +60,7 @@ namespace JJS.Weapon
             shootEnable = true;
             audioSource = GetComponent<AudioSource>();
             JCW.AudioCtrl.AudioSettings.SetAudio(audioSource, 1f, 40f);
+            rigid = transform.parent.gameObject.GetComponent<Rigidbody>();
         }
         //void FixedUpdate()
         //{
@@ -75,16 +75,16 @@ namespace JJS.Weapon
 
         public void ShootCoroutineEnable()
         {
-            if(shootEnable)
+            if (shootEnable)
                 StartCoroutine(ShootCoolTime());
         }
 
         IEnumerator ShootCoolTime()
         {
             shootEnable = false;
-            while (curShootCool< shootSpeed)
+            while (curShootCool < shootSpeed)
             {
-                curShootCool+= 0.01f;
+                curShootCool += 0.01f;
                 yield return new WaitForSeconds(0.01f);
             }
             curShootCool = 0;
@@ -93,8 +93,8 @@ namespace JJS.Weapon
         }
 
         void Shoot()
-        {            
-            GameObject bullet=spawner.Respawn(startPos.transform.position, Quaternion.LookRotation(bezierCurveOrbit.p2 - startPos.transform.position));
+        {
+            GameObject bullet = spawner.Respawn(CorrectionPos(startPos.transform.position), Quaternion.LookRotation(bezierCurveOrbit.p2 - CorrectionPos(startPos.transform.position)));
             if (bullet != null)
             {
                 Bullet bulletInfo = bullet.GetComponent<Bullet>();
@@ -106,6 +106,16 @@ namespace JJS.Weapon
                 bezier.p3 = bezierCurveOrbit.p3;
                 bezier.p4 = bezierCurveOrbit.p4;
             }
+        }
+
+        Vector3 CorrectionPos(Vector3 changePos)
+        {
+            //if (KeyManager.Instance.GetKey(PlayerAction.MoveForward) && !KeyManager.Instance.GetKey(PlayerAction.MoveBackward)
+            //    &&!KeyManager.Instance.GetKey(PlayerAction.MoveLeft)&& !KeyManager.Instance.GetKey(PlayerAction.MoveRight))
+            //{
+            //    changePos += rigid.velocity * Time.deltaTime * 15;
+            //}
+            return changePos;
         }
 
         //void OnDrawGizmos()
@@ -128,34 +138,34 @@ namespace JJS.Weapon
             if (type == 0)
             {
                 dir = transform.forward;
-                PhisicsShootLine(startPos.transform.position, dir);
+                PhisicsShootLine(CorrectionPos(startPos.transform.position), dir);
             }
             else if (type == 1)
             {
                 RaycastHit hit;
                 if (Physics.Raycast(mainCamera.transform.position, mainCamera.transform.forward, out hit, shootMaxDistance, layerMask, QueryTriggerInteraction.Ignore))
                 {
-                    if (hit.distance > Vector3.Distance(startPos.transform.position, mainCamera.transform.position))
+                    if (hit.distance > Vector3.Distance(CorrectionPos(startPos.transform.position), mainCamera.transform.position))
                     {
-                        dir = (hit.point - startPos.transform.position).normalized;
-                        PhisicsShootLine(startPos.transform.position, dir);
+                        dir = (hit.point - CorrectionPos(startPos.transform.position)).normalized;
+                        PhisicsShootLine(CorrectionPos(startPos.transform.position), dir);
                     }
                     else
                     {
-                        MaxPhysicsLine(startPos.transform.position, mainCamera.transform.forward);
+                        MaxPhysicsLine(CorrectionPos(startPos.transform.position), mainCamera.transform.forward);
                     }
                 }
                 else
                 {
-                    MaxPhysicsLine(startPos.transform.position, mainCamera.transform.forward);
+                    MaxPhysicsLine(CorrectionPos(startPos.transform.position), mainCamera.transform.forward);
                 }
             }
             else if (type == 2)
             {
                 //if (shootMinDistrace < Vector3.Distance(mousePoint.transform.position, startPos.transform.position))
                 //{
-                    dir = (mousePoint.transform.position - startPos.transform.position).normalized;
-                    PhisicsShootLine(startPos.transform.position, dir);
+                    dir = (mousePoint.transform.position - CorrectionPos(startPos.transform.position)).normalized;
+                    PhisicsShootLine(CorrectionPos(startPos.transform.position), dir);
                 //}
                 //else
                 //{
