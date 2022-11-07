@@ -18,14 +18,6 @@ namespace KSU.AutoAim.Player
         public bool isEndPosition = false;
         public bool isSucceeded = false;
 
-        // Start is called before the first frame update
-        //void Awake()
-        //{
-        //    objectRigidbody = GetComponent<Rigidbody>();
-        //    audioSource = GetComponent<AudioSource>();
-        //    JCW.AudioCtrl.AudioSettings.SetAudio(audioSource, 1f, 50f);
-        //}
-
         public virtual void InitObject(Vector3 startPos, Vector3 endPos, float objectSpeed, float offset)
         {
             objectRigidbody.velocity = Vector3.zero;

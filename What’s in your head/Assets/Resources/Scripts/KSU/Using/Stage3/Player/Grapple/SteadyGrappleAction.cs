@@ -47,10 +47,10 @@ namespace KSU.AutoAim.Player
         [Header("_______변경 가능 값_______")]
         [Header("플레이어 날아가는 속력")]
         public float grappleMoveSpeed = 10f;
-        [Header("갈고리 날아가는 속력")]
-        public float grappleSpeed = 10f;
-        [Header("갈고리 속력이 빠를땐 이 값을 조금 높이세요")]
-        public float grappleDepartOffset = 0.5f;
+        //[Header("갈고리 날아가는 속력")]
+        //public float grappleSpeed = 10f;
+        //[Header("갈고리 속력이 빠를땐 이 값을 조금 높이세요")]
+        //public float grappleDepartOffset = 0.5f;
         [Header("목표지점 도착후 날아가는 속도")]
         public float escapeGrapplePower = 10f;
         //[Header("오토 타겟팅 탐지 범위(캡슐) 반지름")]
@@ -97,11 +97,6 @@ namespace KSU.AutoAim.Player
             {
                 SendInfoUI();
                 SendInfoAImUI();
-            }
-            
-            if (autoAimObjectSpawner.transform.parent.gameObject.activeSelf && autoAimObjectSpawner.transform.parent.gameObject.activeSelf)
-            {
-                
             }
         }
 
@@ -158,7 +153,7 @@ namespace KSU.AutoAim.Player
         //    }
         //}
 
-        public void InputFire()
+        protected override void InputFire()
         {
             if (playerState.isOutOfControl || playerState.isStopped)
                 return;
@@ -174,27 +169,27 @@ namespace KSU.AutoAim.Player
                         ///////////////// 선택지 2: 여기에 마우스 거리 만큼의 위치까지 쏘는 갈고리 발사
                         Vector3 forward = (playerController.playerMouse.point.transform.position - autoAimObjectSpawner.transform.position);
                         forward.y = 0;
-                        if (forward.magnitude > grapplingRange)
-                            forward = forward.normalized * grapplingRange;
-                        grapple.InitObject(autoAimObjectSpawner.transform.position, (autoAimObjectSpawner.transform.position + forward), grappleSpeed, grappleDepartOffset);
+                        if (forward.magnitude > autoAimObjectRange)
+                            forward = forward.normalized * autoAimObjectRange;
+                        grapple.InitObject(autoAimObjectSpawner.transform.position, (autoAimObjectSpawner.transform.position + forward), autoAimObjectSpeed, autoAimObjectDepartOffset);
                     }
                     else if (steadyInteractionState.isAutoAimObjectFounded)
                     {
                         // 도착 위치: autoAimPosition
-                        grapple.InitObject(autoAimObjectSpawner.transform.position, autoAimPosition.position, grappleSpeed, grappleDepartOffset);
+                        grapple.InitObject(autoAimObjectSpawner.transform.position, autoAimPosition.position, autoAimObjectSpeed, autoAimObjectDepartOffset);
                     }
                     else
                     {
                         // 도착위치: 화면 중앙에 레이 쏴서 도착하는 곳
                         RaycastHit hit;
-                        bool rayCheck = Physics.Raycast(playerCamera.transform.position, playerCamera.transform.forward, out hit, grapplingRange,-1,QueryTriggerInteraction.Ignore);
+                        bool rayCheck = Physics.Raycast(playerCamera.transform.position, playerCamera.transform.forward, out hit, autoAimObjectRange, -1,QueryTriggerInteraction.Ignore);
                         if(rayCheck && (hit.distance > Vector3.Distance(transform.position, playerCamera.transform.position)))
                         {
-                            grapple.InitObject(autoAimObjectSpawner.transform.position, hit.point, grappleSpeed, grappleDepartOffset);
+                            grapple.InitObject(autoAimObjectSpawner.transform.position, hit.point, autoAimObjectSpeed, autoAimObjectDepartOffset);
                         }
                         else
                         {
-                            grapple.InitObject  (autoAimObjectSpawner.transform.position, (playerCamera.transform.position + playerCamera.transform.forward * grapplingRange), grappleSpeed, grappleDepartOffset);
+                            grapple.InitObject  (autoAimObjectSpawner.transform.position, (playerCamera.transform.position + playerCamera.transform.forward * autoAimObjectRange), autoAimObjectSpeed, autoAimObjectDepartOffset);
                         }
                     }
                 }
@@ -216,14 +211,14 @@ namespace KSU.AutoAim.Player
         //    }
         //}
 
-        public bool GetWhetherHit(AutoAimTargetType grappleTargetType)
-        {
-            if((grappleTargetType == curTargetType))
-            {
-                return steadyInteractionState.isSucceededInHittingTaget;
-            }
-            return false;
-        }
+        //public bool GetWhetherHit(AutoAimTargetType grappleTargetType)
+        //{
+        //    if((grappleTargetType == curTargetType))
+        //    {
+        //        return steadyInteractionState.isSucceededInHittingTaget;
+        //    }
+        //    return false;
+        //}
 
         public void StartGrab()
         {

@@ -11,10 +11,12 @@ using KSU.AutoAim.Player;
 
 namespace JJS
 {
+    public enum WeaponName { Mic, Cymbals, Guitar, WaterGun, Grapple, MagnifyingGlass, Null };
     public class SteadyMouseController : PlayerMouseController
     {
         public MagnifyingGlass glass;
-        public SteadyGrappleAction grapple;
+        //public SteadyGrappleAction grapple;
+        public SteadyAutoAimAction autoAimWeapon;
 
         private void Awake()
         {
@@ -52,8 +54,11 @@ namespace JJS
                             && !player.characterState.IsAirJumping
                             && !player.characterState.IsDashing
                             && !player.characterState.IsAirDashing
+                            && player.characterState.IsGrounded
                             && !GetComponent<SteadyInteractionState>().isGrappling
                             && !GetComponent<SteadyInteractionState>().isGrabMonster
+                            && !player.playerAnimator.GetBool("isShootingCymbals")
+                            && !player.playerAnimator.GetBool("WasShootingCymbals")
                             && !player.playerAnimator.GetBool("isDead"))
                         {
                             if (!clickRight)
@@ -104,12 +109,10 @@ namespace JJS
         {
             glass.HitLine(type);
         }
-        public override bool GetCustomInfo(AutoAimTargetType grappleTargetType)
+        public override bool GetCustomInfo(AutoAimTargetType autoAimTargetType)
         {
-            return grapple.GetWhetherHit(grappleTargetType);
+            return autoAimWeapon.GetWhetherHit(autoAimTargetType);
         }
-
-       
     }
 
 }

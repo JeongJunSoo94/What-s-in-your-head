@@ -76,6 +76,7 @@ namespace JJS
                             && !player.characterState.IsAirJumping
                             && !player.characterState.IsDashing
                             && !player.characterState.IsAirDashing
+                            && player.characterState.IsGrounded
                             && !player.playerAnimator.GetBool("isDead"))
                         {
                             if (!clickRight)

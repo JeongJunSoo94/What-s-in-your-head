@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using JCW.UI.Options.InputBindings;
 using JJS.CharacterSMB;
+using KSU.AutoAim.Player;
+using JJS;
+
 namespace KSU
 {
     public class SteadyAimSMB : CharacterBaseSMB
@@ -46,6 +49,7 @@ namespace KSU
             {
                 GetPlayerController(animator).playerMouse.AimUpdate(1);
             }
+
             if (GetPlayerController(animator).playerMouse.weaponInfo[GetPlayerController(animator).playerMouse.GetUseWeapon()].canAim)
             {
                 animator.SetLayerWeight(1, 1);
@@ -72,11 +76,20 @@ namespace KSU
                     }
                 }
             }
+
             if (GetPlayerController(animator).playerMouse.GetUseWeapon() == 0)
             {
                 if (KeyManager.Instance.GetKeyDown(PlayerAction.Fire))
                 {
-                    animator.SetBool("isShootingGrapple", true);
+                    if(((GetPlayerController(animator).playerMouse as SteadyMouseController).autoAimWeapon is SteadyCymbalsAction) && !animator.GetBool("isShootingCymbals"))
+                    {
+                        animator.SetBool("isShootingCymbals", true);
+                    }
+                    else if(((GetPlayerController(animator).playerMouse as SteadyMouseController).autoAimWeapon is SteadyGrappleAction) && !animator.GetBool("isShootingGrapple"))
+                    {
+                        animator.SetBool("isShootingGrapple", true);
+                    }
+
                 }
             }
 

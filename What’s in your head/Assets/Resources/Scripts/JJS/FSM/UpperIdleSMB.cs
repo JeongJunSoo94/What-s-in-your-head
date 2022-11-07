@@ -78,6 +78,7 @@ namespace JJS
                         && !GetPlayerController(animator).characterState.IsDashing
                         && !GetPlayerController(animator).characterState.IsAirDashing
                         && !GetPlayerController(animator).characterState.swap
+                        && GetPlayerController(animator).characterState.IsGrounded
                         && !animator.GetBool("isDead")
                         && !animator.GetBool("isAttack"))
                     {
