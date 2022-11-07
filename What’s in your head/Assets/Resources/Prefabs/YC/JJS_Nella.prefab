@@ -1024,6 +1024,7 @@ MonoBehaviour:
   shootEnable: 0
   curShootCool: 0
   bulletCurCount: 0
+  rigid: {fileID: 0}
 --- !u!114 &4271477110735829085
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2832,10 +2833,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   characterState: {fileID: 4557260369275093484}
   playerMouse: {fileID: 5027572550733305681}
+  playerAnimator: {fileID: 0}
   mainCamera: {fileID: 0}
   playerRigidbody: {fileID: 0}
-  walkSpeed: 8
-  runSpeed: 14
+  photonView: {fileID: 0}
+  walkSpeed: 4
+  runSpeed: 7
   dashSpeed: 20
   airDashSpeed: 16
   inertiaSpeed: 0

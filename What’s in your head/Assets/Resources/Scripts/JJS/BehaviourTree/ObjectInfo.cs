@@ -6,18 +6,20 @@ using Photon.Realtime;
 namespace JJS.BT
 {
     [RequireComponent(typeof(PhotonView))]
-    public class ObjectInfo : MonoBehaviour, IPunObservable
+    public class ObjectInfo : MonoBehaviour
     {
         GameObject prefabObject;
         public PhotonView photonView;
         public int syncIndex;
         public bool delayEnable;
+        public bool delayCheck;
         private void Awake()
         {
             prefabObject = gameObject;
             photonView = GetComponent<PhotonView>();
             syncIndex =0;
             delayEnable = false;
+            delayCheck = true;
         }
         public GameObject PrefabObject
         {
@@ -34,19 +36,9 @@ namespace JJS.BT
         public void SyncCheck(int index)
         {
             syncIndex = index;
+            delayCheck = true;
         }
 
-        public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
-        {
-            if (stream.IsWriting)
-            {
-                stream.SendNext(syncIndex);
-            }
-            else
-            {
-                syncIndex = (int)stream.ReceiveNext();
-            }
-        }
 
         public void DelayCoroutin(bool enable,float delayTime)
         {
@@ -60,9 +52,6 @@ namespace JJS.BT
                 if (delayEnable)
                 {
                     delayEnable = false;
-                }
-                else
-                {
                     StopCoroutine(Delay(delayTime));
                 }
             }
@@ -74,6 +63,10 @@ namespace JJS.BT
             {
                 curCool += 0.01f;
                 yield return new WaitForSeconds(0.01f);
+                if (curCool*10 % 10 < 0.1)
+                { 
+                    Debug.Log(curCool);
+                }
             }
             delayEnable = false;
             yield break;

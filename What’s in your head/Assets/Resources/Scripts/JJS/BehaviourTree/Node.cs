@@ -38,6 +38,15 @@ namespace JJS.BT
             return state;
         }
 
+        public void Abort()
+        {
+            BehaviourTree.Traverse(this, (node) => {
+                node.started = false;
+                node.state = State.Running;
+                node.OnStop();
+            });
+        }
+
         public virtual Node Clone()
         {
             return Instantiate(this);

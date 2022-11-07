@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using JCW.Spawner;
-
+using JCW.UI.Options.InputBindings;
 using YC.Camera_;
 using YC.Camera_Single;
 using JCW.AudioCtrl;
@@ -110,9 +110,12 @@ namespace JJS.Weapon
 
         Vector3 CorrectionPos(Vector3 changePos)
         {
-            Vector3 pos = rigid.velocity*Time.deltaTime;
-            pos += changePos;
-            return pos;
+            //if (KeyManager.Instance.GetKey(PlayerAction.MoveForward) && !KeyManager.Instance.GetKey(PlayerAction.MoveBackward)
+            //    &&!KeyManager.Instance.GetKey(PlayerAction.MoveLeft)&& !KeyManager.Instance.GetKey(PlayerAction.MoveRight))
+            //{
+            //    changePos += rigid.velocity * Time.deltaTime * 15;
+            //}
+            return changePos;
         }
 
         //void OnDrawGizmos()

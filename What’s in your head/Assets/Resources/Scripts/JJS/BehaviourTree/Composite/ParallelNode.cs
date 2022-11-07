@@ -1,15 +1,19 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Linq;
 namespace JJS.BT
 {
     public class ParallelNode : CompositeNode
     {
-        int current;
-        bool isFail;
-        bool isRun;
+        List<State> childrenLeftToExecute = new List<State>();
+
         protected override void OnStart()
         {
+            childrenLeftToExecute.Clear();
+            children.ForEach(a => {
+                childrenLeftToExecute.Add(State.Running);
+            });
         }
 
         protected override void OnStop()
@@ -18,26 +22,39 @@ namespace JJS.BT
 
         protected override State OnUpdate()
         {
-            current = 0;
-            isFail = false;
-            isRun = false;
-            while (current < children.Count)
+            bool stillRunning = false;
+            for (int i = 0; i < childrenLeftToExecute.Count(); ++i)
             {
-                var child = children[current];
-                switch (child.Update())
+                if (childrenLeftToExecute[i] == State.Running)
                 {
-                    case State.Running:
-                        isRun = true;
-                        break;
-                    case State.Failure:
-                        isFail = true;
-                        break;
-                    case State.Success:
-                        break;
+                    var status = children[i].Update();
+                    if (status == State.Failure)
+                    {
+                        AbortRunningChildren();
+                        return State.Failure;
+                    }
+
+                    if (status == State.Running)
+                    {
+                        stillRunning = true;
+                    }
+
+                    childrenLeftToExecute[i] = status;
                 }
-                current++;
             }
-            return isFail ? State.Failure : isRun ? State.Running: State.Success;
+
+            return stillRunning ? State.Running : State.Success;
+        }
+
+        void AbortRunningChildren()
+        {
+            for (int i = 0; i < childrenLeftToExecute.Count(); ++i)
+            {
+                if (childrenLeftToExecute[i] == State.Running)
+                {
+                    children[i].Abort();
+                }
+            }
         }
     }
 }

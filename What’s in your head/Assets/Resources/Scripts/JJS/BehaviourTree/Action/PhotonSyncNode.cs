@@ -32,6 +32,10 @@ namespace JJS.BT
             {
                 return State.Success;
             }
+            if (local)
+            {
+                return State.Running;
+            }
             return State.Failure;
         }
 

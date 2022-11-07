@@ -58,7 +58,7 @@ namespace JJS.BT
 
             //create edges
             tree.nodes.ForEach(n => {
-                var children = tree.GetChildren(n);
+                var children = BehaviourTree.GetChildren(n);
                 children.ForEach(c =>
                 {
                     NodeView parentView = FindNodeView(n);

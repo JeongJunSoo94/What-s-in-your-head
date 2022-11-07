@@ -305,6 +305,8 @@ namespace YC.Camera_
 
         void InitCinemachineRig() //  Rig로 발생하는 이슈를 막기 위해 Rig를 스크립트로 강제 초기화  
         {
+            if (!pv.IsMine) return;
+
             float rigInitValue = 0;
             float offSetYInitValue = 2.5f;
 

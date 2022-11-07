@@ -8,7 +8,17 @@ namespace JJS.BT
         public float duration = 1;
         protected override void OnStart()
         {
-            objectInfo.DelayCoroutin(true, duration);
+            if (objectInfo.delayCheck)
+            { 
+                if (objectInfo.photonView.IsMine)
+                { 
+                    if (!objectInfo.delayEnable)
+                    {
+                        objectInfo.DelayCoroutin(true, duration);
+                        objectInfo.delayCheck = false;
+                    }
+                }
+            }
         }
 
         protected override void OnStop()
