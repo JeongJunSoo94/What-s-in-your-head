@@ -22,7 +22,7 @@ namespace KSU.AutoAim.Player
         protected PhotonView photonView;
 
         protected Camera playerCamera;
-        [SerializeField] protected GameObject lookAtObj;
+        [SerializeField] protected Transform lookAtObj;
         [SerializeField] protected LayerMask layerFilterForAutoAim;
         [SerializeField] protected LayerMask layerForAutoAim;
         protected RaycastHit _raycastHit;

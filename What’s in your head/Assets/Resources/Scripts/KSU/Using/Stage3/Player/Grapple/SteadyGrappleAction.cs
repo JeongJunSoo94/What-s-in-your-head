@@ -77,8 +77,8 @@ namespace KSU.AutoAim.Player
             playerState = GetComponent<PlayerState>();
             steadyInteractionState = GetComponent<SteadyInteractionState>();
             playerRigidbody = GetComponent<Rigidbody>();
+            lookAtObj = this.gameObject.GetComponent<CameraController>().lookatBackObj;
 
-            
             playerCamera = this.gameObject.GetComponent<CameraController>().FindCamera(); // ¸ÖÆ¼¿ë
 
             autoAimObject = Instantiate(autoAimObject);

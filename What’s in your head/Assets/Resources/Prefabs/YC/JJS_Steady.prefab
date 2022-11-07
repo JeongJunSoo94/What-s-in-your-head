@@ -25414,8 +25414,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   characterState: {fileID: 8750876866218855433}
   playerMouse: {fileID: 1441877394586250121}
+  playerAnimator: {fileID: 0}
   mainCamera: {fileID: 0}
   playerRigidbody: {fileID: 0}
+  photonView: {fileID: 0}
   walkSpeed: 8
   runSpeed: 14
   dashSpeed: 20
@@ -25647,8 +25649,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 579bab751d308f040bfbbe0c7f21e5da, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isGrappledObjectFounded: 0
-  isSucceededInGrappling: 0
+  isAutoAimObjectFounded: 0
+  isSucceededInHittingTaget: 0
   isGrappling: 0
   isGrabMonster: 0
 --- !u!114 &2953762621103950369
@@ -25663,24 +25665,26 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bc8bd3eaf0d7d5f44a968f46cbb73a7c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  lookAtObj: {fileID: 0}
-  layerFilterForGrapple:
+  lookAtObj: {fileID: 2713921362035335090, guid: afc9727a139e5874f86ed8923a44d1ed, type: 3}
+  layerFilterForAutoAim:
     serializedVersion: 2
-    m_Bits: 36353
-  layerForGrapple:
+    m_Bits: 101896
+  layerForAutoAim:
     serializedVersion: 2
     m_Bits: 2048
-  grappleSpawner: {fileID: 1911663723217604559}
-  grappleObject: {fileID: 7909980709306676830, guid: c9b54073bf48f804ebee62282b5e85af, type: 3}
-  aimUI: {fileID: 8657421885556112005}
-  grappleMoveSpeed: 10
-  grappleSpeed: 30
-  grappleDepartOffset: 0.5
-  escapeGrapplePower: 10
-  rangeRadius: 5
-  rangeDistance: 20
+  autoAimObjectSpawner: {fileID: 1911663723217604559, guid: afc9727a139e5874f86ed8923a44d1ed, type: 3}
+  autoAimObject: {fileID: 7909980709306676830, guid: c9b54073bf48f804ebee62282b5e85af, type: 3}
+  aimUI: {fileID: 8657421885556112005, guid: afc9727a139e5874f86ed8923a44d1ed, type: 3}
+  cymbalsSpeed: 10
+  cymbalsDepartOffset: 0.5
+  rangeRadius: 10
+  rangeDistance: 30
   grapplingRange: 30
   rangeAngle: 8
+  grappleMoveSpeed: 25
+  grappleSpeed: 40
+  grappleDepartOffset: 0.5
+  escapeGrapplePower: 15
 --- !u!114 &5821330284378002438
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -52221,17 +52225,6 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 4660158950712969291, guid: d9ae6c359ed6b9b4fbc0438148b6bc30, type: 3}
   m_PrefabInstance: {fileID: 3814756060233629550}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &8657421885556112005 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 5536589947466532331, guid: d9ae6c359ed6b9b4fbc0438148b6bc30, type: 3}
-  m_PrefabInstance: {fileID: 3814756060233629550}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a35adc6c2d304da458ad65caca7ff534, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1001 &4683547804405353619
 PrefabInstance:
   m_ObjectHideFlags: 0
