@@ -121,7 +121,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5928069904784630504}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 1}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -256,7 +256,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5928069905187560008}
-  m_LocalRotation: {x: 0.31443152, y: -0, z: -0, w: 0.9492802}
+  m_LocalRotation: {x: 0.31443152, y: 0, z: 0, w: 0.9492802}
   m_LocalPosition: {x: 0, y: 28.2, z: -35.65}
   m_LocalScale: {x: 10, y: 10, z: 10}
   m_ConstrainProportionsScale: 0
@@ -287,6 +287,7 @@ MonoBehaviour:
   spot: {fileID: 0}
   point: {fileID: 0}
   finder: {fileID: 5928069905187560018}
+  finderSpot: {fileID: 825358290}
 --- !u!114 &5928069905187560012
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -300,7 +301,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   photonView: {fileID: 0}
-  sync: 0
+  syncIndex: 0
+  delayEnable: 0
 --- !u!114 &5928069905187560013
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -313,7 +315,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dac74dc1a046b474f8a63218d9e57132, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  tree: {fileID: 11400000, guid: 13e6c6877abc3bb40ab24e4617ab6320, type: 2}
+  tree: {fileID: 11400000, guid: 1de3b5ba937d949458002dc5bec73cc3, type: 2}
 --- !u!114 &5928069905187560018
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -326,8 +328,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fa0e2829b5eb6f24d8e560cbbb7efae3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _discoveryRadius: 50
-  _viewAngle: 30
+  _discoveryRadius: 100
+  _viewAngle: 35
   viewTargetMask:
     serializedVersion: 2
     m_Bits: 64
@@ -354,6 +356,7 @@ MonoBehaviour:
   OwnershipTransfer: 0
   observableSearch: 2
   ObservedComponents:
+  - {fileID: 5928069905187560012}
   - {fileID: 41089627663441535}
   sceneViewId: 0
   InstantiationId: 0
@@ -385,6 +388,7 @@ GameObject:
   - component: {fileID: 5928069905504148782}
   - component: {fileID: 5928069905504148780}
   - component: {fileID: 5928069905504148783}
+  - component: {fileID: 825358290}
   m_Layer: 0
   m_Name: Spot Light
   m_TagString: Untagged
@@ -399,14 +403,14 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5928069905504148777}
-  m_LocalRotation: {x: -0.058444463, y: -0, z: -0, w: 0.99829066}
-  m_LocalPosition: {x: 0, y: 0, z: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 5928069904784630505}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: -6.701, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!108 &5928069905504148780
 Light:
   m_ObjectHideFlags: 0
@@ -420,9 +424,9 @@ Light:
   m_Shape: 0
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_Intensity: 10000
-  m_Range: 50
-  m_SpotAngle: 60
-  m_InnerSpotAngle: 60
+  m_Range: 100
+  m_SpotAngle: 70
+  m_InnerSpotAngle: 70
   m_CookieSize: 10
   m_Shadows:
     m_Type: 1
@@ -489,6 +493,27 @@ MonoBehaviour:
   m_ShadowLayerMask: 1
   m_LightCookieSize: {x: 1, y: 1}
   m_LightCookieOffset: {x: 0, y: 0}
+--- !u!114 &825358290
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5928069905504148777}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fa0e2829b5eb6f24d8e560cbbb7efae3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _discoveryRadius: 100
+  _viewAngle: 35
+  viewTargetMask:
+    serializedVersion: 2
+    m_Bits: 64
+  viewObstacleMask:
+    serializedVersion: 2
+    m_Bits: 65536
+  targetObj: []
 --- !u!1 &5928069905643286610
 GameObject:
   m_ObjectHideFlags: 0
@@ -612,7 +637,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5928069905767641150}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 1.1360002}
+  m_LocalPosition: {x: 0, y: 0, z: 0.2}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []

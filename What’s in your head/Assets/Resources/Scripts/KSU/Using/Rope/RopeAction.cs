@@ -81,6 +81,11 @@ namespace KSU
             }
         }
 
+        public void InitDictionary()
+        {
+            detectedRopes.Clear();
+        }
+
         void FindInteractableRope()
         {
             if ((detectedRopes.Count > 0) && currentRidingRope == null)
@@ -300,8 +305,9 @@ namespace KSU
             if (other.CompareTag("Rope"))
             {
                 Debug.Log("∆Æ∏Æ∞≈ ≈ª√‚ : " + other.gameObject.transform.parent.gameObject);
-                other.gameObject.transform.parent.gameObject.GetComponentInChildren<ConvertIndicator>().SetUI(false, false, 100f);                
+                other?.gameObject.transform.parent.gameObject.GetComponentInChildren<ConvertIndicator>().SetUI(false, false, 100f);
                 detectedRopes.Remove(other.gameObject.transform.parent.gameObject);
+                
             }
         }
     }

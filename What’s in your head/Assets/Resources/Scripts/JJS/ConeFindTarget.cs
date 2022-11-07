@@ -6,7 +6,7 @@ namespace JJS
     public class ConeFindTarget : MonoBehaviour
     {
         [SerializeField]
-        [Range(0f, 50f)]
+        [Range(0f, 500f)]
         private float _discoveryRadius;
 
         [Range(0f, 90f)]

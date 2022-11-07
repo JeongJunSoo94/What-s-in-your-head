@@ -75,7 +75,8 @@ namespace JJS
                             && !player.characterState.IsJumping
                             && !player.characterState.IsAirJumping
                             && !player.characterState.IsDashing
-                            && !player.characterState.IsAirDashing)
+                            && !player.characterState.IsAirDashing
+                            && !player.playerAnimator.GetBool("isDead"))
                         {
                             if (!clickRight)
                             {
@@ -180,6 +181,8 @@ namespace JJS
 
         public void OnEnableObject(int index)
         {
+            if (hitObjs[index].gameObject.activeSelf)
+                hitObjs[index].gameObject.SetActive(false);
             hitObjs[index].gameObject.SetActive(true);
             SoundManager.Instance.PlayEffect_RPC("GuitarAttack");
         }
@@ -198,7 +201,6 @@ namespace JJS
 
         public void TargetUpdate()
         {
-
             for (int i = 0; i < hitObjs.Count; i++)
             {
                 if (hitObjs[i].gameObject.activeSelf)

@@ -58,6 +58,8 @@ namespace KSU
             {
                 ropeAction.EscapeRope();
             }
+            railAction.InitDictionary();
+            ropeAction.InitDictionary();
             interactionState.InitInteractionState();
         }
     }

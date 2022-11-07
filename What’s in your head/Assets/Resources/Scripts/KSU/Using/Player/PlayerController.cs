@@ -11,7 +11,7 @@ using YC.Camera_;
 using YC.Camera_Single;
 using JCW.Object;
 using JJS;
-using KSU.AutoAim.Object.Monster;
+using KSU.Monster;
 
 namespace KSU
 {
@@ -26,12 +26,12 @@ namespace KSU
 
         // 유니티 제공 Components
         #region
-        Animator playerAnimator;
+        public Animator playerAnimator;
         CapsuleCollider playerCapsuleCollider;
         public Camera mainCamera;
         public Rigidbody playerRigidbody;
         //[Header("키 설정")] [SerializeField] private GameObject UI_BG;    
-        PhotonView photonView;
+        public PhotonView photonView;
         #endregion
 
         // 수평 Speed
@@ -134,7 +134,7 @@ namespace KSU
 
         private void FixedUpdate()
         {
-            if (!photonView.IsMine || characterState.isStopped)
+            if (!photonView.IsMine || characterState.isStopped )
             {
                 playerRigidbody.velocity = Vector3.zero;
                 return;
@@ -201,7 +201,7 @@ namespace KSU
 
         void InitInteraction()
         {
-
+            
             GetComponent<PlayerInteraction>().InitInteraction();
         }
 
@@ -223,7 +223,7 @@ namespace KSU
             }
             characterState.CheckMove(playerRigidbody.velocity);
         }
-
+        
 
         public void ResetLocalPosition()
         {
@@ -419,7 +419,7 @@ namespace KSU
 
             if (characterState.top)
             {
-                if (!playerMouse.notRotatoin)
+                if(!playerMouse.notRotatoin)
                     RotateTop();
             }
             else if (characterState.aim)
@@ -481,7 +481,7 @@ namespace KSU
                     moveVec.y = terminalSpeed;
                 }
 
-                if (characterState.isAirBlocked)
+                if(characterState.isAirBlocked)
                 {
                     playerRigidbody.velocity = Vector3.up * moveVec.y;
                 }
@@ -610,7 +610,6 @@ namespace KSU
         public void StartDeath()
         {
             characterState.isStopped = true;
-            InitController();
             playerCapsuleCollider.enabled = false;
         }
 
@@ -623,7 +622,7 @@ namespace KSU
 
         private void OnTriggerEnter(Collider other)
         {
-            if (!playerAnimator.GetBool("isAttacked") && !playerAnimator.GetBool("isKnockBack") && !playerAnimator.GetBool("isDead"))
+            if(!playerAnimator.GetBool("isAttacked") && !playerAnimator.GetBool("isKnockBack") && !playerAnimator.GetBool("isDead"))
             {
                 switch (other.tag)
                 {
@@ -649,7 +648,7 @@ namespace KSU
         public void GetDamage(int damage, DamageType type, Vector3 colliderPos, float knockBackSpeed)
         {
             string damageTirgger = "DeadTrigger";
-            switch (type)
+            switch(type)
             {
                 case DamageType.Attacked:
                     damageTirgger = "AttackedTrigger";
@@ -670,7 +669,7 @@ namespace KSU
             }
             else
             {
-                if (damageTirgger == "KnockBackTrigger")
+                if(damageTirgger == "KnockBackTrigger")
                 {
                     Vector3 knockBackHorVec = (transform.position - colliderPos);
                     knockBackHorVec.y = 0;
@@ -682,7 +681,7 @@ namespace KSU
                 playerAnimator.SetBool(damageTirgger, true);
             }
         }
-
+        [PunRPC]
         public void GetDamage(int damage, DamageType type)
         {
             string damageTirgger = "DeadTrigger";
