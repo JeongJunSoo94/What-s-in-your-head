@@ -37,7 +37,7 @@ namespace YC.Camera_
         CinemachineVirtualCameraBase sideCam;
 
         // 가상 카메라 enum State
-        enum CamState { back, sholder, top};
+        enum CamState { back, sholder};
         CamState curCam; 
         CamState preCam; 
 
@@ -133,15 +133,15 @@ namespace YC.Camera_
 
         // ============  디버그 로그  ============ //
         bool isDebugLog = false;
-        //void DebugLogToggle()  
-        //{
-        //    var assembly = Assembly.GetAssembly(typeof(UnityEditor.Editor));
-        //    var type = assembly.GetType("UnityEditor.LogEntries");
-        //    var method = type.GetMethod("Clear");
-        //    method.Invoke(new object(), null);
+        void DebugLogToggle()
+        {
+            var assembly = Assembly.GetAssembly(typeof(UnityEditor.Editor));
+            var type = assembly.GetType("UnityEditor.LogEntries");
+            var method = type.GetMethod("Clear");
+            method.Invoke(new object(), null);
 
-        //    isDebugLog = !isDebugLog;
-        //}
+            isDebugLog = !isDebugLog;
+        }
 
 
         void Awake()  
@@ -163,11 +163,11 @@ namespace YC.Camera_
 
         void FixedUpdate()
         {
-            //if (Input.GetKeyDown(KeyCode.R))
-            //    DebugLogToggle();
+            if (Input.GetKeyDown(KeyCode.R))
+                DebugLogToggle();
 
             if (isDebugLog) Debug.Log("FixedUpdate");
-
+          
             if (!pv.IsMine) return;
 
             if (isSideView)
@@ -305,6 +305,8 @@ namespace YC.Camera_
 
         void InitCinemachineRig() //  Rig로 발생하는 이슈를 막기 위해 Rig를 스크립트로 강제 초기화  
         {
+            if (!pv.IsMine) return;
+
             float rigInitValue = 0;
             float offSetYInitValue = 2.5f;
 
@@ -541,7 +543,7 @@ namespace YC.Camera_
             OnOffCamera(backCam);
         }
 
-
+      
         // ====================  [Top View 함수]  ==================== //
         
         public void SetDefenseMode() // 디펜스 모드 설정  
