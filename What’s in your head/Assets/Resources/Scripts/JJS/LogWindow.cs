@@ -19,6 +19,7 @@ public class LogWindow : MonoBehaviour
     StreamWriter sw1;
     StreamWriter sw2;
     public GameObject button;
+    public GameObject canvas;
     private void Awake()
     {
         SetGameObject(gameObject,out logObj, "LogText");
@@ -31,7 +32,8 @@ public class LogWindow : MonoBehaviour
         canvasObj.SetActive(false);
 
         Application.logMessageReceived += SetLog;
-
+        CanvasScaler canvasScaler = canvas.GetComponent<CanvasScaler>();
+        canvasScaler.referenceResolution =new Vector2(Screen.width, Screen.height);
         //scroll.transform.position= new Vector3(0, 0,0);
     }
 

@@ -33,6 +33,8 @@ namespace YC.Photon
 
 
         static public TempPhotonManager Instance = null;
+        public int width= 1920;
+        public int height= 1080;
 
         void Awake()
         {
@@ -41,7 +43,7 @@ namespace YC.Photon
             else
                 Destroy(this.gameObject);
             //Cursor.lockState = CursorLockMode.Locked;
-            Screen.SetResolution(1920, 1080, false);
+            Screen.SetResolution(width, height, false);
 
             // 같은 룸의 유저들에게 자동으로 씬을 로딩
             PhotonNetwork.AutomaticallySyncScene = true;

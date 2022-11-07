@@ -28,7 +28,8 @@ namespace JJS.BT
             for (int i = 0; i<find.finderSpot.targetObj.Count; i++)
             {
                 PlayerController player = find.finderSpot.targetObj[i].GetComponent<PlayerController>();
-                player.photonView.RPC(nameof(player.GetDamage), RpcTarget.AllViaServer, damage, DamageType.Attacked);
+                player.GetDamage(damage, DamageType.Attacked);
+                //player.photonView.RPC(nameof(player.GetDamage), RpcTarget.AllViaServer, damage, DamageType.Attacked);
             }
             return State.Success;
         }
