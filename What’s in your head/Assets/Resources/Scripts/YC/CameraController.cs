@@ -5,7 +5,6 @@ using Photon.Pun;
 using Photon.Realtime;
 using System.Linq;
 using Cinemachine;
-using JCW.UI.Options.InputBindings;
 using YC.CameraManager_;
 using UnityEngine.Rendering.Universal;
 using KSU;
@@ -134,15 +133,15 @@ namespace YC.Camera_
 
         // ============  디버그 로그  ============ //
         bool isDebugLog = false;
-        void DebugLogToggle()  
-        {
-            var assembly = Assembly.GetAssembly(typeof(UnityEditor.Editor));
-            var type = assembly.GetType("UnityEditor.LogEntries");
-            var method = type.GetMethod("Clear");
-            method.Invoke(new object(), null);
+        //void DebugLogToggle()  
+        //{
+        //    var assembly = Assembly.GetAssembly(typeof(UnityEditor.Editor));
+        //    var type = assembly.GetType("UnityEditor.LogEntries");
+        //    var method = type.GetMethod("Clear");
+        //    method.Invoke(new object(), null);
 
-            isDebugLog = !isDebugLog;
-        }
+        //    isDebugLog = !isDebugLog;
+        //}
 
 
         void Awake()  
@@ -155,15 +154,17 @@ namespace YC.Camera_
             player = this.gameObject;
 
             FindCamera();
+
             InitVirtualCamera();
             InitDefault();
+            InitCinemachineRig();
         }
 
 
         void FixedUpdate()
         {
-            if (Input.GetKeyDown(KeyCode.R))
-                DebugLogToggle();
+            //if (Input.GetKeyDown(KeyCode.R))
+            //    DebugLogToggle();
 
             if (isDebugLog) Debug.Log("FixedUpdate");
 
@@ -171,8 +172,8 @@ namespace YC.Camera_
 
             if (isSideView)
             {
-                if (Input.GetKeyDown(KeyCode.Keypad9))
-                    ShakeCameraInSideView();
+                //if (Input.GetKeyDown(KeyCode.Keypad9))
+                //    ShakeCameraInSideView();
 
                 MoveInSideView();
                 ZoomInSideView();
@@ -196,7 +197,7 @@ namespace YC.Camera_
                 if (!playerState.IsAirJumping && !isLower)
                     CheckLowerPlayer();
 
-                if (playerState.IsAirJumping && isAirJumpLerpEnd)
+                if (playerState.IsAirJumping && isAirJumpLerpEnd && !playerState.IsAirDashing)
                     AirJumpPlayerFollow();
 
                 if (wasEndSet && playerState.IsAirDashing)
@@ -223,8 +224,7 @@ namespace YC.Camera_
             if (this.gameObject.CompareTag("Nella"))
             {
                 backCam = Instantiate(CineNellaBack, Vector3.zero, Quaternion.identity).GetComponent<CinemachineVirtualCameraBase>();
-                sholderCam = Instantiate(CineNellaSholder, Vector3.zero, Quaternion.identity).GetComponent<CinemachineVirtualCameraBase>();
-                
+                sholderCam = Instantiate(CineNellaSholder, Vector3.zero, Quaternion.identity).GetComponent<CinemachineVirtualCameraBase>();        
             }
             else
             {
@@ -235,19 +235,26 @@ namespace YC.Camera_
             followObj = Instantiate(CineFollowObj_Back, player.transform.position + CineFollowObj_Back.transform.position, player.transform.rotation).GetComponent<Transform>();
             lookatBackObj = Instantiate(CineLookObj_Back, player.transform.position + CineLookObj_Back.transform.position, player.transform.rotation).GetComponent<Transform>();
             lookatSholderObj = transform.Find("Cine_lookatObj_Sholder").gameObject.transform;
-
             lookatObjOriginY = CineLookObj_Back.transform.position.y;
 
-            backCam.GetComponent<CinemachineFreeLook>().m_Follow = followObj;
-            backCam.GetComponent<CinemachineFreeLook>().m_LookAt = lookatBackObj;
-            sholderCam.GetComponent<CinemachineFreeLook>().m_Follow = followObj;
-            sholderCam.GetComponent<CinemachineFreeLook>().m_LookAt = lookatSholderObj;
+            CinemachineFreeLook Cine_backCam = backCam.GetComponent<CinemachineFreeLook>();
+            CinemachineFreeLook Cine_sholderCam = sholderCam.GetComponent<CinemachineFreeLook>();
+
+            Cine_backCam.m_Follow = followObj;
+            Cine_backCam.m_LookAt = lookatBackObj;
+            Cine_backCam.m_XAxis.Value = 0.5f;
+            Cine_backCam.m_YAxis.Value = 0.5f;
+
+            Cine_sholderCam.m_Follow = followObj;
+            Cine_sholderCam.m_LookAt = lookatSholderObj;
+            Cine_sholderCam.m_XAxis.Value = 0.3f;
+            Cine_sholderCam.m_YAxis.Value = 0.3f;
 
             // 가상 카메라 리스트에 넣어준다.
             camList.Add(backCam);
             camList.Add(sholderCam);
 
-            backCam.GetComponent<CinemachineFreeLook>().m_Lens.FieldOfView = backViewFOV;
+            Cine_backCam.GetComponent<CinemachineFreeLook>().m_Lens.FieldOfView = backViewFOV;
         }
 
         void InitDefault()  // 기타 초기화  
@@ -294,6 +301,36 @@ namespace YC.Camera_
             curCam = CamState.back;
             preCam = curCam;
             OnOffCamera(camList[(int)curCam]);
+        }
+
+        void InitCinemachineRig() //  Rig로 발생하는 이슈를 막기 위해 Rig를 스크립트로 강제 초기화  
+        {
+            float rigInitValue = 0;
+            float offSetYInitValue = 2.5f;
+
+            CinemachineFreeLook backCine = backCam.GetComponent<CinemachineFreeLook>();
+            CinemachineFreeLook sholderCine = sholderCam.GetComponent<CinemachineFreeLook>();
+
+            backCine.GetRig(1).GetCinemachineComponent<CinemachineComposer>().m_TrackedObjectOffset.y = offSetYInitValue;
+
+            for (int i = 0; i < 3; ++i)
+            {
+                // BackCam Rig 
+                backCine.GetRig(i).GetCinemachineComponent<CinemachineComposer>().m_HorizontalDamping = rigInitValue;
+                backCine.GetRig(i).GetCinemachineComponent<CinemachineComposer>().m_VerticalDamping = rigInitValue;
+
+                backCine.GetRig(i).GetCinemachineComponent<CinemachineOrbitalTransposer>().m_XDamping = rigInitValue;
+                backCine.GetRig(i).GetCinemachineComponent<CinemachineOrbitalTransposer>().m_YDamping = rigInitValue;
+                backCine.GetRig(i).GetCinemachineComponent<CinemachineOrbitalTransposer>().m_ZDamping = rigInitValue;
+
+                // SholderCam Rig
+                sholderCine.GetRig(i).GetCinemachineComponent<CinemachineComposer>().m_HorizontalDamping = rigInitValue;
+                sholderCine.GetRig(i).GetCinemachineComponent<CinemachineComposer>().m_VerticalDamping = rigInitValue;
+
+                sholderCine.GetRig(i).GetCinemachineComponent<CinemachineOrbitalTransposer>().m_XDamping = rigInitValue;
+                sholderCine.GetRig(i).GetCinemachineComponent<CinemachineOrbitalTransposer>().m_YDamping = rigInitValue;
+                sholderCine.GetRig(i).GetCinemachineComponent<CinemachineOrbitalTransposer>().m_ZDamping = rigInitValue;
+            }
         }
 
 
@@ -559,7 +596,7 @@ namespace YC.Camera_
             }
         }
 
-        void MoveInSideView() // 사이브 뷰 카메라 이동 
+        void MoveInSideView() // 사이브 뷰 카메라 이동  
         {
             // 만약 한명이 죽었다면 바로 리턴
 
@@ -854,8 +891,6 @@ namespace YC.Camera_
 
             while (lerpYpos < player.transform.position.y - 0.05f)
             {
-                //if (isDebugLog) Debug.Log("호출 - 공중점프 코루틴 Lerp 진행중");
-
                 float curFollowYpos = followObj.transform.position.y;
                 float curPlayerYpos = player.transform.position.y;
 
@@ -865,15 +900,13 @@ namespace YC.Camera_
                 float t = currentTime / LerpTime;
                 t = Mathf.Sin(t * Mathf.PI * 0.5f);
 
-
                 lerpYpos = Mathf.Lerp(curFollowYpos, curPlayerYpos, t);
                 if (lerpYpos > curPlayerYpos) lerpYpos = curPlayerYpos;
-                //if (isDebugLog) Debug.Log("호출 - 보간값 : " + lerpYpos);
 
                 lookatBackObj.position = new Vector3(player.transform.position.x, lerpYpos + lookatObjOriginY, player.transform.position.z);
                 followObj.position = new Vector3(player.transform.position.x, lerpYpos, player.transform.position.z);
                 if (isDebugLog) Debug.Log("호출 - 공중 점프 코루틴 Lerp 진행중");
-                yield return null;
+                yield return new WaitForFixedUpdate();
             }
 
             lookatBackObj.position = new Vector3(player.transform.position.x, player.transform.position.y + lookatObjOriginY, player.transform.position.z);
@@ -903,7 +936,6 @@ namespace YC.Camera_
                 lerpYpos = initYpos;
                 while (lerpYpos < player.transform.position.y)
                 {
-                    //if (isDebugLog) Debug.Log("호출 - 일반 코루틴 Lerp 진행중");
 
                     float curPlayerYpos = player.transform.position.y;
 
@@ -918,8 +950,8 @@ namespace YC.Camera_
 
                     lookatBackObj.position = new Vector3(player.transform.position.x, lerpYpos + lookatObjOriginY, player.transform.position.z);
                     followObj.position = new Vector3(player.transform.position.x, lerpYpos, player.transform.position.z);
-                    //if (isDebugLog) Debug.Log("호출 - 일반 코루틴 Lerp 진행중");
-                    yield return null;
+                    if (isDebugLog) Debug.Log("호출 - 일반 코루틴 Lerp 진행중");
+                    yield return new WaitForFixedUpdate();
                 }
             }
             else
@@ -928,7 +960,6 @@ namespace YC.Camera_
 
                 while (lerpYpos > player.transform.position.y)
                 {
-                    //if (isDebugLog) Debug.Log("호출 - 코루틴 Lerp 진행중");
 
                     float curPlayerYpos = player.transform.position.y;
 
@@ -943,8 +974,9 @@ namespace YC.Camera_
 
                     lookatBackObj.position = new Vector3(player.transform.position.x, lookatObjOriginY + lerpYpos, player.transform.position.z);
                     followObj.position = new Vector3(player.transform.position.x, lerpYpos, player.transform.position.z);
+                    if (isDebugLog) Debug.Log("호출 - 일반 코루틴 Lerp 진행중");
 
-                    yield return null;
+                    yield return new WaitForFixedUpdate();
                 }
             }
 
