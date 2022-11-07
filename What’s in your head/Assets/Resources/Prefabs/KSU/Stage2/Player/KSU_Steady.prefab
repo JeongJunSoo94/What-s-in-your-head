@@ -25412,6 +25412,7 @@ MonoBehaviour:
   dashVec: {x: 0, y: 0, z: 0}
   inertiaNormalVec: {x: 0, y: 0, z: 0}
   knockBackVec: {x: 0, y: 0, z: 0}
+  isOn_HP_UI: 0
 --- !u!114 &1441877394586250121
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -25674,8 +25675,8 @@ MonoBehaviour:
   layerForAutoAim:
     serializedVersion: 2
     m_Bits: 34816
-  autoAimObjectSpawner: {fileID: 1911663723217604559}
-  autoAimObject: {fileID: 7639860922579306443, guid: 8efa07a08c1dc7a42bdc1856370f7ea2, type: 3}
+  autoAimObjectSpawner: {fileID: 6643928159826862861}
+  autoAimObject: {fileID: 7909980709306676830, guid: c9b54073bf48f804ebee62282b5e85af, type: 3}
   aimUI: {fileID: 8657421885556112005}
   autoAimObjectSpeed: 30
   autoAimObjectDepartOffset: 0.5
@@ -52407,6 +52408,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: GrapplePosition
       objectReference: {fileID: 0}
+    - target: {fileID: 5999514178359399215, guid: f2137ba5d9da53b41962f4dec3c2ed88, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6052802945646628667, guid: f2137ba5d9da53b41962f4dec3c2ed88, type: 3}
       propertyPath: m_RootOrder
       value: 1
@@ -52456,5 +52461,10 @@ PrefabInstance:
 --- !u!4 &3060038446706238562 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 6052802945646628667, guid: f2137ba5d9da53b41962f4dec3c2ed88, type: 3}
+  m_PrefabInstance: {fileID: 8757408855622822745}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &6643928159826862861 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2718882804161300564, guid: f2137ba5d9da53b41962f4dec3c2ed88, type: 3}
   m_PrefabInstance: {fileID: 8757408855622822745}
   m_PrefabAsset: {fileID: 0}
