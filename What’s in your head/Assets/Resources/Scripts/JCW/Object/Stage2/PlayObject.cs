@@ -5,7 +5,6 @@ using UnityEngine;
 
 namespace JCW.Object
 {
-    [RequireComponent(typeof(Rigidbody))]
     public class PlayObject : MonoBehaviour
     {
         [Header("신호 수신 시 이동 속도")] [SerializeField] float recieveMovingSpeed;
@@ -21,8 +20,6 @@ namespace JCW.Object
 
         private void Awake()
         {
-            GetComponent<Rigidbody>().isKinematic = true;
-            GetComponent<Rigidbody>().useGravity = false;
             if (positionList.Count == 0)
                 positionList.Add(transform.position);
             transform.position = positionList[0];

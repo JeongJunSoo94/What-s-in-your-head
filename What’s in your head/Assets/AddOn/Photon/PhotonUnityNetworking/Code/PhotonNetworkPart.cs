@@ -727,7 +727,7 @@ namespace Photon.Pun
                 }
 
                 // Mark player created objects for destruction
-                if (view !=null&& view.CreatorActorNr == playerId)
+                else if (view.CreatorActorNr == playerId)
                 {
                     playersGameObjects.Add(view.gameObject);
                     continue;
