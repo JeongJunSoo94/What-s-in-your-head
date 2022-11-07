@@ -55,39 +55,9 @@ namespace KSU.AutoAim.Player
 
         protected List<GameObject> autoAimTargetObjects = new();
 
-        public void SearchAutoAimTargetdObject()
+        protected virtual void SearchAutoAimTargetdObject()
         {
-            if (!playerAnimator.GetBool("isShootingCymbals") && autoAimObjectSpawner.transform.parent.gameObject.activeSelf && autoAimObjectSpawner.activeSelf)
-            {
-                if (playerState.aim)
-                {
-                    Vector3 cameraForwardXZ = playerCamera.transform.forward;
-                    cameraForwardXZ.y = 0;
-                    Vector3 rayOrigin = playerCamera.transform.position;
-                    Vector3 rayEnd = (playerCamera.transform.position + playerCamera.transform.forward * (rangeDistance + rangeRadius * 2f));
-                    Vector3 direction = (rayEnd - rayOrigin).normalized;
-                    bool isRayChecked = Physics.SphereCast(rayOrigin, rangeRadius, direction, out _raycastHit, rangeDistance, layerForAutoAim, QueryTriggerInteraction.Ignore);
-
-                    if (isRayChecked)
-                    {
-                        direction = (_raycastHit.collider.gameObject.transform.position - rayOrigin).normalized;
-                        isRayChecked = Physics.SphereCast(rayOrigin, 0.2f, direction, out _raycastHit, (rangeDistance + rangeRadius * 2f), layerFilterForAutoAim, QueryTriggerInteraction.Ignore);
-                        if (isRayChecked)
-                        {
-                            if (_raycastHit.collider.gameObject.layer == LayerMask.NameToLayer("AutoAimedObject"))
-                            {
-                                if (Vector3.Angle(playerCamera.transform.forward, (_raycastHit.collider.gameObject.transform.position - rayOrigin)) < rangeAngle)
-                                {
-                                    autoAimPosition = _raycastHit.collider.gameObject.transform;
-                                    steadyInteractionState.isAutoAimObjectFounded = true;
-                                    return;
-                                }
-                            }
-                        }
-                    }
-                }
-                steadyInteractionState.isAutoAimObjectFounded = false;
-            }
+            
         }
 
         public void SendInfoAImUI()

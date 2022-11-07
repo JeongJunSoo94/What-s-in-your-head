@@ -41,6 +41,8 @@ namespace KSU.AutoAim.Player.Object
 
         public override void InitObject(Vector3 startPos, Vector3 endPos, float objectSpeed, float offset)
         {
+            if (playerGrappleAction == null)
+                playerGrappleAction = player.GetComponent<SteadyGrappleAction>();
             objectRigidbody.velocity = Vector3.zero;
             transform.position = startPos;
             endPosistion = endPos;
@@ -117,9 +119,6 @@ namespace KSU.AutoAim.Player.Object
         {
             if((other.gameObject.layer != LayerMask.NameToLayer("UITriggers")) && (other.gameObject.layer != LayerMask.NameToLayer("Player")) && (other.gameObject.layer != LayerMask.NameToLayer("Bullet")))
             {
-                if (playerGrappleAction == null)
-                    playerGrappleAction = player.GetComponent<SteadyGrappleAction>();
-
                     switch (other.tag)
                 {
                     case "GrappledObject":

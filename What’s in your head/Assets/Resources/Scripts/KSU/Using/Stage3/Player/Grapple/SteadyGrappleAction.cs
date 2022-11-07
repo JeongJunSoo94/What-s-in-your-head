@@ -24,7 +24,7 @@ namespace KSU.AutoAim.Player
         
         SteadyGrapple grapple;
 
-        GameObject grappledTarget;
+        //GameObject grappledTarget;
 
         Vector3 grappleVec;
         //SteadyInteractionState steadyInteractionState;
@@ -92,7 +92,7 @@ namespace KSU.AutoAim.Player
 
         void Update()
         {
-            SearchGrappledObject();
+            SearchAutoAimTargetdObject();
             if(photonView.IsMine)
             {
                 SendInfoUI();
@@ -103,11 +103,15 @@ namespace KSU.AutoAim.Player
             {
                 
             }
+        }
+
+        private void FixedUpdate()
+        {
             MoveToTarget();
         }
 
 
-        public void SearchGrappledObject()
+        protected override void SearchAutoAimTargetdObject()
         {
             if (!playerAnimator.GetBool("isShootingGrapple") && autoAimObjectSpawner.transform.parent.gameObject.activeSelf && autoAimObjectSpawner.activeSelf)
             {
@@ -197,20 +201,20 @@ namespace KSU.AutoAim.Player
             }
         }
 
-        public void RecieveGrappleInfo(bool isSuceeded, GameObject targetObj, AutoAimTargetType grappleTargetType)
-        {
-            curTargetType = grappleTargetType;
-            steadyInteractionState.isSucceededInHittingTaget = isSuceeded;
+        //public void RecieveGrappleInfo(bool isSuceeded, GameObject targetObj, AutoAimTargetType grappleTargetType)
+        //{
+        //    curTargetType = grappleTargetType;
+        //    steadyInteractionState.isSucceededInHittingTaget = isSuceeded;
 
-            if (isSuceeded)
-            {
-                grappledTarget = targetObj;
-            }
-            else
-            {
-                autoAimObjectSpawner.SetActive(true);
-            }
-        }
+        //    if (isSuceeded)
+        //    {
+        //        grappledTarget = targetObj;
+        //    }
+        //    else
+        //    {
+        //        autoAimObjectSpawner.SetActive(true);
+        //    }
+        //}
 
         public bool GetWhetherHit(AutoAimTargetType grappleTargetType)
         {
@@ -242,7 +246,7 @@ namespace KSU.AutoAim.Player
             playerState.isRiding = true;
             playerState.IsAirJumping = false;
             playerState.WasAirDashing = false;
-            targetPosition = grappledTarget.GetComponent<GrappledObject>().GetOffsetPosition();
+            targetPosition = hitTarget.GetComponent<GrappledObject>().GetOffsetPosition();
             grappleVec = (targetPosition - transform.position).normalized * grappleMoveSpeed;
             Vector3 lookVec = grappleVec;
             lookVec.y = 0;
@@ -337,7 +341,7 @@ namespace KSU.AutoAim.Player
 
         public void EscapeMoving()
         {
-            grappledTarget = null;
+            hitTarget = null;
             steadyInteractionState.isSucceededInHittingTaget = false;
             autoAimObjectSpawner.SetActive(true);
             steadyInteractionState.isGrappling = false;
