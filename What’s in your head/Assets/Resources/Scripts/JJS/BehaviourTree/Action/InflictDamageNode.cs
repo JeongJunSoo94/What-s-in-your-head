@@ -25,9 +25,9 @@ namespace JJS.BT
 
         protected override State OnUpdate()
         {
-            for (int i = 0; i<find.finder.targetObj.Count; i++)
+            for (int i = 0; i<find.finderSpot.targetObj.Count; i++)
             {
-                PlayerController player = find.finder.targetObj[i].GetComponent<PlayerController>();
+                PlayerController player = find.finderSpot.targetObj[i].GetComponent<PlayerController>();
                 player.photonView.RPC(nameof(player.GetDamage), RpcTarget.AllViaServer, damage, DamageType.Attacked);
             }
             return State.Success;
