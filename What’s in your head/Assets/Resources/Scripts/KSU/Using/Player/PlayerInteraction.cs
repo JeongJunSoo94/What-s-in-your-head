@@ -50,14 +50,8 @@ namespace KSU
 
         public void InitInteraction()
         {
-            if (interactionState.isRidingRail)
-            {
-                railAction.EscapeRailAction();
-            }
-            else if (interactionState.isRidingRope)
-            {
-                ropeAction.EscapeRope();
-            }
+            railAction.EscapeRailAction();
+            ropeAction.EscapeRope();
             interactionState.InitInteractionState();
         }
     }

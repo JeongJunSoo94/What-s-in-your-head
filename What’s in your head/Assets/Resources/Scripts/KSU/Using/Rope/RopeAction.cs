@@ -234,6 +234,7 @@ namespace KSU
             StartCoroutine(nameof(DelayEscape));
             if(currentRidingRope == null)
             {
+                interactableRope = null;
                 return;
             }
             animator.SetBool("isRidingRope", false);

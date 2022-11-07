@@ -89,6 +89,8 @@ namespace KSU
         public Vector3 knockBackVec = Vector3.zero;
         #endregion
 
+        [HideInInspector] public bool isOn_HP_UI = false;
+
         void Awake()
         {
             // >> : YC
@@ -609,7 +611,6 @@ namespace KSU
         public void StartDeath()
         {
             characterState.isStopped = true;
-            InitController();
             playerCapsuleCollider.enabled = false;
         }
 

@@ -11,8 +11,9 @@ GameObject:
   - component: {fileID: 1628697109241083109}
   - component: {fileID: 2392978141863361344}
   - component: {fileID: 491287878343249802}
-  - component: {fileID: 6692489231849753333}
-  m_Layer: 0
+  - component: {fileID: 8989909951723146238}
+  - component: {fileID: 1531790882210461077}
+  m_Layer: 3
   m_Name: Teapot Enter Office
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -29,6 +30,7 @@ Transform:
   m_LocalRotation: {x: 0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: -0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -52,10 +54,12 @@ MeshRenderer:
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -80,17 +84,30 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!64 &6692489231849753333
-MeshCollider:
+  m_AdditionalVertexStreams: {fileID: 0}
+--- !u!65 &8989909951723146238
+BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2148669784180747871}
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 13400000, guid: e95ff48113628b14f9cf06b2cc75d36e, type: 2}
   m_IsTrigger: 0
   m_Enabled: 1
-  serializedVersion: 4
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: -4828619841648143887, guid: 6adb8e6deb51ce34ebbb712d5298db3b, type: 3}
+  serializedVersion: 2
+  m_Size: {x: 1.5109715, y: 2.9418688, z: 1.5285605}
+  m_Center: {x: 0.0001487732, y: 1.4842057, z: 0.1927022}
+--- !u!65 &1531790882210461077
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2148669784180747871}
+  m_Material: {fileID: 13400000, guid: e95ff48113628b14f9cf06b2cc75d36e, type: 2}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1.1418505, y: 0.060888864, z: 0.32954532}
+  m_Center: {x: 0.002757931, y: 1.2686709, z: 1.0908316}

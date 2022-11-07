@@ -2810,19 +2810,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 89a95da993a6a0745a21cfc544664161, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cinemachineBrain: {fileID: 0}
   backView_MouseSensitivity: 25
   sholderView_MouseSensitivity: 25
   sholderAxisY_MaxUp: 0.2
   sholderAxisY_MaxDown: 0.5
   AmplitudeGain: 1
   FrequebctGain: 1
+  canShake: 1
+  AmplitudeGainSide: 3
+  FrequebctGainSide: 3
+  ShakeTimeSide: 3
+  platformLerpTime: 0
   CineNellaBack: {fileID: 5990922643141382604, guid: 4bf85403c2bfb43499b8557cd0596354, type: 3}
   CineNellaSholder: {fileID: 3213764636192488147, guid: 2bffa73a124ec744590eb56c5ee6567d, type: 3}
   CineSteadyBack: {fileID: 0}
   CineSteadySholder: {fileID: 0}
-  isJumping: 0
-  canShake: 1
+  CineLookObj_Back: {fileID: 0}
+  CineFollowObj_Back: {fileID: 0}
 --- !u!114 &8011218605724820560
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2838,14 +2842,13 @@ MonoBehaviour:
   characterState: {fileID: 4557260369275093484}
   playerMouse: {fileID: 5027572550733305681}
   mainCamera: {fileID: 0}
-  moveSpeed: 0
+  playerRigidbody: {fileID: 0}
   walkSpeed: 4
   runSpeed: 7
   dashSpeed: 10
   airDashSpeed: 8
   inertiaSpeed: 0
   airMoveSpeed: 1
-  knockBackHorizonSpeed: 6
   jumpSpeed: 10
   airJumpSpeed: 6
   gravity: -9.81
@@ -2903,6 +2906,7 @@ MonoBehaviour:
   - {fileID: 7656355952428297822}
   - {fileID: 2048753255070762641}
   gun: {fileID: 4271477110735829057}
+  singing: {fileID: 0}
 --- !u!114 &4557260369275093484
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2929,10 +2933,12 @@ MonoBehaviour:
   slopeAngleCofacter: 0
   IsGrounded: 0
   isFowardBlock: 0
+  isAirBlocked: 0
   isOverAngleForSlope: 0
   isMove: 0
   isRun: 0
   CanJump: 1
+  isDelayingDashJump: 0
   IsJumping: 0
   IsAirJumping: 0
   IsDashing: 0
@@ -2967,6 +2973,7 @@ MonoBehaviour:
   leftHandFollowObj: {fileID: 6883025197069872416}
   rightHandFollowObj: {fileID: 3723959393930102283}
   hitpos: {fileID: 6883025196847062768}
+  weapon: {fileID: 0}
   animator: {fileID: 0}
   enableIK: 0
 --- !u!114 &4573562063243766625
@@ -3068,6 +3075,15 @@ MonoBehaviour:
   - Type: 4
     SynchronizeType: 0
     Name: isKnockBack
+  - Type: 4
+    SynchronizeType: 0
+    Name: AttackedTrigger
+  - Type: 4
+    SynchronizeType: 0
+    Name: DeadTrigger
+  - Type: 4
+    SynchronizeType: 0
+    Name: KnockBackTrigger
   m_SynchronizeLayers:
   - SynchronizeType: 2
     LayerIndex: 0
@@ -3109,6 +3125,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 53c173593f4146742abd36b73400707b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  railAction: {fileID: 0}
+  ropeAction: {fileID: 0}
 --- !u!114 &6169874678787101720
 MonoBehaviour:
   m_ObjectHideFlags: 0

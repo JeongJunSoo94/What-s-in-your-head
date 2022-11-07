@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using KSU;
 using Photon.Pun;
 using UnityEngine;
 using UnityEngine.UI;
@@ -45,10 +46,7 @@ namespace JCW.UI.InGame
         {
             photonView = GetComponent<PhotonView>();
 
-            if (!GameManager.Instance.isTest)
-                isNella = GameManager.Instance.characterOwner[PhotonNetwork.IsMasterClient];
-            else
-                isNella = TempPhotonManager.Instance.isNella;
+            isNella = GameManager.Instance.characterOwner[PhotonNetwork.IsMasterClient];
 
             if (photonView.IsMine)
                 GameManager.Instance.reviveAllPairs.Add(isNella, this);
@@ -68,6 +66,16 @@ namespace JCW.UI.InGame
             }
             curHP = GameManager.Instance.curPlayerHP;
             previousHP = curHP;
+        }
+
+        private void OnEnable()
+        {
+            transform.parent.parent.GetComponent<PlayerController>().isOn_HP_UI = true;
+        }
+
+        private void OnDisable()
+        {
+            transform.parent.parent.GetComponent<PlayerController>().isOn_HP_UI = false;
         }
 
         void Update()

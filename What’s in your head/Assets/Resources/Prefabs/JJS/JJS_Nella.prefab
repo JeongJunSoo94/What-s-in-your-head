@@ -2802,19 +2802,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 89a95da993a6a0745a21cfc544664161, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cinemachineBrain: {fileID: 0}
   backView_MouseSensitivity: 25
   sholderView_MouseSensitivity: 25
   sholderAxisY_MaxUp: 0.2
   sholderAxisY_MaxDown: 0.5
   AmplitudeGain: 1
   FrequebctGain: 1
+  canShake: 1
+  AmplitudeGainSide: 3
+  FrequebctGainSide: 3
+  ShakeTimeSide: 3
+  platformLerpTime: 0
   CineNellaBack: {fileID: 5990922643141382604, guid: 4bf85403c2bfb43499b8557cd0596354, type: 3}
   CineNellaSholder: {fileID: 3213764636192488147, guid: 2bffa73a124ec744590eb56c5ee6567d, type: 3}
   CineSteadyBack: {fileID: 0}
   CineSteadySholder: {fileID: 0}
-  isJumping: 0
-  canShake: 1
+  CineLookObj_Back: {fileID: 0}
+  CineFollowObj_Back: {fileID: 0}
 --- !u!114 &8011218605724820560
 MonoBehaviour:
   m_ObjectHideFlags: 0
