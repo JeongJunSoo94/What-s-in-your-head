@@ -25350,6 +25350,12 @@ MonoBehaviour:
   - Type: 4
     SynchronizeType: 0
     Name: AttackedTrigger
+  - Type: 4
+    SynchronizeType: 0
+    Name: isShootingCymbals
+  - Type: 4
+    SynchronizeType: 0
+    Name: WasShootingCymbals
   m_SynchronizeLayers:
   - SynchronizeType: 2
     LayerIndex: 0
@@ -25477,7 +25483,7 @@ MonoBehaviour:
   AimCool: 0.5
   notRotatoin: 0
   glass: {fileID: 8768540777746556850}
-  grapple: {fileID: 2953762621103950369}
+  autoAimWeapon: {fileID: 0}
 --- !u!114 &8750876866218855433
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -25665,7 +25671,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bc8bd3eaf0d7d5f44a968f46cbb73a7c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  lookAtObj: {fileID: 0}
   layerFilterForAutoAim:
     serializedVersion: 2
     m_Bits: 101896
@@ -25675,15 +25680,13 @@ MonoBehaviour:
   autoAimObjectSpawner: {fileID: 1911663723217604559}
   autoAimObject: {fileID: 7909980709306676830, guid: c9b54073bf48f804ebee62282b5e85af, type: 3}
   aimUI: {fileID: 8657421885556112005}
-  cymbalsSpeed: 10
-  cymbalsDepartOffset: 0.5
+  autoAimObjectSpeed: 10
+  autoAimObjectDepartOffset: 0.5
   rangeRadius: 10
   rangeDistance: 30
-  grapplingRange: 30
+  autoAimObjectRange: 30
   rangeAngle: 8
   grappleMoveSpeed: 25
-  grappleSpeed: 40
-  grappleDepartOffset: 0.5
   escapeGrapplePower: 15
 --- !u!114 &5821330284378002438
 MonoBehaviour:
