@@ -45,7 +45,7 @@ namespace KSU.FSM
         void check(Animator animator)
         {
             animator.SetFloat("HorizonVelocity", 0f);
-            if (!GetGrappleAction(animator).GetWhetherGrappleActived())
+            if (!GetGrappleAction(animator).GetWhetherautoAimObjectActived())
             {
                 animator.SetBool("isGrabMonster", false);
             }

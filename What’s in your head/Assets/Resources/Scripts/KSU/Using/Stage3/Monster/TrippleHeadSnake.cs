@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace KSU.Monster
+namespace KSU.AutoAim.Object.Monster
 {
     public class TrippleHeadSnake : DefenseMonster
     {
@@ -18,13 +18,6 @@ namespace KSU.Monster
         bool isRushDelayOn = false;
         public float rushDelayTime = 10f;
 
-        // Start is called before the first frame update
-        void Start()
-        {
-
-        }
-
-        // Update is called once per frame
         void Update()
         {
             Detect();

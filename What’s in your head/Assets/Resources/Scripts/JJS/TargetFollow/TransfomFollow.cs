@@ -1,4 +1,4 @@
-using KSU.Monster;
+using KSU.AutoAim.Object.Monster;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -17,19 +17,6 @@ namespace JJS
         {
             if(target!=null)
                 transform.position = target.transform.position;
-        }
-
-        private void OnTriggerEnter(Collider other)
-        {
-            switch (other.tag)
-            {
-                case "PoisonSnake":
-                case "TrippleHeadSnake":
-                    {
-                        other.gameObject.GetComponent<DefenseMonster>().GetDamage(10);
-                    }
-                    break;
-            }
         }
     }
 }

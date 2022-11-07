@@ -11,7 +11,7 @@ using YC.Camera_;
 using YC.Camera_Single;
 using JCW.Object;
 using JJS;
-using KSU.Monster;
+using KSU.AutoAim.Object.Monster;
 
 namespace KSU
 {

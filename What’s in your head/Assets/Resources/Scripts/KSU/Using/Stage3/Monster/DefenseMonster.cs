@@ -6,9 +6,9 @@ using UnityEngine.AI;
 using JCW.Spawner;
 using Photon.Pun;
 
-namespace KSU.Monster
+namespace KSU.AutoAim.Object.Monster
 {
-    public class DefenseMonster : MonoBehaviour
+    public class DefenseMonster : AutoAimTargetObject
     {
         protected PhotonView pv;
 
@@ -21,7 +21,7 @@ namespace KSU.Monster
         protected Transform detectedTarget;
         protected Transform currentTarget;
         [SerializeField] protected float detectingRange;
-        public float detectingUIRange;
+        //public float detectingUIRange;
         public float moveSpeed; //시리얼
         //public float stuckTime; //시리얼
         public float stunTime;

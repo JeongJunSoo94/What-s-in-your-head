@@ -7,6 +7,7 @@ using Photon.Pun;
 using JJS.Weapon;
 using KSU;
 using JCW.UI.Options.InputBindings;
+using KSU.AutoAim.Player;
 
 namespace JJS
 {
@@ -103,8 +104,7 @@ namespace JJS
         {
             glass.HitLine(type);
         }
-
-        public override bool GetCustomInfo(GrappleTargetType grappleTargetType)
+        public override bool GetCustomInfo(AutoAimTargetType grappleTargetType)
         {
             return grapple.GetWhetherHit(grappleTargetType);
         }

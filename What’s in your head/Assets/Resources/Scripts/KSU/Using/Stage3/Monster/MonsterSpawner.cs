@@ -7,8 +7,8 @@ using JCW.Spawner;
 using Photon.Pun;
 using JCW.Network;
 using YC.Photon;
-using KSU.Monster;
 using JCW.UI.Options.InputBindings;
+using KSU.AutoAim.Object.Monster;
 
 namespace KSU
 {

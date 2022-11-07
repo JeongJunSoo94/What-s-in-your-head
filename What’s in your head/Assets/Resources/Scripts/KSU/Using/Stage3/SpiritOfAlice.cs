@@ -1,4 +1,4 @@
-using KSU.Monster;
+using KSU.AutoAim.Object.Monster;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;

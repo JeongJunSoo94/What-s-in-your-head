@@ -3,18 +3,17 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace KSU
+namespace KSU.AutoAim.Object
 {
-    public class GrappledObject : MonoBehaviour
+    public class GrappledObject : AutoAimTargetObject
     {
         [SerializeField] GameObject detectingTrigger;
         public GameObject offset;
 
-        public float detectingRange;
         // Start is called before the first frame update
         void Start()
         {
-            detectingTrigger.transform.localScale = new Vector3(1, 1, 1) * (detectingRange * 2f);
+            detectingTrigger.transform.localScale = new Vector3(1, 1, 1) * (detectingUIRange * 2f);
             StartCoroutine(nameof(WaitForPlayer));
         }
 
