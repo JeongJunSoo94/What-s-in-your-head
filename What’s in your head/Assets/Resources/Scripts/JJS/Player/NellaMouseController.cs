@@ -181,6 +181,8 @@ namespace JJS
 
         public void OnEnableObject(int index)
         {
+            if (hitObjs[index].gameObject.activeSelf)
+                hitObjs[index].gameObject.SetActive(false);
             hitObjs[index].gameObject.SetActive(true);
             SoundManager.Instance.PlayEffect_RPC("GuitarAttack");
         }
