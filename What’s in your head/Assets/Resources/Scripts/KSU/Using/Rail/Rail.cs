@@ -168,7 +168,6 @@ namespace KSU
                             {
                                 SteadyDestiation = (track.m_Waypoints.Length - 1.005f);
                                 player.transform.parent = SteadyCart.transform;
-                                player.transform.localPosition = Vector3.zero;
                             }
                             break;
                     }
