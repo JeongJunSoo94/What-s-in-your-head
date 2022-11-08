@@ -66,6 +66,8 @@ public class PlayerState : MonoBehaviour
     public bool IsJumping = false;
     [Tooltip("공중에서 점프한 상태")]
     public bool IsAirJumping = false;
+    [Tooltip("특수 점프(트램펄린)한 상태")]
+    public bool isCumstomJumping = false;
     #endregion
 
     // 대시 변수
@@ -230,6 +232,7 @@ public class PlayerState : MonoBehaviour
     {
         IsJumping = false;
         IsAirJumping = false;
+        isCumstomJumping = false;
     }
     public IEnumerator JumpCool()
     {
@@ -249,6 +252,17 @@ public class PlayerState : MonoBehaviour
             StartCoroutine(nameof(JumpCool));
         }
     }
+
+    public void SetCustomJumpState()
+    {
+        ResetJump();
+        ResetAirDash();
+        IsJumping = true;
+        isCumstomJumping = true;
+        StopCoroutine(nameof(JumpCool));
+        StartCoroutine(nameof(JumpCool));
+    }
+
     public void CheckAirJump()
     {
         // 공중 상태이고 점프 쿨타임이 돌아있을 때, 공중 점프 중이 아닐 때만

@@ -12,6 +12,7 @@ using YC.Camera_Single;
 using JCW.Object;
 using JJS;
 using KSU.AutoAim.Object.Monster;
+using JCW.Object.Stage1;
 
 namespace KSU
 {
@@ -37,20 +38,22 @@ namespace KSU
         // 수평 Speed
         #region
         [Header("움직임")]
-        [Tooltip("현재 이동 속력")]
+        [Header("현재 이동 속력")]
         float moveSpeed = 0f;
-        [Tooltip("걷는 속력")]
+        [Header("걷는 속력")]
         public float walkSpeed = 4f;
-        [Tooltip("달리는 속력")]
+        [Header("달리는 속력")]
         public float runSpeed = 7f;
-        [Tooltip("대시 속력")]
+        [Header("대시 속력")]
         public float dashSpeed = 10f;
-        [Tooltip("공중 대시 속력")]
+        [Header("공중 대시 속력")]
         public float airDashSpeed = 8f;
-        [Tooltip("관성 속력")]
+        [Header("관성 속력")]
         public float inertiaSpeed = 0f;
-        [Tooltip("공중 이동 속력")]
+        [Header("공중 이동 속력")]
         public float airMoveSpeed = 1f;
+        [Header("공중 이동 최대 속력")]
+        public float airMoveMaxSpeed = 10f;
         //[Tooltip("넉백 수평 속력")]
         //public float knockBackHorizonSpeed = 6f;
         #endregion
@@ -203,8 +206,11 @@ namespace KSU
 
         void InitInteraction()
         {
-            
             GetComponent<PlayerInteraction>().InitInteraction();
+        }
+        void EscapeInteraction()
+        {
+            GetComponent<PlayerInteraction>().EscapeInteraction();
         }
 
         private void CheckState()
@@ -386,6 +392,20 @@ namespace KSU
                 }
             }
         }
+
+        void InputCustomJump(float customJumpSpeed)
+        {
+            if (characterState.isOutOfControl || characterState.isStopped || characterState.isRiding)
+                return;
+
+            characterState.SetCustomJumpState();
+            Vector3 horVel = moveDir;
+            horVel.y = 0;
+            transform.LookAt(transform.position + horVel);
+            MakeinertiaVec(0, horVel.normalized);
+            moveVec.y = customJumpSpeed;
+        }
+
         public void InputDash()
         {
             if (characterState.isOutOfControl || characterState.isStopped || characterState.isRiding || !characterState.CanJump)
@@ -524,6 +544,10 @@ namespace KSU
                     {
                         moveVec += inertiaNormalVec * inertiaSpeed;
                     }
+                    Vector3 horVec = moveVec;
+                    horVec.y = 0;
+                    if (horVec.magnitude > airMoveMaxSpeed)
+                        moveVec = horVec.normalized * airMoveMaxSpeed + Vector3.up * moveVec.y;
 
                     if (moveVec.y < terminalSpeed)
                     {
@@ -617,6 +641,7 @@ namespace KSU
         {
             characterState.isStopped = true;
             playerCapsuleCollider.enabled = false;
+            EscapeInteraction();
         }
 
         public void EndDeath()
@@ -628,26 +653,40 @@ namespace KSU
 
         private void OnTriggerEnter(Collider other)
         {
-            if(!playerAnimator.GetBool("isAttacked") && !playerAnimator.GetBool("isKnockBack") && !playerAnimator.GetBool("isDead"))
+            switch (other.tag)
             {
-                switch (other.tag)
-                {
-                    case "MonsterAttack":
-                        {
-                            GetDamage(other.GetComponentInParent<DefenseMonster>().attackDamage, DamageType.Attacked);
-                        }
-                        break;
-                    case "MonsterRush":
-                        {
-                            GetDamage(other.GetComponentInParent<TrippleHeadSnake>().rushDamage, DamageType.KnockBack, other.transform.position, other.GetComponentInParent<TrippleHeadSnake>().rushSpeed);
-                        }
-                        break;
-                    case "DeadZone":
-                        {
-                            GetDamage(12, DamageType.Dead);
-                        }
-                        break;
-                }
+                case "MonsterAttack":
+                    {
+                        GetDamage(other.GetComponentInParent<DefenseMonster>().attackDamage, DamageType.Attacked);
+                    }
+                    break;
+                case "MonsterRush":
+                    {
+                        GetDamage(other.GetComponentInParent<TrippleHeadSnake>().rushDamage, DamageType.KnockBack, other.transform.position, other.GetComponentInParent<TrippleHeadSnake>().rushSpeed);
+                    }
+                    break;
+                case "DeadZone":
+                    {
+                        GetDamage(12, DamageType.Dead);
+                    }
+                    break;
+            }
+        }
+
+        private void OnCollisionEnter(Collision collision)
+        {
+            switch (collision.gameObject.tag)
+            {
+                case "Trampolin":
+                    {
+                        InputCustomJump(collision.gameObject.GetComponentInParent<JumpingPlatform>().jumpSpeed);
+                    }
+                    break;
+                case "DeadZone":
+                    {
+                        GetDamage(12, DamageType.Dead);
+                    }
+                    break;
             }
         }
         [PunRPC]

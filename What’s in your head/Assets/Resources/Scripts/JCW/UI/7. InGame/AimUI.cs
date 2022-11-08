@@ -8,10 +8,9 @@ using YC.CameraManager_;
 
 namespace JCW.UI.InGame
 {
-    [RequireComponent(typeof(PhotonView))]
     public class AimUI : MonoBehaviour
     {
-        [Header("오토 타겟팅 속도")] [Range(0,5f)] [SerializeField] float targetingTime;
+        [Header("오토 타겟팅 속도")] [Range(0, 5f)] [SerializeField] float targetingTime;
         Camera mainCamera;
         Camera curCam;
         RectTransform imgTransform;
@@ -30,26 +29,33 @@ namespace JCW.UI.InGame
         float curTargetTime = 0f;
         float curNormalTime = 0f;
         float detectAngle;
-       
+        PlayerState aimState;
+
         private void Awake()
         {
             imgTransform = transform.GetChild(0).GetComponent<RectTransform>();
-            if (!GetComponent<PhotonView>().IsMine)
-            {
-                Destroy(this.gameObject);
-                return;
-            }
-            StartCoroutine(nameof(WaitForPlayer));
-            playerTF = this.transform.parent;
-            aimImage = imgTransform.GetComponent<Image>();
+            isNella = GameManager.Instance.characterOwner[PhotonNetwork.IsMasterClient];
+            targetTopviewTF = isNella ? GameObject.FindWithTag("NellaMousePoint").transform : GameObject.FindWithTag("SteadyMousePoint").transform;
 
+            mainCamera = isNella ? CameraManager.Instance.cameras[0] : CameraManager.Instance.cameras[1];
+            curCam = mainCamera;
+            imgTransform.position = new Vector3((curCam.rect.x + curCam.rect.width + curCam.rect.x) * 960f, 540f, 0);
+            targetTF = null;
+            aimImage = imgTransform.GetComponent<Image>();
         }
 
-        private void Update()
+        private void Start()
+        {
+            playerTF = GameManager.Instance.myPlayerTF;
+            aimState = playerTF.GetComponent<PlayerController>().characterState;
+        }
+
+
+        private void FixedUpdate()
         {
             if (targetTopviewTF == null)
                 return;
-            aimImage.enabled = playerTF.GetComponent<PlayerController>().characterState.aim;
+            aimImage.enabled = aimState.aim;
             // 현재 탑뷰일 때
             if (GameManager.Instance.isTopView)
             {
@@ -59,10 +65,10 @@ namespace JCW.UI.InGame
                     this.transform.parent = targetTopviewTF;
 
                     // 현재 캠이 완전 축소된 경우 다른 캠으로 설정.
-                    if(curCam.rect.width <= 0.1f)
+                    if (curCam.rect.width <= 0.1f)
                         curCam = isNella ? CameraManager.Instance.cameras[1] : CameraManager.Instance.cameras[0];
                 }
-                imgTransform.position = curCam.WorldToScreenPoint(targetTopviewTF.position);                
+                imgTransform.position = curCam.WorldToScreenPoint(targetTopviewTF.position);
             }
             // 직전엔 탑뷰였지만 지금은 아닌 경우
             else if (wasTopView)
@@ -74,15 +80,15 @@ namespace JCW.UI.InGame
             else
             {
                 // 타겟이 들어옴
-                if(targetTF != null)
+                if (targetTF != null)
                 {
                     isNormal = false;
                     curNormalTime = 0f;
                     if (!isTargeting)
                     {
-                        imgTransform.position = Vector3.Lerp(imgTransform.position, curCam.WorldToScreenPoint(targetTF.position), Time.deltaTime * (detectAngle * 0.5f + 3.5f));
-                        curTargetTime += Time.deltaTime;
-                        if(curTargetTime >= targetingTime)
+                        imgTransform.position = Vector3.Lerp(imgTransform.position, curCam.WorldToScreenPoint(targetTF.position), Time.fixedDeltaTime * (detectAngle * 0.5f + 3.5f));
+                        curTargetTime += Time.fixedDeltaTime;
+                        if (curTargetTime >= targetingTime)
                         {
                             curTargetTime = 0f;
                             isTargeting = true;
@@ -95,10 +101,10 @@ namespace JCW.UI.InGame
                 {
                     isTargeting = false;
                     curTargetTime = 0f;
-                    if(!isNormal)
+                    if (!isNormal)
                     {
-                        imgTransform.position = Vector3.Lerp(imgTransform.position, new Vector3((curCam.rect.x + curCam.rect.width + curCam.rect.x) * 960f, 540f, 0), Time.deltaTime * (detectAngle*0.5f+3.5f));
-                        curNormalTime += Time.deltaTime;
+                        imgTransform.position = Vector3.Lerp(imgTransform.position, new Vector3((curCam.rect.x + curCam.rect.width + curCam.rect.x) * 960f, 540f, 0), Time.fixedDeltaTime * (detectAngle * 0.5f + 3.5f));
+                        curNormalTime += Time.fixedDeltaTime;
                         if (curNormalTime >= targetingTime)
                         {
                             curNormalTime = 0f;
@@ -114,23 +120,7 @@ namespace JCW.UI.InGame
         public void SetTarget(Transform posTF, float angle)
         {
             targetTF = posTF;
-            detectAngle = angle;
-        }
-
-        protected IEnumerator WaitForPlayer()
-        {
-            while (GameManager.Instance.characterOwner.Count <= 1)
-                yield return new WaitForSeconds(0.2f);
-
-            isNella = GameManager.Instance.characterOwner[PhotonNetwork.IsMasterClient];
-            targetTopviewTF = isNella ? GameObject.FindWithTag("NellaMousePoint").transform : GameObject.FindWithTag("SteadyMousePoint").transform;
-
-            mainCamera = isNella ? CameraManager.Instance.cameras[0] : CameraManager.Instance.cameras[1];
-            curCam = mainCamera;
-            imgTransform.position = new Vector3((curCam.rect.x + curCam.rect.width + curCam.rect.x) * 960f, 540f, 0);
-            targetTF = null;
-            yield break;
+            detectAngle = angle;            
         }
     }
 }
-

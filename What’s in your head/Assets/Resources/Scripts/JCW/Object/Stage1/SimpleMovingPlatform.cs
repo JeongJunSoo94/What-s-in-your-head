@@ -22,8 +22,10 @@ namespace JCW.Object.Stage1
         }
 
 
-        void Update()
+        void FixedUpdate()
         {
+            if (posList.Count == 0)
+                return;
             if (Vector3.SqrMagnitude(curTF.position - posList[curIndex]) <= 0.05f)
             {                
                 curTF.position = posList[curIndex];
@@ -39,15 +41,15 @@ namespace JCW.Object.Stage1
                     offset = 1;
                 }
             }
-            curTF.position = Vector3.MoveTowards(curTF.position, posList[curIndex], Time.deltaTime * movingSpeed);
+            curTF.position = Vector3.MoveTowards(curTF.position, posList[curIndex], Time.fixedDeltaTime * movingSpeed);
         }
-
-        private void OnCollisionEnter(Collision collision)
+        private void OnCollisionStay(Collision collision)
         {
             if (collision.gameObject.CompareTag("Nella") || collision.gameObject.CompareTag("Steady"))
             {
                 Transform playerTF = collision.gameObject.transform;
-                if (playerTF.position.y >= this.transform.position.y)
+                if (playerTF.parent != this.transform &&
+                    playerTF.position.y >= this.transform.position.y)
                     playerTF.parent = this.transform;
             }
         }
@@ -56,9 +58,12 @@ namespace JCW.Object.Stage1
         {
             if (collision.gameObject.CompareTag("Nella") || collision.gameObject.CompareTag("Steady"))
             {
-                Transform playerTF = collision.gameObject.transform;
+                Transform playerTF = collision.gameObject.transform;                
                 if (playerTF.IsChildOf(transform))
+                {
+                    Debug.Log("플레이어가 탈출한 로컬 지점 : " + playerTF.localPosition);
                     playerTF.parent = null;
+                }
             }
         }
     }

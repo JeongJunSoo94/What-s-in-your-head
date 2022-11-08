@@ -168,7 +168,6 @@ namespace KSU
                             {
                                 SteadyDestiation = (track.m_Waypoints.Length - 1.005f);
                                 player.transform.parent = SteadyCart.transform;
-                                player.transform.localPosition = Vector3.zero;
                             }
                             break;
                     }
@@ -211,6 +210,7 @@ namespace KSU
                         cart = SteadyCart;
                         break;
                 }
+                cart.transform.position = startPos;
                 float totalLength = Vector3.Distance(track.m_Waypoints[startIndex].position, track.m_Waypoints[startIndex + 1].position);
                 float startLength = Vector3.Distance(track.m_Waypoints[startIndex].position + offset, startPos);
                 float rate = startLength / totalLength;

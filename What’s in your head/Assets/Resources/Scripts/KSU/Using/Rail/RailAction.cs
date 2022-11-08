@@ -498,6 +498,20 @@ namespace KSU
             }
         }
 
+        public void SendUIOff()
+        {
+            if (detectedRail.Count > 0)
+            {
+                foreach (var rail in detectedRail.Keys)
+                {
+                    if (rail != railStartObject.transform.parent.gameObject)
+                    {
+                        rail.GetComponentInChildren<OneIndicator>().SetUI(false, Vector3.zero);
+                    }
+                }
+            }
+        }
+
         private void OnTriggerEnter(Collider other)
         {
             if (other.CompareTag("Rail"))

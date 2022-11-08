@@ -292,6 +292,20 @@ namespace KSU
             }
         }
 
+        public void SendUIOff()
+        {
+            if (!playerState.isMine)
+                return;
+
+            if (detectedRopes.Count > 0)
+            {
+                foreach (var rope in detectedRopes)
+                {
+                    rope.Key.GetComponentInChildren<ConvertIndicator>().SetUI(false, false, 0f);
+                }
+            }
+        }
+
         private void OnTriggerEnter(Collider other)
         {
             if(other.CompareTag("Rope"))

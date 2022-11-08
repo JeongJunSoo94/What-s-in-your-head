@@ -2,8 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
-using Photon.Realtime;
-using System.Linq;
 using Cinemachine;
 using YC.CameraManager_;
 using UnityEngine.Rendering.Universal;
@@ -37,16 +35,16 @@ namespace YC.Camera_
         CinemachineVirtualCameraBase sideCam;
 
         // 가상 카메라 enum State
-        enum CamState { back, sholder, top};
+        enum CamState { back, sholder};
         CamState curCam; 
         CamState preCam; 
 
         // ============  카메라 감도 설정  ============ //
         [Header("[Back View 카메라 마우스 감도]")]
-        [SerializeField] [Range(0, 100)] float backView_MouseSensitivity;
+        [SerializeField] [Range(0, 100)] float backView_MouseSensitivity = 25f;
 
         [Header("[Sholder View 카메라 마우스 감도]")]
-        [SerializeField] [Range(0, 100)] float sholderView_MouseSensitivity;
+        [SerializeField] [Range(0, 100)] float sholderView_MouseSensitivity = 10f;
 
         float curSholderMaxSpeedY;
 
@@ -54,7 +52,7 @@ namespace YC.Camera_
 
         // ============  Aim View Y축 궤도 제한  ============ //
         [Header("[Sholder View Y궤도 Up 제한 값]")]
-        [SerializeField] [Range(0, 1)] float sholderAxisY_MaxUp = 0.3f;
+        [SerializeField] [Range(0, 1)] float sholderAxisY_MaxUp = 0.2f;
 
         [Header("[Sholder View Y궤도 Down 제한 값]")]
         [SerializeField] [Range(0, 1)] float sholderAxisY_MaxDown = 0.5f;
@@ -64,10 +62,10 @@ namespace YC.Camera_
 
         // ============  스테디 빔 사용시 카메라 흔들림  ============ //
         [Header("[스테디 빔, 카메라 흔들림 진폭 크기]")]
-        [SerializeField] [Range(0, 5)] float AmplitudeGain = 3f;
+        [SerializeField] [Range(0, 5)] float AmplitudeGain = 1f;
 
         [Header("[스테디 빔, 카메라 흔들림 빈도]")]
-        [SerializeField] [Range(0, 5)] float FrequebctGain = 3f;
+        [SerializeField] [Range(0, 5)] float FrequebctGain = 1.5f;
 
         List<CinemachineBasicMultiChannelPerlin> listSteadyCBMCP;
 
@@ -83,13 +81,13 @@ namespace YC.Camera_
 
         // ============  사이드뷰 변수  ============ //
         [Header("[사이드 뷰, 카메라 흔들림 진폭 크기]")]
-        [SerializeField] [Range(0, 5)] float AmplitudeGainSide = 3f;
+        [SerializeField] [Range(0, 5)] float AmplitudeGainSide = 2f;
 
         [Header("[사이드 뷰, 카메라 흔들림 빈도]")]
-        [SerializeField] [Range(0, 5)] float FrequebctGainSide = 3f;
+        [SerializeField] [Range(0, 5)] float FrequebctGainSide = 1f;
 
         [Header("[사이드 뷰, 카메라 흔들림 지속 시간]")]
-        [SerializeField] [Range(0, 5)] float ShakeTimeSide = 3f;
+        [SerializeField] [Range(0, 5)] float ShakeTimeSide = 2f;
 
         CinemachineBasicMultiChannelPerlin SideCBMCP;
 
@@ -102,11 +100,11 @@ namespace YC.Camera_
 
         // ============  점프 보간 변수들  ============ //
         [Header("[점프 후, 플랫폼 착지시 보간 시간]")]
-        [SerializeField] [Range(0, 3)] float platformLerpTime;
+        [SerializeField] [Range(0, 3)] float platformLerpTime = 0.7f;
         [Space] [Space]
         Transform followObj; // >> : 점프시 Follow, LookAt 관련
         public Transform lookatBackObj { get; private set; } //< : 레일 액션에서 사용
-        Transform lookatSholderObj;
+        //Transform lookatSholderObj;
         float lookatObjOriginY;
 
         //float avgDif = 0.5f; // 일반 점프 플랫폼 착지시 최소 오차
@@ -119,29 +117,33 @@ namespace YC.Camera_
         bool isJumping = false;
         bool isLerp = false;
         bool isAirJumpLerpEnd = false;
+        bool wasAirJump = false;
         bool isRiding = false; // 라이딩 시작부터, 그라운드 착지시까지 true
         bool isLower = false; // 일반 점프후 플레이어가 점프 시작 전 높이보다 낮다면 true
 
 
         // ============  인스펙터 프리팹  ============ //
-        [SerializeField] CinemachineVirtualCameraBase CineNellaBack;
-        [SerializeField] CinemachineVirtualCameraBase CineNellaSholder;
-        [SerializeField] CinemachineVirtualCameraBase CineSteadyBack;
-        [SerializeField] CinemachineVirtualCameraBase CineSteadySholder;
+
+        [SerializeField] CinemachineVirtualCameraBase CineBack;
+        [SerializeField] CinemachineVirtualCameraBase CineSholder;
         [SerializeField] GameObject CineLookObj_Back;
         [SerializeField] GameObject CineFollowObj_Back;
+        [SerializeField] NoiseSettings NoiseProfile;
+        [Header("Aim UI 프리팹 ")] public GameObject aimUI;
+
+
 
         // ============  디버그 로그  ============ //
         bool isDebugLog = false;
-        //void DebugLogToggle()  
-        //{
-        //    var assembly = Assembly.GetAssembly(typeof(UnityEditor.Editor));
-        //    var type = assembly.GetType("UnityEditor.LogEntries");
-        //    var method = type.GetMethod("Clear");
-        //    method.Invoke(new object(), null);
+        void DebugLogToggle()
+        {
+            //var assembly = Assembly.GetAssembly(typeof(UnityEditor.Editor));
+            //var type = assembly.GetType("UnityEditor.LogEntries");
+            //var method = type.GetMethod("Clear");
+            //method.Invoke(new object(), null);
 
-        //    isDebugLog = !isDebugLog;
-        //}
+            //isDebugLog = !isDebugLog;
+        }
 
 
         void Awake()  
@@ -156,18 +158,20 @@ namespace YC.Camera_
             FindCamera();
 
             InitVirtualCamera();
-            InitDefault();
             InitCinemachineRig();
+            InitDefault();
+            InitUI();
+
         }
 
 
         void FixedUpdate()
         {
-            //if (Input.GetKeyDown(KeyCode.R))
-            //    DebugLogToggle();
+            if (Input.GetKeyDown(KeyCode.R))
+                DebugLogToggle();
 
             if (isDebugLog) Debug.Log("FixedUpdate");
-
+           
             if (!pv.IsMine) return;
 
             if (isSideView)
@@ -189,6 +193,12 @@ namespace YC.Camera_
                 return;
             }
 
+            if(playerState.isCumstomJumping)
+            {
+                FollowPlayer();
+                return;
+            }
+
             if (isJumping && !isLerp)
             {
                 if (!wasEndSet)
@@ -197,7 +207,7 @@ namespace YC.Camera_
                 if (!playerState.IsAirJumping && !isLower)
                     CheckLowerPlayer();
 
-                if (playerState.IsAirJumping && isAirJumpLerpEnd && !playerState.IsAirDashing)
+                if ((playerState.IsAirJumping || wasAirJump) && isAirJumpLerpEnd && !playerState.IsAirDashing)
                     AirJumpPlayerFollow();
 
                 if (wasEndSet && playerState.IsAirDashing)
@@ -214,27 +224,41 @@ namespace YC.Camera_
 
         // ====================  [Awake에서 진행하는 초기화]  ==================== //
 
+        void InitUI()
+        {
+            aimUI = Instantiate(aimUI);
+        }
         void InitVirtualCamera() // Virtual Camera 생성 및 초기화  
         {           
             if (!pv.IsMine) return;
 
             camList = new List<CinemachineVirtualCameraBase>();
 
-            // 각 플레이어에 맞게 가상 카메라를 만들어 준다.
-            if (this.gameObject.CompareTag("Nella"))
+            backCam = Instantiate(CineBack, Vector3.zero, Quaternion.identity).GetComponent<CinemachineVirtualCameraBase>();
+            sholderCam = Instantiate(CineSholder, Vector3.zero, Quaternion.identity).GetComponent<CinemachineVirtualCameraBase>();
+
+            if(this.gameObject.CompareTag("Nella"))
             {
-                backCam = Instantiate(CineNellaBack, Vector3.zero, Quaternion.identity).GetComponent<CinemachineVirtualCameraBase>();
-                sholderCam = Instantiate(CineNellaSholder, Vector3.zero, Quaternion.identity).GetComponent<CinemachineVirtualCameraBase>();        
+                string layerName = "NellaCam";
+                string ignoreTag = "Nella";
+                backCam.gameObject.layer = LayerMask.NameToLayer(layerName);
+                sholderCam.gameObject.layer = LayerMask.NameToLayer(layerName);
+                backCam.GetComponent<CinemachineCollider>().m_IgnoreTag = ignoreTag;
+                sholderCam.GetComponent<CinemachineCollider>().m_IgnoreTag = ignoreTag;
             }
             else
             {
-                backCam = Instantiate(CineSteadyBack, Vector3.zero, Quaternion.identity).GetComponent<CinemachineVirtualCameraBase>();
-                sholderCam = Instantiate(CineSteadySholder, Vector3.zero, Quaternion.identity).GetComponent<CinemachineVirtualCameraBase>();
+                string layerName = "SteadyCam";
+                string ignoreTag = "Steady";
+                backCam.gameObject.layer = LayerMask.NameToLayer(layerName);
+                sholderCam.gameObject.layer = LayerMask.NameToLayer(layerName);
+                backCam.GetComponent<CinemachineCollider>().m_IgnoreTag = ignoreTag;
+                sholderCam.GetComponent<CinemachineCollider>().m_IgnoreTag = ignoreTag;
             }
 
             followObj = Instantiate(CineFollowObj_Back, player.transform.position + CineFollowObj_Back.transform.position, player.transform.rotation).GetComponent<Transform>();
             lookatBackObj = Instantiate(CineLookObj_Back, player.transform.position + CineLookObj_Back.transform.position, player.transform.rotation).GetComponent<Transform>();
-            lookatSholderObj = transform.Find("Cine_lookatObj_Sholder").gameObject.transform;
+            //lookatSholderObj = transform.Find("Cine_lookatObj_Sholder").gameObject.transform;
             lookatObjOriginY = CineLookObj_Back.transform.position.y;
 
             CinemachineFreeLook Cine_backCam = backCam.GetComponent<CinemachineFreeLook>();
@@ -246,7 +270,7 @@ namespace YC.Camera_
             Cine_backCam.m_YAxis.Value = 0.5f;
 
             Cine_sholderCam.m_Follow = followObj;
-            Cine_sholderCam.m_LookAt = lookatSholderObj;
+            Cine_sholderCam.m_LookAt = lookatBackObj;
             Cine_sholderCam.m_XAxis.Value = 0.3f;
             Cine_sholderCam.m_YAxis.Value = 0.3f;
 
@@ -278,6 +302,17 @@ namespace YC.Camera_
 
                 if (AmplitudeGain == 0) AmplitudeGain = 1;
                 if (FrequebctGain == 0) FrequebctGain = 2;
+                
+                // << : 동적으로 노이즈 프로파일 추가
+                if(sholderCam.GetComponent<CinemachineFreeLook>().GetRig(0).GetCinemachineComponent<CinemachineBasicMultiChannelPerlin>() == null)
+                {
+                    for (int i = 0; i < 3; ++i)
+                    {
+                        sholderCam.GetComponent<CinemachineFreeLook>().GetRig(i).AddCinemachineComponent<CinemachineBasicMultiChannelPerlin>();
+                        sholderCam.GetComponent<CinemachineFreeLook>().GetRig(i).GetCinemachineComponent<CinemachineBasicMultiChannelPerlin>().m_NoiseProfile 
+                            = NoiseProfile;
+                    }
+                }
 
                 for (int i = 0; i < 3; ++i)
                 {
@@ -313,7 +348,22 @@ namespace YC.Camera_
             CinemachineFreeLook backCine = backCam.GetComponent<CinemachineFreeLook>();
             CinemachineFreeLook sholderCine = sholderCam.GetComponent<CinemachineFreeLook>();
 
-            backCine.GetRig(1).GetCinemachineComponent<CinemachineComposer>().m_TrackedObjectOffset.y = offSetYInitValue;
+
+            // << : Rig 삭제
+            if (backCam.transform.childCount != 0)
+            {
+                for (int i = 0; i < backCam.transform.childCount; ++i)
+                {
+                    Destroy(backCam.transform.GetChild(i).gameObject);
+                }
+            }
+            if (sholderCam.transform.childCount != 0)
+            {
+                for(int i = 0; i < sholderCam.transform.childCount; ++i)
+                {
+                    Destroy(sholderCam.transform.GetChild(i).gameObject);
+                }
+            }
 
             for (int i = 0; i < 3; ++i)
             {
@@ -333,6 +383,8 @@ namespace YC.Camera_
                 sholderCine.GetRig(i).GetCinemachineComponent<CinemachineOrbitalTransposer>().m_YDamping = rigInitValue;
                 sholderCine.GetRig(i).GetCinemachineComponent<CinemachineOrbitalTransposer>().m_ZDamping = rigInitValue;
             }
+
+            backCine.GetRig(1).GetCinemachineComponent<CinemachineComposer>().m_TrackedObjectOffset.y = offSetYInitValue;
         }
 
 
@@ -343,7 +395,7 @@ namespace YC.Camera_
             canShake = on;
         }
 
-        public void Option_SetSensitivity(float backSensitivity, float sholderSensitivity) // 마우스 민감도 설정  
+        public void Option_SetSensitivity(float backSensitivity, float sholderSensitivity) // 마우q스 민감도 설정  
         {
             int defaulyX = 200;
             int defaultY = 1;
@@ -371,7 +423,7 @@ namespace YC.Camera_
             {
                 if (playerController.characterState.aim) 
                 {
-                    AxisState preCamAxisX = backCam.GetComponent<CinemachineFreeLook>().m_XAxis;
+                    //AxisState preCamAxisX = backCam.GetComponent<CinemachineFreeLook>().m_XAxis;
 
                     preCam = curCam;
                     curCam = CamState.sholder;
@@ -399,14 +451,14 @@ namespace YC.Camera_
 
                     OnOffCamera(camList[(int)curCam]);
 
-                    sholderCam.GetComponent<CinemachineFreeLook>().m_XAxis = preCamAxisX;                   
+                    //sholderCam.GetComponent<CinemachineFreeLook>().m_XAxis = preCamAxisX;                   
                 }
             }
             else if (curCam == CamState.sholder) // Sholder View -> Back View
             {
                 if (!playerController.characterState.aim)
                 {
-                    AxisState preCamAxisX = sholderCam.GetComponent<CinemachineFreeLook>().m_XAxis;
+                    //AxisState preCamAxisX = sholderCam.GetComponent<CinemachineFreeLook>().m_XAxis;
                    
                     preCam = curCam;
                     curCam = CamState.back;
@@ -424,12 +476,12 @@ namespace YC.Camera_
 
                     OnOffCamera(camList[(int)curCam]);
 
-                    backCam.GetComponent<CinemachineFreeLook>().m_XAxis = preCamAxisX;
+                    //backCam.GetComponent<CinemachineFreeLook>().m_XAxis = preCamAxisX;
                 }
             }
         }
 
-        void SetAimYAxis() // Sholder View에서 YAxis Limit 설정  
+        void SetAimYAxis() // Sholder View에서 YAxis Limit 설정 
         {
             if (curCam == CamState.sholder)
             {
@@ -468,7 +520,7 @@ namespace YC.Camera_
                 }
                 camList[(int)curCam].GetComponent<CinemachineFreeLook>().m_YAxis = axisY;
             }
-        }  
+        }
 
         void OnOffCamera(CinemachineVirtualCameraBase curCam) // 매개변수로 받은 카메라 외에 다른 카메라는 Off (인자가 null이라면 모든 가상카메라를 끈다)  
         {
@@ -543,7 +595,7 @@ namespace YC.Camera_
             OnOffCamera(backCam);
         }
 
-
+     
         // ====================  [Top View 함수]  ==================== //
         
         public void SetDefenseMode() // 디펜스 모드 설정  
@@ -569,7 +621,7 @@ namespace YC.Camera_
         public void SetSideScrollMode() // 사이드뷰 모드 설정  
         {
             isSideView = true;
-            
+
             if (pv.IsMine)
             {
                 // 가상 카메라 생성 및 초기화
@@ -579,12 +631,12 @@ namespace YC.Camera_
 
                 lookAndFollow = new GameObject();
                 lookAndFollow.name = "Cine_SideScrollObj";
-                lookAndFollow.transform.position 
+                lookAndFollow.transform.position
                     = new Vector3(lookAndFollow.transform.position.x, sideCam.transform.position.y, lookAndFollow.transform.position.z);
                 sideCam.Follow = lookAndFollow.transform;
                 sideCam.LookAt = lookAndFollow.transform;
 
-               
+
                 OnOffCamera(null);
 
                 // 타겟 설정 
@@ -696,6 +748,22 @@ namespace YC.Camera_
 
         // ====================  [점프 보간 함수]  ==================== //
 
+        void FollowPlayer()
+        {
+            Vector3 PlayerPos = player.transform.position;
+
+            lookatBackObj.position
+                            = new Vector3(PlayerPos.x,
+                                        PlayerPos.y + lookatObjOriginY,
+                                        PlayerPos.z);
+            followObj.position
+                        = new Vector3(PlayerPos.x,
+                                    PlayerPos.y,
+                                    PlayerPos.z);
+
+            if (!wasEndSet) wasEndSet = true;
+        }
+
         void SetCineObjPos() // Look과 Follow의 x, y값 업데이트  
         {
             if (isDebugLog) Debug.Log("호출 : 점프 대기 상태 - x, z 업데이트중");
@@ -708,7 +776,7 @@ namespace YC.Camera_
 
             lookatBackObj.transform.position = LookPos;
         }
-
+        
         public void JumpInit(bool On) // 플레이어 SMB에서 호출  
         {
             if (On) // 일반 점프 시작
@@ -726,6 +794,7 @@ namespace YC.Camera_
 
                 isJumping = true;
                 wasEndSet = false;
+                wasAirJump = false;
                 isAirJumpLerpEnd = false;
                 isLower = false;
 
@@ -871,6 +940,7 @@ namespace YC.Camera_
             if (isDebugLog) Debug.Log("호출 - 공중 점프 시작");
 
             wasEndSet = true;
+            wasAirJump = true;
 
             if (isLerp)
             {
@@ -899,7 +969,7 @@ namespace YC.Camera_
                 float curFollowYpos = followObj.transform.position.y;
                 float curPlayerYpos = player.transform.position.y;
 
-                currentTime += Time.deltaTime;
+                currentTime += Time.fixedDeltaTime;
                 if (currentTime >= LerpTime) currentTime = LerpTime;
 
                 float t = currentTime / LerpTime;
@@ -944,7 +1014,7 @@ namespace YC.Camera_
 
                     float curPlayerYpos = player.transform.position.y;
 
-                    currentTime += Time.deltaTime;
+                    currentTime += Time.fixedDeltaTime;
                     if (currentTime >= LerpTime) currentTime = LerpTime;
 
                     float t = currentTime / LerpTime;
@@ -968,7 +1038,7 @@ namespace YC.Camera_
 
                     float curPlayerYpos = player.transform.position.y;
 
-                    currentTime += Time.deltaTime;
+                    currentTime += Time.fixedDeltaTime;
                     if (currentTime >= LerpTime) currentTime = LerpTime;
 
                     float t = currentTime / LerpTime;

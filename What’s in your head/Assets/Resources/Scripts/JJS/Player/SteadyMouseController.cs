@@ -16,11 +16,23 @@ namespace JJS
     {
         public MagnifyingGlass glass;
         //public SteadyGrappleAction grapple;
-        public SteadyAutoAimAction autoAimWeapon;
+        [HideInInspector] public SteadyAutoAimAction autoAimWeapon;
 
         private void Awake()
         {
             cameraMain = this.gameObject.transform.GetComponent<CameraController>().FindCamera(); // 멀티용
+
+            SteadyCymbalsAction steadyCymbalsWeapon = GetComponent<SteadyCymbalsAction>();
+            SteadyGrappleAction steadyGrappleWeapon = GetComponent<SteadyGrappleAction>();
+            if (steadyCymbalsWeapon.enabled)
+            {
+                autoAimWeapon = GetComponent<SteadyCymbalsAction>();
+            }
+            else if (steadyGrappleWeapon.enabled)
+            {
+                autoAimWeapon = GetComponent<SteadyGrappleAction>();
+            }
+
             glass.mainCamera = cameraMain; // 멀티용
             if (point == null)
             {
