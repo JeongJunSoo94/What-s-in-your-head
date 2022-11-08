@@ -2837,19 +2837,18 @@ MonoBehaviour:
   mainCamera: {fileID: 0}
   playerRigidbody: {fileID: 0}
   photonView: {fileID: 0}
-  walkSpeed: 4
-  runSpeed: 7
-  dashSpeed: 20
-  airDashSpeed: 16
+  walkSpeed: 6
+  runSpeed: 10
+  dashSpeed: 12
+  airDashSpeed: 12
   inertiaSpeed: 0
   airMoveSpeed: 5
-  airMoveMaxSpeed: 10
-  jumpSpeed: 20
-  airJumpSpeed: 12
-  gravity: -20
+  jumpSpeed: 15
+  airJumpSpeed: 10
+  gravity: -15
   gravityCofactor: 10
   terminalSpeed: -20
-  knockBackVerticalSpeed: 16
+  knockBackVerticalSpeed: 8
   rotationSpeed: 720
   moveVec: {x: 0, y: 0, z: 0}
   moveDir: {x: 0, y: 0, z: 0}
@@ -2937,7 +2936,6 @@ MonoBehaviour:
   isDelayingDashJump: 0
   IsJumping: 0
   IsAirJumping: 0
-  isCumstomJumping: 0
   IsDashing: 0
   IsAirDashing: 0
   WasAirDashing: 0
@@ -3124,9 +3122,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   railAction: {fileID: 0}
   ropeAction: {fileID: 0}
-  layerFilter:
-    serializedVersion: 2
-    m_Bits: 65544
 --- !u!114 &6169874678787101720
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3151,8 +3146,8 @@ MonoBehaviour:
   currentRail: {fileID: 0}
   railStartObject: {fileID: 0}
   rangeRadius: 5
-  rangeDistance: 5
-  movingToRailSpeed: 10
+  rangeDistance: 15
+  movingToRailSpeed: 20
   departingRailOffset: 0.5
   railJumpHeight: 4
   railJumpSpeed: 6

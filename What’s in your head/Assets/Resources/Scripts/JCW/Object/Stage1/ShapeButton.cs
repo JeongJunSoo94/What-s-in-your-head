@@ -29,12 +29,12 @@ namespace JCW.Object.Stage1
             }
         }
 
-        private void Update()
+        private void FixedUpdate()
         {
             if (!isPressed)
                 return;
             if (transform.localPosition.y > pressedPos.y)
-                transform.localPosition = Vector3.MoveTowards(transform.localPosition, pressedPos, Time.deltaTime * 5f);
+                transform.localPosition = Vector3.MoveTowards(transform.localPosition, pressedPos, Time.fixedDeltaTime * 5f);
             else
             {
                 for (int i = 0 ; i< activeObjects.Count ; ++i)

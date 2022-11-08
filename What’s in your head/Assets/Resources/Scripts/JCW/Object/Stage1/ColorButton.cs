@@ -18,7 +18,7 @@ namespace JCW.Object.Stage1
         Vector3 pressedPos;
         Transform buttonTF;
 
-        Coroutine coroutine;
+        Coroutine coroutine = null;
 
         private void Awake()
         {
@@ -29,18 +29,17 @@ namespace JCW.Object.Stage1
                 transform.GetChild(i).gameObject.SetActive(i == colorNum);
             }
             pressedPos = buttonTF.localPosition;
-            pressedPos.y -= 0.6f;
+            pressedPos.y -= 0.01f;
         }
 
-        private void Update()
+        private void FixedUpdate()
         {
             if (!isPressed || isEnd)
                 return;
             if (buttonTF.localPosition.y > pressedPos.y)
-                buttonTF.localPosition = Vector3.MoveTowards(buttonTF.localPosition, pressedPos, Time.deltaTime * 5f);
+                buttonTF.localPosition = Vector3.MoveTowards(buttonTF.localPosition, pressedPos, Time.fixedDeltaTime * 5f);
             else
             {
-                var random = new System.Random(Guid.NewGuid().GetHashCode());
                 for (int i = 0 ; i < activeObjects.Count ; ++i)
                 {   
                     activeObjects[i].SetActive(false);
@@ -56,7 +55,8 @@ namespace JCW.Object.Stage1
                 Debug.Log("버튼 접촉 확인");
                 if (collision.transform.position.y >= buttonTF.position.y)
                 {
-                    StopCoroutine(coroutine);
+                    if(coroutine != null)
+                        StopCoroutine(coroutine);
                     isPressed = true;
                     ++bothPress;
                 }
@@ -89,6 +89,7 @@ namespace JCW.Object.Stage1
                 activeObjects[i].SetActive(true);
             }
             isEnd = false;
+            buttonTF.localPosition = new Vector3(buttonTF.localPosition.x, buttonTF.localPosition.y + 0.01f, buttonTF.localPosition.z);
             yield break;
 
         }
