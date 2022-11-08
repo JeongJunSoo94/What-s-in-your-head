@@ -24,14 +24,22 @@ namespace YC_OBJ
 {
     public class WoodButton : MonoBehaviour
     {
-        string WoodDoorTag = "OBJ_3_1_WoodDoor";
+        [Header("Case : 일반 버튼과 문")]
+        [SerializeField] GameObject doorObj;
+
         DoorController doorController;
         int Count = 0; // 현재 버튼 위에 몇명이 올라와 있는지 센다.
         Animator animator;
+        
+        [Space] [Space]
+
+        [Header("Case : 미로의 버튼과 문")]
+        [SerializeField] bool isInMaze = false;
+        [SerializeField] GameObject MazeDoor;
 
         void Start()
         {
-            doorController = GameObject.FindGameObjectWithTag(WoodDoorTag).GetComponent<DoorController>();
+            doorController = doorObj.GetComponent<DoorController>();
             animator = this.gameObject.GetComponent<Animator>();
         }
 
@@ -39,21 +47,28 @@ namespace YC_OBJ
         {
             Count = _count;
 
-            if (Count > 0)
+            if (isInMaze)
             {
-                doorController.SendMessage(nameof(doorController.SetOpen), true);
-
-                animator.SetBool("isUp", false);
-                animator.SetBool("isDown", true);
+                
             }
             else
-                if (Count == 0)
             {
-                doorController.SendMessage(nameof(doorController.SetOpen), false);
+                if (Count > 0)
+                {
+                    doorController.SendMessage(nameof(doorController.SetOpen), true);
 
-                animator.SetBool("isUp", true);
-                animator.SetBool("isDown", false);
-            }
+                    animator.SetBool("isUp", false);
+                    animator.SetBool("isDown", true);
+                }
+                else
+                if (Count == 0)
+                {
+                    doorController.SendMessage(nameof(doorController.SetOpen), false);
+
+                    animator.SetBool("isUp", true);
+                    animator.SetBool("isDown", false);
+                }
+            }          
         }
 
 
