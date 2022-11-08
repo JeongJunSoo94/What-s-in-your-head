@@ -3,18 +3,19 @@ using System.Collections.Generic;
 using UnityEngine;
 namespace JJS.BT
 {
-    public class WaitNode : ActionNode
+    public class RandomWaitNode : ActionNode
     {
-        public float duration = 1;
+        public float startTime = 0;
+        public float endTime = 0;
         protected override void OnStart()
         {
             if (objectInfo.delayCheck)
-            { 
+            {
                 if (objectInfo.photonView.IsMine)
-                { 
+                {
                     if (!objectInfo.delayEnable)
                     {
-                        objectInfo.DelayCoroutine(duration);
+                        objectInfo.DelayCoroutine(startTime, endTime);
                         objectInfo.delayCheck = false;
                     }
                 }
@@ -27,7 +28,7 @@ namespace JJS.BT
 
         protected override State OnUpdate()
         {
-            if(!objectInfo.photonView.IsMine)
+            if (!objectInfo.photonView.IsMine)
                 return State.Success;
             if (!objectInfo.delayEnable)
             {

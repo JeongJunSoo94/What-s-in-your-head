@@ -7,14 +7,12 @@ namespace JJS.BT
     public class TransformLookatNode : ActionNode
     {
         Flashlight find;
-        bool waitCheck = true;
         protected override void OnStart()
         {
             if (find == null)
             {
                 find = objectInfo.PrefabObject.GetComponent<Flashlight>();
             }
-            waitCheck = false;
         }
 
         protected override void OnStop()
@@ -23,17 +21,18 @@ namespace JJS.BT
 
         protected override State OnUpdate()
         {
-            if (!objectInfo.delayCheck)
-            {
-                waitCheck = true;
-            }
-            if(waitCheck&& !objectInfo.delayEnable)
+            if (!objectInfo.delayEnable)
                 return State.Success;
             if (find.TargetCheck())
             {
-                if (find.finder.targetObj.Count != 0)
+                if (find.finder.targetObj.Count == 2)
                 {
-                    objectInfo.PrefabObject.transform.LookAt(find.finder.targetObj[0].transform);
+                    Vector3 pos = (find.finder.targetObj[0].transform.position - find.finder.targetObj[1].transform.position) * 0.5f;
+                    objectInfo.PrefabObject.transform.LookAt(find.finder.targetObj[1].transform.position + pos);
+                }
+                else if(find.finder.targetObj.Count !=0)
+                {
+                    objectInfo.PrefabObject.transform.LookAt(find.finder.targetObj[0].transform.position);
                 }
             }
             return State.Running;

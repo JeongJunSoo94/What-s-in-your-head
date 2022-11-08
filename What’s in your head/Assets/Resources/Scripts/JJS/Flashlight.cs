@@ -7,13 +7,16 @@ namespace JJS
     {
         public GameObject light;
         public Light spot;
+        public Light directional;
         public Light point;
         public ConeFindTarget finder;
         public ConeFindTarget finderSpot;
+
         private void Awake()
         {
             spot = light.transform.GetChild(0).GetComponent<Light>();
-            point = light.transform.GetChild(1).GetComponent<Light>();
+            directional = light.transform.GetChild(1).GetComponent<Light>();
+            point = light.transform.GetChild(2).GetComponent<Light>();
         }
 
         private void Update()
@@ -39,6 +42,7 @@ namespace JJS
         public void SetLightColor(Color color)
         {
             spot.color = color;
+            directional.color = color;
             point.color = color;
         }
     }

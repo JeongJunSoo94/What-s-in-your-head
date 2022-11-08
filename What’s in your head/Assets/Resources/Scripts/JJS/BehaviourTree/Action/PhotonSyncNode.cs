@@ -18,6 +18,7 @@ namespace JJS.BT
                 if (local)
                 {
                     objectInfo.photonView.RPC(nameof(objectInfo.SyncCheck), RpcTarget.AllViaServer, syncChange);
+                    objectInfo.localSync = false;
                 }
             }
         }
@@ -28,13 +29,16 @@ namespace JJS.BT
 
         protected override State OnUpdate()
         {
-            if (objectInfo.syncIndex== syncChange)
-            {
-                return State.Success;
+            if (objectInfo.localSync)
+            { 
+                if (objectInfo.syncIndex== syncChange)
+                {
+                    return State.Success;
+                }
             }
             if (local)
             {
-                return State.Running;
+                return State.Success;
             }
             return State.Failure;
         }

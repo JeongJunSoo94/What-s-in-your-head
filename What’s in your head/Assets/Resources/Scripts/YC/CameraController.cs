@@ -579,8 +579,11 @@ namespace YC.Camera_
 
                 lookAndFollow = new GameObject();
                 lookAndFollow.name = "Cine_SideScrollObj";
+                lookAndFollow.transform.position 
+                    = new Vector3(lookAndFollow.transform.position.x, sideCam.transform.position.y, lookAndFollow.transform.position.z);
                 sideCam.Follow = lookAndFollow.transform;
                 sideCam.LookAt = lookAndFollow.transform;
+
                
                 OnOffCamera(null);
 
@@ -604,7 +607,7 @@ namespace YC.Camera_
 
             Vector3 centerPoint = GetCenterPoint();
 
-            lookAndFollow.transform.position = new Vector3(centerPoint.x, 0f, centerPoint.z);
+            lookAndFollow.transform.position = new Vector3(centerPoint.x, lookAndFollow.transform.position.y, centerPoint.z);
         }
 
         void ZoomInSideView() // »çÀÌµå ºä Ä«¸Þ¶ó ÁÜ  

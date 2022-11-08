@@ -1,0 +1,28 @@
+[2022-11-08 오후 5:52:30]MissingReferenceException: The object of type 'Transform' has been destroyed but you are still trying to access it.
+Your script should either check if it is null or you should not destroy the object.UnityEngine.Transform.get_position () (at <c6b52566f59b49fc861a7812a1ea2f6b>:0)
+YC.Camera_.CameraController.GetCenterPoint () (at Assets/Resources/Scripts/YC/CameraController.cs:636)
+YC.Camera_.CameraController.MoveInSideView () (at Assets/Resources/Scripts/YC/CameraController.cs:608)
+YC.Camera_.CameraController.FixedUpdate () (at Assets/Resources/Scripts/YC/CameraController.cs:178)
+
+[2022-11-08 오후 8:00:36]NullReferenceException: Object reference not set to an instance of an objectJCW.Object.RecieverMic.Play (System.Boolean enable) (at Assets/Resources/Scripts/JCW/Object/Stage2/RecieverMic.cs:26)
+JCW.Object.RecieverMic.OnTriggerExit (UnityEngine.Collider other) (at Assets/Resources/Scripts/JCW/Object/Stage2/RecieverMic.cs:55)
+
+[2022-11-08 오후 9:37:21]NullReferenceException: Object reference not set to an instance of an objectJCW.Spawner.Spawner.Respawn (UnityEngine.Vector3 pos, UnityEngine.Quaternion rotation) (at Assets/Resources/Scripts/JCW/NavMesh/Spawner.cs:53)
+JJS.Weapon.WaterGun.Shoot () (at Assets/Resources/Scripts/JJS/WaterGun.cs:97)
+JJS.Weapon.WaterGun.ShootStart () (at Assets/Resources/Scripts/JJS/WaterGun.cs:72)
+JJS.NellaMouseController.SetWeaponEnable (System.Boolean enable) (at Assets/Resources/Scripts/JJS/Player/NellaMouseController.cs:172)
+System.Reflection.RuntimeMethodInfo.Invoke (System.Object obj, System.Reflection.BindingFlags invokeAttr, System.Reflection.Binder binder, System.Object[] parameters, System.Globalization.CultureInfo culture) (at <c2a97e0383e8404c9fc0ae19d58f57f1>:0)
+Rethrow as TargetInvocationException: Exception has been thrown by the target of an invocation.
+System.Reflection.RuntimeMethodInfo.Invoke (System.Object obj, System.Reflection.BindingFlags invokeAttr, System.Reflection.Binder binder, System.Object[] parameters, System.Globalization.CultureInfo culture) (at <c2a97e0383e8404c9fc0ae19d58f57f1>:0)
+System.Reflection.MethodBase.Invoke (System.Object obj, System.Object[] parameters) (at <c2a97e0383e8404c9fc0ae19d58f57f1>:0)
+Photon.Pun.PhotonNetwork.ExecuteRpc (ExitGames.Client.Photon.Hashtable rpcData, Photon.Realtime.Player sender) (at Assets/AddOn/Photon/PhotonUnityNetworking/Code/PhotonNetworkPart.cs:553)
+Photon.Pun.PhotonNetwork.OnEvent (ExitGames.Client.Photon.EventData photonEvent) (at Assets/AddOn/Photon/PhotonUnityNetworking/Code/PhotonNetworkPart.cs:2201)
+Photon.Realtime.LoadBalancingClient.OnEvent (ExitGames.Client.Photon.EventData photonEvent) (at Assets/AddOn/Photon/PhotonRealtime/Code/LoadBalancingClient.cs:3364)
+ExitGames.Client.Photon.PeerBase.DeserializeMessageAndCallback (ExitGames.Client.Photon.StreamBuffer stream) (at <b01774392bf441f59388585f8e74649d>:0)
+ExitGames.Client.Photon.EnetPeer.DispatchIncomingCommands () (at <b01774392bf441f59388585f8e74649d>:0)
+ExitGames.Client.Photon.PhotonPeer.DispatchIncomingCommands () (at <b01774392bf441f59388585f8e74649d>:0)
+Photon.Pun.PhotonHandler.Dispatch () (at Assets/AddOn/Photon/PhotonUnityNetworking/Code/PhotonHandler.cs:226)
+Rethrow as AggregateException: Caught 11 exception(s) in methods called by DispatchIncomingCommands(). Rethrowing first only (see above). (Exception has been thrown by the target of an invocation.)
+Photon.Pun.PhotonHandler.Dispatch () (at Assets/AddOn/Photon/PhotonUnityNetworking/Code/PhotonHandler.cs:242)
+Photon.Pun.PhotonHandler.FixedUpdate () (at Assets/AddOn/Photon/PhotonUnityNetworking/Code/PhotonHandler.cs:145)
+
