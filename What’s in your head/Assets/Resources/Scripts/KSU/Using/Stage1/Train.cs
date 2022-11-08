@@ -1,4 +1,4 @@
-using Photon.Pun;
+    using Photon.Pun;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -23,6 +23,7 @@ public class Train : MonoBehaviour
         trainCart.m_Path = track;
         photonView = PhotonView.Get(this);
         InitTrain();
+        ActivateTrain();
     }
 
     // Update is called once per frame
@@ -37,21 +38,26 @@ public class Train : MonoBehaviour
     void InitTrain()
     {
         isEnd = false;
+        trainCart.m_Speed = 0f;
         if(isReverseRun)
         {
-            trainCart.m_Speed = -trainSpeed;
             trainCart.m_Position = track.m_Waypoints.Length - 1.005f;
             if (destPos <= 0)
                 destPos = 0.005f;
         }
         else
         {
-            trainCart.m_Speed = trainSpeed;
             trainCart.m_Position = 0.005f;
+            train.transform.localRotation = Quaternion.Euler(Vector3.up * 180f);
             if (destPos <= 0)
                 destPos = track.m_Waypoints.Length - 1.005f;
         }
-        train.SetActive(true); 
+    }
+
+    void ActivateTrain()
+    {
+        train.SetActive(true);
+        trainCart.m_Speed = isReverseRun ? -trainSpeed : trainSpeed;
     }
 
     void CheckEnd()
@@ -76,7 +82,8 @@ public class Train : MonoBehaviour
     {
         isEnd = true;
         train.SetActive(false);
-        yield return new WaitForSeconds(delayTime);
         InitTrain();
+        yield return new WaitForSeconds(delayTime);
+        ActivateTrain();
     }
 }

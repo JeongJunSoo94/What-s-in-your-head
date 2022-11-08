@@ -25390,8 +25390,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   backView_MouseSensitivity: 25
-  sholderView_MouseSensitivity: 25
-  sholderAxisY_MaxUp: 0.05
+  sholderView_MouseSensitivity: 10
+  sholderAxisY_MaxUp: 0.2
   sholderAxisY_MaxDown: 0.5
   AmplitudeGain: 1
   FrequebctGain: 1.5
@@ -25400,12 +25400,11 @@ MonoBehaviour:
   FrequebctGainSide: 1
   ShakeTimeSide: 2
   platformLerpTime: 0.7
-  CineNellaBack: {fileID: 0}
-  CineNellaSholder: {fileID: 0}
-  CineSteadyBack: {fileID: 5990922643141382604, guid: b32e7ce8c1943384d84813d4c3759cfb, type: 3}
-  CineSteadySholder: {fileID: 3213764636192488147, guid: 8e501172630f3094683848937acc69b3, type: 3}
+  CineBack: {fileID: 5990922643141382604, guid: 09dc3c3034d79ec44845aeba912c86ab, type: 3}
+  CineSholder: {fileID: 3213764636192488147, guid: 75991490f73520141b367ac4d7e9caeb, type: 3}
   CineLookObj_Back: {fileID: 3934384160282713336, guid: 90489282f40883d4a9fa701115ed4580, type: 3}
   CineFollowObj_Back: {fileID: 1166992463261942446, guid: 2413b7252612e7841b1c388e19af8cf3, type: 3}
+  NoiseProfile: {fileID: 11400000, guid: 69ce8388f6785dd4c8c39915efece2f4, type: 2}
 --- !u!114 &2982061266958903733
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -25430,6 +25429,7 @@ MonoBehaviour:
   airDashSpeed: 16
   inertiaSpeed: 0
   airMoveSpeed: 5
+  airMoveMaxSpeed: 10
   jumpSpeed: 20
   airJumpSpeed: 12
   gravity: -20
@@ -25442,6 +25442,7 @@ MonoBehaviour:
   dashVec: {x: 0, y: 0, z: 0}
   inertiaNormalVec: {x: 0, y: 0, z: 0}
   knockBackVec: {x: 0, y: 0, z: 0}
+  isOn_HP_UI: 0
 --- !u!114 &1441877394586250121
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -25518,6 +25519,7 @@ MonoBehaviour:
   isDelayingDashJump: 0
   IsJumping: 0
   IsAirJumping: 0
+  isCumstomJumping: 0
   IsDashing: 0
   IsAirDashing: 0
   WasAirDashing: 0
@@ -25592,6 +25594,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   railAction: {fileID: 0}
   ropeAction: {fileID: 0}
+  layerFilter:
+    serializedVersion: 2
+    m_Bits: 0
 --- !u!114 &-3173423300216164636
 MonoBehaviour:
   m_ObjectHideFlags: 0

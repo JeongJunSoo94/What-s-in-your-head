@@ -9,9 +9,16 @@ namespace JCW.Object.Stage1
         [Header("움직일 장애물")] [SerializeField] Transform obstacleTF;
         [Header("장애물을 이동 시킬 로컬 위치")] [SerializeField] Vector3 movLocalPos;
         [Header("이동 속도")] [SerializeField] float moveSpeed = 5f;
+        [Header("원격으로 킬것인지")] [SerializeField] bool isRemotePlay = false;
 
-        int bothCount = 0;
+        public int bothCount = 0;
         bool isStart = false;
+        Vector3 initPos;
+
+        private void Awake()
+        {
+            initPos = transform.localPosition;
+        }
 
         private void OnCollisionEnter(Collision collision)
         {
@@ -19,8 +26,9 @@ namespace JCW.Object.Stage1
             {
                 if (collision.transform.position.y >= this.transform.position.y)
                 {
-                    ++bothCount;
-                    if(bothCount>=2 && !isStart)
+                    if(!isRemotePlay)
+                        ++bothCount;
+                    if(bothCount>= 2 && !isStart)
                     {
                         isStart = true;
                         StartCoroutine(nameof(moveObstacle));
@@ -33,7 +41,10 @@ namespace JCW.Object.Stage1
         {
             if (collision.gameObject.CompareTag("Nella") || collision.gameObject.CompareTag("Steady"))
             {
-                --bothCount;
+                if (!isRemotePlay)
+                    --bothCount;
+                else if (bothCount <= 0)
+                    StartCoroutine(nameof(Reset));
             }
         }
 
@@ -41,11 +52,19 @@ namespace JCW.Object.Stage1
         {
             while(Vector3.SqrMagnitude(obstacleTF.localPosition - movLocalPos) > 0.1f)
             {
-                obstacleTF.localPosition = Vector3.MoveTowards(obstacleTF.localPosition, movLocalPos, Time.deltaTime * moveSpeed);
+                obstacleTF.localPosition = Vector3.MoveTowards(obstacleTF.localPosition, movLocalPos, Time.fixedDeltaTime * moveSpeed);
                 yield return null;
             }
+            yield break;
+        }
 
-            Destroy(this);
+        IEnumerator Reset()
+        {
+            while (Vector3.SqrMagnitude(obstacleTF.localPosition - initPos) > 0.1f)
+            {
+                obstacleTF.localPosition = Vector3.MoveTowards(obstacleTF.localPosition, initPos, Time.fixedDeltaTime * moveSpeed);
+                yield return null;
+            }
             yield break;
         }
     }
