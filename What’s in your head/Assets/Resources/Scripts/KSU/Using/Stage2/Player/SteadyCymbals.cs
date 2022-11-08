@@ -30,13 +30,16 @@ namespace KSU.AutoAim.Player.Object
         // Update is called once per frame
         void FixedUpdate()
         {
-            if (!isEndPosition)
+            if(spawner != null)
             {
-                MoveToEndPosition();
-            }
-            else
-            {
-                MoveToPlayer();
+                if (!isEndPosition)
+                {
+                    MoveToEndPosition();
+                }
+                else
+                {
+                    MoveToPlayer();
+                }
             }
         }
 

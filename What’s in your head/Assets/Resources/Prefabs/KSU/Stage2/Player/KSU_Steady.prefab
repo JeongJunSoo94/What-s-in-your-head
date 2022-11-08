@@ -25400,6 +25400,7 @@ MonoBehaviour:
   airDashSpeed: 16
   inertiaSpeed: 0
   airMoveSpeed: 5
+  airMoveMaxSpeed: 10
   jumpSpeed: 20
   airJumpSpeed: 12
   gravity: -20
@@ -25489,6 +25490,7 @@ MonoBehaviour:
   isDelayingDashJump: 0
   IsJumping: 0
   IsAirJumping: 0
+  isCumstomJumping: 0
   IsDashing: 0
   IsAirDashing: 0
   WasAirDashing: 0
@@ -25563,6 +25565,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   railAction: {fileID: 0}
   ropeAction: {fileID: 0}
+  layerFilter:
+    serializedVersion: 2
+    m_Bits: 0
 --- !u!114 &-3173423300216164636
 MonoBehaviour:
   m_ObjectHideFlags: 0
