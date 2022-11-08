@@ -25350,6 +25350,12 @@ MonoBehaviour:
   - Type: 4
     SynchronizeType: 0
     Name: AttackedTrigger
+  - Type: 4
+    SynchronizeType: 0
+    Name: isShootingCymbals
+  - Type: 4
+    SynchronizeType: 0
+    Name: WasShootingCymbals
   m_SynchronizeLayers:
   - SynchronizeType: 2
     LayerIndex: 0
@@ -25418,24 +25424,25 @@ MonoBehaviour:
   mainCamera: {fileID: 0}
   playerRigidbody: {fileID: 0}
   photonView: {fileID: 0}
-  walkSpeed: 8
-  runSpeed: 14
-  dashSpeed: 20
-  airDashSpeed: 16
+  walkSpeed: 6
+  runSpeed: 10
+  dashSpeed: 12
+  airDashSpeed: 12
   inertiaSpeed: 0
   airMoveSpeed: 5
-  jumpSpeed: 20
-  airJumpSpeed: 12
-  gravity: -20
+  jumpSpeed: 15
+  airJumpSpeed: 10
+  gravity: -15
   gravityCofactor: 10
   terminalSpeed: -20
-  knockBackVerticalSpeed: 16
+  knockBackVerticalSpeed: 8
   rotationSpeed: 720
   moveVec: {x: 0, y: 0, z: 0}
   moveDir: {x: 0, y: 0, z: 0}
   dashVec: {x: 0, y: 0, z: 0}
   inertiaNormalVec: {x: 0, y: 0, z: 0}
   knockBackVec: {x: 0, y: 0, z: 0}
+  isOn_HP_UI: 0
 --- !u!114 &1441877394586250121
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -25477,7 +25484,7 @@ MonoBehaviour:
   AimCool: 0.5
   notRotatoin: 0
   glass: {fileID: 8768540777746556850}
-  grapple: {fileID: 2953762621103950369}
+  autoAimWeapon: {fileID: 0}
 --- !u!114 &8750876866218855433
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -25610,8 +25617,8 @@ MonoBehaviour:
   currentRail: {fileID: 0}
   railStartObject: {fileID: 0}
   rangeRadius: 5
-  rangeDistance: 5
-  movingToRailSpeed: 10
+  rangeDistance: 15
+  movingToRailSpeed: 20
   departingRailOffset: 0.5
   railJumpHeight: 4
   railJumpSpeed: 6
@@ -25665,7 +25672,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bc8bd3eaf0d7d5f44a968f46cbb73a7c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  lookAtObj: {fileID: 2713921362035335090, guid: afc9727a139e5874f86ed8923a44d1ed, type: 3}
   layerFilterForAutoAim:
     serializedVersion: 2
     m_Bits: 101896
@@ -25675,15 +25681,13 @@ MonoBehaviour:
   autoAimObjectSpawner: {fileID: 1911663723217604559, guid: afc9727a139e5874f86ed8923a44d1ed, type: 3}
   autoAimObject: {fileID: 7909980709306676830, guid: c9b54073bf48f804ebee62282b5e85af, type: 3}
   aimUI: {fileID: 8657421885556112005, guid: afc9727a139e5874f86ed8923a44d1ed, type: 3}
-  cymbalsSpeed: 10
-  cymbalsDepartOffset: 0.5
+  autoAimObjectSpeed: 10
+  autoAimObjectDepartOffset: 0.5
   rangeRadius: 10
   rangeDistance: 30
-  grapplingRange: 30
+  autoAimObjectRange: 30
   rangeAngle: 8
   grappleMoveSpeed: 25
-  grappleSpeed: 40
-  grappleDepartOffset: 0.5
   escapeGrapplePower: 15
 --- !u!114 &5821330284378002438
 MonoBehaviour:

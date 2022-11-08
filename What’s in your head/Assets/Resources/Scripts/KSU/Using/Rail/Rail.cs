@@ -211,6 +211,7 @@ namespace KSU
                         cart = SteadyCart;
                         break;
                 }
+                cart.transform.position = startPos;
                 float totalLength = Vector3.Distance(track.m_Waypoints[startIndex].position, track.m_Waypoints[startIndex + 1].position);
                 float startLength = Vector3.Distance(track.m_Waypoints[startIndex].position + offset, startPos);
                 float rate = startLength / totalLength;

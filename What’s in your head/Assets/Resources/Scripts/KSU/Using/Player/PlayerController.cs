@@ -12,6 +12,7 @@ using YC.Camera_Single;
 using JCW.Object;
 using JJS;
 using KSU.AutoAim.Object.Monster;
+using JCW.Object.Stage1;
 
 namespace KSU
 {
@@ -136,7 +137,7 @@ namespace KSU
 
         private void FixedUpdate()
         {
-            if (!photonView.IsMine || characterState.isStopped )
+            if (!photonView.IsMine || characterState.isStopped)
             {
                 playerRigidbody.velocity = Vector3.zero;
                 return;
@@ -203,7 +204,7 @@ namespace KSU
 
         void InitInteraction()
         {
-            
+
             GetComponent<PlayerInteraction>().InitInteraction();
         }
 
@@ -225,7 +226,7 @@ namespace KSU
             }
             characterState.CheckMove(playerRigidbody.velocity);
         }
-        
+
 
         public void ResetLocalPosition()
         {
@@ -255,7 +256,7 @@ namespace KSU
             InitInteraction();
             InitController();
             if (photonView.IsMine)
-            { 
+            {
                 GameManager.Instance.curPlayerHP = 12;
             }
 
@@ -386,6 +387,20 @@ namespace KSU
                 }
             }
         }
+
+        void InputCustomJump(float customJumpSpeed)
+        {
+            if (characterState.isOutOfControl || characterState.isStopped || characterState.isRiding)
+                return;
+
+            //characterState.SetCustomJumpState();
+            Vector3 horVel = playerRigidbody.velocity;
+            horVel.y = 0;
+            transform.LookAt(transform.position + horVel);
+            MakeinertiaVec(horVel.magnitude, horVel.normalized);
+            moveVec.y = customJumpSpeed;
+        }
+
         public void InputDash()
         {
             if (characterState.isOutOfControl || characterState.isStopped || characterState.isRiding || !characterState.CanJump)
@@ -425,7 +440,7 @@ namespace KSU
 
             if (characterState.top)
             {
-                if(!playerMouse.notRotatoin)
+                if (!playerMouse.notRotatoin)
                     RotateTop();
             }
             else if (characterState.aim)
@@ -487,7 +502,7 @@ namespace KSU
                     moveVec.y = terminalSpeed;
                 }
 
-                if(characterState.isAirBlocked)
+                if (characterState.isAirBlocked)
                 {
                     playerRigidbody.velocity = Vector3.up * moveVec.y;
                 }
@@ -628,33 +643,47 @@ namespace KSU
 
         private void OnTriggerEnter(Collider other)
         {
-            if(!playerAnimator.GetBool("isAttacked") && !playerAnimator.GetBool("isKnockBack") && !playerAnimator.GetBool("isDead"))
+            switch (other.tag)
             {
-                switch (other.tag)
-                {
-                    case "MonsterAttack":
-                        {
-                            GetDamage(other.GetComponentInParent<DefenseMonster>().attackDamage, DamageType.Attacked);
-                        }
-                        break;
-                    case "MonsterRush":
-                        {
-                            GetDamage(other.GetComponentInParent<TrippleHeadSnake>().rushDamage, DamageType.KnockBack, other.transform.position, other.GetComponentInParent<TrippleHeadSnake>().rushSpeed);
-                        }
-                        break;
-                    case "DeadZone":
-                        {
-                            GetDamage(12, DamageType.Dead);
-                        }
-                        break;
-                }
+                case "MonsterAttack":
+                    {
+                        GetDamage(other.GetComponentInParent<DefenseMonster>().attackDamage, DamageType.Attacked);
+                    }
+                    break;
+                case "MonsterRush":
+                    {
+                        GetDamage(other.GetComponentInParent<TrippleHeadSnake>().rushDamage, DamageType.KnockBack, other.transform.position, other.GetComponentInParent<TrippleHeadSnake>().rushSpeed);
+                    }
+                    break;
+                case "DeadZone":
+                    {
+                        GetDamage(12, DamageType.Dead);
+                    }
+                    break;
+            }
+        }
+
+        private void OnCollisionEnter(Collision collision)
+        {
+            switch (collision.gameObject.tag)
+            {
+                case "Trampolin":
+                    {
+                        InputCustomJump(collision.gameObject.GetComponent<JumpingPlatform>().jumpSpeed);
+                    }
+                    break;
+                case "DeadZone":
+                    {
+                        GetDamage(12, DamageType.Dead);
+                    }
+                    break;
             }
         }
         [PunRPC]
         public void GetDamage(int damage, DamageType type, Vector3 colliderPos, float knockBackSpeed)
         {
             string damageTirgger = "DeadTrigger";
-            switch(type)
+            switch (type)
             {
                 case DamageType.Attacked:
                     damageTirgger = "AttackedTrigger";
@@ -675,7 +704,7 @@ namespace KSU
             }
             else
             {
-                if(damageTirgger == "KnockBackTrigger")
+                if (damageTirgger == "KnockBackTrigger")
                 {
                     Vector3 knockBackHorVec = (transform.position - colliderPos);
                     knockBackHorVec.y = 0;
@@ -687,7 +716,7 @@ namespace KSU
                 playerAnimator.SetBool(damageTirgger, true);
             }
         }
-        
+
         [PunRPC]
         public void GetDamage(int damage, DamageType type)
         {
