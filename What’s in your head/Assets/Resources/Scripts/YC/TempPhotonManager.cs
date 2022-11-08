@@ -30,7 +30,7 @@ namespace YC.Photon
         [SerializeField] string nellaPrefabDirectory;
         [SerializeField] string steadyPrefabDirectory;
         [SerializeField] public bool isNella;
-
+        [SerializeField] GameObject StartPosition;
 
         static public TempPhotonManager Instance = null;
 
@@ -123,22 +123,13 @@ namespace YC.Photon
                 Debug.Log($"{player.Value.NickName}, {player.Value.ActorNumber}");
             }
 
-
-
-            // 포톤 네트워크를 통해 PhotonNetwork.Instantiate한 오브젝트의 MonoBehaviour. Start()함수는 실행되지 않는다.
-            // 따라서 OnEnable 과 OnDisable 을 반드시 구현 해 주어야 합니다.
-            // https://doc.photonengine.com/ko-kr/pun/current/gameplay/instantiation
-
-
             if (PhotonNetwork.CurrentRoom.PlayerCount == 1)
             {              
                 if(isNella)
                 {
-                    PhotonNetwork.Instantiate("Prefabs/YC/MainCamera_Nella", new Vector3(0, 0, 0), Quaternion.identity, 0);
+                    PhotonNetwork.Instantiate("Prefabs/YC/MainCamera_Nella", StartPosition.transform.position, Quaternion.identity, 0);
                     PhotonNetwork.Instantiate("Prefabs/JCW/NellaMousePoint", new Vector3(0, 0, 0), Quaternion.identity, 0);
-                    //PhotonNetwork.Instantiate(nellaPrefabDirectory, new Vector3(-262.4f, -2.2f, 267.9f), Quaternion.identity, 0);
-                    PhotonNetwork.Instantiate(nellaPrefabDirectory, new Vector3(7f, 27f, 12.5f), Quaternion.identity, 0);
-                    //PhotonNetwork.Instantiate(nellaPrefabDirectory, new Vector3(5, 0, 0), Quaternion.identity, 0);
+                    PhotonNetwork.Instantiate(nellaPrefabDirectory, StartPosition.transform.position, Quaternion.identity, 0);
                     GameManager.Instance.characterOwner.Add(true, true);
                     GameManager.Instance.characterOwner.Add(false, false);
                     GameManager.Instance.isAlive.Add(true, true);
@@ -146,35 +137,22 @@ namespace YC.Photon
                 }
                 else
                 {
-                    PhotonNetwork.Instantiate("Prefabs/YC/MainCamera_Steady", new Vector3(0, 0, 0), Quaternion.identity, 0);
+                    PhotonNetwork.Instantiate("Prefabs/YC/MainCamera_Steady", StartPosition.transform.position, Quaternion.identity, 0);
                     PhotonNetwork.Instantiate("Prefabs/JCW/SteadyMousePoint", new Vector3(0, 0, 0), Quaternion.identity, 0);
-                    //PhotonNetwork.Instantiate(steadyPrefabDirectory, new Vector3(-262.4f, -2.2f, 267.9f), Quaternion.identity, 0);
-                    PhotonNetwork.Instantiate(steadyPrefabDirectory, new Vector3(7f, 27f, 12.5f), Quaternion.identity, 0);
-                    //PhotonNetwork.Instantiate(steadyPrefabDirectory, new Vector3(-5, 0, 0), Quaternion.identity, 0);
+                    PhotonNetwork.Instantiate(steadyPrefabDirectory, StartPosition.transform.position, Quaternion.identity, 0);
                     GameManager.Instance.characterOwner.Add(true, false);
                     GameManager.Instance.characterOwner.Add(false, true);
                     GameManager.Instance.isAlive.Add(true, true);
                     GameManager.Instance.isAlive.Add(false, true);
-                }
-                
-                //CameraManager.Instance.cameras[0] = GameObject.FindGameObjectWithTag("NellaCamera").GetComponent<Camera>();
-
-                //CameraManager.Instance.cameras[0] = 
-                //    PhotonNetwork.Instantiate("Prefabs/YC/MainCamera_Nella", new Vector3(0, 0, 0), Quaternion.identity, 0).GetComponent<Camera>();
-
-                //Inst.GetComponent<CameraController>().mainCam = CameraManager.Instance.cameras[0];
-                //Inst.GetComponent<CameraController>().cinemachineBrain = CameraManager.Instance.cameras[0].GetComponent<CinemachineBrain>();
-
-            }
+                }     
+            }   
             else if (PhotonNetwork.CurrentRoom.PlayerCount == 2)
             {
                 if (isNella)
                 {
-                    PhotonNetwork.Instantiate("Prefabs/YC/MainCamera_Steady", new Vector3(-262.4f, -2.2f, 267.9f), Quaternion.identity, 0);
+                    PhotonNetwork.Instantiate("Prefabs/YC/MainCamera_Steady", StartPosition.transform.position, Quaternion.identity, 0);
                     PhotonNetwork.Instantiate("Prefabs/JCW/SteadyMousePoint", new Vector3(0, 0, 0), Quaternion.identity, 0);
-                    //PhotonNetwork.Instantiate(steadyPrefabDirectory, new Vector3(-262.4f, -2.2f, 267.9f), Quaternion.identity, 0);
-                    PhotonNetwork.Instantiate(steadyPrefabDirectory, new Vector3(7f, 27f, 12.5f), Quaternion.identity, 0);
-                    //PhotonNetwork.Instantiate(steadyPrefabDirectory, new Vector3(-5, 0, 0), Quaternion.identity, 0);
+                    PhotonNetwork.Instantiate(steadyPrefabDirectory, StartPosition.transform.position, Quaternion.identity, 0);
                     GameManager.Instance.characterOwner.Add(false, false);
                     GameManager.Instance.characterOwner.Add(true, true);
                     GameManager.Instance.isAlive.Add(true, true);
@@ -182,11 +160,9 @@ namespace YC.Photon
                 }
                 else
                 {
-                    PhotonNetwork.Instantiate("Prefabs/YC/MainCamera_Nella", new Vector3(0, 0, 0), Quaternion.identity, 0);
+                    PhotonNetwork.Instantiate("Prefabs/YC/MainCamera_Nella", StartPosition.transform.position, Quaternion.identity, 0);
                     PhotonNetwork.Instantiate("Prefabs/JCW/NellaMousePoint", new Vector3(0, 0, 0), Quaternion.identity, 0);
-                    //PhotonNetwork.Instantiate(nellaPrefabDirectory, new Vector3(-262.4f, -2.2f, 267.9f), Quaternion.identity, 0);
-                    PhotonNetwork.Instantiate(nellaPrefabDirectory, new Vector3(7f, 27f, 12.5f), Quaternion.identity, 0);
-                    //PhotonNetwork.Instantiate(nellaPrefabDirectory, new Vector3(5, 0, 0), Quaternion.identity, 0);
+                    PhotonNetwork.Instantiate(nellaPrefabDirectory, StartPosition.transform.position, Quaternion.identity, 0);
                     GameManager.Instance.characterOwner.Add(true, false);
                     GameManager.Instance.characterOwner.Add(false, true);
                     GameManager.Instance.isAlive.Add(true, true);
