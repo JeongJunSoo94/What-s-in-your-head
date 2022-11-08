@@ -30,6 +30,7 @@ namespace JCW.UI.InGame
         float curTargetTime = 0f;
         float curNormalTime = 0f;
         float detectAngle;
+        PlayerState aimState;
        
         private void Awake()
         {
@@ -41,18 +42,20 @@ namespace JCW.UI.InGame
             }
             StartCoroutine(nameof(WaitForPlayer));
             playerTF = this.transform.parent;
+            aimState = playerTF.GetComponent<PlayerController>().characterState;
             aimImage = imgTransform.GetComponent<Image>();
 
         }
 
-        private void Update()
+        private void FixedUpdate()
         {
             if (targetTopviewTF == null)
                 return;
-            aimImage.enabled = playerTF.GetComponent<PlayerController>().characterState.aim;
+            aimImage.enabled = aimState.aim;
             // ÇöÀç Å¾ºäÀÏ ¶§
             if (GameManager.Instance.isTopView)
             {
+                Debug.Log("Å¾ºäÀÓ");
                 if (!wasTopView)
                 {
                     wasTopView = true;
@@ -80,9 +83,9 @@ namespace JCW.UI.InGame
                     curNormalTime = 0f;
                     if (!isTargeting)
                     {
-                        imgTransform.position = Vector3.Lerp(imgTransform.position, curCam.WorldToScreenPoint(targetTF.position), Time.deltaTime * (detectAngle * 0.5f + 3.5f));
-                        curTargetTime += Time.deltaTime;
-                        if(curTargetTime >= targetingTime)
+                        imgTransform.position = Vector3.Lerp(imgTransform.position, curCam.WorldToScreenPoint(targetTF.position), Time.fixedDeltaTime * (detectAngle * 0.5f + 3.5f));
+                        curTargetTime += Time.fixedDeltaTime;
+                        if (curTargetTime >= targetingTime)
                         {
                             curTargetTime = 0f;
                             isTargeting = true;
@@ -95,10 +98,10 @@ namespace JCW.UI.InGame
                 {
                     isTargeting = false;
                     curTargetTime = 0f;
-                    if(!isNormal)
+                    if (!isNormal)
                     {
-                        imgTransform.position = Vector3.Lerp(imgTransform.position, new Vector3((curCam.rect.x + curCam.rect.width + curCam.rect.x) * 960f, 540f, 0), Time.deltaTime * (detectAngle*0.5f+3.5f));
-                        curNormalTime += Time.deltaTime;
+                        imgTransform.position = Vector3.Lerp(imgTransform.position, new Vector3((curCam.rect.x + curCam.rect.width + curCam.rect.x) * 960f, 540f, 0), Time.fixedDeltaTime * (detectAngle * 0.5f + 3.5f));
+                        curNormalTime += Time.fixedDeltaTime;
                         if (curNormalTime >= targetingTime)
                         {
                             curNormalTime = 0f;
@@ -106,7 +109,9 @@ namespace JCW.UI.InGame
                         }
                     }
                     else
+                    {
                         imgTransform.position = new Vector3((curCam.rect.x + curCam.rect.width + curCam.rect.x) * 960f, 540f, 0);
+                    }
                 }
             }
         }

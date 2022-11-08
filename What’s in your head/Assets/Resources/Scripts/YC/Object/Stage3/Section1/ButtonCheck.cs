@@ -10,7 +10,9 @@ namespace YC_OBJ
         string interactionTag2 = "Steady";
 
         // 토글 모드처럼 눌려졌다 떼졌다 할 것인지
-        bool isToggle = false; 
+
+        [Header("토글 모드 (눌렀다 뗐다")]
+        [SerializeField] bool isToggle = false;
         bool isSet = false;
 
         [SerializeField] WoodButton woodButton;

@@ -28,7 +28,6 @@ namespace YC.CameraManager_
         CharacterCamera curFullCamera;
 
         Coroutine curCoroutine;
-
         bool wasTopView;
 
         void Awake()

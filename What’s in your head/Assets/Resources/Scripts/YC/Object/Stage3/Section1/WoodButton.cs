@@ -36,10 +36,15 @@ namespace YC_OBJ
         [Header("Case : 미로의 버튼과 문")]
         [SerializeField] bool isInMaze = false;
         [SerializeField] GameObject MazeDoor;
+        MazeDoorController mazeDoorController;
 
         void Start()
         {
-            doorController = doorObj.GetComponent<DoorController>();
+            if(!isInMaze)
+                doorController = doorObj.GetComponent<DoorController>();
+            if(isInMaze)
+                mazeDoorController = MazeDoor.GetComponent<MazeDoorController>();
+
             animator = this.gameObject.GetComponent<Animator>();
         }
 
@@ -47,12 +52,26 @@ namespace YC_OBJ
         {
             Count = _count;
 
-            if (isInMaze)
+            if (isInMaze) // << : 2섹션 (미로 안에 있는 문)
             {
-                
+                if (Count > 0)
+                {
+                    mazeDoorController.SendMessage(nameof(mazeDoorController.ControlDoor), true);
+                    animator.SetBool("isUp", false);
+                    animator.SetBool("isDown", true);
+
+                }
+                else if (Count == 0)
+                {
+                    mazeDoorController.SendMessage(nameof(mazeDoorController.ControlDoor), false);
+                    animator.SetBool("isUp", false);
+                    animator.SetBool("isUp", true);
+                    animator.SetBool("isDown", false);
+                }
             }
-            else
+            else // << : 1섹션 (2섹션으로 들어가는 출입문)
             {
+
                 if (Count > 0)
                 {
                     doorController.SendMessage(nameof(doorController.SetOpen), true);
@@ -60,8 +79,7 @@ namespace YC_OBJ
                     animator.SetBool("isUp", false);
                     animator.SetBool("isDown", true);
                 }
-                else
-                if (Count == 0)
+                else if (Count == 0)
                 {
                     doorController.SendMessage(nameof(doorController.SetOpen), false);
 
