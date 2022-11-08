@@ -189,6 +189,12 @@ namespace YC.Camera_
                 return;
             }
 
+            if(playerState.isCumstomJumping)
+            {
+                FollowPlayer();
+                return;
+            }
+
             if (isJumping && !isLerp)
             {
                 if (!wasEndSet)
@@ -733,6 +739,18 @@ namespace YC.Camera_
 
 
         // ====================  [점프 보간 함수]  ==================== //
+
+        void FollowPlayer()
+        {
+            lookatBackObj.position
+                            = new Vector3(player.transform.position.x,
+                                        player.transform.position.y + lookatObjOriginY,
+                                        player.transform.position.z);
+            followObj.position
+                        = new Vector3(player.transform.position.x,
+                                    player.transform.position.y,
+                                    player.transform.position.z);
+        }
 
         void SetCineObjPos() // Look과 Follow의 x, y값 업데이트  
         {

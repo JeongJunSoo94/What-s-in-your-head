@@ -25157,7 +25157,6 @@ Transform:
   - {fileID: 8384727844485658405}
   - {fileID: 8800939031453311286}
   - {fileID: 7720751859513143485}
-  - {fileID: 1773498514369647624}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -25390,8 +25389,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   backView_MouseSensitivity: 25
-  sholderView_MouseSensitivity: 25
-  sholderAxisY_MaxUp: 0.05
+  sholderView_MouseSensitivity: 10
+  sholderAxisY_MaxUp: 0.2
   sholderAxisY_MaxDown: 0.5
   AmplitudeGain: 1
   FrequebctGain: 1.5
@@ -25400,12 +25399,11 @@ MonoBehaviour:
   FrequebctGainSide: 1
   ShakeTimeSide: 2
   platformLerpTime: 0.7
-  CineNellaBack: {fileID: 0}
-  CineNellaSholder: {fileID: 0}
-  CineSteadyBack: {fileID: 5990922643141382604, guid: b32e7ce8c1943384d84813d4c3759cfb, type: 3}
-  CineSteadySholder: {fileID: 3213764636192488147, guid: 520238bd3e35f26438205420c20885f7, type: 3}
+  CineBack: {fileID: 5990922643141382604, guid: 09dc3c3034d79ec44845aeba912c86ab, type: 3}
+  CineSholder: {fileID: 3213764636192488147, guid: 75991490f73520141b367ac4d7e9caeb, type: 3}
   CineLookObj_Back: {fileID: 3934384160282713336, guid: 90489282f40883d4a9fa701115ed4580, type: 3}
   CineFollowObj_Back: {fileID: 1166992463261942446, guid: 2413b7252612e7841b1c388e19af8cf3, type: 3}
+  NoiseProfile: {fileID: 11400000, guid: 69ce8388f6785dd4c8c39915efece2f4, type: 2}
 --- !u!114 &2982061266958903733
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -25430,6 +25428,7 @@ MonoBehaviour:
   airDashSpeed: 12
   inertiaSpeed: 0
   airMoveSpeed: 5
+  airMoveMaxSpeed: 10
   jumpSpeed: 15
   airJumpSpeed: 10
   gravity: -15
@@ -25519,6 +25518,7 @@ MonoBehaviour:
   isDelayingDashJump: 0
   IsJumping: 0
   IsAirJumping: 0
+  isCumstomJumping: 0
   IsDashing: 0
   IsAirDashing: 0
   WasAirDashing: 0
@@ -25593,6 +25593,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   railAction: {fileID: 0}
   ropeAction: {fileID: 0}
+  layerFilter:
+    serializedVersion: 2
+    m_Bits: 0
 --- !u!114 &-3173423300216164636
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -25678,9 +25681,9 @@ MonoBehaviour:
   layerForAutoAim:
     serializedVersion: 2
     m_Bits: 2048
-  autoAimObjectSpawner: {fileID: 1911663723217604559, guid: afc9727a139e5874f86ed8923a44d1ed, type: 3}
+  autoAimObjectSpawner: {fileID: 0}
   autoAimObject: {fileID: 7909980709306676830, guid: c9b54073bf48f804ebee62282b5e85af, type: 3}
-  aimUI: {fileID: 8657421885556112005, guid: afc9727a139e5874f86ed8923a44d1ed, type: 3}
+  aimUI: {fileID: 8657421885556112005}
   autoAimObjectSpeed: 10
   autoAimObjectDepartOffset: 0.5
   rangeRadius: 10
@@ -52229,68 +52232,17 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 4660158950712969291, guid: d9ae6c359ed6b9b4fbc0438148b6bc30, type: 3}
   m_PrefabInstance: {fileID: 3814756060233629550}
   m_PrefabAsset: {fileID: 0}
---- !u!1001 &4683547804405353619
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    m_TransformParent: {fileID: 4466008002383961587}
-    m_Modifications:
-    - target: {fileID: 4606108286353797399, guid: 17a47b76307c66d499b88d4b06ce4f5f, type: 3}
-      propertyPath: m_Name
-      value: Cine_lookatObj_Sholder
-      objectReference: {fileID: 0}
-    - target: {fileID: 6369205230953552027, guid: 17a47b76307c66d499b88d4b06ce4f5f, type: 3}
-      propertyPath: m_RootOrder
-      value: 9
-      objectReference: {fileID: 0}
-    - target: {fileID: 6369205230953552027, guid: 17a47b76307c66d499b88d4b06ce4f5f, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6369205230953552027, guid: 17a47b76307c66d499b88d4b06ce4f5f, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 6369205230953552027, guid: 17a47b76307c66d499b88d4b06ce4f5f, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 6369205230953552027, guid: 17a47b76307c66d499b88d4b06ce4f5f, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 6369205230953552027, guid: 17a47b76307c66d499b88d4b06ce4f5f, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6369205230953552027, guid: 17a47b76307c66d499b88d4b06ce4f5f, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6369205230953552027, guid: 17a47b76307c66d499b88d4b06ce4f5f, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6369205230953552027, guid: 17a47b76307c66d499b88d4b06ce4f5f, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6369205230953552027, guid: 17a47b76307c66d499b88d4b06ce4f5f, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6369205230953552027, guid: 17a47b76307c66d499b88d4b06ce4f5f, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: 17a47b76307c66d499b88d4b06ce4f5f, type: 3}
---- !u!4 &1773498514369647624 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 6369205230953552027, guid: 17a47b76307c66d499b88d4b06ce4f5f, type: 3}
-  m_PrefabInstance: {fileID: 4683547804405353619}
+--- !u!114 &8657421885556112005 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5536589947466532331, guid: d9ae6c359ed6b9b4fbc0438148b6bc30, type: 3}
+  m_PrefabInstance: {fileID: 3814756060233629550}
   m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a35adc6c2d304da458ad65caca7ff534, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &4899569590300828417
 PrefabInstance:
   m_ObjectHideFlags: 0
