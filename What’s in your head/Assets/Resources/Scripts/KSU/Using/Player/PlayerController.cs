@@ -494,7 +494,6 @@ namespace KSU
                 Vector3 forward = mainCamera.transform.forward.normalized;
                 forward.y = 0;
                 transform.LookAt(transform.position + forward);
-                Debug.Log(transform.position + forward);
             }
         }
 

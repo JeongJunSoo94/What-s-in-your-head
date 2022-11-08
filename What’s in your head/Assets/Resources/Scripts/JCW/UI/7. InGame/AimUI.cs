@@ -8,7 +8,6 @@ using YC.CameraManager_;
 
 namespace JCW.UI.InGame
 {
-    [RequireComponent(typeof(PhotonView))]
     public class AimUI : MonoBehaviour
     {
         [Header("오토 타겟팅 속도")] [Range(0, 5f)] [SerializeField] float targetingTime;
@@ -35,17 +34,22 @@ namespace JCW.UI.InGame
         private void Awake()
         {
             imgTransform = transform.GetChild(0).GetComponent<RectTransform>();
-            if (!GetComponent<PhotonView>().IsMine)
-            {
-                Destroy(this.gameObject);
-                return;
-            }
-            StartCoroutine(nameof(WaitForPlayer));
-            playerTF = this.transform.parent;
-            aimState = playerTF.GetComponent<PlayerController>().characterState;
-            aimImage = imgTransform.GetComponent<Image>();
+            isNella = GameManager.Instance.characterOwner[PhotonNetwork.IsMasterClient];
+            targetTopviewTF = isNella ? GameObject.FindWithTag("NellaMousePoint").transform : GameObject.FindWithTag("SteadyMousePoint").transform;
 
+            mainCamera = isNella ? CameraManager.Instance.cameras[0] : CameraManager.Instance.cameras[1];
+            curCam = mainCamera;
+            imgTransform.position = new Vector3((curCam.rect.x + curCam.rect.width + curCam.rect.x) * 960f, 540f, 0);
+            targetTF = null;
+            aimImage = imgTransform.GetComponent<Image>();
         }
+
+        private void Start()
+        {
+            playerTF = GameManager.Instance.myPlayerTF;
+            aimState = playerTF.GetComponent<PlayerController>().characterState;
+        }
+
 
         private void FixedUpdate()
         {
@@ -108,9 +112,7 @@ namespace JCW.UI.InGame
                         }
                     }
                     else
-                    {
                         imgTransform.position = new Vector3((curCam.rect.x + curCam.rect.width + curCam.rect.x) * 960f, 540f, 0);
-                    }
                 }
             }
         }
@@ -118,22 +120,7 @@ namespace JCW.UI.InGame
         public void SetTarget(Transform posTF, float angle)
         {
             targetTF = posTF;
-            detectAngle = angle;
-        }
-
-        protected IEnumerator WaitForPlayer()
-        {
-            while (GameManager.Instance.characterOwner.Count <= 1)
-                yield return new WaitForSeconds(0.2f);
-
-            isNella = GameManager.Instance.characterOwner[PhotonNetwork.IsMasterClient];
-            targetTopviewTF = isNella ? GameObject.FindWithTag("NellaMousePoint").transform : GameObject.FindWithTag("SteadyMousePoint").transform;
-
-            mainCamera = isNella ? CameraManager.Instance.cameras[0] : CameraManager.Instance.cameras[1];
-            curCam = mainCamera;
-            imgTransform.position = new Vector3((curCam.rect.x + curCam.rect.width + curCam.rect.x) * 960f, 540f, 0);
-            targetTF = null;
-            yield break;
+            detectAngle = angle;            
         }
     }
 }

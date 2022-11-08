@@ -41,10 +41,10 @@ namespace YC.Camera_
 
         // ============  카메라 감도 설정  ============ //
         [Header("[Back View 카메라 마우스 감도]")]
-        [SerializeField] [Range(0, 100)] float backView_MouseSensitivity;
+        [SerializeField] [Range(0, 100)] float backView_MouseSensitivity = 25f;
 
         [Header("[Sholder View 카메라 마우스 감도]")]
-        [SerializeField] [Range(0, 100)] float sholderView_MouseSensitivity;
+        [SerializeField] [Range(0, 100)] float sholderView_MouseSensitivity = 10f;
 
         float curSholderMaxSpeedY;
 
@@ -52,7 +52,7 @@ namespace YC.Camera_
 
         // ============  Aim View Y축 궤도 제한  ============ //
         [Header("[Sholder View Y궤도 Up 제한 값]")]
-        [SerializeField] [Range(0, 1)] float sholderAxisY_MaxUp = 0.3f;
+        [SerializeField] [Range(0, 1)] float sholderAxisY_MaxUp = 0.2f;
 
         [Header("[Sholder View Y궤도 Down 제한 값]")]
         [SerializeField] [Range(0, 1)] float sholderAxisY_MaxDown = 0.5f;
@@ -62,10 +62,10 @@ namespace YC.Camera_
 
         // ============  스테디 빔 사용시 카메라 흔들림  ============ //
         [Header("[스테디 빔, 카메라 흔들림 진폭 크기]")]
-        [SerializeField] [Range(0, 5)] float AmplitudeGain = 3f;
+        [SerializeField] [Range(0, 5)] float AmplitudeGain = 1f;
 
         [Header("[스테디 빔, 카메라 흔들림 빈도]")]
-        [SerializeField] [Range(0, 5)] float FrequebctGain = 3f;
+        [SerializeField] [Range(0, 5)] float FrequebctGain = 1.5f;
 
         List<CinemachineBasicMultiChannelPerlin> listSteadyCBMCP;
 
@@ -81,13 +81,13 @@ namespace YC.Camera_
 
         // ============  사이드뷰 변수  ============ //
         [Header("[사이드 뷰, 카메라 흔들림 진폭 크기]")]
-        [SerializeField] [Range(0, 5)] float AmplitudeGainSide = 3f;
+        [SerializeField] [Range(0, 5)] float AmplitudeGainSide = 2f;
 
         [Header("[사이드 뷰, 카메라 흔들림 빈도]")]
-        [SerializeField] [Range(0, 5)] float FrequebctGainSide = 3f;
+        [SerializeField] [Range(0, 5)] float FrequebctGainSide = 1f;
 
         [Header("[사이드 뷰, 카메라 흔들림 지속 시간]")]
-        [SerializeField] [Range(0, 5)] float ShakeTimeSide = 3f;
+        [SerializeField] [Range(0, 5)] float ShakeTimeSide = 2f;
 
         CinemachineBasicMultiChannelPerlin SideCBMCP;
 
@@ -100,7 +100,7 @@ namespace YC.Camera_
 
         // ============  점프 보간 변수들  ============ //
         [Header("[점프 후, 플랫폼 착지시 보간 시간]")]
-        [SerializeField] [Range(0, 3)] float platformLerpTime;
+        [SerializeField] [Range(0, 3)] float platformLerpTime = 0.7f;
         [Space] [Space]
         Transform followObj; // >> : 점프시 Follow, LookAt 관련
         public Transform lookatBackObj { get; private set; } //< : 레일 액션에서 사용
@@ -129,6 +129,8 @@ namespace YC.Camera_
         [SerializeField] GameObject CineLookObj_Back;
         [SerializeField] GameObject CineFollowObj_Back;
         [SerializeField] NoiseSettings NoiseProfile;
+        [Header("Aim UI 프리팹 ")] public GameObject aimUI;
+
 
 
         // ============  디버그 로그  ============ //
@@ -158,6 +160,8 @@ namespace YC.Camera_
             InitVirtualCamera();
             InitCinemachineRig();
             InitDefault();
+            InitUI();
+
         }
 
 
@@ -220,6 +224,10 @@ namespace YC.Camera_
 
         // ====================  [Awake에서 진행하는 초기화]  ==================== //
 
+        void InitUI()
+        {
+            aimUI = Instantiate(aimUI);
+        }
         void InitVirtualCamera() // Virtual Camera 생성 및 초기화  
         {           
             if (!pv.IsMine) return;
@@ -742,14 +750,18 @@ namespace YC.Camera_
 
         void FollowPlayer()
         {
+            Vector3 PlayerPos = player.transform.position;
+
             lookatBackObj.position
-                            = new Vector3(player.transform.position.x,
-                                        player.transform.position.y + lookatObjOriginY,
-                                        player.transform.position.z);
+                            = new Vector3(PlayerPos.x,
+                                        PlayerPos.y + lookatObjOriginY,
+                                        PlayerPos.z);
             followObj.position
-                        = new Vector3(player.transform.position.x,
-                                    player.transform.position.y,
-                                    player.transform.position.z);
+                        = new Vector3(PlayerPos.x,
+                                    PlayerPos.y,
+                                    PlayerPos.z);
+
+            if (!wasEndSet) wasEndSet = true;
         }
 
         void SetCineObjPos() // Look과 Follow의 x, y값 업데이트  

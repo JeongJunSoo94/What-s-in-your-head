@@ -61,15 +61,16 @@ namespace KSU.AutoAim.Player
         //public float grapplingRange = 30f;
         //[Header("오토 타겟팅 탐지 범위 (각도)"), Range(1f, 89f)]
         //public float rangeAngle = 30f;
-        
+
         //Vector3 targetPosition;
 
 
         //List<GameObject> grappledObjects = new();
 
         // Start is called before the first frame update
-        void Awake()
+        override protected void Awake()
         {
+            base.Awake();
             playerAnimator = GetComponent<Animator>();
             photonView = GetComponent<PhotonView>();
 

@@ -10688,6 +10688,61 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 2728845071269415905, guid: 7f9b5c1fa39f62841adfd810a6ba2094, type: 3}
   m_PrefabInstance: {fileID: 497269329}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &500513780 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8477004906290916621, guid: edf477c300adcd546b6bf8c358ecc0c3, type: 3}
+  m_PrefabInstance: {fileID: 501553662}
+  m_PrefabAsset: {fileID: 0}
+--- !u!33 &500513784
+MeshFilter:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 500513780}
+  m_Mesh: {fileID: 5356424154838759793, guid: 624a0a63e079fd848963deeb7f3c1b43, type: 3}
+--- !u!23 &500513785
+MeshRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 500513780}
+  m_Enabled: 1
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 2100000, guid: 8673c4f793d663c418f628f5bdb523d1, type: 3}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 3
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
 --- !u!1001 &500556582
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -22078,6 +22133,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ad73b0076b520ae46a7dd0c46bca5d50, type: 3}
+--- !u!1 &1021634821 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1524118313781844, guid: 054b67e619cbc1046bed54b07283d49d, type: 3}
+  m_PrefabInstance: {fileID: 844516750}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1022663970
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -32431,8 +32491,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   roomName: KSU
   nellaPrefabDirectory: Prefabs/KSU/Stage3/Player/KSU_Nella
-  steadyPrefabDirectory: Prefabs/KSU/Stage2/Player/KSU_Steady
+  steadyPrefabDirectory: Prefabs/KSU/Stage3/Player/KSU_Steady
   isNella: 0
+  StartPosition: {fileID: 1021634821}
 --- !u!4 &1518781276
 Transform:
   m_ObjectHideFlags: 0

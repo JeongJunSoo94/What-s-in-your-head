@@ -18,8 +18,9 @@ namespace KSU.AutoAim.Player
         SteadyCymbals cymbals;
         PlayerController playerController;
 
-        void Awake()
+        override protected void Awake()
         {
+            base.Awake();
             playerAnimator = GetComponent<Animator>();
             photonView = GetComponent<PhotonView>();
 

@@ -14,7 +14,7 @@ using KSU.AutoAim.Object;
 namespace KSU.AutoAim.Player
 {
     public enum AutoAimTargetType { GrappledObject, Monster, CymbalsTargetObject, Null };
-    public class SteadyAutoAimAction : MonoBehaviour
+    abstract public class SteadyAutoAimAction : MonoBehaviour
     {
         protected SteadyInteractionState steadyInteractionState;
         protected PlayerState playerState;
@@ -32,7 +32,7 @@ namespace KSU.AutoAim.Player
         protected GameObject hitTarget;
 
         protected Transform autoAimPosition;
-        [SerializeField] protected AimUI aimUI;
+        protected AimUI aimUI;
 
         [Header("_______변경 가능 값_______")]
         [Header("투사체 날아가는 속력")]
@@ -55,15 +55,14 @@ namespace KSU.AutoAim.Player
 
         protected List<GameObject> autoAimTargetObjects = new();
 
-        protected virtual void SearchAutoAimTargetdObject()
+        virtual protected void Awake()
         {
-            
+            aimUI = GetComponent<CameraController>().aimUI.GetComponent<AimUI>();
         }
 
-        protected virtual void InputFire()
-        {
+        abstract protected void SearchAutoAimTargetdObject();
 
-        }
+        abstract protected void InputFire();
 
         public void SendInfoAImUI()
         {
