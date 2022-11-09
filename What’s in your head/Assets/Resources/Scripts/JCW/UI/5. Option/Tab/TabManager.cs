@@ -1,4 +1,5 @@
 using JCW.AudioCtrl;
+using Photon.Pun;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -36,6 +37,8 @@ namespace JCW.UI.Options
 
         public void ClickTab(Button _button)
         {
+            if (!PhotonNetwork.IsMasterClient)
+                return;
             for (int i = 0 ; i<tabButtons.Count ; ++i)
             {
                 // ´­·ÁÁø ÅÇÀ» ²¨ÁÖ±â

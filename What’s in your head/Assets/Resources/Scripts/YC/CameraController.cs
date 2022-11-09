@@ -350,13 +350,13 @@ namespace YC.Camera_
 
 
             // << : Rig »èÁ¦
-            if (backCam.transform.childCount != 0)
-            {
-                for (int i = 0; i < backCam.transform.childCount; ++i)
-                {
-                    Destroy(backCam.transform.GetChild(i).gameObject);
-                }
-            }
+            //if (backCam.transform.childCount != 0)
+            //{
+            //    for (int i = 0; i < backCam.transform.childCount; ++i)
+            //    {
+            //        Destroy(backCam.transform.GetChild(i).gameObject);
+            //    }
+            //}
             if (sholderCam.transform.childCount != 0)
             {
                 for(int i = 0; i < sholderCam.transform.childCount; ++i)
@@ -376,6 +376,9 @@ namespace YC.Camera_
                 backCine.GetRig(i).GetCinemachineComponent<CinemachineOrbitalTransposer>().m_ZDamping = rigInitValue;
 
                 // SholderCam Rig
+                sholderCine.GetRig(i).AddCinemachineComponent<CinemachineComposer>();
+                sholderCine.GetRig(i).AddCinemachineComponent<CinemachineOrbitalTransposer>();
+
                 sholderCine.GetRig(i).GetCinemachineComponent<CinemachineComposer>().m_HorizontalDamping = rigInitValue;
                 sholderCine.GetRig(i).GetCinemachineComponent<CinemachineComposer>().m_VerticalDamping = rigInitValue;
 

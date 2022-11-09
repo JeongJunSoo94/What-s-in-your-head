@@ -12,7 +12,7 @@ namespace JCW.Object
         [Header("접촉 시 사망 여부")] [SerializeField] bool isLethal;
         [Header("이동 경로")] [SerializeField] List<Vector3> positionList;
 
-        [HideInInspector] public bool isActive = false;
+        public bool isActive = false;
         int curIndex = 0;
         int maxIndex = 0;
 
@@ -47,6 +47,7 @@ namespace JCW.Object
 
         public void SetPositionToList(Vector3 pos)
         {
+            Debug.Log("리스트에 추가");
             positionList.Add(pos);
         }
 

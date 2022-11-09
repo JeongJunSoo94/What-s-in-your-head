@@ -61,7 +61,6 @@ namespace JCW.Object.Stage1
                 Transform playerTF = collision.gameObject.transform;                
                 if (playerTF.IsChildOf(transform))
                 {
-                    Debug.Log("플레이어가 탈출한 로컬 지점 : " + playerTF.localPosition);
                     playerTF.parent = null;
                 }
             }

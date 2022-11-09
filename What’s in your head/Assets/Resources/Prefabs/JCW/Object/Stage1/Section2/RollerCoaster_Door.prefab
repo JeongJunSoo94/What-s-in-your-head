@@ -46,6 +46,8 @@ GameObject:
   - component: {fileID: 3250559742598689726}
   - component: {fileID: 790585783950460788}
   - component: {fileID: 7795882130589193430}
+  - component: {fileID: 9049898190105411058}
+  - component: {fileID: 4322643853038752043}
   - component: {fileID: 442252288133070859}
   m_Layer: 3
   m_Name: Door
@@ -132,6 +134,45 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 0.46705818, y: 3.172064, z: 2.0000005}
   m_Center: {x: 0, y: 1.5860313, z: 0.00000023841858}
+--- !u!114 &9049898190105411058
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1294861741753689761}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ObservedComponentsFoldoutOpen: 1
+  Group: 0
+  prefixField: -1
+  Synchronization: 3
+  OwnershipTransfer: 0
+  observableSearch: 2
+  ObservedComponents:
+  - {fileID: 4322643853038752043}
+  sceneViewId: 0
+  InstantiationId: 0
+  isRuntimeInstantiated: 0
+--- !u!114 &4322643853038752043
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1294861741753689761}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 627855c7f81362d41938ffe0b1475957, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_SynchronizePosition: 1
+  m_SynchronizeRotation: 1
+  m_SynchronizeScale: 0
+  m_UseLocal: 1
 --- !u!114 &442252288133070859
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -147,6 +188,7 @@ MonoBehaviour:
   obstacleTF: {fileID: 1924045603844176923}
   movLocalPos: {x: -2, y: 7, z: 0}
   moveSpeed: 8
+  isRemotePlay: 1
   bothCount: 0
 --- !u!1 &2066021544083968091
 GameObject:

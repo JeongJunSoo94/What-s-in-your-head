@@ -5,6 +5,7 @@ using UnityEngine.UI;
 using Photon.Pun;
 using JCW.Network;
 using Photon.Realtime;
+using System.IO;
 
 namespace JCW.UI
 {
@@ -32,6 +33,9 @@ namespace JCW.UI
             player1_Img = player1_Button.gameObject.GetComponent<Image>();
             player2_Img = player2_Button.gameObject.GetComponent<Image>();
             photonView = gameObject.GetComponent<PhotonView>();
+            GameManager.Instance.curStageIndex = 1;
+            GameManager.Instance.curStageType = 1;
+            GameManager.Instance.curSection = 0;
 
             backButton.onClick.AddListener(() =>
             {
@@ -121,6 +125,67 @@ namespace JCW.UI
             PhotonNetwork.JoinOrCreateRoom("Lobby", lobbyOptions, null);
             this.gameObject.SetActive(false);
             yield break;
+        }
+
+        public void LoadLatestStage()
+        {
+            if (!PhotonNetwork.IsMasterClient)
+                return;
+            string path = Application.dataPath + "/Resources/CheckPointInfo/Stage";
+            for (int i=3 ; i>=1 ; --i)
+            {
+                for (int j=2 ; j>=1 ; --j)
+                {
+                    if (Directory.Exists(path + i + "/" + j + "/"))
+                    {
+                        SetStage_RPC(i);
+                        SetStageType_RPC(j);
+                        SetSection_RPC(Directory.GetFiles(path + i + "/" + j + "/").Length);
+                        break;
+                    }                
+                }
+            }
+            
+        }
+
+
+        public void SetStage_RPC(int stageCount)
+        {
+            if (!PhotonNetwork.IsMasterClient)
+                return;
+            photonView.RPC(nameof(SetStage), RpcTarget.AllViaServer, stageCount);
+        }
+
+        [PunRPC]
+        void SetStage(int stageCount)
+        {
+            GameManager.Instance.curStageIndex = stageCount;
+        }
+
+        public void SetStageType_RPC(int stageType)
+        {
+            if (!PhotonNetwork.IsMasterClient)
+                return;
+            photonView.RPC(nameof(SetStageType), RpcTarget.AllViaServer, stageType);
+        }
+
+        [PunRPC]
+        void SetStageType(int stageType)
+        {
+            GameManager.Instance.curStageType = stageType;
+        }
+
+        public void SetSection_RPC(int sectionCount)
+        {
+            if (!PhotonNetwork.IsMasterClient)
+                return;
+            photonView.RPC(nameof(SetSection), RpcTarget.AllViaServer, sectionCount);
+        }
+
+        [PunRPC]
+        void SetSection(int sectionCount)
+        {
+            GameManager.Instance.curSection = sectionCount;
         }
     }
 }

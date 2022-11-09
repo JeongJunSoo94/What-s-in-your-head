@@ -110,7 +110,7 @@ namespace JCW.UI.InGame
                 GameManager.Instance.MediateRevive(false);
                 if(!GameManager.Instance.isTopView && photonView.IsMine)
                     CameraManager.Instance.ReviveCam(isNella);
-                Resurrect();
+                curPlayer.GetComponent<Animator>().SetBool("isDead", false);
             }
         }
 

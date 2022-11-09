@@ -22,7 +22,7 @@ namespace JCW.UI
             if (Instance == null)
             {
                 Instance = this;
-                DontDestroyOnLoad(this);
+                DontDestroyOnLoad(this.gameObject);
             }
             else if (Instance != this)
                 Destroy(this.gameObject);

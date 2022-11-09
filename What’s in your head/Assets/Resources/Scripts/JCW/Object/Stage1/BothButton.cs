@@ -19,15 +19,15 @@ namespace JCW.Object.Stage1
         {
             initPos = transform.localPosition;
         }
-
         private void OnCollisionEnter(Collision collision)
         {
+            if (isRemotePlay)
+                return;
             if (collision.gameObject.CompareTag("Nella") || collision.gameObject.CompareTag("Steady"))
             {
                 if (collision.transform.position.y >= this.transform.position.y)
                 {
-                    if(!isRemotePlay)
-                        ++bothCount;
+                    ++bothCount;
                     if(bothCount>= 2 && !isStart)
                     {
                         isStart = true;
@@ -39,12 +39,27 @@ namespace JCW.Object.Stage1
 
         private void OnCollisionExit(Collision collision)
         {
+            if (isRemotePlay)
+                return;
             if (collision.gameObject.CompareTag("Nella") || collision.gameObject.CompareTag("Steady"))
             {
-                if (!isRemotePlay)
-                    --bothCount;
-                else if (bothCount <= 0)
+                --bothCount;
+                if (bothCount <= 0)
                     StartCoroutine(nameof(Reset));
+            }
+        }
+
+        public void SetBothCount(int count)
+        {
+            bothCount = count;
+            if(bothCount >= 2 && !isStart)
+            {
+                isStart = true;
+                StartCoroutine(nameof(moveObstacle));
+            }
+            if(bothCount<=0)
+            {
+                StartCoroutine(nameof(Reset));
             }
         }
 
@@ -65,6 +80,7 @@ namespace JCW.Object.Stage1
                 obstacleTF.localPosition = Vector3.MoveTowards(obstacleTF.localPosition, initPos, Time.fixedDeltaTime * moveSpeed);
                 yield return null;
             }
+            isStart = false;
             yield break;
         }
     }

@@ -310,7 +310,6 @@ namespace KSU
         {
             if(other.CompareTag("Rope"))
             {
-                Debug.Log("트리거 엔터 : " + other.gameObject.transform.parent.gameObject);
                 detectedRopes.Add(other.gameObject.transform.parent.gameObject, new Obj_Info(false, false, 100f));
             }
         }
@@ -319,7 +318,6 @@ namespace KSU
         {
             if (other.CompareTag("Rope"))
             {
-                Debug.Log("트리거 탈출 : " + other.gameObject.transform.parent.gameObject);
                 other?.gameObject.transform.parent.gameObject.GetComponentInChildren<ConvertIndicator>().SetUI(false, false, 100f);
                 detectedRopes.Remove(other.gameObject.transform.parent.gameObject);
                 

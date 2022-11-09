@@ -64,10 +64,10 @@ namespace KSU
         public float jumpSpeed = 10f;
         [Tooltip("공중 점프 속도")]
         public float airJumpSpeed = 6f;
-        [Range(-20f, 0f), Tooltip("중력")]
+        [Range(-100f, 0f), Tooltip("중력")]
         public float gravity = -9.81f;
         public float gravityCofactor = 0.8f;
-        [Range(-20f, -1f), Tooltip("종단속도")]
+        [Range(-100f, -1f), Tooltip("종단속도")]
         public float terminalSpeed = -10f;
         [Tooltip("넉백 수직 속력")]
         public float knockBackVerticalSpeed = 8f;
@@ -266,56 +266,19 @@ namespace KSU
             }
 
             characterState.InitState(true, false);
-            if (!File.Exists(Application.dataPath + "/Resources/CheckPointInfo/Stage" +
-                GameManager.Instance.curStageIndex + "/Section" + GameManager.Instance.curSection + ".json"))
+
+            string path = Application.dataPath + "/Resources/CheckPointInfo/Stage" + GameManager.Instance.curStageIndex
+                + "/" + GameManager.Instance.curStageType + "/Section" + GameManager.Instance.curSection + ".json";
+            if (!File.Exists(path))
             {
-                //Debug.Log(GameManager.Instance.curSection);
-                //Debug.Log("체크포인트 불러오기 실패");
+                Debug.Log("체크포인트 불러오기 실패 / 불러오려 했던 섹션 : " + GameManager.Instance.curSection);
                 return;
             }
 
-            string jsonString = File.ReadAllText(Application.dataPath + "/Resources/CheckPointInfo/Stage" +
-                GameManager.Instance.curStageIndex + "/Section" + GameManager.Instance.curSection + ".json");
+            string jsonString = File.ReadAllText(path);
 
             SavePosition.PlayerInfo data = JsonUtility.FromJson<SavePosition.PlayerInfo>(jsonString);
             transform.SetPositionAndRotation(new Vector3((float)data.position[0], (float)data.position[1], (float)data.position[2]), new Quaternion((float)data.rotation[0], (float)data.rotation[1], (float)data.rotation[2], (float)data.rotation[3]));
-        }
-
-        public void InputSoundTest()
-        {
-            if (Input.GetKeyDown(KeyCode.G))
-            {
-                Resurrect();
-            }
-            if (Input.GetKeyDown(KeyCode.Keypad1))
-            {
-                SoundManager.Instance.PlayBGM_RPC("POP");
-            }
-            if (Input.GetKeyDown(KeyCode.Keypad2))
-            {
-                SoundManager.Instance.PlayBGM_RPC("Tomboy");
-            }
-            if (Input.GetKeyDown(KeyCode.Keypad3))
-            {
-                SoundManager.Instance.PauseResumeBGM_RPC();
-            }
-            if (Input.GetKeyDown(KeyCode.Keypad4))
-            {
-                SoundManager.Instance.PlayEffect_RPC("Explosion");
-            }
-            if (Input.GetKeyDown(KeyCode.Keypad5))
-            {
-                //SoundManager.Instance.PlayEffect_RPC(SoundManager.Instance.GetEffectClips("Fireball"));
-                SoundManager.Instance.PlayEffect_RPC("Fireball");
-            }
-            if (Input.GetKeyDown(KeyCode.Keypad6))
-            {
-                SoundManager.Instance.PlayEffect_RPC("GetItem");
-            }
-            if (Input.GetKeyDown(KeyCode.Keypad7))
-            {
-                SoundManager.Instance.PlayEffect_RPC("WaterBall");
-            }
         }
 
         public void InputMove()

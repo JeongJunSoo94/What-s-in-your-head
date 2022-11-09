@@ -141,9 +141,9 @@ GameObject:
   - component: {fileID: 8836410400238286702}
   - component: {fileID: 8543551926866608725}
   - component: {fileID: 3549589601489198433}
-  - component: {fileID: 2627227005006963910}
   - component: {fileID: 6299051872517989902}
   - component: {fileID: 549472005276816969}
+  - component: {fileID: 2627227005006963910}
   m_Layer: 0
   m_Name: Flag
   m_TagString: Untagged
@@ -204,20 +204,6 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
---- !u!114 &2627227005006963910
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8208633707074252244}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e12f6acb0e7bd724898bb59eb3834f1d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  bothButton: {fileID: 0}
-  lightButton: {fileID: 0}
 --- !u!114 &6299051872517989902
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -262,6 +248,21 @@ MonoBehaviour:
   m_SynchronizeLayers:
   - SynchronizeType: 2
     LayerIndex: 0
+--- !u!114 &2627227005006963910
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8208633707074252244}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e12f6acb0e7bd724898bb59eb3834f1d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  bothButton: {fileID: 0}
+  lightButton: {fileID: 0}
+  resetTime: 5
 --- !u!1 &9169427787011739690
 GameObject:
   m_ObjectHideFlags: 0
