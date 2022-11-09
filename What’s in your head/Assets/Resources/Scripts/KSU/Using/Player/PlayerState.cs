@@ -139,13 +139,12 @@ public class PlayerState : MonoBehaviour
     public void CheckGround(float sphereRadius)
     {
         RayCheck = Physics.SphereCast(transform.position + Vector3.up * (sphereRadius * 1.5f + Physics.defaultContactOffset), (sphereRadius - Physics.defaultContactOffset), Vector3.down, out groundRaycastHit, groundCheckDistance + sphereRadius * 0.5f + Physics.defaultContactOffset, groundLayerMask, QueryTriggerInteraction.Ignore);
-        
+
         if (RayCheck)
         {
             slopeAngle = Vector3.Angle(Vector3.up, groundRaycastHit.normal);
             if (Mathf.Abs(slopeAngle) >= maxSlopeAngle)
             {
-                //Debug.Log("경사각 초과");
                 IsGrounded = false;
                 isRun = false;
                 isOverAngleForSlope = true;
@@ -153,51 +152,84 @@ public class PlayerState : MonoBehaviour
             else
             {
                 isOverAngleForSlope = false;
-                float uSlopeAngleCofacter = Mathf.Tan(slopeAngle * Mathf.PI / 180);
+                float uSlopeAngleCofacter = Mathf.Tan(slopeAngle * Mathf.Deg2Rad);
                 height = (transform.position - groundRaycastHit.point).y;
-                if (height <= (groundCheckThresholdMax + Mathf.Abs(uSlopeAngleCofacter)))
+                //if (height <= (groundCheckThresholdMax + Mathf.Abs(uSlopeAngleCofacter)))
+                //{
+                //    IsGrounded = true;
+                //    slopeAngle = Vector3.Angle(transform.forward, groundRaycastHit.normal) - 90f;
+                //    slopeAngleCofacter = Mathf.Tan(slopeAngle * Mathf.PI / 180);
+                //    if (CanJump)
+                //    {
+                //        ResetJump();
+                //        ResetAirDash();
+                //    }
+                //}
+                //else
+                //{
+                //    //Debug.Log("FALSE: " + height + " << 높이, 기준 >> " + (groundCheckThresholdMax + Mathf.Abs(uSlopeAngleCofacter)));
+                //    slopeAngleCofacter = 0f;
+                //    IsGrounded = false;
+                //    isRun = false;
+                //}
+
+                IsGrounded = true;
+                slopeAngle = Vector3.Angle(transform.forward, groundRaycastHit.normal) - 90f;
+                slopeAngleCofacter = Mathf.Tan(slopeAngle * Mathf.Deg2Rad);
+                if (CanJump)
                 {
-                    IsGrounded = true;
-                    slopeAngle = Vector3.Angle(transform.forward, groundRaycastHit.normal) - 90f;
-                    slopeAngleCofacter = Mathf.Tan(slopeAngle * Mathf.PI / 180);
-                    if (CanJump)
-                    {
-                        ResetJump();
-                        ResetAirDash();
-                    }
-                }
-                else
-                {
-                    //Debug.Log("FALSE: " + height + " << 높이, 기준 >> " + (groundCheckThresholdMax + Mathf.Abs(uSlopeAngleCofacter)));
-                    slopeAngleCofacter = 0f;
-                    IsGrounded = false;
-                    isRun = false;
+                    ResetJump();
+                    ResetAirDash();
                 }
             }
 
-            bool rayChecked = Physics.SphereCast(transform.position + Vector3.up * (sphereRadius + Physics.defaultContactOffset) - transform.forward * Physics.defaultContactOffset, (sphereRadius - Physics.defaultContactOffset), transform.forward, out fowardRaycastHit, 0.2f, groundLayerMask, QueryTriggerInteraction.Ignore);
-            if(rayChecked)
+            //bool rayChecked = Physics.SphereCast(transform.position + Vector3.up * (sphereRadius + Physics.defaultContactOffset) 
+            //    - transform.forward * Physics.defaultContactOffset, (sphereRadius - Physics.defaultContactOffset), transform.forward,
+            //    out fowardRaycastHit, 0.2f, groundLayerMask, QueryTriggerInteraction.Ignore);
+            //if(rayChecked)
+            //{
+            //    float forwardAngle = Vector3.Angle(Vector3.up, fowardRaycastHit.normal);
+
+            //    if (forwardAngle > maxSlopeAngle)
+            //    {
+            //        isFowardBlock = true;
+            //    }
+            //    else
+            //        isFowardBlock = false;
+
+            //    forwardHeight = Mathf.Abs(fowardRaycastHit.point.y - transform.position.y);
+            //    if (forwardHeight < forwardblockingMinHeight)
+            //    {
+            //        slopeAngleCofacter = forwardblockingMinHeight;
+            //        IsGrounded = true;
+            //        isFowardBlock = false;
+            //    }
+            //}
+            //else
+            //{
+            //    isFowardBlock = false;
+            //}
+
+            bool rayChecked1 = Physics.Raycast(transform.position, transform.forward, forwardblockingMinHeight / Mathf.Cos((90f - maxSlopeAngle) * Mathf.Deg2Rad), groundLayerMask, QueryTriggerInteraction.Ignore);
+            bool rayChecked2 = Physics.Raycast(transform.position + Vector3.up * forwardblockingMinHeight, transform.forward, forwardblockingMinHeight / Mathf.Cos((90f - maxSlopeAngle) * Mathf.Deg2Rad), groundLayerMask, QueryTriggerInteraction.Ignore);
+            if (rayChecked1)
             {
-                float forwardAngle = Vector3.Angle(Vector3.up, fowardRaycastHit.normal);
-                
-                if (forwardAngle > maxSlopeAngle)
+                if (!rayChecked2)
                 {
-                    isFowardBlock = true;
+                    isFowardBlock = rayChecked2;
+                    IsGrounded = true;
+                    slopeAngleCofacter = forwardblockingMinHeight;
+                    isFowardBlock = false;
                 }
                 else
-                    isFowardBlock = false;
-
-                forwardHeight = Mathf.Abs(fowardRaycastHit.point.y - transform.position.y);
-                if (forwardHeight < forwardblockingMinHeight)
                 {
-                    slopeAngleCofacter = forwardblockingMinHeight;
-                    IsGrounded = true;
-                    isFowardBlock = false;
+                    isFowardBlock = true;
                 }
             }
             else
             {
-                isFowardBlock = false;
+                if (isOverAngleForSlope)
+                    IsGrounded = true;
             }
         }
         else
@@ -205,6 +237,7 @@ public class PlayerState : MonoBehaviour
             isOverAngleForSlope = false;
             IsGrounded = false;
         }
+
     }
     #endregion
 

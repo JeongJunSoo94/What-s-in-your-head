@@ -597,7 +597,7 @@ namespace KSU
                     moveVec.y = characterState.slopeAngleCofacter * moveSpeed;
 
                 if (characterState.height >= characterState.groundCheckThresholdMin)
-                    moveVec += Vector3.up * (gravity * gravityCofactor * Time.fixedDeltaTime);
+                    moveVec.y = playerRigidbody.velocity.y + gravity * Time.fixedDeltaTime;
             }
 
             playerRigidbody.velocity = moveVec;
