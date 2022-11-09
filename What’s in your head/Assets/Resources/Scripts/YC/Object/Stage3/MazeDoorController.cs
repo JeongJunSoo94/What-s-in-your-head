@@ -17,7 +17,6 @@ public class MazeDoorController : MonoBehaviour
     }
     public void ControlDoor(bool open)
     {
-        Debug.Log("Send Message ¼ö½Å");
         if (isCor)
             StopAllCoroutines();
 

@@ -45,7 +45,7 @@ namespace YC_OBJ
         public float curTime { get; private set; } = 0; // 현재 시간 게이지
         bool isCurHit = false;
         int curHitCount = 0;
-        float delayTime = 0.15f; // 총알을 현재 맞고 있는지를 몇 초 전과 비교할 것인지 (총알 발사 속도와 연관)
+        float delayTime = 0.13f; // 총알을 현재 맞고 있는지를 몇 초 전과 비교할 것인지 (총알 발사 속도와 연관)
 
 
         string interactionObjTag = "NellaWater";
@@ -64,6 +64,8 @@ namespace YC_OBJ
 
         AnimatorStateInfo animatorStateInfo;
 
+        [SerializeField] GameObject Bone;
+
         void Awake()
         {
             animator = GetComponent<Animator>();
@@ -77,6 +79,22 @@ namespace YC_OBJ
             animatorStateInfo = animator.GetCurrentAnimatorStateInfo(0);
         }
 
+        IEnumerator Up()
+        {
+            LiftObj.player.GetComponent<PhotonTransformView>().enabled = false;
+            if (tempPos == Vector3.zero)
+            {
+                tempPos = LiftObj.player.transform.localPosition;
+            }
+
+            while (true)
+            {
+                Bone.transform.position = new Vector3(Bone.transform.position.x, Bone.transform.position.y + Time.deltaTime * 5, Bone.transform.position.z);
+                LiftObj.player.transform.localPosition = tempPos;
+                Debug.Log(Bone.transform.position.y);
+                yield return null;
+            }
+        }
         void Update()
         {
             if (isGrowed)
@@ -84,12 +102,13 @@ namespace YC_OBJ
                 growTime += Time.deltaTime;
 
                 if (growTime > maxGrowedTime)
-                {                   
+                {
                     if (pv.IsMine)
-                    {                     
+                    {
                         pv.RPC(nameof(SetLess_RPC), RpcTarget.AllViaServer);
                     }
                 }
+
             }
             else
             {
@@ -97,7 +116,7 @@ namespace YC_OBJ
 
                 indicator.SetGauge(curTime / maxTime);
             }
-            BlockPlayerMove();
+            //BlockPlayerMove();
         }
 
         private void OnTriggerEnter(Collider other)
@@ -134,31 +153,40 @@ namespace YC_OBJ
         // << :
         void BlockPlayerMove()
         {
-            if (CheckAnimation())
-                SetPlayerMovePossible(false);
-            else
-                SetPlayerMovePossible(true);
+            //if (CheckAnimation())
+            //    //SetPlayerMovePossible(false);
+            //else
+            //    //SetPlayerMovePossible(true);
         }
 
-        void SetPlayerMovePossible (bool can)
+        public void SetPlayerMovePossible (int can)
         {
             if (!LiftObj.player) return;
 
-            if (can)
+            if (can == 0)
             {
-                LiftObj.player.GetComponent<PhotonTransformView>().enabled = true;
-                LiftObj.player.GetComponent<PlayerState>().isOutOfControl = false;
+                if(LiftObj.player.GetComponent<PhotonView>().IsMine)
+                {
+                    LiftObj.player.GetComponent<PhotonTransformView>().enabled = true;
+                    LiftObj.player.GetComponent<PlayerState>().isOutOfControl = false;
 
-                //LiftObj.GetComponent<MeshCollider>().enabled = true;
+                    //LiftObj.GetComponent<MeshCollider>().enabled = true;
+                    Debug.Log("안 막는중!");
+                }
             }
             else
             {
-                LiftObj.player.GetComponent<PhotonTransformView>().enabled = false;
-                LiftObj.player.GetComponent<PlayerState>().isOutOfControl = true;
-                LiftObj.player.transform.localPosition = tempPos;
+                if (LiftObj.player.GetComponent<PhotonView>().IsMine)
+                {
+                    LiftObj.player.GetComponent<PhotonTransformView>().enabled = false;
+                    LiftObj.player.GetComponent<PlayerState>().isOutOfControl = true;
+                    LiftObj.player.transform.localPosition = tempPos;
 
-                //LiftObj.GetComponent<MeshCollider>().enabled = false;
-                //LiftObj.player.GetComponent<Rigidbody>().velocity = Vector3.zero;
+                    Debug.Log("막는 중!");
+
+                    //LiftObj.GetComponent<MeshCollider>().enabled = false;
+                    //LiftObj.player.GetComponent<Rigidbody>().velocity = Vector3.zero;
+                }
             }
         }
 
@@ -205,13 +233,14 @@ namespace YC_OBJ
         [PunRPC]
         public void SetGrow_RPC()
         {
-            animator.SetBool("isGrow", true);
-            animator.SetBool("isLess", false);
+            //animator.SetBool("isGrow", true);
+            //animator.SetBool("isLess", false);
             indicator.gameObject.SetActive(false);
 
             curTime = maxTime;
             isGrowed = true;
             curTime = 0;
+            StartCoroutine(Up());
         }
 
         [PunRPC]

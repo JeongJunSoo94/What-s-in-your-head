@@ -3724,114 +3724,6 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 7.517469, y: 13.6462555, z: 9.794319}
   m_Center: {x: 0, y: 6.823127, z: -0.000028371811}
---- !u!1 &891277203
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 891277205}
-  - component: {fileID: 891277204}
-  m_Layer: 0
-  m_Name: MeshBaker (0)
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &891277204
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 891277203}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2fb2e0d8bc810bb48b63c91af80d5f17, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  sortAxis: {x: 0, y: 0, z: 0}
-  objsToMesh:
-  - {fileID: 0}
-  - {fileID: 0}
-  useObjsToMeshFromTexBaker: 0
-  clearBuffersAfterBake: 1
-  bakeAssetsInPlaceFolderPath: 
-  resultPrefab: {fileID: 2152519570844452537, guid: 531dcdebd1bfc99428195e3f63b7b36f, type: 3}
-  resultPrefabLeaveInstanceInSceneAfterBake: 0
-  parentSceneObject: {fileID: 0}
-  _meshCombiner:
-    _validationLevel: 2
-    _name: MeshBaker (0)-mesh
-    _textureBakeResults: {fileID: 0}
-    _resultSceneObject: {fileID: 0}
-    _targetRenderer: {fileID: 0}
-    _LOG_LEVEL: 3
-    _settingsHolder: {fileID: 0}
-    _outputOption: 2
-    _renderType: 0
-    _lightmapOption: 1
-    _doNorm: 1
-    _doTan: 1
-    _doCol: 0
-    _doUV: 1
-    _doUV3: 0
-    _doUV4: 0
-    _doUV5: 0
-    _doUV6: 0
-    _doUV7: 0
-    _doUV8: 0
-    _doBlendShapes: 0
-    _pivotLocationType: 0
-    _pivotLocation: {x: 0, y: 0, z: 0}
-    _clearBuffersAfterBake: 0
-    _optimizeAfterBake: 1
-    _uv2UnwrappingParamsHardAngle: 60
-    _uv2UnwrappingParamsPackMargin: 0.005
-    _smrNoExtraBonesWhenCombiningMeshRenderers: 0
-    _smrMergeBlendShapesWithSameNames: 0
-    _assignToMeshCustomizer: {fileID: 0}
-    objectsInCombinedMesh: []
-    lightmapIndex: -1
-    mbDynamicObjectsInCombinedMesh: []
-    verts: []
-    normals: []
-    tangents: []
-    uvs: []
-    uvsSliceIdx: []
-    uv2s: []
-    uv3s: []
-    uv4s: []
-    uv5s: []
-    uv6s: []
-    uv7s: []
-    uv8s: []
-    colors: []
-    bindPoses: []
-    bones: []
-    blendShapes: []
-    blendShapesInCombined: []
-    submeshTris: []
-    _meshBirth: 1
-    _mesh: {fileID: 4300000, guid: 4d50fd2bd2d65e74680025482f1d8f53, type: 2}
---- !u!4 &891277205
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 891277203}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 64
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &902044139 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 6457172088568486429, guid: 5f8b2bfc2dccbcd45a7849d86c139871, type: 3}
@@ -6886,16 +6778,20 @@ PrefabInstance:
       value: TempPhotonManager
       objectReference: {fileID: 0}
     - target: {fileID: 7713197008845528157, guid: 82a5417180838e44aa46d790008df36c, type: 3}
+      propertyPath: roomName
+      value: YCCC
+      objectReference: {fileID: 0}
+    - target: {fileID: 7713197008845528157, guid: 82a5417180838e44aa46d790008df36c, type: 3}
       propertyPath: CreatePos
       value: 
       objectReference: {fileID: 1933545501}
     - target: {fileID: 7713197008845528157, guid: 82a5417180838e44aa46d790008df36c, type: 3}
       propertyPath: nellaPrefabDirectory
-      value: Prefabs/JJS/KSU_Nella
+      value: Prefabs/YC/KSU_Nella
       objectReference: {fileID: 0}
     - target: {fileID: 7713197008845528157, guid: 82a5417180838e44aa46d790008df36c, type: 3}
       propertyPath: steadyPrefabDirectory
-      value: Prefabs/JJS/KSU_Steady
+      value: Prefabs/YC/KSU_Steady
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 82a5417180838e44aa46d790008df36c, type: 3}

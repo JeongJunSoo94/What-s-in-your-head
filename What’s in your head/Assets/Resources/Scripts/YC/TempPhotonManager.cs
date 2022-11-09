@@ -139,6 +139,9 @@ namespace YC.Photon
             {
                 createPos = CreatePos.transform.position;
             }
+            else
+                createPos = this.gameObject.transform.position;
+
             if (PhotonNetwork.CurrentRoom.PlayerCount == 1)
             {              
                 if(isNella)
