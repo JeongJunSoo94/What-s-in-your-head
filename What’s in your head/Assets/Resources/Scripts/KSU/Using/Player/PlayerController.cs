@@ -603,6 +603,16 @@ namespace KSU
             playerRigidbody.velocity = moveVec;
         }
 
+        public void SetOnCollider()
+        {
+            playerCapsuleCollider.enabled = true;
+        }
+
+        public void SetOffCollider()
+        {
+            playerCapsuleCollider.enabled = false;
+        }
+
         public void MakeKnockBackVec(Vector3 horVec, float rushSpeed)
         {
             knockBackVec = horVec.normalized * rushSpeed * 1.3f + Vector3.up * knockBackVerticalSpeed;
