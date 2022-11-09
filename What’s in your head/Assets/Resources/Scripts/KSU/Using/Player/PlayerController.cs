@@ -507,7 +507,7 @@ namespace KSU
                     moveVec.y = terminalSpeed;
                 }
 
-                if(characterState.isAirBlocked)
+                if (characterState.isAirBlocked)
                 {
                     playerRigidbody.velocity = Vector3.up * moveVec.y;
                 }
@@ -597,7 +597,7 @@ namespace KSU
                     moveVec.y = characterState.slopeAngleCofacter * moveSpeed;
 
                 if (characterState.height >= characterState.groundCheckThresholdMin)
-                    moveVec += Vector3.up * (gravity * gravityCofactor * Time.fixedDeltaTime);
+                    moveVec.y = playerRigidbody.velocity.y + gravity * Time.fixedDeltaTime;
             }
 
             playerRigidbody.velocity = moveVec;
@@ -641,6 +641,7 @@ namespace KSU
         {
             characterState.isStopped = true;
             playerCapsuleCollider.enabled = false;
+            InitInteraction();
             EscapeInteraction();
         }
 

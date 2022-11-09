@@ -52,7 +52,7 @@ namespace YC.Camera_
 
         // ============  Aim View YÃà ±Ëµµ Á¦ÇÑ  ============ //
         [Header("[Sholder View Y±Ëµµ Up Á¦ÇÑ °ª]")]
-        [SerializeField] [Range(0, 1)] float sholderAxisY_MaxUp = 0.2f;
+        [SerializeField] [Range(0, 1)] float sholderAxisY_MaxUp = 0.25f;
 
         [Header("[Sholder View Y±Ëµµ Down Á¦ÇÑ °ª]")]
         [SerializeField] [Range(0, 1)] float sholderAxisY_MaxDown = 0.5f;

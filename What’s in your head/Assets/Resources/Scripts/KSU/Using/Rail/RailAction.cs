@@ -35,15 +35,15 @@ namespace KSU
         [Header("레일 탐지 범위(캡슐) 반지름")]
         public float rangeRadius = 5f;
         [Header("레일 탐지 범위(캡슐) 길이(거리)")]
-        public float rangeDistance = 5f;
+        public float rangeDistance = 15f;
         [Header("레일 상호작용키 사용후 레일까지 날아가는 속력(갈아타기 동일)")]
-        public float movingToRailSpeed = 10f;
+        public float movingToRailSpeed = 20f;
         [Header("레일 상호작용 후 레일 도달 오프셋")]
         public float departingRailOffset = 0.5f;
         [Header("레일 타는 중 점프 높이")]
-        public float railJumpHeight = 4f;
+        public float railJumpHeight = 5f;
         [Header("레일 타는 중 점프 속도(상승 하강 동일)")]
-        public float railJumpSpeed = 6f;
+        public float railJumpSpeed = 20f;
 
 
 
@@ -362,12 +362,14 @@ namespace KSU
 
         public float StartRailAction()
         {
+            if (railStartObject == null)
+                return 0f;
+            currentRail = railStartObject.transform.parent.gameObject;
             playerController.characterState.isRiding = true;
             playerRigidbody.velocity = Vector3.zero;
             Vector3 lookVec = (railStartPosiotion - transform.position);
             lookVec.y = 0;
             transform.LookAt(transform.position + lookVec);
-            currentRail = railStartObject.transform.parent.gameObject;
             interactionState.isMovingToRail = true;
             interactionState.isRailTriggered = true;
             interactionState.isRidingRail = false;
@@ -475,24 +477,27 @@ namespace KSU
 
         void SendInfoUI()
         {
-            if(detectedRail.Count > 0)
+            if (detectedRail.Count > 0)
             {
                 if (interactionState.isRailFounded)
                 {
-                    railStartObject.transform.parent.gameObject.GetComponentInChildren<OneIndicator>().SetUI(true, _raycastHit.point);
-                    foreach (var rail in detectedRail.Keys)
+                    foreach (var rail in detectedRail)
                     {
-                        if (rail != railStartObject.transform.parent.gameObject)
+                        if (rail.Key != railStartObject.transform.parent.gameObject)
                         {
-                            rail.GetComponentInChildren<OneIndicator>().SetUI(false, Vector3.zero);
+                            rail.Key.GetComponentInChildren<OneIndicator>().SetUI(false, Vector3.zero);
+                        }
+                        else
+                        {
+                            rail.Key.GetComponentInChildren<OneIndicator>().SetUI(true, _raycastHit.point);
                         }
                     }
                 }
                 else
                 {
-                    foreach (var rail in detectedRail.Keys)
+                    foreach (var rail in detectedRail)
                     {
-                        rail.GetComponentInChildren<OneIndicator>().SetUI(false, Vector3.zero);
+                        rail.Key.GetComponentInChildren<OneIndicator>().SetUI(false, Vector3.zero);
                     }
                 }
             }
@@ -548,26 +553,27 @@ namespace KSU
             {
                 if (detectedRail.Count > 0)
                 {
-                    bool isNewRail = true;
+                    //bool isNewRail = true;
                     foreach (var rail in detectedRail)
                     {
                         if (rail.Key == other.transform.parent.transform.parent.gameObject)
                         {
                             detectedRail[rail.Key] = rail.Value - 1;
-                            if(rail.Value < 1)
+                            if(rail.Value < 2)
                             {
+                                rail.Key.GetComponentInChildren<OneIndicator>().SetUI(false, Vector3.zero);
                                 detectedRail.Remove(rail.Key);
                             }
 
-                            isNewRail = false;
+                            //isNewRail = false;
                             break;
                         }
                     }
 
-                    if (isNewRail)
-                    {
-                        Debug.Log("레일 갯수 오류");
-                    }
+                    //if (isNewRail)
+                    //{
+                    //    Debug.Log("레일 갯수 오류");
+                    //}
                 }
 
                 interactionState.railTriggerDetectionNum--;

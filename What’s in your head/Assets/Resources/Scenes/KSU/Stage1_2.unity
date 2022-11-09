@@ -4516,10 +4516,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   roomName: JCW11
-  nellaPrefabDirectory: Prefabs/YC/JJS_Nella
-  steadyPrefabDirectory: Prefabs/YC/JJS_Steady
-  isNella: 1
-  StartPosition: {fileID: 1624440615}
+  nellaPrefabDirectory: Prefabs/KSU/Stage3/Player/KSU_Nella
+  steadyPrefabDirectory: Prefabs/KSU/Stage2/Player/KSU_Steady
+  isNella: 0
+  StartPosition: {fileID: 766787157}
 --- !u!1 &336761061
 GameObject:
   m_ObjectHideFlags: 0
@@ -10381,6 +10381,11 @@ Transform:
   m_Father: {fileID: 978751829}
   m_RootOrder: 11
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &766787157 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6834598979589664434, guid: d4ea71ba79eac5944944a3e5d6f3884f, type: 3}
+  m_PrefabInstance: {fileID: 1168941411}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &770887780
 GameObject:
   m_ObjectHideFlags: 0
@@ -13073,6 +13078,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 2129113893}
     m_Modifications:
+    - target: {fileID: 3936760853262231242, guid: c70e6dcfc87a485498c2c5ef3bd1cfb5, type: 3}
+      propertyPath: m_Name
+      value: Rail11
+      objectReference: {fileID: 0}
     - target: {fileID: 4123064193583307452, guid: c70e6dcfc87a485498c2c5ef3bd1cfb5, type: 3}
       propertyPath: m_Name
       value: TunnelRail3_10
@@ -15810,15 +15819,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7530588499379395745, guid: d4ea71ba79eac5944944a3e5d6f3884f, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -495.24
+      value: -504
       objectReference: {fileID: 0}
     - target: {fileID: 7530588499379395745, guid: d4ea71ba79eac5944944a3e5d6f3884f, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 18.651
+      value: 28.96
       objectReference: {fileID: 0}
     - target: {fileID: 7530588499379395745, guid: d4ea71ba79eac5944944a3e5d6f3884f, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 251.79
+      value: 155.5497
       objectReference: {fileID: 0}
     - target: {fileID: 7530588499379395745, guid: d4ea71ba79eac5944944a3e5d6f3884f, type: 3}
       propertyPath: m_LocalRotation.w
@@ -18088,6 +18097,10 @@ PrefabInstance:
     - target: {fileID: 1239850285181637300, guid: 71cd6059147b12c4f8228736c7d9cd98, type: 3}
       propertyPath: m_Waypoints.Array.data[10].position.z
       value: 40
+      objectReference: {fileID: 0}
+    - target: {fileID: 1239850285181637302, guid: 71cd6059147b12c4f8228736c7d9cd98, type: 3}
+      propertyPath: m_Name
+      value: Rail10
       objectReference: {fileID: 0}
     - target: {fileID: 3126146773226594752, guid: 71cd6059147b12c4f8228736c7d9cd98, type: 3}
       propertyPath: m_RootOrder
@@ -21952,11 +21965,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: bce6ee07595e405448a6d538ef30ccd0, type: 3}
---- !u!1 &1624440615 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 5652331108056305054, guid: e437b5fa29def88438d60170f682d255, type: 3}
-  m_PrefabInstance: {fileID: 260056244}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1629694711
 GameObject:
   m_ObjectHideFlags: 0
@@ -25740,6 +25748,37 @@ Transform:
   - {fileID: 52119417}
   m_Father: {fileID: 978751829}
   m_RootOrder: 8
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1902275955
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1902275956}
+  m_Layer: 0
+  m_Name: GameObject
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1902275956
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1902275955}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 6.08, y: 26.66, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 161
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1903049160
 PrefabInstance:
@@ -30072,6 +30111,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2850765749915706650, guid: 12f4ef26209781d498be6fd967e65a47, type: 3}
+      propertyPath: m_Name
+      value: Rail2
+      objectReference: {fileID: 0}
     - target: {fileID: 9192455952278553969, guid: 12f4ef26209781d498be6fd967e65a47, type: 3}
       propertyPath: m_Name
       value: RollerRail2
@@ -30189,6 +30232,10 @@ PrefabInstance:
     - target: {fileID: 3706911958810024115, guid: 63e4496d3d4424c45a15a6a0001a1d59, type: 3}
       propertyPath: m_Name
       value: RollerRail1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8547547812940587147, guid: 63e4496d3d4424c45a15a6a0001a1d59, type: 3}
+      propertyPath: m_Name
+      value: Rail1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 63e4496d3d4424c45a15a6a0001a1d59, type: 3}

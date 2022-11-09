@@ -11,7 +11,10 @@ namespace KSU.FSM
         override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
         {
             animator.SetBool("DeadTrigger", false);
-            animator.SetBool("isDead", true);
+            if(GameManager.Instance.isTopView)
+            {
+                animator.SetBool("isDead", true);
+            }
             // 수정: 스타트 데스 안에 이스케이프 인터랙션 함수 추가해야함
             GetPlayerController(animator).StartDeath();
             
@@ -27,7 +30,6 @@ namespace KSU.FSM
         override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
         {
             GetPlayerController(animator).EndDeath();
-            animator.SetBool("isDead", false);
         }
 
         // OnStateMove is called right after Animator.OnAnimatorMove()

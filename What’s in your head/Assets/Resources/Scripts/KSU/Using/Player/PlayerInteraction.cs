@@ -131,6 +131,7 @@ namespace KSU
             {
                 foreach (var obj in detectedInteractableObjects)
                 {
+                    Debug.Log("SendInfoUI");
                     obj.Key.GetComponentInChildren<ConvertIndicator>().SetUI(obj.Value.isUIActive, obj.Value.isInteractable, obj.Value.distance);
                 }
             }
@@ -176,6 +177,7 @@ namespace KSU
         {
             if (other.CompareTag("InteractableObject"))
             {
+                Debug.Log("상호작용 오브젝트 감지");
                 detectedInteractableObjects.Add(other.gameObject.transform.parent.gameObject, new Obj_Info(false, false, 100f));
             }
         }

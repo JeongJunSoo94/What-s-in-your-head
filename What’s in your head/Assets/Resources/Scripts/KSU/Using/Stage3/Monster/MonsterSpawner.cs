@@ -149,7 +149,7 @@ namespace KSU
             {
                 if (curSpawnCount < maxSpawnNum)
                 {
-                    if (patternCount > spawnPattern.Count)
+                    if (patternCount >= spawnPattern.Count)
                         patternCount = 0;
 
                     int spawnPatternNum = spawnPattern[patternCount];

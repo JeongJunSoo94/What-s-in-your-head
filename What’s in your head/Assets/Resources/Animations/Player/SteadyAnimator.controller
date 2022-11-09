@@ -993,7 +993,7 @@ AnimatorStateTransition:
   m_Mute: 0
   m_IsExit: 0
   serializedVersion: 3
-  m_TransitionDuration: 0.25
+  m_TransitionDuration: 0
   m_TransitionOffset: 0
   m_ExitTime: 0.75
   m_HasExitTime: 0
@@ -1829,13 +1829,16 @@ AnimatorStateTransition:
   - m_ConditionMode: 1
     m_ConditionEvent: JumpDown
     m_EventTreshold: 0
+  - m_ConditionMode: 2
+    m_ConditionEvent: isAirDash
+    m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: -4191497811479198430}
   m_Solo: 0
   m_Mute: 0
   m_IsExit: 0
   serializedVersion: 3
-  m_TransitionDuration: 0.019582244
+  m_TransitionDuration: 0
   m_TransitionOffset: 0
   m_ExitTime: 0
   m_HasExitTime: 0
@@ -2253,7 +2256,7 @@ AnimatorState:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: ExitRope
-  m_Speed: 2
+  m_Speed: 4
   m_CycleOffset: 0
   m_Transitions:
   - {fileID: -6735513822538970787}
@@ -2767,7 +2770,7 @@ AnimatorStateMachine:
     m_Position: {x: 180, y: 460, z: 0}
   - serializedVersion: 1
     m_State: {fileID: -4191497811479198430}
-    m_Position: {x: 470, y: 460, z: 0}
+    m_Position: {x: 480, y: 410, z: 0}
   - serializedVersion: 1
     m_State: {fileID: 687927285015735982}
     m_Position: {x: 50, y: 30, z: 0}
@@ -3038,7 +3041,7 @@ AnimatorStateTransition:
   m_Mute: 0
   m_IsExit: 0
   serializedVersion: 3
-  m_TransitionDuration: 0.25
+  m_TransitionDuration: 0.1
   m_TransitionOffset: 0
   m_ExitTime: 0.625
   m_HasExitTime: 0
@@ -3653,13 +3656,13 @@ AnimatorStateMachine:
   - {fileID: 759562447041015730}
   m_EntryTransitions: []
   m_StateMachineTransitions:
+  - first: {fileID: 2577613250862105067}
+    second: []
   - first: {fileID: 2705869895666531156}
     second: []
   - first: {fileID: 6310391677611241162}
     second: []
   - first: {fileID: -4394488166074350668}
-    second: []
-  - first: {fileID: 2577613250862105067}
     second: []
   m_StateMachineBehaviours: []
   m_AnyStatePosition: {x: -420, y: 0, z: 0}
