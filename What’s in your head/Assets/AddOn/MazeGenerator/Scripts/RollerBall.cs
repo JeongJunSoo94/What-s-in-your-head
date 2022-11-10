@@ -13,14 +13,15 @@ public class RollerBall : MonoBehaviour {
 
 	private Rigidbody mRigidBody = null;
 	private AudioSource mAudioSource = null;
-	private bool mFloorTouched = false;
+	public bool mFloorTouched = false;
 
 	void Start () {
 		mRigidBody = GetComponent<Rigidbody> ();
-		mAudioSource = GetComponent<AudioSource> ();
+        mAudioSource = GetComponent<AudioSource>();
+
 	}
 
-	void FixedUpdate () {
+    void FixedUpdate () {
 		if (mRigidBody != null) {
 			if (Input.GetButton ("Horizontal")) {
 				mRigidBody.AddTorque(Vector3.back * Input.GetAxis("Horizontal")*10);

@@ -14,7 +14,7 @@ namespace JJS.BT
                 { 
                     if (!objectInfo.delayEnable)
                     {
-                        objectInfo.DelayCoroutin(true, duration);
+                        objectInfo.DelayCoroutine(duration);
                         objectInfo.delayCheck = false;
                     }
                 }
@@ -23,11 +23,12 @@ namespace JJS.BT
 
         protected override void OnStop()
         {
-            objectInfo.DelayCoroutin(false, duration);
         }
 
         protected override State OnUpdate()
         {
+            if(!objectInfo.photonView.IsMine)
+                return State.Success;
             if (!objectInfo.delayEnable)
             {
                 return State.Success;

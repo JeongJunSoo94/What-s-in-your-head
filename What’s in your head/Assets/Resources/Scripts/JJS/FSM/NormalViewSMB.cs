@@ -9,7 +9,6 @@ namespace JJS
 {
     public class NormalViewSMB : CharacterBaseSMB
     {
-        float AttackDelayTime = 0f;
         override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
         {
             animator.SetBool("wasAirJump", false);

@@ -53,7 +53,7 @@ namespace JJS
         public float AimCool = 0.5f;
 
         public bool notRotatoin;
-        
+
         private void Awake()
         {
             afterDelayTime = false;
@@ -65,6 +65,8 @@ namespace JJS
 
             player = GetComponent<PlayerController>();
             layerWeight = 0;
+
+   
         }
 
 

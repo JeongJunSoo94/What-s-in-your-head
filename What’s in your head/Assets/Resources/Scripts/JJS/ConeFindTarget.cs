@@ -6,7 +6,7 @@ namespace JJS
     public class ConeFindTarget : MonoBehaviour
     {
         [SerializeField]
-        [Range(0f, 500f)]
+        [Range(0f, 1500f)]
         private float _discoveryRadius;
 
         [Range(0f, 90f)]
@@ -25,6 +25,8 @@ namespace JJS
         public Collider[] HitColliders { get { return hitColliders; } }
 
         public List<GameObject> targetObj;
+
+        public bool rayUse =false;
 
         enum type
         {
@@ -123,9 +125,12 @@ namespace JJS
 
                     if (angle <= _viewAngle)
                     {
-                        if (Physics.Raycast(originPos, dir, _discoveryRadius, viewObstacleMask, QueryTriggerInteraction.Ignore))
-                        {
-                            continue;
+                        if (rayUse)
+                        { 
+                            if (Physics.Raycast(originPos, dir, _discoveryRadius, viewObstacleMask, QueryTriggerInteraction.Ignore))
+                            {
+                                continue;
+                            }
                         }
                         count++;
                         targetObj.Add(hitColliders[index].gameObject);

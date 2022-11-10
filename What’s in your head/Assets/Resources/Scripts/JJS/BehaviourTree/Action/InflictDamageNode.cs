@@ -11,14 +11,12 @@ namespace JJS.BT
     {
         public int damage;
         Flashlight find;
-        bool waitCheck = true;
         protected override void OnStart()
         {
             if (find == null)
             {
                 find = objectInfo.PrefabObject.GetComponent<Flashlight>();
             }
-            waitCheck = false;
         }
 
         protected override void OnStop()
@@ -27,11 +25,7 @@ namespace JJS.BT
 
         protected override State OnUpdate()
         {
-            if (!objectInfo.delayCheck)
-            {
-                waitCheck = true;
-            }
-            if (waitCheck && !objectInfo.delayEnable)
+            if (objectInfo.photonView.IsMine && !objectInfo.delayEnable)
                 return State.Success;
             for (int i = 0; i<find.finderSpot.targetObj.Count; i++)
             {

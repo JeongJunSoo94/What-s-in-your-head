@@ -17,6 +17,7 @@ namespace JCW.Object
         int maxIndex = 0;
 
         bool isStart = false;
+        bool isBackToInit = false;
 
         private void Awake()
         {
@@ -59,9 +60,11 @@ namespace JCW.Object
         {
             if (positionList.Count <= 1)
                 yield break;
-            
+
+            isBackToInit = false;
+
             // 현재 인덱스와 인덱스 사이라면, 미리 이동시켜놓음.
-            while(true)
+            while (true)
             {
                 if (transform.position == positionList[curIndex])
                     break;
@@ -87,6 +90,7 @@ namespace JCW.Object
             if (positionList.Count <= 1)
                 yield break;
 
+            isBackToInit = true;
             // 현재 인덱스와 인덱스 사이라면, 미리 이동시켜놓음.
             while (true)
             {
@@ -117,10 +121,23 @@ namespace JCW.Object
             {
                 Debug.Log("오브젝트 접근");
                 Transform playerTF = collision.gameObject.transform;
-                if (isLethal)
-                    playerTF.GetComponent<PlayerController>().Resurrect();
-                else if (playerTF.position.y >= this.transform.position.y)
+                if (playerTF.position.y >= this.transform.position.y)
                     playerTF.parent = this.transform;
+            }
+        }
+
+        private void OnTriggerEnter(Collider other)
+        {
+            if (other.CompareTag("Nella") || other.CompareTag("Steady"))
+            {
+                if (isLethal && isBackToInit)
+                {
+                    PlayerController player = other.GetComponent<PlayerController>();
+                    if (player.characterState.isMine)
+                    {
+                        player.GetDamage(12, DamageType.Dead);
+                    }
+                }
             }
         }
 

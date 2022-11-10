@@ -9,8 +9,6 @@ namespace JJS
 {
     public class WeaponSwapSMB : CharacterBaseSMB
     {
-        int index=0;
-        // OnStateEnter is called when a transition starts and the state machine starts to evaluate this state
         override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
         {
             animator.SetLayerWeight(1, 1);

@@ -49,12 +49,10 @@ public static class Debug
     {
         UnityEngine.Debug.DrawRay(start, dir);
     }
-
     public static void Log(object message, UnityEngine.Object context)
     {
         UnityEngine.Debug.Log(message, context);
     }
-
     public static void Log(object message)
     {
         UnityEngine.Debug.Log(message);

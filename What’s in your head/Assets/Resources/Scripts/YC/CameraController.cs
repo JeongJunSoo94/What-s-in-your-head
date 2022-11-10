@@ -348,26 +348,24 @@ namespace YC.Camera_
             CinemachineFreeLook backCine = backCam.GetComponent<CinemachineFreeLook>();
             CinemachineFreeLook sholderCine = sholderCam.GetComponent<CinemachineFreeLook>();
 
-
             // << : Rig »èÁ¦
-            if (backCam.transform.childCount != 0)
-            {
-                for (int i = 0; i < backCam.transform.childCount; ++i)
-                {
-                    Destroy(backCam.transform.GetChild(i).gameObject);
-                }
-            }
+            //if (backCam.transform.childCount != 0)
+            //{
+            //    for (int i = 0; i < backCam.transform.childCount; ++i)
+            //    {
+            //        Destroy(backCam.transform.GetChild(i).gameObject);
+            //    }
+            //}
+
             if (sholderCam.transform.childCount != 0)
             {
-                for(int i = 0; i < sholderCam.transform.childCount; ++i)
+                for (int i = 0; i < sholderCam.transform.childCount; ++i)
                 {
                     Destroy(sholderCam.transform.GetChild(i).gameObject);
                 }
             }
-
             for (int i = 0; i < 3; ++i)
             {
-                // BackCam Rig 
                 backCine.GetRig(i).GetCinemachineComponent<CinemachineComposer>().m_HorizontalDamping = rigInitValue;
                 backCine.GetRig(i).GetCinemachineComponent<CinemachineComposer>().m_VerticalDamping = rigInitValue;
 
@@ -375,15 +373,16 @@ namespace YC.Camera_
                 backCine.GetRig(i).GetCinemachineComponent<CinemachineOrbitalTransposer>().m_YDamping = rigInitValue;
                 backCine.GetRig(i).GetCinemachineComponent<CinemachineOrbitalTransposer>().m_ZDamping = rigInitValue;
 
-                // SholderCam Rig
+                sholderCine.GetRig(i).AddCinemachineComponent<CinemachineComposer>();
+                sholderCine.GetRig(i).AddCinemachineComponent<CinemachineOrbitalTransposer>();
+
                 sholderCine.GetRig(i).GetCinemachineComponent<CinemachineComposer>().m_HorizontalDamping = rigInitValue;
                 sholderCine.GetRig(i).GetCinemachineComponent<CinemachineComposer>().m_VerticalDamping = rigInitValue;
 
                 sholderCine.GetRig(i).GetCinemachineComponent<CinemachineOrbitalTransposer>().m_XDamping = rigInitValue;
                 sholderCine.GetRig(i).GetCinemachineComponent<CinemachineOrbitalTransposer>().m_YDamping = rigInitValue;
-                sholderCine.GetRig(i).GetCinemachineComponent<CinemachineOrbitalTransposer>().m_ZDamping = rigInitValue;
+                sholderCine.GetRig(i).GetCinemachineComponent<CinemachineOrbitalTransposer>().m_ZDamping = rigInitValue; 
             }
-
             backCine.GetRig(1).GetCinemachineComponent<CinemachineComposer>().m_TrackedObjectOffset.y = offSetYInitValue;
         }
 

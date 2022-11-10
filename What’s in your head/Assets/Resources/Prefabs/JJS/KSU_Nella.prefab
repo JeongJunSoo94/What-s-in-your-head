@@ -2665,7 +2665,7 @@ GameObject:
   - component: {fileID: -7836225080468928713}
   - component: {fileID: 6212938360851387413}
   m_Layer: 6
-  m_Name: JJS_Nella
+  m_Name: KSU_Nella
   m_TagString: Nella
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2694,7 +2694,6 @@ Transform:
   - {fileID: 5865305643984531538}
   - {fileID: 679623358290193281}
   - {fileID: 1860323822555127062}
-  - {fileID: 4209191871710801199}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -2802,8 +2801,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   backView_MouseSensitivity: 25
-  sholderView_MouseSensitivity: 25
-  sholderAxisY_MaxUp: 0.05
+  sholderView_MouseSensitivity: 10
+  sholderAxisY_MaxUp: 0.2
   sholderAxisY_MaxDown: 0.5
   AmplitudeGain: 1
   FrequebctGain: 1.5
@@ -2812,12 +2811,12 @@ MonoBehaviour:
   FrequebctGainSide: 1
   ShakeTimeSide: 2
   platformLerpTime: 0.7
-  CineBack: {fileID: 0}
-  CineSholder: {fileID: 0}
+  CineBack: {fileID: 5990922643141382604, guid: 09dc3c3034d79ec44845aeba912c86ab, type: 3}
+  CineSholder: {fileID: 3213764636192488147, guid: 75991490f73520141b367ac4d7e9caeb, type: 3}
   CineLookObj_Back: {fileID: 3934384160282713336, guid: 90489282f40883d4a9fa701115ed4580, type: 3}
   CineFollowObj_Back: {fileID: 1166992463261942446, guid: 2413b7252612e7841b1c388e19af8cf3, type: 3}
   NoiseProfile: {fileID: 0}
-  aimUI: {fileID: 0}
+  aimUI: {fileID: 4660158950712969332, guid: d9ae6c359ed6b9b4fbc0438148b6bc30, type: 3}
 --- !u!114 &8011218605724820560
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2836,8 +2835,8 @@ MonoBehaviour:
   mainCamera: {fileID: 0}
   playerRigidbody: {fileID: 0}
   photonView: {fileID: 0}
-  walkSpeed: 4
-  runSpeed: 7
+  walkSpeed: 8
+  runSpeed: 14
   dashSpeed: 20
   airDashSpeed: 16
   inertiaSpeed: 0
@@ -3125,7 +3124,7 @@ MonoBehaviour:
   ropeAction: {fileID: 0}
   layerFilter:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 196616
 --- !u!114 &6169874678787101720
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3343,7 +3342,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4570095282960336666, guid: ad07cf81223c0a74a982da92429708f1, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4570095282960571194, guid: ad07cf81223c0a74a982da92429708f1, type: 3}
       propertyPath: m_RootOrder
@@ -3743,82 +3742,4 @@ Transform:
 GameObject:
   m_CorrespondingSourceObject: {fileID: 8013387862399095547, guid: 8dd44bd9e98848449b051b3d9f62fa94, type: 3}
   m_PrefabInstance: {fileID: 6673046687653910379}
-  m_PrefabAsset: {fileID: 0}
---- !u!1001 &7064454420272215476
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    m_TransformParent: {fileID: 8914183395468562454}
-    m_Modifications:
-    - target: {fileID: 4211676276295628334, guid: 17a47b76307c66d499b88d4b06ce4f5f, type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4606108286353797399, guid: 17a47b76307c66d499b88d4b06ce4f5f, type: 3}
-      propertyPath: m_Name
-      value: Cine_lookatObj_Sholder
-      objectReference: {fileID: 0}
-    - target: {fileID: 6369205230953552027, guid: 17a47b76307c66d499b88d4b06ce4f5f, type: 3}
-      propertyPath: m_RootOrder
-      value: 11
-      objectReference: {fileID: 0}
-    - target: {fileID: 6369205230953552027, guid: 17a47b76307c66d499b88d4b06ce4f5f, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6369205230953552027, guid: 17a47b76307c66d499b88d4b06ce4f5f, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 6369205230953552027, guid: 17a47b76307c66d499b88d4b06ce4f5f, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 6369205230953552027, guid: 17a47b76307c66d499b88d4b06ce4f5f, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 6369205230953552027, guid: 17a47b76307c66d499b88d4b06ce4f5f, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6369205230953552027, guid: 17a47b76307c66d499b88d4b06ce4f5f, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6369205230953552027, guid: 17a47b76307c66d499b88d4b06ce4f5f, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6369205230953552027, guid: 17a47b76307c66d499b88d4b06ce4f5f, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6369205230953552027, guid: 17a47b76307c66d499b88d4b06ce4f5f, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6369205230953552027, guid: 17a47b76307c66d499b88d4b06ce4f5f, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8438130422447126419, guid: 17a47b76307c66d499b88d4b06ce4f5f, type: 3}
-      propertyPath: m_LocalScale.x
-      value: 0.3
-      objectReference: {fileID: 0}
-    - target: {fileID: 8438130422447126419, guid: 17a47b76307c66d499b88d4b06ce4f5f, type: 3}
-      propertyPath: m_LocalScale.y
-      value: 0.3
-      objectReference: {fileID: 0}
-    - target: {fileID: 8438130422447126419, guid: 17a47b76307c66d499b88d4b06ce4f5f, type: 3}
-      propertyPath: m_LocalScale.z
-      value: 0.3
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: 17a47b76307c66d499b88d4b06ce4f5f, type: 3}
---- !u!4 &4209191871710801199 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 6369205230953552027, guid: 17a47b76307c66d499b88d4b06ce4f5f, type: 3}
-  m_PrefabInstance: {fileID: 7064454420272215476}
   m_PrefabAsset: {fileID: 0}

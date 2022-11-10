@@ -52,7 +52,8 @@ namespace KSU.FSM
         void check(Animator animator)
         {
             animator.SetLayerWeight(1, 0);
-            if (GetPlayerController(animator).playerMouse.SwapPossibleCheck() && GetPlayerController(animator).playerMouse.weaponInfo[GetPlayerController(animator).playerMouse.GetUseWeapon()].canAim)
+            //if (GetPlayerController(animator).playerMouse.SwapPossibleCheck() && GetPlayerController(animator).playerMouse.weaponInfo[GetPlayerController(animator).playerMouse.GetUseWeapon()].canAim)
+            if (GetPlayerController(animator).playerMouse.weaponInfo[GetPlayerController(animator).playerMouse.GetUseWeapon()].canAim)
             {
                 if (GetPlayerController(animator).characterState.isMine)
                 {
