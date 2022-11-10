@@ -9,6 +9,7 @@ public class BossSwitch : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        boss?.SetActive(enable);
+        if(other.gameObject.layer==LayerMask.NameToLayer("Player"))
+            boss?.SetActive(enable);
     }
 }
