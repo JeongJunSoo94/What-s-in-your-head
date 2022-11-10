@@ -38,9 +38,9 @@ namespace JJS
                 animator.SetBool("isAir", true);
                 return;
             }
-                animator.SetBool("isAir", GetPlayerController(animator).characterState.IsGrounded);
+            animator.SetBool("isAir", !GetPlayerController(animator).characterState.IsGrounded);
             
-                animator.SetBool("isDash", GetPlayerController(animator).characterState.IsDashing);
+            animator.SetBool("isDash", GetPlayerController(animator).characterState.IsDashing);
         }
     }
 

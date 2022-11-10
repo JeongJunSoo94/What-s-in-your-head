@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using KSU;
+using KSU.AutoAim.Player;
 namespace JJS
 { 
     public class CharacterBuilder : MonoBehaviour
@@ -24,6 +25,7 @@ namespace JJS
                 {
                     SetCharacterComponent(nella, nellaMouseControllerData, "Hand_R");
                     SetCharacterComponent(steady, steadyMouseControllerData, "Hand_R");
+                    SteadyScriptSetActive(steady);
                     gameObject.SetActive(false);
                 }
             }
@@ -37,6 +39,7 @@ namespace JJS
                 {
                     SetCharacterComponent(nella, nellaMouseControllerData, "Hand_R");
                     SetCharacterComponent(steady, steadyMouseControllerData, "Hand_R");
+                    SteadyScriptSetActive(steady);
                     gameObject.SetActive(false);
                 }
             }
@@ -123,6 +126,32 @@ namespace JJS
             clone.transform.localPosition = weapon.transform.position;
             clone.transform.localRotation = weapon.transform.rotation;
             return clone;
+        }
+
+        public void SteadyScriptSetActive(GameObject player)
+        {
+            if (player != null)
+            {
+                PlayerMouseController playerMouse = player.GetComponent<PlayerMouseController>();
+                if (playerMouse.weaponInfo.Length != 0)
+                {
+                    if (playerMouse.weaponInfo[playerMouse.GetUseWeapon()].weapon.name == "CymbalsPosition")
+                    {
+                        player.GetComponent<SteadyCymbalsAction>().enabled = true;
+                        player.GetComponent<SteadyGrappleAction>().enabled = false;
+                    }
+                    else if (playerMouse.weaponInfo[playerMouse.GetUseWeapon()].weapon.name == "GrapplePosition")
+                    {
+                        player.GetComponent<SteadyCymbalsAction>().enabled = false;
+                        player.GetComponent<SteadyGrappleAction>().enabled = true;
+                    }
+                }
+                else
+                {
+                    player.GetComponent<SteadyCymbalsAction>().enabled = false;
+                    player.GetComponent<SteadyGrappleAction>().enabled = false;
+                }
+            }
         }
     }
 }
