@@ -67,10 +67,9 @@ namespace JCW.Object.Stage1
             for (int i = 0 ; i < objList.Count ; ++i)
             {
                 Vector3 targetRot = objList[i].localEulerAngles;
-                targetRot.z = targetRot.z == 0 ? 90f : 0f;
+                targetRot.x = targetRot.x == 0 ? 90f : 0f;
                 objList[i].localRotation = Quaternion.Euler(targetRot);
             }
-
             coroutine = null;
             canStart = true;
             yield break;

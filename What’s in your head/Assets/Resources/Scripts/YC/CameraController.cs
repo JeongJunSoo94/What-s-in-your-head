@@ -226,7 +226,8 @@ namespace YC.Camera_
 
         void InitUI()
         {
-            aimUI = Instantiate(aimUI);
+            if(pv.IsMine)
+                aimUI = Instantiate(aimUI);
         }
         void InitVirtualCamera() // Virtual Camera 생성 및 초기화  
         {           

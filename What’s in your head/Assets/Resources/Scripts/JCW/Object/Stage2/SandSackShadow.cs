@@ -7,7 +7,7 @@ namespace JCW.Object
 {
     public class SandSackShadow : ShadowCaster
     {
-        [Header("ÇöÀç ¾Æ·¡ÀÇ ÇÃ·§ÆûÀÇ Æ®·£½ºÆû")] public Transform groundPlatform;
+        [HideInInspector] public Transform groundPlatform;
 
         float initHeight;
         float groundHeight;

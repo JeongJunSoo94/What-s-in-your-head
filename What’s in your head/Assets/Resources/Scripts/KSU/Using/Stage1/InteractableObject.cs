@@ -30,11 +30,7 @@ namespace KSU.Object.Interaction
         public virtual void StartInteraction()
         {
             if (isInteractable)
-            {
-                if(photonView.IsMine)
-                    photonView.RPC(nameof(SetInteractable), RpcTarget.AllViaServer, false);
-                // 상호작용 시작
-            }
+                photonView.RPC(nameof(SetInteractable), RpcTarget.AllViaServer, false);
         }
 
         [PunRPC]

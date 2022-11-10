@@ -13,11 +13,14 @@ namespace JCW.Object.Stage1
 
         bool isPressed = false;
         Vector3 pressedPos;
+        Vector3 unpressedPos;
+        Coroutine coroutine = null;
 
         private void Awake()
         {
             transform.GetChild(0).GetChild(buttonType).gameObject.SetActive(true);
-            pressedPos = transform.localPosition;
+            unpressedPos = transform.localPosition;
+            pressedPos = unpressedPos;
             pressedPos.y -= 0.6f;
             for (int i = 0 ; i< activeObjects.Count ; ++i)
             {
@@ -28,35 +31,64 @@ namespace JCW.Object.Stage1
                 inactiveObjects[j].SetActive(true);
             }
         }
-
-        private void FixedUpdate()
-        {
-            if (!isPressed)
-                return;
-            if (transform.localPosition.y > pressedPos.y)
-                transform.localPosition = Vector3.MoveTowards(transform.localPosition, pressedPos, Time.fixedDeltaTime * 5f);
-            else
-            {
-                for (int i = 0 ; i< activeObjects.Count ; ++i)
-                {
-                    activeObjects[i].SetActive(true);
-                }
-                for (int j = 0 ; j< inactiveObjects.Count ; ++j)
-                {
-                    inactiveObjects[j].SetActive(false);
-                }
-                Destroy(this);
-            }
-        }
-
         private void OnCollisionEnter(Collision collision)
         {
             if (collision.gameObject.CompareTag("Nella") || collision.gameObject.CompareTag("Steady"))
             {
-                if(collision.transform.position.y >= this.transform.position.y)
-                    isPressed = true;
+                StartCoroutine("ButtonDown");
+            }                
+        }
+
+        private void OnCollisionExit(Collision collision)
+        {
+            if (collision.gameObject.CompareTag("Nella") || collision.gameObject.CompareTag("Steady"))
+            {
+                StartCoroutine("ButtonUp");
             }
-                
+        }
+
+        IEnumerator ButtonDown()
+        {            
+            StopCoroutine("ButtonUp");
+            while (transform.localPosition.y > pressedPos.y)
+            {
+                transform.localPosition = Vector3.MoveTowards(transform.localPosition, pressedPos, Time.deltaTime * 5f);
+                yield return null;
+            }
+
+            for (int i = 0 ; i< activeObjects.Count ; ++i)
+            {
+                activeObjects[i].SetActive(true);
+            }
+            for (int j = 0 ; j< inactiveObjects.Count ; ++j)
+            {
+                inactiveObjects[j].SetActive(false);
+            }
+        }
+
+        IEnumerator ButtonUp()
+        {
+            float curTime = 0f;
+            while (curTime<0.5f)
+            {
+                curTime += Time.deltaTime;
+                yield return null;
+            }
+            StopCoroutine("ButtonDown");
+            while (transform.localPosition.y < unpressedPos.y)
+            {
+                transform.localPosition = Vector3.MoveTowards(transform.localPosition, unpressedPos, Time.deltaTime * 5f);
+                yield return null;
+            }
+
+            for (int i = 0 ; i< activeObjects.Count ; ++i)
+            {
+                activeObjects[i].SetActive(false);
+            }
+            for (int j = 0 ; j< inactiveObjects.Count ; ++j)
+            {
+                inactiveObjects[j].SetActive(true);
+            }
         }
     }
 }

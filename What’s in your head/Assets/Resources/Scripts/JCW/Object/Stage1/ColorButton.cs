@@ -1,10 +1,12 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Photon.Pun;
 using UnityEngine;
 
 namespace JCW.Object.Stage1
 {
+    [RequireComponent(typeof(PhotonView))]
     public class ColorButton : MonoBehaviour
     {
         [Header("현재 컬러")]
@@ -19,6 +21,7 @@ namespace JCW.Object.Stage1
         Transform buttonTF;
 
         Coroutine coroutine = null;
+        PhotonView photonView;
 
         private void Awake()
         {
@@ -28,6 +31,7 @@ namespace JCW.Object.Stage1
                     buttonTF = transform.GetChild(i).GetChild(0).gameObject.transform;
                 transform.GetChild(i).gameObject.SetActive(i == colorNum);
             }
+            photonView = PhotonView.Get(this);
             pressedPos = buttonTF.localPosition;
             pressedPos.y -= 0.01f;
         }
@@ -52,13 +56,9 @@ namespace JCW.Object.Stage1
         {
             if (collision.gameObject.CompareTag("Nella") || collision.gameObject.CompareTag("Steady"))
             {
-                Debug.Log("버튼 접촉 확인");
-                if (collision.transform.position.y >= buttonTF.position.y)
+                if (collision.gameObject.GetComponent<PlayerState>().isMine)
                 {
-                    if(coroutine != null)
-                        StopCoroutine(coroutine);
-                    isPressed = true;
-                    ++bothPress;
+                    photonView.RPC(nameof(StepOnOff), RpcTarget.AllViaServer, true);
                 }
             }
         }
@@ -67,8 +67,27 @@ namespace JCW.Object.Stage1
         {
             if (collision.gameObject.CompareTag("Nella") || collision.gameObject.CompareTag("Steady"))
             {
+                if (collision.gameObject.GetComponent<PlayerState>().isMine)
+                {
+                    photonView.RPC(nameof(StepOnOff), RpcTarget.AllViaServer, false);
+                }
+            }
+        }
+
+        [PunRPC]
+        void StepOnOff(bool isOn)
+        {
+            if (isOn)
+            {
+                if (coroutine != null)
+                    StopCoroutine(coroutine);
+                isPressed = true;
+                ++bothPress;
+            }
+            else
+            {
                 --bothPress;
-                if(bothPress <= 0)
+                if (bothPress <= 0)
                 {
                     isPressed = false;
                     coroutine = StartCoroutine(nameof(Reset));

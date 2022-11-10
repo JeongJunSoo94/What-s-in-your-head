@@ -10,6 +10,7 @@ namespace JCW.Object
         [Header("신호 수신 시 이동 속도")] [SerializeField] float recieveMovingSpeed;
         [Header("신호 해제 시 복귀 속도")] [SerializeField] float comebackMovingSpeed;
         [Header("접촉 시 사망 여부")] [SerializeField] bool isLethal;
+        [Header("플레이어가 탈 수 있는 지 여부")] [SerializeField] bool canRide;
         [Header("이동 경로")] [SerializeField] List<Vector3> positionList;
 
         public bool isActive = false;
@@ -47,7 +48,6 @@ namespace JCW.Object
 
         public void SetPositionToList(Vector3 pos)
         {
-            Debug.Log("리스트에 추가");
             positionList.Add(pos);
         }
 
@@ -120,7 +120,7 @@ namespace JCW.Object
                 Transform playerTF = collision.gameObject.transform;
                 if (isLethal)
                     playerTF.GetComponent<PlayerController>().Resurrect();
-                else if (playerTF.position.y >= this.transform.position.y)
+                else if (canRide && playerTF.position.y >= this.transform.position.y)
                     playerTF.parent = this.transform;
             }
         }

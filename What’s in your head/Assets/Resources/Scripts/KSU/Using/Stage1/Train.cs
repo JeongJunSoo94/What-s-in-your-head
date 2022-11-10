@@ -66,16 +66,24 @@ public class Train : MonoBehaviour
         {
             if ((trainCart.m_Position < destPos) && !isEnd)
             {
-                StartCoroutine(nameof(DelayReset));
+                photonView.RPC(nameof(StartDelay),RpcTarget.AllViaServer);
+                //StartCoroutine(nameof(DelayReset));
             }
         }
         else
         {
             if ((trainCart.m_Position > destPos) && !isEnd)
             {
-                StartCoroutine(nameof(DelayReset));
+                photonView.RPC(nameof(StartDelay), RpcTarget.AllViaServer);
+                //StartCoroutine(nameof(DelayReset));
             }
         }
+    }
+
+    [PunRPC]
+    void StartDelay()
+    {
+        StartCoroutine(nameof(DelayReset));
     }
 
     IEnumerator DelayReset()
