@@ -10,6 +10,7 @@ namespace JCW.Object
     public class SavePosition : MonoBehaviour, IPunObservable
     {
         private bool firstContact = false;
+        PhotonView photonView;
 
         [Serializable]
         public class PlayerInfo
@@ -30,31 +31,40 @@ namespace JCW.Object
             }
         }
 
+        private void Awake()
+        {
+            photonView = PhotonView.Get(this);
+        }
+
         private void OnTriggerEnter(Collider other)
         {
             if (other.CompareTag("Nella") || other.CompareTag("Steady"))
             {
                 if (!firstContact)
-                {
+                {                    
+                    if (PhotonNetwork.PlayerList.Length < 2)
+                        return;
                     firstContact = true;
-                    Vector3 pos = other.gameObject.transform.position;
-                    Quaternion rot = other.gameObject.transform.rotation;
-                    GetComponent<PhotonView>().RPC(nameof(Check), RpcTarget.AllViaServer, pos, rot);
+                    Vector3 pos = transform.position;
+                    Quaternion rot = transform.rotation;
+                    photonView.RPC(nameof(Check), RpcTarget.AllViaServer, pos, rot);
                 }
             }
         }
         [PunRPC]
         private void Check(Vector3 pos, Quaternion rot)
-        {
-            ++GameManager.Instance.curSection;
-            Debug.Log("체크포인트 접촉 : " + GameManager.Instance.curSection);
+        {            
             PlayerInfo playerTF = new(pos, rot);
             JsonData infoJson = JsonMapper.ToJson(playerTF);
 
             int curStage = GameManager.Instance.curStageIndex;
-            if (!Directory.Exists(Application.dataPath + "/Resources/CheckPointInfo/Stage" + curStage + "/"))
-                Directory.CreateDirectory(Application.dataPath + "/Resources/CheckPointInfo/Stage" + curStage + "/");
-            File.WriteAllText(Application.dataPath + "/Resources/CheckPointInfo/Stage" + curStage + "/Section" +GameManager.Instance.curSection +".json", infoJson.ToString());
+            int curStageType = GameManager.Instance.curStageType;
+            ++GameManager.Instance.curSection;
+
+            string path = Application.dataPath + "/Resources/CheckPointInfo/Stage" + curStage + "/" + curStageType + "/";
+            if (!Directory.Exists(path))
+                Directory.CreateDirectory(path);
+            File.WriteAllText(path + "Section" +GameManager.Instance.curSection +".json", infoJson.ToString());
             Debug.Log("체크포인트 저장");
             Destroy(this);
         }

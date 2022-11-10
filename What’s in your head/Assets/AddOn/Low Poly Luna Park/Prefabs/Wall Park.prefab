@@ -12,6 +12,8 @@ GameObject:
   - component: {fileID: 3250559742823293555}
   - component: {fileID: 790585783168407225}
   - component: {fileID: 7795882130889295131}
+  - component: {fileID: 1414632484094486833}
+  - component: {fileID: 8439771400716271186}
   m_Layer: 3
   m_Name: Wall Park
   m_TagString: Untagged
@@ -97,3 +99,42 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 0.46705818, y: 3.172064, z: 2.0000005}
   m_Center: {x: 0, y: 1.5860313, z: 0.00000023841858}
+--- !u!114 &1414632484094486833
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1294861742527330156}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ObservedComponentsFoldoutOpen: 1
+  Group: 0
+  prefixField: -1
+  Synchronization: 3
+  OwnershipTransfer: 0
+  observableSearch: 2
+  ObservedComponents:
+  - {fileID: 8439771400716271186}
+  sceneViewId: 0
+  InstantiationId: 0
+  isRuntimeInstantiated: 0
+--- !u!114 &8439771400716271186
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1294861742527330156}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 627855c7f81362d41938ffe0b1475957, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_SynchronizePosition: 1
+  m_SynchronizeRotation: 1
+  m_SynchronizeScale: 0
+  m_UseLocal: 1

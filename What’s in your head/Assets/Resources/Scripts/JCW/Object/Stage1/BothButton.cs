@@ -1,9 +1,11 @@
 using System.Collections;
 using System.Collections.Generic;
+using Photon.Pun;
 using UnityEngine;
 
 namespace JCW.Object.Stage1
 {
+    [RequireComponent(typeof(PhotonView))]
     public class BothButton : MonoBehaviour
     {
         [Header("움직일 장애물")] [SerializeField] Transform obstacleTF;
@@ -14,22 +16,25 @@ namespace JCW.Object.Stage1
         public int bothCount = 0;
         bool isStart = false;
         Vector3 initPos;
+        PhotonView photonView;
 
         private void Awake()
         {
             initPos = transform.localPosition;
+            photonView = GetComponent<PhotonView>();
         }
-
         private void OnCollisionEnter(Collision collision)
         {
+            if (isRemotePlay)
+                return;
             if (collision.gameObject.CompareTag("Nella") || collision.gameObject.CompareTag("Steady"))
             {
                 if (collision.transform.position.y >= this.transform.position.y)
                 {
-                    if(!isRemotePlay)
-                        ++bothCount;
+                    ++bothCount;
                     if(bothCount>= 2 && !isStart)
                     {
+                        Debug.Log("움직이라고 신호");
                         isStart = true;
                         StartCoroutine(nameof(moveObstacle));
                     }
@@ -39,13 +44,42 @@ namespace JCW.Object.Stage1
 
         private void OnCollisionExit(Collision collision)
         {
+            if (isRemotePlay)
+                return;
             if (collision.gameObject.CompareTag("Nella") || collision.gameObject.CompareTag("Steady"))
             {
-                if (!isRemotePlay)
-                    --bothCount;
-                else if (bothCount <= 0)
+                --bothCount;
+                if (bothCount <= 0)
                     StartCoroutine(nameof(Reset));
             }
+        }
+
+        public void SetBothCount(int count)
+        {
+            bothCount = count;
+            Debug.Log("실 카운트 : " + bothCount);
+            if (bothCount >= 2 && !isStart)
+            {
+                isStart = true;
+                StartCoroutine(nameof(moveObstacle));
+            }
+            if (bothCount<=0)
+                StartCoroutine(nameof(Reset));
+            //photonView.RPC(nameof(SetCount), RpcTarget.AllViaServer, count);           
+        }
+
+        [PunRPC]
+        void SetCount(int count)
+        {
+            bothCount = count;
+            Debug.Log("실 카운트 : " + bothCount);
+            if (bothCount >= 2 && !isStart)
+            {
+                isStart = true;
+                StartCoroutine(nameof(moveObstacle));
+            }
+            if (bothCount<=0)
+                StartCoroutine(nameof(Reset));
         }
 
         IEnumerator moveObstacle()
@@ -65,6 +99,8 @@ namespace JCW.Object.Stage1
                 obstacleTF.localPosition = Vector3.MoveTowards(obstacleTF.localPosition, initPos, Time.fixedDeltaTime * moveSpeed);
                 yield return null;
             }
+            isStart = false;
+            bothCount = 0;
             yield break;
         }
     }

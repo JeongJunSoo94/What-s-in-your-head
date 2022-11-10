@@ -3,9 +3,12 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using JCW.Network;
+using KSU;
+using Photon.Pun;
 
 namespace JCW.UI
 {
+    [RequireComponent(typeof(PhotonView))]
     public class CheckPointManager : MonoBehaviour
     {
         [Header("일시정지 타이틀")] [SerializeField] GameObject titleObj;
@@ -13,14 +16,20 @@ namespace JCW.UI
         [Header("체크포인트 메뉴")]
         [SerializeField] Button loadMenu;
         [SerializeField] Button backMenu;
+        PhotonView photonView;
 
         private void Awake()
         {
+            photonView = PhotonView.Get(this);
             loadMenu.onClick.AddListener(() =>
             {
-                Debug.Log("아직 미구현");
-                GameManager.Instance.curStageIndex = 0;
-                PhotonManager.Instance.ChangeStage();
+                if (GameManager.Instance.curSection > 1)
+                    photonView.RPC(nameof(LoadCP), RpcTarget.AllViaServer);
+                else
+                {
+                    this.gameObject.SetActive(false);
+                    titleObj.transform.parent.gameObject.SetActive(false);
+                }
             });
             backMenu.onClick.AddListener(() =>
             {
@@ -36,6 +45,15 @@ namespace JCW.UI
         {
             titleObj.SetActive(true);
             menuObj.SetActive(true);
+        }
+
+        [PunRPC]
+        void LoadCP()
+        {
+            --GameManager.Instance.curSection;
+            GameManager.Instance.myPlayerTF.GetComponent<PlayerController>().Resurrect();
+            this.gameObject.SetActive(false);
+            titleObj.transform.parent.gameObject.SetActive(false);
         }
     }
 }

@@ -13,7 +13,8 @@ public class GameManager : MonoBehaviour, IPunObservable
 
     // 현재 스테이지 , 섹션 인덱스
     [HideInInspector] public int curStageIndex = 0;
-    [HideInInspector] public int curSection;
+    [HideInInspector] public int curStageType = 1;
+    [HideInInspector] public int curSection = 0;
     
     // 현재 캐릭터들의 생존 여부
     [HideInInspector] public Hashtable isAlive = new();
@@ -26,6 +27,9 @@ public class GameManager : MonoBehaviour, IPunObservable
     [HideInInspector] public Transform otherPlayerTF;
     // Owner인 내 캐릭터의 위치
     [HideInInspector] public Transform myPlayerTF;
+
+    // PauseUI
+    [Header("일시정지 UI 프리팹")] public GameObject pauseUI = null;
 
     // 현재 탑뷰인지
     [Header("탑뷰")] public bool isTopView;
@@ -45,6 +49,8 @@ public class GameManager : MonoBehaviour, IPunObservable
         if (Instance == null)
         {
             Instance = this;
+            pauseUI = pauseUI == null ? Resources.Load<GameObject>("Prefabs/JCW/UI/InGame/PauseUI") : Instantiate(pauseUI);
+            DontDestroyOnLoad(pauseUI);
             DontDestroyOnLoad(this.gameObject);
         }
         else
@@ -147,6 +153,7 @@ public class GameManager : MonoBehaviour, IPunObservable
         {
             stream.SendNext(isTopView);
             stream.SendNext(curStageIndex);            
+            stream.SendNext(curStageType);            
             stream.SendNext(curSection);
         }
 
@@ -155,6 +162,7 @@ public class GameManager : MonoBehaviour, IPunObservable
         {
             isTopView     = (bool)stream.ReceiveNext();
             curStageIndex = (int)stream.ReceiveNext();
+            curStageType  = (int)stream.ReceiveNext();
             curSection    = (int)stream.ReceiveNext();
         }
     }

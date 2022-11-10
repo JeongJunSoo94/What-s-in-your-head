@@ -83,7 +83,7 @@ namespace KSU
         }
         private void Update()
         {
-            SearchRail();
+            SearchWithSphereCast();
             if(playerState.isMine)
                 SendInfoUI();
             //if(interactionState.isRailTriggered)
@@ -120,12 +120,6 @@ namespace KSU
                     transform.localPosition = Vector3.zero;
                 }
             }
-        }
-
-        void SearchRail()
-        {
-            MakeGizmoVecs(); 
-            SearchWithSphereCast();
         }
 
         public void SearchWithSphereCast()
@@ -580,54 +574,5 @@ namespace KSU
             }
         }
 
-        void MakeGizmoVecs()
-        {
-            if (interactionState.railTriggerDetectionNum > 0)
-            {
-                hVision = mainCamera.transform.forward;
-
-                startCenter = lookAtObj.transform.position;
-                //startUps = startCenter + mainCamera.transform.up;
-                //startDowns = startCenter - mainCamera.transform.up;
-                //startLefts = startCenter - mainCamera.transform.right;
-                //startRights = startCenter + mainCamera.transform.right;
-
-                startUp = startCenter + mainCamera.transform.up * rangeRadius;
-                startDown = startCenter - mainCamera.transform.up * rangeRadius;
-                startLeft = startCenter - mainCamera.transform.right * rangeRadius;
-                startRight = startCenter + mainCamera.transform.right * rangeRadius;
-
-                endCenter = startCenter + hVision * rangeDistance;
-                //endUps = endCenter + mainCamera.transform.up;
-                //endDowns = endCenter - mainCamera.transform.up;
-                //endLefts = endCenter - mainCamera.transform.right;
-                //endRights = endCenter + mainCamera.transform.right;
-
-                endUp = endCenter + mainCamera.transform.up * rangeRadius;
-                endDown = endCenter - mainCamera.transform.up * rangeRadius;
-                endLeft = endCenter - mainCamera.transform.right * rangeRadius;
-                endRight = endCenter + mainCamera.transform.right * rangeRadius;
-            }
-        }
-
-        //private void OnDrawGizmos()
-        //{
-        //    if (interactionState.railTriggerDetectionNum > 0)
-        //    {
-        //        if (_raycastHit.point != null)
-        //        {
-        //            Gizmos.color = Color.red;
-        //            Gizmos.DrawSphere(_raycastHit.point, 1f);
-        //        }
-
-        //        Gizmos.DrawLine(startUp, endUp);
-        //        Gizmos.DrawLine(startDown, endDown);
-        //        Gizmos.DrawLine(startRight, endRight);
-        //        Gizmos.DrawLine(startLeft, endLeft);
-
-        //        Gizmos.DrawWireSphere(startCenter, rangeRadius);
-        //        Gizmos.DrawWireSphere(endCenter, rangeRadius);
-        //    }
-        //}
     }
 }

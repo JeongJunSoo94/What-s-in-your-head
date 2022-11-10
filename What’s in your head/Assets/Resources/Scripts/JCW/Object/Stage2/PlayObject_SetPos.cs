@@ -14,7 +14,18 @@ namespace JCW.Object
 
         private void Awake()
         {
-            playObject = GetComponent<PlayObject>();
+            if (Application.isEditor)
+            {
+                if (playObject == null)
+                    playObject = GetComponent<PlayObject>();
+            }
+            else
+            {
+                needToSetPos = false;
+                needToClear = false;
+                Destroy(this);
+                return;
+            }
         }
 
         void Update()
@@ -22,6 +33,8 @@ namespace JCW.Object
             // 현재 실행 중이면 해당 스크립트 제거
             if (Application.isPlaying)
             {
+                needToSetPos = false;
+                needToClear = false;
                 Destroy(this);
                 return;
             }
@@ -35,6 +48,12 @@ namespace JCW.Object
                 playObject.ClearList();
                 needToClear = false;
             }
+        }
+
+        private void OnApplicationQuit()
+        {
+            needToSetPos = false;
+            needToClear = false;
         }
     }
 }

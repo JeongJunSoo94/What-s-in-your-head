@@ -11,7 +11,7 @@ using JCW.UI.InGame.Indicator;
 using KSU.Object.Interaction;
 
 namespace KSU
-{
+{    
     public class PlayerInteraction : MonoBehaviour
     {
         PlayerInteractionState interactionState;
@@ -43,6 +43,8 @@ namespace KSU
 
         public void InputInteract()
         {
+            if (!playerState.isMine)
+                return;
             if (KeyManager.Instance.GetKeyDown(PlayerAction.Interaction))
             {
                 if (interactableObject != null)

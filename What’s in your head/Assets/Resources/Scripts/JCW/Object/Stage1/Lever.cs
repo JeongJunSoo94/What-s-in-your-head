@@ -1,4 +1,5 @@
 using KSU.Object.Interaction;
+using Photon.Pun;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -12,9 +13,10 @@ namespace JCW.Object.Stage1
 
         Transform leverStickTF;
         int isRed = 0;
-        //public bool isRot = false;
+        bool canStart = true;
 
         List<Vector3> towardRotList = new();
+        Coroutine coroutine = null;
 
         override protected void Awake()
         {
@@ -28,24 +30,49 @@ namespace JCW.Object.Stage1
 
         void FixedUpdate()
         {
-            if (isInteractable)
+            if (isInteractable || !canStart )
                 return;
 
+            canStart = false;
+            RotateRPC();
+        }
+
+        void RotateRPC()
+        {
+            photonView.RPC(nameof(RotateObject_RPC), RpcTarget.AllViaServer);
+        }
+
+        [PunRPC]
+        void RotateObject_RPC()
+        {
+            if (coroutine == null)
+                coroutine = StartCoroutine(nameof(RotateObject));
+        }
+
+        IEnumerator RotateObject()
+        {
+            canStart = false;
             Vector3 curRot = leverStickTF.localRotation.eulerAngles;
-            curRot.z = curRot.z >= 180f ? curRot.z - 360f : curRot.z <= -180f ? curRot.z + 360f : curRot.z;
-            leverStickTF.localRotation = Quaternion.Euler(Vector3.MoveTowards(curRot, towardRotList[1 - isRed], Time.fixedDeltaTime * rotSpeed));
-            if (curRot.z - towardRotList[1 - isRed].z <= 0.1f
-                && curRot.z - towardRotList[1 - isRed].z >= -0.1f)
+            while (curRot.z - towardRotList[1 - isRed].z > 0.1f
+                || curRot.z - towardRotList[1 - isRed].z < -0.1f)
             {
-                isRed = 1 - isRed;
-                isInteractable = true;
-                for (int i = 0; i < objList.Count; ++i)
-                {
-                    Vector3 targetRot = objList[i].localEulerAngles;
-                    targetRot.z = targetRot.z == 0 ? 90f : 0f;
-                    objList[i].localRotation = Quaternion.Euler(targetRot);
-                }
+                curRot = leverStickTF.localRotation.eulerAngles;
+                curRot.z = curRot.z >= 180f ? curRot.z - 360f : curRot.z <= -180f ? curRot.z + 360f : curRot.z;
+                leverStickTF.localRotation = Quaternion.Euler(Vector3.MoveTowards(curRot, towardRotList[1 - isRed], Time.deltaTime * rotSpeed));
+                yield return null;
             }
+
+            isInteractable = true;
+            isRed = 1 - isRed;
+            for (int i = 0 ; i < objList.Count ; ++i)
+            {
+                Vector3 targetRot = objList[i].localEulerAngles;
+                targetRot.x = targetRot.x == 0 ? 90f : 0f;
+                objList[i].localRotation = Quaternion.Euler(targetRot);
+            }
+            coroutine = null;
+            canStart = true;
+            yield break;
         }
     }
 }

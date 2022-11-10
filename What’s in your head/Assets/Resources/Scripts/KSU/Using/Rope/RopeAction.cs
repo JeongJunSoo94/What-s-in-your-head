@@ -207,13 +207,13 @@ namespace KSU
                 rope.SetPosition(0, hand.transform.position);
                 rope.SetPosition(1, hand.transform.position);
                 rope.enabled = true;
-                Debug.Log("StartRopeAction == true");
+                //Debug.Log("StartRopeAction == true");
                 StartCoroutine(nameof(DelayRide));
                 return true;
             }
             else
             {
-                Debug.Log("StartRopeAction == false");
+                //Debug.Log("StartRopeAction == false");
                 return false;
             }
         }
@@ -243,10 +243,10 @@ namespace KSU
                 return;
             }
             animator.SetBool("isRidingRope", false);
-            Debug.Log("파라미터 변화");
-            Debug.Log("로프 해제 진입");
+            //Debug.Log("파라미터 변화");
+            //Debug.Log("로프 해제 진입");
             float jumpPower = currentRidingRope.GetComponent<RopeSpawner>().EndRopeAction(this.gameObject);
-            Debug.Log("jumpPower: " + jumpPower);
+            //Debug.Log("jumpPower: " + jumpPower);
             Obj_Info node = detectedRopes.GetValueOrDefault(currentRidingRope);
             node.isUIActive = true;
             node.isInteractable = false;
@@ -310,7 +310,6 @@ namespace KSU
         {
             if(other.CompareTag("Rope"))
             {
-                Debug.Log("트리거 엔터 : " + other.gameObject.transform.parent.gameObject);
                 detectedRopes.Add(other.gameObject.transform.parent.gameObject, new Obj_Info(false, false, 100f));
             }
         }
@@ -319,7 +318,6 @@ namespace KSU
         {
             if (other.CompareTag("Rope"))
             {
-                Debug.Log("트리거 탈출 : " + other.gameObject.transform.parent.gameObject);
                 other?.gameObject.transform.parent.gameObject.GetComponentInChildren<ConvertIndicator>().SetUI(false, false, 100f);
                 detectedRopes.Remove(other.gameObject.transform.parent.gameObject);
                 

@@ -52,7 +52,7 @@ namespace YC.Camera_
 
         // ============  Aim View Y축 궤도 제한  ============ //
         [Header("[Sholder View Y궤도 Up 제한 값]")]
-        [SerializeField] [Range(0, 1)] float sholderAxisY_MaxUp = 0.25f;
+        [SerializeField] [Range(0, 1)] float sholderAxisY_MaxUp = 0.2f;
 
         [Header("[Sholder View Y궤도 Down 제한 값]")]
         [SerializeField] [Range(0, 1)] float sholderAxisY_MaxDown = 0.5f;
@@ -226,7 +226,8 @@ namespace YC.Camera_
 
         void InitUI()
         {
-            aimUI = Instantiate(aimUI);
+            if(pv.IsMine)
+                aimUI = Instantiate(aimUI);
         }
         void InitVirtualCamera() // Virtual Camera 생성 및 초기화  
         {           
@@ -348,6 +349,7 @@ namespace YC.Camera_
             CinemachineFreeLook backCine = backCam.GetComponent<CinemachineFreeLook>();
             CinemachineFreeLook sholderCine = sholderCam.GetComponent<CinemachineFreeLook>();
 
+
             // << : Rig 삭제
             //if (backCam.transform.childCount != 0)
             //{
@@ -356,16 +358,17 @@ namespace YC.Camera_
             //        Destroy(backCam.transform.GetChild(i).gameObject);
             //    }
             //}
-
             if (sholderCam.transform.childCount != 0)
             {
-                for (int i = 0; i < sholderCam.transform.childCount; ++i)
+                for(int i = 0; i < sholderCam.transform.childCount; ++i)
                 {
                     Destroy(sholderCam.transform.GetChild(i).gameObject);
                 }
             }
+
             for (int i = 0; i < 3; ++i)
             {
+                // BackCam Rig 
                 backCine.GetRig(i).GetCinemachineComponent<CinemachineComposer>().m_HorizontalDamping = rigInitValue;
                 backCine.GetRig(i).GetCinemachineComponent<CinemachineComposer>().m_VerticalDamping = rigInitValue;
 
@@ -373,6 +376,7 @@ namespace YC.Camera_
                 backCine.GetRig(i).GetCinemachineComponent<CinemachineOrbitalTransposer>().m_YDamping = rigInitValue;
                 backCine.GetRig(i).GetCinemachineComponent<CinemachineOrbitalTransposer>().m_ZDamping = rigInitValue;
 
+                // SholderCam Rig
                 sholderCine.GetRig(i).AddCinemachineComponent<CinemachineComposer>();
                 sholderCine.GetRig(i).AddCinemachineComponent<CinemachineOrbitalTransposer>();
 
@@ -381,8 +385,9 @@ namespace YC.Camera_
 
                 sholderCine.GetRig(i).GetCinemachineComponent<CinemachineOrbitalTransposer>().m_XDamping = rigInitValue;
                 sholderCine.GetRig(i).GetCinemachineComponent<CinemachineOrbitalTransposer>().m_YDamping = rigInitValue;
-                sholderCine.GetRig(i).GetCinemachineComponent<CinemachineOrbitalTransposer>().m_ZDamping = rigInitValue; 
+                sholderCine.GetRig(i).GetCinemachineComponent<CinemachineOrbitalTransposer>().m_ZDamping = rigInitValue;
             }
+
             backCine.GetRig(1).GetCinemachineComponent<CinemachineComposer>().m_TrackedObjectOffset.y = offSetYInitValue;
         }
 
