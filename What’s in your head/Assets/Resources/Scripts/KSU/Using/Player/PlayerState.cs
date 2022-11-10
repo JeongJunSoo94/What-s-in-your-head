@@ -145,7 +145,6 @@ public class PlayerState : MonoBehaviour
             slopeAngle = Vector3.Angle(Vector3.up, groundRaycastHit.normal);
             if (Mathf.Abs(slopeAngle) >= maxSlopeAngle)
             {
-                Debug.Log("경사각 초과");
                 IsGrounded = false;
                 isRun = false;
                 isOverAngleForSlope = true;
@@ -215,10 +214,8 @@ public class PlayerState : MonoBehaviour
             bool rayChecked2 = Physics.Raycast(transform.position + Vector3.up * forwardblockingMinHeight, transform.forward, forwardblockingMinHeight / Mathf.Cos((90f - maxSlopeAngle) * Mathf.Deg2Rad), groundLayerMask, QueryTriggerInteraction.Ignore);
             if (rayChecked1)
             {
-                Debug.Log("여기 잘 들어왔어영1");
                 if (!rayChecked2)
                 {
-                    Debug.Log("여기 잘 들어왔어영2");
                     isFowardBlock = rayChecked2;
                     IsGrounded = true;
                     slopeAngleCofacter = forwardblockingMinHeight;
@@ -231,19 +228,16 @@ public class PlayerState : MonoBehaviour
             }
             else
             {
-                if(isOverAngleForSlope)
+                isFowardBlock = false;
+                if (isOverAngleForSlope)
                     IsGrounded = true;
             }
         }
         else
         {
-            Debug.Log("스피어캐스트 실패");
             isOverAngleForSlope = false;
             IsGrounded = false;
         }
-
-        if (!IsGrounded)
-            Debug.Log("공중");
     }
     #endregion
 
