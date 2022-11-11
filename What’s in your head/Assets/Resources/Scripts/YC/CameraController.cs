@@ -596,7 +596,7 @@ namespace YC.Camera_
             //else {}
         }
 
-        void InitSceneChange() // Scene이 변경될 시 다시 카메라를 원상태 (BackView)로 복귀  
+        public void InitSceneChange() // Scene이 변경될 시 다시 카메라를 원상태 (BackView)로 복귀  
         {
             if (!pv.IsMine) return;
 
@@ -614,9 +614,9 @@ namespace YC.Camera_
             OnOffCamera(backCam);
         }
 
-     
+
         // ====================  [Top View 함수]  ==================== //
-        
+
         public void SetDefenseMode() // 디펜스 모드 설정  
         {
             if (pv.IsMine)

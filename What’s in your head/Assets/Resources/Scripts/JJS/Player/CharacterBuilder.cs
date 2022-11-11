@@ -4,6 +4,7 @@ using UnityEngine;
 using KSU;
 using KSU.AutoAim.Player;
 using JJS.Weapon;
+using YC.Camera_;
 namespace JJS
 { 
     public class CharacterBuilder : MonoBehaviour
@@ -58,6 +59,8 @@ namespace JJS
         {
             if (player != null)
             {
+                player.GetComponent<CameraController>().InitSceneChange();
+
                 PlayerMouseController playerMouse = player.GetComponent<PlayerMouseController>();
                 if (playerMouse.GetUseWeapon() != -1)
                     playerMouse.weaponInfo[playerMouse.GetUseWeapon()].weapon.SetActive(false);
