@@ -285,6 +285,7 @@ namespace KSU
         {
             if (characterState.isOutOfControl || characterState.isStopped || characterState.isRiding)
                 return;
+
             moveDir =
               mainCamera.transform.forward * ((KeyManager.Instance.GetKey(PlayerAction.MoveForward) ? 1 : 0) + (KeyManager.Instance.GetKey(PlayerAction.MoveBackward) ? -1 : 0))
             + mainCamera.transform.right * ((KeyManager.Instance.GetKey(PlayerAction.MoveRight) ? 1 : 0) + (KeyManager.Instance.GetKey(PlayerAction.MoveLeft) ? -1 : 0));
@@ -435,9 +436,9 @@ namespace KSU
             transform.LookAt(transform.position + moveDir);
         }
 
+
         public void RotateSlerp()
         {
-
             if (characterState.IsGrounded && characterState.CanJump)
             {
                 if (!characterState.IsDashing)
