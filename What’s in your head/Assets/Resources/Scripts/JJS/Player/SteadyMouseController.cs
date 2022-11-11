@@ -60,6 +60,12 @@ namespace JJS
                 {
                     if (weaponInfo[GetUseWeapon()].canAim)
                     {
+                        if (player.playerAnimator.GetBool("isShootingCymbals") && !autoAimWeapon.GetWhetherautoAimObjectActived())
+                        {
+                            player.characterState.aim = true;
+                            return;
+                        }
+
                         if (KeyManager.Instance.GetKey(PlayerAction.Aim)
                             && !player.characterState.swap
                             && !player.characterState.IsJumping
@@ -69,7 +75,6 @@ namespace JJS
                             && player.characterState.IsGrounded
                             && !GetComponent<SteadyInteractionState>().isGrappling
                             && !GetComponent<SteadyInteractionState>().isGrabMonster
-                            && !player.playerAnimator.GetBool("isShootingCymbals")
                             && !player.playerAnimator.GetBool("WasShootingCymbals")
                             && !player.playerAnimator.GetBool("isDead"))
                         {

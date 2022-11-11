@@ -41,6 +41,7 @@ namespace JJS
 
         public void wartergunInit()
         {
+            gun = GetComponent<WaterGun>();
             point = GameObject.FindGameObjectWithTag("NellaMousePoint");
             if (gun != null)
             { 

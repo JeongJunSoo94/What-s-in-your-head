@@ -89,6 +89,13 @@ public class PlayerState : MonoBehaviour
     public bool isRiding = false;
     #endregion
 
+
+    // 스테이지3 미로 관련 변수
+    #region
+    public bool isInMaze = false;
+    string mazeColTag = "MazeCameraCollider";
+    #endregion
+
     public bool CanResetKnockBack = true;
 
     public bool aim = false;
@@ -385,6 +392,25 @@ public class PlayerState : MonoBehaviour
         if (!IsGrounded)
         {
             isAirBlocked = false;
+        }
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        // << : 스테이지3 미로에 입장하거나 퇴장할 경우, 플레이어의 State와 Camera의 세팅을 바꿔준다.
+
+        if (!other.gameObject.tag.Equals(mazeColTag))
+            return;
+
+        if(!isInMaze) 
+        {
+            isInMaze = true;
+            //Debug.Log("Maze 입장!" + isInMaze);
+        }
+        else // Exit Maze
+        {
+            isInMaze = false;
+            //Debug.Log("Maze 나감!" + isInMaze);
         }
     }
 }

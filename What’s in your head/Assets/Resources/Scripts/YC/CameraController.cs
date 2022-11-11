@@ -52,7 +52,7 @@ namespace YC.Camera_
 
         // ============  Aim View Y축 궤도 제한  ============ //
         [Header("[Sholder View Y궤도 Up 제한 값]")]
-        [SerializeField] [Range(0, 1)] float sholderAxisY_MaxUp = 0.2f;
+        [SerializeField] [Range(0, 1)] float sholderAxisY_MaxUp = 0.25f;
 
         [Header("[Sholder View Y궤도 Down 제한 값]")]
         [SerializeField] [Range(0, 1)] float sholderAxisY_MaxDown = 0.5f;
@@ -76,6 +76,7 @@ namespace YC.Camera_
 
         // ============  FOV  ============ //
         float backViewFOV = 50;
+        //float sholderViewFOV = 50;
         float topViewFOV = 60;
         float sideScrollViewFOV = 60;
 
@@ -104,10 +105,7 @@ namespace YC.Camera_
         [Space] [Space]
         Transform followObj; // >> : 점프시 Follow, LookAt 관련
         public Transform lookatBackObj { get; private set; } //< : 레일 액션에서 사용
-        //Transform lookatSholderObj;
         float lookatObjOriginY;
-
-        //float avgDif = 0.5f; // 일반 점프 플랫폼 착지시 최소 오차
 
         float originPlayerY; // << : 플레이어가 점프하기 전, 오브젝트들의 높이값
         float orgLookY;
@@ -129,7 +127,8 @@ namespace YC.Camera_
         [SerializeField] GameObject CineLookObj_Back;
         [SerializeField] GameObject CineFollowObj_Back;
         [SerializeField] NoiseSettings NoiseProfile;
-        [Header("Aim UI 프리팹 ")] public GameObject aimUI;
+        [Header("[Aim UI]")] 
+        public GameObject aimUI;
 
 
 
@@ -161,7 +160,6 @@ namespace YC.Camera_
             InitCinemachineRig();
             InitDefault();
             InitUI();
-
         }
 
 
@@ -173,6 +171,9 @@ namespace YC.Camera_
             if (isDebugLog) Debug.Log("FixedUpdate");
            
             if (!pv.IsMine) return;
+
+            if (playerState.isInMaze)
+                return;
 
             if (isSideView)
             {
@@ -195,6 +196,8 @@ namespace YC.Camera_
 
             if(playerState.isCumstomJumping)
             {
+                if (isLerp) return;
+
                 FollowPlayer();
                 return;
             }
@@ -224,11 +227,12 @@ namespace YC.Camera_
 
         // ====================  [Awake에서 진행하는 초기화]  ==================== //
 
-        void InitUI()
+        void InitUI()  
         {
-            if(pv.IsMine)
+            if (!pv.IsMine) return;
                 aimUI = Instantiate(aimUI);
         }
+
         void InitVirtualCamera() // Virtual Camera 생성 및 초기화  
         {           
             if (!pv.IsMine) return;
@@ -280,6 +284,70 @@ namespace YC.Camera_
             camList.Add(sholderCam);
 
             Cine_backCam.GetComponent<CinemachineFreeLook>().m_Lens.FieldOfView = backViewFOV;
+        }
+
+        void InitCinemachineRig() //  Rig로 발생하는 이슈를 막기 위해 Rig를 스크립트로 강제 초기화  
+        {
+            if (!pv.IsMine) return;
+
+            float zero = 0;
+            float offSetYInitValue = 2.5f;
+
+            CinemachineFreeLook backCine = backCam.GetComponent<CinemachineFreeLook>();
+            CinemachineFreeLook sholderCine = sholderCam.GetComponent<CinemachineFreeLook>();
+
+            if (mainCam.transform.childCount != 0) // << : Rig 삭제 (MainCam)
+            {
+                for (int i = 0; i < mainCam.transform.childCount; ++i)
+                {
+                    Destroy(mainCam.transform.GetChild(i).gameObject);
+                }
+            }
+
+            //if (backCam.transform.childCount != 0) // << : Rig 삭제 (BackCam)
+            //{
+            //    for (int i = 0; i < backCam.transform.childCount; ++i)
+            //    {
+            //        Destroy(backCam.transform.GetChild(i).gameObject);
+            //    }
+            //}
+
+            //if (sholderCam.transform.childCount != 0) // << : Rig 삭제(SholderCam)
+            //{
+            //    for (int i = 0; i < sholderCam.transform.childCount; ++i)
+            //    {
+            //        Destroy(sholderCam.transform.GetChild(i).gameObject);
+            //    }
+            //}
+
+
+            for (int i = 0; i < 3; ++i)
+            {            
+                if(backCine.GetRig(i))
+                {
+                    //backCine.GetRig(i).AddCinemachineComponent<CinemachineComposer>();
+                
+                    backCine.GetRig(i).GetCinemachineComponent<CinemachineComposer>().m_HorizontalDamping = zero;
+                    backCine.GetRig(i).GetCinemachineComponent<CinemachineComposer>().m_VerticalDamping = zero;
+
+                    backCine.GetRig(i).GetCinemachineComponent<CinemachineOrbitalTransposer>().m_XDamping = zero;
+                    backCine.GetRig(i).GetCinemachineComponent<CinemachineOrbitalTransposer>().m_YDamping = zero;
+                    backCine.GetRig(i).GetCinemachineComponent<CinemachineOrbitalTransposer>().m_ZDamping = zero;
+                }
+                if(sholderCine.GetRig(i))
+                {
+                    //sholderCine.GetRig(i).AddCinemachineComponent<CinemachineComposer>();
+
+                    sholderCine.GetRig(i).GetCinemachineComponent<CinemachineComposer>().m_HorizontalDamping = zero;
+                    sholderCine.GetRig(i).GetCinemachineComponent<CinemachineComposer>().m_VerticalDamping = zero;
+
+                    sholderCine.GetRig(i).GetCinemachineComponent<CinemachineOrbitalTransposer>().m_XDamping = zero;
+                    sholderCine.GetRig(i).GetCinemachineComponent<CinemachineOrbitalTransposer>().m_YDamping = zero;
+                    sholderCine.GetRig(i).GetCinemachineComponent<CinemachineOrbitalTransposer>().m_ZDamping = zero;
+                }
+            }
+
+            backCine.GetRig(1).GetCinemachineComponent<CinemachineComposer>().m_TrackedObjectOffset.y = offSetYInitValue; // Back View Middle에서 포지션 내려 잡기
         }
 
         void InitDefault()  // 기타 초기화  
@@ -338,60 +406,7 @@ namespace YC.Camera_
             preCam = curCam;
             OnOffCamera(camList[(int)curCam]);
         }
-
-        void InitCinemachineRig() //  Rig로 발생하는 이슈를 막기 위해 Rig를 스크립트로 강제 초기화  
-        {
-            if (!pv.IsMine) return;
-
-            float rigInitValue = 0;
-            float offSetYInitValue = 2.5f;
-
-            CinemachineFreeLook backCine = backCam.GetComponent<CinemachineFreeLook>();
-            CinemachineFreeLook sholderCine = sholderCam.GetComponent<CinemachineFreeLook>();
-
-
-            // << : Rig 삭제
-            //if (backCam.transform.childCount != 0)
-            //{
-            //    for (int i = 0; i < backCam.transform.childCount; ++i)
-            //    {
-            //        Destroy(backCam.transform.GetChild(i).gameObject);
-            //    }
-            //}
-            if (sholderCam.transform.childCount != 0)
-            {
-                for(int i = 0; i < sholderCam.transform.childCount; ++i)
-                {
-                    Destroy(sholderCam.transform.GetChild(i).gameObject);
-                }
-            }
-
-            for (int i = 0; i < 3; ++i)
-            {
-                // BackCam Rig 
-                backCine.GetRig(i).GetCinemachineComponent<CinemachineComposer>().m_HorizontalDamping = rigInitValue;
-                backCine.GetRig(i).GetCinemachineComponent<CinemachineComposer>().m_VerticalDamping = rigInitValue;
-
-                backCine.GetRig(i).GetCinemachineComponent<CinemachineOrbitalTransposer>().m_XDamping = rigInitValue;
-                backCine.GetRig(i).GetCinemachineComponent<CinemachineOrbitalTransposer>().m_YDamping = rigInitValue;
-                backCine.GetRig(i).GetCinemachineComponent<CinemachineOrbitalTransposer>().m_ZDamping = rigInitValue;
-
-                // SholderCam Rig
-                sholderCine.GetRig(i).AddCinemachineComponent<CinemachineComposer>();
-                sholderCine.GetRig(i).AddCinemachineComponent<CinemachineOrbitalTransposer>();
-
-                sholderCine.GetRig(i).GetCinemachineComponent<CinemachineComposer>().m_HorizontalDamping = rigInitValue;
-                sholderCine.GetRig(i).GetCinemachineComponent<CinemachineComposer>().m_VerticalDamping = rigInitValue;
-
-                sholderCine.GetRig(i).GetCinemachineComponent<CinemachineOrbitalTransposer>().m_XDamping = rigInitValue;
-                sholderCine.GetRig(i).GetCinemachineComponent<CinemachineOrbitalTransposer>().m_YDamping = rigInitValue;
-                sholderCine.GetRig(i).GetCinemachineComponent<CinemachineOrbitalTransposer>().m_ZDamping = rigInitValue;
-            }
-
-            backCine.GetRig(1).GetCinemachineComponent<CinemachineComposer>().m_TrackedObjectOffset.y = offSetYInitValue;
-        }
-
-
+     
         // ====================  [Option 관련 함수 (찬우형)]  ==================== //
 
         public void Option_SetShake(bool on) // 스테디 카메라 흔들림 사용 여부  
@@ -581,7 +596,7 @@ namespace YC.Camera_
             //else {}
         }
 
-        void InitSceneChange() // Scene이 변경될 시 다시 카메라를 원상태 (BackView)로 복귀  
+        public void InitSceneChange() // Scene이 변경될 시 다시 카메라를 원상태 (BackView)로 복귀  
         {
             if (!pv.IsMine) return;
 
@@ -599,9 +614,9 @@ namespace YC.Camera_
             OnOffCamera(backCam);
         }
 
-     
+
         // ====================  [Top View 함수]  ==================== //
-        
+
         public void SetDefenseMode() // 디펜스 모드 설정  
         {
             if (pv.IsMine)
@@ -695,6 +710,13 @@ namespace YC.Camera_
             return bounds.center;
         }
 
+        //float GetCenterPoint_() 
+        //{
+        //    float middlePos = 
+
+        //    return bounds.center;
+        //}
+
         public void ShakeCameraInSideView() // 플레이어 사망시, 카메라 흔들림 세팅 (외부에서 센드메시지로 호출)  
         {
             if (!canShake) return;
@@ -752,7 +774,7 @@ namespace YC.Camera_
 
         // ====================  [점프 보간 함수]  ==================== //
 
-        void FollowPlayer()
+        void FollowPlayer()  // 단순히 플레이어를 따라가기만 
         {
             Vector3 PlayerPos = player.transform.position;
 
@@ -766,6 +788,8 @@ namespace YC.Camera_
                                     PlayerPos.z);
 
             if (!wasEndSet) wasEndSet = true;
+
+            if (isDebugLog) Debug.Log("호출 : 단순 플레이어 따라가는 중");
         }
 
         void SetCineObjPos() // Look과 Follow의 x, y값 업데이트  
@@ -1106,7 +1130,9 @@ namespace YC.Camera_
                 cam.m_XAxis.m_InputAxisName = "";
                 cam.m_YAxis.m_InputAxisName = "";
 
-                cam.m_XAxis.m_InputAxisValue = 0;  // << : 회전하면서 빔 사용시 삥삥 도는 문제
+                // << : 회전하면서 빔 사용시 삥삥 도는 문제 해결
+                cam.m_XAxis.m_InputAxisValue = 0;  
+                cam.m_YAxis.m_InputAxisValue = 0;
             }
             else
             {

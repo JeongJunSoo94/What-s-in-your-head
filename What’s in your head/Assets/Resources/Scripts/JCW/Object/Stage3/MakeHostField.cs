@@ -120,18 +120,6 @@ namespace JCW.Object
             StartCoroutine(nameof(WarnInfection), indexs);
         }
 
-        public void SetPurified(int myIndex)
-        {
-            photonView.RPC(nameof(SetPurifiedRPC), RpcTarget.AllViaServer, myIndex);
-        }
-
-        [PunRPC]
-        void SetPurifiedRPC(int myIndex)
-        {
-            Debug.Log("정화시킬 인덱스 : " + myIndex);
-            transform.GetChild(myIndex).GetComponent<HostField>().Purified();
-        }
-
         IEnumerator WarnInfection(List<int> indexs)
         {
             float curTime = 0f;
