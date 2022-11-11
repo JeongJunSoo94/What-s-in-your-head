@@ -52,8 +52,8 @@ namespace JJS
         // << :
         private void OnTriggerEnter(Collider other)
         {
-            if (other.gameObject.CompareTag("ContaminationField"))
-                other.gameObject.GetComponent<HostField>().GetDamaged();
+            //if (other.gameObject.CompareTag("ContaminationField"))
+            //    other.gameObject.GetComponent<HostField>().GetDamaged();
 
             //Debug.Log(other.gameObject.name);
             if(!(other.gameObject.layer == LayerMask.NameToLayer("UITriggers")))

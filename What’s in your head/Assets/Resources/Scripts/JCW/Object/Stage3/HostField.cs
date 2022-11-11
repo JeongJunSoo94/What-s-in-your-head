@@ -154,6 +154,10 @@ namespace JCW.Object
                 case "Steady":
                     other.gameObject.GetComponent<PlayerController>().Resurrect();
                     break;
+                case "NellaWater":
+                    GetDamaged();
+                    break;
+
             }
         }
 
@@ -165,30 +169,13 @@ namespace JCW.Object
             {
                 isDead = true;
                 animator.Play("Destroy");
-                if (mediator)
-                    mediator.SetPurified(myIndex);
-                else
-                    StartCoroutine(nameof(CheckAnimEnd));
+                SoundManager.Instance.Play3D_RPC("ContaminationFieldPurified", audioSource);
             }
         }
-
-        public void Purified()
+        public void DestroyField()
         {
-            if(gameObject.activeSelf)
-                StartCoroutine(nameof(CheckAnimEnd));
-        }
-
-        IEnumerator CheckAnimEnd()
-        {            
-            WaitForSeconds ws = new(0.1f);
-            SoundManager.Instance.Play3D_RPC("ContaminationFieldPurified", audioSource);
-            while (animator.GetCurrentAnimatorStateInfo(0).normalizedTime < 1f)
-            {
-                yield return ws;
-            }            
             this.enabled = false;
             this.gameObject.SetActive(false);
-            yield break;
         }
     }
 }
