@@ -316,7 +316,7 @@ namespace KSU
 
         public void AimViewInputMove()
         {
-            if (characterState.isOutOfControl || characterState.isStopped || characterState.isRiding)
+            if (characterState.isOutOfControl || characterState.isStopped || characterState.isRiding || characterState.isInMaze)
                 return;
             moveDir.z = ((KeyManager.Instance.GetKey(PlayerAction.MoveForward) ? 1 : 0) + (KeyManager.Instance.GetKey(PlayerAction.MoveBackward) ? -1 : 0));
             moveDir.x = ((KeyManager.Instance.GetKey(PlayerAction.MoveRight) ? 1 : 0) + (KeyManager.Instance.GetKey(PlayerAction.MoveLeft) ? -1 : 0));
@@ -420,7 +420,7 @@ namespace KSU
                 if(!playerMouse.notRotatoin)
                     RotateTop();
             }
-            else if (characterState.aim)
+            else if (characterState.aim || characterState.isInMaze)
             {
                 RotateAim();
             }

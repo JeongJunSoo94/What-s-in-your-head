@@ -172,6 +172,9 @@ namespace YC.Camera_
            
             if (!pv.IsMine) return;
 
+            if (playerState.isInMaze)
+                return;
+
             if (isSideView)
             {
                 //if (Input.GetKeyDown(KeyCode.Keypad9))
@@ -611,9 +614,9 @@ namespace YC.Camera_
             OnOffCamera(backCam);
         }
 
-     
+
         // ====================  [Top View 함수]  ==================== //
-        
+
         public void SetDefenseMode() // 디펜스 모드 설정  
         {
             if (pv.IsMine)

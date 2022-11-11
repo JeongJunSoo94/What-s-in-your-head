@@ -367,6 +367,7 @@ namespace KSU
             interactionState.isMovingToRail = true;
             interactionState.isRailTriggered = true;
             interactionState.isRidingRail = false;
+            playerController.SetOffCollider();
             return Vector3.Distance(railStartPosiotion, transform.position)/movingToRailSpeed;
         }
 
@@ -380,6 +381,7 @@ namespace KSU
                 playerRigidbody.velocity = Vector3.zero;
                 railStartObject.transform.parent.gameObject.GetComponent<Rail>().RideOnRail(railStartPosiotion, railStartObject, this.gameObject);
                 interactionState.isRailTriggered = false;
+                playerController.SetOnCollider();
                 return;
             }
             playerRigidbody.velocity = (railStartPosiotion - transform.position).normalized * movingToRailSpeed;
@@ -519,6 +521,8 @@ namespace KSU
                 //    return;
                 if (detectedRail.Count > 0)
                 {
+                    if (detectedRail.ContainsKey(other.transform.parent.transform.parent.gameObject))
+                        return;
                     bool isNewRail = true;
                     foreach (var rail in detectedRail)
                     {

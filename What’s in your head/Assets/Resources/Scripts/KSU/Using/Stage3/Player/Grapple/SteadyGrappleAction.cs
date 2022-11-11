@@ -365,6 +365,8 @@ namespace KSU.AutoAim.Player
         {
             if ((other.gameObject.layer == LayerMask.NameToLayer("UITriggers")) && (other.CompareTag("GrappledObject") || other.CompareTag("PoisonSnake") || other.CompareTag("TrippleHeadSnake")))
             {
+                if (autoAimTargetObjects.Contains(other.gameObject))
+                    return;
                 other.gameObject.transform.parent.gameObject.GetComponentInChildren<OneIndicator>().SetUI(false);
                 autoAimTargetObjects.Remove(other.gameObject);
             }
