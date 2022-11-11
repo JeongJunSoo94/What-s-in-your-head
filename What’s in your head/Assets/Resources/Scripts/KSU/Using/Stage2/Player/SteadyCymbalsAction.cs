@@ -17,6 +17,7 @@ namespace KSU.AutoAim.Player
     {
         SteadyCymbals cymbals;
         PlayerController playerController;
+        Vector3 shootPosition;
 
         override protected void Awake()
         {
@@ -27,7 +28,7 @@ namespace KSU.AutoAim.Player
             playerController = GetComponent<PlayerController>();
             playerState = GetComponent<PlayerState>();
             steadyInteractionState = GetComponent<SteadyInteractionState>();
-            lookAtObj = this.gameObject.GetComponent<CameraController>().lookatBackObj;
+            //lookAtObj = this.gameObject.GetComponent<CameraController>().lookatBackObj;
 
             playerCamera = this.gameObject.GetComponent<CameraController>().FindCamera(); // ¸ÖÆ¼¿ë
 
@@ -84,6 +85,32 @@ namespace KSU.AutoAim.Player
             }
         }
 
+        public void MakeShootPosition()
+        {
+            if (playerState.isOutOfControl || playerState.isStopped)
+                return;
+
+            if (steadyInteractionState.isAutoAimObjectFounded)
+            {
+                // µµÂø À§Ä¡: autoAimPosition
+                shootPosition = autoAimPosition.position;
+            }
+            else
+            {
+                // µµÂøÀ§Ä¡: È­¸é Áß¾Ó¿¡ ·¹ÀÌ ½÷¼­ µµÂøÇÏ´Â °÷
+                RaycastHit hit;
+                bool rayCheck = Physics.Raycast(playerCamera.transform.position, playerCamera.transform.forward, out hit, autoAimObjectRange, -1, QueryTriggerInteraction.Ignore);
+                if (rayCheck && (hit.distance > Vector3.Distance(transform.position, playerCamera.transform.position)))
+                {
+                    shootPosition = hit.point;
+                }
+                else
+                {
+                    shootPosition = playerCamera.transform.position + playerCamera.transform.forward * autoAimObjectRange;
+                }
+            }
+        }
+
         protected override void InputFire()
         {
             if (playerState.isOutOfControl || playerState.isStopped)
@@ -95,25 +122,26 @@ namespace KSU.AutoAim.Player
                 {
                     steadyInteractionState.isSucceededInHittingTaget = false;
                     autoAimObjectSpawner.SetActive(false);
-                    if (steadyInteractionState.isAutoAimObjectFounded)
-                    {
-                        // µµÂø À§Ä¡: autoAimPosition
-                        cymbals.InitObject(autoAimObjectSpawner.transform.position, autoAimPosition.position, autoAimObjectSpeed, autoAimObjectDepartOffset);
-                    }
-                    else
-                    {
-                        // µµÂøÀ§Ä¡: È­¸é Áß¾Ó¿¡ ·¹ÀÌ ½÷¼­ µµÂøÇÏ´Â °÷
-                        RaycastHit hit;
-                        bool rayCheck = Physics.Raycast(playerCamera.transform.position, playerCamera.transform.forward, out hit, autoAimObjectRange, -1, QueryTriggerInteraction.Ignore);
-                        if (rayCheck && (hit.distance > Vector3.Distance(transform.position, playerCamera.transform.position)))
-                        {
-                            cymbals.InitObject(autoAimObjectSpawner.transform.position, hit.point, autoAimObjectSpeed, autoAimObjectDepartOffset);
-                        }
-                        else
-                        {
-                            cymbals.InitObject(autoAimObjectSpawner.transform.position, (playerCamera.transform.position + playerCamera.transform.forward * autoAimObjectRange), autoAimObjectSpeed, autoAimObjectDepartOffset);
-                        }
-                    }
+                    cymbals.InitObject(autoAimObjectSpawner.transform.position, shootPosition, autoAimObjectSpeed, autoAimObjectDepartOffset);
+                    //if (steadyInteractionState.isAutoAimObjectFounded)
+                    //{
+                    //    // µµÂø À§Ä¡: autoAimPosition
+                    //    cymbals.InitObject(autoAimObjectSpawner.transform.position, autoAimPosition.position, autoAimObjectSpeed, autoAimObjectDepartOffset);
+                    //}
+                    //else
+                    //{
+                    //    // µµÂøÀ§Ä¡: È­¸é Áß¾Ó¿¡ ·¹ÀÌ ½÷¼­ µµÂøÇÏ´Â °÷
+                    //    RaycastHit hit;
+                    //    bool rayCheck = Physics.Raycast(playerCamera.transform.position, playerCamera.transform.forward, out hit, autoAimObjectRange, -1, QueryTriggerInteraction.Ignore);
+                    //    if (rayCheck && (hit.distance > Vector3.Distance(transform.position, playerCamera.transform.position)))
+                    //    {
+                    //        cymbals.InitObject(autoAimObjectSpawner.transform.position, hit.point, autoAimObjectSpeed, autoAimObjectDepartOffset);
+                    //    }
+                    //    else
+                    //    {
+                    //        cymbals.InitObject(autoAimObjectSpawner.transform.position, (playerCamera.transform.position + playerCamera.transform.forward * autoAimObjectRange), autoAimObjectSpeed, autoAimObjectDepartOffset);
+                    //    }
+                    //}
                 }
             }
         }
@@ -121,14 +149,16 @@ namespace KSU.AutoAim.Player
         private void OnTriggerEnter(Collider other)
         {
 
-            if ((other.gameObject.layer == LayerMask.NameToLayer("UITriggers")) && (other.CompareTag("GrappledObject") || other.CompareTag("PoisonSnake") || other.CompareTag("TrippleHeadSnake")))
+            if ((other.gameObject.layer == LayerMask.NameToLayer("UITriggers")) && other.CompareTag("CymbalsTarget"))
             {
+                if (autoAimTargetObjects.Contains(other.gameObject))
+                    return;
                 autoAimTargetObjects.Add(other.gameObject);
             }
         }
         private void OnTriggerExit(Collider other)
         {
-            if ((other.gameObject.layer == LayerMask.NameToLayer("UITriggers")) && (other.CompareTag("GrappledObject") || other.CompareTag("PoisonSnake") || other.CompareTag("TrippleHeadSnake")))
+            if ((other.gameObject.layer == LayerMask.NameToLayer("UITriggers")) && other.CompareTag("CymbalsTarget"))
             {
                 other.gameObject.transform.parent.gameObject.GetComponentInChildren<OneIndicator>().SetUI(false);
                 autoAimTargetObjects.Remove(other.gameObject);
