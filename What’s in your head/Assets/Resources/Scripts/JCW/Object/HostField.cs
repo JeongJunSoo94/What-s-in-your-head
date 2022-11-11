@@ -154,6 +154,10 @@ namespace JCW.Object
                 case "Steady":
                     other.gameObject.GetComponent<PlayerController>().Resurrect();
                     break;
+                case "NellaWater":
+                    GetDamaged();
+                    break;
+
             }
         }
 

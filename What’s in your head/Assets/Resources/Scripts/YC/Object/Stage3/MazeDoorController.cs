@@ -9,6 +9,7 @@ public class MazeDoorController : MonoBehaviour
     [SerializeField] float delayTime;
 
     float originPosY;
+ 
     bool isCor;
 
     private void Awake()
@@ -33,7 +34,7 @@ public class MazeDoorController : MonoBehaviour
         float currentTime = 0;
         float lerpYpos;
 
-        float height = 10;
+        float height = 15;
         Vector3 thisPos = this.gameObject.transform.position;
 
         if (open)
