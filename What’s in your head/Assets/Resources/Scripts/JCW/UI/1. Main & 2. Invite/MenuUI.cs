@@ -5,6 +5,7 @@ using UnityEngine.UI;
 using Photon.Pun;
 using Photon.Realtime;
 using JCW.UI.Options;
+using JCW.AudioCtrl;
 
 namespace JCW.UI
 {
@@ -35,6 +36,7 @@ namespace JCW.UI
         private void Start()
         {
             StartCoroutine(nameof(Appear));
+            SoundManager.Instance.PlayBGM("Menu_BGM");
         }        
 
         IEnumerator Appear()

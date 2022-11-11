@@ -50,10 +50,8 @@ namespace JCW.Object.Stage1
                 }
             }
             curTF.position = Vector3.MoveTowards(curTF.position, posList[curIndex], Time.fixedDeltaTime * movingSpeed);
-        }
+        }       
 
-
-       
 
         private void OnTriggerEnter(Collider other)
         {

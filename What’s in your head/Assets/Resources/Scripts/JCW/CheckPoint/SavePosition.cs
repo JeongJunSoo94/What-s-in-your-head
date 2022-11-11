@@ -53,7 +53,8 @@ namespace JCW.Object
         }
         [PunRPC]
         private void Check(Vector3 pos, Quaternion rot)
-        {            
+        {
+            firstContact = true;
             PlayerInfo playerTF = new(pos, rot);
             JsonData infoJson = JsonMapper.ToJson(playerTF);
 

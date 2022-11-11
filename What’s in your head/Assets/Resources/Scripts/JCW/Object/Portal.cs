@@ -12,6 +12,8 @@ namespace JCW.Object
         [Header("·Îµù UI")] public GameObject LoadingUI;
         PhotonView photonView;
 
+        bool isStart = false;
+
         private void Awake()
         {
             photonView = PhotonView.Get(this);
@@ -19,12 +21,26 @@ namespace JCW.Object
         private void OnTriggerEnter(Collider other)
         {
             if (other.CompareTag("Nella") || other.CompareTag("Steady"))
-                photonView.RPC(nameof(Loading), RpcTarget.AllViaServer);
+            {
+                if(other.GetComponent<PlayerState>().isMine && !isStart)
+                {
+                    isStart = true;
+                    photonView.RPC(nameof(Loading), RpcTarget.AllViaServer);
+                }
+            }
         }
 
         [PunRPC]
         void Loading()
         {
+            isStart = true;
+            if (GameManager.Instance.curStageType == 1)
+                ++GameManager.Instance.curStageType;
+            else
+            {
+                --GameManager.Instance.curStageType;
+                ++GameManager.Instance.curStageIndex;
+            }
             LoadingUI.SetActive(true);
         }
     }

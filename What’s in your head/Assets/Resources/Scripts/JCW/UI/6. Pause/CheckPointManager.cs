@@ -50,7 +50,6 @@ namespace JCW.UI
         [PunRPC]
         void LoadCP()
         {
-            --GameManager.Instance.curSection;
             GameManager.Instance.myPlayerTF.GetComponent<PlayerController>().Resurrect();
             this.gameObject.SetActive(false);
             titleObj.transform.parent.gameObject.SetActive(false);

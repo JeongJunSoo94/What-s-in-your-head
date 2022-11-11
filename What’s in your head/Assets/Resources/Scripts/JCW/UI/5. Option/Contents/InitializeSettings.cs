@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 using System.IO;
+using JCW.AudioCtrl;
 
 namespace JCW.UI.Options
 {
@@ -23,6 +24,11 @@ namespace JCW.UI.Options
             {
                 this.gameObject.SetActive(false);
             });
+        }
+
+        private void OnEnable()
+        {
+            SoundManager.Instance.PlayUI("SystemMessage");
         }
 
         void InitializeValue()
