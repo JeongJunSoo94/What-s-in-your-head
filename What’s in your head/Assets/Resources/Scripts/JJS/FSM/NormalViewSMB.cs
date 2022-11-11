@@ -84,6 +84,19 @@ namespace JJS
                     GetPlayerController(animator).playerMouse.TopViewUpdate();
                 }
             }
+            else if (GameManager.Instance.isSideView)
+            {
+                //if (GetPlayerController(animator).CompareTag("Nella"))
+                //{
+                //    if (!GetPlayerController(animator).playerMouse.clickLeft)
+                //        GetPlayerController(animator).playerMouse.SideViewUpdate();
+                //}
+                //else
+                //{
+                //    GetPlayerController(animator).playerMouse.SideViewUpdate();
+                //}
+                GetPlayerController(animator).playerMouse.SideViewUpdate();
+            }
 
             GetPlayerController(animator).InputRun();
             if (GetPlayerController(animator).CompareTag("Steady"))
@@ -165,7 +178,11 @@ namespace JJS
         {
             if (GameManager.Instance.isTopView)
             {
-                //GetPlayerController(animator).characterState.top = !GetPlayerController(animator).characterState.top;
+                GetPlayerController(animator).characterState.top = true;
+                Cursor.lockState = CursorLockMode.Confined;
+            }
+            else if (GameManager.Instance.isSideView)
+            {
                 GetPlayerController(animator).characterState.top = true;
                 Cursor.lockState = CursorLockMode.Confined;
             }

@@ -285,12 +285,20 @@ namespace KSU
         {
             if (characterState.isOutOfControl || characterState.isStopped || characterState.isRiding)
                 return;
-
-            moveDir =
-              mainCamera.transform.forward * ((KeyManager.Instance.GetKey(PlayerAction.MoveForward) ? 1 : 0) + (KeyManager.Instance.GetKey(PlayerAction.MoveBackward) ? -1 : 0))
-            + mainCamera.transform.right * ((KeyManager.Instance.GetKey(PlayerAction.MoveRight) ? 1 : 0) + (KeyManager.Instance.GetKey(PlayerAction.MoveLeft) ? -1 : 0));
-            moveDir.y = 0;
-            moveDir = moveDir.normalized;
+            if (GameManager.Instance.isSideView)
+            {
+                moveDir = mainCamera.transform.right * ((KeyManager.Instance.GetKey(PlayerAction.MoveRight) ? 1 : 0) + (KeyManager.Instance.GetKey(PlayerAction.MoveLeft) ? -1 : 0));
+                moveDir.y = 0;
+                moveDir = moveDir.normalized;
+            }
+            else
+            {
+                moveDir =
+                mainCamera.transform.forward * ((KeyManager.Instance.GetKey(PlayerAction.MoveForward) ? 1 : 0) + (KeyManager.Instance.GetKey(PlayerAction.MoveBackward) ? -1 : 0))
+                + mainCamera.transform.right * ((KeyManager.Instance.GetKey(PlayerAction.MoveRight) ? 1 : 0) + (KeyManager.Instance.GetKey(PlayerAction.MoveLeft) ? -1 : 0));
+                moveDir.y = 0;
+                moveDir = moveDir.normalized;
+            }
 
             if (moveDir.magnitude > 0)
                 characterState.isMove = true;
@@ -407,7 +415,7 @@ namespace KSU
                 return;
             }
 
-            if (characterState.top)
+            if (characterState.top||GameManager.Instance.isSideView)
             {
                 if(!playerMouse.notRotatoin)
                     RotateTop();

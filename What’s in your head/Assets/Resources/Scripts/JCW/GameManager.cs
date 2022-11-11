@@ -1,27 +1,29 @@
 using System.Collections;
 using System.Collections.Generic;
+using JCW.UI;
 using JCW.UI.InGame;
+using JCW.UI.Options.InputBindings;
 using Photon.Pun;
 using UnityEngine;
 using YC.Photon;
 
 [RequireComponent(typeof(PhotonView))]
 public class GameManager : MonoBehaviour, IPunObservable
-{    
+{
     // 좌측 bool 값은 master client인지, 우측 bool 값은 Nella 캐릭터인지.    
-    [HideInInspector] public Dictionary<bool, bool> characterOwner = new();   
+    [HideInInspector] public Dictionary<bool, bool> characterOwner = new();
 
     // 현재 스테이지 , 섹션 인덱스
     [HideInInspector] public int curStageIndex = 0;
     [HideInInspector] public int curStageType = 1;
     [HideInInspector] public int curSection = 0;
-    
+
     // 현재 캐릭터들의 생존 여부
     [HideInInspector] public Hashtable isAlive = new();
 
     // 좌측 bool 값은 Nella 캐릭터인지, 우측은 해당 캐릭터가 가지고 있는 스크립트
-    [HideInInspector] public Dictionary<bool, HealthUI> reviveAllPairs= new();
-    [HideInInspector] public Dictionary<bool, CharUI> hpAllPairs= new();
+    [HideInInspector] public Dictionary<bool, HealthUI> reviveAllPairs = new();
+    [HideInInspector] public Dictionary<bool, CharUI> hpAllPairs = new();
 
     // Remote인 다른 캐릭터의 위치
     [HideInInspector] public Transform otherPlayerTF;
@@ -33,6 +35,7 @@ public class GameManager : MonoBehaviour, IPunObservable
 
     // 현재 탑뷰인지
     [Header("탑뷰")] public bool isTopView;
+    [Header("사이드뷰")] public bool isSideView;
     [Header("테스트용")] public bool isTest;
 
     // 랜덤시드
@@ -58,21 +61,24 @@ public class GameManager : MonoBehaviour, IPunObservable
 
         photonView = GetComponent<PhotonView>();
 
-        //{
-        //    GameObject obj = new GameObject("_GameManager");
-        //    photonView = obj.AddComponent<PhotonView>();
-        //    photonView.ViewID = PhotonNetwork.AllocateViewID(0);
-        //    photonView.observableSearch = PhotonView.ObservableSearch.AutoFindAll;
-        //}
-
         curStageIndex = 0;
         curSection = 0;
     }
 
     private void Update()
     {
-        if(Input.GetKeyDown(KeyCode.Keypad0))
+        if (Input.GetKeyDown(KeyCode.Keypad1))
             isTopView = !isTopView;
+        if (Input.GetKeyDown(KeyCode.Keypad2))
+            isSideView = !isSideView;
+        if (KeyManager.Instance.GetKeyDown(PlayerAction.Pause))
+        {
+            if (!pauseUI.activeSelf)
+                pauseUI.SetActive(true);
+            else
+                PauseManager.Instance.CloseUI();
+        }
+
     }
 
     public void SetRandomSeed()
@@ -83,11 +89,11 @@ public class GameManager : MonoBehaviour, IPunObservable
     [PunRPC]
     void SetRandomSeed_RPC(int seed)
     {
-        if(PhotonNetwork.IsMasterClient)
+        if (PhotonNetwork.IsMasterClient)
             randomSeed = seed;
     }
 
-    public void SectionUP() { ++curSection;  }
+    public void SectionUP() { ++curSection; }
 
     // 누구 하나 죽었거나, 죽음->부활일 때 작동하는 함수=====================
     public void MediateRevive(bool value)
@@ -152,18 +158,18 @@ public class GameManager : MonoBehaviour, IPunObservable
         if (stream.IsWriting)
         {
             stream.SendNext(isTopView);
-            stream.SendNext(curStageIndex);            
-            stream.SendNext(curStageType);            
+            stream.SendNext(curStageIndex);
+            stream.SendNext(curStageType);
             stream.SendNext(curSection);
         }
 
         // 받는 사람
         else
         {
-            isTopView     = (bool)stream.ReceiveNext();
+            isTopView = (bool)stream.ReceiveNext();
             curStageIndex = (int)stream.ReceiveNext();
-            curStageType  = (int)stream.ReceiveNext();
-            curSection    = (int)stream.ReceiveNext();
+            curStageType = (int)stream.ReceiveNext();
+            curSection = (int)stream.ReceiveNext();
         }
     }
 

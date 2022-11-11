@@ -10,11 +10,13 @@ namespace JCW.UI
     public class PauseManager : MonoBehaviour
     {
         private enum PauseMenu { Resume, Checkpoint, Option, Exit };
-        
+
         [Header("일시정지 메뉴 리스트")] [SerializeField] List<Button> buttonList = new();
         [Header("체크포인트 버튼 UI")] [SerializeField] GameObject checkPointUI;
         [Header("옵션 버튼 UI")] [SerializeField] GameObject optionUI;
         [Header("종료 버튼 UI")] [SerializeField] GameObject exitUI;
+
+        public int childOnIndex = 0;
 
         public static PauseManager Instance = null;
         private void Awake()
@@ -34,11 +36,32 @@ namespace JCW.UI
 
             buttonList[(int)PauseMenu.Checkpoint].onClick.AddListener(() =>
             {
-                checkPointUI.SetActive(true);
+                checkPointUI.SetActive(true); childOnIndex = 1;
             });
-            buttonList[(int)PauseMenu.Option].onClick.AddListener(() => { optionUI.SetActive(true); });
-            buttonList[(int)PauseMenu.Exit].onClick.AddListener(() =>  { exitUI.SetActive(true);   });
+            buttonList[(int)PauseMenu.Option].onClick.AddListener(() => { optionUI.SetActive(true); childOnIndex = 2; });
+            buttonList[(int)PauseMenu.Exit].onClick.AddListener(() => { exitUI.SetActive(true); childOnIndex = 3; });
+        }
+
+        public void CloseUI()
+        {
+            switch (childOnIndex)
+            {
+                case 0:
+                    this.gameObject.SetActive(false);
+                    break;
+                case 1:
+                    checkPointUI.SetActive(false);
+                    childOnIndex = 0;
+                    break;
+                case 2:
+                    optionUI.SetActive(false);
+                    childOnIndex = 0;
+                    break;
+                case 3:
+                    exitUI.SetActive(false);
+                    childOnIndex = 0;
+                    break;
+            }
         }
     }
 }
-

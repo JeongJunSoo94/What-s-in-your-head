@@ -29,6 +29,7 @@ namespace YC.CameraManager_
 
         Coroutine curCoroutine;
         bool wasTopView;
+        bool wasSideView;
 
         void Awake()
         {
@@ -80,6 +81,24 @@ namespace YC.CameraManager_
                 {
                     wasTopView = false;
                 }
+
+                if (GameManager.Instance.isSideView)
+                {
+                    // >> : 기존
+                    //pv.RPC(nameof(InitCamera), RpcTarget.AllBuffered, (int)CharacterCamera.NELLA); 
+                    //pv.RPC(nameof(SetDefenceModeCamera), RpcTarget.AllBuffered);
+
+                    // >> : 수정
+                    if (!wasSideView)
+                    {
+                        pv.RPC(nameof(SetSideModeCamera), RpcTarget.AllBuffered);
+                        wasSideView = true;
+                    }
+                }
+                else if (wasSideView)
+                {
+                    wasSideView = false;
+                }
             }
         }
 
@@ -105,14 +124,29 @@ namespace YC.CameraManager_
             {
                 //pv.RPC(nameof(InitCamera), RpcTarget.AllBuffered, (int)CharacterCamera.NELLA);
                 InitCamera((int)CharacterCamera.NELLA);
-                //GameObject.FindGameObjectWithTag("Nella").GetComponent<CameraController>().SetDefenseMode(); // << : TopView
+                GameObject.FindGameObjectWithTag("Nella").GetComponent<CameraController>().SetDefenseMode(); // << : TopView
+            }
+            else // 스테디라면
+            {
+                //pv.RPC(nameof(InitCamera), RpcTarget.AllBuffered, (int)CharacterCamera.STEADY);
+                InitCamera((int)CharacterCamera.STEADY);
+                GameObject.FindGameObjectWithTag("Nella").GetComponent<CameraController>().SetDefenseMode(); // << : TopView
+            }
+        }
+        [PunRPC]
+        void SetSideModeCamera()
+        {
+            // >> : 수정
+            if (GameManager.Instance.characterOwner[PhotonNetwork.IsMasterClient]) // 넬라면
+            {
+                //pv.RPC(nameof(InitCamera), RpcTarget.AllBuffered, (int)CharacterCamera.NELLA);
+                InitCamera((int)CharacterCamera.NELLA);
                 GameObject.FindGameObjectWithTag("Nella").GetComponent<CameraController>().SetSideScrollMode(); // << : SideView
             }
             else // 스테디라면
             {
                 //pv.RPC(nameof(InitCamera), RpcTarget.AllBuffered, (int)CharacterCamera.STEADY);
                 InitCamera((int)CharacterCamera.STEADY);
-                //GameObject.FindGameObjectWithTag("Nella").GetComponent<CameraController>().SetDefenseMode(); // << : TopView
                 GameObject.FindGameObjectWithTag("Steady").GetComponent<CameraController>().SetSideScrollMode(); // << : SideView
             }
         }
