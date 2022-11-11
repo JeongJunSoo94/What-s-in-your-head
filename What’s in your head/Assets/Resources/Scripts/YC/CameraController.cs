@@ -99,6 +99,12 @@ namespace YC.Camera_
         float maxZoom;
         [Space] [Space]
 
+        // ============  미로뷰 변수  ============ //
+        string mazeCamTag = "Cine_MazeCam";
+        GameObject mazeCamObj;
+        CinemachineVirtualCamera mazeCineCam;
+        CinemachineCollider mazeCineCamCol;
+
         // ============  점프 보간 변수들  ============ //
         [Header("[점프 후, 플랫폼 착지시 보간 시간]")]
         [SerializeField] [Range(0, 3)] float platformLerpTime = 0.7f;
@@ -634,6 +640,66 @@ namespace YC.Camera_
             }
         }
 
+
+        // ====================  [Maze View 함수]  ==================== //
+        public void SetMazeMode(bool enter, bool isExit) // 미로 모드 설정  
+        {
+            if(enter) // 미로 입장시
+            {
+                OnOffCamera(null);
+
+                if(!mazeCamObj)
+                {
+                    GameObject[] mazeCamObjs;
+                    mazeCamObjs = GameObject.FindGameObjectsWithTag(mazeCamTag);
+
+                    foreach (GameObject cam in mazeCamObjs)
+                    {
+                        if(cam.layer == 0)
+                        {
+                            mazeCamObj = GameObject.FindGameObjectWithTag(mazeCamTag);
+                        }
+                    }
+
+                    mazeCineCam = mazeCamObj.GetComponent<CinemachineVirtualCamera>();
+                    mazeCineCamCol = mazeCamObj.GetComponent<CinemachineCollider>();
+
+                    mazeCineCam.LookAt = player.transform;
+                    mazeCineCam.Follow = player.transform;
+
+                    if (player.CompareTag("Nella"))
+                    {
+                        string layerName = "NellaCam";
+                        string ignoreTag = "Nella";
+                        mazeCamObj.gameObject.layer = LayerMask.NameToLayer(layerName);
+                        mazeCineCamCol.m_IgnoreTag = ignoreTag;
+                    }
+                    else if (player.CompareTag("Steady"))
+                    {
+                        string layerName = "SteadyCam";
+                        string ignoreTag = "Steady";
+                        mazeCamObj.gameObject.layer = LayerMask.NameToLayer(layerName);
+                        mazeCineCamCol.m_IgnoreTag = ignoreTag;
+                    }
+                }
+
+                mazeCineCam.enabled = true;
+                mazeCineCamCol.enabled = true;
+            }
+            else // 미로 퇴장시
+            {
+                if(!isExit)
+                {
+                    backCam.GetComponent<CinemachineFreeLook>().m_XAxis.Value = -(backCam.GetComponent<CinemachineFreeLook>().m_XAxis.Value);
+                }
+               
+                mazeCineCam.enabled = false;
+                mazeCineCamCol.enabled = false;
+
+                curCam = CamState.back;
+                OnOffCamera(camList[(int)curCam]);
+            }        
+        }
 
         // ====================  [Side View 함수]  ==================== //
 
