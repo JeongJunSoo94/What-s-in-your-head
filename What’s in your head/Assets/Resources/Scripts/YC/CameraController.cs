@@ -172,6 +172,9 @@ namespace YC.Camera_
            
             if (!pv.IsMine) return;
 
+            if (playerState.isInMaze)
+                return;
+
             if (isSideView)
             {
                 //if (Input.GetKeyDown(KeyCode.Keypad9))
