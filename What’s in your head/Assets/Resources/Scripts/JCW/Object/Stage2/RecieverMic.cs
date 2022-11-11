@@ -11,14 +11,17 @@ namespace JCW.Object
 
         //(대충 넬라 스크립트 자료형) (변수명);
         Singing nellaSinging;
+        Animator animator;
 
         private void Awake()
         {
             transform.GetChild(1).localScale = new Vector3(detectRange, detectRange, detectRange);
+            animator = GetComponent<Animator>();
         }
 
         public void Play(bool enable)
         {
+            animator.SetBool("Play", enable);
             for (int i = 0; i < objectList.Count; ++i)
             {
                 if(enable)

@@ -310,6 +310,8 @@ namespace KSU
         {
             if(other.CompareTag("Rope"))
             {
+                if (detectedRopes.ContainsKey(other.gameObject.transform.parent.gameObject))
+                    return;
                 detectedRopes.Add(other.gameObject.transform.parent.gameObject, new Obj_Info(false, false, 100f));
             }
         }

@@ -7,14 +7,6 @@ namespace KSU.AutoAim.Object.Stage2
 {
     public class CymbalsRope : CymbalsReciever
     {
-        [SerializeField] GameObject upperRope;
-        [SerializeField] GameObject midRope;
-        [SerializeField] GameObject underRope;
-
-        public float ropeSpeed = 0f;
-        public float gravity = -9.8f;
-        public float terminalSpeed = 20f;
-
         // Start is called before the first frame update
         protected override void Awake()
         {
@@ -22,26 +14,26 @@ namespace KSU.AutoAim.Object.Stage2
         }
 
         // Update is called once per frame
-        void FixedUpdate()
-        {
-            if(isActivated)
-            {
-                CutOff();
-            }
-        }
-        void CutOff()
-        {
-            ropeSpeed += gravity * Time.fixedDeltaTime;
-            upperRope.transform.position = upperRope.transform.position - Vector3.up * ropeSpeed;
-            underRope.transform.position = underRope.transform.position - Vector3.up * ropeSpeed;
-        }
+        //void FixedUpdate()
+        //{
+        //    if(isActivated)
+        //    {
+        //        CutOff();
+        //    }
+        //}
+        //void CutOff()
+        //{
+        //    ropeSpeed += gravity * Time.fixedDeltaTime;
+        //    upperRope.transform.position = upperRope.transform.position - Vector3.up * ropeSpeed;
+        //    underRope.transform.position = underRope.transform.position - Vector3.up * ropeSpeed;
+        //}
 
         [PunRPC]
         protected override void SetActive()
         {
             isActivated = true;
             SendInfo();
-            midRope.SetActive(false);
+            animator.SetBool("isCut", true);
             StartCoroutine(nameof(DelayActivation));
         }
 

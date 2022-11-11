@@ -515,6 +515,8 @@ namespace KSU
         {
             if (other.CompareTag("Rail"))
             {
+                //if (detectedRail.ContainsKey(other.transform.parent.transform.parent.gameObject))
+                //    return;
                 if (detectedRail.Count > 0)
                 {
                     bool isNewRail = true;

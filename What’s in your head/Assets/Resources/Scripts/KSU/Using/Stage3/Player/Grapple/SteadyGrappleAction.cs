@@ -353,9 +353,11 @@ namespace KSU.AutoAim.Player
 
         private void OnTriggerEnter(Collider other)
         {
-
+            
             if ((other.gameObject.layer == LayerMask.NameToLayer("UITriggers")) && (other.CompareTag("GrappledObject") || other.CompareTag("PoisonSnake") || other.CompareTag("TrippleHeadSnake")))
             {
+                if (autoAimTargetObjects.Contains(other.gameObject))
+                    return;
                 autoAimTargetObjects.Add(other.gameObject);
             }
         }

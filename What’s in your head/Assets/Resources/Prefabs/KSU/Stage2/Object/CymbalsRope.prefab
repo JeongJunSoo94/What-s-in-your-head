@@ -48,13 +48,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fa4de02c3dfb3af4e8d5b2339ecaa83f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  detectingUITrigger: {fileID: 0}
   detectingUIRange: 0
   activationDelayTime: 5
   linkedObjects: []
   upperRope: {fileID: 0}
   midRope: {fileID: 0}
   underRope: {fileID: 0}
+  ropeSpeed: 0
+  gravity: -9.8
+  terminalSpeed: 20
 --- !u!114 &1032882142684963932
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -118,7 +120,7 @@ MeshFilter:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2770845111094890366}
-  m_Mesh: {fileID: 8792586484180348971, guid: 0c5dc8b84bc04b14a9d0cd693875b617, type: 3}
+  m_Mesh: {fileID: -7951404580735127205, guid: 0c5dc8b84bc04b14a9d0cd693875b617, type: 3}
 --- !u!23 &7962498028245599872
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -214,7 +216,7 @@ MeshFilter:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5011340205466589886}
-  m_Mesh: {fileID: 8314571269056883277, guid: 0c5dc8b84bc04b14a9d0cd693875b617, type: 3}
+  m_Mesh: {fileID: 1046750572288753046, guid: 0c5dc8b84bc04b14a9d0cd693875b617, type: 3}
 --- !u!23 &7559231699165250029
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -297,7 +299,7 @@ MeshFilter:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 9192291305425432073}
-  m_Mesh: {fileID: 8999911773206952699, guid: 0c5dc8b84bc04b14a9d0cd693875b617, type: 3}
+  m_Mesh: {fileID: -562413237752591273, guid: 0c5dc8b84bc04b14a9d0cd693875b617, type: 3}
 --- !u!23 &577830612733230520
 MeshRenderer:
   m_ObjectHideFlags: 0

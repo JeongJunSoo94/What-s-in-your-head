@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using KSU;
 using KSU.AutoAim.Player;
+using JJS.Weapon;
 namespace JJS
 { 
     public class CharacterBuilder : MonoBehaviour
@@ -25,6 +26,7 @@ namespace JJS
                 {
                     SetCharacterComponent(nella, nellaMouseControllerData, "Hand_R");
                     SetCharacterComponent(steady, steadyMouseControllerData, "Hand_R");
+                    NellaScriptSetActive(nella);
                     SteadyScriptSetActive(steady);
                     gameObject.SetActive(false);
                 }
@@ -39,6 +41,7 @@ namespace JJS
                 {
                     SetCharacterComponent(nella, nellaMouseControllerData, "Hand_R");
                     SetCharacterComponent(steady, steadyMouseControllerData, "Hand_R");
+                    NellaScriptSetActive(nella);
                     SteadyScriptSetActive(steady);
                     gameObject.SetActive(false);
                 }
@@ -127,7 +130,20 @@ namespace JJS
             clone.transform.localRotation = weapon.transform.rotation;
             return clone;
         }
-
+        public void NellaScriptSetActive(GameObject player)
+        {
+            if (player != null)
+            {
+                PlayerMouseController playerMouse = player.GetComponent<PlayerMouseController>();
+                if (playerMouse.weaponInfo.Length != 0)
+                {
+                    if (playerMouse.weaponInfo[playerMouse.GetUseWeapon()].weapon.name == "WaterPistol")
+                    {
+                        player.GetComponent<WaterGun>().InitSpawner();
+                    }
+                }
+            }
+        }
         public void SteadyScriptSetActive(GameObject player)
         {
             if (player != null)
