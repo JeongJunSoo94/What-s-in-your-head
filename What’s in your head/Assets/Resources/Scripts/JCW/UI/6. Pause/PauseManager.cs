@@ -10,7 +10,7 @@ namespace JCW.UI
     public class PauseManager : MonoBehaviour
     {
         private enum PauseMenu { Resume, Checkpoint, Option, Exit };
-
+        
         [Header("일시정지 메뉴 리스트")] [SerializeField] List<Button> buttonList = new();
         [Header("체크포인트 버튼 UI")] [SerializeField] GameObject checkPointUI;
         [Header("옵션 버튼 UI")] [SerializeField] GameObject optionUI;
@@ -39,15 +39,16 @@ namespace JCW.UI
                 checkPointUI.SetActive(true); childOnIndex = 1;
             });
             buttonList[(int)PauseMenu.Option].onClick.AddListener(() => { optionUI.SetActive(true); childOnIndex = 2; });
-            buttonList[(int)PauseMenu.Exit].onClick.AddListener(() => { exitUI.SetActive(true); childOnIndex = 3; });
+            buttonList[(int)PauseMenu.Exit].onClick.AddListener(() =>  { exitUI.SetActive(true); childOnIndex = 3; });
         }
 
         public void CloseUI()
         {
-            switch (childOnIndex)
+            switch(childOnIndex)
             {
                 case 0:
                     this.gameObject.SetActive(false);
+                    Cursor.lockState = CursorLockMode.Locked;
                     break;
                 case 1:
                     checkPointUI.SetActive(false);
@@ -65,3 +66,4 @@ namespace JCW.UI
         }
     }
 }
+

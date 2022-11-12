@@ -71,6 +71,7 @@ namespace KSU
         public float terminalSpeed = -10f;
         [Tooltip("넉백 수직 속력")]
         public float knockBackVerticalSpeed = 8f;
+        public float trampolinSpeed = 20f;
         #endregion
 
         // 회전 Speed
@@ -676,7 +677,7 @@ namespace KSU
             {
                 case "Trampolin":
                     {
-                        InputCustomJump(collision.gameObject.GetComponentInParent<JumpingPlatform>().jumpSpeed);
+                        InputCustomJump(trampolinSpeed);
                     }
                     break;
                 case "DeadZone":
@@ -689,17 +690,17 @@ namespace KSU
         [PunRPC]
         public void GetDamage(int damage, DamageType type, Vector3 colliderPos, float knockBackSpeed)
         {
-            string damageTirgger = "DeadTrigger";
+            string damageTrigger = "DeadTrigger";
             switch(type)
             {
                 case DamageType.Attacked:
-                    damageTirgger = "AttackedTrigger";
+                    damageTrigger = "AttackedTrigger";
                     break;
                 case DamageType.KnockBack:
-                    damageTirgger = "KnockBackTrigger";
+                    damageTrigger = "KnockBackTrigger";
                     break;
                 case DamageType.Dead:
-                    damageTirgger = "DeadTrigger";
+                    damageTrigger = "DeadTrigger";
                     break;
             }
 
@@ -711,7 +712,7 @@ namespace KSU
             }
             else
             {
-                if(damageTirgger == "KnockBackTrigger")
+                if(damageTrigger == "KnockBackTrigger")
                 {
                     Vector3 knockBackHorVec = (transform.position - colliderPos);
                     knockBackHorVec.y = 0;
@@ -720,7 +721,7 @@ namespace KSU
                     StartCoroutine(nameof(DelayResetKnockBack));
                 }
 
-                playerAnimator.SetBool(damageTirgger, true);
+                playerAnimator.SetBool(damageTrigger, true);
             }
         }
         
@@ -729,17 +730,17 @@ namespace KSU
         {
             if (!photonView.IsMine)
                 return;
-            string damageTirgger = "DeadTrigger";
+            string damageTrigger = "DeadTrigger";
             switch (type)
             {
                 case DamageType.Attacked:
-                    damageTirgger = "AttackedTrigger";
+                    damageTrigger = "AttackedTrigger";
                     break;
                 case DamageType.KnockBack:
-                    damageTirgger = "KnockBackTrigger";
+                    damageTrigger = "KnockBackTrigger";
                     break;
                 case DamageType.Dead:
-                    damageTirgger = "DeadTrigger";
+                    damageTrigger = "DeadTrigger";
                     break;
             }
             if (!playerAnimator.GetBool("isAttacked") && !playerAnimator.GetBool("isKnockBack") && !playerAnimator.GetBool("isDead"))
@@ -753,7 +754,7 @@ namespace KSU
                 }
                 else
                 {
-                    photonView.RPC(nameof(SetAnimatorBool), RpcTarget.AllViaServer, damageTirgger, true);
+                    photonView.RPC(nameof(SetAnimatorBool), RpcTarget.AllViaServer, damageTrigger, true);
                     //playerAnimator.SetBool(damageTirgger, true);
                 }
             }

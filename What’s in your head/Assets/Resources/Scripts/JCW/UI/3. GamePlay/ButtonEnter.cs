@@ -129,9 +129,8 @@ namespace JCW.UI
 
         public void LoadLatestStage()
         {
-            if (!PhotonNetwork.IsMasterClient)
-                return;
             string path = Application.dataPath + "/Resources/CheckPointInfo/Stage";
+            bool isTextCheck = false;
             for (int i=3 ; i>=1 ; --i)
             {
                 for (int j=2 ; j>=1 ; --j)
@@ -141,11 +140,32 @@ namespace JCW.UI
                         SetStage_RPC(i);
                         SetStageType_RPC(j);
                         SetSection_RPC(Directory.GetFiles(path + i + "/" + j + "/").Length);
+                        isTextCheck = true;
                         break;
                     }                
                 }
+            }            
+            if(isTextCheck)
+            {
+                Text tempText = transform.GetChild(2).GetChild(1).GetChild(1).GetChild(0).GetComponent<Text>();
+                switch(GameManager.Instance.curStageIndex)
+                {
+                    case 0:
+                    case 1:
+                        tempText.text = "놀이 공원";
+                        break;
+                    case 2:
+                        tempText.text = "연주회";
+                        break;
+                    case 3:
+                        tempText.text = "식물원";
+                        break;
+                }
             }
-            
+            else
+            {
+                GameManager.Instance.curStageIndex = 1;
+            }
         }
 
 

@@ -5,6 +5,7 @@ using UnityEngine.UI;
 using Photon.Pun;
 using Photon.Realtime;
 using JCW.Network;
+using JCW.AudioCtrl;
 
 namespace JCW.UI
 {    public class Invitation : MonoBehaviour
@@ -27,6 +28,12 @@ namespace JCW.UI
             });
             declineButton.onClick.AddListener(() => {  this.gameObject.SetActive(false); });
         }
+
+        private void OnEnable()
+        {
+            SoundManager.Instance.PlayUI("SystemMessage");
+        }
+
         public void SetMasterName(string masterName)
         {
             masterID = masterName;

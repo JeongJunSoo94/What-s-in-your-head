@@ -148,6 +148,7 @@ public class PlayerState : MonoBehaviour
     #region
     public void CheckGround(float sphereRadius)
     {
+
         RayCheck = Physics.SphereCast(transform.position + Vector3.up * (sphereRadius * 1.5f + Physics.defaultContactOffset), (sphereRadius - Physics.defaultContactOffset), Vector3.down, out groundRaycastHit, groundCheckDistance + sphereRadius * 0.5f + Physics.defaultContactOffset, groundLayerMask, QueryTriggerInteraction.Ignore);
 
         if (RayCheck)
