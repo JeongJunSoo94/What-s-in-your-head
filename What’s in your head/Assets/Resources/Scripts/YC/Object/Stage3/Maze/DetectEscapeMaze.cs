@@ -7,11 +7,13 @@ namespace YC_OBJ
     public class DetectEscapeMaze : MonoBehaviour
     {
         [SerializeField] Maze Maze;
+        string tag1 = "Nella";
+        string tag2 = "Steady";
 
         private void OnTriggerEnter(Collider other)
         {
-            if (other.gameObject.tag == "Nella" ||
-                other.gameObject.tag == "Steady")
+            if (other.gameObject.CompareTag(tag1) ||
+                other.gameObject.CompareTag(tag2))
             {
                 Maze.EscapeMaze();
             }

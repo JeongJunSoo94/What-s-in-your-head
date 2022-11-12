@@ -70,7 +70,7 @@ namespace YC_OBJ
 
         PhotonView bonePV;
 
-        bool isLerp = false;
+        //bool isLerp = false;
 
         bool isMove = false;
         bool isUpDir = false;

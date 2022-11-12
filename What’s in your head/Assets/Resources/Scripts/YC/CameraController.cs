@@ -136,21 +136,6 @@ namespace YC.Camera_
         [Header("[Aim UI]")] 
         public GameObject aimUI;
 
-
-
-        // ============  디버그 로그  ============ //
-        bool isDebugLog = false;
-        void DebugLogToggle()
-        {
-            //var assembly = Assembly.GetAssembly(typeof(UnityEditor.Editor));
-            //var type = assembly.GetType("UnityEditor.LogEntries");
-            //var method = type.GetMethod("Clear");
-            //method.Invoke(new object(), null);
-
-            //isDebugLog = !isDebugLog;
-        }
-
-
         void Awake()  
         {
             pv = GetComponent<PhotonView>();
@@ -171,11 +156,6 @@ namespace YC.Camera_
 
         void FixedUpdate()
         {
-            if (Input.GetKeyDown(KeyCode.R))
-                DebugLogToggle();
-
-            if (isDebugLog) Debug.Log("FixedUpdate");
-           
             if (!pv.IsMine) return;
 
             if (playerState.isInMaze)
@@ -854,14 +834,10 @@ namespace YC.Camera_
                                     PlayerPos.z);
 
             if (!wasEndSet) wasEndSet = true;
-
-            if (isDebugLog) Debug.Log("호출 : 단순 플레이어 따라가는 중");
         }
 
         void SetCineObjPos() // Look과 Follow의 x, y값 업데이트  
         {
-            if (isDebugLog) Debug.Log("호출 : 점프 대기 상태 - x, z 업데이트중");
-
             followObj.transform.position = player.transform.position;
 
             Vector3 LookPos = new Vector3(player.transform.position.x,
@@ -878,7 +854,6 @@ namespace YC.Camera_
                 // 플랫폼 보간 중, 점프를 시도했다면 
                 if (isLerp)
                 {
-                    if (isDebugLog) Debug.Log("호출 - 플랫폼 보간중 일반점프 시도! ");
                     StopAllCoroutines();
                     isLerp = false;
                     float lerpTime = 120;
@@ -896,12 +871,9 @@ namespace YC.Camera_
                 orgLookY = lookatBackObj.transform.position.y;
                 orgFollowY = followObj.transform.position.y;
                 originPlayerY = player.transform.position.y;
-
-                if (isDebugLog) Debug.Log("호출 - 일반점프 시작");
             }
             else if (!On) // 땅에 착지 or 스페셜 액션 종료
             {
-                if (isDebugLog) Debug.Log("호출 - 착지");
                 isJumping = false;
 
 
@@ -912,7 +884,6 @@ namespace YC.Camera_
 
                 if (wasEndSet)
                 {
-                    if (isDebugLog) Debug.Log("호출 - 이미 세팅되었으니 리턴");
                     return;
                 }
 
@@ -922,46 +893,15 @@ namespace YC.Camera_
                     {
                         StopAllCoroutines();
                         isLerp = false;
-                        if (isDebugLog) Debug.Log("호출 - 이중 코루틴 방지, 기존 코루틴 종료");
                     }
 
-                    if (isDebugLog) Debug.Log("호출 - 일반 플랫폼 착지, 보간 시작");
                     StartCoroutine(LerpAfter(platformLerpTime));
-                }
-                else
-                {
-                    if (isDebugLog) Debug.Log("호출 - 일반 착지, 변경사항 없음");
-                }
-
-
-                //float curDif = Mathf.Abs(player.transform.position.y - originPlayerY);  // 점프 시작시 플레이어 높이와, 현재 플레이어의 높이 차를 구한다
-
-                //if (curDif > avgDif) // 일반 점프가 종료되고, 플랫폼에 올라탔을시, 높이 차이만큼 보간
-                //{
-                //    if (isLerp)
-                //    {
-                //        StopAllCoroutines();
-                //        Debug.Log("호출 - 이중 코루틴 방지, 기존 코루틴 종료");
-                //    }
-
-                //    Debug.Log("호출 - 일반 플랫폼 착지, 보간 시작");
-                //    StartCoroutine(LerpAfter(platformLerpTime));
-                //    return;
-                //}
-                //else // 아무런 이벤트 없이 일반점프 종료
-                //{
-                //    Debug.Log("호출 - 점프 후 아무런 이벤트 없이 착지");
-                //    lookatBackObj.position = new Vector3(lookatBackObj.transform.position.x, player.transform.position.y + lookatObjOriginY, lookatBackObj.transform.position.z);
-                //    followObj.position = new Vector3(followObj.transform.position.x, player.transform.position.y, followObj.transform.position.z);
-
-                //}
+                }                          
             }
         }
 
         void NormalJump_FixY() // 플레이어가 일반 점프 중일 때, 외부 오브젝트의 Y값을 고정시킨다  
         {
-            if (isDebugLog) Debug.Log("호출 - 일반 점프 Y값 고정중");
-
             lookatBackObj.position =
                         new Vector3(player.transform.position.x,
                                     orgLookY,
@@ -983,8 +923,6 @@ namespace YC.Camera_
                         = new Vector3(player.transform.position.x,
                                     player.transform.position.y,
                                     player.transform.position.z);
-
-            if (isDebugLog) Debug.Log("호출 - 일반 점프 후 에어 대쉬, 플레이어 위치 따라가는 중");
         }
 
         void CheckLowerPlayer() // 점프 시작 때 높이보다, 점프 종료후 높이가 낮다면 True  
@@ -996,14 +934,11 @@ namespace YC.Camera_
                 wasEndSet = true;
 
                 isLower = true;
-                if (isDebugLog) Debug.Log("호출 - 일반 점프후, 플레이어 높이가 시작 높이보다 낮음 체크");
             }
         }
 
         void LowerPlayerFollow() // 위 함수를 통해 isLower가 true라면 플레이어를 쫓는다  
         {
-            if (isDebugLog) Debug.Log("호출 - 일반 점프 후, 플레이어 위치 따라가는 중");
-
             lookatBackObj.position
                         = new Vector3(player.transform.position.x,
                                     player.transform.position.y + lookatObjOriginY,
@@ -1017,8 +952,6 @@ namespace YC.Camera_
 
         void AirJumpPlayerFollow() // 공중 점프 보간 후 플레이어 위치 따라감  
         {
-            if (isDebugLog) Debug.Log("호출 - 공중 점프 보간 후, 플레이어 위치 따라가는 중");
-
             lookatBackObj.position
                             = new Vector3(player.transform.position.x,
                                         player.transform.position.y + lookatObjOriginY,
@@ -1031,8 +964,6 @@ namespace YC.Camera_
 
         public void AirJumpStart() // 공중점프 시작  
         {
-            if (isDebugLog) Debug.Log("호출 - 공중 점프 시작");
-
             wasEndSet = true;
             wasAirJump = true;
 
@@ -1040,7 +971,6 @@ namespace YC.Camera_
             {
                 StopAllCoroutines();
                 isLerp = false;
-                if (isDebugLog) Debug.Log("호출 - 이중 코루틴 방지, 기존 코루틴 종료");
             }
             float lerpTime = 120;
             StartCoroutine(AirJumpLerp(lerpTime));
@@ -1048,8 +978,6 @@ namespace YC.Camera_
 
         IEnumerator AirJumpLerp(float LerpTime) // 공중 점프 보간  
         {
-            if (isDebugLog) Debug.Log("호출 - 공중 점프 코루틴 시작");
-
             float initYpos = followObj.transform.position.y; // 현재 FollowObj의 Y 값
             float lerpYpos = initYpos;  // 보간이 이루어지고 있는 y 값
 
@@ -1074,7 +1002,6 @@ namespace YC.Camera_
 
                 lookatBackObj.position = new Vector3(player.transform.position.x, lerpYpos + lookatObjOriginY, player.transform.position.z);
                 followObj.position = new Vector3(player.transform.position.x, lerpYpos, player.transform.position.z);
-                if (isDebugLog) Debug.Log("호출 - 공중 점프 코루틴 Lerp 진행중");
                 yield return new WaitForFixedUpdate();
             }
 
@@ -1082,12 +1009,10 @@ namespace YC.Camera_
             followObj.position = new Vector3(player.transform.position.x, player.transform.position.y, player.transform.position.z);
             isLerp = false;
             isAirJumpLerpEnd = true;
-            if (isDebugLog) Debug.Log("호출 - 공중점프 코루틴 Lerp 종료");
         }
 
         IEnumerator LerpAfter(float LerpTime) // 일반 점프 보간  
         {
-            if (isDebugLog) Debug.Log("호출 - 일반 코루틴 Lerp 시작");
             isLerp = true;
 
             float currentTime = 0;
@@ -1119,7 +1044,6 @@ namespace YC.Camera_
 
                     lookatBackObj.position = new Vector3(player.transform.position.x, lerpYpos + lookatObjOriginY, player.transform.position.z);
                     followObj.position = new Vector3(player.transform.position.x, lerpYpos, player.transform.position.z);
-                    if (isDebugLog) Debug.Log("호출 - 일반 코루틴 Lerp 진행중");
                     yield return new WaitForFixedUpdate();
                 }
             }
@@ -1143,7 +1067,6 @@ namespace YC.Camera_
 
                     lookatBackObj.position = new Vector3(player.transform.position.x, lookatObjOriginY + lerpYpos, player.transform.position.z);
                     followObj.position = new Vector3(player.transform.position.x, lerpYpos, player.transform.position.z);
-                    if (isDebugLog) Debug.Log("호출 - 일반 코루틴 Lerp 진행중");
 
                     yield return new WaitForFixedUpdate();
                 }
@@ -1152,26 +1075,21 @@ namespace YC.Camera_
             lookatBackObj.position = new Vector3(player.transform.position.x, player.transform.position.y + lookatObjOriginY, player.transform.position.z);
             followObj.position = new Vector3(player.transform.position.x, player.transform.position.y, player.transform.position.z);
             isLerp = false;
-            if (isDebugLog) Debug.Log("호출 - 일반 코루틴 Lerp 종료");
         }
 
         public void RidingInit() // 라이딩(로프, 레일)진행시 각각의 SMB에서 해당 함수를 호출한다 (갈고리 제외)  
         {
             if (isLerp)
             {
-                if (isDebugLog) Debug.Log("호출 - 이전 코루틴 중지");
                 StopAllCoroutines();
                 isLerp = false;
             }
 
-            if (isDebugLog) Debug.Log("호출 - 라이딩 시작======================================");
             isRiding = true;           
         }
 
         void RidingCamera() // 라이딩 시작부터, '착지할 때'까지 플레이어를 쫓아간다  
         {
-            if (isDebugLog) Debug.Log("호출 - 라이딩 카메라 진행중======================================");
-
             lookatBackObj.position
                             = new Vector3(player.transform.position.x,
                                         player.transform.position.y + lookatObjOriginY,
