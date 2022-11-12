@@ -18,7 +18,7 @@ namespace YC_OBJ
         public float curTime { get; private set; } = 0; // 현재 시간 게이지
         bool isCurHit = false;
         int curHitCount = 0;
-        float delayTime = 0.2f; // 총알을 현재 맞고 있는지를 몇 초 전과 비교할 것인지 (총알 발사 속도와 연관)
+        float delayTime = 0.12f; // 총알을 현재 맞고 있는지를 몇 초 전과 비교할 것인지 (총알 발사 속도와 연관)
 
 
         string interactionObjTag = "NellaWater";
@@ -34,7 +34,7 @@ namespace YC_OBJ
 
         void Awake()
         {   
-            //indicator = transform.GetChild(3).GetComponent<JCW.UI.InGame.Indicator.OneIndicator>();  //인덱스 번호 확인!
+            indicator = transform.GetChild(4).GetComponent<JCW.UI.InGame.Indicator.OneIndicator>();  //인덱스 번호 확인!
 
             maxTime = MaxTime;
 
@@ -49,7 +49,7 @@ namespace YC_OBJ
             {
                 SetCurTime();
 
-                //indicator.SetGauge(curTime / maxTime);
+                indicator.SetGauge(curTime / maxTime);
             }
         }
 
@@ -111,7 +111,9 @@ namespace YC_OBJ
         [PunRPC]
         public void SetBloom()
         {
+            indicator.gameObject.SetActive(false);
             FlowerObj.GetComponent<PotFlower>().SetBloom();
+            FlowerObj.gameObject.GetComponent<CapsuleCollider>().enabled = false;
         }
 
      

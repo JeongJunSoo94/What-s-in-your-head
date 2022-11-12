@@ -49,6 +49,8 @@ namespace YC_OBJ
 
         string interactionObjTag = "NellaWater";
 
+        string pureTag = "Untagged";
+        string notPureTag = "DeadZone";
 
         public bool isPure { get; private set;}
 
@@ -74,6 +76,8 @@ namespace YC_OBJ
             animator2.speed = animationSpeed;
 
             pv = GetComponent<PhotonView>();
+
+            this.gameObject.tag = notPureTag;
         }
 
         void Start() { } // 컴포넌트 상에서 스크립트 활성화 위해서
@@ -110,7 +114,8 @@ namespace YC_OBJ
                 animator.SetBool("isCreate", false);
                 animator2.SetBool("isDestroy", true);
                 animator2.SetBool("isCreate", false);
-                curTime = 0;              
+                curTime = 0;
+                this.gameObject.tag = pureTag;
             }
             else // 정화 -> 오염
             {
@@ -119,6 +124,7 @@ namespace YC_OBJ
                 animator2.SetBool("isCreate", true);
                 animator2.SetBool("isDestroy", false);
                 curPureTime = 0;
+                this.gameObject.tag = notPureTag;
             }
         }
    

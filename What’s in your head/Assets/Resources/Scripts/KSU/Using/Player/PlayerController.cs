@@ -41,17 +41,17 @@ namespace KSU
         [Header("현재 이동 속력")]
         float moveSpeed = 0f;
         [Header("걷는 속력")]
-        public float walkSpeed = 4f;
+        public float walkSpeed = 8f;
         [Header("달리는 속력")]
-        public float runSpeed = 7f;
+        public float runSpeed = 14f;
         [Header("대시 속력")]
-        public float dashSpeed = 10f;
+        public float dashSpeed = 15f;
         [Header("공중 대시 속력")]
-        public float airDashSpeed = 8f;
+        public float airDashSpeed = 15f;
         [Header("관성 속력")]
         public float inertiaSpeed = 0f;
         [Header("공중 이동 속력")]
-        public float airMoveSpeed = 1f;
+        public float airMoveSpeed = 5f;
         [Header("공중 이동 최대 속력")]
         public float airMoveMaxSpeed = 10f;
         //[Tooltip("넉백 수평 속력")]
@@ -61,14 +61,14 @@ namespace KSU
         // 수직 Speed
         #region
         [Tooltip("점프 속도")]
-        public float jumpSpeed = 10f;
+        public float jumpSpeed = 15f;
         [Tooltip("공중 점프 속도")]
-        public float airJumpSpeed = 6f;
+        public float airJumpSpeed = 15f;
         [Range(-100f, 0f), Tooltip("중력")]
-        public float gravity = -9.81f;
-        public float gravityCofactor = 0.8f;
+        public float gravity = -30f;
+        public float gravityCofactor = -10f;
         [Range(-100f, -1f), Tooltip("종단속도")]
-        public float terminalSpeed = -10f;
+        public float terminalSpeed = -50f;
         [Tooltip("넉백 수직 속력")]
         public float knockBackVerticalSpeed = 8f;
         #endregion
