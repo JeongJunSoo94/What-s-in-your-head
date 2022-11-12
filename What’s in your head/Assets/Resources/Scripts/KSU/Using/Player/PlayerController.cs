@@ -71,6 +71,7 @@ namespace KSU
         public float terminalSpeed = -10f;
         [Tooltip("넉백 수직 속력")]
         public float knockBackVerticalSpeed = 8f;
+        public float trampolinSpeed = 20f;
         #endregion
 
         // 회전 Speed
@@ -653,7 +654,7 @@ namespace KSU
             {
                 case "Trampolin":
                     {
-                        InputCustomJump(collision.gameObject.GetComponentInParent<JumpingPlatform>().jumpSpeed);
+                        InputCustomJump(trampolinSpeed);
                     }
                     break;
                 case "DeadZone":
