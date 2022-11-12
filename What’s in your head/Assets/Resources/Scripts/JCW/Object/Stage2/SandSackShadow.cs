@@ -15,9 +15,13 @@ namespace JCW.Object
         {
             base.Awake();
             initHeight = transform.position.y;
+        }
+
+        private void Start()
+        {
             groundHeight = groundPlatform.position.y;
             // 최대 크기와 최소 크기의 차이를 현재 모래주머니의 높이로 나눈 값.
-            scaleOffset = (maxShadowValue - defaultShadowValue) / (initHeight - groundHeight) ;
+            scaleOffset = (maxShadowValue - defaultShadowValue) / (initHeight - groundHeight);
         }
 
         override protected void Update()

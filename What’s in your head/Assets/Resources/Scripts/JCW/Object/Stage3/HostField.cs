@@ -30,7 +30,9 @@ namespace JCW.Object
         // 오염된 필드 스포너가 가지는 인덱스 최대치
         int maxLimit;
 
-        int convertIndex;
+        int convertWidthIndex;
+        //int convertIndex;
+        int convertHeightIndex;
 
         bool isStart = false;
         bool isDead = false;
@@ -55,8 +57,10 @@ namespace JCW.Object
             {
                 parentObj = transform.parent.gameObject.transform;
                 mediator = transform.parent.gameObject.GetComponent<MakeHostField>();
-                convertIndex = transform.parent.gameObject.GetComponent<ContaminationFieldSetting>().count;
-                nextTargetOffset = new() { 2, -2, 2 * convertIndex, -2 * convertIndex };
+                //convertIndex = transform.parent.gameObject.GetComponent<ContaminationFieldSetting>().count;
+                convertWidthIndex = transform.parent.gameObject.GetComponent<ContaminationFieldSetting>().widthCount;
+                convertHeightIndex = transform.parent.gameObject.GetComponent<ContaminationFieldSetting>().heightCount;
+                nextTargetOffset = new() { 2, -2, 2 * convertWidthIndex, -2 * convertWidthIndex };
             }
             animator = GetComponent<Animator>();
         }
@@ -115,11 +119,11 @@ namespace JCW.Object
                 maxLimit = transform.parent.gameObject.transform.childCount - 1;
                 myIndex = index;
                 //Debug.Log(convertIndex);
-                if ((myIndex - 1) % (convertIndex * 2) == 0)      nextTargetOffset.Remove(-2);
-                else if ((myIndex + 1) % (convertIndex * 2) == 0) nextTargetOffset.Remove(2);
+                if ((myIndex - 1) % (convertWidthIndex * 2) == 0)      nextTargetOffset.Remove(-2);
+                else if ((myIndex + 1) % (convertWidthIndex * 2) == 0) nextTargetOffset.Remove(2);
 
-                if (myIndex < 2 * convertIndex)                  nextTargetOffset.Remove(-2 * convertIndex);
-                else if (myIndex + 2 * convertIndex > maxLimit)  nextTargetOffset.Remove(2 * convertIndex);
+                if (myIndex < 2 * convertWidthIndex)                  nextTargetOffset.Remove(-2 * convertWidthIndex);
+                else if (myIndex + 2 * convertWidthIndex > maxLimit)  nextTargetOffset.Remove(2 * convertWidthIndex);
             }
         }
 
@@ -152,8 +156,12 @@ namespace JCW.Object
             {
                 case "Nella":
                 case "Steady":
-                    other.gameObject.GetComponent<PlayerController>().Resurrect();
+                    other.GetComponent<PlayerController>().GetDamage(12, DamageType.Dead);
                     break;
+                case "NellaWater":
+                    GetDamaged();
+                    break;
+
             }
         }
 
@@ -165,30 +173,13 @@ namespace JCW.Object
             {
                 isDead = true;
                 animator.Play("Destroy");
-                if (mediator)
-                    mediator.SetPurified(myIndex);
-                else
-                    StartCoroutine(nameof(CheckAnimEnd));
+                SoundManager.Instance.Play3D_RPC("ContaminationFieldPurified", audioSource);
             }
         }
-
-        public void Purified()
+        public void DestroyField()
         {
-            if(gameObject.activeSelf)
-                StartCoroutine(nameof(CheckAnimEnd));
-        }
-
-        IEnumerator CheckAnimEnd()
-        {            
-            WaitForSeconds ws = new(0.1f);
-            SoundManager.Instance.Play3D_RPC("ContaminationFieldPurified", audioSource);
-            while (animator.GetCurrentAnimatorStateInfo(0).normalizedTime < 1f)
-            {
-                yield return ws;
-            }            
             this.enabled = false;
             this.gameObject.SetActive(false);
-            yield break;
         }
     }
 }

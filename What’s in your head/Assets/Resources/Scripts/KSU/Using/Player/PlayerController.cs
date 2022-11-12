@@ -286,11 +286,20 @@ namespace KSU
         {
             if (characterState.isOutOfControl || characterState.isStopped || characterState.isRiding)
                 return;
-            moveDir =
-              mainCamera.transform.forward * ((KeyManager.Instance.GetKey(PlayerAction.MoveForward) ? 1 : 0) + (KeyManager.Instance.GetKey(PlayerAction.MoveBackward) ? -1 : 0))
-            + mainCamera.transform.right * ((KeyManager.Instance.GetKey(PlayerAction.MoveRight) ? 1 : 0) + (KeyManager.Instance.GetKey(PlayerAction.MoveLeft) ? -1 : 0));
-            moveDir.y = 0;
-            moveDir = moveDir.normalized;
+            if (GameManager.Instance.isSideView)
+            {
+                moveDir = mainCamera.transform.right * ((KeyManager.Instance.GetKey(PlayerAction.MoveRight) ? 1 : 0) + (KeyManager.Instance.GetKey(PlayerAction.MoveLeft) ? -1 : 0));
+                moveDir.y = 0;
+                moveDir = moveDir.normalized;
+            }
+            else
+            {
+                moveDir =
+                mainCamera.transform.forward * ((KeyManager.Instance.GetKey(PlayerAction.MoveForward) ? 1 : 0) + (KeyManager.Instance.GetKey(PlayerAction.MoveBackward) ? -1 : 0))
+                + mainCamera.transform.right * ((KeyManager.Instance.GetKey(PlayerAction.MoveRight) ? 1 : 0) + (KeyManager.Instance.GetKey(PlayerAction.MoveLeft) ? -1 : 0));
+                moveDir.y = 0;
+                moveDir = moveDir.normalized;
+            }
 
             if (moveDir.magnitude > 0)
                 characterState.isMove = true;
@@ -308,7 +317,7 @@ namespace KSU
 
         public void AimViewInputMove()
         {
-            if (characterState.isOutOfControl || characterState.isStopped || characterState.isRiding)
+            if (characterState.isOutOfControl || characterState.isStopped || characterState.isRiding || characterState.isInMaze)
                 return;
             moveDir.z = ((KeyManager.Instance.GetKey(PlayerAction.MoveForward) ? 1 : 0) + (KeyManager.Instance.GetKey(PlayerAction.MoveBackward) ? -1 : 0));
             moveDir.x = ((KeyManager.Instance.GetKey(PlayerAction.MoveRight) ? 1 : 0) + (KeyManager.Instance.GetKey(PlayerAction.MoveLeft) ? -1 : 0));
@@ -407,10 +416,14 @@ namespace KSU
                 return;
             }
 
-            if (characterState.top)
+            if (characterState.top||GameManager.Instance.isSideView)
             {
                 if(!playerMouse.notRotatoin)
                     RotateTop();
+            }
+            else if(characterState.isInMaze)
+            {
+                RotateInMaze();
             }
             else if (characterState.aim)
             {
@@ -436,9 +449,9 @@ namespace KSU
             transform.LookAt(transform.position + moveDir);
         }
 
+
         public void RotateSlerp()
         {
-
             if (characterState.IsGrounded && characterState.CanJump)
             {
                 if (!characterState.IsDashing)
@@ -451,6 +464,7 @@ namespace KSU
             }
         }
 
+
         public void RotateAim()
         {
             if (!characterState.IsDashing && !characterState.IsAirDashing)
@@ -459,6 +473,15 @@ namespace KSU
                 forward.y = 0;
                 transform.LookAt(transform.position + forward);
             }
+        }
+
+        float rotateSpeed = 400.0f;
+        float xRotate;
+        public void RotateInMaze()
+        {
+            float yRotateMove = Input.GetAxis("Mouse X") * Time.deltaTime * rotateSpeed;
+            float yRotate = transform.eulerAngles.y + yRotateMove;
+            transform.eulerAngles = new Vector3(0, yRotate, 0);
         }
 
         private void Move()
@@ -667,17 +690,17 @@ namespace KSU
         [PunRPC]
         public void GetDamage(int damage, DamageType type, Vector3 colliderPos, float knockBackSpeed)
         {
-            string damageTirgger = "DeadTrigger";
+            string damageTrigger = "DeadTrigger";
             switch(type)
             {
                 case DamageType.Attacked:
-                    damageTirgger = "AttackedTrigger";
+                    damageTrigger = "AttackedTrigger";
                     break;
                 case DamageType.KnockBack:
-                    damageTirgger = "KnockBackTrigger";
+                    damageTrigger = "KnockBackTrigger";
                     break;
                 case DamageType.Dead:
-                    damageTirgger = "DeadTrigger";
+                    damageTrigger = "DeadTrigger";
                     break;
             }
 
@@ -689,7 +712,7 @@ namespace KSU
             }
             else
             {
-                if(damageTirgger == "KnockBackTrigger")
+                if(damageTrigger == "KnockBackTrigger")
                 {
                     Vector3 knockBackHorVec = (transform.position - colliderPos);
                     knockBackHorVec.y = 0;
@@ -698,7 +721,7 @@ namespace KSU
                     StartCoroutine(nameof(DelayResetKnockBack));
                 }
 
-                playerAnimator.SetBool(damageTirgger, true);
+                playerAnimator.SetBool(damageTrigger, true);
             }
         }
         
@@ -707,17 +730,17 @@ namespace KSU
         {
             if (!photonView.IsMine)
                 return;
-            string damageTirgger = "DeadTrigger";
+            string damageTrigger = "DeadTrigger";
             switch (type)
             {
                 case DamageType.Attacked:
-                    damageTirgger = "AttackedTrigger";
+                    damageTrigger = "AttackedTrigger";
                     break;
                 case DamageType.KnockBack:
-                    damageTirgger = "KnockBackTrigger";
+                    damageTrigger = "KnockBackTrigger";
                     break;
                 case DamageType.Dead:
-                    damageTirgger = "DeadTrigger";
+                    damageTrigger = "DeadTrigger";
                     break;
             }
             if (!playerAnimator.GetBool("isAttacked") && !playerAnimator.GetBool("isKnockBack") && !playerAnimator.GetBool("isDead"))
@@ -731,7 +754,7 @@ namespace KSU
                 }
                 else
                 {
-                    photonView.RPC(nameof(SetAnimatorBool), RpcTarget.AllViaServer, damageTirgger, true);
+                    photonView.RPC(nameof(SetAnimatorBool), RpcTarget.AllViaServer, damageTrigger, true);
                     //playerAnimator.SetBool(damageTirgger, true);
                 }
             }

@@ -35,6 +35,7 @@ public class GameManager : MonoBehaviour, IPunObservable
 
     // 현재 탑뷰인지
     [Header("탑뷰")] public bool isTopView;
+    [Header("사이드뷰")] public bool isSideView;
     [Header("테스트용")] public bool isTest;
 
     // 랜덤시드
@@ -63,22 +64,19 @@ public class GameManager : MonoBehaviour, IPunObservable
         curStageIndex = 0;
         curSection = 0;
     }
-
     private void Update()
     {
-        if(Input.GetKeyDown(KeyCode.Keypad0))
+        if (Input.GetKeyDown(KeyCode.Keypad1))
             isTopView = !isTopView;
-        if(KeyManager.Instance.GetKeyDown(PlayerAction.Pause))
+        if (Input.GetKeyDown(KeyCode.Keypad2))
+            isSideView = !isSideView;
+        if (KeyManager.Instance.GetKeyDown(PlayerAction.Pause))
         {
             if (!pauseUI.activeSelf)
-            {
                 pauseUI.SetActive(true);
-                Cursor.lockState = CursorLockMode.Confined;
-            }
             else
                 PauseManager.Instance.CloseUI();
         }
-            
     }
 
     public void SetRandomSeed()

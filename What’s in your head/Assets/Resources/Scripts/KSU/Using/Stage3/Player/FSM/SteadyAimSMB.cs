@@ -83,6 +83,7 @@ namespace KSU
                 {
                     if(((GetPlayerController(animator).playerMouse as SteadyMouseController).autoAimWeapon is SteadyCymbalsAction) && !animator.GetBool("isShootingCymbals"))
                     {
+                        ((GetPlayerController(animator).playerMouse as SteadyMouseController).autoAimWeapon as SteadyCymbalsAction).MakeShootPosition();
                         animator.SetBool("isShootingCymbals", true);
                     }
                     else if(((GetPlayerController(animator).playerMouse as SteadyMouseController).autoAimWeapon is SteadyGrappleAction) && !animator.GetBool("isShootingGrapple"))

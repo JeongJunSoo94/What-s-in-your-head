@@ -7,12 +7,10 @@ namespace KSU.AutoAim.Object.Stage2
 {
     public class CymbalsButton : CymbalsReciever
     {
-        Animator animator;
         // Start is called before the first frame update
         protected override void Awake()
         {
             base.Awake();
-            animator = GetComponent<Animator>();
         }
         [PunRPC]
         protected override void SetActive()

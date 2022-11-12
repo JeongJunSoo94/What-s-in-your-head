@@ -22,16 +22,7 @@ namespace JJS
         {
             cameraMain = this.gameObject.transform.GetComponent<CameraController>().FindCamera(); // 멀티용
 
-            SteadyCymbalsAction steadyCymbalsWeapon = GetComponent<SteadyCymbalsAction>();
-            SteadyGrappleAction steadyGrappleWeapon = GetComponent<SteadyGrappleAction>();
-            if (steadyCymbalsWeapon.enabled)
-            {
-                autoAimWeapon = GetComponent<SteadyCymbalsAction>();
-            }
-            else if (steadyGrappleWeapon.enabled)
-            {
-                autoAimWeapon = GetComponent<SteadyGrappleAction>();
-            }
+            SetAimWeapon();
 
             glass.mainCamera = cameraMain; // 멀티용
             if (point == null)
@@ -60,6 +51,12 @@ namespace JJS
                 {
                     if (weaponInfo[GetUseWeapon()].canAim)
                     {
+                        if (player.playerAnimator.GetBool("isShootingCymbals") && !autoAimWeapon.GetWhetherautoAimObjectActived())
+                        {
+                            player.characterState.aim = true;
+                            return;
+                        }
+
                         if (KeyManager.Instance.GetKey(PlayerAction.Aim)
                             && !player.characterState.swap
                             && !player.characterState.IsJumping
@@ -69,7 +66,6 @@ namespace JJS
                             && player.characterState.IsGrounded
                             && !GetComponent<SteadyInteractionState>().isGrappling
                             && !GetComponent<SteadyInteractionState>().isGrabMonster
-                            && !player.playerAnimator.GetBool("isShootingCymbals")
                             && !player.playerAnimator.GetBool("WasShootingCymbals")
                             && !player.playerAnimator.GetBool("isDead"))
                         {
@@ -105,8 +101,23 @@ namespace JJS
                     }
                 }
             }
-                
+
         }
+
+        public void SetAimWeapon()
+        {
+            SteadyCymbalsAction steadyCymbalsWeapon = GetComponent<SteadyCymbalsAction>();
+            SteadyGrappleAction steadyGrappleWeapon = GetComponent<SteadyGrappleAction>();
+            if (steadyCymbalsWeapon.enabled)
+            {
+                autoAimWeapon = GetComponent<SteadyCymbalsAction>();
+            }
+            else if (steadyGrappleWeapon.enabled)
+            {
+                autoAimWeapon = GetComponent<SteadyGrappleAction>();
+            }
+        }
+
         public void StopBeam()
         {
             notRotatoin = false;

@@ -41,8 +41,11 @@ namespace KSU
         [SerializeField] LayerMask layerFilterForRope;
 
         public GameObject currentRidingRope;
+        Vector3 currentRidingRopePosition;
         public GameObject interactableRope;
         public float ridingRopeDelayTime = 0.5f;
+
+        bool isRopeOn = false;
 
 
         Dictionary<GameObject, Obj_Info> detectedRopes = new Dictionary<GameObject, Obj_Info>();
@@ -62,10 +65,6 @@ namespace KSU
             interactionState = GetComponent<PlayerInteractionState>();
             animator = GetComponent<Animator>();
             mainCamera = GetComponent<CameraController>().FindCamera(); // 멀티용
-
-            if (mainCamera == null)
-                Debug.Log("카메라 NULL");
-
             rope = GetComponentInChildren<LineRenderer>();
         }
 
@@ -74,13 +73,21 @@ namespace KSU
             FindInteractableRope();
             SendInfoUI();
 
-            if (currentRidingRope != null)
+            if (isRopeOn)
             {
                 rope.SetPosition(0, hand.transform.position);
-                rope.SetPosition(1, currentRidingRope.transform.position);
+                rope.SetPosition(1, currentRidingRopePosition);
             }
         }
 
+        [PunRPC]
+        void SetRope(Vector3 ropePos, bool isOn)
+        {
+            currentRidingRopePosition = ropePos;
+            isRopeOn = isOn;
+            rope.enabled = isOn;
+        }
+        
         public void InitDictionary()
         {
             detectedRopes.Clear();
@@ -195,6 +202,7 @@ namespace KSU
             GetComponent<Rigidbody>().velocity = Vector3.zero;
 
             currentRidingRope = interactableRope;
+            playerController.photonView.RPC(nameof(SetRope), RpcTarget.AllViaServer, currentRidingRope.transform.position, true);
             interactableRope = null;
 
             Obj_Info node = detectedRopes.GetValueOrDefault(currentRidingRope);
@@ -206,7 +214,6 @@ namespace KSU
             {
                 rope.SetPosition(0, hand.transform.position);
                 rope.SetPosition(1, hand.transform.position);
-                rope.enabled = true;
                 //Debug.Log("StartRopeAction == true");
                 StartCoroutine(nameof(DelayRide));
                 return true;
@@ -251,8 +258,9 @@ namespace KSU
             node.isUIActive = true;
             node.isInteractable = false;
             detectedRopes[currentRidingRope] = node;
-
             currentRidingRope = null;
+            playerController.photonView.RPC(nameof(SetRope), RpcTarget.AllViaServer, Vector3.zero, false);
+
             Vector3 inertiaVec = mainCamera.transform.forward;
             inertiaVec.y = 0;
 
@@ -262,7 +270,6 @@ namespace KSU
             playerState.WasAirDashing = false;
             playerState.IsAirJumping = false;
             playerController.characterState.isRiding = false;
-            rope.enabled = false;
         }
 
         IEnumerator DelayEscape()
@@ -310,6 +317,8 @@ namespace KSU
         {
             if(other.CompareTag("Rope"))
             {
+                if(detectedRopes.ContainsKey(other.gameObject.transform.parent.gameObject))
+                    return;
                 detectedRopes.Add(other.gameObject.transform.parent.gameObject, new Obj_Info(false, false, 100f));
             }
         }

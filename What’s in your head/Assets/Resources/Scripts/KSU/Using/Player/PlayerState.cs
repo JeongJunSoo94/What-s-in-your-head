@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using YC.Camera_;
 
 public class PlayerState : MonoBehaviour
 {
@@ -87,6 +88,15 @@ public class PlayerState : MonoBehaviour
     public bool isOutOfControl = false;
     public bool isStopped = false;
     public bool isRiding = false;
+    #endregion
+
+
+    // 스테이지3 미로 관련 변수
+    #region
+    public bool isInMaze = false;
+    string mazeColTag = "MazeCameraCollider";
+    CameraController CameraController;
+    bool isExitMaze = false;
     #endregion
 
     public bool CanResetKnockBack = true;
@@ -387,5 +397,37 @@ public class PlayerState : MonoBehaviour
         {
             isAirBlocked = false;
         }
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        // << : 스테이지3 미로에 입장하거나 퇴장할 경우, 플레이어의 State와 Camera의 세팅을 바꿔준다.
+
+        if(other.gameObject.tag.Equals("MazeCameraExitCollider"))
+        {
+            isExitMaze = true;
+        }
+
+        if (!other.gameObject.tag.Equals(mazeColTag))
+            return;
+
+        if (!CameraController)
+            CameraController = this.gameObject.GetComponent<CameraController>();
+        
+        isInMaze = true;
+        CameraController.SetMazeMode(isInMaze, false);
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        if (!other.gameObject.tag.Equals(mazeColTag))
+            return;
+
+        isInMaze = false;
+
+        if(isExitMaze)
+            CameraController.SetMazeMode(isInMaze, true);
+        else
+            CameraController.SetMazeMode(isInMaze, false);
     }
 }

@@ -10,7 +10,6 @@ namespace KSU.FSM
         // OnStateEnter is called when a transition starts and the state machine starts to evaluate this state
         override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
         {
-            GetPlayerController(animator).SetOffCollider();
             if (GetRailAction(animator).interactionState.GetWhetherHasParent())
             {
                 animator.SetBool("isRidingRail", true);
@@ -29,10 +28,9 @@ namespace KSU.FSM
         }
 
         // OnStateExit is called when a transition ends and the state machine finishes evaluating this state
-        override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
-        {
-            GetPlayerController(animator).SetOnCollider();
-        }
+        //override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
+        //{
+        //}
 
         // OnStateMove is called right after Animator.OnAnimatorMove()
         //override public void OnStateMove(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)

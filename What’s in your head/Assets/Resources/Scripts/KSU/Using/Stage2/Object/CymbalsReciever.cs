@@ -11,6 +11,7 @@ namespace KSU.AutoAim.Object.Stage2
     {
         protected bool isActivated = false;
         protected PhotonView photonView;
+        protected Animator animator;
         [SerializeField] protected float activationDelayTime = 5f;
         [SerializeField] protected List<LinkedObjectWithReciever> linkedObjects;
 
@@ -19,6 +20,7 @@ namespace KSU.AutoAim.Object.Stage2
         protected virtual void Awake()
         {
             photonView = PhotonView.Get(this);
+            animator = GetComponent<Animator>();
         }
 
         protected void SendInfo()

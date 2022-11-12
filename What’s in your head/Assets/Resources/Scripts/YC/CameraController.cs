@@ -52,7 +52,7 @@ namespace YC.Camera_
 
         // ============  Aim View Y축 궤도 제한  ============ //
         [Header("[Sholder View Y궤도 Up 제한 값]")]
-        [SerializeField] [Range(0, 1)] float sholderAxisY_MaxUp = 0.2f;
+        [SerializeField] [Range(0, 1)] float sholderAxisY_MaxUp = 0.25f;
 
         [Header("[Sholder View Y궤도 Down 제한 값]")]
         [SerializeField] [Range(0, 1)] float sholderAxisY_MaxDown = 0.5f;
@@ -76,6 +76,7 @@ namespace YC.Camera_
 
         // ============  FOV  ============ //
         float backViewFOV = 50;
+        //float sholderViewFOV = 50;
         float topViewFOV = 60;
         float sideScrollViewFOV = 60;
 
@@ -98,16 +99,19 @@ namespace YC.Camera_
         float maxZoom;
         [Space] [Space]
 
+        // ============  미로뷰 변수  ============ //
+        string mazeCamTag = "Cine_MazeCam";
+        GameObject mazeCamObj;
+        CinemachineVirtualCamera mazeCineCam;
+        CinemachineCollider mazeCineCamCol;
+
         // ============  점프 보간 변수들  ============ //
         [Header("[점프 후, 플랫폼 착지시 보간 시간]")]
         [SerializeField] [Range(0, 3)] float platformLerpTime = 0.7f;
         [Space] [Space]
         Transform followObj; // >> : 점프시 Follow, LookAt 관련
         public Transform lookatBackObj { get; private set; } //< : 레일 액션에서 사용
-        //Transform lookatSholderObj;
         float lookatObjOriginY;
-
-        //float avgDif = 0.5f; // 일반 점프 플랫폼 착지시 최소 오차
 
         float originPlayerY; // << : 플레이어가 점프하기 전, 오브젝트들의 높이값
         float orgLookY;
@@ -129,22 +133,8 @@ namespace YC.Camera_
         [SerializeField] GameObject CineLookObj_Back;
         [SerializeField] GameObject CineFollowObj_Back;
         [SerializeField] NoiseSettings NoiseProfile;
-        [Header("Aim UI 프리팹 ")] public GameObject aimUI;
-
-
-
-        // ============  디버그 로그  ============ //
-        bool isDebugLog = false;
-        void DebugLogToggle()
-        {
-            //var assembly = Assembly.GetAssembly(typeof(UnityEditor.Editor));
-            //var type = assembly.GetType("UnityEditor.LogEntries");
-            //var method = type.GetMethod("Clear");
-            //method.Invoke(new object(), null);
-
-            //isDebugLog = !isDebugLog;
-        }
-
+        [Header("[Aim UI]")] 
+        public GameObject aimUI;
 
         void Awake()  
         {
@@ -161,18 +151,15 @@ namespace YC.Camera_
             InitCinemachineRig();
             InitDefault();
             InitUI();
-
         }
 
 
         void FixedUpdate()
         {
-            if (Input.GetKeyDown(KeyCode.R))
-                DebugLogToggle();
-
-            if (isDebugLog) Debug.Log("FixedUpdate");
-           
             if (!pv.IsMine) return;
+
+            if (playerState.isInMaze)
+                return;
 
             if (isSideView)
             {
@@ -195,6 +182,8 @@ namespace YC.Camera_
 
             if(playerState.isCumstomJumping)
             {
+                if (isLerp) return;
+
                 FollowPlayer();
                 return;
             }
@@ -224,11 +213,12 @@ namespace YC.Camera_
 
         // ====================  [Awake에서 진행하는 초기화]  ==================== //
 
-        void InitUI()
+        void InitUI()  
         {
-            if(pv.IsMine)
+            if (!pv.IsMine) return;
                 aimUI = Instantiate(aimUI);
         }
+
         void InitVirtualCamera() // Virtual Camera 생성 및 초기화  
         {           
             if (!pv.IsMine) return;
@@ -280,6 +270,70 @@ namespace YC.Camera_
             camList.Add(sholderCam);
 
             Cine_backCam.GetComponent<CinemachineFreeLook>().m_Lens.FieldOfView = backViewFOV;
+        }
+
+        void InitCinemachineRig() //  Rig로 발생하는 이슈를 막기 위해 Rig를 스크립트로 강제 초기화  
+        {
+            if (!pv.IsMine) return;
+
+            float zero = 0;
+            float offSetYInitValue = 2.5f;
+
+            CinemachineFreeLook backCine = backCam.GetComponent<CinemachineFreeLook>();
+            CinemachineFreeLook sholderCine = sholderCam.GetComponent<CinemachineFreeLook>();
+
+            if (mainCam.transform.childCount != 0) // << : Rig 삭제 (MainCam)
+            {
+                for (int i = 0; i < mainCam.transform.childCount; ++i)
+                {
+                    Destroy(mainCam.transform.GetChild(i).gameObject);
+                }
+            }
+
+            //if (backCam.transform.childCount != 0) // << : Rig 삭제 (BackCam)
+            //{
+            //    for (int i = 0; i < backCam.transform.childCount; ++i)
+            //    {
+            //        Destroy(backCam.transform.GetChild(i).gameObject);
+            //    }
+            //}
+
+            //if (sholderCam.transform.childCount != 0) // << : Rig 삭제(SholderCam)
+            //{
+            //    for (int i = 0; i < sholderCam.transform.childCount; ++i)
+            //    {
+            //        Destroy(sholderCam.transform.GetChild(i).gameObject);
+            //    }
+            //}
+
+
+            for (int i = 0; i < 3; ++i)
+            {            
+                if(backCine.GetRig(i))
+                {
+                    //backCine.GetRig(i).AddCinemachineComponent<CinemachineComposer>();
+                
+                    backCine.GetRig(i).GetCinemachineComponent<CinemachineComposer>().m_HorizontalDamping = zero;
+                    backCine.GetRig(i).GetCinemachineComponent<CinemachineComposer>().m_VerticalDamping = zero;
+
+                    backCine.GetRig(i).GetCinemachineComponent<CinemachineOrbitalTransposer>().m_XDamping = zero;
+                    backCine.GetRig(i).GetCinemachineComponent<CinemachineOrbitalTransposer>().m_YDamping = zero;
+                    backCine.GetRig(i).GetCinemachineComponent<CinemachineOrbitalTransposer>().m_ZDamping = zero;
+                }
+                if(sholderCine.GetRig(i))
+                {
+                    //sholderCine.GetRig(i).AddCinemachineComponent<CinemachineComposer>();
+
+                    sholderCine.GetRig(i).GetCinemachineComponent<CinemachineComposer>().m_HorizontalDamping = zero;
+                    sholderCine.GetRig(i).GetCinemachineComponent<CinemachineComposer>().m_VerticalDamping = zero;
+
+                    sholderCine.GetRig(i).GetCinemachineComponent<CinemachineOrbitalTransposer>().m_XDamping = zero;
+                    sholderCine.GetRig(i).GetCinemachineComponent<CinemachineOrbitalTransposer>().m_YDamping = zero;
+                    sholderCine.GetRig(i).GetCinemachineComponent<CinemachineOrbitalTransposer>().m_ZDamping = zero;
+                }
+            }
+
+            backCine.GetRig(1).GetCinemachineComponent<CinemachineComposer>().m_TrackedObjectOffset.y = offSetYInitValue; // Back View Middle에서 포지션 내려 잡기
         }
 
         void InitDefault()  // 기타 초기화  
@@ -338,60 +392,7 @@ namespace YC.Camera_
             preCam = curCam;
             OnOffCamera(camList[(int)curCam]);
         }
-
-        void InitCinemachineRig() //  Rig로 발생하는 이슈를 막기 위해 Rig를 스크립트로 강제 초기화  
-        {
-            if (!pv.IsMine) return;
-
-            float rigInitValue = 0;
-            float offSetYInitValue = 2.5f;
-
-            CinemachineFreeLook backCine = backCam.GetComponent<CinemachineFreeLook>();
-            CinemachineFreeLook sholderCine = sholderCam.GetComponent<CinemachineFreeLook>();
-
-
-            // << : Rig 삭제
-            //if (backCam.transform.childCount != 0)
-            //{
-            //    for (int i = 0; i < backCam.transform.childCount; ++i)
-            //    {
-            //        Destroy(backCam.transform.GetChild(i).gameObject);
-            //    }
-            //}
-            if (sholderCam.transform.childCount != 0)
-            {
-                for(int i = 0; i < sholderCam.transform.childCount; ++i)
-                {
-                    Destroy(sholderCam.transform.GetChild(i).gameObject);
-                }
-            }
-
-            for (int i = 0; i < 3; ++i)
-            {
-                // BackCam Rig 
-                backCine.GetRig(i).GetCinemachineComponent<CinemachineComposer>().m_HorizontalDamping = rigInitValue;
-                backCine.GetRig(i).GetCinemachineComponent<CinemachineComposer>().m_VerticalDamping = rigInitValue;
-
-                backCine.GetRig(i).GetCinemachineComponent<CinemachineOrbitalTransposer>().m_XDamping = rigInitValue;
-                backCine.GetRig(i).GetCinemachineComponent<CinemachineOrbitalTransposer>().m_YDamping = rigInitValue;
-                backCine.GetRig(i).GetCinemachineComponent<CinemachineOrbitalTransposer>().m_ZDamping = rigInitValue;
-
-                // SholderCam Rig
-                sholderCine.GetRig(i).AddCinemachineComponent<CinemachineComposer>();
-                sholderCine.GetRig(i).AddCinemachineComponent<CinemachineOrbitalTransposer>();
-
-                sholderCine.GetRig(i).GetCinemachineComponent<CinemachineComposer>().m_HorizontalDamping = rigInitValue;
-                sholderCine.GetRig(i).GetCinemachineComponent<CinemachineComposer>().m_VerticalDamping = rigInitValue;
-
-                sholderCine.GetRig(i).GetCinemachineComponent<CinemachineOrbitalTransposer>().m_XDamping = rigInitValue;
-                sholderCine.GetRig(i).GetCinemachineComponent<CinemachineOrbitalTransposer>().m_YDamping = rigInitValue;
-                sholderCine.GetRig(i).GetCinemachineComponent<CinemachineOrbitalTransposer>().m_ZDamping = rigInitValue;
-            }
-
-            backCine.GetRig(1).GetCinemachineComponent<CinemachineComposer>().m_TrackedObjectOffset.y = offSetYInitValue;
-        }
-
-
+     
         // ====================  [Option 관련 함수 (찬우형)]  ==================== //
 
         public void Option_SetShake(bool on) // 스테디 카메라 흔들림 사용 여부  
@@ -581,7 +582,7 @@ namespace YC.Camera_
             //else {}
         }
 
-        void InitSceneChange() // Scene이 변경될 시 다시 카메라를 원상태 (BackView)로 복귀  
+        public void InitSceneChange() // Scene이 변경될 시 다시 카메라를 원상태 (BackView)로 복귀  
         {
             if (!pv.IsMine) return;
 
@@ -599,9 +600,9 @@ namespace YC.Camera_
             OnOffCamera(backCam);
         }
 
-     
+
         // ====================  [Top View 함수]  ==================== //
-        
+
         public void SetDefenseMode() // 디펜스 모드 설정  
         {
             if (pv.IsMine)
@@ -619,6 +620,66 @@ namespace YC.Camera_
             }
         }
 
+
+        // ====================  [Maze View 함수]  ==================== //
+        public void SetMazeMode(bool enter, bool isExit) // 미로 모드 설정  
+        {
+            if(enter) // 미로 입장시
+            {
+                OnOffCamera(null);
+
+                if(!mazeCamObj)
+                {
+                    GameObject[] mazeCamObjs;
+                    mazeCamObjs = GameObject.FindGameObjectsWithTag(mazeCamTag);
+
+                    foreach (GameObject cam in mazeCamObjs)
+                    {
+                        if(cam.layer == 0)
+                        {
+                            mazeCamObj = GameObject.FindGameObjectWithTag(mazeCamTag);
+                        }
+                    }
+
+                    mazeCineCam = mazeCamObj.GetComponent<CinemachineVirtualCamera>();
+                    mazeCineCamCol = mazeCamObj.GetComponent<CinemachineCollider>();
+
+                    mazeCineCam.LookAt = player.transform;
+                    mazeCineCam.Follow = player.transform;
+
+                    if (player.CompareTag("Nella"))
+                    {
+                        string layerName = "NellaCam";
+                        string ignoreTag = "Nella";
+                        mazeCamObj.gameObject.layer = LayerMask.NameToLayer(layerName);
+                        mazeCineCamCol.m_IgnoreTag = ignoreTag;
+                    }
+                    else if (player.CompareTag("Steady"))
+                    {
+                        string layerName = "SteadyCam";
+                        string ignoreTag = "Steady";
+                        mazeCamObj.gameObject.layer = LayerMask.NameToLayer(layerName);
+                        mazeCineCamCol.m_IgnoreTag = ignoreTag;
+                    }
+                }
+
+                mazeCineCam.enabled = true;
+                mazeCineCamCol.enabled = true;
+            }
+            else // 미로 퇴장시
+            {
+                if(!isExit)
+                {
+                    backCam.GetComponent<CinemachineFreeLook>().m_XAxis.Value = -(backCam.GetComponent<CinemachineFreeLook>().m_XAxis.Value);
+                }
+               
+                mazeCineCam.enabled = false;
+                mazeCineCamCol.enabled = false;
+
+                curCam = CamState.back;
+                OnOffCamera(camList[(int)curCam]);
+            }        
+        }
 
         // ====================  [Side View 함수]  ==================== //
 
@@ -695,6 +756,13 @@ namespace YC.Camera_
             return bounds.center;
         }
 
+        //float GetCenterPoint_() 
+        //{
+        //    float middlePos = 
+
+        //    return bounds.center;
+        //}
+
         public void ShakeCameraInSideView() // 플레이어 사망시, 카메라 흔들림 세팅 (외부에서 센드메시지로 호출)  
         {
             if (!canShake) return;
@@ -752,7 +820,7 @@ namespace YC.Camera_
 
         // ====================  [점프 보간 함수]  ==================== //
 
-        void FollowPlayer()
+        void FollowPlayer()  // 단순히 플레이어를 따라가기만 
         {
             Vector3 PlayerPos = player.transform.position;
 
@@ -770,8 +838,6 @@ namespace YC.Camera_
 
         void SetCineObjPos() // Look과 Follow의 x, y값 업데이트  
         {
-            if (isDebugLog) Debug.Log("호출 : 점프 대기 상태 - x, z 업데이트중");
-
             followObj.transform.position = player.transform.position;
 
             Vector3 LookPos = new Vector3(player.transform.position.x,
@@ -788,7 +854,6 @@ namespace YC.Camera_
                 // 플랫폼 보간 중, 점프를 시도했다면 
                 if (isLerp)
                 {
-                    if (isDebugLog) Debug.Log("호출 - 플랫폼 보간중 일반점프 시도! ");
                     StopAllCoroutines();
                     isLerp = false;
                     float lerpTime = 120;
@@ -806,12 +871,9 @@ namespace YC.Camera_
                 orgLookY = lookatBackObj.transform.position.y;
                 orgFollowY = followObj.transform.position.y;
                 originPlayerY = player.transform.position.y;
-
-                if (isDebugLog) Debug.Log("호출 - 일반점프 시작");
             }
             else if (!On) // 땅에 착지 or 스페셜 액션 종료
             {
-                if (isDebugLog) Debug.Log("호출 - 착지");
                 isJumping = false;
 
 
@@ -822,7 +884,6 @@ namespace YC.Camera_
 
                 if (wasEndSet)
                 {
-                    if (isDebugLog) Debug.Log("호출 - 이미 세팅되었으니 리턴");
                     return;
                 }
 
@@ -832,46 +893,15 @@ namespace YC.Camera_
                     {
                         StopAllCoroutines();
                         isLerp = false;
-                        if (isDebugLog) Debug.Log("호출 - 이중 코루틴 방지, 기존 코루틴 종료");
                     }
 
-                    if (isDebugLog) Debug.Log("호출 - 일반 플랫폼 착지, 보간 시작");
                     StartCoroutine(LerpAfter(platformLerpTime));
-                }
-                else
-                {
-                    if (isDebugLog) Debug.Log("호출 - 일반 착지, 변경사항 없음");
-                }
-
-
-                //float curDif = Mathf.Abs(player.transform.position.y - originPlayerY);  // 점프 시작시 플레이어 높이와, 현재 플레이어의 높이 차를 구한다
-
-                //if (curDif > avgDif) // 일반 점프가 종료되고, 플랫폼에 올라탔을시, 높이 차이만큼 보간
-                //{
-                //    if (isLerp)
-                //    {
-                //        StopAllCoroutines();
-                //        Debug.Log("호출 - 이중 코루틴 방지, 기존 코루틴 종료");
-                //    }
-
-                //    Debug.Log("호출 - 일반 플랫폼 착지, 보간 시작");
-                //    StartCoroutine(LerpAfter(platformLerpTime));
-                //    return;
-                //}
-                //else // 아무런 이벤트 없이 일반점프 종료
-                //{
-                //    Debug.Log("호출 - 점프 후 아무런 이벤트 없이 착지");
-                //    lookatBackObj.position = new Vector3(lookatBackObj.transform.position.x, player.transform.position.y + lookatObjOriginY, lookatBackObj.transform.position.z);
-                //    followObj.position = new Vector3(followObj.transform.position.x, player.transform.position.y, followObj.transform.position.z);
-
-                //}
+                }                          
             }
         }
 
         void NormalJump_FixY() // 플레이어가 일반 점프 중일 때, 외부 오브젝트의 Y값을 고정시킨다  
         {
-            if (isDebugLog) Debug.Log("호출 - 일반 점프 Y값 고정중");
-
             lookatBackObj.position =
                         new Vector3(player.transform.position.x,
                                     orgLookY,
@@ -893,8 +923,6 @@ namespace YC.Camera_
                         = new Vector3(player.transform.position.x,
                                     player.transform.position.y,
                                     player.transform.position.z);
-
-            if (isDebugLog) Debug.Log("호출 - 일반 점프 후 에어 대쉬, 플레이어 위치 따라가는 중");
         }
 
         void CheckLowerPlayer() // 점프 시작 때 높이보다, 점프 종료후 높이가 낮다면 True  
@@ -906,14 +934,11 @@ namespace YC.Camera_
                 wasEndSet = true;
 
                 isLower = true;
-                if (isDebugLog) Debug.Log("호출 - 일반 점프후, 플레이어 높이가 시작 높이보다 낮음 체크");
             }
         }
 
         void LowerPlayerFollow() // 위 함수를 통해 isLower가 true라면 플레이어를 쫓는다  
         {
-            if (isDebugLog) Debug.Log("호출 - 일반 점프 후, 플레이어 위치 따라가는 중");
-
             lookatBackObj.position
                         = new Vector3(player.transform.position.x,
                                     player.transform.position.y + lookatObjOriginY,
@@ -927,8 +952,6 @@ namespace YC.Camera_
 
         void AirJumpPlayerFollow() // 공중 점프 보간 후 플레이어 위치 따라감  
         {
-            if (isDebugLog) Debug.Log("호출 - 공중 점프 보간 후, 플레이어 위치 따라가는 중");
-
             lookatBackObj.position
                             = new Vector3(player.transform.position.x,
                                         player.transform.position.y + lookatObjOriginY,
@@ -941,8 +964,6 @@ namespace YC.Camera_
 
         public void AirJumpStart() // 공중점프 시작  
         {
-            if (isDebugLog) Debug.Log("호출 - 공중 점프 시작");
-
             wasEndSet = true;
             wasAirJump = true;
 
@@ -950,7 +971,6 @@ namespace YC.Camera_
             {
                 StopAllCoroutines();
                 isLerp = false;
-                if (isDebugLog) Debug.Log("호출 - 이중 코루틴 방지, 기존 코루틴 종료");
             }
             float lerpTime = 120;
             StartCoroutine(AirJumpLerp(lerpTime));
@@ -958,8 +978,6 @@ namespace YC.Camera_
 
         IEnumerator AirJumpLerp(float LerpTime) // 공중 점프 보간  
         {
-            if (isDebugLog) Debug.Log("호출 - 공중 점프 코루틴 시작");
-
             float initYpos = followObj.transform.position.y; // 현재 FollowObj의 Y 값
             float lerpYpos = initYpos;  // 보간이 이루어지고 있는 y 값
 
@@ -984,7 +1002,6 @@ namespace YC.Camera_
 
                 lookatBackObj.position = new Vector3(player.transform.position.x, lerpYpos + lookatObjOriginY, player.transform.position.z);
                 followObj.position = new Vector3(player.transform.position.x, lerpYpos, player.transform.position.z);
-                if (isDebugLog) Debug.Log("호출 - 공중 점프 코루틴 Lerp 진행중");
                 yield return new WaitForFixedUpdate();
             }
 
@@ -992,12 +1009,10 @@ namespace YC.Camera_
             followObj.position = new Vector3(player.transform.position.x, player.transform.position.y, player.transform.position.z);
             isLerp = false;
             isAirJumpLerpEnd = true;
-            if (isDebugLog) Debug.Log("호출 - 공중점프 코루틴 Lerp 종료");
         }
 
         IEnumerator LerpAfter(float LerpTime) // 일반 점프 보간  
         {
-            if (isDebugLog) Debug.Log("호출 - 일반 코루틴 Lerp 시작");
             isLerp = true;
 
             float currentTime = 0;
@@ -1029,7 +1044,6 @@ namespace YC.Camera_
 
                     lookatBackObj.position = new Vector3(player.transform.position.x, lerpYpos + lookatObjOriginY, player.transform.position.z);
                     followObj.position = new Vector3(player.transform.position.x, lerpYpos, player.transform.position.z);
-                    if (isDebugLog) Debug.Log("호출 - 일반 코루틴 Lerp 진행중");
                     yield return new WaitForFixedUpdate();
                 }
             }
@@ -1053,7 +1067,6 @@ namespace YC.Camera_
 
                     lookatBackObj.position = new Vector3(player.transform.position.x, lookatObjOriginY + lerpYpos, player.transform.position.z);
                     followObj.position = new Vector3(player.transform.position.x, lerpYpos, player.transform.position.z);
-                    if (isDebugLog) Debug.Log("호출 - 일반 코루틴 Lerp 진행중");
 
                     yield return new WaitForFixedUpdate();
                 }
@@ -1062,26 +1075,21 @@ namespace YC.Camera_
             lookatBackObj.position = new Vector3(player.transform.position.x, player.transform.position.y + lookatObjOriginY, player.transform.position.z);
             followObj.position = new Vector3(player.transform.position.x, player.transform.position.y, player.transform.position.z);
             isLerp = false;
-            if (isDebugLog) Debug.Log("호출 - 일반 코루틴 Lerp 종료");
         }
 
         public void RidingInit() // 라이딩(로프, 레일)진행시 각각의 SMB에서 해당 함수를 호출한다 (갈고리 제외)  
         {
             if (isLerp)
             {
-                if (isDebugLog) Debug.Log("호출 - 이전 코루틴 중지");
                 StopAllCoroutines();
                 isLerp = false;
             }
 
-            if (isDebugLog) Debug.Log("호출 - 라이딩 시작======================================");
             isRiding = true;           
         }
 
         void RidingCamera() // 라이딩 시작부터, '착지할 때'까지 플레이어를 쫓아간다  
         {
-            if (isDebugLog) Debug.Log("호출 - 라이딩 카메라 진행중======================================");
-
             lookatBackObj.position
                             = new Vector3(player.transform.position.x,
                                         player.transform.position.y + lookatObjOriginY,
@@ -1106,7 +1114,9 @@ namespace YC.Camera_
                 cam.m_XAxis.m_InputAxisName = "";
                 cam.m_YAxis.m_InputAxisName = "";
 
-                cam.m_XAxis.m_InputAxisValue = 0;  // << : 회전하면서 빔 사용시 삥삥 도는 문제
+                // << : 회전하면서 빔 사용시 삥삥 도는 문제 해결
+                cam.m_XAxis.m_InputAxisValue = 0;  
+                cam.m_YAxis.m_InputAxisValue = 0;
             }
             else
             {

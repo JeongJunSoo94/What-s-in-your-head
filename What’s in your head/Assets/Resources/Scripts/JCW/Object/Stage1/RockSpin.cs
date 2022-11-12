@@ -8,7 +8,7 @@ namespace JCW.Object.Stage1
     public class RockSpin : MonoBehaviour
     {
         [Header("회전 속도")] [SerializeField] float speed = 10f;
-        float curAxis;
+        //float curAxis;
         Transform myTF;
         Transform seatTF;
 
@@ -24,8 +24,8 @@ namespace JCW.Object.Stage1
             seatTF = myTF.GetChild(1);
             StartCoroutine(nameof(WaitForPlayer));
 
-            curAxis = myTF.rotation.eulerAngles.x;
-            curAxis += (curAxis > 180 ? -360 : 0);
+            //curAxis = myTF.rotation.eulerAngles.x;
+            //curAxis += (curAxis > 180 ? -360 : 0);
         }
 
         private void FixedUpdate()

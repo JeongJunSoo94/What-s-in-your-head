@@ -18,7 +18,9 @@ namespace JCW.Object
         [Header("주위 필드 감염 소요 시간")][SerializeField] float infectTime = 5f;
         [Header("감염 가능 여부")][SerializeField] bool canInfect = true;
 
-        int usingCount;
+        //int usingCount;
+        int usingWidthCount;
+        int usingHeightCount;
         List<int> firstSpawnPlace;
         float elapsedTime = 0f;
 
@@ -28,6 +30,8 @@ namespace JCW.Object
         PhotonView photonView;
         AudioSource audioSource;
 
+        bool isStart;
+
         private void Awake()
         {
             photonView = GetComponent<PhotonView>();
@@ -36,25 +40,23 @@ namespace JCW.Object
                 this.enabled = false;
                 return;
             }
-            usingCount = GetComponent<ContaminationFieldSetting>().count;
+            //usingCount = GetComponent<ContaminationFieldSetting>().count;
+            usingWidthCount = GetComponent<ContaminationFieldSetting>().widthCount;
+            usingHeightCount = GetComponent<ContaminationFieldSetting>().heightCount;
 
             // 스폰될 수 있는 각 꼭지점 정해두기
-            firstSpawnPlace = new() { 1, 2*usingCount-1, 2*usingCount*(usingCount-1)+1, 2*usingCount*usingCount-1 };
+            firstSpawnPlace = new() { 1, 2* usingWidthCount - 1, 2* usingWidthCount * (usingHeightCount-1)+1, 2* usingWidthCount * usingHeightCount - 1 };
 
-            if (PhotonNetwork.IsMasterClient)
-            {
-                // 그 중 1군데 랜덤하게 지우기
-                var random = new System.Random(Guid.NewGuid().GetHashCode());
-                randomIndex = random.Next(0, 4);
-                photonView.RPC(nameof(Init), RpcTarget.AllViaServer, randomIndex);
-            }
             audioSource = GetComponent<AudioSource>();
-            Debug.Log(Vector3.Distance(this.transform.position, transform.GetChild(0).position) + 30f);
+            //Debug.Log(Vector3.Distance(this.transform.position, transform.GetChild(0).position) + 30f);
             AudioCtrl.AudioSettings.SetAudio(audioSource, 1f, Vector3.Distance(this.transform.position, transform.GetChild(0).position) + 30f);
+
+            StartCoroutine(nameof(WaitForPlayer));
         }
 
         void Update()
         {
+            if (!isStart) return;
             elapsedTime += Time.deltaTime;
             if(PhotonNetwork.IsMasterClient)
             {
@@ -85,7 +87,8 @@ namespace JCW.Object
 
         [PunRPC]
         void Init(int i)
-        {                       
+        {
+            Debug.Log("삭제되는 인덱스 :  " + i);
             firstSpawnPlace.RemoveAt(i);
         }
 
@@ -118,18 +121,6 @@ namespace JCW.Object
         {
             List<int> indexs = new() { myIndex, nextTarget };
             StartCoroutine(nameof(WarnInfection), indexs);
-        }
-
-        public void SetPurified(int myIndex)
-        {
-            photonView.RPC(nameof(SetPurifiedRPC), RpcTarget.AllViaServer, myIndex);
-        }
-
-        [PunRPC]
-        void SetPurifiedRPC(int myIndex)
-        {
-            Debug.Log("정화시킬 인덱스 : " + myIndex);
-            transform.GetChild(myIndex).GetComponent<HostField>().Purified();
         }
 
         IEnumerator WarnInfection(List<int> indexs)
@@ -175,6 +166,20 @@ namespace JCW.Object
             nextTargetBeforeObj_ready.SetActive(false);
             indexs.Clear();
             yield break;
+        }
+
+        IEnumerator WaitForPlayer()
+        {
+            yield return new WaitUntil(() => PhotonNetwork.PlayerList.Length == 1);
+
+            if (PhotonNetwork.IsMasterClient)
+            {
+                // 그 중 1군데 랜덤하게 지우기
+                var random = new System.Random(Guid.NewGuid().GetHashCode());
+                randomIndex = random.Next(0, 4);
+                photonView.RPC(nameof(Init), RpcTarget.AllViaServer, randomIndex);
+                isStart = true;
+            }
         }
     }
 }

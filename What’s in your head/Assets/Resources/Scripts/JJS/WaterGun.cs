@@ -51,20 +51,25 @@ namespace JJS.Weapon
         {
             bezierCurveOrbit = gameObject.GetComponent<BezierCurve>();
             bezierCurveOrbit.targetObj = startPos;
-            bulletSpawner = new GameObject("BulletSpawner");
-            bulletSpawner.AddComponent<Spawner>();
+            InitSpawner();
+            shootEnable = true;
+            audioSource = GetComponent<AudioSource>();
+            JCW.AudioCtrl.AudioSettings.SetAudio(audioSource, 1f, 40f);
+            //rigid = transform.parent.gameObject.GetComponent<Rigidbody>();
+        }
+
+        public void InitSpawner()
+        {
+            if (bulletSpawner == null)
+            { 
+                bulletSpawner = new GameObject("BulletSpawner");
+                bulletSpawner.AddComponent<Spawner>();
+            }
             spawner = bulletSpawner.GetComponent<Spawner>();
             spawner.obj = bullet;
             spawner.count = bulletCount;
             spawner.spawnCount = 0;
-            shootEnable = true;
-            audioSource = GetComponent<AudioSource>();
-            JCW.AudioCtrl.AudioSettings.SetAudio(audioSource, 1f, 40f);
-            rigid = transform.parent.gameObject.GetComponent<Rigidbody>();
         }
-        //void FixedUpdate()
-        //{
-        //}
 
         public void ShootStart()
         {

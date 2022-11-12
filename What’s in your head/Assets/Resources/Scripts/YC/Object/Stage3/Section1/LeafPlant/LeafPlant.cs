@@ -41,11 +41,13 @@ namespace YC_OBJ
         [Header("[애니메이션 재생속도]")]
         [SerializeField] float animationSpeed = 1f;
 
+        [Header("[위 아래 움직이는 속도]")]
+        [SerializeField] float moveSpeed = 5f;
 
         public float curTime { get; private set; } = 0; // 현재 시간 게이지
         bool isCurHit = false;
         int curHitCount = 0;
-        float delayTime = 0.15f; // 총알을 현재 맞고 있는지를 몇 초 전과 비교할 것인지 (총알 발사 속도와 연관)
+        float delayTime = 0.13f; // 총알을 현재 맞고 있는지를 몇 초 전과 비교할 것인지 (총알 발사 속도와 연관)
 
 
         string interactionObjTag = "NellaWater";
@@ -64,6 +66,18 @@ namespace YC_OBJ
 
         AnimatorStateInfo animatorStateInfo;
 
+        [SerializeField] GameObject Bone;
+
+        PhotonView bonePV;
+
+        //bool isLerp = false;
+
+        bool isMove = false;
+        bool isUpDir = false;
+
+        float height = 10;
+        Vector3 upPos;
+        Vector3 initPos;
         void Awake()
         {
             animator = GetComponent<Animator>();
@@ -73,23 +87,29 @@ namespace YC_OBJ
             maxTime = MaxTime;
 
             pv = this.gameObject.GetComponent<PhotonView>();
+            bonePV = Bone.GetComponent<PhotonView>();
 
             animatorStateInfo = animator.GetCurrentAnimatorStateInfo(0);
+
+            initPos  = Bone.transform.localPosition;
+            upPos = new Vector3(initPos.x, initPos.y + height, initPos.z);
         }
 
-        void Update()
+        
+        void FixedUpdate()
         {
             if (isGrowed)
             {
                 growTime += Time.deltaTime;
 
                 if (growTime > maxGrowedTime)
-                {                   
+                {
                     if (pv.IsMine)
-                    {                     
+                    {
                         pv.RPC(nameof(SetLess_RPC), RpcTarget.AllViaServer);
                     }
                 }
+
             }
             else
             {
@@ -97,7 +117,35 @@ namespace YC_OBJ
 
                 indicator.SetGauge(curTime / maxTime);
             }
-            BlockPlayerMove();
+            //BlockPlayerMove();
+
+            MoveLiftObj();
+        }
+
+
+
+
+        private void MoveLiftObj()
+        {
+            if (!isMove) return;
+
+            Vector3 BonePos = Bone.transform.localPosition;
+
+            if (isUpDir)
+            {
+                Bone.transform.localPosition = Vector3.MoveTowards(BonePos, upPos, Time.fixedDeltaTime * moveSpeed);
+
+                if (Bone.transform.localPosition == upPos)
+                    isMove = false;
+            }
+            else
+            {
+                Bone.transform.localPosition = Vector3.MoveTowards(BonePos, initPos, Time.fixedDeltaTime * moveSpeed);
+
+                if (Bone.transform.localPosition == initPos)
+                    isMove = false;
+            }
+
         }
 
         private void OnTriggerEnter(Collider other)
@@ -112,67 +160,79 @@ namespace YC_OBJ
             }
         }
 
-        bool CheckAnimation() // 현재 성장 혹은 줄어듦 애니메이션이 진행 중인지 체크한다
-        {
-            if (((animatorStateInfo.IsName("Lessing") || animatorStateInfo.IsName("Growed")) &&
-                animatorStateInfo.normalizedTime < 1.0f))
-            {
-                //Debug.Log("진행중!");
-                if(tempPos == Vector3.zero)
-                {
-                    tempPos = LiftObj.player.transform.localPosition;
-                }
-                return true;
-            }
-            else
-            {
-                //Debug.Log("진행중 아님!");
-                return false;
-            } 
-        }
+        //bool CheckAnimation() // 현재 성장 혹은 줄어듦 애니메이션이 진행 중인지 체크한다
+        //{
+        //    if (((animatorStateInfo.IsName("Lessing") || animatorStateInfo.IsName("Growed")) &&
+        //        animatorStateInfo.normalizedTime < 1.0f))
+        //    {
+        //        //Debug.Log("진행중!");
+        //        if(tempPos == Vector3.zero)
+        //        {
+        //            tempPos = LiftObj.player.transform.localPosition;
+        //        }
+        //        return true;
+        //    }
+        //    else
+        //    {
+        //        //Debug.Log("진행중 아님!");
+        //        return false;
+        //    } 
+        //}
 
-        // << :
-        void BlockPlayerMove()
-        {
-            if (CheckAnimation())
-                SetPlayerMovePossible(false);
-            else
-                SetPlayerMovePossible(true);
-        }
+        //// << :
+        //void BlockPlayerMove()
+        //{
+        //    //if (CheckAnimation())
+        //    //    //SetPlayerMovePossible(false);
+        //    //else
+        //    //    //SetPlayerMovePossible(true);
+        //}
 
-        void SetPlayerMovePossible (bool can)
-        {
-            if (!LiftObj.player) return;
+        //public void SetPlayerMovePossible (int can)
+        //{
+        //    //if (!LiftObj.player) return;
 
-            if (can)
-            {
-                LiftObj.player.GetComponent<PhotonTransformView>().enabled = true;
-                LiftObj.player.GetComponent<PlayerState>().isOutOfControl = false;
+        //    //if (can == 0)
+        //    //{
+        //    //    if(LiftObj.player.GetComponent<PhotonView>().IsMine)
+        //    //    {
+        //    //        //LiftObj.player.GetComponent<PhotonTransformView>().enabled = true;
+        //    //        //LiftObj.player.GetComponent<PlayerState>().isOutOfControl = false;
 
-                //LiftObj.GetComponent<MeshCollider>().enabled = true;
-            }
-            else
-            {
-                LiftObj.player.GetComponent<PhotonTransformView>().enabled = false;
-                LiftObj.player.GetComponent<PlayerState>().isOutOfControl = true;
-                LiftObj.player.transform.localPosition = tempPos;
+        //    //        //LiftObj.GetComponent<MeshCollider>().enabled = true;
+        //    //        //Debug.Log("안 막는중!");
+        //    //    }
+        //    //}
+        //    //else
+        //    //{
+        //    //    if (LiftObj.player.GetComponent<PhotonView>().IsMine)
+        //    //    {
+        //    //        //LiftObj.player.GetComponent<PhotonTransformView>().enabled = false;
+        //    //        //LiftObj.player.GetComponent<PlayerState>().isOutOfControl = true;
+        //    //        //LiftObj.player.transform.localPosition = tempPos;
 
-                //LiftObj.GetComponent<MeshCollider>().enabled = false;
-                //LiftObj.player.GetComponent<Rigidbody>().velocity = Vector3.zero;
-            }
-        }
+        //    //        //Debug.Log("막는 중!");
+
+        //    //        //LiftObj.GetComponent<MeshCollider>().enabled = false;
+        //    //        //LiftObj.player.GetComponent<Rigidbody>().velocity = Vector3.zero;
+        //    //    }
+        //    //}
+        //}
 
         void SetCurTime()
         {
+            if (isGrowed) return;
+
             if (isCurHit)
             {
                 curTime += Time.deltaTime;
 
                 if (curTime > maxTime)
-                {                  
+                {                                  
                     if (pv.IsMine)
-                    {
+                    {                    
                         pv.RPC(nameof(SetGrow_RPC), RpcTarget.AllViaServer);
+                        Debug.Log("Plant 함수 호출!");
                     }
                 }
 
@@ -205,8 +265,17 @@ namespace YC_OBJ
         [PunRPC]
         public void SetGrow_RPC()
         {
-            animator.SetBool("isGrow", true);
-            animator.SetBool("isLess", false);
+            //animator.SetBool("isGrow", true);
+            //animator.SetBool("isLess", false);
+
+            if (bonePV.IsMine)
+            {
+                isMove = true;
+                isUpDir = true;
+                Debug.Log("Bone 함수 호출!");
+
+            }
+
             indicator.gameObject.SetActive(false);
 
             curTime = maxTime;
@@ -217,6 +286,13 @@ namespace YC_OBJ
         [PunRPC]
         public void SetLess_RPC()
         {
+            if (bonePV.IsMine)
+            {
+                isMove = true;
+                isUpDir = false;
+                Debug.Log("Bone 함수 호출!");
+            }
+
             animator.SetBool("isLess", true);
             animator.SetBool("isGrow", false);
             indicator.gameObject.SetActive(true);

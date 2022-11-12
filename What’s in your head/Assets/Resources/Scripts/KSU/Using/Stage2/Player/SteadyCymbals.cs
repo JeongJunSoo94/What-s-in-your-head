@@ -97,12 +97,14 @@ namespace KSU.AutoAim.Player.Object
                             objectRigidbody.velocity = Vector3.zero;
                         }
                         break;
-                    default:
-                        {
-                            if (!isEndPosition)
-                                isEndPosition = true;
-                        }
+                    case "Rope":
                         break;
+                    //default:
+                    //    {
+                    //        if (!isEndPosition)
+                    //            isEndPosition = true;
+                    //    }
+                    //    break;
                 }
             }
         }
