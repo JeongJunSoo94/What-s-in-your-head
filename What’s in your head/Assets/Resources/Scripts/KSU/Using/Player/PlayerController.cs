@@ -420,7 +420,11 @@ namespace KSU
                 if(!playerMouse.notRotatoin)
                     RotateTop();
             }
-            else if (characterState.aim || characterState.isInMaze)
+            else if(characterState.isInMaze)
+            {
+                RotateInMaze();
+            }
+            else if (characterState.aim)
             {
                 RotateAim();
             }
@@ -459,6 +463,7 @@ namespace KSU
             }
         }
 
+
         public void RotateAim()
         {
             if (!characterState.IsDashing && !characterState.IsAirDashing)
@@ -467,6 +472,15 @@ namespace KSU
                 forward.y = 0;
                 transform.LookAt(transform.position + forward);
             }
+        }
+
+        float rotateSpeed = 400.0f;
+        float xRotate;
+        public void RotateInMaze()
+        {
+            float yRotateMove = Input.GetAxis("Mouse X") * Time.deltaTime * rotateSpeed;
+            float yRotate = transform.eulerAngles.y + yRotateMove;
+            transform.eulerAngles = new Vector3(0, yRotate, 0);
         }
 
         private void Move()
