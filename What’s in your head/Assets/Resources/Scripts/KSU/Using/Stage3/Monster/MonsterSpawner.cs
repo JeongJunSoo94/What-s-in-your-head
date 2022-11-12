@@ -35,8 +35,6 @@ namespace KSU
         bool isGameEnd = false;
         PhotonView photonView;
 
-        bool hasStarted = false;
-
         [SerializeField] GameObject alice;
 
         // Start is called before the first frame update

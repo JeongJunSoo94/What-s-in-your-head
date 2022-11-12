@@ -10,8 +10,9 @@ namespace JJS
     public class CharacterBuilder : MonoBehaviour
     {
         public bool single;
-        protected GameObject nella;
-        protected GameObject steady;
+        public int stage;
+        public GameObject nella;
+        public GameObject steady;
         public MouseControllerWeaponData nellaMouseControllerData;
         public MouseControllerWeaponData steadyMouseControllerData;
 
@@ -44,6 +45,10 @@ namespace JJS
                     SetCharacterComponent(steady, steadyMouseControllerData, "Hand_R");
                     NellaScriptSetActive(nella);
                     SteadyScriptSetActive(steady);
+                    if (stage == 2)
+                    {
+                        GameManager.Instance.isSideView = true;
+                    }
                     gameObject.SetActive(false);
                 }
             }

@@ -161,7 +161,7 @@ namespace KSU
             playerRigidbody.velocity = Vector3.zero;
         }
 
-        public void InitAnimatorParam(bool initTop)
+        public void InitAnimatorParam()
         {
             playerAnimator.SetBool("isAir", false);
             playerAnimator.SetBool("isAirDash", false);
@@ -187,8 +187,6 @@ namespace KSU
             playerAnimator.SetFloat("HorizonVelocity", 0f);
             playerAnimator.SetFloat("DistY", 0f);
             playerAnimator.SetFloat("moveToRailSpeed", 0f);
-            if (initTop)
-                playerAnimator.SetBool("Top", false);
             switch (this.gameObject.tag)
             {
                 case "Nella":
@@ -260,6 +258,7 @@ namespace KSU
         {
             InitInteraction();
             InitController();
+            InitAnimatorParam();
             if (photonView.IsMine)
             { 
                 GameManager.Instance.curPlayerHP = 12;

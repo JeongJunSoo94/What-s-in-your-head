@@ -11,12 +11,14 @@ using JCW.UI.InGame.Indicator;
 using JCW.UI.InGame;
 using KSU.AutoAim.Player.Object;
 
+using JJS;
 namespace KSU.AutoAim.Player
 {
     public class SteadyCymbalsAction : SteadyAutoAimAction
     {
         SteadyCymbals cymbals;
         PlayerController playerController;
+        SteadyMouseController mouse;
         Vector3 shootPosition;
 
         override protected void Awake()
@@ -31,7 +33,7 @@ namespace KSU.AutoAim.Player
             //lookAtObj = this.gameObject.GetComponent<CameraController>().lookatBackObj;
 
             playerCamera = this.gameObject.GetComponent<CameraController>().FindCamera(); // ¸ÖÆ¼¿ë
-
+            mouse = GetComponent<SteadyMouseController>();
             autoAimObject = Instantiate(autoAimObject);
             cymbals = autoAimObject.GetComponent<SteadyCymbals>();
             cymbals.player = this.gameObject;
@@ -41,8 +43,6 @@ namespace KSU.AutoAim.Player
 
         void Update()
         {
-            if (Input.GetKeyDown(KeyCode.Mouse0))
-                Debug.Log(Input.mousePosition);
             SearchAutoAimTargetdObject();
             if (photonView.IsMine)
             {
@@ -97,7 +97,7 @@ namespace KSU.AutoAim.Player
                 Vector3 target = Vector3.zero;
                 Ray ray = playerCamera.ScreenPointToRay(Input.mousePosition);
                 RaycastHit hit;
-                if (Physics.Raycast(ray, out hit, 1000f, LayerMask.NameToLayer("Defalut"), QueryTriggerInteraction.Ignore))
+                if (Physics.Raycast(ray, out hit, 1000f, mouse.mouseSideLayer, QueryTriggerInteraction.Ignore))
                 {
                     target = hit.point;
                 }

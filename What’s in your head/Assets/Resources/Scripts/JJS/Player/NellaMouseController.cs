@@ -19,6 +19,11 @@ namespace JJS
         public WaterGun gun;
         public Singing singing;
 
+        string watergunName = "WaterPistol";
+        string micName = "Mic";
+        
+
+
         private void Awake()
         {
 
@@ -157,7 +162,7 @@ namespace JJS
         [PunRPC]
         public override void SetWeaponEnable(bool enable)
         {
-            if (weaponInfo[GetUseWeapon()].weapon.name == "WaterPistol")
+            if (weaponInfo[GetUseWeapon()].weapon.name == watergunName)
             {
                 if (enable)
                 {
@@ -175,7 +180,7 @@ namespace JJS
                 else
                     clickLeft = false;
             }
-            else if (weaponInfo[GetUseWeapon()].weapon.name == "Mic")
+            else if (weaponInfo[GetUseWeapon()].weapon.name == micName)
                 singing.enabled = clickLeft = enable;
             else
                 clickLeft = enable;

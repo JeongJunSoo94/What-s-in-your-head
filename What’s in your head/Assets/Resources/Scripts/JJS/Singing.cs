@@ -14,6 +14,11 @@ namespace JJS
         private void Update()
         {
             Play(true);
+            if (GameManager.Instance.curPlayerHP == 0)
+            {
+                Play(false);
+                MicDictionary.Clear();
+            }
         }
 
         private void OnDisable()

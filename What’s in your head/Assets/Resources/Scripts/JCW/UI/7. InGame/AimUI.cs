@@ -57,7 +57,7 @@ namespace JCW.UI.InGame
                 return;
             aimImage.enabled = aimState.aim;
             // 현재 탑뷰일 때
-            if (GameManager.Instance.isTopView)
+            if (GameManager.Instance.isTopView || GameManager.Instance.isSideView)
             {
                 if (!wasTopView)
                 {

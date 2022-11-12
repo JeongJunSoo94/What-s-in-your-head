@@ -16,6 +16,7 @@ namespace JJS.BT
         public bool localSync;
         public bool delayEnable;
         public bool delayCheck;
+        public WaitForSeconds wait;
         private void Awake()
         {
             prefabObject = gameObject;
@@ -26,6 +27,7 @@ namespace JJS.BT
             localSync = true;
             animator = GetComponent<Animator>();
             currentAniState = "";
+            wait = new WaitForSeconds(0.01f);
         }
         public GameObject PrefabObject
         {
@@ -66,11 +68,7 @@ namespace JJS.BT
             while (curCool < delayTime)
             {
                 curCool += 0.01f;
-                yield return new WaitForSeconds(0.01f);
-                //if (curCool*10 % 10 < 0.1)
-                //{ 
-                //    Debug.Log(curCool);
-                //}
+                yield return wait;
             }
             delayEnable = false;
             yield break;
