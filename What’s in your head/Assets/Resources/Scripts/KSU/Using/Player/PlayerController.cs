@@ -655,6 +655,7 @@ namespace KSU
                 case "Trampolin":
                     {
                         InputCustomJump(collision.gameObject.GetComponentInParent<JumpingPlatform>().jumpSpeed);
+                        //InputCustomJump(float.Parse(collision.gameObject.name));
                     }
                     break;
                 case "DeadZone":
