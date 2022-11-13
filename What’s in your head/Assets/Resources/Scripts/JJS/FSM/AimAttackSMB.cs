@@ -8,6 +8,7 @@ namespace JJS
 {
     public class AimAttackSMB : CharacterBaseSMB
     {
+        string aimAttack = "AimAttack";
         override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
         {
             //GetPlayerController(animator).playerMouse.SetWeaponEnable(GetPlayerController(animator).playerMouse.GetUseWeapon(), true);
@@ -53,7 +54,7 @@ namespace JJS
             
             if (!GetPlayerController(animator).playerMouse.clickLeft)
             {
-                animator.SetBool("AimAttack", false);
+                animator.SetBool(aimAttack, false);
             }
             //if (!GetPlayerController(animator).characterState.IsGrounded)
             //{

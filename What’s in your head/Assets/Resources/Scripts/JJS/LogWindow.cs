@@ -4,115 +4,129 @@ using UnityEngine;
 using UnityEngine.UI;
 using System;
 using System.IO;
-public class LogWindow : MonoBehaviour
-{
-    bool use;
-    public string m_FilePath1 = @"PlayerLog.txt";
-    public string m_FilePath2 = @"PlayerExceptionLog.txt";
-    Text logText;
-    Text exceptionText;
-    ScrollRect scrollRect;
-    GameObject logObj;
-    GameObject exceptionObj;
-    GameObject scroll;
-    GameObject canvasObj;
-    StreamWriter sw1;
-    StreamWriter sw2;
-    public GameObject button;
-    public GameObject canvas;
-    private void Awake()
-    {
-        SetGameObject(gameObject,out logObj, "LogText");
-        logText = logObj?.GetComponent<Text>();
-        SetGameObject(gameObject, out exceptionObj, "ExceptionText");
-        exceptionText = exceptionObj?.GetComponent<Text>();
-        SetGameObject(gameObject, out scroll, "ScrollView");
-        scrollRect = scroll?.GetComponent<ScrollRect>();
-        SetGameObject(gameObject, out canvasObj, "Canvas");
-        canvasObj.SetActive(false);
+using System.Text;
 
-        Application.logMessageReceived += SetLog;
-        CanvasScaler canvasScaler = canvas.GetComponent<CanvasScaler>();
-        canvasScaler.referenceResolution =new Vector2(Screen.width, Screen.height);
-        //scroll.transform.position= new Vector3(0, 0,0);
-    }
-
-    private void Update()
+namespace JJS
+{ 
+    public class LogWindow : MonoBehaviour
     {
-        if (Input.GetKeyDown(KeyCode.BackQuote))
+        bool use;
+        public string m_FilePath1 = "PlayerLog.txt";
+        public string m_FilePath2 = "PlayerExceptionLog.txt";
+        Text logText;
+        Text exceptionText;
+        ScrollRect scrollRect;
+        GameObject logObj;
+        GameObject exceptionObj;
+        GameObject scroll;
+        GameObject canvasObj;
+        StreamWriter sw1;
+        StreamWriter sw2;
+        GameObject button;
+        readonly StringBuilder changedStr = new(500);
+        readonly StringBuilder allLogText = new(100000);
+
+        private void Awake()
         {
-            use = !use;
-            UseWindow(use);
+            SetGameObject(gameObject,out logObj, "LogText");
+            logText = logObj?.GetComponent<Text>();
+            SetGameObject(gameObject, out exceptionObj, "ExceptionText");
+            exceptionText = exceptionObj?.GetComponent<Text>();
+            SetGameObject(gameObject, out scroll, "ScrollView");
+            scrollRect = scroll?.GetComponent<ScrollRect>();
+            SetGameObject(gameObject, out canvasObj, "Canvas");
+            SetGameObject(gameObject, out button, "Button");
+            canvasObj.SetActive(false);
+
+            Application.logMessageReceived += SetLog;
+            CanvasScaler canvasScaler = canvasObj.GetComponent<CanvasScaler>();
+            canvasScaler.referenceResolution =new Vector2(Screen.width, Screen.height);
+            //scroll.transform.position= new Vector3(0, 0,0);
         }
-    }
 
-    public void SetLog(string logString, string stackTrace, LogType type)
-    {
-        sw1 = new StreamWriter(m_FilePath1, true);
-        sw2 = new StreamWriter(m_FilePath2, true);
-        string str = "["+DateTime.Now.ToString()+ "]";
-        str += logString;
-        if (LogType.Exception == type)
+        private void Update()
         {
-            str += stackTrace;
-            UseWindow(true);
-            logObj.SetActive(false);
-            exceptionObj.SetActive(true);
-            exceptionText.color = Color.red;
-            exceptionText.text = str;
-            sw2.WriteLine(str);
-        }
-        else
-        {
-            logText.text += str+"\n";
-            sw1.WriteLine(str);
-        }
-        scrollRect.verticalNormalizedPosition = 0.0f;
-        sw1.Close();
-        sw2.Close();
-    }
-
-    void OnDisable()
-    {
-        sw1 = new StreamWriter(m_FilePath1, true);
-        sw2 = new StreamWriter(m_FilePath2, true);
-        Application.logMessageReceived -= SetLog;
-        sw1.Flush();
-        sw2.Flush();
-        sw1.Close();
-        sw2.Close();
-    }
-
-    public void UseWindow(bool enable)
-    {
-        canvasObj.SetActive(enable);
-        CursorUse(enable);
-        use = enable;
-    }
-
-    public void CursorUse(bool enable)
-    {
-        button.SetActive(enable);
-        if (enable)
-        {
-            Cursor.lockState = CursorLockMode.Confined;
-        }
-        else
-        {
-            Cursor.lockState = CursorLockMode.Locked;
-        }
-    }
-
-    public void SetGameObject(GameObject findObject, out GameObject discoverObject, string findName)
-    {
-        discoverObject = null;
-        Transform[] allChildren = findObject.GetComponentsInChildren<Transform>();
-        foreach (Transform child in allChildren)
-        {
-            if (child.name == findName)
+            if (Input.GetKeyDown(KeyCode.BackQuote))
             {
-                discoverObject = child.gameObject;
-                return;
+                use = !use;
+                UseWindow(use);
+            }
+        }
+
+        public void SetLog(string logString, string stackTrace, LogType type)
+        {
+            sw1 = new StreamWriter(m_FilePath1, true);
+            sw2 = new StreamWriter(m_FilePath2, true);
+            changedStr.Clear();
+            changedStr.AppendFormat("[{0}]{1}\n", DateTime.Now.ToString(),logString);
+            //string str = "["+DateTime.Now.ToString()+ "]";
+            if (LogType.Exception == type)
+            {
+                changedStr.Append(stackTrace);
+                UseWindow(true);
+                logObj.SetActive(false);
+                exceptionObj.SetActive(true);
+                exceptionText.color = Color.red;
+                exceptionText.text = changedStr.ToString();
+                sw2.WriteLine(changedStr);
+            }
+            else
+            {
+                if (allLogText.Length >= 1000000)
+                {
+                    allLogText.Clear();
+                }
+                allLogText.Append(changedStr);
+                logText.text = allLogText.ToString();
+                sw1.Write(changedStr);
+            }
+            scrollRect.verticalNormalizedPosition = 0.0f;
+            sw1.Close();
+            sw2.Close();
+        }
+
+        void OnDisable()
+        {
+            sw1 = new StreamWriter(m_FilePath1, true);
+            sw2 = new StreamWriter(m_FilePath2, true);
+            Application.logMessageReceived -= SetLog;
+            sw1.Flush();
+            sw2.Flush();
+            sw1.Close();
+            sw2.Close();
+        }
+
+        public void UseWindow(bool enable)
+        {
+            canvasObj.SetActive(enable);
+            CursorUse(enable);
+            use = enable;
+        }
+
+        public void CursorUse(bool enable)
+        {
+            button.SetActive(enable);
+            if (enable)
+            {
+                Cursor.lockState = CursorLockMode.Confined;
+            }
+            else
+            {
+                Cursor.lockState = CursorLockMode.Locked;
+            }
+        }
+
+        public void SetGameObject(GameObject findObject, out GameObject discoverObject, string findName)
+        {
+            discoverObject = null;
+            Transform[] allChildren = findObject.GetComponentsInChildren<Transform>();
+            foreach (Transform child in allChildren)
+            {
+                if (child.name == findName)
+                {
+                    discoverObject = child.gameObject;
+                    return;
+                }
             }
         }
     }

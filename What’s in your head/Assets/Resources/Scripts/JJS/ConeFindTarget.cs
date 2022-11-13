@@ -57,50 +57,50 @@ namespace JJS
             }
             return newDirection;
         }
-        void Update()
-        {
-            //DiscoveryTargetBool();
-        }
-        void OnDrawGizmos()
-        {
-            OnDrawGizmosRay();
-        }
+        //void Update()
+        //{
+        //    //DiscoveryTargetBool();
+        //}
+        //void OnDrawGizmos()
+        //{
+        //    OnDrawGizmosRay();
+        //}
 
-        void OnDrawGizmosRay()
-        {
+        //void OnDrawGizmosRay()
+        //{
 
-            Gizmos.DrawWireSphere(transform.position, _discoveryRadius);
+        //    Gizmos.DrawWireSphere(transform.position, _discoveryRadius);
 
-            Vector3 originPos = transform.position;
-            Vector3 lookDir = transform.forward;
-            Vector3 rightDir = AngleToDirection(transform, _viewAngle, type.x);
-            Vector3 leftDir = AngleToDirection(transform, -_viewAngle, type.x);
-            Vector3 upDir = AngleToDirection(transform, _viewAngle, type.y);
-            Vector3 downDir = AngleToDirection(transform, -_viewAngle, type.y);
+        //    Vector3 originPos = transform.position;
+        //    Vector3 lookDir = transform.forward;
+        //    Vector3 rightDir = AngleToDirection(transform, _viewAngle, type.x);
+        //    Vector3 leftDir = AngleToDirection(transform, -_viewAngle, type.x);
+        //    Vector3 upDir = AngleToDirection(transform, _viewAngle, type.y);
+        //    Vector3 downDir = AngleToDirection(transform, -_viewAngle, type.y);
 
-            ray[0].origin = transform.position;
-            ray[0].direction = rightDir;
-            ray[1].origin = transform.position;
-            ray[1].direction = leftDir;
-            ray[2].origin = transform.position;
-            ray[2].direction = upDir;
-            ray[3].origin = transform.position;
-            ray[3].direction = downDir;
-            ray[4].origin = transform.position;
-            ray[4].direction = lookDir;
+        //    ray[0].origin = transform.position;
+        //    ray[0].direction = rightDir;
+        //    ray[1].origin = transform.position;
+        //    ray[1].direction = leftDir;
+        //    ray[2].origin = transform.position;
+        //    ray[2].direction = upDir;
+        //    ray[3].origin = transform.position;
+        //    ray[3].direction = downDir;
+        //    ray[4].origin = transform.position;
+        //    ray[4].direction = lookDir;
 
 
-            for (int i = 0; i < 2; i++)
-            {
-                Debug.DrawLine(ray[i].origin, ray[i].origin + ray[i].direction * _discoveryRadius, Color.red);
-            }
-            for (int i = 2; i < 4; i++)
-            {
-                Debug.DrawLine(ray[i].origin, ray[i].origin + ray[i].direction * _discoveryRadius, Color.blue);
-            }
+        //    for (int i = 0; i < 2; i++)
+        //    {
+        //        Debug.DrawLine(ray[i].origin, ray[i].origin + ray[i].direction * _discoveryRadius, Color.red);
+        //    }
+        //    for (int i = 2; i < 4; i++)
+        //    {
+        //        Debug.DrawLine(ray[i].origin, ray[i].origin + ray[i].direction * _discoveryRadius, Color.blue);
+        //    }
 
-            Debug.DrawRay(ray[4].origin, ray[4].direction * _discoveryRadius, Color.green);
-        }
+        //    Debug.DrawRay(ray[4].origin, ray[4].direction * _discoveryRadius, Color.green);
+        //}
         public bool DiscoveryTargetBool()
         {
             Vector3 originPos = transform.position;

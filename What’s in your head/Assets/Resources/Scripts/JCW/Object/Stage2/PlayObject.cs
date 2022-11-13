@@ -33,7 +33,6 @@ namespace JCW.Object
             {
                 if(!isStart)
                 {
-                    Debug.Log("다시 작동해야해");
                     StopAllCoroutines();
                     StartCoroutine(nameof(MoveToEnd));
                     isStart = true;
@@ -41,7 +40,6 @@ namespace JCW.Object
             }
             else if (isStart)
             {
-                Debug.Log("돌아가야해");
                 StopAllCoroutines();
                 isStart = false;
                 StartCoroutine(nameof(MoveToFirst));                
@@ -64,10 +62,8 @@ namespace JCW.Object
                 yield break;
 
             // 현재 인덱스와 인덱스 사이라면, 미리 이동시켜놓음.
-            Debug.Log("다시 작동해야해 - 시작");
             while (true)
             {
-                Debug.Log("다시 작동해야해 - 미리 세팅");
                 if (transform.position == positionList[curIndex])
                     break;
                 transform.position = Vector3.MoveTowards(transform.position, positionList[curIndex], Time.deltaTime * recieveMovingSpeed);
@@ -78,7 +74,6 @@ namespace JCW.Object
 
             while(curIndex < maxIndex)
             {
-                Debug.Log("다시 작동해야해 - 이동");
                 transform.position = Vector3.MoveTowards(transform.position, positionList[curIndex+1], Time.deltaTime * recieveMovingSpeed);
                 if (Vector3.SqrMagnitude(transform.position - positionList[curIndex+1]) <= 0.05f)
                     transform.position = positionList[++curIndex];
@@ -92,7 +87,6 @@ namespace JCW.Object
         {
             if (positionList.Count <= 1)
                 yield break;
-            Debug.Log("돌아가야해 - 시작");
             // 현재 인덱스와 인덱스 사이라면, 미리 이동시켜놓음.
             while (true)
             {
@@ -121,7 +115,6 @@ namespace JCW.Object
         {
             if(collision.gameObject.CompareTag("Nella") || collision.gameObject.CompareTag("Steady"))
             {
-                Debug.Log("오브젝트 접근");
                 Transform playerTF = collision.gameObject.transform;
                 if (isLethal)
                     playerTF.gameObject.GetComponent<PlayerController>().GetDamage(12, DamageType.Dead);
@@ -144,7 +137,6 @@ namespace JCW.Object
         {
             if (other.CompareTag("Nella") || other.CompareTag("Steady"))
             {
-                Debug.Log("오브젝트 접근");
                 Transform playerTF = other.transform;
                 if (isLethal)
                     playerTF.gameObject.GetComponent<PlayerController>().GetDamage(12, DamageType.Dead);
