@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
+using JCW.UI;
 using JCW.UI.InGame;
+using JCW.UI.Options.InputBindings;
 using Photon.Pun;
 using UnityEngine;
 using YC.Photon;
@@ -33,6 +35,7 @@ public class GameManager : MonoBehaviour, IPunObservable
 
     // 현재 탑뷰인지
     [Header("탑뷰")] public bool isTopView;
+    [Header("사이드뷰")] public bool isSideView;
     [Header("테스트용")] public bool isTest;
 
     // 랜덤시드
@@ -58,21 +61,22 @@ public class GameManager : MonoBehaviour, IPunObservable
 
         photonView = GetComponent<PhotonView>();
 
-        //{
-        //    GameObject obj = new GameObject("_GameManager");
-        //    photonView = obj.AddComponent<PhotonView>();
-        //    photonView.ViewID = PhotonNetwork.AllocateViewID(0);
-        //    photonView.observableSearch = PhotonView.ObservableSearch.AutoFindAll;
-        //}
-
         curStageIndex = 0;
         curSection = 0;
     }
-
     private void Update()
     {
-        if(Input.GetKeyDown(KeyCode.Keypad0))
+        if (Input.GetKeyDown(KeyCode.Keypad1))
             isTopView = !isTopView;
+        if (Input.GetKeyDown(KeyCode.Keypad2))
+            isSideView = !isSideView;
+        if (KeyManager.Instance.GetKeyDown(PlayerAction.Pause))
+        {
+            if (!pauseUI.activeSelf)
+                pauseUI.SetActive(true);
+            else
+                PauseManager.Instance.CloseUI();
+        }
     }
 
     public void SetRandomSeed()

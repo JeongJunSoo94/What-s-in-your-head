@@ -36,7 +36,7 @@ namespace JCW.Network
             if (Instance == null)
             {
                 Instance = this;
-                myPhotonView = gameObject.GetComponent<PhotonView>();
+                myPhotonView = GetComponent<PhotonView>();
                 myRoomOptions = new()
                 {
                     MaxPlayers = 2,    // 최대 접속자수, 포톤 무료는 20CCU이므로 20 초과로는 못한다.
@@ -121,13 +121,18 @@ namespace JCW.Network
             }
             //StartCoroutine(nameof(MakeChar));
         }
-        public void ChangeStage()
-        {            
-            PhotonNetwork.LoadLevel(++GameManager.Instance.curStageIndex);
-            if (GameManager.Instance.curStageIndex == 1)
-                StartCoroutine(nameof(MakeChar));
+        public void MakeCharacter()
+        {
+            //PhotonNetwork.LoadLevel(GameManager.Instance.curStageIndex * 2 - 2 + GameManager.Instance.curStageType);
+            myPhotonView.RPC(nameof(StartMakeChar), RpcTarget.AllViaServer);
             //if(PhotonNetwork.IsMasterClient)
             //myPhotonView.RPC(nameof(ChangeStageRPC), RpcTarget.AllViaServer);
+        }   
+
+        [PunRPC]
+        void StartMakeChar()
+        {
+            StartCoroutine(nameof(MakeChar));
         }
 
         // 친구 검색창에서 돋보기 버튼 누르면 작동
@@ -176,7 +181,7 @@ namespace JCW.Network
 
         IEnumerator MakeChar()
         {
-            yield return new WaitForSeconds(0.3f);
+            yield return new WaitUntil(() => GameManager.Instance.characterOwner.Count == 2);
 
             // 넬라인 지 아닌지 판단해서 캐릭터 생성해주면 됨
             // 현재 자신이 마스터인지 아닌지와 어떤 캐릭터를 선택했는지가 담겨있음.
@@ -186,14 +191,14 @@ namespace JCW.Network
                 Debug.Log("넬라 생성");
                 PhotonNetwork.Instantiate("Prefabs/YC/MainCamera_Nella", new Vector3(0, 0, 0), Quaternion.identity, 0);
                 PhotonNetwork.Instantiate("Prefabs/JJS/NellaMousePoint", new Vector3(-10, 0, -5), Quaternion.identity);
-                PhotonNetwork.Instantiate("Prefabs/JCW/JJS_Nella", new Vector3(-5, 0, 0), Quaternion.identity);
+                PhotonNetwork.Instantiate("Prefabs/JCW/JCW_Nella", new Vector3(-5, 100, 0), Quaternion.identity);
             }
             else
             {
                 Debug.Log("스테디 생성");
                 PhotonNetwork.Instantiate("Prefabs/YC/MainCamera_Steady", new Vector3(0, 0, 0), Quaternion.identity, 0);
                 PhotonNetwork.Instantiate("Prefabs/JJS/SteadyMousePoint", new Vector3(10, 0, -5), Quaternion.identity);
-                PhotonNetwork.Instantiate("Prefabs/JCW/JJS_Steady", new Vector3(5, 0, 0), Quaternion.identity);
+                PhotonNetwork.Instantiate("Prefabs/JCW/JCW_Steady", new Vector3(5, 100, 0), Quaternion.identity);
             }
             StopAllCoroutines();
         }

@@ -37,14 +37,13 @@ namespace JCW.UI.Options
 
         public void ClickTab(Button _button)
         {
-            if (!PhotonNetwork.IsMasterClient)
-                return;
+            //if (!PhotonNetwork.IsMasterClient)
+                //return;
             for (int i = 0 ; i<tabButtons.Count ; ++i)
             {
                 // ´­·ÁÁø ÅÇÀ» ²¨ÁÖ±â
                 if (tabButtons[i] == _button)
                 {
-                    SoundManager.Instance.PlayUI("category_change");
                     curTabIndex = i;
                     _button.interactable = false;
                     _button.gameObject.transform.GetChild(1).gameObject.SetActive(true);

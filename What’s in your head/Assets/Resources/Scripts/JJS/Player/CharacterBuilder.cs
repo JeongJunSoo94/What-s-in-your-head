@@ -6,7 +6,7 @@ using KSU.AutoAim.Player;
 using JJS.Weapon;
 using YC.Camera_;
 namespace JJS
-{ 
+{
     public class CharacterBuilder : MonoBehaviour
     {
         public bool single;
@@ -55,7 +55,7 @@ namespace JJS
             steady = GameObject.FindWithTag("Steady");
         }
 
-        public virtual void SetCharacterComponent(GameObject player, MouseControllerWeaponData data,string findWeaponPath)
+        public virtual void SetCharacterComponent(GameObject player, MouseControllerWeaponData data, string findWeaponPath)
         {
             if (player != null)
             {
@@ -100,7 +100,7 @@ namespace JJS
             }
         }
 
-        public void SetCharacterGameObject(GameObject findObject,out GameObject discoverObject, string findName)
+        public void SetCharacterGameObject(GameObject findObject, out GameObject discoverObject, string findName)
         {
             discoverObject = null;
             Transform[] allChildren = findObject.GetComponentsInChildren<Transform>();
@@ -116,15 +116,15 @@ namespace JJS
 
         public void SetWeaponGameObject(GameObject findObject, out GameObject discoverObject, string findName)
         {
-            discoverObject =null;
+            discoverObject = null;
             Transform findObj = findObject.transform.Find(findName);
-            if (findObj!=null)
+            if (findObj != null)
             {
                 discoverObject = findObj.gameObject;
             }
         }
 
-        public GameObject CreateWeapon(GameObject weapon,Transform parent)
+        public GameObject CreateWeapon(GameObject weapon, Transform parent)
         {
             GameObject clone = Instantiate(weapon);
             clone.name = weapon.name;
@@ -152,6 +152,7 @@ namespace JJS
             if (player != null)
             {
                 PlayerMouseController playerMouse = player.GetComponent<PlayerMouseController>();
+
                 if (playerMouse.weaponInfo.Length != 0)
                 {
                     if (playerMouse.weaponInfo[playerMouse.GetUseWeapon()].weapon.name == "CymbalsPosition")
@@ -169,6 +170,11 @@ namespace JJS
                 {
                     player.GetComponent<SteadyCymbalsAction>().enabled = false;
                     player.GetComponent<SteadyGrappleAction>().enabled = false;
+                }
+                if (playerMouse is SteadyMouseController)
+                {
+                    SteadyMouseController steadyMouse = playerMouse as SteadyMouseController;
+                    steadyMouse.SetAimWeapon();
                 }
             }
         }

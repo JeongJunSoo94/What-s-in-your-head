@@ -48,6 +48,8 @@ namespace JCW.Object.Stage1
         IEnumerator Reset()
         {            
             yield return ws;
+            if (!isStart)
+                yield break;
             isStart = false;
             GetComponent<Animator>().SetBool("isCheck", false);
             lightButton.GetChild(0).gameObject.SetActive(true);

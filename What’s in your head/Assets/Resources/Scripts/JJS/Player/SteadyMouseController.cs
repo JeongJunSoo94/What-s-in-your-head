@@ -22,16 +22,7 @@ namespace JJS
         {
             cameraMain = this.gameObject.transform.GetComponent<CameraController>().FindCamera(); // 멀티용
 
-            SteadyCymbalsAction steadyCymbalsWeapon = GetComponent<SteadyCymbalsAction>();
-            SteadyGrappleAction steadyGrappleWeapon = GetComponent<SteadyGrappleAction>();
-            if (steadyCymbalsWeapon.enabled)
-            {
-                autoAimWeapon = GetComponent<SteadyCymbalsAction>();
-            }
-            else if (steadyGrappleWeapon.enabled)
-            {
-                autoAimWeapon = GetComponent<SteadyGrappleAction>();
-            }
+            SetAimWeapon();
 
             glass.mainCamera = cameraMain; // 멀티용
             if (point == null)
@@ -110,8 +101,23 @@ namespace JJS
                     }
                 }
             }
-                
+
         }
+
+        public void SetAimWeapon()
+        {
+            SteadyCymbalsAction steadyCymbalsWeapon = GetComponent<SteadyCymbalsAction>();
+            SteadyGrappleAction steadyGrappleWeapon = GetComponent<SteadyGrappleAction>();
+            if (steadyCymbalsWeapon.enabled)
+            {
+                autoAimWeapon = GetComponent<SteadyCymbalsAction>();
+            }
+            else if (steadyGrappleWeapon.enabled)
+            {
+                autoAimWeapon = GetComponent<SteadyGrappleAction>();
+            }
+        }
+
         public void StopBeam()
         {
             notRotatoin = false;

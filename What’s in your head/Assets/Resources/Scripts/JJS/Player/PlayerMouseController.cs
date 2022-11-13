@@ -109,6 +109,16 @@ namespace JJS
             }
         }
 
+        public virtual void SideViewUpdate()
+        {
+            ray = cameraMain.ScreenPointToRay(Input.mousePosition);
+            if (Physics.Raycast(ray, out hit, 1000f, LayerMask.NameToLayer("Defalut"), QueryTriggerInteraction.Ignore))
+            {
+                point.transform.position = hit.point;
+            }
+
+        }
+
         public virtual void WeaponSwapRPC()
         {
             photonView.RPC(nameof(WeaponSwap), RpcTarget.AllViaServer);

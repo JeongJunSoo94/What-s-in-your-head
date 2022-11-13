@@ -41,6 +41,8 @@ namespace KSU.AutoAim.Player
 
         void Update()
         {
+            if (Input.GetKeyDown(KeyCode.Mouse0))
+                Debug.Log(Input.mousePosition);
             SearchAutoAimTargetdObject();
             if (photonView.IsMine)
             {
@@ -90,10 +92,24 @@ namespace KSU.AutoAim.Player
             if (playerState.isOutOfControl || playerState.isStopped)
                 return;
 
-            if (steadyInteractionState.isAutoAimObjectFounded)
+            if(GameManager.Instance.isSideView)
+            {
+                Vector3 target = Vector3.zero;
+                Ray ray = playerCamera.ScreenPointToRay(Input.mousePosition);
+                RaycastHit hit;
+                if (Physics.Raycast(ray, out hit, 1000f, LayerMask.NameToLayer("Defalut"), QueryTriggerInteraction.Ignore))
+                {
+                    target = hit.point;
+                }
+                Vector3 forward = target - autoAimObjectSpawner.transform.position;
+                forward.z = 0;  
+                forward = forward.normalized * autoAimObjectRange;
+                playerController.photonView.RPC(nameof(SetShoot), RpcTarget.AllViaServer, autoAimObjectSpawner.transform.position + forward);
+            }
+            else if (steadyInteractionState.isAutoAimObjectFounded)
             {
                 // µµÂø À§Ä¡: autoAimPosition
-                shootPosition = autoAimPosition.position;
+                playerController.photonView.RPC(nameof(SetShoot), RpcTarget.AllViaServer, autoAimPosition.position);
             }
             else
             {
@@ -102,13 +118,19 @@ namespace KSU.AutoAim.Player
                 bool rayCheck = Physics.Raycast(playerCamera.transform.position, playerCamera.transform.forward, out hit, autoAimObjectRange, -1, QueryTriggerInteraction.Ignore);
                 if (rayCheck && (hit.distance > Vector3.Distance(transform.position, playerCamera.transform.position)))
                 {
-                    shootPosition = hit.point;
+                    playerController.photonView.RPC(nameof(SetShoot), RpcTarget.AllViaServer, hit.point);
                 }
                 else
                 {
-                    shootPosition = playerCamera.transform.position + playerCamera.transform.forward * autoAimObjectRange;
+                    playerController.photonView.RPC(nameof(SetShoot), RpcTarget.AllViaServer, playerCamera.transform.position + playerCamera.transform.forward * autoAimObjectRange);
                 }
             }
+        }
+
+        [PunRPC]
+        void SetShoot(Vector3 pos)
+        {
+            shootPosition = pos;
         }
 
         protected override void InputFire()

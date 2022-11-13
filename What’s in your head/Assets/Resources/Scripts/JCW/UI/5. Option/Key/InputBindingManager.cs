@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
+using JCW.AudioCtrl;
 
 namespace JCW.UI.Options.InputBindings
 {
@@ -60,16 +61,18 @@ namespace JCW.UI.Options.InputBindings
 
         private void InitButtonListeners()
         {
-            _saveButton.onClick.AddListener(() => {_binding.SaveToFile();});            
+            _saveButton.onClick.AddListener(() => { SoundManager.Instance.PlayUI("ButtonClick"); _binding.SaveToFile();});            
             _backButton.onClick.AddListener(() => 
-            { 
+            {
                 // 뒤로가기 시, 파일에서 다시 로드 후 세팅.
+                SoundManager.Instance.PlayUI("BackButton");
                 _binding.LoadFromFile(); 
                 KeyManager.Instance.KeySet(_binding); 
                 RefreshAllBindingUIs(); TurnOff();
             });
             _resetButton.onClick.AddListener(() => 
-            { 
+            {
+                SoundManager.Instance.PlayUI("ButtonClick");
                 _binding.ResetAll(); 
                 _binding.SaveToFile();
                 RefreshAllBindingUIs();
