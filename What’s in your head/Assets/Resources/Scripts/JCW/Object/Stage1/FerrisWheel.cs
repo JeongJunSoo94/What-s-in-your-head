@@ -1,5 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
+using JCW.AudioCtrl;
+using Photon.Pun;
 using UnityEngine;
 
 
@@ -16,7 +18,7 @@ namespace JCW.Object.Stage1
             cabins = transform.GetComponentsInChildren<Transform>();
             StartCoroutine(nameof(WaitForPlayer));
         }
-
+        
 
         void FixedUpdate()
         {
@@ -30,9 +32,9 @@ namespace JCW.Object.Stage1
         }
 
         IEnumerator WaitForPlayer()
-        {
-            yield return null;
-            //yield return new WaitUntil(() => PhotonNetwork.PlayerList.Length == 2);
+        {            
+            yield return new WaitUntil(() => PhotonNetwork.PlayerList.Length == 2);
+            SoundManager.Instance.PlayBGM_RPC("S1S2");
             isStart = true;
         }
     }

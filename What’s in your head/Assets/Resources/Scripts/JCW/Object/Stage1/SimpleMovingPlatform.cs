@@ -57,7 +57,6 @@ namespace JCW.Object.Stage1
         {
             if (other.CompareTag("Nella") || other.CompareTag("Steady"))
             {
-                Debug.Log(other.name + " 이 자식이 되었습니다.");
                 Transform playerTF = other.transform;
                 playerTF.parent = this.transform;
             }
@@ -66,7 +65,6 @@ namespace JCW.Object.Stage1
         {
             if (other.CompareTag("Nella") || other.CompareTag("Steady"))
             {
-                Debug.Log(other.name + " 이 자식에서 나왔습니다.");
                 Transform playerTF = other.transform;
                 playerTF.parent = null;
             }

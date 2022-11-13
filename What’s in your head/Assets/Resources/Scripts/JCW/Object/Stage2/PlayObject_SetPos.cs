@@ -10,6 +10,7 @@ namespace JCW.Object
     {
         [Header("현 위치 저장")] [SerializeField] bool needToSetPos = false;
         [Header("리스트 초기화")] [SerializeField] bool needToClear = false;
+        [Header("리스트 고정")] [SerializeField] bool isSet = false;
         PlayObject playObject;
 
         private void Awake()
@@ -38,22 +39,21 @@ namespace JCW.Object
                 Destroy(this);
                 return;
             }
-            if(needToSetPos)
+            if (isSet)
+            {
+                needToClear = false;
+                needToSetPos = false;
+            }
+            if(needToSetPos && !isSet)
             {
                 playObject.SetPositionToList(transform.position);
                 needToSetPos = false;
             }
-            if(needToClear)
+            if(needToClear && !isSet)
             {
                 playObject.ClearList();
                 needToClear = false;
             }
-        }
-
-        private void OnApplicationQuit()
-        {
-            needToSetPos = false;
-            needToClear = false;
         }
     }
 }

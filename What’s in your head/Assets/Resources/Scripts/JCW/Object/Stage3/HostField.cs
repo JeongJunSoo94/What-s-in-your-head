@@ -32,7 +32,7 @@ namespace JCW.Object
 
         int convertWidthIndex;
         //int convertIndex;
-        int convertHeightIndex;
+        //int convertHeightIndex;
 
         bool isStart = false;
         bool isDead = false;
@@ -48,7 +48,7 @@ namespace JCW.Object
         {
             curHP = maxHP;            
             audioSource = GetComponent<AudioSource>();
-            AudioCtrl.AudioSettings.SetAudio(audioSource, 1f, 60f);
+            AudioCtrl.AudioSettings.SetAudio(audioSource, 0.05f, 30f);
             if (!canInfect)
             {                
                 myIndex = transform.GetSiblingIndex();
@@ -59,7 +59,7 @@ namespace JCW.Object
                 mediator = transform.parent.gameObject.GetComponent<MakeHostField>();
                 //convertIndex = transform.parent.gameObject.GetComponent<ContaminationFieldSetting>().count;
                 convertWidthIndex = transform.parent.gameObject.GetComponent<ContaminationFieldSetting>().widthCount;
-                convertHeightIndex = transform.parent.gameObject.GetComponent<ContaminationFieldSetting>().heightCount;
+                //convertHeightIndex = transform.parent.gameObject.GetComponent<ContaminationFieldSetting>().heightCount;
                 nextTargetOffset = new() { 2, -2, 2 * convertWidthIndex, -2 * convertWidthIndex };
             }
             animator = GetComponent<Animator>();
@@ -69,6 +69,8 @@ namespace JCW.Object
         {
             if (isPurified)
                 this.gameObject.SetActive(false);
+            else
+                SoundManager.Instance.Play3D_RPC("ContaminationFieldCreated", audioSource);
         }
 
         private void OnDisable()
@@ -144,8 +146,7 @@ namespace JCW.Object
                 gameObject.SetActive(true);
                 SetIndex(index);
                 isStart = true;
-                audioSource.Play();
-                SoundManager.Instance.Play3D_RPC("ContaminationFieldCreated", audioSource);
+                //audioSource.Play();                
             }
             
         }
