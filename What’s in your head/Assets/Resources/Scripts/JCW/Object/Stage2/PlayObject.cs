@@ -19,8 +19,6 @@ namespace JCW.Object
 
         bool isStart = false;
 
-        float curIndex_float = 0f;
-
         private void Awake()
         {
             if (positionList.Count == 0)
