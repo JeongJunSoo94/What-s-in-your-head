@@ -28,7 +28,6 @@ namespace JCW.Object
         int randomIndex = 0;
 
         PhotonView photonView;
-        AudioSource audioSource;
 
         bool isStart;
 
@@ -40,16 +39,11 @@ namespace JCW.Object
                 this.enabled = false;
                 return;
             }
-            //usingCount = GetComponent<ContaminationFieldSetting>().count;
             usingWidthCount = GetComponent<ContaminationFieldSetting>().widthCount;
             usingHeightCount = GetComponent<ContaminationFieldSetting>().heightCount;
 
             // 스폰될 수 있는 각 꼭지점 정해두기
-            firstSpawnPlace = new() { 1, 2* usingWidthCount - 1, 2* usingWidthCount * (usingHeightCount-1)+1, 2* usingWidthCount * usingHeightCount - 1 };
-
-            audioSource = GetComponent<AudioSource>();
-            //Debug.Log(Vector3.Distance(this.transform.position, transform.GetChild(0).position) + 30f);
-            AudioCtrl.AudioSettings.SetAudio(audioSource, 1f, Vector3.Distance(this.transform.position, transform.GetChild(0).position) + 30f);
+            firstSpawnPlace = new() { 1, 2* usingWidthCount - 1, 2* usingWidthCount * (usingHeightCount-1)+1, 2* usingWidthCount * usingHeightCount - 1 };          
 
             StartCoroutine(nameof(WaitForPlayer));
         }
@@ -88,7 +82,6 @@ namespace JCW.Object
         [PunRPC]
         void Init(int i)
         {
-            Debug.Log("삭제되는 인덱스 :  " + i);
             firstSpawnPlace.RemoveAt(i);
         }
 
@@ -151,7 +144,7 @@ namespace JCW.Object
                     isStart = true;
                     nextTargetBeforeObj_ready.SetActive(true);
                 }
-                SoundManager.Instance.Play3D_RPC("ContaminationFieldWarn", audioSource);
+                //SoundManager.Instance.Play3D_RPC("ContaminationFieldWarn", audioSource);
                 yield return new WaitForSeconds(0.5f);
             }
                 
@@ -179,6 +172,7 @@ namespace JCW.Object
                 randomIndex = random.Next(0, 4);
                 photonView.RPC(nameof(Init), RpcTarget.AllViaServer, randomIndex);
                 isStart = true;
+                SoundManager.Instance.PlayBGM_RPC("S3S2");
             }
         }
     }

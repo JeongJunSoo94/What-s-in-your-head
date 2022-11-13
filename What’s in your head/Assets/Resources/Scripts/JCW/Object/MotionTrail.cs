@@ -29,7 +29,7 @@ namespace JCW.Effect
                 go.transform.parent = TrailContainer.transform;
                 go.SetActive(false);
                 go.AddComponent<MeshRenderer>();
-                go.GetComponent<MeshRenderer>().material = mat;
+                go.GetComponent<MeshRenderer>().sharedMaterial = mat;
                 go.AddComponent<MeshFilter>();
                 objQueue.Enqueue(go);
             }

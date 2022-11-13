@@ -261,12 +261,12 @@ namespace KSU
         {
             InitInteraction();
             InitController();
-            if (photonView.IsMine)
-            { 
-                GameManager.Instance.curPlayerHP = 12;
-            }
-
             characterState.InitState(true, false);
+
+            if (!photonView.IsMine)
+                return;
+
+            GameManager.Instance.curPlayerHP = 12;
 
             string path = Application.dataPath + "/Resources/CheckPointInfo/Stage" + GameManager.Instance.curStageIndex
                 + "/" + GameManager.Instance.curStageType + "/Section" + GameManager.Instance.curSection + ".json";
