@@ -40,13 +40,14 @@ namespace JCW.Object
         {
             if (other.CompareTag("Nella") || other.CompareTag("Steady"))
             {
+                Debug.Log("¡¢√À");
                 if (!firstContact)
-                {                    
+                {
                     if (PhotonNetwork.PlayerList.Length < 2)
                         return;
-                    firstContact = true;
                     if (!other.GetComponent<PlayerState>().isMine)
                         return;
+                    firstContact = true;
                     Vector3 pos = transform.position;
                     Quaternion rot = transform.rotation;                    
                     photonView.RPC(nameof(Check), RpcTarget.AllViaServer, pos, rot);
