@@ -13,7 +13,7 @@ namespace JCW.AudioCtrl
         UI,
         End,
     }
-    
+
     [RequireComponent(typeof(PhotonView))]
     public class SoundManager : MonoBehaviour
     {
@@ -39,7 +39,7 @@ namespace JCW.AudioCtrl
         public static SoundManager Instance;
         private void Awake()
         {
-            if (Instance==null)
+            if (Instance == null)
             {
                 Instance = this;
                 DontDestroyOnLoad(this.gameObject);
@@ -53,7 +53,7 @@ namespace JCW.AudioCtrl
         private void OnEnable()
         {
             soundTypes = System.Enum.GetNames(typeof(JCW.AudioCtrl.Sound));
-            for (int i = 0 ; i < (int)Sound.End ; ++i)
+            for (int i = 0; i < (int)Sound.End; ++i)
             {
                 GameObject obj = new() { name = soundTypes[i] };
                 audioSources[i] = obj.AddComponent<AudioSource>();
@@ -67,10 +67,10 @@ namespace JCW.AudioCtrl
         // 비우기
         public void Clear()
         {
-            for (int i = 0 ; i<audioSources.Length ; ++i)
+            for (int i = 0; i < audioSources.Length; ++i)
             {
                 audioSources[i].clip = null;
-                audioSources[i].Stop();                
+                audioSources[i].Stop();
             }
             audioClips.Clear();
             UIClips.Clear();
@@ -83,7 +83,7 @@ namespace JCW.AudioCtrl
             if (!name.Contains($"Sounds/{soundTypes[(int)soundType]}"))
                 clipName = $"Sounds/{soundTypes[(int)soundType]}/{name}";
 
-            switch(soundType)
+            switch (soundType)
             {
                 case Sound.EFFECT:
                     return audioClips[clipName];
@@ -129,15 +129,15 @@ namespace JCW.AudioCtrl
         }
         public void SetUp()
         {
-            for (int i = 0 ; i<prevAudioClips.Count ; ++i)
+            for (int i = 0; i < prevAudioClips.Count; ++i)
             {
                 SetAudioClip("Sounds/EFFECT/" + prevAudioClips[i].name, Sound.EFFECT);
             }
-            for (int i = 0 ; i<prevUIClips.Count ; ++i)
+            for (int i = 0; i < prevUIClips.Count; ++i)
             {
                 SetAudioClip("Sounds/UI/" + prevUIClips[i].name, Sound.UI);
             }
-            for (int i = 0 ; i<prev3DClips.Count ; ++i)
+            for (int i = 0; i < prev3DClips.Count; ++i)
             {
                 SetAudioClip("Sounds/DISTANCE/" + prev3DClips[i].name, Sound.DISTANCE);
             }
@@ -176,8 +176,8 @@ namespace JCW.AudioCtrl
             if (audioSources[(int)Sound.EFFECT].isPlaying)
                 audioSources[(int)Sound.EFFECT].Stop();
         }
-       
-        
+
+
 
         public void PlayEffectNoOverlap_RPC(string path)
         {
@@ -237,8 +237,8 @@ namespace JCW.AudioCtrl
                 return;
             }
             else
-                Debug.Log(path +"를 실행합니다");
-                
+                Debug.Log(path + "를 실행합니다");
+
             AudioSource curAudio = audioSources[(int)Sound.BGM];
             if (curAudio.isPlaying)
                 curAudio.Stop();
@@ -281,7 +281,7 @@ namespace JCW.AudioCtrl
 
         [PunRPC]
         public void Play3D(string path)
-        {            
+        {
             AudioClip audioClip = GetAudioClips(path, Sound.DISTANCE);
             if (audioClip == null)
             {
@@ -289,9 +289,9 @@ namespace JCW.AudioCtrl
                 return;
             }
             // 해당 음원 위치에서 클립 재생
-            otherSource.PlayOneShot(audioClip);            
+            otherSource.PlayOneShot(audioClip);
         }
-        
+
         #endregion
 
 
