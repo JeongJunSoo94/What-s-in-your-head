@@ -49,7 +49,7 @@ namespace JCW.Object
                         return;
                     firstContact = true;
                     Vector3 pos = transform.position;
-                    Quaternion rot = transform.rotation;                    
+                    Quaternion rot = transform.rotation;
                     photonView.RPC(nameof(Check), RpcTarget.AllViaServer, pos, rot);
                 }
             }
@@ -68,10 +68,9 @@ namespace JCW.Object
             string path = Application.dataPath + "/Resources/CheckPointInfo/Stage" + curStage + "/" + curStageType + "/";
             if (!Directory.Exists(path))
                 Directory.CreateDirectory(path);
-            File.WriteAllText(path + "Section" +GameManager.Instance.curSection +".json", infoJson.ToString());            
+            File.WriteAllText(path + "Section" + GameManager.Instance.curSection + ".json", infoJson.ToString());
             //Debug.Log("체크포인트 저장");
             Destroy(this);
         }
     }
 }
-

@@ -13,14 +13,13 @@ namespace JCW.UI.InGame.Indicator
     {
         [Header("콜라이더 범위")] [SerializeField] [Range(0, 100)] float range;
         PhotonView photonView;
-        OneIndicator targetIndicator;
+        [Header("OneIndicator UI")] [SerializeField] OneIndicator targetIndicator;
         Camera mainCam;
 
         private void Awake()
         {
             this.transform.localScale = new Vector3(range, range, range);
             photonView = GetComponent<PhotonView>();
-            targetIndicator = transform.parent.GetChild(3).GetComponent<OneIndicator>();
         }
         private void OnTriggerEnter(Collider other)
         {

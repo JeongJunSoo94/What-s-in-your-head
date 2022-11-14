@@ -11,7 +11,6 @@ GameObject:
   - component: {fileID: 4426005072648402585}
   - component: {fileID: 4426005072651767559}
   - component: {fileID: 4426005072650792297}
-  - component: {fileID: 4426005071963945127}
   - component: {fileID: 4426005072651767557}
   - component: {fileID: 4426005072651767558}
   m_Layer: 3
@@ -19,7 +18,7 @@ GameObject:
   m_TagString: Bush
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &4426005072648402585
 Transform:
@@ -86,25 +85,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!205 &4426005071963945127
-LODGroup:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4426005072648602003}
-  serializedVersion: 2
-  m_LocalReferencePoint: {x: -0.0365991, y: 0.49699384, z: -0.010445833}
-  m_Size: 1.6058847
-  m_FadeMode: 0
-  m_AnimateCrossFading: 0
-  m_LastLODIsBillboard: 0
-  m_LODs:
-  - screenRelativeHeight: 0.007932555
-    fadeTransitionWidth: 0
-    renderers:
-    - renderer: {fileID: 4426005072650792297}
-  m_Enabled: 1
 --- !u!114 &4426005072651767557
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -144,6 +124,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5680084253001078996}
   - component: {fileID: 5680084253001078997}
+  - component: {fileID: 5537004313051404266}
   m_Layer: 3
   m_Name: MapObj_Bush2
   m_TagString: Untagged
@@ -160,7 +141,7 @@ Transform:
   m_GameObject: {fileID: 5680084253001078998}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -20.6, y: 0, z: 2.02}
-  m_LocalScale: {x: 3, y: 3, z: 3}
+  m_LocalScale: {x: 2, y: 2, z: 2}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 5680084254064749419}
@@ -180,6 +161,25 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5b801445afcb26e46933bbba18f7aeb7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!205 &5537004313051404266
+LODGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5680084253001078998}
+  serializedVersion: 2
+  m_LocalReferencePoint: {x: -0.036644876, y: 0.63999385, z: -0.010445833}
+  m_Size: 1.6058847
+  m_FadeMode: 0
+  m_AnimateCrossFading: 0
+  m_LastLODIsBillboard: 0
+  m_LODs:
+  - screenRelativeHeight: 0.098612584
+    fadeTransitionWidth: 0
+    renderers:
+    - renderer: {fileID: 4426005072650792297}
+  m_Enabled: 1
 --- !u!1 &5680084254064749428
 GameObject:
   m_ObjectHideFlags: 0
@@ -205,7 +205,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5680084254064749428}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: -0.2, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []

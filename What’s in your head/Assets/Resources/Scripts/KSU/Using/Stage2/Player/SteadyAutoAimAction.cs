@@ -130,6 +130,7 @@ namespace KSU.AutoAim.Player
         {
             if ((autoAimTargetType == curTargetType))
             {
+                curTargetType = AutoAimTargetType.Null;
                 return steadyInteractionState.isSucceededInHittingTaget;
             }
             return false;
