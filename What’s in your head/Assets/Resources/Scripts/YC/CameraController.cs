@@ -34,6 +34,9 @@ namespace YC.Camera_
         CinemachineVirtualCameraBase topCam;
         CinemachineVirtualCameraBase sideCam;
 
+        CinemachineCollider backCamCol;
+        CinemachineCollider sholderCamCol;
+
         // 가상 카메라 enum State
         enum CamState { back, sholder };
         CamState curCam;
@@ -167,10 +170,6 @@ namespace YC.Camera_
         {
             if (!pv.IsMine) return;
 
-            //Debug.Log(isJumping + "  " + isLerp + "  " + wasEndSet);
-            //Debug.Log(lookatBackObj.transform.position.y);
-            //Debug.Log(followObj.transform.position.y);
-
             if (playerState.isInMaze)
                 return;
 
@@ -241,8 +240,12 @@ namespace YC.Camera_
 
             backCam = Instantiate(CineBack, Vector3.zero, Quaternion.identity).GetComponent<CinemachineVirtualCameraBase>();
             sholderCam = Instantiate(CineSholder, Vector3.zero, Quaternion.identity).GetComponent<CinemachineVirtualCameraBase>();
+
             backCam.GetComponent<CinemachineFreeLook>().m_Lens.FarClipPlane = farValue;
             sholderCam.GetComponent<CinemachineFreeLook>().m_Lens.FarClipPlane = farValue;
+
+            backCamCol = backCam.GetComponent<CinemachineCollider>();
+            sholderCamCol = sholderCam.GetComponent<CinemachineCollider>();
 
             if (this.gameObject.CompareTag("Nella"))
             {
@@ -250,8 +253,8 @@ namespace YC.Camera_
                 string ignoreTag = "Nella";
                 backCam.gameObject.layer = LayerMask.NameToLayer(layerName);
                 sholderCam.gameObject.layer = LayerMask.NameToLayer(layerName);
-                backCam.GetComponent<CinemachineCollider>().m_IgnoreTag = ignoreTag;
-                sholderCam.GetComponent<CinemachineCollider>().m_IgnoreTag = ignoreTag;
+                backCamCol.m_IgnoreTag = ignoreTag;
+                sholderCamCol.m_IgnoreTag = ignoreTag;
             }
             else
             {
@@ -259,13 +262,17 @@ namespace YC.Camera_
                 string ignoreTag = "Steady";
                 backCam.gameObject.layer = LayerMask.NameToLayer(layerName);
                 sholderCam.gameObject.layer = LayerMask.NameToLayer(layerName);
-                backCam.GetComponent<CinemachineCollider>().m_IgnoreTag = ignoreTag;
-                sholderCam.GetComponent<CinemachineCollider>().m_IgnoreTag = ignoreTag;
+                backCamCol.m_IgnoreTag = ignoreTag;
+                sholderCamCol.m_IgnoreTag = ignoreTag;
             }
+
+            backCamCol.m_Damping = 0.1f;
+            backCamCol.m_DampingWhenOccluded = 0.1f;
+            sholderCamCol.m_Damping = 0.1f;
+            sholderCamCol.m_DampingWhenOccluded = 0.1f;
 
             followObj = Instantiate(CineFollowObj_Back, player.transform.position + CineFollowObj_Back.transform.position, player.transform.rotation).GetComponent<Transform>();
             lookatBackObj = Instantiate(CineLookObj_Back, player.transform.position + CineLookObj_Back.transform.position, player.transform.rotation).GetComponent<Transform>();
-            //lookatSholderObj = transform.Find("Cine_lookatObj_Sholder").gameObject.transform;
             lookatObjOriginY = CineLookObj_Back.transform.position.y;
 
             CinemachineFreeLook Cine_backCam = backCam.GetComponent<CinemachineFreeLook>();
@@ -656,6 +663,8 @@ namespace YC.Camera_
         // ====================  [Maze View 함수]  ==================== //
         public void SetMazeMode(bool enter, bool isExit) // 미로 모드 설정  
         {
+            if (!pv.IsMine) return;
+
             if (enter) // 미로 입장시
             {
                 OnOffCamera(null);
@@ -913,19 +922,12 @@ namespace YC.Camera_
                                             player.transform.position.z);
 
             lookatBackObj.transform.position = LookPos;
-            //Debug.Log("SetCineObjPos");
-            //Debug.Log(orgLookY);
-            //Debug.Log(orgFollowY);
-
         }
 
         public void JumpInit(bool On) // 플레이어 SMB에서 호출  
         {
             if (On) // 일반 점프 시작
             {
-                //Debug.Log("JumpInit - On =================================================");
-                //Debug.Log(orgLookY);
-                //Debug.Log(orgFollowY);
 
                 // 플랫폼 보간 중, 점프를 시도했다면 
                 if (isLerp)
@@ -951,9 +953,6 @@ namespace YC.Camera_
             else if (!On) // 땅에 착지 or 스페셜 액션 종료
             {
                 isJumping = false;
-                //Debug.Log("JumpInit - Off =================================================");
-                //Debug.Log(orgLookY);
-                //Debug.Log(orgFollowY);
 
                 if (playerState.IsGrounded)
                 {
@@ -979,9 +978,6 @@ namespace YC.Camera_
 
         void NormalJump_FixY() // 플레이어가 일반 점프 중일 때, 외부 오브젝트의 Y값을 고정시킨다  
         {
-            //Debug.Log("NormalJump_FixY");
-            //Debug.Log(orgLookY);
-            //Debug.Log(orgFollowY);
             lookatBackObj.position =
                         new Vector3(player.transform.position.x,
                                     orgLookY,
@@ -1161,21 +1157,17 @@ namespace YC.Camera_
 
         public void RidingInit() // 라이딩(로프, 레일)진행시 각각의 SMB에서 해당 함수를 호출한다 (갈고리 제외)  
         {
-            if (isLerp)
-            {
-                StopAllCoroutines();
-                isLerp = false;
-            }
-
             isRiding = true;
         }
 
         void RidingCamera() // 라이딩 시작부터, '착지할 때'까지 플레이어를 쫓아간다  
         {
+            if (isLerp) return;
+
             lookatBackObj.position
-                            = new Vector3(player.transform.position.x,
-                                        player.transform.position.y + lookatObjOriginY,
-                                        player.transform.position.z);
+                        = new Vector3(player.transform.position.x,
+                                    player.transform.position.y + lookatObjOriginY,
+                                    player.transform.position.z);
             followObj.position
                         = new Vector3(player.transform.position.x,
                                     player.transform.position.y,
