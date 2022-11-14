@@ -12,7 +12,7 @@ using System.Reflection;
 namespace YC.Camera_
 {
     public class CameraController : MonoBehaviour, IPunObservable
-    {
+    {      
         // 플레이어 및 포톤
         PlayerController playerController;
         GameObject player;
@@ -35,9 +35,9 @@ namespace YC.Camera_
         CinemachineVirtualCameraBase sideCam;
 
         // 가상 카메라 enum State
-        enum CamState { back, sholder };
-        CamState curCam;
-        CamState preCam;
+        enum CamState { back, sholder};
+        CamState curCam; 
+        CamState preCam; 
 
         // ============  카메라 감도 설정  ============ //
         [Header("[Back View 카메라 마우스 감도]")]
@@ -48,8 +48,7 @@ namespace YC.Camera_
 
         float curSholderMaxSpeedY;
 
-        [Space]
-        [Space]
+        [Space][Space]
 
         // ============  Aim View Y축 궤도 제한  ============ //
         [Header("[Sholder View Y궤도 Up 제한 값]")]
@@ -59,8 +58,7 @@ namespace YC.Camera_
         [SerializeField] [Range(0, 1)] float sholderAxisY_MaxDown = 0.5f;
 
         float sholderViewMaxY;
-        [Space]
-        [Space]
+        [Space][Space]
 
         // ============  스테디 빔 사용시 카메라 흔들림  ============ //
         [Header("[스테디 빔, 카메라 흔들림 진폭 크기]")]
@@ -74,8 +72,7 @@ namespace YC.Camera_
         [HideInInspector] public bool canShake = true; // 옵션 스테디 흔들림 여부
         bool wasShaked = false;
         bool isShakedFade = false;
-        [Space]
-        [Space]
+        [Space] [Space]
 
         // ============  FOV  ============ //
         float backViewFOV = 50;
@@ -100,8 +97,7 @@ namespace YC.Camera_
         GameObject lookAndFollow;
         float minZoom;
         float maxZoom;
-        [Space]
-        [Space]
+        [Space] [Space]
 
         // ============  미로뷰 변수  ============ //
         string mazeCamTag = "Cine_MazeCam";
@@ -112,8 +108,7 @@ namespace YC.Camera_
         // ============  점프 보간 변수들  ============ //
         [Header("[점프 후, 플랫폼 착지시 보간 시간]")]
         [SerializeField] [Range(0, 3)] float platformLerpTime = 0.7f;
-        [Space]
-        [Space]
+        [Space] [Space]
         Transform followObj; // >> : 점프시 Follow, LookAt 관련
         public Transform lookatBackObj { get; private set; } //< : 레일 액션에서 사용
         float lookatObjOriginY;
@@ -138,10 +133,10 @@ namespace YC.Camera_
         [SerializeField] GameObject CineLookObj_Back;
         [SerializeField] GameObject CineFollowObj_Back;
         [SerializeField] NoiseSettings NoiseProfile;
-        [Header("[Aim UI]")]
+        [Header("[Aim UI]")] 
         public GameObject aimUI;
 
-        void Awake()
+        void Awake()  
         {
             pv = GetComponent<PhotonView>();
             if (pv) pv.ObservedComponents.Add(this);
@@ -185,7 +180,7 @@ namespace YC.Camera_
                 return;
             }
 
-            if (playerState.isCumstomJumping)
+            if(playerState.isCumstomJumping)
             {
                 if (isLerp) return;
 
@@ -218,14 +213,14 @@ namespace YC.Camera_
 
         // ====================  [Awake에서 진행하는 초기화]  ==================== //
 
-        void InitUI()
+        void InitUI()  
         {
             if (!pv.IsMine) return;
-            aimUI = Instantiate(aimUI);
+                aimUI = Instantiate(aimUI);
         }
 
         void InitVirtualCamera() // Virtual Camera 생성 및 초기화  
-        {
+        {           
             if (!pv.IsMine) return;
 
             camList = new List<CinemachineVirtualCameraBase>();
@@ -233,7 +228,7 @@ namespace YC.Camera_
             backCam = Instantiate(CineBack, Vector3.zero, Quaternion.identity).GetComponent<CinemachineVirtualCameraBase>();
             sholderCam = Instantiate(CineSholder, Vector3.zero, Quaternion.identity).GetComponent<CinemachineVirtualCameraBase>();
 
-            if (this.gameObject.CompareTag("Nella"))
+            if(this.gameObject.CompareTag("Nella"))
             {
                 string layerName = "NellaCam";
                 string ignoreTag = "Nella";
@@ -313,11 +308,11 @@ namespace YC.Camera_
 
 
             for (int i = 0; i < 3; ++i)
-            {
-                if (backCine.GetRig(i))
+            {            
+                if(backCine.GetRig(i))
                 {
                     //backCine.GetRig(i).AddCinemachineComponent<CinemachineComposer>();
-
+                
                     backCine.GetRig(i).GetCinemachineComponent<CinemachineComposer>().m_HorizontalDamping = zero;
                     backCine.GetRig(i).GetCinemachineComponent<CinemachineComposer>().m_VerticalDamping = zero;
 
@@ -325,7 +320,7 @@ namespace YC.Camera_
                     backCine.GetRig(i).GetCinemachineComponent<CinemachineOrbitalTransposer>().m_YDamping = zero;
                     backCine.GetRig(i).GetCinemachineComponent<CinemachineOrbitalTransposer>().m_ZDamping = zero;
                 }
-                if (sholderCine.GetRig(i))
+                if(sholderCine.GetRig(i))
                 {
                     //sholderCine.GetRig(i).AddCinemachineComponent<CinemachineComposer>();
 
@@ -347,7 +342,7 @@ namespace YC.Camera_
             if (!pv.IsMine) cinemachineBrain.enabled = false;
 
             if (!pv.IsMine) return;
-
+      
             // << : 감도 세팅
             Option_SetSensitivity(backView_MouseSensitivity, sholderView_MouseSensitivity);
 
@@ -362,14 +357,14 @@ namespace YC.Camera_
 
                 if (AmplitudeGain == 0) AmplitudeGain = 1;
                 if (FrequebctGain == 0) FrequebctGain = 2;
-
+                
                 // << : 동적으로 노이즈 프로파일 추가
-                if (sholderCam.GetComponent<CinemachineFreeLook>().GetRig(0).GetCinemachineComponent<CinemachineBasicMultiChannelPerlin>() == null)
+                if(sholderCam.GetComponent<CinemachineFreeLook>().GetRig(0).GetCinemachineComponent<CinemachineBasicMultiChannelPerlin>() == null)
                 {
                     for (int i = 0; i < 3; ++i)
                     {
                         sholderCam.GetComponent<CinemachineFreeLook>().GetRig(i).AddCinemachineComponent<CinemachineBasicMultiChannelPerlin>();
-                        sholderCam.GetComponent<CinemachineFreeLook>().GetRig(i).GetCinemachineComponent<CinemachineBasicMultiChannelPerlin>().m_NoiseProfile
+                        sholderCam.GetComponent<CinemachineFreeLook>().GetRig(i).GetCinemachineComponent<CinemachineBasicMultiChannelPerlin>().m_NoiseProfile 
                             = NoiseProfile;
                     }
                 }
@@ -397,7 +392,7 @@ namespace YC.Camera_
             preCam = curCam;
             OnOffCamera(camList[(int)curCam]);
         }
-
+     
         // ====================  [Option 관련 함수 (찬우형)]  ==================== //
 
         public void Option_SetShake(bool on) // 스테디 카메라 흔들림 사용 여부  
@@ -424,14 +419,14 @@ namespace YC.Camera_
 
 
         // ====================  [넬라 스테디 공용 함수]  ==================== //
-
+      
         void SetCamera() // 플레이어 State에 따라 카메라 세팅  
         {
             if (GameManager.Instance.isTopView) return;
 
             if (curCam == CamState.back) // Back View -> Sholder View
             {
-                if (playerController.characterState.aim)
+                if (playerController.characterState.aim) 
                 {
                     //AxisState preCamAxisX = backCam.GetComponent<CinemachineFreeLook>().m_XAxis;
 
@@ -469,7 +464,7 @@ namespace YC.Camera_
                 if (!playerController.characterState.aim)
                 {
                     //AxisState preCamAxisX = sholderCam.GetComponent<CinemachineFreeLook>().m_XAxis;
-
+                   
                     preCam = curCam;
                     curCam = CamState.back;
 
@@ -629,18 +624,18 @@ namespace YC.Camera_
         // ====================  [Maze View 함수]  ==================== //
         public void SetMazeMode(bool enter, bool isExit) // 미로 모드 설정  
         {
-            if (enter) // 미로 입장시
+            if(enter) // 미로 입장시
             {
                 OnOffCamera(null);
 
-                if (!mazeCamObj)
+                if(!mazeCamObj)
                 {
                     GameObject[] mazeCamObjs;
                     mazeCamObjs = GameObject.FindGameObjectsWithTag(mazeCamTag);
 
                     foreach (GameObject cam in mazeCamObjs)
                     {
-                        if (cam.layer == 0)
+                        if(cam.layer == 0)
                         {
                             mazeCamObj = GameObject.FindGameObjectWithTag(mazeCamTag);
                         }
@@ -673,20 +668,20 @@ namespace YC.Camera_
             }
             else // 미로 퇴장시
             {
-                if (!isExit)
+                if(!isExit)
                 {
                     backCam.GetComponent<CinemachineFreeLook>().m_XAxis.Value = -(backCam.GetComponent<CinemachineFreeLook>().m_XAxis.Value);
                 }
-
+               
                 mazeCineCam.enabled = false;
                 mazeCineCamCol.enabled = false;
 
                 curCam = CamState.back;
                 OnOffCamera(camList[(int)curCam]);
-            }
+            }        
         }
 
-        // ====================  [Side View 함수]  ==================== //  
+        // ====================  [Side View 함수]  ==================== //
 
         public void SetSideScrollMode() // 사이드뷰 모드 설정  
         {
@@ -722,44 +717,10 @@ namespace YC.Camera_
                 mainCam.fieldOfView = sideScrollViewFOV;
             }
         }
-             
-        public void LerpPlatformHeight_Cor(float LerpTime, float height) // 플랫폼 높이 차이 보간  
-        {
-            if(pv.IsMine)
-                StartCoroutine(LerpPlatformHeight(LerpTime, height));
-        }
-
-        IEnumerator LerpPlatformHeight(float LerpTime, float height)
-        {
-            float initYpos = lookAndFollow.transform.position.y;
-            float lerpYpos = initYpos;
-            float targetYpos = initYpos + height;
-
-            float currentTime = 0;
-
-            while (lerpYpos < targetYpos)
-            {
-                lerpYpos = lookAndFollow.transform.position.y;
-
-                currentTime += Time.fixedDeltaTime;
-                if (currentTime >= LerpTime) currentTime = LerpTime;
-
-                float t = currentTime / LerpTime;
-                t = Mathf.Sin(t * Mathf.PI * 0.5f);
-
-                lerpYpos = Mathf.Lerp(lerpYpos, targetYpos, t);
-                if (lerpYpos > targetYpos) lerpYpos = targetYpos;
-
-                lookAndFollow.transform.position = new Vector3(lookAndFollow.transform.position.x, lerpYpos, lookAndFollow.transform.position.z);
-                yield return new WaitForFixedUpdate();
-            }
-        }
 
         void MoveInSideView() // 사이브 뷰 카메라 이동  
         {
             // 만약 한명이 죽었다면 바로 리턴
-
-            if (!targets[0] || !targets[1]) return;
 
             Vector3 centerPoint = GetCenterPoint();
 
@@ -778,8 +739,6 @@ namespace YC.Camera_
             // if, 현재 살아있는 플레이어가 한명
             // 리턴, 그 한명의 포지션
 
-            if (!targets[0] || !targets[1]) return 0;
-
             var bounds = new Bounds(targets[0].position, Vector3.zero); // 넬라의 센터를 기준으로하는 경계상자 생성
             bounds.Encapsulate(targets[1].position); // 위 경계상자가 스테디를 포함하도록 한다
 
@@ -789,7 +748,7 @@ namespace YC.Camera_
         Vector3 GetCenterPoint() // 두 플레이어 사이 포지션 값을 구한다  
         {
             // if, 현재 살아있는 플레이어가 한명
-            // 리턴, 그 한명의 포지션         
+            // 리턴, 그 한명의 포지션
 
             var bounds = new Bounds(targets[0].position, Vector3.zero); // 넬라의 센터를 기준으로하는 경계상자 생성
             bounds.Encapsulate(targets[1].position); // 위 경계상자가 스테디를 포함하도록 한다
@@ -827,7 +786,7 @@ namespace YC.Camera_
         {
             SideCBMCP.m_AmplitudeGain = AmplitudeGainSide;
             SideCBMCP.m_FrequencyGain = FrequebctGainSide;
-
+          
             yield return new WaitForSeconds(ShakeTimeSide);
 
             float fadeLerpTime = 0.5f;
@@ -887,7 +846,7 @@ namespace YC.Camera_
 
             lookatBackObj.transform.position = LookPos;
         }
-
+        
         public void JumpInit(bool On) // 플레이어 SMB에서 호출  
         {
             if (On) // 일반 점프 시작
@@ -937,7 +896,7 @@ namespace YC.Camera_
                     }
 
                     StartCoroutine(LerpAfter(platformLerpTime));
-                }
+                }                          
             }
         }
 
@@ -969,7 +928,7 @@ namespace YC.Camera_
         void CheckLowerPlayer() // 점프 시작 때 높이보다, 점프 종료후 높이가 낮다면 True  
         {
             if (playerState.IsAirDashing) return;
-
+           
             if (player.transform.position.y < followObj.transform.position.y - 0.5f) // 0.5하면 떨어질 때 오류, -0.5 안 하면 점프 종료후 일반 대쉬 못따라감
             {
                 wasEndSet = true;
@@ -1126,7 +1085,7 @@ namespace YC.Camera_
                 isLerp = false;
             }
 
-            isRiding = true;
+            isRiding = true;           
         }
 
         void RidingCamera() // 라이딩 시작부터, '착지할 때'까지 플레이어를 쫓아간다  
@@ -1156,7 +1115,7 @@ namespace YC.Camera_
                 cam.m_YAxis.m_InputAxisName = "";
 
                 // << : 회전하면서 빔 사용시 삥삥 도는 문제 해결
-                cam.m_XAxis.m_InputAxisValue = 0;
+                cam.m_XAxis.m_InputAxisValue = 0;  
                 cam.m_YAxis.m_InputAxisValue = 0;
             }
             else
@@ -1234,6 +1193,6 @@ namespace YC.Camera_
                 CBMCP.m_FrequencyGain = initialVlaue;
             }
             isShakedFade = false;
-        }
+        }   
     }
 }

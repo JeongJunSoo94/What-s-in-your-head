@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using YC.Camera_;
 
 public class PlayerState : MonoBehaviour
 {
@@ -94,6 +95,8 @@ public class PlayerState : MonoBehaviour
     #region
     public bool isInMaze = false;
     string mazeColTag = "MazeCameraCollider";
+    CameraController CameraController;
+    bool isExitMaze = false;
     #endregion
 
     public bool CanResetKnockBack = true;
@@ -145,6 +148,7 @@ public class PlayerState : MonoBehaviour
     #region
     public void CheckGround(float sphereRadius)
     {
+
         RayCheck = Physics.SphereCast(transform.position + Vector3.up * (sphereRadius * 1.5f + Physics.defaultContactOffset), (sphereRadius - Physics.defaultContactOffset), Vector3.down, out groundRaycastHit, groundCheckDistance + sphereRadius * 0.5f + Physics.defaultContactOffset, groundLayerMask, QueryTriggerInteraction.Ignore);
 
         if (RayCheck)
@@ -399,18 +403,31 @@ public class PlayerState : MonoBehaviour
     {
         // << : 스테이지3 미로에 입장하거나 퇴장할 경우, 플레이어의 State와 Camera의 세팅을 바꿔준다.
 
+        if(other.gameObject.tag.Equals("MazeCameraExitCollider"))
+        {
+            isExitMaze = true;
+        }
+
         if (!other.gameObject.tag.Equals(mazeColTag))
             return;
 
-        if(!isInMaze) 
-        {
-            isInMaze = true;
-            //Debug.Log("Maze 입장!" + isInMaze);
-        }
-        else // Exit Maze
-        {
-            isInMaze = false;
-            //Debug.Log("Maze 나감!" + isInMaze);
-        }
+        if (!CameraController)
+            CameraController = this.gameObject.GetComponent<CameraController>();
+        
+        isInMaze = true;
+        CameraController.SetMazeMode(isInMaze, false);
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        if (!other.gameObject.tag.Equals(mazeColTag))
+            return;
+
+        isInMaze = false;
+
+        if(isExitMaze)
+            CameraController.SetMazeMode(isInMaze, true);
+        else
+            CameraController.SetMazeMode(isInMaze, false);
     }
 }

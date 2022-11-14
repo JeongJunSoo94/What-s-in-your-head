@@ -31,66 +31,11 @@ namespace JCW.Object
         {
             anim = transform.parent.parent.GetComponent<Animator>();
             meshRenderer = transform.GetChild(1).GetComponent<MeshRenderer>();
-            meshRenderer.material = normalMat;
+            meshRenderer.sharedMaterial = normalMat;
             audioSource = GetComponent<AudioSource>();
             AudioCtrl.AudioSettings.SetAudio(audioSource, 1f, 50f);
             ws = new(releaseTime);
         }
-        /*
-        void Update()
-        {
-            if (isPressed)
-            {
-                if (pressed_Ratio != 0f)
-                {
-                    // 닿는 순간 메테리얼 변경
-                    if (!isMatChanged)
-                    {
-                        //SoundManager.Instance.Play3D_RPC("ButtonTurnOn", audioSource);
-                        meshRenderer.material = activeMat;
-                        isMatChanged = true;
-                        Debug.Log("메테리얼 교체");
-                    }
-
-                    // 애니메이션 재생
-                    pressed_Ratio = Mathf.Lerp(pressed_Ratio, 0, pressedSpeed * Time.deltaTime);
-                    if (pressed_Ratio < 0.01f)
-                    {
-                        Debug.Log("1->0이 되었으므로 다시 버튼 작동 해제");
-                        pressed_Ratio = 0f;
-                        for (int i = 0 ; i<objectList.Count ; ++i)
-                        {
-                            objectList[i].GetComponent<PlayObject>().enabled = true;
-                            objectList[i].isActive = true;
-                        }
-                        if (isPermanent)
-                            Destroy(this);
-                    }
-                    anim.SetFloat("pressed_ratio", pressed_Ratio);
-                    anim.Play("Press Blend Tree");
-                }
-            }
-            else if (!isPermanent && pressed_Ratio != 1f)
-            {
-
-                if (pressed_Ratio > 0.95f)
-                {
-                    isPressed = false;
-                    Debug.Log("0->1이 되었으므로 버튼 작동");
-                    pressed_Ratio = 1f;
-                    meshRenderer.material = normalMat;
-                    isMatChanged = false;
-                    for (int i = 0 ; i<objectList.Count ; ++i)
-                    {
-                        objectList[i].isActive = false;
-                    }
-                }
-                pressed_Ratio = Mathf.Lerp(pressed_Ratio, 1, releaseSpeed * Time.deltaTime);
-                anim.SetFloat("pressed_ratio", pressed_Ratio);
-                anim.Play("Press Blend Tree");
-            }
-        }
-        */
         private void OnTriggerEnter(Collider other)
         {
             if (other.CompareTag("Cymbals"))
@@ -101,7 +46,7 @@ namespace JCW.Object
         {
             // 닿는 순간 메테리얼 변경
             StopCoroutine("DeactiveObj");
-            meshRenderer.material = activeMat;
+            meshRenderer.sharedMaterial = activeMat;
 
             for (int i = 0 ; i<objectList.Count ; ++i)
             {
@@ -139,7 +84,7 @@ namespace JCW.Object
 
             pressed_Ratio = 1f;
             anim.SetFloat("pressed_ratio", pressed_Ratio);
-            meshRenderer.material = normalMat;
+            meshRenderer.sharedMaterial = normalMat;
             for (int i = 0 ; i<objectList.Count ; ++i)
             {
                 objectList[i].isActive = false;

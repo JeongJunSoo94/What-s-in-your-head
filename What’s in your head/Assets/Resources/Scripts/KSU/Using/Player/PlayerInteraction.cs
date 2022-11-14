@@ -46,8 +46,8 @@ namespace KSU
             if (!playerState.isMine)
                 return;
             if (KeyManager.Instance.GetKeyDown(PlayerAction.Interaction))
-            {
-                if (interactableObject != null)
+            {                
+                if (interactableObject != null) 
                 {
                     interactableObject.GetComponent<InteractableObject>().StartInteraction();
                     return;
@@ -133,7 +133,6 @@ namespace KSU
             {
                 foreach (var obj in detectedInteractableObjects)
                 {
-                    Debug.Log("SendInfoUI");
                     obj.Key.GetComponentInChildren<ConvertIndicator>().SetUI(obj.Value.isUIActive, obj.Value.isInteractable, obj.Value.distance);
                 }
             }
@@ -179,9 +178,8 @@ namespace KSU
         {
             if (other.CompareTag("InteractableObject"))
             {
-                if (detectedInteractableObjects.ContainsKey(other.gameObject.transform.parent.gameObject))
-                    return;
-                detectedInteractableObjects.Add(other.gameObject.transform.parent.gameObject, new Obj_Info(false, false, 100f));
+                if(!detectedInteractableObjects.ContainsKey(other.gameObject.transform.parent.gameObject))
+                    detectedInteractableObjects.Add(other.gameObject.transform.parent.gameObject, new Obj_Info(false, false, 100f));
             }
         }
 

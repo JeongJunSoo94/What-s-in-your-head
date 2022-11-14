@@ -7,7 +7,7 @@ using Photon.Pun;
 namespace JCW.Object
 {
     [RequireComponent(typeof(PhotonView))]
-    public class SavePosition : MonoBehaviour, IPunObservable
+    public class SavePosition : MonoBehaviour
     {
         private bool firstContact = false;
         PhotonView photonView;
@@ -45,15 +45,18 @@ namespace JCW.Object
                     if (PhotonNetwork.PlayerList.Length < 2)
                         return;
                     firstContact = true;
+                    if (!other.GetComponent<PlayerState>().isMine)
+                        return;
                     Vector3 pos = transform.position;
-                    Quaternion rot = transform.rotation;
+                    Quaternion rot = transform.rotation;                    
                     photonView.RPC(nameof(Check), RpcTarget.AllViaServer, pos, rot);
                 }
             }
         }
         [PunRPC]
         private void Check(Vector3 pos, Quaternion rot)
-        {            
+        {
+            firstContact = true;
             PlayerInfo playerTF = new(pos, rot);
             JsonData infoJson = JsonMapper.ToJson(playerTF);
 
@@ -64,21 +67,9 @@ namespace JCW.Object
             string path = Application.dataPath + "/Resources/CheckPointInfo/Stage" + curStage + "/" + curStageType + "/";
             if (!Directory.Exists(path))
                 Directory.CreateDirectory(path);
-            File.WriteAllText(path + "Section" +GameManager.Instance.curSection +".json", infoJson.ToString());
-            Debug.Log("체크포인트 저장");
+            File.WriteAllText(path + "Section" +GameManager.Instance.curSection +".json", infoJson.ToString());            
+            //Debug.Log("체크포인트 저장");
             Destroy(this);
-        }
-
-        public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
-        {
-            if (stream.IsWriting)
-            {
-                stream.SendNext(firstContact);
-            }
-            else
-            {
-                this.firstContact = (bool)stream.ReceiveNext();
-            }
         }
     }
 }

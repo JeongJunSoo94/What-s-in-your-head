@@ -49,7 +49,7 @@ namespace KSU
         }
         private void OnCollisionEnter(Collision collision)
         {
-            if(collision.collider.CompareTag("Nella"))
+            if(collision.collider.gameObject.layer == LayerMask.NameToLayer("Player"))
             {
                 collision.gameObject.transform.parent = this.gameObject.transform;
             }
@@ -57,7 +57,7 @@ namespace KSU
 
         private void OnCollisionExit(Collision collision)
         {
-            if (collision.collider.CompareTag("Nella"))
+            if (collision.collider.gameObject.layer == LayerMask.NameToLayer("Player"))
             {
                 collision.gameObject.transform.parent = null;
             }

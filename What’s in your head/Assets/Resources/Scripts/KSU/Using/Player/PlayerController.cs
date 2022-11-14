@@ -71,6 +71,7 @@ namespace KSU
         public float terminalSpeed = -10f;
         [Tooltip("넉백 수직 속력")]
         public float knockBackVerticalSpeed = 8f;
+        public float trampolinSpeed = 20f;
         #endregion
 
         // 회전 Speed
@@ -161,7 +162,7 @@ namespace KSU
             playerRigidbody.velocity = Vector3.zero;
         }
 
-        public void InitAnimatorParam()
+        public void InitAnimatorParam(bool initTop)
         {
             playerAnimator.SetBool("isAir", false);
             playerAnimator.SetBool("isAirDash", false);
@@ -187,6 +188,8 @@ namespace KSU
             playerAnimator.SetFloat("HorizonVelocity", 0f);
             playerAnimator.SetFloat("DistY", 0f);
             playerAnimator.SetFloat("moveToRailSpeed", 0f);
+            if (initTop)
+                playerAnimator.SetBool("Top", false);
             switch (this.gameObject.tag)
             {
                 case "Nella":
@@ -258,13 +261,12 @@ namespace KSU
         {
             InitInteraction();
             InitController();
-            InitAnimatorParam();
-            if (photonView.IsMine)
-            { 
-                GameManager.Instance.curPlayerHP = 12;
-            }
-
             characterState.InitState(true, false);
+
+            if (!photonView.IsMine)
+                return;
+
+            GameManager.Instance.curPlayerHP = 12;
 
             string path = Application.dataPath + "/Resources/CheckPointInfo/Stage" + GameManager.Instance.curStageIndex
                 + "/" + GameManager.Instance.curStageType + "/Section" + GameManager.Instance.curSection + ".json";
@@ -419,7 +421,11 @@ namespace KSU
                 if(!playerMouse.notRotatoin)
                     RotateTop();
             }
-            else if (characterState.aim || characterState.isInMaze)
+            else if(characterState.isInMaze)
+            {
+                RotateInMaze();
+            }
+            else if (characterState.aim)
             {
                 RotateAim();
             }
@@ -458,6 +464,7 @@ namespace KSU
             }
         }
 
+
         public void RotateAim()
         {
             if (!characterState.IsDashing && !characterState.IsAirDashing)
@@ -466,6 +473,15 @@ namespace KSU
                 forward.y = 0;
                 transform.LookAt(transform.position + forward);
             }
+        }
+
+        float rotateSpeed = 400.0f;
+        float xRotate;
+        public void RotateInMaze()
+        {
+            float yRotateMove = Input.GetAxis("Mouse X") * Time.deltaTime * rotateSpeed;
+            float yRotate = transform.eulerAngles.y + yRotateMove;
+            transform.eulerAngles = new Vector3(0, yRotate, 0);
         }
 
         private void Move()
@@ -661,7 +677,7 @@ namespace KSU
             {
                 case "Trampolin":
                     {
-                        InputCustomJump(collision.gameObject.GetComponentInParent<JumpingPlatform>().jumpSpeed);
+                        InputCustomJump(trampolinSpeed);
                     }
                     break;
                 case "DeadZone":
@@ -674,17 +690,17 @@ namespace KSU
         [PunRPC]
         public void GetDamage(int damage, DamageType type, Vector3 colliderPos, float knockBackSpeed)
         {
-            string damageTirgger = "DeadTrigger";
+            string damageTrigger = "DeadTrigger";
             switch(type)
             {
                 case DamageType.Attacked:
-                    damageTirgger = "AttackedTrigger";
+                    damageTrigger = "AttackedTrigger";
                     break;
                 case DamageType.KnockBack:
-                    damageTirgger = "KnockBackTrigger";
+                    damageTrigger = "KnockBackTrigger";
                     break;
                 case DamageType.Dead:
-                    damageTirgger = "DeadTrigger";
+                    damageTrigger = "DeadTrigger";
                     break;
             }
 
@@ -696,7 +712,7 @@ namespace KSU
             }
             else
             {
-                if(damageTirgger == "KnockBackTrigger")
+                if(damageTrigger == "KnockBackTrigger")
                 {
                     Vector3 knockBackHorVec = (transform.position - colliderPos);
                     knockBackHorVec.y = 0;
@@ -705,7 +721,7 @@ namespace KSU
                     StartCoroutine(nameof(DelayResetKnockBack));
                 }
 
-                playerAnimator.SetBool(damageTirgger, true);
+                playerAnimator.SetBool(damageTrigger, true);
             }
         }
         
@@ -714,17 +730,17 @@ namespace KSU
         {
             if (!photonView.IsMine)
                 return;
-            string damageTirgger = "DeadTrigger";
+            string damageTrigger = "DeadTrigger";
             switch (type)
             {
                 case DamageType.Attacked:
-                    damageTirgger = "AttackedTrigger";
+                    damageTrigger = "AttackedTrigger";
                     break;
                 case DamageType.KnockBack:
-                    damageTirgger = "KnockBackTrigger";
+                    damageTrigger = "KnockBackTrigger";
                     break;
                 case DamageType.Dead:
-                    damageTirgger = "DeadTrigger";
+                    damageTrigger = "DeadTrigger";
                     break;
             }
             if (!playerAnimator.GetBool("isAttacked") && !playerAnimator.GetBool("isKnockBack") && !playerAnimator.GetBool("isDead"))
@@ -738,7 +754,7 @@ namespace KSU
                 }
                 else
                 {
-                    photonView.RPC(nameof(SetAnimatorBool), RpcTarget.AllViaServer, damageTirgger, true);
+                    photonView.RPC(nameof(SetAnimatorBool), RpcTarget.AllViaServer, damageTrigger, true);
                     //playerAnimator.SetBool(damageTirgger, true);
                 }
             }

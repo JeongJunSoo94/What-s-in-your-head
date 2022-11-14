@@ -11,10 +11,8 @@ namespace JCW.Object.Stage1
         [Header("활성화시킬 오브젝트 목록들")] [SerializeField] List<GameObject> activeObjects;
         [Header("비활성화시킬 오브젝트 목록들")] [SerializeField] List<GameObject> inactiveObjects;
 
-        bool isPressed = false;
         Vector3 pressedPos;
         Vector3 unpressedPos;
-        Coroutine coroutine = null;
 
         private void Awake()
         {

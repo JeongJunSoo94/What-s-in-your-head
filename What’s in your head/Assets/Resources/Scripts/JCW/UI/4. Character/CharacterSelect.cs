@@ -16,6 +16,7 @@ namespace JCW.UI
         [Header("기본 버튼 스프라이트")] [SerializeField] protected Sprite defaultSprite = null;
         [Header("호버링 버튼 스프라이트")] [SerializeField] protected Sprite onButtonSprite = null;
         [Header("선택 버튼 스프라이트")] [SerializeField] protected Sprite selectSprite = null;
+        [Header("로딩 UI")] [SerializeField] GameObject loadingUI;
         private GameObject selectCharacter = null;
 
         private Image thisImg;
@@ -147,7 +148,8 @@ namespace JCW.UI
                         string character = GameManager.Instance.characterOwner[ism] ? "넬라" : "스테디";
                         Debug.Log(player + " : " + character);
                     }
-                    PhotonManager.Instance.ChangeStage();
+                    //LoadingScene.Instance.gameObject.SetActive(true);
+                    loadingUI.SetActive(true);
                     GameManager.Instance.AddAliveState(GameManager.Instance.characterOwner[PhotonNetwork.IsMasterClient], true);
                     this.enabled = false;
                 }

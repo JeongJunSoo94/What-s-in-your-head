@@ -101,7 +101,7 @@ namespace JJS
                     }
                 }
             }
-                
+
         }
 
         public void SetAimWeapon()

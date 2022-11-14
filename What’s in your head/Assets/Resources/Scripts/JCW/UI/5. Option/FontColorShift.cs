@@ -20,7 +20,7 @@ namespace JCW.UI.Options
 
         virtual public void OnPointerEnter(PointerEventData eventData)
         {
-            SoundManager.Instance.PlayUI("hoveringtest");
+            SoundManager.Instance.PlayUI("MouseHovering");
             InvertFont();
         }
 

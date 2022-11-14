@@ -6,6 +6,7 @@ namespace JCW.AudioCtrl
 {
     public enum Sound
     {
+        TOTAL,
         BGM,
         EFFECT,
         DISTANCE,
@@ -21,7 +22,7 @@ namespace JCW.AudioCtrl
         [Header("UI 효과음 목록")] [SerializeField] List<AudioClip> prevUIClips = new();
 
         // 오디오 재생기
-        readonly AudioSource[] audioSources = new AudioSource[(int)Sound.End];
+        public readonly AudioSource[] audioSources = new AudioSource[(int)Sound.End];
 
         // 오디오 클립
         readonly Dictionary<string, AudioClip> audioClips = new();
@@ -56,6 +57,7 @@ namespace JCW.AudioCtrl
             {
                 GameObject obj = new() { name = soundTypes[i] };
                 audioSources[i] = obj.AddComponent<AudioSource>();
+                audioSources[i].GetComponent<AudioSource>().volume = 0.5f;
                 obj.transform.parent = this.transform;
             }
             audioSources[(int)Sound.BGM].loop = true;

@@ -2650,13 +2650,13 @@ GameObject:
   - component: {fileID: 8914183395468562453}
   - component: {fileID: 8914183395468562452}
   - component: {fileID: 5930514849141991021}
+  - component: {fileID: 4573562063243766625}
   - component: {fileID: 2788435784745212738}
   - component: {fileID: 1639897209371980818}
   - component: {fileID: 8011218605724820560}
   - component: {fileID: 5027572550733305681}
   - component: {fileID: 4557260369275093484}
   - component: {fileID: 6125511999642235224}
-  - component: {fileID: 4573562063243766625}
   - component: {fileID: 8891849524777518278}
   - component: {fileID: 3596058637112808704}
   - component: {fileID: 6169874678787101720}
@@ -2766,213 +2766,14 @@ MonoBehaviour:
   prefixField: -1
   Synchronization: 3
   OwnershipTransfer: 0
-  observableSearch: 2
+  observableSearch: 1
   ObservedComponents:
+  - {fileID: 4573562063243766625}
   - {fileID: 2788435784745212738}
   - {fileID: 1639897209371980818}
-  - {fileID: 4573562063243766625}
   sceneViewId: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0
---- !u!114 &2788435784745212738
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8914183395468562472}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 627855c7f81362d41938ffe0b1475957, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_SynchronizePosition: 1
-  m_SynchronizeRotation: 1
-  m_SynchronizeScale: 0
-  m_UseLocal: 0
---- !u!114 &1639897209371980818
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8914183395468562472}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 89a95da993a6a0745a21cfc544664161, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  backView_MouseSensitivity: 25
-  sholderView_MouseSensitivity: 10
-  sholderAxisY_MaxUp: 0.2
-  sholderAxisY_MaxDown: 0.5
-  AmplitudeGain: 1
-  FrequebctGain: 1.5
-  canShake: 1
-  AmplitudeGainSide: 2
-  FrequebctGainSide: 1
-  ShakeTimeSide: 2
-  platformLerpTime: 0.7
-  CineBack: {fileID: 5990922643141382604, guid: 09dc3c3034d79ec44845aeba912c86ab, type: 3}
-  CineSholder: {fileID: 3213764636192488147, guid: 75991490f73520141b367ac4d7e9caeb, type: 3}
-  CineLookObj_Back: {fileID: 3934384160282713336, guid: 90489282f40883d4a9fa701115ed4580, type: 3}
-  CineFollowObj_Back: {fileID: 1166992463261942446, guid: 2413b7252612e7841b1c388e19af8cf3, type: 3}
-  NoiseProfile: {fileID: 0}
-  aimUI: {fileID: 4660158950712969332, guid: d9ae6c359ed6b9b4fbc0438148b6bc30, type: 3}
---- !u!114 &8011218605724820560
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8914183395468562472}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b7ed9eb70617446458e5843e4e20c602, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  characterState: {fileID: 4557260369275093484}
-  playerMouse: {fileID: 5027572550733305681}
-  playerAnimator: {fileID: 0}
-  mainCamera: {fileID: 0}
-  playerRigidbody: {fileID: 0}
-  photonView: {fileID: 0}
-  walkSpeed: 8
-  runSpeed: 14
-  dashSpeed: 15
-  airDashSpeed: 15
-  inertiaSpeed: 0
-  airMoveSpeed: 5
-  airMoveMaxSpeed: 10
-  jumpSpeed: 15
-  airJumpSpeed: 15
-  gravity: -30
-  gravityCofactor: 10
-  terminalSpeed: -50
-  knockBackVerticalSpeed: 8
-  rotationSpeed: 720
-  moveVec: {x: 0, y: 0, z: 0}
-  moveDir: {x: 0, y: 0, z: 0}
-  dashVec: {x: 0, y: 0, z: 0}
-  inertiaNormalVec: {x: 0, y: 0, z: 0}
-  knockBackVec: {x: 0, y: 0, z: 0}
-  isOn_HP_UI: 0
---- !u!114 &5027572550733305681
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8914183395468562472}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 63cf26e97a25e2947b5a019e6d64a706, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  layerWeight: 0
-  point: {fileID: 0}
-  cameraMain: {fileID: 0}
-  weaponInfo:
-  - weapon: {fileID: 2288157919270802511}
-    canAim: 1
-    canNoAimAttack: 0
-    canMoveAttack: 1
-  - weapon: {fileID: 3723959394221475216}
-    canAim: 0
-    canNoAimAttack: 1
-    canMoveAttack: 0
-  ik: {fileID: 6125511999642235224}
-  afterDelayTime: 0
-  ableToRight: 0
-  clickLeft: 0
-  clickRight: 0
-  mouseLayer:
-    serializedVersion: 2
-    m_Bits: 8
-  mouseRayDistance: 100
-  canSwap: 0
-  curCool: 0
-  swapCool: 0.5
-  canAim: 0
-  curAimCool: 0
-  AimCool: 0.5
-  notRotatoin: 0
-  hitObjs:
-  - {fileID: 1305514216266557921}
-  - {fileID: 7656355952428297822}
-  - {fileID: 2048753255070762641}
-  gun: {fileID: 4271477110735829057}
-  singing: {fileID: -7836225080468928713}
---- !u!114 &4557260369275093484
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8914183395468562472}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4c06a3092784b2e4db1030c55078528f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  groundLayerMask:
-    serializedVersion: 2
-    m_Bits: 65544
-  groundCheckDistance: 2
-  groundCheckThresholdMin: 0.02
-  groundCheckThresholdMax: 0.1
-  forwardblockingMinHeight: 0.2
-  height: 0
-  forwardHeight: 0
-  RayCheck: 0
-  slopeAngle: 0
-  slopeAngleCofacter: 0
-  IsGrounded: 0
-  isFowardBlock: 0
-  isAirBlocked: 0
-  isOverAngleForSlope: 0
-  isMove: 0
-  isRun: 0
-  CanJump: 1
-  isDelayingDashJump: 0
-  IsJumping: 0
-  IsAirJumping: 0
-  isCumstomJumping: 0
-  IsDashing: 0
-  IsAirDashing: 0
-  WasAirDashing: 0
-  isMine: 0
-  isOutOfControl: 0
-  isStopped: 0
-  isRiding: 0
-  CanResetKnockBack: 1
-  aim: 0
-  top: 0
-  swap: 0
-  maxSlopeAngle: 40
-  jumpCoolTime: 0.2
-  dashTime: 1
-  airDashTime: 0.5
---- !u!114 &6125511999642235224
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8914183395468562472}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f8410c6d230bf2c4296eded5338180c6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  posWeight: 1
-  rotWeight: 1
-  leftHandFollowObj: {fileID: 6883025197069872416}
-  rightHandFollowObj: {fileID: 3723959393930102283}
-  hitpos: {fileID: 6883025196847062768}
-  weapon: {fileID: 0}
-  animator: {fileID: 0}
-  enableIK: 0
 --- !u!114 &4573562063243766625
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3086,6 +2887,207 @@ MonoBehaviour:
     LayerIndex: 0
   - SynchronizeType: 2
     LayerIndex: 1
+--- !u!114 &2788435784745212738
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8914183395468562472}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 627855c7f81362d41938ffe0b1475957, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_SynchronizePosition: 1
+  m_SynchronizeRotation: 1
+  m_SynchronizeScale: 0
+  m_UseLocal: 0
+--- !u!114 &1639897209371980818
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8914183395468562472}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 89a95da993a6a0745a21cfc544664161, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  backView_MouseSensitivity: 25
+  sholderView_MouseSensitivity: 10
+  sholderAxisY_MaxUp: 0.2
+  sholderAxisY_MaxDown: 0.5
+  AmplitudeGain: 1
+  FrequebctGain: 1.5
+  canShake: 1
+  AmplitudeGainSide: 2
+  FrequebctGainSide: 1
+  ShakeTimeSide: 2
+  platformLerpTime: 0.7
+  CineBack: {fileID: 5990922643141382604, guid: 09dc3c3034d79ec44845aeba912c86ab, type: 3}
+  CineSholder: {fileID: 3213764636192488147, guid: 75991490f73520141b367ac4d7e9caeb, type: 3}
+  CineLookObj_Back: {fileID: 3934384160282713336, guid: 90489282f40883d4a9fa701115ed4580, type: 3}
+  CineFollowObj_Back: {fileID: 1166992463261942446, guid: 2413b7252612e7841b1c388e19af8cf3, type: 3}
+  NoiseProfile: {fileID: 0}
+  aimUI: {fileID: 4660158950712969332, guid: d9ae6c359ed6b9b4fbc0438148b6bc30, type: 3}
+--- !u!114 &8011218605724820560
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8914183395468562472}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b7ed9eb70617446458e5843e4e20c602, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  characterState: {fileID: 4557260369275093484}
+  playerMouse: {fileID: 5027572550733305681}
+  playerAnimator: {fileID: 0}
+  mainCamera: {fileID: 0}
+  playerRigidbody: {fileID: 0}
+  photonView: {fileID: 0}
+  walkSpeed: 8
+  runSpeed: 14
+  dashSpeed: 15
+  airDashSpeed: 15
+  inertiaSpeed: 0
+  airMoveSpeed: 5
+  airMoveMaxSpeed: 10
+  jumpSpeed: 15
+  airJumpSpeed: 15
+  gravity: -30
+  gravityCofactor: 10
+  terminalSpeed: -50
+  knockBackVerticalSpeed: 8
+  trampolinSpeed: 20
+  rotationSpeed: 720
+  moveVec: {x: 0, y: 0, z: 0}
+  moveDir: {x: 0, y: 0, z: 0}
+  dashVec: {x: 0, y: 0, z: 0}
+  inertiaNormalVec: {x: 0, y: 0, z: 0}
+  knockBackVec: {x: 0, y: 0, z: 0}
+  isOn_HP_UI: 0
+--- !u!114 &5027572550733305681
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8914183395468562472}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 63cf26e97a25e2947b5a019e6d64a706, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  layerWeight: 0
+  point: {fileID: 0}
+  cameraMain: {fileID: 0}
+  weaponInfo:
+  - weapon: {fileID: 2288157919270802511}
+    canAim: 1
+    canNoAimAttack: 0
+    canMoveAttack: 1
+  - weapon: {fileID: 3723959394221475216}
+    canAim: 0
+    canNoAimAttack: 1
+    canMoveAttack: 0
+  ik: {fileID: 6125511999642235224}
+  afterDelayTime: 0
+  ableToRight: 0
+  clickLeft: 0
+  clickRight: 0
+  mouseLayer:
+    serializedVersion: 2
+    m_Bits: 8
+  mouseRayDistance: 100
+  canSwap: 0
+  curCool: 0
+  swapCool: 0.5
+  canAim: 0
+  curAimCool: 0
+  AimCool: 0.5
+  notRotatoin: 0
+  hitObjs:
+  - {fileID: 1305514216266557921}
+  - {fileID: 7656355952428297822}
+  - {fileID: 2048753255070762641}
+  gun: {fileID: 4271477110735829057}
+  singing: {fileID: -7836225080468928713}
+--- !u!114 &4557260369275093484
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8914183395468562472}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4c06a3092784b2e4db1030c55078528f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  groundLayerMask:
+    serializedVersion: 2
+    m_Bits: 65544
+  groundCheckDistance: 2
+  groundCheckThresholdMin: 0.02
+  groundCheckThresholdMax: 0.1
+  forwardblockingMinHeight: 0.2
+  height: 0
+  forwardHeight: 0
+  RayCheck: 0
+  slopeAngle: 0
+  slopeAngleCofacter: 0
+  IsGrounded: 0
+  isFowardBlock: 0
+  isAirBlocked: 0
+  isOverAngleForSlope: 0
+  isMove: 0
+  isRun: 0
+  CanJump: 1
+  isDelayingDashJump: 0
+  IsJumping: 0
+  IsAirJumping: 0
+  isCumstomJumping: 0
+  IsDashing: 0
+  IsAirDashing: 0
+  WasAirDashing: 0
+  isMine: 0
+  isOutOfControl: 0
+  isStopped: 0
+  isRiding: 0
+  isInMaze: 0
+  CanResetKnockBack: 1
+  aim: 0
+  top: 0
+  swap: 0
+  maxSlopeAngle: 40
+  jumpCoolTime: 0.2
+  dashTime: 1
+  airDashTime: 0.5
+--- !u!114 &6125511999642235224
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8914183395468562472}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f8410c6d230bf2c4296eded5338180c6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  posWeight: 1
+  rotWeight: 1
+  leftHandFollowObj: {fileID: 6883025197069872416}
+  rightHandFollowObj: {fileID: 3723959393930102283}
+  hitpos: {fileID: 6883025196847062768}
+  weapon: {fileID: 0}
+  animator: {fileID: 0}
+  enableIK: 0
 --- !u!114 &8891849524777518278
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -1182,7 +1182,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &5100013671370253574
 RectTransform:
   m_ObjectHideFlags: 0
@@ -2491,8 +2491,8 @@ GameObject:
   - component: {fileID: 5100013672296497389}
   - component: {fileID: 5100013672296497390}
   - component: {fileID: 5100013672296497391}
-  - component: {fileID: 5100013672296497384}
   - component: {fileID: 3633799796700207863}
+  - component: {fileID: 5100013672296497384}
   m_Layer: 5
   m_Name: CheckPointUI
   m_TagString: Untagged
@@ -2584,22 +2584,6 @@ MonoBehaviour:
   m_BlockingMask:
     serializedVersion: 2
     m_Bits: 4294967295
---- !u!114 &5100013672296497384
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5100013672296497386}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 63c64907fdff4a5428249aa175d6b144, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  titleObj: {fileID: 5100013670692046192}
-  menuObj: {fileID: 5100013670725178530}
-  loadMenu: {fileID: 5100013671235839254}
-  backMenu: {fileID: 5100013671540992288}
 --- !u!114 &3633799796700207863
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2622,6 +2606,22 @@ MonoBehaviour:
   sceneViewId: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0
+--- !u!114 &5100013672296497384
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5100013672296497386}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 63c64907fdff4a5428249aa175d6b144, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  titleObj: {fileID: 5100013670692046192}
+  menuObj: {fileID: 5100013670725178530}
+  loadMenu: {fileID: 5100013671235839254}
+  backMenu: {fileID: 5100013671540992288}
 --- !u!1 &5100013672410371526
 GameObject:
   m_ObjectHideFlags: 0

@@ -11,9 +11,9 @@ namespace JCW.Object
         [Header("신호 해제 시 복귀 속도")] [SerializeField] float comebackMovingSpeed;
         [Header("접촉 시 사망 여부")] [SerializeField] bool isLethal;
         [Header("플레이어가 탈 수 있는 지 여부")] [SerializeField] bool canRide;
+        public bool isActive = false;
         [Header("이동 경로")] [SerializeField] List<Vector3> positionList;
 
-        public bool isActive = false;
         int curIndex = 0;
         int maxIndex = 0;
 
@@ -58,19 +58,8 @@ namespace JCW.Object
 
         IEnumerator MoveToEnd()
         {
-            if (positionList.Count <= 1)
+            if (positionList.Count <= 1 || curIndex >= maxIndex)
                 yield break;
-
-            // 현재 인덱스와 인덱스 사이라면, 미리 이동시켜놓음.
-            while (true)
-            {
-                if (transform.position == positionList[curIndex])
-                    break;
-                transform.position = Vector3.MoveTowards(transform.position, positionList[curIndex], Time.deltaTime * recieveMovingSpeed);
-                if (Vector3.SqrMagnitude(transform.position - positionList[curIndex]) <= 0.05f)
-                    transform.position = positionList[curIndex];
-                yield return null;
-            }
 
             while(curIndex < maxIndex)
             {
@@ -80,6 +69,9 @@ namespace JCW.Object
                 yield return null;
             }
 
+            if (curIndex > maxIndex)
+                curIndex = maxIndex;
+
             yield break;
         }
 
@@ -87,24 +79,20 @@ namespace JCW.Object
         {
             if (positionList.Count <= 1)
                 yield break;
-            // 현재 인덱스와 인덱스 사이라면, 미리 이동시켜놓음.
-            while (true)
+
+            if(curIndex == maxIndex)
+                --curIndex;
+
+            while (curIndex >= 0)
             {
-                if (transform.position == positionList[curIndex])
-                    break;
                 transform.position = Vector3.MoveTowards(transform.position, positionList[curIndex], Time.deltaTime * comebackMovingSpeed);
                 if (Vector3.SqrMagnitude(transform.position - positionList[curIndex]) <= 0.05f)
-                    transform.position = positionList[curIndex];
+                    transform.position = positionList[curIndex--];
                 yield return null;
             }
 
-            while (curIndex > 0)
-            {
-                transform.position = Vector3.MoveTowards(transform.position, positionList[curIndex - 1], Time.deltaTime * comebackMovingSpeed);
-                if (Vector3.SqrMagnitude(transform.position - positionList[curIndex - 1]) <= 0.05f)
-                    transform.position = positionList[--curIndex];
-                yield return null;
-            }
+            if (curIndex < 0)
+                curIndex = 0;
 
             this.enabled = false;
 
@@ -115,9 +103,10 @@ namespace JCW.Object
         {
             if(collision.gameObject.CompareTag("Nella") || collision.gameObject.CompareTag("Steady"))
             {
+                Debug.Log("오브젝트 접근");
                 Transform playerTF = collision.gameObject.transform;
                 if (isLethal)
-                    playerTF.gameObject.GetComponent<PlayerController>().GetDamage(12, DamageType.Dead);
+                    playerTF.GetComponent<PlayerController>().Resurrect();
                 else if (canRide && playerTF.position.y >= this.transform.position.y)
                     playerTF.parent = this.transform;
             }
@@ -130,16 +119,6 @@ namespace JCW.Object
                 Transform playerTF = collision.gameObject.transform;
                 if (playerTF.IsChildOf(transform))
                     playerTF.parent = null;
-            }
-        }
-
-        private void OnTriggerEnter(Collider other)
-        {
-            if (other.CompareTag("Nella") || other.CompareTag("Steady"))
-            {
-                Transform playerTF = other.transform;
-                if (isLethal)
-                    playerTF.gameObject.GetComponent<PlayerController>().GetDamage(12, DamageType.Dead);
             }
         }
     }
