@@ -12,8 +12,11 @@ namespace KSU.Object.Interaction
         public float detectingRange = 20f;
         public float interactableRange = 5f;
 
-        protected bool isInteractable = true; 
+        protected bool isInteractable = true;
+        protected bool isActivated = false;
         protected PhotonView photonView;
+
+        [SerializeField] List<InteractingTargetObject> interactingTargetObjects;
 
         // Start is called before the first frame update
         virtual protected void Awake()
@@ -37,6 +40,21 @@ namespace KSU.Object.Interaction
         protected void SetInteractable(bool isOn)
         {
             isInteractable = isOn;
+        }
+
+        [PunRPC]
+        protected void SetActivation(bool isOn)
+        {
+            isActivated = isOn;
+        }
+
+        [PunRPC]
+        protected virtual void SendActivation()
+        {
+            foreach(var obj in interactingTargetObjects)
+            {
+                obj.RecieveActivation(isActivated);
+            }
         }
     }
 }
