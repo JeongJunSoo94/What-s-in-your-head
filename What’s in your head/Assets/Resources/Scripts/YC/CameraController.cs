@@ -44,7 +44,7 @@ namespace YC.Camera_
 
         // ============  최적화 관련 설정  ============ //
         [Header("[Clipping Planes Far]")]
-        [SerializeField] [Range(0, 3000)] float farValue = 700f;
+        [SerializeField] [Range(0, 1000)] float farValue = 500;
 
         // ============  카메라 감도 설정  ============ //
         [Header("[Back View 카메라 마우스 감도]")]
@@ -175,9 +175,6 @@ namespace YC.Camera_
 
             if (isSideView)
             {
-                //if (Input.GetKeyDown(KeyCode.Keypad9))
-                //    ShakeCameraInSideView();
-
                 MoveInSideView();
                 ZoomInSideView();
                 return;
