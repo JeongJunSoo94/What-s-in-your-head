@@ -21,7 +21,7 @@ namespace JJS
             public bool canNoAimAttack;
             public bool canMoveAttack;
         }
-        protected PhotonView photonView;
+        public PhotonView photonView;
 
         public float layerWeight=0;
 
@@ -55,6 +55,9 @@ namespace JJS
 
         public bool notRotatoin;
 
+        public GameObject sideLeft;
+        public GameObject sideRight;
+
         private void Awake()
         {
             afterDelayTime = false;
@@ -81,6 +84,14 @@ namespace JJS
 
         }
 
+
+        public void InstantiateSideCollider()
+        {
+            GameObject obj=Instantiate(sideLeft);
+            obj.GetComponent<SideViewColliderBoundary>().cameraMain = cameraMain;
+            obj = Instantiate(sideRight);
+            obj.GetComponent<SideViewColliderBoundary>().cameraMain = cameraMain;
+        }
         public virtual int GetUseWeapon()
         {
             if (weaponInfo.Length !=0)

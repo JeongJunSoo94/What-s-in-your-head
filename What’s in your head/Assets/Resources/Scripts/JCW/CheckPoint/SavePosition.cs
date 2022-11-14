@@ -40,7 +40,6 @@ namespace JCW.Object
         {
             if (other.CompareTag("Nella") || other.CompareTag("Steady"))
             {
-                Debug.Log("¡¢√À");
                 if (!firstContact)
                 {
                     if (PhotonNetwork.PlayerList.Length < 2)

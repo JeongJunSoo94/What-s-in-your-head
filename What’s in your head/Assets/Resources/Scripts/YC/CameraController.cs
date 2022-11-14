@@ -145,7 +145,7 @@ namespace YC.Camera_
         [Header("[Aim UI]")]
         public GameObject aimUI;
 
-        void Awake()  
+        void Awake()
         {
             pv = GetComponent<PhotonView>();
             if (pv) pv.ObservedComponents.Add(this);
@@ -166,10 +166,6 @@ namespace YC.Camera_
         void FixedUpdate()
         {
             if (!pv.IsMine) return;
-
-            //Debug.Log(isJumping + "  " + isLerp + "  " + wasEndSet);
-            //Debug.Log(lookatBackObj.transform.position.y);
-            //Debug.Log(followObj.transform.position.y);
 
             if (playerState.isInMaze)
                 return;
@@ -215,7 +211,7 @@ namespace YC.Camera_
                 if (wasEndSet && playerState.IsAirDashing)
                     AirDashFollow();
 
-                if (isLower) 
+                if (isLower)
                     LowerPlayerFollow();
             }
             else if (!isJumping && !isLerp)
@@ -262,6 +258,11 @@ namespace YC.Camera_
                 backCam.GetComponent<CinemachineCollider>().m_IgnoreTag = ignoreTag;
                 sholderCam.GetComponent<CinemachineCollider>().m_IgnoreTag = ignoreTag;
             }
+
+            backCam.GetComponent<CinemachineCollider>().m_Damping = 0.1f;
+            backCam.GetComponent<CinemachineCollider>().m_DampingWhenOccluded = 0.1f;
+            sholderCam.GetComponent<CinemachineCollider>().m_Damping = 0.1f;
+            sholderCam.GetComponent<CinemachineCollider>().m_DampingWhenOccluded = 0.1f;
 
             followObj = Instantiate(CineFollowObj_Back, player.transform.position + CineFollowObj_Back.transform.position, player.transform.rotation).GetComponent<Transform>();
             lookatBackObj = Instantiate(CineLookObj_Back, player.transform.position + CineLookObj_Back.transform.position, player.transform.rotation).GetComponent<Transform>();
@@ -656,6 +657,8 @@ namespace YC.Camera_
         // ====================  [Maze View 함수]  ==================== //
         public void SetMazeMode(bool enter, bool isExit) // 미로 모드 설정  
         {
+            if (!pv.IsMine) return;
+
             if (enter) // 미로 입장시
             {
                 OnOffCamera(null);
@@ -913,19 +916,12 @@ namespace YC.Camera_
                                             player.transform.position.z);
 
             lookatBackObj.transform.position = LookPos;
-            //Debug.Log("SetCineObjPos");
-            //Debug.Log(orgLookY);
-            //Debug.Log(orgFollowY);
-
         }
 
         public void JumpInit(bool On) // 플레이어 SMB에서 호출  
         {
             if (On) // 일반 점프 시작
             {
-                //Debug.Log("JumpInit - On =================================================");
-                //Debug.Log(orgLookY);
-                //Debug.Log(orgFollowY);
 
                 // 플랫폼 보간 중, 점프를 시도했다면 
                 if (isLerp)
@@ -951,9 +947,6 @@ namespace YC.Camera_
             else if (!On) // 땅에 착지 or 스페셜 액션 종료
             {
                 isJumping = false;
-                //Debug.Log("JumpInit - Off =================================================");
-                //Debug.Log(orgLookY);
-                //Debug.Log(orgFollowY);
 
                 if (playerState.IsGrounded)
                 {
@@ -979,9 +972,6 @@ namespace YC.Camera_
 
         void NormalJump_FixY() // 플레이어가 일반 점프 중일 때, 외부 오브젝트의 Y값을 고정시킨다  
         {
-            //Debug.Log("NormalJump_FixY");
-            //Debug.Log(orgLookY);
-            //Debug.Log(orgFollowY);
             lookatBackObj.position =
                         new Vector3(player.transform.position.x,
                                     orgLookY,
