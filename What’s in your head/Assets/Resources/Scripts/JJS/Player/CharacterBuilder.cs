@@ -5,13 +5,14 @@ using KSU;
 using KSU.AutoAim.Player;
 using JJS.Weapon;
 using YC.Camera_;
+
 namespace JJS
 {
     public class CharacterBuilder : MonoBehaviour
     {
         public bool single;
-        protected GameObject nella;
-        protected GameObject steady;
+        [HideInInspector] public GameObject nella;
+        [HideInInspector] public GameObject steady;
         public MouseControllerWeaponData nellaMouseControllerData;
         public MouseControllerWeaponData steadyMouseControllerData;
 
