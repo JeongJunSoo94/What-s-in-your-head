@@ -39,6 +39,10 @@ namespace YC.Camera_
         CamState curCam;
         CamState preCam;
 
+        // ============  최적화 관련 설정  ============ //
+        [Header("[Clipping Planes Far]")]
+        [SerializeField] [Range(0, 3000)] float farValue = 700f;
+
         // ============  카메라 감도 설정  ============ //
         [Header("[Back View 카메라 마우스 감도]")]
         [SerializeField] [Range(0, 100)] float backView_MouseSensitivity = 25f;
@@ -141,7 +145,7 @@ namespace YC.Camera_
         [Header("[Aim UI]")]
         public GameObject aimUI;
 
-        void Awake()
+        void Awake()  
         {
             pv = GetComponent<PhotonView>();
             if (pv) pv.ObservedComponents.Add(this);
@@ -211,7 +215,7 @@ namespace YC.Camera_
                 if (wasEndSet && playerState.IsAirDashing)
                     AirDashFollow();
 
-                if (isLower)
+                if (isLower) 
                     LowerPlayerFollow();
             }
             else if (!isJumping && !isLerp)
@@ -237,6 +241,8 @@ namespace YC.Camera_
 
             backCam = Instantiate(CineBack, Vector3.zero, Quaternion.identity).GetComponent<CinemachineVirtualCameraBase>();
             sholderCam = Instantiate(CineSholder, Vector3.zero, Quaternion.identity).GetComponent<CinemachineVirtualCameraBase>();
+            backCam.GetComponent<CinemachineFreeLook>().m_Lens.FarClipPlane = farValue;
+            sholderCam.GetComponent<CinemachineFreeLook>().m_Lens.FarClipPlane = farValue;
 
             if (this.gameObject.CompareTag("Nella"))
             {
@@ -407,11 +413,26 @@ namespace YC.Camera_
 
         public void Option_SetShake(bool on) // 스테디 카메라 흔들림 사용 여부  
         {
+            if (CameraManager.Instance.isOptionInit) // << : 게임 시작 전, 옵션에서 미리 설정된 값이 있다면
+            {
+                canShake = CameraManager.Instance.canShakeSaved;
+                return;
+            }
+
             canShake = on;
         }
 
-        public void Option_SetSensitivity(float backSensitivity, float sholderSensitivity) // 마우q스 민감도 설정  
+        public void Option_SetSensitivity(float _backSensitivity, float _sholderSensitivity) // 마우스 민감도 설정  
         {
+            float backSensitivity = _backSensitivity;
+            float sholderSensitivity = _sholderSensitivity;
+
+            if (CameraManager.Instance.isOptionInit) // << : 게임 시작 전, 옵션에서 미리 설정된 값이 있다면
+            {
+                backSensitivity = CameraManager.Instance.backSensitivitySaved;
+                sholderSensitivity = CameraManager.Instance.sholderSensitivitySaved;
+            }
+
             int defaulyX = 200;
             int defaultY = 1;
 
@@ -424,6 +445,7 @@ namespace YC.Camera_
 
             sholderCam.GetComponent<CinemachineFreeLook>().m_XAxis.m_MaxSpeed = defaulyX + sholderSensitivity * 4;
             sholderCam.GetComponent<CinemachineFreeLook>().m_YAxis.m_MaxSpeed = defaultY + sholderSensitivity * 0.04f;
+
             curSholderMaxSpeedY = sholderCam.GetComponent<CinemachineFreeLook>().m_YAxis.m_MaxSpeed;
         }
 
