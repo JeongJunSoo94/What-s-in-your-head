@@ -138,14 +138,14 @@ namespace JCW.Object
                     nextTargetBeforeObj_ready.SetActive(false);
                     break;
                 }
-                curTime+= flickTime / 2f;
-                if(!isStart)
+                curTime+= Time.deltaTime;
+                if (!isStart)
                 {
                     isStart = true;
                     nextTargetBeforeObj_ready.SetActive(true);
                 }
                 //SoundManager.Instance.Play3D_RPC("ContaminationFieldWarn", audioSource);
-                yield return new WaitForSeconds(0.5f);
+                yield return null;
             }
                 
             if (transform.GetChild(indexs[0]).gameObject.activeSelf)
@@ -163,7 +163,7 @@ namespace JCW.Object
 
         IEnumerator WaitForPlayer()
         {
-            yield return new WaitUntil(() => PhotonNetwork.PlayerList.Length == 1);
+            yield return new WaitUntil(() => PhotonNetwork.PlayerList.Length == 2);
 
             if (PhotonNetwork.IsMasterClient)
             {

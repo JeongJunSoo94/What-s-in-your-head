@@ -1079,17 +1079,13 @@ namespace YC.Camera_
 
         public void RidingInit() // 라이딩(로프, 레일)진행시 각각의 SMB에서 해당 함수를 호출한다 (갈고리 제외)  
         {
-            if (isLerp)
-            {
-                StopAllCoroutines();
-                isLerp = false;
-            }
-
             isRiding = true;           
         }
 
         void RidingCamera() // 라이딩 시작부터, '착지할 때'까지 플레이어를 쫓아간다  
         {
+            if (isLerp) return;
+
             lookatBackObj.position
                             = new Vector3(player.transform.position.x,
                                         player.transform.position.y + lookatObjOriginY,
