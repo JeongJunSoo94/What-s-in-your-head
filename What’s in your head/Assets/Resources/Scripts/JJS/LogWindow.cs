@@ -13,16 +13,16 @@ namespace JJS
         bool use;
         public string m_FilePath1 = "PlayerLog.txt";
         public string m_FilePath2 = "PlayerExceptionLog.txt";
-        Text logText;
-        Text exceptionText;
-        ScrollRect scrollRect;
-        GameObject logObj;
-        GameObject exceptionObj;
-        GameObject scroll;
-        GameObject canvasObj;
-        StreamWriter sw1;
-        StreamWriter sw2;
-        GameObject button;
+        public Text logText;
+        public Text exceptionText;
+        public ScrollRect scrollRect;
+        public GameObject logObj;
+        public GameObject exceptionObj;
+        public GameObject scroll;
+        public GameObject canvasObj;
+        public StreamWriter sw1;
+        public StreamWriter sw2;
+        public GameObject button;
         readonly StringBuilder changedStr = new(500);
         readonly StringBuilder allLogText = new(100000);
 
@@ -87,13 +87,13 @@ namespace JJS
 
         void OnDisable()
         {
-            sw1 = new StreamWriter(m_FilePath1, true);
-            sw2 = new StreamWriter(m_FilePath2, true);
             Application.logMessageReceived -= SetLog;
-            sw1.Flush();
-            sw2.Flush();
-            sw1.Close();
-            sw2.Close();
+            //sw1 = new StreamWriter(m_FilePath1, true);
+            //sw2 = new StreamWriter(m_FilePath2, true);
+            //sw1.Flush();
+            //sw2.Flush();
+            //sw1.Close();
+            //sw2.Close();
         }
 
         public void UseWindow(bool enable)

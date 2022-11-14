@@ -9,6 +9,7 @@ namespace JJS
 {
     public class NormalViewSMB : CharacterBaseSMB
     {
+
         override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
         {
             animator.SetBool("wasAirJump", false);
@@ -85,14 +86,17 @@ namespace JJS
                         {
                             if (!GetPlayerController(animator).characterState.IsDashing && !GetPlayerController(animator).characterState.IsJumping)
                             {
-                                if (GetPlayerController(animator).playerMouse.weaponInfo[GetPlayerController(animator).playerMouse.GetUseWeapon()].weapon.name != "Mic")
+                                if (GetPlayerController(animator).playerMouse.weaponInfo[GetPlayerController(animator).playerMouse.GetUseWeapon()].weapon.name == "ElectricGuitar_st")
                                 {
                                     animator.SetBool("isAttackNext", true);
                                     animator.SetBool("isAttack", true);
                                     return;
                                 }
-                                animator.SetBool("isSinging", true);
-                                return;
+                                else if (GetPlayerController(animator).playerMouse.weaponInfo[GetPlayerController(animator).playerMouse.GetUseWeapon()].weapon.name == "Mic")
+                                {
+                                    animator.SetBool("isSinging", true);
+                                    return;
+                                }
                             }
                         }
                     }
