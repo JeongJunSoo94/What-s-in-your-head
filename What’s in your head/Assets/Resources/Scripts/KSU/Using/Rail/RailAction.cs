@@ -83,9 +83,11 @@ namespace KSU
         }
         private void Update()
         {
-            SearchWithSphereCast();
-            if(playerState.isMine)
+            if (playerState.isMine)
+            {
+                SearchWithSphereCast();
                 SendInfoUI();
+            }
             //if(interactionState.isRailTriggered)
             //{
             //    if (interactionState.isMovingToRail)

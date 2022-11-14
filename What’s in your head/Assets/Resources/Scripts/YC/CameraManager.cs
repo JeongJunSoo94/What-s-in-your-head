@@ -506,11 +506,8 @@ namespace YC.CameraManager_
             string tagSteady = "Steady";
 
             if (!GameManager.Instance.characterOwner[PhotonNetwork.IsMasterClient])
-            {
-                GameObject.FindGameObjectWithTag(tagSteady).GetComponent<CameraController>().Option_SetShake(on);
-            }
+                GameObject.FindGameObjectWithTag(tagSteady).GetComponent<CameraController>().Option_SetShake(on);           
         }
-
         public void Option_SetSensitivity(float _backSensitivity, float _sholderSensitivity) // 마우스 민감도 설정  
         {
             // >> : 아직 플레이어가 생성되지 않았다면, 카메라 매니저 변수에 저장만 해두고 바로 리턴
@@ -527,13 +524,9 @@ namespace YC.CameraManager_
             string tagSteady = "Steady";
 
             if (GameManager.Instance.characterOwner[PhotonNetwork.IsMasterClient])
-            {
-                GameObject.FindGameObjectWithTag(tagNella).GetComponent<CameraController>().Option_SetSensitivity(_backSensitivity, _sholderSensitivity);
-            }
+                GameObject.FindGameObjectWithTag(tagNella).GetComponent<CameraController>().Option_SetSensitivity(_backSensitivity, _sholderSensitivity); 
             else
-            {
-                GameObject.FindGameObjectWithTag(tagSteady).GetComponent<CameraController>().Option_SetSensitivity(_backSensitivity, _sholderSensitivity);
-            }
+                GameObject.FindGameObjectWithTag(tagSteady).GetComponent<CameraController>().Option_SetSensitivity(_backSensitivity, _sholderSensitivity);           
         }
 
 

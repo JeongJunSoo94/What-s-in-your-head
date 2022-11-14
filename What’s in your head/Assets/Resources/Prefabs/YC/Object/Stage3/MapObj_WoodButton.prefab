@@ -96,7 +96,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: ced78b98dbf994e46837e2f4ad3ca93c, type: 2}
+  - {fileID: 2100000, guid: 28754bfadb3b8dc42a3e6f0e68cfbc92, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -260,7 +260,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: ff664faedcb8e3a47bfb126991675006, type: 2}
+  - {fileID: 2100000, guid: 6be865c5c4d45ad499a3fb96bf6659ad, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -308,6 +308,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fafcef47dab05b146aacaa481906b930, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isToggle: 0
   woodButton: {fileID: 6080685035425099917}
 --- !u!54 &2648692949979773221
 Rigidbody:
@@ -418,7 +419,6 @@ GameObject:
   m_Component:
   - component: {fileID: 6857080619562412584}
   - component: {fileID: 6387097145343513273}
-  - component: {fileID: 6080685035425099916}
   - component: {fileID: 6080685035425099917}
   m_Layer: 3
   m_Name: MapObj_WoodButton
@@ -436,7 +436,7 @@ Transform:
   m_GameObject: {fileID: 6080685035425099922}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -7.88, y: 0.5, z: 0}
-  m_LocalScale: {x: 2, y: 2, z: 2}
+  m_LocalScale: {x: 0.45125595, y: 0.45125595, z: 0.45125595}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 2565340040390539958}
@@ -464,28 +464,6 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
---- !u!114 &6080685035425099916
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6080685035425099922}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  ObservedComponentsFoldoutOpen: 1
-  Group: 0
-  prefixField: -1
-  Synchronization: 3
-  OwnershipTransfer: 0
-  observableSearch: 2
-  ObservedComponents: []
-  sceneViewId: 0
-  InstantiationId: 0
-  isRuntimeInstantiated: 0
 --- !u!114 &6080685035425099917
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -498,6 +476,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1084aad4c861fdf419ca556f300e9046, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  doorObj: {fileID: 0}
+  isInMaze: 0
+  MazeDoor: {fileID: 0}
 --- !u!1 &6453611327292580610
 GameObject:
   m_ObjectHideFlags: 0
