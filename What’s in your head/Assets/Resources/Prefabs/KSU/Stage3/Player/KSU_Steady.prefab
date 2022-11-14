@@ -25406,6 +25406,7 @@ MonoBehaviour:
   gravityCofactor: 10
   terminalSpeed: -20
   knockBackVerticalSpeed: 8
+  trampolinSpeed: 20
   rotationSpeed: 720
   moveVec: {x: 0, y: 0, z: 0}
   moveDir: {x: 0, y: 0, z: 0}
@@ -25469,8 +25470,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   groundLayerMask:
     serializedVersion: 2
-    m_Bits: 8
+    m_Bits: 1114120
   groundCheckDistance: 2
+  groundCheckAirDistance: 1
   groundCheckThresholdMin: 0.02
   groundCheckThresholdMax: 0.1
   forwardblockingMinHeight: 0.2
@@ -25497,6 +25499,7 @@ MonoBehaviour:
   isOutOfControl: 0
   isStopped: 0
   isRiding: 0
+  isInMaze: 0
   CanResetKnockBack: 1
   aim: 0
   top: 0

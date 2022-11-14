@@ -4,15 +4,25 @@ using UnityEngine;
 
 public class SwitchingTrampolin : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    [SerializeField] List<GameObject> trampolins;
+
+    private void Start()
     {
-        
+        trampolins[0].SetActive(true);
+        trampolins[1].SetActive(false);
     }
 
-    // Update is called once per frame
-    void Update()
+    void SwitchTrampolin()
     {
-        
+        for(int i = 0; i < trampolins.Count; ++i)
+        {
+            trampolins[i].SetActive(!trampolins[i].activeSelf);
+        }
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.CompareTag("player"))
+            SwitchTrampolin();
     }
 }

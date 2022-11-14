@@ -15,6 +15,7 @@ namespace KSU.Object.Interaction.Stage1
         {
             objRigidbody = GetComponent<Rigidbody>();
             objRigidbody.useGravity = false;
+            objRigidbody.isKinematic = true;
         }
 
         public override void RecieveActivation(bool isActive)
@@ -28,6 +29,7 @@ namespace KSU.Object.Interaction.Stage1
 
         IEnumerator StartActivation()
         {
+            objRigidbody.isKinematic = false;
             objRigidbody.velocity = Vector3.up * floatingSpeed;
             yield return new WaitForSeconds(delayTime);
             objRigidbody.velocity = Vector3.zero;

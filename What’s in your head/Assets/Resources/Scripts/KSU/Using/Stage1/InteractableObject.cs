@@ -22,7 +22,8 @@ namespace KSU.Object.Interaction
         virtual protected void Awake()
         {
             photonView = GetComponent<PhotonView>();
-            SetDetectingTrigger();
+            if(detectingTrigger != null)
+                SetDetectingTrigger();
         }
 
         virtual protected void SetDetectingTrigger()
@@ -33,7 +34,12 @@ namespace KSU.Object.Interaction
         public virtual void StartInteraction()
         {
             if (isInteractable)
+            {
+                isInteractable = false;
                 photonView.RPC(nameof(SetInteractable), RpcTarget.AllViaServer, false);
+                photonView.RPC(nameof(SetActivation), RpcTarget.AllViaServer, !isActivated);
+                photonView.RPC(nameof(SendActivation), RpcTarget.AllViaServer);
+            }
         }
 
         [PunRPC]
@@ -43,7 +49,7 @@ namespace KSU.Object.Interaction
         }
 
         [PunRPC]
-        protected void SetActivation(bool isOn)
+        protected virtual void SetActivation(bool isOn)
         {
             isActivated = isOn;
         }
@@ -51,9 +57,12 @@ namespace KSU.Object.Interaction
         [PunRPC]
         protected virtual void SendActivation()
         {
-            foreach(var obj in interactingTargetObjects)
+            if (interactingTargetObjects.Count > 0)
             {
-                obj.RecieveActivation(isActivated);
+                foreach (var obj in interactingTargetObjects)
+                {
+                    obj.RecieveActivation(this, isActivated);
+                }
             }
         }
     }

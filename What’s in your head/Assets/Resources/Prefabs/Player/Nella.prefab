@@ -2630,18 +2630,18 @@ MonoBehaviour:
   photonView: {fileID: 0}
   walkSpeed: 8
   runSpeed: 14
-  dashSpeed: 20
-  airDashSpeed: 16
+  dashSpeed: 15
+  airDashSpeed: 15
   inertiaSpeed: 0
   airMoveSpeed: 5
   airMoveMaxSpeed: 10
-  jumpSpeed: 20
-  airJumpSpeed: 12
-  gravity: -20
+  jumpSpeed: 15
+  airJumpSpeed: 15
+  gravity: -30
   gravityCofactor: 10
-  terminalSpeed: -20
-  knockBackVerticalSpeed: 16
-  trampolinSpeed: 20
+  terminalSpeed: -50
+  knockBackVerticalSpeed: 15
+  trampolinSpeed: 30
   rotationSpeed: 720
   moveVec: {x: 0, y: 0, z: 0}
   moveDir: {x: 0, y: 0, z: 0}
@@ -2710,9 +2710,10 @@ MonoBehaviour:
   groundLayerMask:
     serializedVersion: 2
     m_Bits: 65544
-  groundCheckDistance: 2
+  groundCheckDistance: 1
+  groundCheckAirDistance: 0.1
   groundCheckThresholdMin: 0.02
-  groundCheckThresholdMax: 0.1
+  groundCheckThresholdMax: 0.05
   forwardblockingMinHeight: 0.2
   height: 0
   forwardHeight: 0

@@ -162,7 +162,7 @@ namespace KSU
             playerRigidbody.velocity = Vector3.zero;
         }
 
-        public void InitAnimatorParam(bool initTop)
+        public void InitAnimatorParam()
         {
             playerAnimator.SetBool("isAir", false);
             playerAnimator.SetBool("isAirDash", false);
@@ -188,8 +188,7 @@ namespace KSU
             playerAnimator.SetFloat("HorizonVelocity", 0f);
             playerAnimator.SetFloat("DistY", 0f);
             playerAnimator.SetFloat("moveToRailSpeed", 0f);
-            if (initTop)
-                playerAnimator.SetBool("Top", false);
+            
             switch (this.gameObject.tag)
             {
                 case "Nella":
@@ -219,7 +218,7 @@ namespace KSU
             if (characterState.IsGrounded)
             {
                 characterState.CheckGround(playerCapsuleCollider.radius);
-                if (!characterState.IsGrounded && characterState.CanJump)
+                if (!characterState.IsGrounded && characterState.CanJump && !characterState.IsDashing)
                 {
                     Vector3 horVel = playerRigidbody.velocity;
                     horVel.y = 0;
@@ -261,6 +260,7 @@ namespace KSU
         {
             InitInteraction();
             InitController();
+            InitAnimatorParam();
             if (photonView.IsMine)
             { 
                 GameManager.Instance.curPlayerHP = 12;
@@ -610,12 +610,13 @@ namespace KSU
             InitController();
             moveVec = knockBackVec;
             characterState.IsJumping = true;
+            characterState.JumpCool();
             characterState.isOutOfControl = true;
         }
         public IEnumerator DelayResetKnockBack()
         {
             characterState.CanResetKnockBack = false;
-            yield return new WaitForSeconds(0.2f);
+            yield return new WaitForSeconds(1f);
             characterState.CanResetKnockBack = true;
         }
 

@@ -51,7 +51,7 @@ namespace KSU.AutoAim.Object.Monster
 
 
 
-        bool isTopView = true;
+        bool isTopView = false;
 
 
         // Start is called before the first frame update
@@ -92,6 +92,11 @@ namespace KSU.AutoAim.Object.Monster
             monsterCollider.enabled = true;
             attackTrigger.SetActive(false);
             detectingUITrigger.SetActive(true);
+        }
+
+        public void SetTopViewMode()
+        {
+            isTopView = true;
         }
 
         public void ActiveMonster(Vector3 position)

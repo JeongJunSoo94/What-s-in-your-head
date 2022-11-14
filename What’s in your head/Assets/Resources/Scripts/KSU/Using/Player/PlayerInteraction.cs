@@ -179,8 +179,9 @@ namespace KSU
         {
             if (other.CompareTag("InteractableObject"))
             {
-                if (detectedInteractableObjects.ContainsKey(other.gameObject.transform.parent.gameObject))
-                    return;
+                Debug.Log("트리거 엔터");
+                //if (detectedInteractableObjects.ContainsKey(other.gameObject.transform.parent.gameObject))
+                //    return;
                 detectedInteractableObjects.Add(other.gameObject.transform.parent.gameObject, new Obj_Info(false, false, 100f));
             }
         }

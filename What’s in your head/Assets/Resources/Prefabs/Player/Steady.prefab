@@ -25401,11 +25401,11 @@ MonoBehaviour:
   airMoveMaxSpeed: 10
   jumpSpeed: 15
   airJumpSpeed: 15
-  gravity: -20
+  gravity: -30
   gravityCofactor: 10
-  terminalSpeed: -20
-  knockBackVerticalSpeed: 8
-  trampolinSpeed: 20
+  terminalSpeed: -50
+  knockBackVerticalSpeed: 15
+  trampolinSpeed: 30
   rotationSpeed: 720
   moveVec: {x: 0, y: 0, z: 0}
   moveDir: {x: 0, y: 0, z: 0}
@@ -25470,9 +25470,10 @@ MonoBehaviour:
   groundLayerMask:
     serializedVersion: 2
     m_Bits: 65544
-  groundCheckDistance: 2
+  groundCheckDistance: 1
+  groundCheckAirDistance: 0.1
   groundCheckThresholdMin: 0.02
-  groundCheckThresholdMax: 0.1
+  groundCheckThresholdMax: 0.05
   forwardblockingMinHeight: 0.2
   height: 0
   forwardHeight: 0
@@ -52237,7 +52238,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5999514178359399215, guid: f2137ba5d9da53b41962f4dec3c2ed88, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6052802945646628667, guid: f2137ba5d9da53b41962f4dec3c2ed88, type: 3}
       propertyPath: m_RootOrder
