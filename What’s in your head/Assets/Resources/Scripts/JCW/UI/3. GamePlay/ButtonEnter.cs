@@ -6,29 +6,33 @@ using Photon.Pun;
 using JCW.Network;
 using Photon.Realtime;
 using System.IO;
+using JCW.UI.InGame;
 
 namespace JCW.UI
 {
     public class ButtonEnter : MonoBehaviour
     {
-        [Header("플레이어 버튼")][SerializeField] private Button player1_Button = null;
-                                [SerializeField] private Button player2_Button = null;
-        [Header("뒤로가기 버튼")][SerializeField] private Button backButton = null;        
-        [Header("기본 버튼 스프라이트")][SerializeField] private Sprite defaultSprite1 = null;
-                                     [SerializeField] private Sprite defaultSprite2 = null;
-        [Header("완료 버튼 스프라이트")][SerializeField] private Sprite readySprite1 = null;        
-                                     [SerializeField] private Sprite readySprite2 = null;
-        [Header("캐릭터 선택 UI")] [SerializeField] private GameObject charSelectUI = null;
-        [Header("넘어가기 버튼")] [SerializeField] private Button moveOnButton = null;
+        [Header("플레이어 버튼")][SerializeField]         Button player1_Button = null;
+                                [SerializeField]        Button player2_Button = null;
+        [Header("뒤로가기 버튼")][SerializeField]         Button backButton = null;        
+        [Header("기본 버튼 스프라이트")][SerializeField]  Sprite defaultSprite1 = null;
+                                     [SerializeField]  Sprite defaultSprite2 = null;
+        [Header("완료 버튼 스프라이트")][SerializeField]  Sprite readySprite1 = null;        
+                                     [SerializeField]  Sprite readySprite2 = null;
+        [Header("캐릭터 선택 UI")] [SerializeField]      GameObject charSelectUI = null;
+        [Header("넘어가기 버튼")] [SerializeField]        Button moveOnButton = null;
+        [Header("로딩 UI")] [SerializeField]              CutScene openingUI;
 
-        private bool isReady = false;
+         bool isReady = false;
 
-        private Image player1_Img;
-        private Image player2_Img;
+         Image player1_Img;
+         Image player2_Img;
 
-        private PhotonView photonView;
+         PhotonView photonView;
 
-        private void Awake()
+        [HideInInspector] public bool isNewGame = true;
+
+         void Awake()
         {
             player1_Img = player1_Button.gameObject.GetComponent<Image>();
             player2_Img = player2_Button.gameObject.GetComponent<Image>();
@@ -59,7 +63,7 @@ namespace JCW.UI
                 photonView.RPC(nameof(MoveOn), RpcTarget.AllViaServer);                
             });
         }
-        private void Update()
+         void Update()
         {
             if (Input.GetKeyDown(KeyCode.Return))
             {
@@ -68,7 +72,7 @@ namespace JCW.UI
         }
 
         [PunRPC]
-        private void SetEnter(bool isMaster, bool leave = false)
+         void SetEnter(bool isMaster, bool leave = false)
         {
             isReady = !isReady;
             if (leave && isReady)
@@ -87,7 +91,7 @@ namespace JCW.UI
 
         }
         [PunRPC]
-        private void CancleEnter()
+         void CancleEnter()
         {
             isReady = false;
             player1_Img.sprite = defaultSprite1;
@@ -95,15 +99,22 @@ namespace JCW.UI
         }
 
         [PunRPC]
-        private void MoveOn()
+         void MoveOn()
         {
             CancleEnter();
-            charSelectUI.SetActive(true);
+
             moveOnButton.gameObject.SetActive(false);
+            if (isNewGame)
+            {
+                openingUI.gameObject.SetActive(true);
+                StartCoroutine(nameof(WaitForCutSceneEnd));
+            }
+            else
+                charSelectUI.SetActive(true);
         }
 
         [PunRPC]
-        private void Leave()
+         void Leave()
         {
             PhotonNetwork.LeaveRoom();
             StartCoroutine(nameof(WaitForRoom));
@@ -112,10 +123,7 @@ namespace JCW.UI
 
         IEnumerator WaitForRoom()
         {
-            while (PhotonNetwork.NetworkClientState.ToString() != ClientState.JoinedLobby.ToString())
-            {
-                yield return new WaitForSeconds(0.05f);
-            }
+            yield return new WaitUntil(() => PhotonNetwork.NetworkClientState.ToString() == ClientState.JoinedLobby.ToString());
             RoomOptions lobbyOptions = new()
             {
                 MaxPlayers = 20,    // 최대 접속자수, 포톤 무료는 20CCU이므로 20 초과로는 못한다.
@@ -127,6 +135,15 @@ namespace JCW.UI
             yield break;
         }
 
+        IEnumerator WaitForCutSceneEnd()
+        {
+            yield return new WaitUntil(() => openingUI.gameObject.activeSelf == false);
+            charSelectUI.SetActive(true);
+            yield break;
+        }
+
+        // 스테이지 세팅
+        #region 
         public void LoadLatestStage()
         {
             string path = Application.dataPath + "/Resources/CheckPointInfo/Stage";
@@ -152,7 +169,7 @@ namespace JCW.UI
                 {
                     case 0:
                     case 1:
-                        tempText.text = "놀이 공원";
+                        tempText.text = "테마 파크";
                         break;
                     case 2:
                         tempText.text = "연주회";
@@ -166,6 +183,23 @@ namespace JCW.UI
             {
                 GameManager.Instance.curStageIndex = 1;
             }
+            isNewGame = false;
+        }
+
+        public void SetNewGame_RPC()
+        {
+            if (!PhotonNetwork.IsMasterClient)
+                return;
+            photonView.RPC(nameof(SetNewGame), RpcTarget.AllViaServer);
+        }
+
+        [PunRPC]
+        void SetNewGame()
+        {
+            isNewGame = true;
+            GameManager.Instance.curStageIndex = 1;
+            GameManager.Instance.curStageType = 1;
+            GameManager.Instance.curSection = 0;
         }
 
 
@@ -207,5 +241,6 @@ namespace JCW.UI
         {
             GameManager.Instance.curSection = sectionCount;
         }
+        #endregion 
     }
 }

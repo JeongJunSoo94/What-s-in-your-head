@@ -78,15 +78,34 @@ namespace JCW.Dialog
         StringBuilder nellaDialog = null;
         StringBuilder steadyDialog = null;
 
-        public Text etcText1;       public Text etcText2;
-        public Text nellaText1;     public Text nellaText2;
-        public Text steadyText1;    public Text steadyText2;
+        public Text etcText1;           public Text etcText2;   
+        public Text nellaText1;         public Text nellaText2; 
+        public Text steadyText1;        public Text steadyText2;
+
+        Text etcRealText1;       Text etcRealText2;
+        Text nellaRealText1;     Text nellaRealText2;
+        Text steadyRealText1;    Text steadyRealText2;
+
+
+        [HideInInspector] public bool isEtcStart = false;
+        [HideInInspector] public bool isNellaStart = false;
+        [HideInInspector] public bool isSteadyStart = false;
+        [HideInInspector] public bool needToEtcBreak = false;
+        [HideInInspector] public bool needToNellaBreak = false;
+        [HideInInspector] public bool needToSteadyBreak = false;
+
         private void Awake()
         {
             if (Instance == null)
             {
                 Instance = this;
                 DontDestroyOnLoad(this.gameObject);
+                etcRealText1    = etcText1.transform.GetChild(1).GetComponent<Text>();
+                etcRealText2    = etcText2.transform.GetChild(1).GetComponent<Text>();
+                nellaRealText1  = nellaText1.transform.GetChild(1).GetComponent<Text>();
+                nellaRealText2  = nellaText2.transform.GetChild(1).GetComponent<Text>();
+                steadyRealText1 = steadyText1.transform.GetChild(1).GetComponent<Text>();
+                steadyRealText2 = steadyText2.transform.GetChild(1).GetComponent<Text>();
             }
             else
                 Destroy(this.gameObject);
@@ -191,8 +210,10 @@ namespace JCW.Dialog
             }
             etcText1.text = etcDialog.ToString();
             etcText2.text = etcText1.text;
-            etcText1.enabled = true;
-            etcText2.enabled = true;
+            etcRealText1.text = etcText1.text;
+            etcRealText2.text = etcText1.text;
+            etcText1.gameObject.SetActive(true);
+            etcText2.gameObject.SetActive(true);
         }
 
         public void SetNellaDialog(int order)
@@ -210,8 +231,10 @@ namespace JCW.Dialog
             }
             nellaText1.text = nellaDialog.ToString();
             nellaText2.text = nellaText1.text;
-            nellaText1.enabled = true;
-            nellaText2.enabled = true;
+            nellaRealText1.text = nellaText1.text;
+            nellaRealText2.text = nellaText1.text;
+            nellaText1.gameObject.SetActive(true);
+            nellaText2.gameObject.SetActive(true);
         }
 
         public void SetSteadyDialog(int order)
@@ -229,18 +252,20 @@ namespace JCW.Dialog
             }
             steadyText1.text = steadyDialog.ToString();
             steadyText2.text = steadyText1.text;
-            steadyText1.enabled = true;
-            steadyText2.enabled = true;
+            steadyRealText1.text = steadyText1.text;
+            steadyRealText2.text = steadyText1.text;
+            steadyText1.gameObject.SetActive(true);
+            steadyText2.gameObject.SetActive(true);
         }
 
         public void CleanSet()
         {
-            etcText1.enabled = false;
-            etcText2.enabled = false;
-            nellaText1.enabled = false;
-            nellaText2.enabled = false;
-            steadyText1.enabled = false;
-            steadyText2.enabled = false;
+            etcText1.gameObject.SetActive(false);
+            etcText2.gameObject.SetActive(false);
+            nellaText1.gameObject.SetActive(false);
+            nellaText2.gameObject.SetActive(false);
+            steadyText1.gameObject.SetActive(false);
+            steadyText2.gameObject.SetActive(false);
         }
 
     }
