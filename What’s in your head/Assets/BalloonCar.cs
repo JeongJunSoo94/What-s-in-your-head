@@ -34,13 +34,23 @@ namespace KSU.Object.Interaction.Stage1
             yield return new WaitForSeconds(delayTime);
             objRigidbody.velocity = Vector3.zero;
             objRigidbody.useGravity = true;
-            DestroyBalloon();
+            StartCoroutine(nameof(DestroyBalloon));
         }
 
-        void DestroyBalloon()
+        IEnumerator DestroyBalloon()
         {
             objRigidbody.velocity = Vector3.zero;
             Destroy(balloon);
+            WaitForEndOfFrame temp = new WaitForEndOfFrame();
+            while (true)
+            {
+                if (transform.position.y < 13.2f)
+                {
+                    objRigidbody.isKinematic = true;
+                    yield break;
+                }
+                yield return temp;
+            }
         }
     }
 }

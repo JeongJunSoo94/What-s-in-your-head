@@ -23,6 +23,7 @@ namespace KSU
         #region    
         public PlayerState characterState;
         public PlayerMouseController playerMouse;
+        public PlayerInteraction playerInteraction;
         #endregion
 
         // 유니티 제공 Components
@@ -108,6 +109,7 @@ namespace KSU
             playerCapsuleCollider = GetComponent<CapsuleCollider>();
             playerRigidbody = GetComponent<Rigidbody>();
             playerMouse = GetComponent<PlayerMouseController>();
+            playerInteraction = GetComponent<PlayerInteraction>();
 
 
             //====================================================
@@ -206,11 +208,11 @@ namespace KSU
 
         void InitInteraction()
         {
-            GetComponent<PlayerInteraction>().InitInteraction();
+            playerInteraction.InitInteraction();
         }
         void EscapeInteraction()
         {
-            GetComponent<PlayerInteraction>().EscapeInteraction();
+            playerInteraction.EscapeInteraction();
         }
 
         private void CheckState()
@@ -598,6 +600,7 @@ namespace KSU
         public void SetOffCollider()
         {
             playerCapsuleCollider.enabled = false;
+            playerInteraction.InitDictionaryAll();
         }
 
         public void MakeKnockBackVec(Vector3 horVec, float rushSpeed)

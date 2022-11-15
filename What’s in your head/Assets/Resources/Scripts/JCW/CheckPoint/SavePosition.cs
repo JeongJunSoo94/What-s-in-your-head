@@ -12,6 +12,10 @@ namespace JCW.Object
         private bool firstContact = false;
         PhotonView photonView;
 
+        [Header("싱글용인지")] [SerializeField] bool isSingle = false;
+
+        int curPlayerCount = 0;
+
         [Serializable]
         public class PlayerInfo
         {
@@ -34,6 +38,7 @@ namespace JCW.Object
         private void Awake()
         {
             photonView = PhotonView.Get(this);
+            curPlayerCount = isSingle ? 1 : 2;
         }
 
         private void OnTriggerEnter(Collider other)
@@ -42,7 +47,7 @@ namespace JCW.Object
             {
                 if (!firstContact)
                 {                    
-                    if (PhotonNetwork.PlayerList.Length < 2)
+                    if (PhotonNetwork.PlayerList.Length < curPlayerCount)
                         return;
                     firstContact = true;
                     Vector3 pos = transform.position;

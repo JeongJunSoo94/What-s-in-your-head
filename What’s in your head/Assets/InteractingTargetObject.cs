@@ -7,17 +7,6 @@ namespace KSU.Object.Interaction
     public class InteractingTargetObject : MonoBehaviour
     {
         protected bool isActivated = false;
-        // Start is called before the first frame update
-        void Start()
-        {
-
-        }
-
-        // Update is called once per frame
-        void Update()
-        {
-
-        }
 
         public virtual void RecieveActivation(bool isActive)
         {

@@ -157,8 +157,7 @@ namespace KSU
         {
             detectedInteractableObjects.Clear();
         }
-
-        public void InitInteraction()
+        public void InitDictionaryAll()
         {
             SendUIOff();
             InitDictionary();
@@ -166,6 +165,11 @@ namespace KSU
             railAction.InitDictionary();
             ropeAction.SendUIOff();
             ropeAction.InitDictionary();
+        }
+
+        public void InitInteraction()
+        {
+            InitDictionaryAll();
             interactionState.InitInteractionState();
         }
 

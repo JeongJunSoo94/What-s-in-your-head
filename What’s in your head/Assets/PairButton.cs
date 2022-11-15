@@ -57,13 +57,14 @@ namespace KSU.Object.Interaction
         {
             Vector3 curPos = transform.position;
             float endPos = unPressedPos - pressingDistance;
-            while(true)
+            WaitForEndOfFrame temp = new WaitForEndOfFrame();
+            while (true)
             {
                 curPos.y -= pressingSpeed * Time.deltaTime;
                 transform.position = curPos;
                 if (curPos.y < endPos)
                     yield break;
-                yield return new WaitForEndOfFrame();
+                yield return temp;
             }
         }
     }

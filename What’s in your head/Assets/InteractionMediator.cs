@@ -27,12 +27,11 @@ namespace KSU.Object.Interaction
             {
                 if (!isActivated || !senderPair[interactionSender])
                 {
-                    Debug.Log("실패");
                     isActivated = false;
                     return;
                 }
             }
-            Debug.Log("성공");
+
             foreach (var interactionReciever in interactionRecievers)
             {
                 interactionReciever.RecieveActivation(isActivated);

@@ -22,7 +22,7 @@ public class SwitchingTrampolin : MonoBehaviour
 
     private void OnTriggerExit(Collider other)
     {
-        if (other.CompareTag("player"))
+        if (other.CompareTag("Nella")|| other.CompareTag("Steady"))
             SwitchTrampolin();
     }
 }
