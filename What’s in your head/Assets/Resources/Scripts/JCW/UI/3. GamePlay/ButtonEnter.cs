@@ -20,6 +20,9 @@ namespace JCW.UI
                                      [SerializeField] private Sprite readySprite2 = null;
         [Header("캐릭터 선택 UI")] [SerializeField] private GameObject charSelectUI = null;
         [Header("넘어가기 버튼")] [SerializeField] private Button moveOnButton = null;
+        [Space(10f)]
+        [Header("가져올 스테이지 배경 리스트")] [SerializeField] List<Sprite> bgList;
+
 
         private bool isReady = false;
 
@@ -97,6 +100,8 @@ namespace JCW.UI
         [PunRPC]
         private void MoveOn()
         {
+            if (GameManager.Instance.curStageIndex <= 0)
+                return;
             CancleEnter();
             charSelectUI.SetActive(true);
             moveOnButton.gameObject.SetActive(false);
@@ -147,18 +152,23 @@ namespace JCW.UI
             }            
             if(isTextCheck)
             {
-                Text tempText = transform.GetChild(2).GetChild(1).GetChild(1).GetChild(0).GetComponent<Text>();
-                switch(GameManager.Instance.curStageIndex)
+                Transform continueContentsTF = transform.GetChild(2).GetChild(1).GetChild(1);
+                Text tempText = continueContentsTF.GetChild(0).GetComponent<Text>();
+                Image tempBgImg = continueContentsTF.GetChild(1).GetComponent<Image>();
+                switch (GameManager.Instance.curStageIndex)
                 {
                     case 0:
                     case 1:
-                        tempText.text = "놀이 공원";
+                        tempText.text = "테마 파크";
+                        tempBgImg.sprite = bgList[1];
                         break;
                     case 2:
                         tempText.text = "연주회";
+                        tempBgImg.sprite = bgList[2];
                         break;
                     case 3:
-                        tempText.text = "식물원";
+                        tempText.text = "수목원";
+                        tempBgImg.sprite = bgList[3];
                         break;
                 }
             }

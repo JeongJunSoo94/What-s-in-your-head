@@ -14,7 +14,6 @@ namespace JCW.Object
         [Header("===========시작 후===========")]
         [Header("첫 번째 스폰 시간")][SerializeField] float firstSpawnTime = 40f;
         [Header("두 번째 스폰 시간")][SerializeField] float secondSpawnTime = 120f;
-        [Header("깜빡거리는 시간")][SerializeField] float flickTime = 1f;
         [Header("주위 필드 감염 소요 시간")][SerializeField] float infectTime = 5f;
         [Header("감염 가능 여부")][SerializeField] bool canInfect = true;
 
