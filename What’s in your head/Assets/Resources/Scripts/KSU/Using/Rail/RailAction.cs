@@ -204,27 +204,27 @@ namespace KSU
                             }
                         }
                         else
-                        {
-                            rayOrigin = (lookAtObj.transform.position + cameraForwardXZ * rangeRadius);
-                            direction = -cameraForwardXZ.normalized;
+                        //{
+                        //    rayOrigin = (lookAtObj.transform.position + cameraForwardXZ * rangeRadius);
+                        //    direction = -cameraForwardXZ.normalized;
 
-                            isRayChecked = Physics.SphereCast(rayOrigin, rangeRadius, direction, out _raycastHit, rangeRadius * 2f, layerFilterForRail, QueryTriggerInteraction.Ignore);
+                        //    isRayChecked = Physics.SphereCast(rayOrigin, rangeRadius, direction, out _raycastHit, rangeRadius * 2f, layerFilterForRail, QueryTriggerInteraction.Ignore);
 
-                            if (isRayChecked)
-                            {
-                                //Debug.Log("4 hit! : " + _raycastHit.collider.tag);
-                                if (_raycastHit.collider.CompareTag("Rail"))
-                                {
-                                    if ((_raycastHit.collider.gameObject.transform.parent.gameObject != currentRail) || interactionState.isRailJumping)
-                                    {
-                                        interactionState.isRailFounded = true;
-                                        railStartPosiotion = _raycastHit.point;
-                                        railStartObject = _raycastHit.collider.gameObject;
-                                        return;
-                                    }
-                                }
-                            }
-                        }
+                        //    if (isRayChecked)
+                        //    {
+                        //        //Debug.Log("4 hit! : " + _raycastHit.collider.tag);
+                        //        if (_raycastHit.collider.CompareTag("Rail"))
+                        //        {
+                        //            if ((_raycastHit.collider.gameObject.transform.parent.gameObject != currentRail) || interactionState.isRailJumping)
+                        //            {
+                        //                interactionState.isRailFounded = true;
+                        //                railStartPosiotion = _raycastHit.point;
+                        //                railStartObject = _raycastHit.collider.gameObject;
+                        //                return;
+                        //            }
+                        //        }
+                        //    }
+                        //}
 
                         //Debug.Log("Not Found : " + false);
                         interactionState.isRailFounded = false;
@@ -235,7 +235,8 @@ namespace KSU
                         Vector3 cameraForwardXZ = mainCamera.transform.forward;
                         cameraForwardXZ.y = 0;
                         cameraForwardXZ = cameraForwardXZ.normalized;
-                        Vector3 rayOrigin = (lookAtObj.transform.position - mainCamera.transform.forward * rangeRadius);
+                        Vector3 rayOrigin = lookAtObj.transform.position;
+                        //Vector3 rayOrigin = (lookAtObj.transform.position - mainCamera.transform.forward * rangeRadius);
                         //Vector3 rayEnd = (lookAtObj.transform.position + mainCamera.transform.forward * (rangeDistance + rangeRadius * 2f));
                         Vector3 direction = mainCamera.transform.forward;
                         bool isRayChecked = Physics.SphereCast(rayOrigin, rangeRadius, direction, out _raycastHit, rangeDistance, layerForRail, QueryTriggerInteraction.Ignore);
@@ -303,40 +304,40 @@ namespace KSU
                                 }
                             }
                         }
-                        else
-                        {
-                            rayOrigin = (lookAtObj.transform.position + cameraForwardXZ * rangeRadius);
-                            direction = -cameraForwardXZ.normalized;
+                        //else
+                        //{
+                        //    rayOrigin = (lookAtObj.transform.position + cameraForwardXZ * rangeRadius);
+                        //    direction = -cameraForwardXZ.normalized;
 
-                            isRayChecked = Physics.SphereCast(rayOrigin, rangeRadius, direction, out _raycastHit, rangeRadius * 2f, layerFilterForRail, QueryTriggerInteraction.Ignore);
+                        //    isRayChecked = Physics.SphereCast(rayOrigin, rangeRadius, direction, out _raycastHit, rangeRadius * 2f, layerFilterForRail, QueryTriggerInteraction.Ignore);
 
-                            if (isRayChecked)
-                            {
-                                if (currentRail != null)
-                                {
-                                    if (_raycastHit.collider.CompareTag("Rail"))
-                                    {
-                                        if ((_raycastHit.collider.gameObject.transform.parent.gameObject != currentRail) || interactionState.isRailJumping)
-                                        {
-                                            interactionState.isRailFounded = true;
-                                            railStartPosiotion = _raycastHit.point;
-                                            railStartObject = _raycastHit.collider.gameObject;
-                                            return;
-                                        }
-                                    }
-                                }
-                                else
-                                {
-                                    if (_raycastHit.collider.CompareTag("Rail"))
-                                    {
-                                        interactionState.isRailFounded = true;
-                                        railStartPosiotion = _raycastHit.point;
-                                        railStartObject = _raycastHit.collider.gameObject;
-                                        return;
-                                    }
-                                }
-                            }
-                        }
+                        //    if (isRayChecked)
+                        //    {
+                        //        if (currentRail != null)
+                        //        {
+                        //            if (_raycastHit.collider.CompareTag("Rail"))
+                        //            {
+                        //                if ((_raycastHit.collider.gameObject.transform.parent.gameObject != currentRail) || interactionState.isRailJumping)
+                        //                {
+                        //                    interactionState.isRailFounded = true;
+                        //                    railStartPosiotion = _raycastHit.point;
+                        //                    railStartObject = _raycastHit.collider.gameObject;
+                        //                    return;
+                        //                }
+                        //            }
+                        //        }
+                        //        else
+                        //        {
+                        //            if (_raycastHit.collider.CompareTag("Rail"))
+                        //            {
+                        //                interactionState.isRailFounded = true;
+                        //                railStartPosiotion = _raycastHit.point;
+                        //                railStartObject = _raycastHit.collider.gameObject;
+                        //                return;
+                        //            }
+                        //        }
+                        //    }
+                        //}
 
                         //Debug.Log("Not Found : " + false);
                         interactionState.isRailFounded = false;

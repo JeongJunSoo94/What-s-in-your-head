@@ -458,7 +458,8 @@ namespace KSU
             {
                 if (!characterState.IsDashing)
                 {
-                    Vector3 forward = Vector3.Slerp(transform.forward, moveDir.normalized, rotationSpeed * Time.fixedDeltaTime / Vector3.Angle(transform.forward, moveDir.normalized));
+                    //Vector3 forward = Vector3.Slerp(transform.forward, moveDir.normalized, rotationSpeed * Time.fixedDeltaTime / Vector3.Angle(transform.forward, moveDir.normalized));
+                    Vector3 forward = moveDir.normalized;
                     forward.y = 0;
                     moveDir = forward;
                     transform.LookAt(transform.position + forward);

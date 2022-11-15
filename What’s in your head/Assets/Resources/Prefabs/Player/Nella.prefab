@@ -2593,6 +2593,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 89a95da993a6a0745a21cfc544664161, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  farValue: 700
   backView_MouseSensitivity: 25
   sholderView_MouseSensitivity: 10
   sholderAxisY_MaxUp: 0.25
@@ -2679,9 +2680,12 @@ MonoBehaviour:
   ableToRight: 0
   clickLeft: 0
   clickRight: 0
-  mouseLayer:
+  mouseTopLayer:
     serializedVersion: 2
-    m_Bits: 8
+    m_Bits: 0
+  mouseSideLayer:
+    serializedVersion: 2
+    m_Bits: 0
   mouseRayDistance: 100
   canSwap: 0
   curCool: 0
@@ -2945,12 +2949,12 @@ MonoBehaviour:
     m_Bits: 1024
   currentRail: {fileID: 0}
   railStartObject: {fileID: 0}
-  rangeRadius: 5
-  rangeDistance: 5
-  movingToRailSpeed: 10
+  rangeRadius: 10
+  rangeDistance: 15
+  movingToRailSpeed: 20
   departingRailOffset: 0.5
-  railJumpHeight: 4
-  railJumpSpeed: 6
+  railJumpHeight: 5
+  railJumpSpeed: 20
 --- !u!114 &-2508882052053191699
 MonoBehaviour:
   m_ObjectHideFlags: 0

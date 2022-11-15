@@ -32,25 +32,30 @@ namespace KSU.Object.Interaction.Stage1
             objRigidbody.isKinematic = false;
             objRigidbody.velocity = Vector3.up * floatingSpeed;
             yield return new WaitForSeconds(delayTime);
-            objRigidbody.velocity = Vector3.zero;
             objRigidbody.useGravity = true;
             StartCoroutine(nameof(DestroyBalloon));
         }
 
         IEnumerator DestroyBalloon()
         {
-            objRigidbody.velocity = Vector3.zero;
+            objRigidbody.velocity = Vector3.zero;            
+            Debug.Log(objRigidbody.velocity);
             Destroy(balloon);
-            WaitForEndOfFrame temp = new WaitForEndOfFrame();
-            while (true)
-            {
-                if (transform.position.y < 13.2f)
-                {
-                    objRigidbody.isKinematic = true;
-                    yield break;
-                }
-                yield return temp;
-            }
+            //WaitForEndOfFrame temp = new WaitForEndOfFrame();
+
+            yield return new WaitUntil(() => transform.position.y < 13.2f);
+            objRigidbody.isKinematic = true;
+            yield break;
+
+            //while (true)
+            //{
+            //    if (transform.position.y < 13.2f)
+            //    {
+            //        objRigidbody.isKinematic = true;
+            //        yield break;
+            //    }
+            //    yield return temp;
+            //}
         }
     }
 }
