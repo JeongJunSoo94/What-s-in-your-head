@@ -220,11 +220,11 @@ namespace KSU
             if (characterState.IsGrounded)
             {
                 characterState.CheckGround(playerCapsuleCollider.radius);
-                if (!characterState.IsGrounded && characterState.CanJump && !characterState.IsDashing)
+                if (!characterState.IsGrounded && characterState.CanJump)
                 {
                     Vector3 horVel = playerRigidbody.velocity;
                     horVel.y = 0;
-                    MakeinertiaVec(horVel.magnitude, moveDir);
+                    MakeinertiaVec(horVel.magnitude, horVel.normalized);
                 }
             }
             else
@@ -590,7 +590,14 @@ namespace KSU
                     moveVec.y = playerRigidbody.velocity.y + gravity * Time.fixedDeltaTime;
             }
 
-            playerRigidbody.velocity = moveVec;
+            if(characterState.IsGrounded)
+            {
+                playerRigidbody.velocity = moveVec;
+            }
+            else
+            {
+                playerRigidbody.velocity = moveVec;
+            }
         }
 
         public void SetOnCollider()

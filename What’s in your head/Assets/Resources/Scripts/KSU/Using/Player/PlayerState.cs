@@ -341,7 +341,7 @@ public class PlayerState : MonoBehaviour
 
     private void OnCollisionStay(Collision collision)
     {
-        if(IsGrounded || !CanJump)
+        if(IsGrounded || !CanJump || IsDashing)
         {
             isAirBlocked = false;
         }

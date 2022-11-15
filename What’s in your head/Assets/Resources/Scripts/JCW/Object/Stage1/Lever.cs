@@ -22,7 +22,6 @@ namespace JCW.Object.Stage1
         {
             base.Awake();
             leverStickTF = transform.GetChild(2);
-            Debug.Log(transform.GetChild(2).name);
             towardRotList.Add(leverStickTF.localRotation.eulerAngles);
             Vector3 towardRot = towardRotList[0];
             towardRot.z = -towardRot.z;
