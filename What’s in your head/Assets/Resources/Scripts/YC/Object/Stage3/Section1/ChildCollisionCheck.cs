@@ -43,7 +43,7 @@ namespace YC_OBJ
             isHit = true;
             meshCollider.enabled = false;
             upCollider.GetComponent<BoxCollider>().enabled = false;
-
+            //ren.shadowCastingMode = ShadowCastingMode.Off;
 
             StartCoroutine(nameof(EffectShader), delayTime);
         }

@@ -1,5 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
+using JCW.AudioCtrl;
+using Photon.Pun;
 using UnityEngine;
 
 
@@ -14,9 +16,8 @@ namespace JCW.Object.Stage1
         private void Awake()
         {
             cabins = transform.GetComponentsInChildren<Transform>();
-            StartCoroutine(nameof(WaitForPlayer));
         }
-
+        
 
         void FixedUpdate()
         {
@@ -27,13 +28,6 @@ namespace JCW.Object.Stage1
             {
                 cabins[i].LookAt(cabins[i].position + Vector3.forward);
             }
-        }
-
-        IEnumerator WaitForPlayer()
-        {
-            yield return null;
-            //yield return new WaitUntil(() => PhotonNetwork.PlayerList.Length == 2);
-            isStart = true;
         }
     }
 

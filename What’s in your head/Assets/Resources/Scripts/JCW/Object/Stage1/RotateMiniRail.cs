@@ -26,8 +26,8 @@ namespace JCW.Object.Stage1
 
         IEnumerator WaitForPlayer()
         {
-            yield return null;
-            //yield return new WaitUntil(() => PhotonNetwork.PlayerList.Length == 2);
+            //yield return null;
+            yield return new WaitUntil(() => PhotonNetwork.PlayerList.Length == 2);
             isStart = true;
         }
     }

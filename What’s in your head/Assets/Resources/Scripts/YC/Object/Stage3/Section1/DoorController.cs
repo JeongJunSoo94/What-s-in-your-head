@@ -29,7 +29,6 @@ namespace YC_OBJ
         [SerializeField] float animationSpeed = 0.3f;
 
         Animator animator;
-        PhotonView pv;
         AudioSource audioSource;
 
         private void Awake()
@@ -38,17 +37,13 @@ namespace YC_OBJ
 
             animator.speed = animationSpeed;
 
-            pv = this.gameObject.GetComponent<PhotonView>();
             audioSource = GetComponent<AudioSource>();
             JCW.AudioCtrl.AudioSettings.SetAudio(audioSource);
         }
         public void SetOpen(bool _isOpen)
         {
-            if (pv.IsMine)
-            {
-                animator.SetBool("isOpen", _isOpen);
-                SoundManager.Instance.Play3D_RPC("DoorOpen", audioSource);
-            }
+            animator.SetBool("isOpen", _isOpen);
+            SoundManager.Instance.Play3D_RPC("DoorOpen", audioSource);
         }     
     }
 }

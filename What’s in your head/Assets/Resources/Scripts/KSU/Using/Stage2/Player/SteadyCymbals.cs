@@ -99,12 +99,12 @@ namespace KSU.AutoAim.Player.Object
                         break;
                     case "Rope":
                         break;
-                    //default:
-                    //    {
-                    //        if (!isEndPosition)
-                    //            isEndPosition = true;
-                    //    }
-                    //    break;
+                    default:
+                        {
+                            if (!isEndPosition)
+                                isEndPosition = true;
+                        }
+                        break;
                 }
             }
         }

@@ -32,7 +32,7 @@ namespace JCW.Object
             anim = transform.parent.parent.GetComponent<Animator>();
             meshRenderer = transform.GetChild(1).GetComponent<MeshRenderer>();
             meshRenderer.sharedMaterial = normalMat;
-            audioSource = GetComponent<AudioSource>();
+            TryGetComponent(out audioSource);
             AudioCtrl.AudioSettings.SetAudio(audioSource, 1f, 50f);
             ws = new(releaseTime);
         }

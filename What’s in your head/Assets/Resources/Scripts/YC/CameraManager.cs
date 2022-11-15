@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using YC.Camera_;
 
+
 namespace YC.CameraManager_
 {
     public enum CharacterCamera { NELLA, STEADY };
@@ -18,6 +19,8 @@ namespace YC.CameraManager_
         PhotonView pv;
         public static CameraManager Instance = null;
 
+        
+
         //float currentMiddleValue = 0.5f; // 현재 카메라 분할 중앙값
 
 
@@ -30,6 +33,13 @@ namespace YC.CameraManager_
         Coroutine curCoroutine;
         bool wasTopView;
         bool wasSideView;
+
+        // ============  Option 관련 변수들  ============ //
+        public bool canShakeSaved { get; private set; }
+        public float backSensitivitySaved { get; private set; }
+        public float sholderSensitivitySaved { get; private set; }
+        public bool isOptionInit { get; private set; }
+
 
         void Awake()
         {
@@ -47,30 +57,21 @@ namespace YC.CameraManager_
 
             curFullCamera = new CharacterCamera();
 
+
+            canShakeSaved = true;
+            isOptionInit = false;
+
         }
 
         void Update()
         {
-            if (cameras[(int)CharacterCamera.NELLA] == null ||
-                cameras[(int)CharacterCamera.STEADY] == null) return;
+            if (!IsExistCameras()) return;
 
             if (pv.IsMine)
             {
-                //Debugg();
-
-                // << : 유닛 테스트용 디펜스 모드 전환
-                //      
-                //      타이틀 씬 통해서 접근시
-                //      아래 함수 게임매니저 통해 플레이어들 불러오도록
-                //      플레이어 각각 NormalView함수 인풋 부분 수정(탑 스테이트로 바꾸는 부분)
 
                 if (GameManager.Instance.isTopView)
-                {
-                    // >> : 기존
-                    //pv.RPC(nameof(InitCamera), RpcTarget.AllBuffered, (int)CharacterCamera.NELLA); 
-                    //pv.RPC(nameof(SetDefenceModeCamera), RpcTarget.AllBuffered);
-
-                    // >> : 수정
+                {                    
                     if(!wasTopView)
                     {
                         pv.RPC(nameof(SetDefenceModeCamera), RpcTarget.AllBuffered);
@@ -83,12 +84,7 @@ namespace YC.CameraManager_
                 }
 
                 if (GameManager.Instance.isSideView)
-                {
-                    // >> : 기존
-                    //pv.RPC(nameof(InitCamera), RpcTarget.AllBuffered, (int)CharacterCamera.NELLA); 
-                    //pv.RPC(nameof(SetDefenceModeCamera), RpcTarget.AllBuffered);
-
-                    // >> : 수정
+                {                 
                     if (!wasSideView)
                     {
                         pv.RPC(nameof(SetSideModeCamera), RpcTarget.AllBuffered);
@@ -104,82 +100,30 @@ namespace YC.CameraManager_
 
         [PunRPC]
         void SetDefenceModeCamera()
-        {
-            // >> : 기존
-            //// 유닛 테스트 임시용이다.
-            //// 타이틀 씬 통해서 접속시, 게임매니저 통해서 플레이어 받아온다
-
-            //GameObject NellaTemp = GameObject.FindGameObjectWithTag("Nella");
-            //GameObject SteadyTemp = GameObject.FindGameObjectWithTag("Steady");
-
-            //if(NellaTemp)
-            //    NellaTemp.GetComponent<CameraController>().SetDefenseMode();
-
-            //if (SteadyTemp)
-            //    SteadyTemp.GetComponent<CameraController>().SetDefenseMode();
-
-
-            // >> : 수정
-            if (GameManager.Instance.characterOwner[PhotonNetwork.IsMasterClient]) // 넬라면
+        {    
+            if (GameManager.Instance.characterOwner[PhotonNetwork.IsMasterClient]) 
             {
-                //pv.RPC(nameof(InitCamera), RpcTarget.AllBuffered, (int)CharacterCamera.NELLA);
                 InitCamera((int)CharacterCamera.NELLA);
-                GameObject.FindGameObjectWithTag("Nella").GetComponent<CameraController>().SetDefenseMode(); // << : TopView
+                GameObject.FindGameObjectWithTag("Nella").GetComponent<CameraController>().SetDefenseMode(); 
             }
-            else // 스테디라면
+            else
             {
-                //pv.RPC(nameof(InitCamera), RpcTarget.AllBuffered, (int)CharacterCamera.STEADY);
                 InitCamera((int)CharacterCamera.STEADY);
-                GameObject.FindGameObjectWithTag("Nella").GetComponent<CameraController>().SetDefenseMode(); // << : TopView
+                GameObject.FindGameObjectWithTag("Nella").GetComponent<CameraController>().SetDefenseMode(); 
             }
         }
         [PunRPC]
         void SetSideModeCamera()
         {
-            // >> : 수정
-            if (GameManager.Instance.characterOwner[PhotonNetwork.IsMasterClient]) // 넬라면
+            if (GameManager.Instance.characterOwner[PhotonNetwork.IsMasterClient]) 
             {
-                //pv.RPC(nameof(InitCamera), RpcTarget.AllBuffered, (int)CharacterCamera.NELLA);
                 InitCamera((int)CharacterCamera.NELLA);
-                GameObject.FindGameObjectWithTag("Nella").GetComponent<CameraController>().SetSideScrollMode(); // << : SideView
+                GameObject.FindGameObjectWithTag("Nella").GetComponent<CameraController>().SetSideScrollMode(); 
             }
             else // 스테디라면
             {
-                //pv.RPC(nameof(InitCamera), RpcTarget.AllBuffered, (int)CharacterCamera.STEADY);
                 InitCamera((int)CharacterCamera.STEADY);
-                GameObject.FindGameObjectWithTag("Steady").GetComponent<CameraController>().SetSideScrollMode(); // << : SideView
-            }
-        }
-
-        void Debugg()
-        {
-            if (isBlending) return;
-
-            if (Input.GetKeyDown(KeyCode.Keypad1))
-            {
-                //NellaDeadCam();
-
-            }
-            else if (Input.GetKeyDown(KeyCode.Keypad2))
-            {
-                //SteadyDeadCam();
-            }
-            else if (Input.GetKeyDown(KeyCode.Keypad3))
-            {
-                //ReviveCam();
-            }
-            else if (Input.GetKeyDown(KeyCode.Keypad4))
-            {
-                //Cor_SetSplitCamera((int)CharacterCamera.NELLA, 0.64f, 2f); 다른 스테이지 미완
-            }
-            else if (Input.GetKeyDown(KeyCode.Keypad5))
-            {
-                //Cor_SetSplitCamera((int)CharacterCamera.STEADY, 0.36f, 2f); 다른 스테이지 미완
-
-            }
-            else if (Input.GetKeyDown(KeyCode.Keypad6))
-            {
-
+                GameObject.FindGameObjectWithTag("Steady").GetComponent<CameraController>().SetSideScrollMode(); 
             }
         }
 
@@ -354,13 +298,6 @@ namespace YC.CameraManager_
             }
         }
 
-
-        //Stage 3 Defence Mode - Sizing 전체 화면 세팅 (Lerp 시간 동안)
-        //[PunRPC]
-        //public void Cor_SetFullScreen(float lerpTime)
-        //{
-        //    StartCoroutine(SetFullScreen(lerpTime));
-        //}
         public IEnumerator SetFullScreen(float LerpTime)
         {
             Rect camRect1 = cameras[(int)CharacterCamera.NELLA].rect;
@@ -551,5 +488,55 @@ namespace YC.CameraManager_
                 isBlending = false;
             }
         }
+
+
+
+
+        public void Option_SetShake(bool on) // 스테디 카메라 흔들림 사용 여부  
+        {
+            // >> : 아직 플레이어가 생성되지 않았다면, 카메라 매니저 변수에 저장만 해두고 바로 리턴
+            if (!IsExistCameras())
+            {
+                canShakeSaved = on;
+                isOptionInit = true;
+                return;
+            }
+
+            // >> : 플레이어가 생성되었다면, 플레이어의 카메라 컨트롤러에 접근 후 함수 호출
+            string tagSteady = "Steady";
+
+            if (!GameManager.Instance.characterOwner[PhotonNetwork.IsMasterClient])
+                GameObject.FindGameObjectWithTag(tagSteady).GetComponent<CameraController>().Option_SetShake(on);           
+        }
+        public void Option_SetSensitivity(float _backSensitivity, float _sholderSensitivity) // 마우스 민감도 설정  
+        {
+            // >> : 아직 플레이어가 생성되지 않았다면, 카메라 매니저 변수에 저장만 해두고 바로 리턴
+            if (!IsExistCameras())
+            {
+                backSensitivitySaved = _backSensitivity;
+                sholderSensitivitySaved = _sholderSensitivity;
+                isOptionInit = true;
+                return;
+            }
+
+            // >> : 플레이어가 생성되었다면, 플레이어의 카메라 컨트롤러에 접근 후 함수 호출
+            string tagNella = "Nella";
+            string tagSteady = "Steady";
+
+            if (GameManager.Instance.characterOwner[PhotonNetwork.IsMasterClient])
+                GameObject.FindGameObjectWithTag(tagNella).GetComponent<CameraController>().Option_SetSensitivity(_backSensitivity, _sholderSensitivity); 
+            else
+                GameObject.FindGameObjectWithTag(tagSteady).GetComponent<CameraController>().Option_SetSensitivity(_backSensitivity, _sholderSensitivity);           
+        }
+
+
+        bool IsExistCameras()
+        {
+            if (cameras[(int)CharacterCamera.NELLA] != null &&
+                cameras[(int)CharacterCamera.STEADY] != null)
+                return true;
+            else
+                return false;
+        }     
     }
 }

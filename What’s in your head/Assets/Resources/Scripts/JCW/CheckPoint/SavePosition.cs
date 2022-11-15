@@ -7,14 +7,10 @@ using Photon.Pun;
 namespace JCW.Object
 {
     [RequireComponent(typeof(PhotonView))]
-    public class SavePosition : MonoBehaviour, IPunObservable
+    public class SavePosition : MonoBehaviour
     {
         private bool firstContact = false;
         PhotonView photonView;
-
-        [Header("싱글용인지")] [SerializeField] bool isSingle = false;
-
-        int curPlayerCount = 0;
 
         [Serializable]
         public class PlayerInfo
@@ -38,16 +34,18 @@ namespace JCW.Object
         private void Awake()
         {
             photonView = PhotonView.Get(this);
-            curPlayerCount = isSingle ? 1 : 2;
         }
 
         private void OnTriggerEnter(Collider other)
         {
             if (other.CompareTag("Nella") || other.CompareTag("Steady"))
             {
+                Debug.Log("접촉");
                 if (!firstContact)
-                {                    
-                    if (PhotonNetwork.PlayerList.Length < curPlayerCount)
+                {
+                    if (PhotonNetwork.PlayerList.Length < 2)
+                        return;
+                    if (!other.GetComponent<PlayerState>().isMine)
                         return;
                     firstContact = true;
                     Vector3 pos = transform.position;
@@ -70,22 +68,9 @@ namespace JCW.Object
             string path = Application.dataPath + "/Resources/CheckPointInfo/Stage" + curStage + "/" + curStageType + "/";
             if (!Directory.Exists(path))
                 Directory.CreateDirectory(path);
-            File.WriteAllText(path + "Section" +GameManager.Instance.curSection +".json", infoJson.ToString());
-            Debug.Log("체크포인트 저장");
+            File.WriteAllText(path + "Section" + GameManager.Instance.curSection + ".json", infoJson.ToString());
+            //Debug.Log("체크포인트 저장");
             Destroy(this);
-        }
-
-        public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
-        {
-            if (stream.IsWriting)
-            {
-                stream.SendNext(firstContact);
-            }
-            else
-            {
-                this.firstContact = (bool)stream.ReceiveNext();
-            }
         }
     }
 }
-

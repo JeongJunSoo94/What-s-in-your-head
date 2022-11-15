@@ -10,11 +10,13 @@ namespace JJS
     public class CharacterBuilder : MonoBehaviour
     {
         public bool single;
-        protected GameObject nella;
-        protected GameObject steady;
+        public int stage;
+        [HideInInspector] public GameObject nella;
+        [HideInInspector] public GameObject steady;
         public MouseControllerWeaponData nellaMouseControllerData;
         public MouseControllerWeaponData steadyMouseControllerData;
-
+        public Transform start;
+        public Vector3 intervalPos;
         private void Update()
         {
             if (single)
@@ -29,6 +31,7 @@ namespace JJS
                     SetCharacterComponent(steady, steadyMouseControllerData, "Hand_R");
                     NellaScriptSetActive(nella);
                     SteadyScriptSetActive(steady);
+                    SetStartPos();
                     gameObject.SetActive(false);
                 }
             }
@@ -44,6 +47,11 @@ namespace JJS
                     SetCharacterComponent(steady, steadyMouseControllerData, "Hand_R");
                     NellaScriptSetActive(nella);
                     SteadyScriptSetActive(steady);
+                    SetStartPos();
+                    if (stage == 2)
+                    {
+                        GameManager.Instance.isSideView = true;
+                    }
                     gameObject.SetActive(false);
                 }
             }
@@ -53,6 +61,15 @@ namespace JJS
         {
             nella = GameObject.FindWithTag("Nella");
             steady = GameObject.FindWithTag("Steady");
+        }
+
+        public void SetStartPos()
+        {
+            Vector3 pos = start.position;
+            if(nella!=null)
+                nella.transform.position = pos - intervalPos;
+            if (steady != null)
+                steady.transform.position = pos + intervalPos;
         }
 
         public virtual void SetCharacterComponent(GameObject player, MouseControllerWeaponData data, string findWeaponPath)

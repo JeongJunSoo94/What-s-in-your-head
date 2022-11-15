@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Text;
 using UnityEngine;
 using UnityEngine.UI;
 namespace JJS
@@ -19,6 +20,9 @@ namespace JJS
         public Text textMin;
         public GameObject canvas;
         public GameObject panel;
+        readonly StringBuilder maxStr = new(20);
+        readonly StringBuilder curStr = new(20);
+        readonly StringBuilder minStr = new(20);
         private void Awake()
         {
             curfps = 0;
@@ -30,7 +34,7 @@ namespace JJS
         // Update is called once per frame
         void Update()
         {
-           float delta = Time.unscaledDeltaTime;
+            float delta = Time.unscaledDeltaTime;
             secDelay -= delta;
             fpsCount++;
             int fps = (int)(1f/delta);
@@ -68,10 +72,18 @@ namespace JJS
             {
                 maxfpsText = curfps;
             }
+            maxStr.Clear();
+            maxStr.AppendFormat("{0} MAXFPS", maxfps.ToString());
 
-            textMax.text = maxfps.ToString() + "MAXFPS";
-            textCur.text = curfps.ToString() + "FPS";
-            textMin.text = minfps.ToString() + "MINFPS";
+            curStr.Clear();
+            curStr.AppendFormat("{0} FPS", curfps.ToString());
+
+            minStr.Clear();
+            minStr.AppendFormat("{0} MINFPS", minfps.ToString());
+
+            textMax.text = maxStr.ToString();
+            textCur.text = curStr.ToString();
+            textMin.text = minStr.ToString();
         }
     }
 }

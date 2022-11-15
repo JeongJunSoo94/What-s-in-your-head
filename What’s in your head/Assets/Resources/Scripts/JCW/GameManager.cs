@@ -14,8 +14,8 @@ public class GameManager : MonoBehaviour, IPunObservable
     [HideInInspector] public Dictionary<bool, bool> characterOwner = new();   
 
     // 현재 스테이지 , 섹션 인덱스
-    [HideInInspector] public int curStageIndex = 0;
-    [HideInInspector] public int curStageType = 1;
+    [HideInInspector] public int curStageIndex = 1; // 기본값 0
+    [HideInInspector] public int curStageType = 2; // 기본값 1
     [HideInInspector] public int curSection = 0;
     
     // 현재 캐릭터들의 생존 여부
@@ -60,9 +60,10 @@ public class GameManager : MonoBehaviour, IPunObservable
             Destroy(this.gameObject);
 
         photonView = GetComponent<PhotonView>();
-
-        curStageIndex = 0;
-        curSection = 0;
+        curStageIndex = 1;
+        curStageType = 2;
+        //curStageIndex = 0;
+        //curSection = 0;
     }
     private void Update()
     {

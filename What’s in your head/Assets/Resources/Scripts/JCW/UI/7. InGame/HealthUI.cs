@@ -116,7 +116,7 @@ namespace JCW.UI.InGame
                         GameManager.Instance.MediateRevive(false);
                         GameManager.Instance.SetAliveState(isNella, true);
                         GameManager.Instance.SetAliveState(!isNella, true);
-                        if (!GameManager.Instance.isTopView)
+                        if (!GameManager.Instance.isTopView && !GameManager.Instance.isSideView)
                         {
                             CameraManager.Instance.ReviveCam(isNella);
                             CameraManager.Instance.ReviveCam(!isNella);
@@ -191,7 +191,8 @@ namespace JCW.UI.InGame
                 charHpUI.SetActive(true);
                 //GameManager.Instance.curPlayerHP = maxHP;
             }
-            reviveUI.SetActive(value);
+            if(GameManager.Instance.isTopView)
+                reviveUI.SetActive(value);
         }
 
         void SetHpAmount(int curState, float amount)

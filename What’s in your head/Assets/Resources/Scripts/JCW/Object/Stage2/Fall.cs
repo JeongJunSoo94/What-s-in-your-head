@@ -40,13 +40,15 @@ namespace JCW.Object
 
         private void OnTriggerEnter(Collider other)
         {
+            //Debug.Log(other.gameObject.layer);
+
             if (other.gameObject.layer == LayerMask.NameToLayer("Player"))
             {
-                Debug.Log("모래주머니 캐릭터 깔고 뭉갬");
+                //Debug.Log("모래주머니 캐릭터 깔고 뭉갬");
             }
             else if (other.gameObject.layer == LayerMask.NameToLayer("Platform"))
             {
-                Debug.Log("모래주머니 땅에 추락");
+                //Debug.Log("모래주머니 땅에 추락");
 
                 //현재는 추락 시 오브젝트 자체를 없애지만, 이펙트 실행하는 함수를 실행 후에 이펙트가 끝난 이후에 없애거나 SetActive(false)해야 할듯.
 

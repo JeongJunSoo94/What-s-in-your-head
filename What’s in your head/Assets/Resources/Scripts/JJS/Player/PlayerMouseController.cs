@@ -38,7 +38,8 @@ namespace JJS
         [HideInInspector] public bool clickLeft;
         [HideInInspector] public bool clickRight;
 
-        public LayerMask mouseLayer;
+        public LayerMask mouseTopLayer;
+        public LayerMask mouseSideLayer;
         public int mouseRayDistance;
 
         protected Ray ray;
@@ -103,7 +104,7 @@ namespace JJS
         public virtual void TopViewUpdate()
         {
             ray = cameraMain.ScreenPointToRay(Input.mousePosition);
-            if (Physics.Raycast(ray, out hit, mouseRayDistance, mouseLayer, QueryTriggerInteraction.Ignore))
+            if (Physics.Raycast(ray, out hit, mouseRayDistance, mouseTopLayer, QueryTriggerInteraction.Ignore))
             {
                 point.transform.position = hit.point;
             }
@@ -112,7 +113,7 @@ namespace JJS
         public virtual void SideViewUpdate()
         {
             ray = cameraMain.ScreenPointToRay(Input.mousePosition);
-            if (Physics.Raycast(ray, out hit, 1000f, LayerMask.NameToLayer("Defalut"), QueryTriggerInteraction.Ignore))
+            if (Physics.Raycast(ray, out hit, 1000f, mouseSideLayer, QueryTriggerInteraction.Ignore))
             {
                 point.transform.position = hit.point;
             }

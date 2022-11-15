@@ -7,7 +7,6 @@ public class Train : MonoBehaviour
 {
     [Header("开林青老 锭 true"), SerializeField] bool isReverseRun = false;
     [SerializeField] float trainSpeed = 12f;
-    [SerializeField] float departingOffset = 0.2f;
     [SerializeField] float delayTime = 3f;
     [SerializeField] GameObject train;
     float destPos = -1f;

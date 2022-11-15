@@ -9,12 +9,12 @@ namespace JJS
 {
     public class NormalViewSMB : CharacterBaseSMB
     {
+
         override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
         {
             animator.SetBool("wasAirJump", false);
             animator.SetBool("isJump", false);
             animator.SetBool("isAttack", false);
-            //GetPlayerController(animator).characterState.aim = false;
             if (GetPlayerController(animator).characterState.isMine)
             {
                 GetPlayerController(animator).GetComponent<CameraController>().JumpInit(false); // << : 찬 추가
@@ -25,8 +25,6 @@ namespace JJS
         {
             if (!GetPlayerController(animator).characterState.swap)
             { 
-                //WeaponCheck(animator);
-                //GetPlayerController(animator).playerMouse.ik.enableIK = false;
             }
             if (GetPlayerController(animator).characterState.isMine)
             {
@@ -39,35 +37,6 @@ namespace JJS
         {
             GetPlayerController(animator).MoveStop();
         }
-        //void WeaponCheck(Animator animator)
-        //{
-        //    if (GetPlayerController(animator).playerMouse.weaponInfo[GetPlayerController(animator).playerMouse.GetUseWeapon()].canAim)
-        //    {
-        //        if(GetPlayerController(animator).playerMouse.weaponInfo[GetPlayerController(animator).playerMouse.GetUseWeapon()].canNoAimAttack)
-        //        {
-        //            animator.SetLayerWeight(1, 1);
-        //        }
-        //        else
-        //        {
-        //            if (animator.GetLayerWeight(1) == 0 && GetPlayerController(animator).characterState.aim|| GetPlayerController(animator).characterState.top)
-        //            {
-        //                animator.SetLayerWeight(1, 1);
-        //            }
-        //            else
-        //            {
-        //                animator.SetLayerWeight(1, 0);
-        //            }
-        //        }
-        //    }
-        //    else
-        //    {
-        //        if (animator.GetLayerWeight(1) == 1)
-        //        {
-        //            GetPlayerController(animator).playerMouse.ik.enableIK = false;
-        //            animator.SetLayerWeight(1, 0);
-        //        }
-        //    }
-        //}
 
         void InputCheck(Animator animator)
         {
@@ -86,15 +55,6 @@ namespace JJS
             }
             else if (GameManager.Instance.isSideView)
             {
-                //if (GetPlayerController(animator).CompareTag("Nella"))
-                //{
-                //    if (!GetPlayerController(animator).playerMouse.clickLeft)
-                //        GetPlayerController(animator).playerMouse.SideViewUpdate();
-                //}
-                //else
-                //{
-                //    GetPlayerController(animator).playerMouse.SideViewUpdate();
-                //}
                 GetPlayerController(animator).playerMouse.SideViewUpdate();
             }
 
@@ -110,24 +70,6 @@ namespace JJS
             {
                 GetPlayerController(animator).InputMove();
             }
-            //GetPlayerController(animator).InputJump();
-            //if (!GetPlayerController(animator).playerMouse.weaponInfo[GetPlayerController(animator).playerMouse.GetUseWeapon()].canAim
-            //    || GetPlayerController(animator).characterState.top) /////////// 3스테이지 전용 코드
-            //{
-            //    if (!animator.GetBool("isAttack") && !animator.GetBool("AimAttack"))
-            //    {
-            //        GetPlayerController(animator).InputJump();
-            //        GetPlayerController(animator).InputDash();
-            //    }
-            //}
-            //else
-            //{
-            //    if (!animator.GetBool("Aim")&&!animator.GetBool("isAttack") && !animator.GetBool("AimAttack"))
-            //    {
-            //        GetPlayerController(animator).InputJump();
-            //        GetPlayerController(animator).InputDash();
-            //    }
-            //}
 
             if (!animator.GetBool("Aim") && !animator.GetBool("isAttack") && !animator.GetBool("AimAttack"))
             {
@@ -144,14 +86,17 @@ namespace JJS
                         {
                             if (!GetPlayerController(animator).characterState.IsDashing && !GetPlayerController(animator).characterState.IsJumping)
                             {
-                                if (GetPlayerController(animator).playerMouse.weaponInfo[GetPlayerController(animator).playerMouse.GetUseWeapon()].weapon.name != "Mic")
+                                if (GetPlayerController(animator).playerMouse.weaponInfo[GetPlayerController(animator).playerMouse.GetUseWeapon()].weapon.name == "ElectricGuitar_st")
                                 {
                                     animator.SetBool("isAttackNext", true);
                                     animator.SetBool("isAttack", true);
                                     return;
                                 }
-                                animator.SetBool("isSinging", true);
-                                return;
+                                else if (GetPlayerController(animator).playerMouse.weaponInfo[GetPlayerController(animator).playerMouse.GetUseWeapon()].weapon.name == "Mic")
+                                {
+                                    animator.SetBool("isSinging", true);
+                                    return;
+                                }
                             }
                         }
                     }

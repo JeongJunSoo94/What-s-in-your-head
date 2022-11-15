@@ -239,6 +239,8 @@ namespace KSU.AutoAim.Player
         }
         public void Hook()
         {
+            if (!playerState.isMine)
+                return;
             playerState.isRiding = true;
             playerState.IsAirJumping = false;
             playerState.WasAirDashing = false;

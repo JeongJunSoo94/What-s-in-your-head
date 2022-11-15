@@ -120,7 +120,7 @@ namespace JCW.Object
                 Debug.Log("오브젝트 접근");
                 Transform playerTF = collision.gameObject.transform;
                 if (isLethal)
-                    playerTF.GetComponent<PlayerController>().Resurrect();
+                    playerTF.gameObject.GetComponent<PlayerController>().GetDamage(12,DamageType.Dead);
                 else if (canRide && playerTF.position.y >= this.transform.position.y)
                     playerTF.parent = this.transform;
             }

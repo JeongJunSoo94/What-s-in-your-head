@@ -28,7 +28,6 @@ namespace JCW.Object
         int randomIndex = 0;
 
         PhotonView photonView;
-        AudioSource audioSource;
 
         bool isStart;
 
@@ -40,16 +39,11 @@ namespace JCW.Object
                 this.enabled = false;
                 return;
             }
-            //usingCount = GetComponent<ContaminationFieldSetting>().count;
             usingWidthCount = GetComponent<ContaminationFieldSetting>().widthCount;
             usingHeightCount = GetComponent<ContaminationFieldSetting>().heightCount;
 
             // 스폰될 수 있는 각 꼭지점 정해두기
-            firstSpawnPlace = new() { 1, 2* usingWidthCount - 1, 2* usingWidthCount * (usingHeightCount-1)+1, 2* usingWidthCount * usingHeightCount - 1 };
-
-            audioSource = GetComponent<AudioSource>();
-            //Debug.Log(Vector3.Distance(this.transform.position, transform.GetChild(0).position) + 30f);
-            AudioCtrl.AudioSettings.SetAudio(audioSource, 1f, Vector3.Distance(this.transform.position, transform.GetChild(0).position) + 30f);
+            firstSpawnPlace = new() { 1, 2* usingWidthCount - 1, 2* usingWidthCount * (usingHeightCount-1)+1, 2* usingWidthCount * usingHeightCount - 1 };          
 
             StartCoroutine(nameof(WaitForPlayer));
         }
@@ -88,7 +82,6 @@ namespace JCW.Object
         [PunRPC]
         void Init(int i)
         {
-            Debug.Log("삭제되는 인덱스 :  " + i);
             firstSpawnPlace.RemoveAt(i);
         }
 
@@ -145,14 +138,14 @@ namespace JCW.Object
                     nextTargetBeforeObj_ready.SetActive(false);
                     break;
                 }
-                curTime+= flickTime / 2f;
-                if(!isStart)
+                curTime+= Time.deltaTime;
+                if (!isStart)
                 {
                     isStart = true;
                     nextTargetBeforeObj_ready.SetActive(true);
                 }
-                SoundManager.Instance.Play3D_RPC("ContaminationFieldWarn", audioSource);
-                yield return new WaitForSeconds(0.5f);
+                //SoundManager.Instance.Play3D_RPC("ContaminationFieldWarn", audioSource);
+                yield return null;
             }
                 
             if (transform.GetChild(indexs[0]).gameObject.activeSelf)
@@ -170,7 +163,7 @@ namespace JCW.Object
 
         IEnumerator WaitForPlayer()
         {
-            yield return new WaitUntil(() => PhotonNetwork.PlayerList.Length == 1);
+            yield return new WaitUntil(() => PhotonNetwork.PlayerList.Length == 2);
 
             if (PhotonNetwork.IsMasterClient)
             {
@@ -179,6 +172,7 @@ namespace JCW.Object
                 randomIndex = random.Next(0, 4);
                 photonView.RPC(nameof(Init), RpcTarget.AllViaServer, randomIndex);
                 isStart = true;
+                SoundManager.Instance.PlayBGM_RPC("S3S2");
             }
         }
     }

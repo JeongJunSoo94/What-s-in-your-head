@@ -13,10 +13,8 @@ namespace JCW.Object.Stage1
         [Header("눌리는 정도"), SerializeField] float pressedDistance = 0.6f;
         [Header("영구적 눌림"), SerializeField] bool permanentPress = false;
 
-        bool isPressed = false;
         Vector3 pressedPos;
         Vector3 unpressedPos;
-        Coroutine coroutine = null;
 
         private void Awake()
         {

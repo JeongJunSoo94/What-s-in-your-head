@@ -83,9 +83,11 @@ namespace KSU
         }
         private void Update()
         {
-            SearchWithSphereCast();
-            if(playerState.isMine)
+            if (playerState.isMine)
+            {
+                SearchWithSphereCast();
                 SendInfoUI();
+            }
             //if(interactionState.isRailTriggered)
             //{
             //    if (interactionState.isMovingToRail)
@@ -521,8 +523,8 @@ namespace KSU
                 //    return;
                 if (detectedRail.Count > 0)
                 {
-                    if (detectedRail.ContainsKey(other.transform.parent.transform.parent.gameObject))
-                        return;
+                    //if (detectedRail.ContainsKey(other.transform.parent.transform.parent.gameObject))
+                    //    return;
                     bool isNewRail = true;
                     foreach (var rail in detectedRail)
                     {
