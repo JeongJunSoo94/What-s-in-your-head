@@ -24,7 +24,6 @@ namespace JCW.Object
             //transform.GetChild(0).GetComponent<SandSackShadow>().groundPlatform = this.groundPlatform;
             sandSackShadow = transform.GetChild(0).GetComponent<SandSackShadow>();            
             finalPos = transform.position;
-            GroundCheck();
 
             //sandSackShadow.SetGroundPlatform(groundPlatform);
         }
@@ -40,18 +39,20 @@ namespace JCW.Object
 
         public void StartCoroutineFall(float time)
         {
+            GroundCheck();
             StartCoroutine(SandAttackCoroutine(time));
         }
 
         public void Initialized(Vector3 pos)
         {
             finalPos = pos;
+
         }
 
         public void GroundCheck()
         {
             RaycastHit hit;
-            if (Physics.Raycast(transform.position, transform.up,out hit, 1000f, layer, QueryTriggerInteraction.Ignore))
+            if (Physics.Raycast(transform.position, -transform.up,out hit, 1000f, layer, QueryTriggerInteraction.Ignore))
             {
                 groundPlatform = hit.transform;
                 sandSackShadow.SetGroundPlatform(groundPlatform);

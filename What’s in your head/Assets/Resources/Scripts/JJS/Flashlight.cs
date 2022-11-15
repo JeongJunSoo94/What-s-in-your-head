@@ -44,19 +44,12 @@ namespace JJS
 
         void Update()
         {
-            if (photonView.IsMine)
+            if (finder.targetObj.Count == 2)
             {
-                if (finder.targetObj.Count == 2)
+                if (GameManager.Instance.curPlayerHP == 0 && canAttack)
                 {
-                    if (GameManager.Instance.curPlayerHP == 0&& canAttack)
-                    {
-                        photonView.RPC(nameof(SandAttack), RpcTarget.AllViaServer);
-                        canAttack = false;
-                    }
-                    else
-                    {
-                        canAttack = true;
-                    }
+                    SandAttack();
+                       canAttack = false;
                 }
             }
         }
@@ -91,6 +84,7 @@ namespace JJS
         {
             InitSpawner();
             SetList(posList);
+            canAttack = true;
         }
 
         public void SetList(GameObject objectList)
