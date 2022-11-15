@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using JJS.CharacterSMB;
 using KSU;
+
 namespace JJS
 {
     public class DashSMB : CharacterBaseSMB
@@ -27,6 +28,7 @@ namespace JJS
         public override void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
         {
             animator.SetBool("isDash", false);
+
         }
         void check(Animator animator)
         {
