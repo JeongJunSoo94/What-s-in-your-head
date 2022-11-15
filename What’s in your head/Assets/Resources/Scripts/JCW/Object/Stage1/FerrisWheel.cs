@@ -16,7 +16,6 @@ namespace JCW.Object.Stage1
         private void Awake()
         {
             cabins = transform.GetComponentsInChildren<Transform>();
-            StartCoroutine(nameof(WaitForPlayer));
         }
         
 
@@ -29,13 +28,6 @@ namespace JCW.Object.Stage1
             {
                 cabins[i].LookAt(cabins[i].position + Vector3.forward);
             }
-        }
-
-        IEnumerator WaitForPlayer()
-        {            
-            yield return new WaitUntil(() => PhotonNetwork.PlayerList.Length == 2);
-            SoundManager.Instance.PlayBGM_RPC("S1S2");
-            isStart = true;
         }
     }
 
