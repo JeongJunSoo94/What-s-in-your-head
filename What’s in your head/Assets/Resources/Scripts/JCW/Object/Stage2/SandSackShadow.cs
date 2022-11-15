@@ -15,6 +15,7 @@ namespace JCW.Object
         {
             base.Awake();
             initHeight = transform.position.y;
+            groundPlatform = this.transform;
         }
 
         private void Start()
@@ -31,6 +32,13 @@ namespace JCW.Object
 
             projector.fadeFactor = ((initHeight + 5f - transform.position.y) / (initHeight - groundHeight)) * shadowTransparent;
         }        
+
+        public void SetGroundPlatform(Transform tf)
+        {
+            groundPlatform = tf;
+            groundHeight = groundPlatform.position.y;
+            scaleOffset = (maxShadowValue - defaultShadowValue) / (initHeight - groundHeight);
+        }
     }
 
 }

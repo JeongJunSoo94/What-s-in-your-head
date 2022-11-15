@@ -34,6 +34,9 @@ namespace YC.Camera_
         CinemachineVirtualCameraBase topCam;
         CinemachineVirtualCameraBase sideCam;
 
+        CinemachineCollider backCamCol;
+        CinemachineCollider sholderCamCol;
+
         // 가상 카메라 enum State
         enum CamState { back, sholder };
         CamState curCam;
@@ -41,7 +44,7 @@ namespace YC.Camera_
 
         // ============  최적화 관련 설정  ============ //
         [Header("[Clipping Planes Far]")]
-        [SerializeField] [Range(0, 3000)] float farValue = 700f;
+        [SerializeField] [Range(0, 1000)] float farValue = 500;
 
         // ============  카메라 감도 설정  ============ //
         [Header("[Back View 카메라 마우스 감도]")]
@@ -102,8 +105,9 @@ namespace YC.Camera_
         bool isSideView = false;
         List<Transform> targets;
         GameObject lookAndFollow;
-        float minZoom;
-        float maxZoom;
+        float minDis = 0; // Follow Obj의 최소 거리
+        float maxDis = -250; // Follow Obj의 최대 거리
+        float curPosZ = 0;
         [Space]
         [Space]
 
@@ -172,9 +176,6 @@ namespace YC.Camera_
 
             if (isSideView)
             {
-                //if (Input.GetKeyDown(KeyCode.Keypad9))
-                //    ShakeCameraInSideView();
-
                 MoveInSideView();
                 ZoomInSideView();
                 return;
@@ -237,8 +238,12 @@ namespace YC.Camera_
 
             backCam = Instantiate(CineBack, Vector3.zero, Quaternion.identity).GetComponent<CinemachineVirtualCameraBase>();
             sholderCam = Instantiate(CineSholder, Vector3.zero, Quaternion.identity).GetComponent<CinemachineVirtualCameraBase>();
+
             backCam.GetComponent<CinemachineFreeLook>().m_Lens.FarClipPlane = farValue;
             sholderCam.GetComponent<CinemachineFreeLook>().m_Lens.FarClipPlane = farValue;
+
+            backCamCol = backCam.GetComponent<CinemachineCollider>();
+            sholderCamCol = sholderCam.GetComponent<CinemachineCollider>();
 
             if (this.gameObject.CompareTag("Nella"))
             {
@@ -246,8 +251,8 @@ namespace YC.Camera_
                 string ignoreTag = "Nella";
                 backCam.gameObject.layer = LayerMask.NameToLayer(layerName);
                 sholderCam.gameObject.layer = LayerMask.NameToLayer(layerName);
-                backCam.GetComponent<CinemachineCollider>().m_IgnoreTag = ignoreTag;
-                sholderCam.GetComponent<CinemachineCollider>().m_IgnoreTag = ignoreTag;
+                backCamCol.m_IgnoreTag = ignoreTag;
+                sholderCamCol.m_IgnoreTag = ignoreTag;
             }
             else
             {
@@ -255,18 +260,17 @@ namespace YC.Camera_
                 string ignoreTag = "Steady";
                 backCam.gameObject.layer = LayerMask.NameToLayer(layerName);
                 sholderCam.gameObject.layer = LayerMask.NameToLayer(layerName);
-                backCam.GetComponent<CinemachineCollider>().m_IgnoreTag = ignoreTag;
-                sholderCam.GetComponent<CinemachineCollider>().m_IgnoreTag = ignoreTag;
+                backCamCol.m_IgnoreTag = ignoreTag;
+                sholderCamCol.m_IgnoreTag = ignoreTag;
             }
 
-            backCam.GetComponent<CinemachineCollider>().m_Damping = 0.1f;
-            backCam.GetComponent<CinemachineCollider>().m_DampingWhenOccluded = 0.1f;
-            sholderCam.GetComponent<CinemachineCollider>().m_Damping = 0.1f;
-            sholderCam.GetComponent<CinemachineCollider>().m_DampingWhenOccluded = 0.1f;
+            backCamCol.m_Damping = 0.1f;
+            backCamCol.m_DampingWhenOccluded = 0.1f;
+            sholderCamCol.m_Damping = 0.1f;
+            sholderCamCol.m_DampingWhenOccluded = 0.1f;
 
             followObj = Instantiate(CineFollowObj_Back, player.transform.position + CineFollowObj_Back.transform.position, player.transform.rotation).GetComponent<Transform>();
             lookatBackObj = Instantiate(CineLookObj_Back, player.transform.position + CineLookObj_Back.transform.position, player.transform.rotation).GetComponent<Transform>();
-            //lookatSholderObj = transform.Find("Cine_lookatObj_Sholder").gameObject.transform;
             lookatObjOriginY = CineLookObj_Back.transform.position.y;
 
             CinemachineFreeLook Cine_backCam = backCam.GetComponent<CinemachineFreeLook>();
@@ -732,10 +736,9 @@ namespace YC.Camera_
                 lookAndFollow = new GameObject();
                 lookAndFollow.name = "Cine_SideScrollObj";
                 lookAndFollow.transform.position
-                    = new Vector3(lookAndFollow.transform.position.x, sideCam.transform.position.y, lookAndFollow.transform.position.z);
+                    = new Vector3(lookAndFollow.transform.position.x, sideCam.transform.position.y, 0);
                 sideCam.Follow = lookAndFollow.transform;
                 sideCam.LookAt = lookAndFollow.transform;
-
 
                 OnOffCamera(null);
 
@@ -743,9 +746,6 @@ namespace YC.Camera_
                 targets = new List<Transform>();
                 targets.Add(GameObject.FindWithTag("Nella").GetComponent<Transform>());
                 targets.Add(GameObject.FindWithTag("Steady").GetComponent<Transform>());
-
-                minZoom = sideScrollViewFOV + 15f; // 시야각 최대 넓음
-                maxZoom = sideScrollViewFOV; // 시야각 최대 좁음 = 최초 시야각 값
             }
             else
             {
@@ -781,33 +781,29 @@ namespace YC.Camera_
                 if (lerpYpos > targetYpos) lerpYpos = targetYpos;
 
                 lookAndFollow.transform.position = new Vector3(lookAndFollow.transform.position.x, lerpYpos, lookAndFollow.transform.position.z);
+                //lookAndFollow.transform.position = new Vector3(lookAndFollow.transform.position.x, lerpYpos, curPosZ);
                 yield return new WaitForFixedUpdate();
             }
         }
 
         void MoveInSideView() // 사이브 뷰 카메라 이동  
         {
-            // 만약 한명이 죽었다면 바로 리턴
-
             if (!targets[0] || !targets[1]) return;
 
             Vector3 centerPoint = GetCenterPoint();
 
-            lookAndFollow.transform.position = new Vector3(centerPoint.x, lookAndFollow.transform.position.y, centerPoint.z);
+            //lookAndFollow.transform.position = new Vector3(centerPoint.x, lookAndFollow.transform.position.y, centerPoint.z);
+            lookAndFollow.transform.position = new Vector3(centerPoint.x, lookAndFollow.transform.position.y, curPosZ);
         }
 
         void ZoomInSideView() // 사이드 뷰 카메라 줌  
         {
-            float newZoom = Mathf.Lerp(maxZoom, minZoom, (GetDistance() / minZoom));
-
-            sideCam.GetComponent<CinemachineVirtualCamera>().m_Lens.FieldOfView = newZoom;
+            float newZoom = Mathf.Lerp(minDis, maxDis, (GetDistance() / 2000));
+            curPosZ = newZoom;
         }
 
         float GetDistance() // 두 플레이어 간 거리를 구한다  
         {
-            // if, 현재 살아있는 플레이어가 한명
-            // 리턴, 그 한명의 포지션
-
             if (!targets[0] || !targets[1]) return 0;
 
             var bounds = new Bounds(targets[0].position, Vector3.zero); // 넬라의 센터를 기준으로하는 경계상자 생성
@@ -1151,21 +1147,17 @@ namespace YC.Camera_
 
         public void RidingInit() // 라이딩(로프, 레일)진행시 각각의 SMB에서 해당 함수를 호출한다 (갈고리 제외)  
         {
-            if (isLerp)
-            {
-                StopAllCoroutines();
-                isLerp = false;
-            }
-
             isRiding = true;
         }
 
         void RidingCamera() // 라이딩 시작부터, '착지할 때'까지 플레이어를 쫓아간다  
         {
+            if (isLerp) return;
+
             lookatBackObj.position
-                            = new Vector3(player.transform.position.x,
-                                        player.transform.position.y + lookatObjOriginY,
-                                        player.transform.position.z);
+                        = new Vector3(player.transform.position.x,
+                                    player.transform.position.y + lookatObjOriginY,
+                                    player.transform.position.z);
             followObj.position
                         = new Vector3(player.transform.position.x,
                                     player.transform.position.y,

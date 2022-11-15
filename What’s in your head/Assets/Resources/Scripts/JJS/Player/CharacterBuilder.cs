@@ -162,11 +162,6 @@ namespace JJS
                         player.GetComponent<WaterGun>().InitSpawner();
                     }
                 }
-                if (stage == 2)
-                {
-                    if (playerMouse.photonView.IsMine)
-                        playerMouse.InstantiateSideCollider();
-                }
             }
         }
         public void SteadyScriptSetActive(GameObject player)
@@ -192,11 +187,6 @@ namespace JJS
                 {
                     player.GetComponent<SteadyCymbalsAction>().enabled = false;
                     player.GetComponent<SteadyGrappleAction>().enabled = false;
-                }
-                if (stage == 2)
-                {
-                    if (playerMouse.photonView.IsMine)
-                        playerMouse.InstantiateSideCollider();
                 }
                 if (playerMouse is SteadyMouseController)
                 {

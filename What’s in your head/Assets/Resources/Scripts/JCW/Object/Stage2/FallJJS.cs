@@ -1,34 +1,62 @@
 using System.Collections;
 using System.Collections.Generic;
-using Photon.Pun;
 using UnityEngine;
 using KSU.Object.Stage2;
 
 namespace JCW.Object
 {
-    public class FallKSU : LinkedObjectWithReciever
+    public class FallJJS : LinkedObjectWithReciever
     {
         [Header("추락 초기 속도")] [SerializeField] float fallSpeed;
         [Header("추락 가속도")] [SerializeField] float fallAccelerateSpeed;
-        //Transform groundPlatform;
+        Transform groundPlatform;
 
         Vector3 finalPos;
 
+        SandSackShadow sandSackShadow;
+
+        public LayerMask layer;
         public JCW.Spawner.Spawner spawner;
         public WaitForSeconds wait = new WaitForSeconds(0.01f);
 
         private void Awake()
         {
             //transform.GetChild(0).GetComponent<SandSackShadow>().groundPlatform = this.groundPlatform;
+            sandSackShadow = transform.GetChild(0).GetComponent<SandSackShadow>();            
             finalPos = transform.position;
+            GroundCheck();
+
+            //sandSackShadow.SetGroundPlatform(groundPlatform);
         }
 
         void Update()
         {
+            GroundCheck();
             if (!isActivated)
                 return;
             transform.position = Vector3.MoveTowards(transform.position, finalPos, Time.deltaTime * fallSpeed);
             fallSpeed += Time.deltaTime * fallAccelerateSpeed;
+        }
+
+        public void StartCoroutineFall(float time)
+        {
+            StartCoroutine(SandAttackCoroutine(time));
+        }
+
+        public void Initialized(Vector3 pos)
+        {
+            finalPos = pos;
+        }
+
+        public void GroundCheck()
+        {
+            RaycastHit hit;
+            if (Physics.Raycast(transform.position, transform.up,out hit, 1000f, layer, QueryTriggerInteraction.Ignore))
+            {
+                groundPlatform = hit.transform;
+                sandSackShadow.SetGroundPlatform(groundPlatform);
+                finalPos = groundPlatform.position;
+            }
         }
 
         private void OnTriggerEnter(Collider other)

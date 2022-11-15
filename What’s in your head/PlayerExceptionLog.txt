@@ -868,3 +868,220 @@ Rethrow as AggregateException: Caught 1 exception(s) in methods called by Dispat
 Photon.Pun.PhotonHandler.Dispatch () (at Assets/AddOn/Photon/PhotonUnityNetworking/Code/PhotonHandler.cs:242)
 Photon.Pun.PhotonHandler.FixedUpdate () (at Assets/AddOn/Photon/PhotonUnityNetworking/Code/PhotonHandler.cs:145)
 
+[2022-11-15 오후 7:56:15]ArgumentException: The Object you want to instantiate is null.
+UnityEngine.Object.CheckNullArgument (System.Object arg, System.String message) (at <c6b52566f59b49fc861a7812a1ea2f6b>:0)
+UnityEngine.Object.Instantiate (UnityEngine.Object original, UnityEngine.Transform parent, System.Boolean instantiateInWorldSpace) (at <c6b52566f59b49fc861a7812a1ea2f6b>:0)
+UnityEngine.Object.Instantiate[T] (T original, UnityEngine.Transform parent, System.Boolean worldPositionStays) (at <c6b52566f59b49fc861a7812a1ea2f6b>:0)
+UnityEngine.Object.Instantiate[T] (T original, UnityEngine.Transform parent) (at <c6b52566f59b49fc861a7812a1ea2f6b>:0)
+JCW.Spawner.Spawner.SpawnInit () (at Assets/Resources/Scripts/JCW/NavMesh/Spawner.cs:69)
+JCW.Spawner.Spawner.Start () (at Assets/Resources/Scripts/JCW/NavMesh/Spawner.cs:21)
+
+[2022-11-15 오후 8:10:38]NullReferenceException: Object reference not set to an instance of an object
+JJS.Flashlight.SandAttack () (at Assets/Resources/Scripts/JJS/Flashlight.cs:93)
+System.Reflection.RuntimeMethodInfo.Invoke (System.Object obj, System.Reflection.BindingFlags invokeAttr, System.Reflection.Binder binder, System.Object[] parameters, System.Globalization.CultureInfo culture) (at <c2a97e0383e8404c9fc0ae19d58f57f1>:0)
+Rethrow as TargetInvocationException: Exception has been thrown by the target of an invocation.
+System.Reflection.RuntimeMethodInfo.Invoke (System.Object obj, System.Reflection.BindingFlags invokeAttr, System.Reflection.Binder binder, System.Object[] parameters, System.Globalization.CultureInfo culture) (at <c2a97e0383e8404c9fc0ae19d58f57f1>:0)
+System.Reflection.MethodBase.Invoke (System.Object obj, System.Object[] parameters) (at <c2a97e0383e8404c9fc0ae19d58f57f1>:0)
+Photon.Pun.PhotonNetwork.ExecuteRpc (ExitGames.Client.Photon.Hashtable rpcData, Photon.Realtime.Player sender) (at Assets/AddOn/Photon/PhotonUnityNetworking/Code/PhotonNetworkPart.cs:517)
+Photon.Pun.PhotonNetwork.OnEvent (ExitGames.Client.Photon.EventData photonEvent) (at Assets/AddOn/Photon/PhotonUnityNetworking/Code/PhotonNetworkPart.cs:2201)
+Photon.Realtime.LoadBalancingClient.OnEvent (ExitGames.Client.Photon.EventData photonEvent) (at Assets/AddOn/Photon/PhotonRealtime/Code/LoadBalancingClient.cs:3364)
+ExitGames.Client.Photon.PeerBase.DeserializeMessageAndCallback (ExitGames.Client.Photon.StreamBuffer stream) (at <b01774392bf441f59388585f8e74649d>:0)
+ExitGames.Client.Photon.EnetPeer.DispatchIncomingCommands () (at <b01774392bf441f59388585f8e74649d>:0)
+ExitGames.Client.Photon.PhotonPeer.DispatchIncomingCommands () (at <b01774392bf441f59388585f8e74649d>:0)
+Photon.Pun.PhotonHandler.Dispatch () (at Assets/AddOn/Photon/PhotonUnityNetworking/Code/PhotonHandler.cs:226)
+Rethrow as AggregateException: Caught 1 exception(s) in methods called by DispatchIncomingCommands(). Rethrowing first only (see above). (Exception has been thrown by the target of an invocation.)
+Photon.Pun.PhotonHandler.Dispatch () (at Assets/AddOn/Photon/PhotonUnityNetworking/Code/PhotonHandler.cs:242)
+Photon.Pun.PhotonHandler.FixedUpdate () (at Assets/AddOn/Photon/PhotonUnityNetworking/Code/PhotonHandler.cs:145)
+
+[2022-11-15 오후 8:10:38]UnassignedReferenceException: The variable groundPlatform of SandSackShadow has not been assigned.
+You probably need to assign the groundPlatform variable of the SandSackShadow script in the inspector.
+UnityEngine.Transform.get_position () (at <c6b52566f59b49fc861a7812a1ea2f6b>:0)
+JCW.Object.SandSackShadow.Start () (at Assets/Resources/Scripts/JCW/Object/Stage2/SandSackShadow.cs:22)
+
+[2022-11-15 오후 8:10:38]UnassignedReferenceException: The variable groundPlatform of SandSackShadow has not been assigned.
+You probably need to assign the groundPlatform variable of the SandSackShadow script in the inspector.
+UnityEngine.Transform.get_position () (at <c6b52566f59b49fc861a7812a1ea2f6b>:0)
+JCW.Object.SandSackShadow.Start () (at Assets/Resources/Scripts/JCW/Object/Stage2/SandSackShadow.cs:22)
+
+[2022-11-15 오후 8:10:38]UnassignedReferenceException: The variable groundPlatform of SandSackShadow has not been assigned.
+You probably need to assign the groundPlatform variable of the SandSackShadow script in the inspector.
+UnityEngine.Transform.get_position () (at <c6b52566f59b49fc861a7812a1ea2f6b>:0)
+JCW.Object.SandSackShadow.Start () (at Assets/Resources/Scripts/JCW/Object/Stage2/SandSackShadow.cs:22)
+
+[2022-11-15 오후 8:10:38]UnassignedReferenceException: The variable groundPlatform of SandSackShadow has not been assigned.
+You probably need to assign the groundPlatform variable of the SandSackShadow script in the inspector.
+UnityEngine.Transform.get_position () (at <c6b52566f59b49fc861a7812a1ea2f6b>:0)
+JCW.Object.SandSackShadow.Start () (at Assets/Resources/Scripts/JCW/Object/Stage2/SandSackShadow.cs:22)
+
+[2022-11-15 오후 8:10:38]UnassignedReferenceException: The variable groundPlatform of SandSackShadow has not been assigned.
+You probably need to assign the groundPlatform variable of the SandSackShadow script in the inspector.
+UnityEngine.Transform.get_position () (at <c6b52566f59b49fc861a7812a1ea2f6b>:0)
+JCW.Object.SandSackShadow.Start () (at Assets/Resources/Scripts/JCW/Object/Stage2/SandSackShadow.cs:22)
+
+[2022-11-15 오후 8:10:38]UnassignedReferenceException: The variable groundPlatform of SandSackShadow has not been assigned.
+You probably need to assign the groundPlatform variable of the SandSackShadow script in the inspector.
+UnityEngine.Transform.get_position () (at <c6b52566f59b49fc861a7812a1ea2f6b>:0)
+JCW.Object.SandSackShadow.Start () (at Assets/Resources/Scripts/JCW/Object/Stage2/SandSackShadow.cs:22)
+
+[2022-11-15 오후 8:10:38]UnassignedReferenceException: The variable groundPlatform of SandSackShadow has not been assigned.
+You probably need to assign the groundPlatform variable of the SandSackShadow script in the inspector.
+UnityEngine.Transform.get_position () (at <c6b52566f59b49fc861a7812a1ea2f6b>:0)
+JCW.Object.SandSackShadow.Start () (at Assets/Resources/Scripts/JCW/Object/Stage2/SandSackShadow.cs:22)
+
+[2022-11-15 오후 8:10:38]UnassignedReferenceException: The variable groundPlatform of SandSackShadow has not been assigned.
+You probably need to assign the groundPlatform variable of the SandSackShadow script in the inspector.
+UnityEngine.Transform.get_position () (at <c6b52566f59b49fc861a7812a1ea2f6b>:0)
+JCW.Object.SandSackShadow.Start () (at Assets/Resources/Scripts/JCW/Object/Stage2/SandSackShadow.cs:22)
+
+[2022-11-15 오후 8:10:38]UnassignedReferenceException: The variable groundPlatform of SandSackShadow has not been assigned.
+You probably need to assign the groundPlatform variable of the SandSackShadow script in the inspector.
+UnityEngine.Transform.get_position () (at <c6b52566f59b49fc861a7812a1ea2f6b>:0)
+JCW.Object.SandSackShadow.Start () (at Assets/Resources/Scripts/JCW/Object/Stage2/SandSackShadow.cs:22)
+
+[2022-11-15 오후 8:10:38]UnassignedReferenceException: The variable groundPlatform of SandSackShadow has not been assigned.
+You probably need to assign the groundPlatform variable of the SandSackShadow script in the inspector.
+UnityEngine.Transform.get_position () (at <c6b52566f59b49fc861a7812a1ea2f6b>:0)
+JCW.Object.SandSackShadow.Start () (at Assets/Resources/Scripts/JCW/Object/Stage2/SandSackShadow.cs:22)
+
+[2022-11-15 오후 8:23:00]NullReferenceException: Object reference not set to an instance of an object
+JJS.Flashlight.SandAttack () (at Assets/Resources/Scripts/JJS/Flashlight.cs:94)
+System.Reflection.RuntimeMethodInfo.Invoke (System.Object obj, System.Reflection.BindingFlags invokeAttr, System.Reflection.Binder binder, System.Object[] parameters, System.Globalization.CultureInfo culture) (at <c2a97e0383e8404c9fc0ae19d58f57f1>:0)
+Rethrow as TargetInvocationException: Exception has been thrown by the target of an invocation.
+System.Reflection.RuntimeMethodInfo.Invoke (System.Object obj, System.Reflection.BindingFlags invokeAttr, System.Reflection.Binder binder, System.Object[] parameters, System.Globalization.CultureInfo culture) (at <c2a97e0383e8404c9fc0ae19d58f57f1>:0)
+System.Reflection.MethodBase.Invoke (System.Object obj, System.Object[] parameters) (at <c2a97e0383e8404c9fc0ae19d58f57f1>:0)
+Photon.Pun.PhotonNetwork.ExecuteRpc (ExitGames.Client.Photon.Hashtable rpcData, Photon.Realtime.Player sender) (at Assets/AddOn/Photon/PhotonUnityNetworking/Code/PhotonNetworkPart.cs:517)
+Photon.Pun.PhotonNetwork.OnEvent (ExitGames.Client.Photon.EventData photonEvent) (at Assets/AddOn/Photon/PhotonUnityNetworking/Code/PhotonNetworkPart.cs:2201)
+Photon.Realtime.LoadBalancingClient.OnEvent (ExitGames.Client.Photon.EventData photonEvent) (at Assets/AddOn/Photon/PhotonRealtime/Code/LoadBalancingClient.cs:3364)
+ExitGames.Client.Photon.PeerBase.DeserializeMessageAndCallback (ExitGames.Client.Photon.StreamBuffer stream) (at <b01774392bf441f59388585f8e74649d>:0)
+ExitGames.Client.Photon.EnetPeer.DispatchIncomingCommands () (at <b01774392bf441f59388585f8e74649d>:0)
+ExitGames.Client.Photon.PhotonPeer.DispatchIncomingCommands () (at <b01774392bf441f59388585f8e74649d>:0)
+Photon.Pun.PhotonHandler.Dispatch () (at Assets/AddOn/Photon/PhotonUnityNetworking/Code/PhotonHandler.cs:226)
+Rethrow as AggregateException: Caught 1 exception(s) in methods called by DispatchIncomingCommands(). Rethrowing first only (see above). (Exception has been thrown by the target of an invocation.)
+Photon.Pun.PhotonHandler.Dispatch () (at Assets/AddOn/Photon/PhotonUnityNetworking/Code/PhotonHandler.cs:242)
+Photon.Pun.PhotonHandler.FixedUpdate () (at Assets/AddOn/Photon/PhotonUnityNetworking/Code/PhotonHandler.cs:145)
+
+[2022-11-15 오후 8:23:00]UnassignedReferenceException: The variable groundPlatform of SandSackShadow has not been assigned.
+You probably need to assign the groundPlatform variable of the SandSackShadow script in the inspector.
+UnityEngine.Transform.get_position () (at <c6b52566f59b49fc861a7812a1ea2f6b>:0)
+JCW.Object.SandSackShadow.Start () (at Assets/Resources/Scripts/JCW/Object/Stage2/SandSackShadow.cs:22)
+
+[2022-11-15 오후 8:23:00]UnassignedReferenceException: The variable groundPlatform of SandSackShadow has not been assigned.
+You probably need to assign the groundPlatform variable of the SandSackShadow script in the inspector.
+UnityEngine.Transform.get_position () (at <c6b52566f59b49fc861a7812a1ea2f6b>:0)
+JCW.Object.SandSackShadow.Start () (at Assets/Resources/Scripts/JCW/Object/Stage2/SandSackShadow.cs:22)
+
+[2022-11-15 오후 8:23:00]UnassignedReferenceException: The variable groundPlatform of SandSackShadow has not been assigned.
+You probably need to assign the groundPlatform variable of the SandSackShadow script in the inspector.
+UnityEngine.Transform.get_position () (at <c6b52566f59b49fc861a7812a1ea2f6b>:0)
+JCW.Object.SandSackShadow.Start () (at Assets/Resources/Scripts/JCW/Object/Stage2/SandSackShadow.cs:22)
+
+[2022-11-15 오후 8:23:00]UnassignedReferenceException: The variable groundPlatform of SandSackShadow has not been assigned.
+You probably need to assign the groundPlatform variable of the SandSackShadow script in the inspector.
+UnityEngine.Transform.get_position () (at <c6b52566f59b49fc861a7812a1ea2f6b>:0)
+JCW.Object.SandSackShadow.Start () (at Assets/Resources/Scripts/JCW/Object/Stage2/SandSackShadow.cs:22)
+
+[2022-11-15 오후 8:23:00]UnassignedReferenceException: The variable groundPlatform of SandSackShadow has not been assigned.
+You probably need to assign the groundPlatform variable of the SandSackShadow script in the inspector.
+UnityEngine.Transform.get_position () (at <c6b52566f59b49fc861a7812a1ea2f6b>:0)
+JCW.Object.SandSackShadow.Start () (at Assets/Resources/Scripts/JCW/Object/Stage2/SandSackShadow.cs:22)
+
+[2022-11-15 오후 8:23:00]UnassignedReferenceException: The variable groundPlatform of SandSackShadow has not been assigned.
+You probably need to assign the groundPlatform variable of the SandSackShadow script in the inspector.
+UnityEngine.Transform.get_position () (at <c6b52566f59b49fc861a7812a1ea2f6b>:0)
+JCW.Object.SandSackShadow.Start () (at Assets/Resources/Scripts/JCW/Object/Stage2/SandSackShadow.cs:22)
+
+[2022-11-15 오후 8:23:00]UnassignedReferenceException: The variable groundPlatform of SandSackShadow has not been assigned.
+You probably need to assign the groundPlatform variable of the SandSackShadow script in the inspector.
+UnityEngine.Transform.get_position () (at <c6b52566f59b49fc861a7812a1ea2f6b>:0)
+JCW.Object.SandSackShadow.Start () (at Assets/Resources/Scripts/JCW/Object/Stage2/SandSackShadow.cs:22)
+
+[2022-11-15 오후 8:23:00]UnassignedReferenceException: The variable groundPlatform of SandSackShadow has not been assigned.
+You probably need to assign the groundPlatform variable of the SandSackShadow script in the inspector.
+UnityEngine.Transform.get_position () (at <c6b52566f59b49fc861a7812a1ea2f6b>:0)
+JCW.Object.SandSackShadow.Start () (at Assets/Resources/Scripts/JCW/Object/Stage2/SandSackShadow.cs:22)
+
+[2022-11-15 오후 8:23:00]UnassignedReferenceException: The variable groundPlatform of SandSackShadow has not been assigned.
+You probably need to assign the groundPlatform variable of the SandSackShadow script in the inspector.
+UnityEngine.Transform.get_position () (at <c6b52566f59b49fc861a7812a1ea2f6b>:0)
+JCW.Object.SandSackShadow.Start () (at Assets/Resources/Scripts/JCW/Object/Stage2/SandSackShadow.cs:22)
+
+[2022-11-15 오후 8:23:00]UnassignedReferenceException: The variable groundPlatform of SandSackShadow has not been assigned.
+You probably need to assign the groundPlatform variable of the SandSackShadow script in the inspector.
+UnityEngine.Transform.get_position () (at <c6b52566f59b49fc861a7812a1ea2f6b>:0)
+JCW.Object.SandSackShadow.Start () (at Assets/Resources/Scripts/JCW/Object/Stage2/SandSackShadow.cs:22)
+
+[2022-11-15 오후 8:42:17]UnassignedReferenceException: The variable groundPlatform of SandSackShadow has not been assigned.
+You probably need to assign the groundPlatform variable of the SandSackShadow script in the inspector.
+UnityEngine.Transform.get_position () (at <c6b52566f59b49fc861a7812a1ea2f6b>:0)
+JCW.Object.SandSackShadow.Start () (at Assets/Resources/Scripts/JCW/Object/Stage2/SandSackShadow.cs:22)
+
+[2022-11-15 오후 8:53:55]NullReferenceException: Object reference not set to an instance of an object
+JJS.Flashlight.SandAttack () (at Assets/Resources/Scripts/JJS/Flashlight.cs:93)
+System.Reflection.RuntimeMethodInfo.Invoke (System.Object obj, System.Reflection.BindingFlags invokeAttr, System.Reflection.Binder binder, System.Object[] parameters, System.Globalization.CultureInfo culture) (at <c2a97e0383e8404c9fc0ae19d58f57f1>:0)
+Rethrow as TargetInvocationException: Exception has been thrown by the target of an invocation.
+System.Reflection.RuntimeMethodInfo.Invoke (System.Object obj, System.Reflection.BindingFlags invokeAttr, System.Reflection.Binder binder, System.Object[] parameters, System.Globalization.CultureInfo culture) (at <c2a97e0383e8404c9fc0ae19d58f57f1>:0)
+System.Reflection.MethodBase.Invoke (System.Object obj, System.Object[] parameters) (at <c2a97e0383e8404c9fc0ae19d58f57f1>:0)
+Photon.Pun.PhotonNetwork.ExecuteRpc (ExitGames.Client.Photon.Hashtable rpcData, Photon.Realtime.Player sender) (at Assets/AddOn/Photon/PhotonUnityNetworking/Code/PhotonNetworkPart.cs:517)
+Photon.Pun.PhotonNetwork.OnEvent (ExitGames.Client.Photon.EventData photonEvent) (at Assets/AddOn/Photon/PhotonUnityNetworking/Code/PhotonNetworkPart.cs:2201)
+Photon.Realtime.LoadBalancingClient.OnEvent (ExitGames.Client.Photon.EventData photonEvent) (at Assets/AddOn/Photon/PhotonRealtime/Code/LoadBalancingClient.cs:3364)
+ExitGames.Client.Photon.PeerBase.DeserializeMessageAndCallback (ExitGames.Client.Photon.StreamBuffer stream) (at <b01774392bf441f59388585f8e74649d>:0)
+ExitGames.Client.Photon.EnetPeer.DispatchIncomingCommands () (at <b01774392bf441f59388585f8e74649d>:0)
+ExitGames.Client.Photon.PhotonPeer.DispatchIncomingCommands () (at <b01774392bf441f59388585f8e74649d>:0)
+Photon.Pun.PhotonHandler.Dispatch () (at Assets/AddOn/Photon/PhotonUnityNetworking/Code/PhotonHandler.cs:226)
+Rethrow as AggregateException: Caught 2 exception(s) in methods called by DispatchIncomingCommands(). Rethrowing first only (see above). (Exception has been thrown by the target of an invocation.)
+Photon.Pun.PhotonHandler.Dispatch () (at Assets/AddOn/Photon/PhotonUnityNetworking/Code/PhotonHandler.cs:242)
+Photon.Pun.PhotonHandler.FixedUpdate () (at Assets/AddOn/Photon/PhotonUnityNetworking/Code/PhotonHandler.cs:145)
+
+[2022-11-15 오후 8:55:20]NullReferenceException: Object reference not set to an instance of an object
+JJS.Flashlight.SandAttack () (at Assets/Resources/Scripts/JJS/Flashlight.cs:93)
+System.Reflection.RuntimeMethodInfo.Invoke (System.Object obj, System.Reflection.BindingFlags invokeAttr, System.Reflection.Binder binder, System.Object[] parameters, System.Globalization.CultureInfo culture) (at <c2a97e0383e8404c9fc0ae19d58f57f1>:0)
+Rethrow as TargetInvocationException: Exception has been thrown by the target of an invocation.
+System.Reflection.RuntimeMethodInfo.Invoke (System.Object obj, System.Reflection.BindingFlags invokeAttr, System.Reflection.Binder binder, System.Object[] parameters, System.Globalization.CultureInfo culture) (at <c2a97e0383e8404c9fc0ae19d58f57f1>:0)
+System.Reflection.MethodBase.Invoke (System.Object obj, System.Object[] parameters) (at <c2a97e0383e8404c9fc0ae19d58f57f1>:0)
+Photon.Pun.PhotonNetwork.ExecuteRpc (ExitGames.Client.Photon.Hashtable rpcData, Photon.Realtime.Player sender) (at Assets/AddOn/Photon/PhotonUnityNetworking/Code/PhotonNetworkPart.cs:517)
+Photon.Pun.PhotonNetwork.OnEvent (ExitGames.Client.Photon.EventData photonEvent) (at Assets/AddOn/Photon/PhotonUnityNetworking/Code/PhotonNetworkPart.cs:2201)
+Photon.Realtime.LoadBalancingClient.OnEvent (ExitGames.Client.Photon.EventData photonEvent) (at Assets/AddOn/Photon/PhotonRealtime/Code/LoadBalancingClient.cs:3364)
+ExitGames.Client.Photon.PeerBase.DeserializeMessageAndCallback (ExitGames.Client.Photon.StreamBuffer stream) (at <b01774392bf441f59388585f8e74649d>:0)
+ExitGames.Client.Photon.EnetPeer.DispatchIncomingCommands () (at <b01774392bf441f59388585f8e74649d>:0)
+ExitGames.Client.Photon.PhotonPeer.DispatchIncomingCommands () (at <b01774392bf441f59388585f8e74649d>:0)
+Photon.Pun.PhotonHandler.Dispatch () (at Assets/AddOn/Photon/PhotonUnityNetworking/Code/PhotonHandler.cs:226)
+Rethrow as AggregateException: Caught 1 exception(s) in methods called by DispatchIncomingCommands(). Rethrowing first only (see above). (Exception has been thrown by the target of an invocation.)
+Photon.Pun.PhotonHandler.Dispatch () (at Assets/AddOn/Photon/PhotonUnityNetworking/Code/PhotonHandler.cs:242)
+Photon.Pun.PhotonHandler.FixedUpdate () (at Assets/AddOn/Photon/PhotonUnityNetworking/Code/PhotonHandler.cs:145)
+
+[2022-11-15 오후 9:03:32]NullReferenceException: Object reference not set to an instance of an object
+JCW.Object.FallJJS+<StopEffect>d__15.MoveNext () (at Assets/Resources/Scripts/JCW/Object/Stage2/FallJJS.cs:95)
+UnityEngine.SetupCoroutine.InvokeMoveNext (System.Collections.IEnumerator enumerator, System.IntPtr returnValueAddress) (at <c6b52566f59b49fc861a7812a1ea2f6b>:0)
+
+[2022-11-15 오후 9:06:47]MissingReferenceException: The object of type 'GameObject' has been destroyed but you are still trying to access it.
+Your script should either check if it is null or you should not destroy the object.
+UnityEngine.GameObject.GetComponent[T] () (at <c6b52566f59b49fc861a7812a1ea2f6b>:0)
+JJS.Flashlight.Update () (at Assets/Resources/Scripts/JJS/Flashlight.cs:54)
+
+[2022-11-15 오후 9:08:36]MissingReferenceException: The object of type 'GameObject' has been destroyed but you are still trying to access it.
+Your script should either check if it is null or you should not destroy the object.
+UnityEngine.GameObject.GetComponent[T] () (at <c6b52566f59b49fc861a7812a1ea2f6b>:0)
+JJS.Flashlight.Update () (at Assets/Resources/Scripts/JJS/Flashlight.cs:54)
+
+[2022-11-15 오후 9:13:26]MissingReferenceException: The object of type 'GameObject' has been destroyed but you are still trying to access it.
+Your script should either check if it is null or you should not destroy the object.
+UnityEngine.GameObject.GetComponent[T] () (at <c6b52566f59b49fc861a7812a1ea2f6b>:0)
+JJS.Flashlight.Update () (at Assets/Resources/Scripts/JJS/Flashlight.cs:54)
+
+[2022-11-15 오후 9:18:53]NullReferenceException: Object reference not set to an instance of an object
+JJS.Flashlight.SandAttack () (at Assets/Resources/Scripts/JJS/Flashlight.cs:85)
+System.Reflection.RuntimeMethodInfo.Invoke (System.Object obj, System.Reflection.BindingFlags invokeAttr, System.Reflection.Binder binder, System.Object[] parameters, System.Globalization.CultureInfo culture) (at <c2a97e0383e8404c9fc0ae19d58f57f1>:0)
+Rethrow as TargetInvocationException: Exception has been thrown by the target of an invocation.
+System.Reflection.RuntimeMethodInfo.Invoke (System.Object obj, System.Reflection.BindingFlags invokeAttr, System.Reflection.Binder binder, System.Object[] parameters, System.Globalization.CultureInfo culture) (at <c2a97e0383e8404c9fc0ae19d58f57f1>:0)
+System.Reflection.MethodBase.Invoke (System.Object obj, System.Object[] parameters) (at <c2a97e0383e8404c9fc0ae19d58f57f1>:0)
+Photon.Pun.PhotonNetwork.ExecuteRpc (ExitGames.Client.Photon.Hashtable rpcData, Photon.Realtime.Player sender) (at Assets/AddOn/Photon/PhotonUnityNetworking/Code/PhotonNetworkPart.cs:517)
+Photon.Pun.PhotonNetwork.OnEvent (ExitGames.Client.Photon.EventData photonEvent) (at Assets/AddOn/Photon/PhotonUnityNetworking/Code/PhotonNetworkPart.cs:2201)
+Photon.Realtime.LoadBalancingClient.OnEvent (ExitGames.Client.Photon.EventData photonEvent) (at Assets/AddOn/Photon/PhotonRealtime/Code/LoadBalancingClient.cs:3364)
+ExitGames.Client.Photon.PeerBase.DeserializeMessageAndCallback (ExitGames.Client.Photon.StreamBuffer stream) (at <b01774392bf441f59388585f8e74649d>:0)
+ExitGames.Client.Photon.EnetPeer.DispatchIncomingCommands () (at <b01774392bf441f59388585f8e74649d>:0)
+ExitGames.Client.Photon.PhotonPeer.DispatchIncomingCommands () (at <b01774392bf441f59388585f8e74649d>:0)
+Photon.Pun.PhotonHandler.Dispatch () (at Assets/AddOn/Photon/PhotonUnityNetworking/Code/PhotonHandler.cs:226)
+Rethrow as AggregateException: Caught 1 exception(s) in methods called by DispatchIncomingCommands(). Rethrowing first only (see above). (Exception has been thrown by the target of an invocation.)
+Photon.Pun.PhotonHandler.Dispatch () (at Assets/AddOn/Photon/PhotonUnityNetworking/Code/PhotonHandler.cs:242)
+Photon.Pun.PhotonHandler.FixedUpdate () (at Assets/AddOn/Photon/PhotonUnityNetworking/Code/PhotonHandler.cs:145)
+

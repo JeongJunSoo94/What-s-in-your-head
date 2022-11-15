@@ -16,18 +16,49 @@ namespace JJS
         public Light point;
         public ConeFindTarget finder;
         public ConeFindTarget finderSpot;
+
+        PhotonView photonView;
+
+        public bool sandSackUse;
+
         GameObject sandSpawner;
         public Spawner spawner;
         public GameObject bullet;
         public int bulletCount = 0;
         public float attackTime;
+        public int index;
+        public GameObject posList;
+        public List<Transform[]> targetList = new();
+        public bool canAttack;
+
         private void Awake()
         {
             SetCharacterGameObject(gameObject, out lightObj, "Light");
             spot = lightObj.transform.GetChild(0).GetComponent<Light>();
             directional = lightObj.transform.GetChild(1).GetComponent<Light>();
             point = lightObj.transform.GetChild(2).GetComponent<Light>();
-            InitSpawner();
+            photonView = GetComponent<PhotonView>();
+            if (sandSackUse)
+                InitializedSandSack();
+        }
+
+        void Update()
+        {
+            if (photonView.IsMine)
+            {
+                if (finder.targetObj.Count == 2)
+                {
+                    if (GameManager.Instance.curPlayerHP == 0&& canAttack)
+                    {
+                        photonView.RPC(nameof(SandAttack), RpcTarget.AllViaServer);
+                        canAttack = false;
+                    }
+                    else
+                    {
+                        canAttack = true;
+                    }
+                }
+            }
         }
 
         public void LightEnable(bool enable)
@@ -46,17 +77,30 @@ namespace JJS
         }
 
         [PunRPC]
-        public void SandAttack(string name)
+        public void SandAttack()
         {
-            foreach (var obj in finder.targetObj)
+            for (int i = 1; i < targetList[index].Length; i++)
             {
-                if (obj.name == name)
-                {
-                }
+                GameObject bullet = spawner.Respawn(targetList[index][i].position);
+                bullet.GetComponent<FallJJS>().StartCoroutineFall(attackTime);
             }
         }
 
-   
+
+        public void InitializedSandSack()
+        {
+            InitSpawner();
+            SetList(posList);
+        }
+
+        public void SetList(GameObject objectList)
+        {
+            for (int i = 0; i < objectList.transform.childCount; i++)
+            {
+                Transform[] allChildren = objectList.transform.GetChild(i).GetComponentsInChildren<Transform>();
+                targetList.Add(allChildren);
+            }
+        }
 
         public void InitSpawner()
         {
@@ -74,7 +118,7 @@ namespace JJS
 
         public void InitSand()
         {
-            bullet.GetComponent<FallKSU>();
+            bullet.GetComponent<FallJJS>().spawner = spawner;
         }
 
         public void SetLightColor(Color color)

@@ -168,9 +168,7 @@ GameObject:
   - component: {fileID: 6497006195793896930}
   - component: {fileID: 6497006195793896932}
   - component: {fileID: 6497006195793896931}
-  - component: {fileID: 5347851194579711069}
-  - component: {fileID: 5468825791259640123}
-  - component: {fileID: 8739177983620288041}
+  - component: {fileID: 8116892531566164937}
   m_Layer: 0
   m_Name: SandSackBullet
   m_TagString: DeadZone
@@ -226,7 +224,7 @@ CapsuleCollider:
   m_Height: 3.6328049
   m_Direction: 1
   m_Center: {x: 0, y: 1.3164024, z: 0.07793808}
---- !u!114 &5347851194579711069
+--- !u!114 &8116892531566164937
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -235,51 +233,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 6497006195793896928}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  ObservedComponentsFoldoutOpen: 1
-  Group: 0
-  prefixField: -1
-  Synchronization: 3
-  OwnershipTransfer: 0
-  observableSearch: 2
-  ObservedComponents:
-  - {fileID: 5468825791259640123}
-  sceneViewId: 0
-  InstantiationId: 0
-  isRuntimeInstantiated: 0
---- !u!114 &5468825791259640123
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6497006195793896928}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 627855c7f81362d41938ffe0b1475957, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_SynchronizePosition: 1
-  m_SynchronizeRotation: 1
-  m_SynchronizeScale: 0
-  m_UseLocal: 1
---- !u!114 &8739177983620288041
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6497006195793896928}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1a675eafe937d934d94599e934e5b9c6, type: 3}
+  m_Script: {fileID: 11500000, guid: 00f439b5928bbe143bfd8752ef0b1b50, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   fallSpeed: 0
-  fallAccelerateSpeed: 0
-  groundPlatform: {fileID: 0}
+  fallAccelerateSpeed: 240
+  layer:
+    serializedVersion: 2
+    m_Bits: 65544
   spawner: {fileID: 0}
 --- !u!1 &8072372222583176792
 GameObject:

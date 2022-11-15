@@ -47,8 +47,6 @@ namespace JJS
             if (weaponInfo.Length!=0)
                 weaponInfo[0].weapon.SetActive(true);
 
-            sideLeft.GetComponent<SideViewColliderBoundary>().cameraMain = cameraMain;
-            sideRight.GetComponent<SideViewColliderBoundary>().cameraMain = cameraMain;
         }
 
         public void wartergunInit()
