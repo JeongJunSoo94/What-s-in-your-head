@@ -7,7 +7,6 @@ using YC.CameraManager_;
 using UnityEngine.Rendering.Universal;
 using KSU;
 using System;
-using System.Reflection;
 
 namespace YC.Camera_
 {
@@ -43,8 +42,9 @@ namespace YC.Camera_
         CamState preCam;
 
         // ============  최적화 관련 설정  ============ //
-        [Header("[Clipping Planes Far]")]
-        [SerializeField] [Range(0, 1000)] float farValue = 500;
+        //[Header("[Clipping Planes Far]")]
+        //[SerializeField] [Range(0, 1000)] 
+        float farValue = 450;
 
         // ============  카메라 감도 설정  ============ //
         [Header("[Back View 카메라 마우스 감도]")]
@@ -603,12 +603,8 @@ namespace YC.Camera_
 
                     cinemachineBrain = mainCam.GetComponent<CinemachineBrain>();
                     CameraManager.Instance.cameras[0] = mainCam;
-                    return mainCam;
                 }
-                else
-                {
-                    return mainCam;
-                }
+                return mainCam;
             }
             else if (this.gameObject.CompareTag("Steady"))
             {
@@ -618,12 +614,8 @@ namespace YC.Camera_
                     mainCam.GetComponent<UniversalAdditionalCameraData>().SetRenderer(1);
                     cinemachineBrain = mainCam.GetComponent<CinemachineBrain>();
                     CameraManager.Instance.cameras[1] = mainCam;
-                    return mainCam;
                 }
-                else
-                {
-                    return mainCam;
-                }
+                return mainCam;
             }
             return mainCam;
         }
@@ -637,6 +629,14 @@ namespace YC.Camera_
         public void InitSceneChange() // Scene이 변경될 시 다시 카메라를 원상태 (BackView)로 복귀  
         {
             if (!pv.IsMine) return;
+
+            //if (GameManager.Instance.isTopView || GameManager.Instance.isSideView || playerState.isInMaze) return;
+
+            if(playerState.isInMaze)
+            {
+                mazeCineCam.enabled = false;
+                mazeCineCamCol.enabled = false;
+            }
 
             float defaultAxisValue = 0.5f;
 
@@ -715,7 +715,6 @@ namespace YC.Camera_
                         mazeCineCamCol.m_IgnoreTag = ignoreTag;
                     }
                 }
-
                 mazeCineCam.enabled = true;
                 mazeCineCamCol.enabled = true;
             }
@@ -836,13 +835,6 @@ namespace YC.Camera_
 
             return bounds.center;
         }
-
-        //float GetCenterPoint_() 
-        //{
-        //    float middlePos = 
-
-        //    return bounds.center;
-        //}
 
         public void ShakeCameraInSideView() // 플레이어 사망시, 카메라 흔들림 세팅 (외부에서 센드메시지로 호출)  
         {
