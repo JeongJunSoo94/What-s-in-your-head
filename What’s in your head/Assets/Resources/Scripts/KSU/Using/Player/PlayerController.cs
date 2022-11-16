@@ -282,6 +282,12 @@ namespace KSU
 
             SavePosition.PlayerInfo data = JsonUtility.FromJson<SavePosition.PlayerInfo>(jsonString);
             transform.SetPositionAndRotation(new Vector3((float)data.position[0], (float)data.position[1], (float)data.position[2]), new Quaternion((float)data.rotation[0], (float)data.rotation[1], (float)data.rotation[2], (float)data.rotation[3]));
+
+            if (photonView.IsMine && characterState.isInMaze)
+            {
+                this.gameObject.GetComponent<CameraController>().InitSceneChange();
+                characterState.isInMaze = false;
+            }
         }
 
         public void InputMove()
