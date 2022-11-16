@@ -21,7 +21,7 @@ namespace JJS
             public bool canNoAimAttack;
             public bool canMoveAttack;
         }
-        protected PhotonView photonView;
+        public PhotonView photonView;
 
         public float layerWeight=0;
 

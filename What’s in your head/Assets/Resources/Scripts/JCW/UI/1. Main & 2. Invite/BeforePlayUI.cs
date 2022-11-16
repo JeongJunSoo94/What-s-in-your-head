@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 using Photon.Pun;
@@ -17,7 +18,9 @@ namespace JCW.UI
 
         private void Awake()
         {
-            myID.text = PhotonManager.Instance.userID;
+            //myID.text = PhotonManager.Instance.userID;
+
+            
 
             backButton.onClick.AddListener(() =>
             {
@@ -48,15 +51,29 @@ namespace JCW.UI
             });
         }
 
+        private void OnEnable()
+        {
+            StopAllCoroutines();
+            StartCoroutine(nameof(WaitForServer));
+        }
+
+        private void OnDisable()
+        {
+            myID.text = "서버 접속 중..";
+        }
+
         private void Update()
         {
             if(Input.GetKeyDown(KeyCode.Return) || Input.GetKeyDown(KeyCode.KeypadEnter))
                 searchButton.onClick.Invoke();
         }
 
-        public void GetOutOfRoom()
+        IEnumerator WaitForServer()
         {
-            PhotonNetwork.LeaveRoom();
+            yield return new WaitUntil(() => PhotonNetwork.NetworkClientState.ToString() == ClientState.Joined.ToString());
+
+            myID.text = PhotonManager.Instance.userID;
+            yield break;
         }
     }
 }

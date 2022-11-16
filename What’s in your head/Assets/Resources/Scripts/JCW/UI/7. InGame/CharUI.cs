@@ -34,9 +34,9 @@ namespace JCW.UI.InGame
         {
             mainCamera = transform.parent.GetComponent<CameraController>().FindCamera(); // ¸ÖÆ¼¿ë       
 
-            photonView = GetComponent<PhotonView>();            
-
+            photonView = GetComponent<PhotonView>();
             itemUI_RT = transform.GetChild(0).gameObject.GetComponent<RectTransform>();
+
             hpUI = transform.GetChild(1).gameObject;
 
             StartCoroutine(nameof(WaitForPlayer));
@@ -62,14 +62,17 @@ namespace JCW.UI.InGame
         [PunRPC]
         void SetHP_RPC(bool isOn)
         {
-            Vector2 ogPos = itemUI_RT.anchoredPosition;
-            float tempOffset = isOn ? offset : -offset;
-            Vector2 movePos;
-            if(photonView.IsMine)
-                movePos = isNella ? new Vector2(ogPos.x + tempOffset, ogPos.y) : new Vector2(ogPos.x - tempOffset, ogPos.y);
-            else
-                movePos = isNella ? new Vector2(ogPos.x - tempOffset, ogPos.y) : new Vector2(ogPos.x + tempOffset, ogPos.y);
-            itemUI_RT.anchoredPosition = movePos;
+            if(itemUI_RT.gameObject.activeSelf)
+            {
+                Vector2 ogPos = itemUI_RT.anchoredPosition;
+                float tempOffset = isOn ? offset : -offset;
+                Vector2 movePos;
+                if (photonView.IsMine)
+                    movePos = isNella ? new Vector2(ogPos.x + tempOffset, ogPos.y) : new Vector2(ogPos.x - tempOffset, ogPos.y);
+                else
+                    movePos = isNella ? new Vector2(ogPos.x - tempOffset, ogPos.y) : new Vector2(ogPos.x + tempOffset, ogPos.y);
+                itemUI_RT.anchoredPosition = movePos;
+            }            
             hpUI.SetActive(isOn);
         }
 

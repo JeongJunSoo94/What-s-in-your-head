@@ -21,8 +21,6 @@ namespace JJS
 
         string watergunName = "WaterPistol";
         string micName = "Mic";
-        
-
 
         private void Awake()
         {
@@ -35,6 +33,12 @@ namespace JJS
             {
                 cameraMain = this.gameObject.transform.GetComponent<CameraController_Single>().FindCamera(); // ½Ì±Û¿ë
             }
+
+            if (point == null)
+            {
+                point = GameObject.FindGameObjectWithTag("NellaMousePoint");
+                DontDestroyOnLoad(point);
+            }
             wartergunInit();
             photonView = GetComponent<PhotonView>();
             player = GetComponent<PlayerController>();
@@ -42,12 +46,12 @@ namespace JJS
             canAim = true;
             if (weaponInfo.Length!=0)
                 weaponInfo[0].weapon.SetActive(true);
+
         }
 
         public void wartergunInit()
         {
             gun = GetComponent<WaterGun>();
-            point = GameObject.FindGameObjectWithTag("NellaMousePoint");
             if (gun != null)
             { 
                 gun.mainCamera = cameraMain;

@@ -29,11 +29,13 @@ namespace JJS
             {
                 point = GameObject.FindGameObjectWithTag("SteadyMousePoint");
                 glass.mousePoint = point;
+                DontDestroyOnLoad(point);
             }
             canSwap = true;
             photonView = GetComponent<PhotonView>();
             canAim = true;
             player = GetComponent<PlayerController>();
+
         }
 
         private void Update()

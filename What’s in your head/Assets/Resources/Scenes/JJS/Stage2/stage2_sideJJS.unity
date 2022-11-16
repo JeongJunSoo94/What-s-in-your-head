@@ -779,19 +779,24 @@ PrefabInstance:
       propertyPath: m_Layer
       value: 16
       objectReference: {fileID: 0}
+    - target: {fileID: 7311408853422820346, guid: 2c48d7029546e9d4cafdf275f11763ae, type: 3}
+      propertyPath: groundPlatform
+      value: 
+      objectReference: {fileID: 391924633}
+    - target: {fileID: 7311408853422820346, guid: 2c48d7029546e9d4cafdf275f11763ae, type: 3}
+      propertyPath: fallAccelerateSpeed
+      value: 240
+      objectReference: {fileID: 0}
+    - target: {fileID: 8729123953199030245, guid: 2c48d7029546e9d4cafdf275f11763ae, type: 3}
+      propertyPath: groundPlatform
+      value: 
+      objectReference: {fileID: 391924633}
+    - target: {fileID: 8729123953199030245, guid: 2c48d7029546e9d4cafdf275f11763ae, type: 3}
+      propertyPath: fallAccelerateSpeed
+      value: 240
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2c48d7029546e9d4cafdf275f11763ae, type: 3}
---- !u!114 &189509719 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 5413503936236419651, guid: 2c48d7029546e9d4cafdf275f11763ae, type: 3}
-  m_PrefabInstance: {fileID: 189509718}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1525305551}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 84c7b908b36d16147b333e0c828eabfd, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!4 &189509720 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 5413503936236419652, guid: 2c48d7029546e9d4cafdf275f11763ae, type: 3}
@@ -2245,7 +2250,7 @@ PrefabInstance:
     - target: {fileID: 4947683165128073113, guid: f04a769473857834188bf807cb90fc4e, type: 3}
       propertyPath: linkedObjects.Array.data[0]
       value: 
-      objectReference: {fileID: 189509719}
+      objectReference: {fileID: 0}
     - target: {fileID: 4947683165128073114, guid: f04a769473857834188bf807cb90fc4e, type: 3}
       propertyPath: sceneViewId
       value: 22
@@ -6522,7 +6527,7 @@ PrefabInstance:
     - target: {fileID: 4947683165128073113, guid: f04a769473857834188bf807cb90fc4e, type: 3}
       propertyPath: linkedObjects.Array.data[0]
       value: 
-      objectReference: {fileID: 1765352041}
+      objectReference: {fileID: 0}
     - target: {fileID: 4947683165128073114, guid: f04a769473857834188bf807cb90fc4e, type: 3}
       propertyPath: sceneViewId
       value: 20
@@ -8145,6 +8150,22 @@ PrefabInstance:
       propertyPath: m_Layer
       value: 16
       objectReference: {fileID: 0}
+    - target: {fileID: 7311408853422820346, guid: 2c48d7029546e9d4cafdf275f11763ae, type: 3}
+      propertyPath: groundPlatform
+      value: 
+      objectReference: {fileID: 391924633}
+    - target: {fileID: 7311408853422820346, guid: 2c48d7029546e9d4cafdf275f11763ae, type: 3}
+      propertyPath: fallAccelerateSpeed
+      value: 240
+      objectReference: {fileID: 0}
+    - target: {fileID: 8729123953199030245, guid: 2c48d7029546e9d4cafdf275f11763ae, type: 3}
+      propertyPath: groundPlatform
+      value: 
+      objectReference: {fileID: 391924633}
+    - target: {fileID: 8729123953199030245, guid: 2c48d7029546e9d4cafdf275f11763ae, type: 3}
+      propertyPath: fallAccelerateSpeed
+      value: 240
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2c48d7029546e9d4cafdf275f11763ae, type: 3}
 --- !u!4 &1765352040 stripped
@@ -8152,17 +8173,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 5413503936236419652, guid: 2c48d7029546e9d4cafdf275f11763ae, type: 3}
   m_PrefabInstance: {fileID: 1765352039}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &1765352041 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 5413503936236419651, guid: 2c48d7029546e9d4cafdf275f11763ae, type: 3}
-  m_PrefabInstance: {fileID: 1765352039}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1805428464}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 84c7b908b36d16147b333e0c828eabfd, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &1770553063
 GameObject:
   m_ObjectHideFlags: 3
@@ -12876,6 +12886,14 @@ PrefabInstance:
     - target: {fileID: 6030345853748491949, guid: df89bfb5651bcb841848a968a61fc7cf, type: 3}
       propertyPath: m_CullingMask.m_Bits
       value: 16
+      objectReference: {fileID: 0}
+    - target: {fileID: 6030345854409515025, guid: df89bfb5651bcb841848a968a61fc7cf, type: 3}
+      propertyPath: bullet
+      value: 
+      objectReference: {fileID: 5413503936236419654, guid: 2c48d7029546e9d4cafdf275f11763ae, type: 3}
+    - target: {fileID: 6030345854409515025, guid: df89bfb5651bcb841848a968a61fc7cf, type: 3}
+      propertyPath: bulletCount
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 6030345854409515026, guid: df89bfb5651bcb841848a968a61fc7cf, type: 3}
       propertyPath: sceneViewId
