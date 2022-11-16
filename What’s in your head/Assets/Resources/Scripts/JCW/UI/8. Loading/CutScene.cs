@@ -33,7 +33,8 @@ namespace JCW.UI.InGame
         private void OnEnable()
         {
             isStart = false;
-            StartCoroutine(nameof(WaitUntilEnd));
+            if (PhotonNetwork.IsMasterClient)
+                pv.RPC(nameof(SyncStart), RpcTarget.AllViaServer);
         }
 
         void Update()
@@ -63,6 +64,14 @@ namespace JCW.UI.InGame
                 this.gameObject.SetActive(false);
             }
             */
+        }
+        [PunRPC]
+        void SyncStart()
+        {
+            videoPlayer.gameObject.SetActive(true);
+            player1_Img.gameObject.SetActive(true);
+            player2_Img.gameObject.SetActive(true);
+            StartCoroutine(nameof(WaitUntilEnd));
         }
 
         [PunRPC]
