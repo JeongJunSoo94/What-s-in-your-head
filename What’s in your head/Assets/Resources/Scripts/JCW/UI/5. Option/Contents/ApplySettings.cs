@@ -7,6 +7,7 @@ using System;
 using System.IO;
 using LitJson;
 using JCW.AudioCtrl;
+using YC.CameraManager_;
 
 namespace JCW.UI.Options
 {
@@ -86,8 +87,8 @@ namespace JCW.UI.Options
                 if (funcObj.name == "Function")
                 {
                     string value = funcObj.GetComponent<Text>().text == "끄기" ? "0" : "1";
-                    //if(type == "Camera" && index == 0)
-                        //CameraManager.Instance.isShake = value == "0" ? false : true;
+                    if(type == "Camera" && index == 0)
+                        CameraManager.Instance.Option_SetShake(value == "1");
                     setValue.data.Add(new OptionData(_contents[tabObj], value, false));
                 }
 
@@ -102,17 +103,13 @@ namespace JCW.UI.Options
                             {
                                 switch (index)
                                 {
-                                    case 0:
-                                        // 카메라 흔들림 여부 넣어주기
-                                        // CameraManager.Instance.isShake = 
-                                        break;
                                     case 1:
                                         // 카메라 기본 감도 여부 넣어주기
-                                        // CameraManager.Instance. = 
+                                        CameraManager.Instance.Option_SetSensitivity(funcObj.GetComponent<Slider>().value, CameraManager.Instance.sholderSensitivitySaved);
                                         break;
                                     case 2:
                                         // 카메라 조준 감도 여부 넣어주기
-                                        // CameraManager.Instance. = 
+                                        CameraManager.Instance.Option_SetSensitivity(CameraManager.Instance.backSensitivitySaved, funcObj.GetComponent<Slider>().value);
                                         break;
                                 }
                             }
@@ -144,14 +141,12 @@ namespace JCW.UI.Options
             }
         }
 
-        private void SaveToFile(bool init = false)
+        public void SaveToFile(bool init = false)
         {
             setValue.data.Clear();
             SetData(gameContents, "Game");
             SetData(camContents, "Camera");
             SetData(soundContents, "Sound");
-
-            Debug.Log("옵션 세팅값 저장");
 
             JsonData infoJson = JsonMapper.ToJson(setValue);
 
@@ -167,17 +162,14 @@ namespace JCW.UI.Options
             setValue.data.Clear();
         }
 
-        private void LoadFromFile(bool init = false)
+        public void LoadFromFile(bool init = false)
         {
             string file = init ? "/Resources/Options/OptionValuesInit.json" : "/Resources/Options/OptionValues.json";
             if (!File.Exists(Application.dataPath + file))
             {
-                Debug.Log("옵션 세팅값 불러오기 실패. 초기 데이터 저장");
                 SaveToFile(true);
                 return;
             }
-            else
-                Debug.Log("옵션 세팅값 불러오기 성공");
 
             string jsonString = File.ReadAllText(Application.dataPath + file);
             
@@ -207,17 +199,17 @@ namespace JCW.UI.Options
                     GameObject funcObj = Setting.transform.GetChild(2).gameObject;
                     if (_value.data[index].isSlider == false)
                     {
-                        bool isOff = int.Parse(_value.data[index].value) == 0;
+                        bool isOn = int.Parse(_value.data[index].value) == 1;
                         switch (type)
                         {
                             case "Game":
                                 break;
                             case "Camera":
-                                //if(typeContentsIndex == 0)
-                                    //CameraManager.Instance.isShake = isOff;
+                                if (type == "Camera" && index == 0)
+                                    CameraManager.Instance.Option_SetShake(isOn);
                                 break;
                         }
-                        funcObj.GetComponent<Text>().text = isOff ? "끄기" : "켜기";
+                        funcObj.GetComponent<Text>().text = isOn ? "켜기" : "끄기";
                     }
                     else if (_value.data[index].isSlider == true)
                     {
@@ -248,11 +240,11 @@ namespace JCW.UI.Options
                                     {
                                         case 1:
                                             // 카메라 기본 감도 여부 넣어주기
-                                            // CameraManager.Instance. = 
+                                            CameraManager.Instance.Option_SetSensitivity(value, CameraManager.Instance.sholderSensitivitySaved);
                                             break;
                                         case 2:
                                             // 카메라 조준 감도 여부 넣어주기
-                                            // CameraManager.Instance. = 
+                                            CameraManager.Instance.Option_SetSensitivity(CameraManager.Instance.backSensitivitySaved, value);
                                             break;
                                     }
                                 }
