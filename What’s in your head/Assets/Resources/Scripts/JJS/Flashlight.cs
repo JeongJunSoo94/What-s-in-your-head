@@ -48,8 +48,12 @@ namespace JJS
             {
                 if (GameManager.Instance.curPlayerHP == 0 && canAttack)
                 {
-                    SandAttack();
-                       canAttack = false;
+                    photonView.RPC(nameof(SandAttack), RpcTarget.AllViaServer);
+                    canAttack = false;
+                }
+                else if (GameManager.Instance.curPlayerHP == 12)
+                {
+                    canAttack = true;
                 }
             }
         }
