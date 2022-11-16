@@ -536,7 +536,12 @@ namespace KSU
                     }
                     Vector3 horVec = moveVec;
                     horVec.y = 0;
-                    if (horVec.magnitude > airMoveMaxSpeed)
+                    if (characterState.WasDashing)
+                    {
+                        if (horVec.magnitude > dashSpeed)
+                            moveVec = horVec.normalized * dashSpeed + Vector3.up * moveVec.y;
+                    }
+                    else if (horVec.magnitude > airMoveMaxSpeed)
                         moveVec = horVec.normalized * airMoveMaxSpeed + Vector3.up * moveVec.y;
 
                     if (moveVec.y < terminalSpeed)

@@ -2632,8 +2632,8 @@ MonoBehaviour:
   photonView: {fileID: 0}
   walkSpeed: 8
   runSpeed: 14
-  dashSpeed: 15
-  airDashSpeed: 15
+  dashSpeed: 25
+  airDashSpeed: 40
   inertiaSpeed: 0
   airMoveSpeed: 5
   airMoveMaxSpeed: 10
@@ -2737,6 +2737,7 @@ MonoBehaviour:
   IsAirJumping: 0
   isCumstomJumping: 0
   IsDashing: 0
+  WasDashing: 0
   IsAirDashing: 0
   WasAirDashing: 0
   isMine: 0
@@ -2750,8 +2751,8 @@ MonoBehaviour:
   swap: 0
   maxSlopeAngle: 40
   jumpCoolTime: 0.2
-  dashTime: 1
-  airDashTime: 0.5
+  dashTime: 0.6
+  airDashTime: 0.15
 --- !u!114 &6125511999642235224
 MonoBehaviour:
   m_ObjectHideFlags: 0

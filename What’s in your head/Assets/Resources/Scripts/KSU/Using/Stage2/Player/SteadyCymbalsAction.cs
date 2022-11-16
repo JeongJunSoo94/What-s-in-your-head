@@ -19,7 +19,7 @@ namespace KSU.AutoAim.Player
         SteadyCymbals cymbals;
         PlayerController playerController;
         SteadyMouseController mouse;
-        Vector3 shootPosition;
+        
 
         override protected void Awake()
         {
@@ -104,12 +104,12 @@ namespace KSU.AutoAim.Player
                 Vector3 forward = target - autoAimObjectSpawner.transform.position;
                 forward.z = 0;  
                 forward = forward.normalized * autoAimObjectRange;
-                playerController.photonView.RPC(nameof(SetShoot), RpcTarget.AllViaServer, autoAimObjectSpawner.transform.position + forward);
+                playerController.photonView.RPC(nameof(SetCymbalsShoot), RpcTarget.AllViaServer, autoAimObjectSpawner.transform.position + forward);
             }
             else if (steadyInteractionState.isAutoAimObjectFounded)
             {
                 // µµÂø À§Ä¡: autoAimPosition
-                playerController.photonView.RPC(nameof(SetShoot), RpcTarget.AllViaServer, autoAimPosition.position);
+                playerController.photonView.RPC(nameof(SetCymbalsShoot), RpcTarget.AllViaServer, autoAimPosition.position);
             }
             else
             {
@@ -118,17 +118,17 @@ namespace KSU.AutoAim.Player
                 bool rayCheck = Physics.Raycast(playerCamera.transform.position, playerCamera.transform.forward, out hit, autoAimObjectRange, -1, QueryTriggerInteraction.Ignore);
                 if (rayCheck && (hit.distance > Vector3.Distance(transform.position, playerCamera.transform.position)))
                 {
-                    playerController.photonView.RPC(nameof(SetShoot), RpcTarget.AllViaServer, hit.point);
+                    playerController.photonView.RPC(nameof(SetCymbalsShoot), RpcTarget.AllViaServer, hit.point);
                 }
                 else
                 {
-                    playerController.photonView.RPC(nameof(SetShoot), RpcTarget.AllViaServer, playerCamera.transform.position + playerCamera.transform.forward * autoAimObjectRange);
+                    playerController.photonView.RPC(nameof(SetCymbalsShoot), RpcTarget.AllViaServer, playerCamera.transform.position + playerCamera.transform.forward * autoAimObjectRange);
                 }
             }
         }
 
         [PunRPC]
-        void SetShoot(Vector3 pos)
+        void SetCymbalsShoot(Vector3 pos)
         {
             shootPosition = pos;
         }

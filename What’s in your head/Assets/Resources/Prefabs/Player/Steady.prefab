@@ -25396,8 +25396,8 @@ MonoBehaviour:
   photonView: {fileID: 0}
   walkSpeed: 8
   runSpeed: 14
-  dashSpeed: 15
-  airDashSpeed: 15
+  dashSpeed: 25
+  airDashSpeed: 40
   inertiaSpeed: 0
   airMoveSpeed: 5
   airMoveMaxSpeed: 10
@@ -25497,6 +25497,7 @@ MonoBehaviour:
   IsAirJumping: 0
   isCumstomJumping: 0
   IsDashing: 0
+  WasDashing: 0
   IsAirDashing: 0
   WasAirDashing: 0
   isMine: 0
@@ -25510,8 +25511,8 @@ MonoBehaviour:
   swap: 0
   maxSlopeAngle: 40
   jumpCoolTime: 0.2
-  dashTime: 1
-  airDashTime: 0.5
+  dashTime: 0.6
+  airDashTime: 0.15
 --- !u!114 &6988878118824629920
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -25687,14 +25688,14 @@ MonoBehaviour:
     m_Bits: 34816
   autoAimObjectSpawner: {fileID: 6643928159826862861}
   autoAimObject: {fileID: 7909980709306676830, guid: c9b54073bf48f804ebee62282b5e85af, type: 3}
-  autoAimObjectSpeed: 30
+  autoAimObjectSpeed: 50
   autoAimObjectDepartOffset: 0.5
   rangeRadius: 5
   rangeDistance: 25
   autoAimObjectRange: 35
   rangeAngle: 10
-  grappleMoveSpeed: 20
-  escapeGrapplePower: 10
+  grappleMoveSpeed: 40
+  escapeGrapplePower: 20
 --- !u!114 &5821330284378002438
 MonoBehaviour:
   m_ObjectHideFlags: 0

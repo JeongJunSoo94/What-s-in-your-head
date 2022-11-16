@@ -88,6 +88,7 @@ namespace KSU
                     }
                     else if(((GetPlayerController(animator).playerMouse as SteadyMouseController).autoAimWeapon is SteadyGrappleAction) && !animator.GetBool("isShootingGrapple"))
                     {
+                        ((GetPlayerController(animator).playerMouse as SteadyMouseController).autoAimWeapon as SteadyGrappleAction).MakeShootPosition();
                         animator.SetBool("isShootingGrapple", true);
                     }
 

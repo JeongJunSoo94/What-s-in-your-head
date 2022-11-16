@@ -31,6 +31,7 @@ namespace KSU.AutoAim.Player
         [SerializeField] protected GameObject autoAimObject;
         protected GameObject hitTarget;
 
+        protected Vector3 shootPosition;
         protected Transform autoAimPosition;
         protected AimUI aimUI;
 
