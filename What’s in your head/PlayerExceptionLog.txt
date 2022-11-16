@@ -27873,3 +27873,11 @@ Rethrow as AggregateException: Caught 1 exception(s) in methods called by Dispat
 Photon.Pun.PhotonHandler.Dispatch () (at Assets/AddOn/Photon/PhotonUnityNetworking/Code/PhotonHandler.cs:242)
 Photon.Pun.PhotonHandler.FixedUpdate () (at Assets/AddOn/Photon/PhotonUnityNetworking/Code/PhotonHandler.cs:145)
 
+[2022-11-16 오전 11:52:11]ArgumentOutOfRangeException: The length cannot be greater than the capacity.
+Parameter name: valueCount
+System.Text.StringBuilder.Append (System.Char* value, System.Int32 valueCount) (at <c2a97e0383e8404c9fc0ae19d58f57f1>:0)
+System.Text.StringBuilder.AppendHelper (System.String value) (at <c2a97e0383e8404c9fc0ae19d58f57f1>:0)
+System.Text.StringBuilder.Append (System.String value) (at <c2a97e0383e8404c9fc0ae19d58f57f1>:0)
+JCW.Dialog.DialogManager.SetDialogs (System.String fileName) (at Assets/Resources/Scripts/JCW/Manager/DialogManager.cs:104)
+StartPoint.Awake () (at Assets/Resources/Scripts/JCW/Object/StartPoint.cs:26)
+

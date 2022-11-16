@@ -490,7 +490,14 @@ namespace YC.CameraManager_
         }
 
 
-
+        bool IsExistCameras()
+        {
+            if (cameras[(int)CharacterCamera.NELLA] != null &&
+                cameras[(int)CharacterCamera.STEADY] != null)
+                return true;
+            else
+                return false;
+        }
 
         public void Option_SetShake(bool on) // 스테디 카메라 흔들림 사용 여부  
         {
@@ -528,15 +535,16 @@ namespace YC.CameraManager_
             else
                 GameObject.FindGameObjectWithTag(tagSteady).GetComponent<CameraController>().Option_SetSensitivity(_backSensitivity, _sholderSensitivity);           
         }
-
-
-        bool IsExistCameras()
+    
+        public void BlockCinemachineInput(bool block) // Pause시 카메라 인풋을 막는다
         {
-            if (cameras[(int)CharacterCamera.NELLA] != null &&
-                cameras[(int)CharacterCamera.STEADY] != null)
-                return true;
+            string tagNella = "Nella";
+            string tagSteady = "Steady";
+
+            if (GameManager.Instance.characterOwner[PhotonNetwork.IsMasterClient])
+                GameObject.FindGameObjectWithTag(tagNella).GetComponent<CameraController>().BlockCinemachineInput(block);
             else
-                return false;
-        }     
+                GameObject.FindGameObjectWithTag(tagSteady).GetComponent<CameraController>().BlockCinemachineInput(block);
+        }
     }
 }
