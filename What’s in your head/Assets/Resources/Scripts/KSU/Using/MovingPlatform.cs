@@ -1,12 +1,14 @@
+using Photon.Pun;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace KSU
+namespace KSU.Object
 {
+    [RequireComponent(typeof(PhotonView))]
     public class MovingPlatform : MonoBehaviour
     {
-
+        PhotonView photonView;
         public Vector3 startPosition = new Vector3(-3, 0.5f, -3);
         public Vector3 endPosition = new Vector3(-3, 5.5f, -3);
 
@@ -17,10 +19,16 @@ namespace KSU
         public float stayingTime = 0.2f;
         bool isStop = false;
 
+        private void Start()
+        {
+            photonView = GetComponent<PhotonView>();
+        }
+
         // Update is called once per frame
         void FixedUpdate()
         {
-            MoveRepeatly();
+            if(photonView.IsMine)
+                MoveRepeatly();
         }
 
         void MoveRepeatly()

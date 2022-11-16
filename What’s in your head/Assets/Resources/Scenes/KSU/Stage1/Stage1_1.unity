@@ -3569,13 +3569,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a21b4b195a8637045948eccc7e1f96dc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  roomName: JCW13
+  roomName: KSU
   nellaPrefabDirectory: Prefabs/Player/Nella
   steadyPrefabDirectory: Prefabs/Player/Steady
   isNella: 1
   width: 1920
   height: 1080
-  CreatePos: {fileID: 2101811529}
+  CreatePos: {fileID: 603108384}
 --- !u!1 &446798918
 GameObject:
   m_ObjectHideFlags: 0
@@ -15136,6 +15136,8 @@ GameObject:
   - component: {fileID: 23813074106057792}
   - component: {fileID: 64161958310622548}
   - component: {fileID: 780125290}
+  - component: {fileID: 64161958310622550}
+  - component: {fileID: 64161958310622549}
   m_Layer: 3
   m_Name: SM_Buildings_FloorCurved_1x1_01 (1)
   m_TagString: Untagged
@@ -15156,6 +15158,8 @@ GameObject:
   - component: {fileID: 23813073995583225}
   - component: {fileID: 64161958268305389}
   - component: {fileID: 1034166625}
+  - component: {fileID: 64161958268305391}
+  - component: {fileID: 64161958268305390}
   m_Layer: 3
   m_Name: SM_Buildings_FloorCurved_1x1_01
   m_TagString: Untagged
@@ -20162,6 +20166,45 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 4300000, guid: 5d36a7f2cc18ba347b8ed5ef83b06f7f, type: 3}
+--- !u!114 &64161958268305390
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1385000731411443}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 627855c7f81362d41938ffe0b1475957, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_SynchronizePosition: 1
+  m_SynchronizeRotation: 1
+  m_SynchronizeScale: 0
+  m_UseLocal: 0
+--- !u!114 &64161958268305391
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1385000731411443}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ObservedComponentsFoldoutOpen: 1
+  Group: 0
+  prefixField: -1
+  Synchronization: 3
+  OwnershipTransfer: 0
+  observableSearch: 2
+  ObservedComponents:
+  - {fileID: 64161958268305390}
+  sceneViewId: 12
+  InstantiationId: 0
+  isRuntimeInstantiated: 0
 --- !u!64 &64161958310622548
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -20176,6 +20219,45 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 4300000, guid: 5d36a7f2cc18ba347b8ed5ef83b06f7f, type: 3}
+--- !u!114 &64161958310622549
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1385000704559434}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 627855c7f81362d41938ffe0b1475957, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_SynchronizePosition: 1
+  m_SynchronizeRotation: 1
+  m_SynchronizeScale: 0
+  m_UseLocal: 0
+--- !u!114 &64161958310622550
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1385000704559434}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ObservedComponentsFoldoutOpen: 1
+  Group: 0
+  prefixField: -1
+  Synchronization: 3
+  OwnershipTransfer: 0
+  observableSearch: 2
+  ObservedComponents:
+  - {fileID: 64161958310622549}
+  sceneViewId: 13
+  InstantiationId: 0
+  isRuntimeInstantiated: 0
 --- !u!64 &64293212939777295
 MeshCollider:
   m_ObjectHideFlags: 0
