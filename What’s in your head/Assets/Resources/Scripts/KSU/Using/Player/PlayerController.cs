@@ -282,6 +282,12 @@ namespace KSU
 
             SavePosition.PlayerInfo data = JsonUtility.FromJson<SavePosition.PlayerInfo>(jsonString);
             transform.SetPositionAndRotation(new Vector3((float)data.position[0], (float)data.position[1], (float)data.position[2]), new Quaternion((float)data.rotation[0], (float)data.rotation[1], (float)data.rotation[2], (float)data.rotation[3]));
+
+            if (photonView.IsMine && characterState.isInMaze)
+            {
+                this.gameObject.GetComponent<CameraController>().InitSceneChange();
+                characterState.isInMaze = false;
+            }
         }
 
         public void InputMove()
@@ -536,7 +542,12 @@ namespace KSU
                     }
                     Vector3 horVec = moveVec;
                     horVec.y = 0;
-                    if (horVec.magnitude > airMoveMaxSpeed)
+                    if (characterState.WasDashing)
+                    {
+                        if (horVec.magnitude > dashSpeed)
+                            moveVec = horVec.normalized * dashSpeed + Vector3.up * moveVec.y;
+                    }
+                    else if (horVec.magnitude > airMoveMaxSpeed)
                         moveVec = horVec.normalized * airMoveMaxSpeed + Vector3.up * moveVec.y;
 
                     if (moveVec.y < terminalSpeed)

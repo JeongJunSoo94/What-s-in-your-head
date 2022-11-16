@@ -23,7 +23,7 @@ namespace KSU.AutoAim.Player
         Rigidbody playerRigidbody;
         
         SteadyGrapple grapple;
-
+        string grappleDirectory;
         //GameObject grappledTarget;
 
         Vector3 grappleVec;
@@ -90,7 +90,7 @@ namespace KSU.AutoAim.Player
 
             playerAnimator = GetComponent<Animator>();
         }
-
+        //그래플 속의 메이크 로프를 여기서 해보자
         void Update()
         {
             SearchAutoAimTargetdObject();
@@ -154,6 +154,50 @@ namespace KSU.AutoAim.Player
         //    }
         //}
 
+        public void MakeShootPosition()
+        {
+            if (playerState.isOutOfControl || playerState.isStopped)
+                return;
+            Vector3 target = Vector3.zero;
+            if (GameManager.Instance.isTopView)
+            {
+                ///////////////// 선택지 2: 여기에 마우스 거리 만큼의 위치까지 쏘는 갈고리 발사
+                Vector3 forward = (playerController.playerMouse.point.transform.position - autoAimObjectSpawner.transform.position);
+                forward.y = 0;
+                if (forward.magnitude > autoAimObjectRange)
+                    forward = forward.normalized * autoAimObjectRange;
+                target = (autoAimObjectSpawner.transform.position + forward);
+
+                playerController.photonView.RPC(nameof(SetGrappleShoot), RpcTarget.AllViaServer, target);
+            }
+            else if (steadyInteractionState.isAutoAimObjectFounded)
+            {
+                // 도착 위치: autoAimPosition
+                playerController.photonView.RPC(nameof(SetGrappleShoot), RpcTarget.AllViaServer, autoAimPosition.position);
+            }
+            else
+            {
+                // 도착위치: 화면 중앙에 레이 쏴서 도착하는 곳
+                RaycastHit hit;
+                bool rayCheck = Physics.Raycast(playerCamera.transform.position, playerCamera.transform.forward, out hit, autoAimObjectRange, -1, QueryTriggerInteraction.Ignore);
+                if (rayCheck && (hit.distance > Vector3.Distance(transform.position, playerCamera.transform.position)))
+                {
+                    playerController.photonView.RPC(nameof(SetGrappleShoot), RpcTarget.AllViaServer, hit.point);
+                }
+                else
+                {
+                    target = playerCamera.transform.position + playerCamera.transform.forward * autoAimObjectRange;
+                    playerController.photonView.RPC(nameof(SetGrappleShoot), RpcTarget.AllViaServer, target);
+                }
+            }
+        }
+
+        [PunRPC]
+        void SetGrappleShoot(Vector3 pos)
+        {
+            shootPosition = pos;
+        }
+
         protected override void InputFire()
         {
             if (playerState.isOutOfControl || playerState.isStopped)
@@ -165,34 +209,36 @@ namespace KSU.AutoAim.Player
                 {
                     steadyInteractionState.isSucceededInHittingTaget = false;
                     autoAimObjectSpawner.SetActive(false);
-                    if(GameManager.Instance.isTopView)
-                    {
-                        ///////////////// 선택지 2: 여기에 마우스 거리 만큼의 위치까지 쏘는 갈고리 발사
-                        Vector3 forward = (playerController.playerMouse.point.transform.position - autoAimObjectSpawner.transform.position);
-                        forward.y = 0;
-                        if (forward.magnitude > autoAimObjectRange)
-                            forward = forward.normalized * autoAimObjectRange;
-                        grapple.InitObject(autoAimObjectSpawner.transform.position, (autoAimObjectSpawner.transform.position + forward), autoAimObjectSpeed, autoAimObjectDepartOffset);
-                    }
-                    else if (steadyInteractionState.isAutoAimObjectFounded)
-                    {
-                        // 도착 위치: autoAimPosition
-                        grapple.InitObject(autoAimObjectSpawner.transform.position, autoAimPosition.position, autoAimObjectSpeed, autoAimObjectDepartOffset);
-                    }
-                    else
-                    {
-                        // 도착위치: 화면 중앙에 레이 쏴서 도착하는 곳
-                        RaycastHit hit;
-                        bool rayCheck = Physics.Raycast(playerCamera.transform.position, playerCamera.transform.forward, out hit, autoAimObjectRange, -1,QueryTriggerInteraction.Ignore);
-                        if(rayCheck && (hit.distance > Vector3.Distance(transform.position, playerCamera.transform.position)))
-                        {
-                            grapple.InitObject(autoAimObjectSpawner.transform.position, hit.point, autoAimObjectSpeed, autoAimObjectDepartOffset);
-                        }
-                        else
-                        {
-                            grapple.InitObject  (autoAimObjectSpawner.transform.position, (playerCamera.transform.position + playerCamera.transform.forward * autoAimObjectRange), autoAimObjectSpeed, autoAimObjectDepartOffset);
-                        }
-                    }
+                    grapple.InitObject(autoAimObjectSpawner.transform.position, shootPosition, autoAimObjectSpeed, autoAimObjectDepartOffset);
+
+                    //if(GameManager.Instance.isTopView)
+                    //{
+                    //    ///////////////// 선택지 2: 여기에 마우스 거리 만큼의 위치까지 쏘는 갈고리 발사
+                    //    Vector3 forward = (playerController.playerMouse.point.transform.position - autoAimObjectSpawner.transform.position);
+                    //    forward.y = 0;
+                    //    if (forward.magnitude > autoAimObjectRange)
+                    //        forward = forward.normalized * autoAimObjectRange;
+                    //    grapple.InitObject(autoAimObjectSpawner.transform.position, (autoAimObjectSpawner.transform.position + forward), autoAimObjectSpeed, autoAimObjectDepartOffset);
+                    //}
+                    //else if (steadyInteractionState.isAutoAimObjectFounded)
+                    //{
+                    //    // 도착 위치: autoAimPosition
+                    //    grapple.InitObject(autoAimObjectSpawner.transform.position, autoAimPosition.position, autoAimObjectSpeed, autoAimObjectDepartOffset);
+                    //}
+                    //else
+                    //{
+                    //    // 도착위치: 화면 중앙에 레이 쏴서 도착하는 곳
+                    //    RaycastHit hit;
+                    //    bool rayCheck = Physics.Raycast(playerCamera.transform.position, playerCamera.transform.forward, out hit, autoAimObjectRange, -1,QueryTriggerInteraction.Ignore);
+                    //    if(rayCheck && (hit.distance > Vector3.Distance(transform.position, playerCamera.transform.position)))
+                    //    {
+                    //        grapple.InitObject(autoAimObjectSpawner.transform.position, hit.point, autoAimObjectSpeed, autoAimObjectDepartOffset);
+                    //    }
+                    //    else
+                    //    {
+                    //        grapple.InitObject  (autoAimObjectSpawner.transform.position, (playerCamera.transform.position + playerCamera.transform.forward * autoAimObjectRange), autoAimObjectSpeed, autoAimObjectDepartOffset);
+                    //    }
+                    //}
                 }
             }
         }
@@ -350,6 +396,12 @@ namespace KSU.AutoAim.Player
             playerController.MakeinertiaVec(escapeGrapplePower, transform.forward.normalized);
             playerController.moveVec = Vector3.up * jumpPower;
             playerController.characterState.isRiding = false;
+            playerController.photonView.RPC(nameof(SetGrappleOff), RpcTarget.AllViaServer);
+        }
+
+        [PunRPC]
+        void SetGrappleOff()
+        {
             grapple.gameObject.SetActive(false);
         }
 

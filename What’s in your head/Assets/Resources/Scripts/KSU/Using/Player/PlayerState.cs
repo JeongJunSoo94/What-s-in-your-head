@@ -77,6 +77,8 @@ public class PlayerState : MonoBehaviour
     #region
     [Tooltip("지면에서 대시한 상태")]
     public bool IsDashing = false;
+    [Tooltip("지면에서 이전에 대시했던 상태")]
+    public bool WasDashing = false;
     [Tooltip("공중에서 대시한 상태")]
     public bool IsAirDashing = false;
     [Tooltip("공중에서 이전에 대시했던 상태")]
@@ -177,7 +179,7 @@ public class PlayerState : MonoBehaviour
                 if (CanJump)
                 {
                     ResetJump();
-                    ResetAirDash();
+                    ResetDash();
                 }
             }
 
@@ -252,6 +254,7 @@ public class PlayerState : MonoBehaviour
         {
             // 점프 쿨타임이 돌아가기 시작, Jumping상태 true
             IsJumping = true;
+            WasDashing = false;
             StopCoroutine(nameof(JumpCool));
             StartCoroutine(nameof(JumpCool));
         }
@@ -260,7 +263,7 @@ public class PlayerState : MonoBehaviour
     public void SetCustomJumpState()
     {
         ResetJump();
-        ResetAirDash();
+        ResetDash();
         IsJumping = true;
         isCumstomJumping = true;
         StopCoroutine(nameof(JumpCool));
@@ -282,10 +285,12 @@ public class PlayerState : MonoBehaviour
 
     // 대시 함수
     #region
-    private void ResetAirDash()
+    private void ResetDash()
     {
         IsAirDashing = false;
         WasAirDashing = false;
+        if(!IsDashing)
+            WasDashing = false;
     }
 
     public void CheckDash()
@@ -295,7 +300,7 @@ public class PlayerState : MonoBehaviour
         {
             StartCoroutine(nameof(StartDashTimer));
             //StartCoroutine(nameof(DelayJump));
-            IsDashing = true;
+            //IsDashing = true;
         }
     }
 
@@ -321,6 +326,7 @@ public class PlayerState : MonoBehaviour
         if (IsGrounded)
         {
             IsDashing = true;
+            WasDashing = true;
             yield return new WaitForSeconds(dashTime);
             IsDashing = false;
         }
