@@ -51,7 +51,8 @@ namespace KSU.AutoAim.Object.Monster
 
 
 
-        bool isTopView = false;
+        bool isTopView = true;
+        //bool isTopView = false;
 
 
         // Start is called before the first frame update
