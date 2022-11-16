@@ -191,6 +191,23 @@ namespace JCW.AudioCtrl
                 SetAudioClip(prev3DClips[i], Sound.DISTANCE);
             }
         }
+        public void StopAllSound_RPC()
+        {
+            photonView.RPC(nameof(StopAllSound), RpcTarget.AllViaServer);
+        }
+
+        [PunRPC]
+        public void StopAllSound()
+        {
+            if (audioSources[(int)Sound.EFFECT].isPlaying)
+                audioSources[(int)Sound.EFFECT].Stop();
+            if (audioSources[(int)Sound.BGM].isPlaying)
+                audioSources[(int)Sound.BGM].Stop();
+            if (audioSources[(int)Sound.DISTANCE].isPlaying)
+                audioSources[(int)Sound.DISTANCE].Stop();
+            if (audioSources[(int)Sound.UI].isPlaying)
+                audioSources[(int)Sound.UI].Stop();
+        }
 
         // EFFECT ==========================================================================
         #region 

@@ -5,6 +5,8 @@ using UnityEngine.UI;
 using Photon.Pun;
 using System;
 using JCW.Network;
+using JCW.AudioCtrl;
+using UnityEngine.SceneManagement;
 
 namespace JCW.UI
 {
@@ -12,6 +14,8 @@ namespace JCW.UI
     public class LoadingUI : MonoBehaviour
     {
         [Header("TIP 목록")][SerializeField] List<string> tipList = new();
+        [Header("스테이지 별 이미지 목록")][SerializeField] List<Sprite> bgList = new();
+
         PhotonView photonView;
 
         bool isLoading = false;
@@ -19,38 +23,49 @@ namespace JCW.UI
         Text text;
 
         public static LoadingUI Instance = null;
+        Image bgImg;
+        bool isMainTitle = false;
 
         private void Awake()
         {
             if (Instance == null)
                 Instance = this;
             photonView = PhotonView.Get(this);
+            bgImg = transform.GetChild(0).GetComponent<Image>();
             image = transform.GetChild(1).GetComponent<Image>();
             text = transform.GetChild(2).GetComponent<Text>();
         }
         
         private void OnEnable()
         {
-            if(PhotonNetwork.IsMasterClient)
-                photonView.RPC(nameof(StartLoading), RpcTarget.AllViaServer);
+            isLoading = false;
+            isMainTitle = SceneManager.GetActiveScene().name == "MainTitle";
+            Debug.Log("현재 씬 이름 : " + SceneManager.GetActiveScene().name);
+            if (PhotonNetwork.IsMasterClient)
+                StartCoroutine(nameof(WaitForStable));
+                       
             var random = new System.Random(Guid.NewGuid().GetHashCode());
             text.text = "TIP : " + tipList[random.Next(0, tipList.Count)];
+            bgImg.sprite = bgList[GameManager.Instance.curStageIndex];
+            if(SceneManager.GetActiveScene().name != "MainTitle")
+                SoundManager.Instance.StopAllSound_RPC();
         }
 
         void Update()
         {
+            Debug.Log("로딩 UI 시작 시 진행율 : " +(float)PhotonNetwork.LevelLoadingProgress*100f);
             if (!isLoading)
                 return;
 
             image.fillAmount = PhotonNetwork.LevelLoadingProgress;
-            if (image.fillAmount >= 0.98f)
+            if (image.fillAmount >= 0.95f)
             {
                 image.fillAmount = 0f;
                 isLoading = false;
-                if (GameManager.Instance.curStageIndex == 1
-                    && GameManager.Instance.curStageType == 1
-                    && PhotonNetwork.IsMasterClient)
+                Debug.Log("씬 불러오기 완료");
+                if (isMainTitle && PhotonNetwork.IsMasterClient)
                 {
+                    Debug.Log("캐릭터 만들어주기");
                     PhotonManager.Instance.MakeCharacter();
                 }
                 this.gameObject.SetActive(false);
@@ -59,17 +74,44 @@ namespace JCW.UI
         [PunRPC]
         void StartLoading()
         {
+            Debug.Log("로딩 시작 진입");
             isLoading = true;
+            Debug.Log("현재 씬 이름 : " + SceneManager.GetActiveScene().name);
+            if (!isMainTitle)
+            {
+                Debug.Log("메인 메뉴가 아니므로 더해주기");
+                GameManager.Instance.curStageType = GameManager.Instance.curStageType >= 3 ? 0 : GameManager.Instance.curStageType + 1;
+                GameManager.Instance.curStageIndex = GameManager.Instance.curStageType == 0 ? GameManager.Instance.curStageIndex + 1 : GameManager.Instance.curStageIndex;
+                Debug.Log("S" + GameManager.Instance.curStageIndex + "S" + GameManager.Instance.curStageType);
+            }
             if (PhotonNetwork.IsMasterClient)
-                StartCoroutine(nameof(Delay));
+            {
+                int sceneNum = 4 * (GameManager.Instance.curStageIndex - 1) + 1 + GameManager.Instance.curStageType;
+                Debug.Log("씬 넘버 : " + sceneNum + " 에 접근");
+                PhotonNetwork.LoadLevel(sceneNum);
+                //StartCoroutine(nameof(Delay));
+            }
         }
         
-        // 로딩씬 보여주기 위한 딜레이
+        // 로딩씬 보여주기 위한 딜레이        
         IEnumerator Delay()
         {
-            yield return new WaitForSeconds(2f);
-            PhotonNetwork.LoadLevel(GameManager.Instance.curStageIndex * 2 - 2 + GameManager.Instance.curStageType);
-            yield break;
+            Debug.Log("대충 딜레이 1초 주기");
+            yield return new WaitForSeconds(1f);
+            //PhotonNetwork.LoadLevel(GameManager.Instance.curStageIndex * 2 - 2 + GameManager.Instance.curStageType);            
+            int sceneNum = 4 * (GameManager.Instance.curStageIndex - 1) + 1 + GameManager.Instance.curStageType;
+            Debug.Log("씬 넘버 : " + sceneNum +  " 에 접근");
+            PhotonNetwork.LoadLevel(sceneNum);
+        }
+
+        IEnumerator WaitForStable()
+        {
+            while(PhotonNetwork.LevelLoadingProgress > 0f)
+            {
+                Debug.Log("포톤 씬이 현재 불러와져있는 상태라 대기 : " + PhotonNetwork.LevelLoadingProgress);
+                yield return null;
+            }
+            photonView.RPC(nameof(StartLoading), RpcTarget.AllViaServer);
         }
     }
 }

@@ -10,6 +10,11 @@ namespace JCW.Object
     public class Portal : MonoBehaviour
     {
         [Header("로딩 UI")] public GameObject LoadingUI;
+        [Space(10f)]
+        [Tooltip("0 : 메뉴, 1~3 : 실제 게임, 4 : 엔딩")]
+        [Header("이동할 스테이지 (0~4)")] public int nextStageIndex;
+        [Tooltip("0 : 인트로, 1~2 : 실제 게임, 3 : 아웃트로")]
+        [Header("이동할 섹션 (0~3")] public int nextStageType;
         PhotonView photonView;
 
         bool isStart = false;
@@ -34,13 +39,8 @@ namespace JCW.Object
         void Loading()
         {
             isStart = true;
-            if (GameManager.Instance.curStageType == 1)
-                ++GameManager.Instance.curStageType;
-            else
-            {
-                --GameManager.Instance.curStageType;
-                ++GameManager.Instance.curStageIndex;
-            }
+            GameManager.Instance.curStageType = nextStageType;
+            GameManager.Instance.curStageIndex = nextStageIndex;
             LoadingUI.SetActive(true);
         }
     }

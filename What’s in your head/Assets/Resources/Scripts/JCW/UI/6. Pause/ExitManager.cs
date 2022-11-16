@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using JCW.Network;
+using Photon.Pun;
 
 namespace JCW.UI
 {
@@ -19,13 +20,13 @@ namespace JCW.UI
         {
             mainMenu.onClick.AddListener(() =>
             {
-                GameManager.Instance.curStageIndex = 0;
-                GameManager.Instance.curStageType = 1;
-                LoadingUI.Instance.gameObject.SetActive(true);
+                GameManager.Instance.GoMainMenu_RPC();
+                this.gameObject.SetActive(false);
                 //PhotonManager.Instance.ChangeStage();
             });
             exitMenu.onClick.AddListener(() =>
             {
+                PhotonManager.Instance.DestroyCurrentRoom_RPC();
                 #if UNITY_EDITOR
                     UnityEditor.EditorApplication.isPlaying = false;
                 #else
@@ -46,6 +47,6 @@ namespace JCW.UI
         {
             titleObj.SetActive(true);
             menuObj.SetActive(true);
-        }
+        }        
     }
 }
