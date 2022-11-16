@@ -2,9 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
+using JCW.AudioCtrl;
 
 namespace YC_OBJ
 {
+    [RequireComponent(typeof(AudioSource))]
     public class FlowerTree : MonoBehaviour
     {
         [Header("<기획 편집 사항>")]
@@ -31,6 +33,8 @@ namespace YC_OBJ
 
         GameObject FlowerObj;
 
+        AudioSource audioSource;
+
 
         void Awake()
         {   
@@ -41,6 +45,9 @@ namespace YC_OBJ
             pv = this.gameObject.GetComponent<PhotonView>();
 
             FlowerObj = transform.GetChild(0).gameObject;
+
+            audioSource = GetComponent<AudioSource>();
+            JCW.AudioCtrl.AudioSettings.SetAudio(audioSource, 1, 50f);
         }
 
         void Update()
@@ -114,6 +121,8 @@ namespace YC_OBJ
             indicator.gameObject.SetActive(false);
             FlowerObj.GetComponent<PotFlower>().SetBloom();
             FlowerObj.gameObject.GetComponent<CapsuleCollider>().enabled = false;
+            //SoundManager.Instance.Play3D_RPC("PlantGrow", audioSource);
+
         }
 
      
