@@ -14,7 +14,6 @@ namespace JCW.Object
         [Header("===========시작 후===========")]
         [Header("첫 번째 스폰 시간")][SerializeField] float firstSpawnTime = 40f;
         [Header("두 번째 스폰 시간")][SerializeField] float secondSpawnTime = 120f;
-        [Header("깜빡거리는 시간")][SerializeField] float flickTime = 1f;
         [Header("주위 필드 감염 소요 시간")][SerializeField] float infectTime = 5f;
         [Header("감염 가능 여부")][SerializeField] bool canInfect = true;
 
@@ -138,14 +137,14 @@ namespace JCW.Object
                     nextTargetBeforeObj_ready.SetActive(false);
                     break;
                 }
-                curTime+= flickTime / 2f;
-                if(!isStart)
+                curTime+= Time.deltaTime;
+                if (!isStart)
                 {
                     isStart = true;
                     nextTargetBeforeObj_ready.SetActive(true);
                 }
                 //SoundManager.Instance.Play3D_RPC("ContaminationFieldWarn", audioSource);
-                yield return new WaitForSeconds(0.5f);
+                yield return null;
             }
                 
             if (transform.GetChild(indexs[0]).gameObject.activeSelf)
@@ -163,7 +162,7 @@ namespace JCW.Object
 
         IEnumerator WaitForPlayer()
         {
-            yield return new WaitUntil(() => PhotonNetwork.PlayerList.Length == 1);
+            yield return new WaitUntil(() => PhotonNetwork.PlayerList.Length == 2);
 
             if (PhotonNetwork.IsMasterClient)
             {

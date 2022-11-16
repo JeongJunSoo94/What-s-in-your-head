@@ -39,16 +39,12 @@ namespace KSU.FSM
 
             if (KeyManager.Instance.GetKeyDown(PlayerAction.Interaction))
             {
-                if(!animator.GetBool("isRailJump"))
+                if (!animator.GetBool("isRailJump"))
                 {
                     if (GetRailAction(animator).GetWhetherFoundRail())
                     {
                         animator.SetBool("isTransferRail", true);
                         animator.SetFloat("moveToRailSpeed", 1.883f / GetRailAction(animator).SwapRail());
-                    }
-                    else
-                    {
-                        GetRailAction(animator).EscapeRailAction();
                     }
                 }
             }

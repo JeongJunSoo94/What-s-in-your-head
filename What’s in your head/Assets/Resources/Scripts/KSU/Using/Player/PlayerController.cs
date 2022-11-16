@@ -23,6 +23,7 @@ namespace KSU
         #region    
         public PlayerState characterState;
         public PlayerMouseController playerMouse;
+        public PlayerInteraction playerInteraction;
         #endregion
 
         // 유니티 제공 Components
@@ -41,17 +42,17 @@ namespace KSU
         [Header("현재 이동 속력")]
         float moveSpeed = 0f;
         [Header("걷는 속력")]
-        public float walkSpeed = 8f;
+        public float walkSpeed = 4f;
         [Header("달리는 속력")]
-        public float runSpeed = 14f;
+        public float runSpeed = 7f;
         [Header("대시 속력")]
-        public float dashSpeed = 15f;
+        public float dashSpeed = 10f;
         [Header("공중 대시 속력")]
-        public float airDashSpeed = 15f;
+        public float airDashSpeed = 8f;
         [Header("관성 속력")]
         public float inertiaSpeed = 0f;
         [Header("공중 이동 속력")]
-        public float airMoveSpeed = 5f;
+        public float airMoveSpeed = 1f;
         [Header("공중 이동 최대 속력")]
         public float airMoveMaxSpeed = 10f;
         //[Tooltip("넉백 수평 속력")]
@@ -61,14 +62,14 @@ namespace KSU
         // 수직 Speed
         #region
         [Tooltip("점프 속도")]
-        public float jumpSpeed = 15f;
+        public float jumpSpeed = 10f;
         [Tooltip("공중 점프 속도")]
-        public float airJumpSpeed = 15f;
+        public float airJumpSpeed = 6f;
         [Range(-100f, 0f), Tooltip("중력")]
-        public float gravity = -30f;
-        public float gravityCofactor = -10f;
+        public float gravity = -9.81f;
+        public float gravityCofactor = 0.8f;
         [Range(-100f, -1f), Tooltip("종단속도")]
-        public float terminalSpeed = -50f;
+        public float terminalSpeed = -10f;
         [Tooltip("넉백 수직 속력")]
         public float knockBackVerticalSpeed = 8f;
         public float trampolinSpeed = 20f;
@@ -108,6 +109,7 @@ namespace KSU
             playerCapsuleCollider = GetComponent<CapsuleCollider>();
             playerRigidbody = GetComponent<Rigidbody>();
             playerMouse = GetComponent<PlayerMouseController>();
+            playerInteraction = GetComponent<PlayerInteraction>();
 
 
             //====================================================
@@ -162,7 +164,7 @@ namespace KSU
             playerRigidbody.velocity = Vector3.zero;
         }
 
-        public void InitAnimatorParam(bool initTop)
+        public void InitAnimatorParam()
         {
             playerAnimator.SetBool("isAir", false);
             playerAnimator.SetBool("isAirDash", false);
@@ -188,8 +190,7 @@ namespace KSU
             playerAnimator.SetFloat("HorizonVelocity", 0f);
             playerAnimator.SetFloat("DistY", 0f);
             playerAnimator.SetFloat("moveToRailSpeed", 0f);
-            if (initTop)
-                playerAnimator.SetBool("Top", false);
+            
             switch (this.gameObject.tag)
             {
                 case "Nella":
@@ -207,11 +208,11 @@ namespace KSU
 
         void InitInteraction()
         {
-            GetComponent<PlayerInteraction>().InitInteraction();
+            playerInteraction.InitInteraction();
         }
         void EscapeInteraction()
         {
-            GetComponent<PlayerInteraction>().EscapeInteraction();
+            playerInteraction.EscapeInteraction();
         }
 
         private void CheckState()
@@ -223,7 +224,7 @@ namespace KSU
                 {
                     Vector3 horVel = playerRigidbody.velocity;
                     horVel.y = 0;
-                    MakeinertiaVec(horVel.magnitude, moveDir);
+                    MakeinertiaVec(horVel.magnitude, horVel.normalized);
                 }
             }
             else
@@ -261,12 +262,13 @@ namespace KSU
         {
             InitInteraction();
             InitController();
+            InitAnimatorParam();
+            if (photonView.IsMine)
+            { 
+                GameManager.Instance.curPlayerHP = 12;
+            }
+
             characterState.InitState(true, false);
-
-            if (!photonView.IsMine)
-                return;
-
-            GameManager.Instance.curPlayerHP = 12;
 
             string path = Application.dataPath + "/Resources/CheckPointInfo/Stage" + GameManager.Instance.curStageIndex
                 + "/" + GameManager.Instance.curStageType + "/Section" + GameManager.Instance.curSection + ".json";
@@ -456,7 +458,8 @@ namespace KSU
             {
                 if (!characterState.IsDashing)
                 {
-                    Vector3 forward = Vector3.Slerp(transform.forward, moveDir.normalized, rotationSpeed * Time.fixedDeltaTime / Vector3.Angle(transform.forward, moveDir.normalized));
+                    //Vector3 forward = Vector3.Slerp(transform.forward, moveDir.normalized, rotationSpeed * Time.fixedDeltaTime / Vector3.Angle(transform.forward, moveDir.normalized));
+                    Vector3 forward = moveDir.normalized;
                     forward.y = 0;
                     moveDir = forward;
                     transform.LookAt(transform.position + forward);
@@ -587,7 +590,14 @@ namespace KSU
                     moveVec.y = playerRigidbody.velocity.y + gravity * Time.fixedDeltaTime;
             }
 
-            playerRigidbody.velocity = moveVec;
+            if(characterState.IsGrounded)
+            {
+                playerRigidbody.velocity = moveVec;
+            }
+            else
+            {
+                playerRigidbody.velocity = moveVec;
+            }
         }
 
         public void SetOnCollider()
@@ -598,6 +608,7 @@ namespace KSU
         public void SetOffCollider()
         {
             playerCapsuleCollider.enabled = false;
+            playerInteraction.InitDictionaryAll();
         }
 
         public void MakeKnockBackVec(Vector3 horVec, float rushSpeed)
@@ -610,12 +621,13 @@ namespace KSU
             InitController();
             moveVec = knockBackVec;
             characterState.IsJumping = true;
+            characterState.JumpCool();
             characterState.isOutOfControl = true;
         }
         public IEnumerator DelayResetKnockBack()
         {
             characterState.CanResetKnockBack = false;
-            yield return new WaitForSeconds(0.2f);
+            yield return new WaitForSeconds(1f);
             characterState.CanResetKnockBack = true;
         }
 

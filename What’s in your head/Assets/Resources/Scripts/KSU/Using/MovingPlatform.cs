@@ -13,11 +13,9 @@ namespace KSU
         public float moveSpeed = 2f;
 
         bool isMovingToEnd = true;
-        // Start is called before the first frame update
-        void Start()
-        {
 
-        }
+        public float stayingTime = 0.2f;
+        bool isStop = false;
 
         // Update is called once per frame
         void FixedUpdate()
@@ -27,25 +25,37 @@ namespace KSU
 
         void MoveRepeatly()
         {
-            if(isMovingToEnd)
+            if(!isStop)
             {
-                if(Vector3.Distance(endPosition,transform.position) < 0.1f)
+                if (isMovingToEnd)
                 {
-                    isMovingToEnd = false;
-                    return;
-                }
+                    if (Vector3.Distance(endPosition, transform.position) < 0.1f)
+                    {
+                        isMovingToEnd = false;
+                        StartCoroutine(nameof(StopAwhile));
+                        return;
+                    }
 
-                transform.position = Vector3.MoveTowards(transform.position, endPosition, moveSpeed * Time.fixedDeltaTime);
-            }
-            else
-            {
-                if (Vector3.Distance(startPosition, transform.position) < 0.1f)
-                {
-                    isMovingToEnd = true;
-                    return;
+                    transform.position = Vector3.MoveTowards(transform.position, endPosition, moveSpeed * Time.fixedDeltaTime);
                 }
-                transform.position = Vector3.MoveTowards(transform.position, startPosition, moveSpeed * Time.fixedDeltaTime);
+                else
+                {
+                    if (Vector3.Distance(startPosition, transform.position) < 0.1f)
+                    {
+                        isMovingToEnd = true;
+                        StartCoroutine(nameof(StopAwhile));
+                        return;
+                    }
+                    transform.position = Vector3.MoveTowards(transform.position, startPosition, moveSpeed * Time.fixedDeltaTime);
+                }
             }
+        }
+
+        IEnumerator StopAwhile()
+        {
+            isStop = true;
+            yield return new WaitForSeconds(stayingTime);
+            isStop = false;
         }
         private void OnCollisionEnter(Collision collision)
         {

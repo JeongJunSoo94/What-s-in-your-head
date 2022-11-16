@@ -301,8 +301,8 @@ GameObject:
   - component: {fileID: 6741895408954719999}
   - component: {fileID: 7243772966290873398}
   - component: {fileID: 7243772966290873397}
+  - component: {fileID: 6085713236715304606}
   - component: {fileID: 7243772966290873396}
-  - component: {fileID: 4036375734705897839}
   m_Layer: 0
   m_Name: HostField
   m_TagString: DeadZone
@@ -455,6 +455,25 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!205 &6085713236715304606
+LODGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6258832000072115270}
+  serializedVersion: 2
+  m_LocalReferencePoint: {x: 0.009670615, y: 0.2835573, z: 0.009083986}
+  m_Size: 2.5956511
+  m_FadeMode: 0
+  m_AnimateCrossFading: 0
+  m_LastLODIsBillboard: 0
+  m_LODs:
+  - screenRelativeHeight: 0.0699739
+    fadeTransitionWidth: 0
+    renderers:
+    - renderer: {fileID: 7950215553699088230}
+  m_Enabled: 1
 --- !u!114 &7243772966290873396
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -467,31 +486,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 929009156892fbf4eaae216c177fa8ee, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  infectTime: 1
+  infectTime: 10
   maxHP: 100
   healingSpeed: 1
   damage: 10
   canInfect: 1
   isPurified: 0
---- !u!205 &4036375734705897839
-LODGroup:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6258832000072115270}
-  serializedVersion: 2
-  m_LocalReferencePoint: {x: 0.009670734, y: 0.28355724, z: 0.009083986}
-  m_Size: 2.6006403
-  m_FadeMode: 0
-  m_AnimateCrossFading: 0
-  m_LastLODIsBillboard: 0
-  m_LODs:
-  - screenRelativeHeight: 0.059775945
-    fadeTransitionWidth: 0
-    renderers:
-    - renderer: {fileID: 7950215553699088230}
-  m_Enabled: 1
 --- !u!1 &6584743880968723481
 GameObject:
   m_ObjectHideFlags: 0

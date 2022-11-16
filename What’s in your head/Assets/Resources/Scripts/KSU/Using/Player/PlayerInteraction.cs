@@ -46,8 +46,8 @@ namespace KSU
             if (!playerState.isMine)
                 return;
             if (KeyManager.Instance.GetKeyDown(PlayerAction.Interaction))
-            {                
-                if (interactableObject != null) 
+            {
+                if (interactableObject != null)
                 {
                     interactableObject.GetComponent<InteractableObject>().StartInteraction();
                     return;
@@ -156,8 +156,7 @@ namespace KSU
         {
             detectedInteractableObjects.Clear();
         }
-
-        public void InitInteraction()
+        public void InitDictionaryAll()
         {
             SendUIOff();
             InitDictionary();
@@ -165,6 +164,11 @@ namespace KSU
             railAction.InitDictionary();
             ropeAction.SendUIOff();
             ropeAction.InitDictionary();
+        }
+
+        public void InitInteraction()
+        {
+            InitDictionaryAll();
             interactionState.InitInteractionState();
         }
 
@@ -178,8 +182,9 @@ namespace KSU
         {
             if (other.CompareTag("InteractableObject"))
             {
-                if(!detectedInteractableObjects.ContainsKey(other.gameObject.transform.parent.gameObject))
-                    detectedInteractableObjects.Add(other.gameObject.transform.parent.gameObject, new Obj_Info(false, false, 100f));
+                //if (detectedInteractableObjects.ContainsKey(other.gameObject.transform.parent.gameObject))
+                //    return;
+                detectedInteractableObjects.Add(other.gameObject.transform.parent.gameObject, new Obj_Info(false, false, 100f));
             }
         }
 

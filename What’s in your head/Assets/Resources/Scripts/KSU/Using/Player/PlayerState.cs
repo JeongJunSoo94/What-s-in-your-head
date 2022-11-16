@@ -11,12 +11,14 @@ public class PlayerState : MonoBehaviour
     #region
     [Tooltip("지면으로 체크할 레이어 설정")]
     public LayerMask groundLayerMask;
-    [Range(0.1f, 10.0f), Tooltip("지면 감지 거리")]
-    public float groundCheckDistance = 2.0f;
+    [Range(0.1f, 10.0f), Tooltip("지면에서 지면 감지 거리")]
+    public float groundCheckDistance = 1f;
+    [Range(0.1f, 10.0f), Tooltip("공중에서 지면 감지 거리")]
+    public float groundCheckAirDistance = 0.1f;
     [Range(0.0f, 1f), Tooltip("지면 인식 허용 최소 거리")]
     public float groundCheckThresholdMin = 0.02f;
     [Range(0.0f, 1f), Tooltip("지면 인식 허용 최대 거리")]
-    public float groundCheckThresholdMax = 0.2f;
+    public float groundCheckThresholdMax = 0.05f;
     [Range(0.0f, 1f), Tooltip("전방 막힘 최소 높이")]
     public float forwardblockingMinHeight = 0.2f;
 
@@ -149,7 +151,10 @@ public class PlayerState : MonoBehaviour
     public void CheckGround(float sphereRadius)
     {
 
-        RayCheck = Physics.SphereCast(transform.position + Vector3.up * (sphereRadius * 1.5f + Physics.defaultContactOffset), (sphereRadius - Physics.defaultContactOffset), Vector3.down, out groundRaycastHit, groundCheckDistance + sphereRadius * 0.5f + Physics.defaultContactOffset, groundLayerMask, QueryTriggerInteraction.Ignore);
+        if(IsGrounded)
+            RayCheck = Physics.SphereCast(transform.position + Vector3.up * (sphereRadius * 1.5f + Physics.defaultContactOffset), (sphereRadius - Physics.defaultContactOffset), Vector3.down, out groundRaycastHit, groundCheckDistance + sphereRadius * 0.5f + Physics.defaultContactOffset, groundLayerMask, QueryTriggerInteraction.Ignore);
+        else
+            RayCheck = Physics.SphereCast(transform.position + Vector3.up * (sphereRadius * 1.5f + Physics.defaultContactOffset), (sphereRadius - Physics.defaultContactOffset), Vector3.down, out groundRaycastHit, groundCheckAirDistance + sphereRadius * 0.5f + Physics.defaultContactOffset, groundLayerMask, QueryTriggerInteraction.Ignore);
 
         if (RayCheck)
         {
@@ -165,24 +170,6 @@ public class PlayerState : MonoBehaviour
                 isOverAngleForSlope = false;
                 float uSlopeAngleCofacter = Mathf.Tan(slopeAngle * Mathf.Deg2Rad);
                 height = (transform.position - groundRaycastHit.point).y;
-                //if (height <= (groundCheckThresholdMax + Mathf.Abs(uSlopeAngleCofacter)))
-                //{
-                //    IsGrounded = true;
-                //    slopeAngle = Vector3.Angle(transform.forward, groundRaycastHit.normal) - 90f;
-                //    slopeAngleCofacter = Mathf.Tan(slopeAngle * Mathf.PI / 180);
-                //    if (CanJump)
-                //    {
-                //        ResetJump();
-                //        ResetAirDash();
-                //    }
-                //}
-                //else
-                //{
-                //    //Debug.Log("FALSE: " + height + " << 높이, 기준 >> " + (groundCheckThresholdMax + Mathf.Abs(uSlopeAngleCofacter)));
-                //    slopeAngleCofacter = 0f;
-                //    IsGrounded = false;
-                //    isRun = false;
-                //}
 
                 IsGrounded = true;
                 slopeAngle = Vector3.Angle(transform.forward, groundRaycastHit.normal) - 90f;
@@ -193,33 +180,6 @@ public class PlayerState : MonoBehaviour
                     ResetAirDash();
                 }
             }
-
-            //bool rayChecked = Physics.SphereCast(transform.position + Vector3.up * (sphereRadius + Physics.defaultContactOffset) 
-            //    - transform.forward * Physics.defaultContactOffset, (sphereRadius - Physics.defaultContactOffset), transform.forward,
-            //    out fowardRaycastHit, 0.2f, groundLayerMask, QueryTriggerInteraction.Ignore);
-            //if(rayChecked)
-            //{
-            //    float forwardAngle = Vector3.Angle(Vector3.up, fowardRaycastHit.normal);
-
-            //    if (forwardAngle > maxSlopeAngle)
-            //    {
-            //        isFowardBlock = true;
-            //    }
-            //    else
-            //        isFowardBlock = false;
-
-            //    forwardHeight = Mathf.Abs(fowardRaycastHit.point.y - transform.position.y);
-            //    if (forwardHeight < forwardblockingMinHeight)
-            //    {
-            //        slopeAngleCofacter = forwardblockingMinHeight;
-            //        IsGrounded = true;
-            //        isFowardBlock = false;
-            //    }
-            //}
-            //else
-            //{
-            //    isFowardBlock = false;
-            //}
 
             bool rayChecked1 = Physics.Raycast(transform.position, transform.forward, forwardblockingMinHeight / Mathf.Cos((90f - maxSlopeAngle) * Mathf.Deg2Rad), groundLayerMask, QueryTriggerInteraction.Ignore);
             bool rayChecked2 = Physics.Raycast(transform.position + Vector3.up * forwardblockingMinHeight, transform.forward, forwardblockingMinHeight / Mathf.Cos((90f - maxSlopeAngle) * Mathf.Deg2Rad), groundLayerMask, QueryTriggerInteraction.Ignore);
@@ -381,7 +341,7 @@ public class PlayerState : MonoBehaviour
 
     private void OnCollisionStay(Collision collision)
     {
-        if(IsGrounded || !CanJump)
+        if(IsGrounded || !CanJump || IsDashing)
         {
             isAirBlocked = false;
         }

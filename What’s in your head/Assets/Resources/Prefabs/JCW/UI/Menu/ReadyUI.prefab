@@ -135,6 +135,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 0}
+        m_TargetAssemblyTypeName: JCW.AudioCtrl.SoundManager, Assembly-CSharp
+        m_MethodName: PlayUI
+        m_Mode: 5
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: ButtonClick
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &2131468508
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -283,6 +295,18 @@ MonoBehaviour:
           m_IntArgument: 1
           m_FloatArgument: 0
           m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 0}
+        m_TargetAssemblyTypeName: JCW.AudioCtrl.SoundManager, Assembly-CSharp
+        m_MethodName: PlayUI
+        m_Mode: 5
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: ButtonClick
           m_BoolArgument: 0
         m_CallState: 2
 --- !u!114 &2032688713
@@ -516,6 +540,18 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
+      - m_Target: {fileID: 0}
+        m_TargetAssemblyTypeName: JCW.AudioCtrl.SoundManager, Assembly-CSharp
+        m_MethodName: PlayUI
+        m_Mode: 5
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: BackButton
+          m_BoolArgument: 0
+        m_CallState: 2
       - m_Target: {fileID: 1605897101388222363}
         m_TargetAssemblyTypeName: JCW.UI.Options.ButtonShifter, Assembly-CSharp
         m_MethodName: SetDefaultSprite
@@ -824,7 +860,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 3381914067303689686}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 0}
+        m_TargetAssemblyTypeName: JCW.AudioCtrl.SoundManager, Assembly-CSharp
+        m_MethodName: PlayUI
+        m_Mode: 5
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: ButtonClick
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &3381914067641086346
 GameObject:
   m_ObjectHideFlags: 0
@@ -904,7 +952,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: "\uB180\uC774 \uACF5\uC6D0"
+  m_Text: "\uD14C\uB9C8 \uD30C\uD06C"
 --- !u!1 &3381914067672630803
 GameObject:
   m_ObjectHideFlags: 0
@@ -918,6 +966,7 @@ GameObject:
   - component: {fileID: 3381914067672630799}
   - component: {fileID: 3381914067672630798}
   - component: {fileID: 3381914067672630801}
+  - component: {fileID: 1108080539850908890}
   m_Layer: 5
   m_Name: LoadGame
   m_TagString: Untagged
@@ -1029,16 +1078,16 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 3381914068897405787}
-        m_TargetAssemblyTypeName: JCW.UI.ButtonEnter, Assembly-CSharp
-        m_MethodName: SetStage_RPC
-        m_Mode: 3
+      - m_Target: {fileID: 0}
+        m_TargetAssemblyTypeName: JCW.AudioCtrl.SoundManager, Assembly-CSharp
+        m_MethodName: PlayUI
+        m_Mode: 5
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 1
           m_FloatArgument: 0
-          m_StringArgument: 
+          m_StringArgument: ButtonClick
           m_BoolArgument: 0
         m_CallState: 2
 --- !u!114 &3381914067672630801
@@ -1054,6 +1103,28 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isShare: 1
+--- !u!114 &1108080539850908890
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3381914067672630803}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ObservedComponentsFoldoutOpen: 1
+  Group: 0
+  prefixField: -1
+  Synchronization: 3
+  OwnershipTransfer: 0
+  observableSearch: 2
+  ObservedComponents: []
+  sceneViewId: 0
+  InstantiationId: 0
+  isRuntimeInstantiated: 0
 --- !u!1 &3381914067877812246
 GameObject:
   m_ObjectHideFlags: 0
@@ -1479,6 +1550,7 @@ GameObject:
   - component: {fileID: 3381914068305126107}
   - component: {fileID: 3381914068305126106}
   - component: {fileID: 1640954650}
+  - component: {fileID: 8651484400158720737}
   m_Layer: 5
   m_Name: Contents
   m_TagString: Untagged
@@ -1592,6 +1664,28 @@ MonoBehaviour:
   - "\uC2DD\uBB3C\uC6D0"
   curStage: {fileID: 3381914068749010541}
   sections: {fileID: 6278447800327431342}
+--- !u!114 &8651484400158720737
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3381914068305126108}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ObservedComponentsFoldoutOpen: 1
+  Group: 0
+  prefixField: -1
+  Synchronization: 3
+  OwnershipTransfer: 0
+  observableSearch: 2
+  ObservedComponents: []
+  sceneViewId: 0
+  InstantiationId: 0
+  isRuntimeInstantiated: 0
 --- !u!1 &3381914068360798127
 GameObject:
   m_ObjectHideFlags: 0
@@ -1713,7 +1807,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 3381914068360798125}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 0}
+        m_TargetAssemblyTypeName: JCW.AudioCtrl.SoundManager, Assembly-CSharp
+        m_MethodName: PlayUI
+        m_Mode: 5
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: ButtonClick
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &3381914068404417072
 GameObject:
   m_ObjectHideFlags: 0
@@ -1725,6 +1831,7 @@ GameObject:
   - component: {fileID: 3381914068404417073}
   - component: {fileID: 3381914068404417069}
   - component: {fileID: 3381914068404417068}
+  - component: {fileID: 7936297307160664046}
   - component: {fileID: 3381914068404417071}
   - component: {fileID: 3381914068404417070}
   m_Layer: 5
@@ -1794,6 +1901,28 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &7936297307160664046
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3381914068404417072}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ObservedComponentsFoldoutOpen: 1
+  Group: 0
+  prefixField: -1
+  Synchronization: 3
+  OwnershipTransfer: 0
+  observableSearch: 2
+  ObservedComponents: []
+  sceneViewId: 0
+  InstantiationId: 0
+  isRuntimeInstantiated: 0
 --- !u!114 &3381914068404417071
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1838,6 +1967,18 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
+      - m_Target: {fileID: 0}
+        m_TargetAssemblyTypeName: JCW.AudioCtrl.SoundManager, Assembly-CSharp
+        m_MethodName: PlayUI
+        m_Mode: 5
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 1
+          m_FloatArgument: 0
+          m_StringArgument: ButtonClick
+          m_BoolArgument: 0
+        m_CallState: 2
       - m_Target: {fileID: 3381914068897405787}
         m_TargetAssemblyTypeName: JCW.UI.ButtonEnter, Assembly-CSharp
         m_MethodName: SetStage_RPC
@@ -2046,7 +2187,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: "\uB180\uC774 \uACF5\uC6D0"
+  m_Text: "\uD14C\uB9C8 \uD30C\uD06C"
 --- !u!1 &3381914068787907045
 GameObject:
   m_ObjectHideFlags: 0
@@ -2447,6 +2588,7 @@ GameObject:
   - component: {fileID: 3381914069105708772}
   - component: {fileID: 3381914069105708775}
   - component: {fileID: 3381914069105708774}
+  - component: {fileID: 3473483821821152299}
   m_Layer: 5
   m_Name: ContinueGame
   m_TagString: Untagged
@@ -2558,6 +2700,18 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
+      - m_Target: {fileID: 0}
+        m_TargetAssemblyTypeName: JCW.AudioCtrl.SoundManager, Assembly-CSharp
+        m_MethodName: PlayUI
+        m_Mode: 5
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: ButtonClick
+          m_BoolArgument: 0
+        m_CallState: 2
       - m_Target: {fileID: 3381914068897405787}
         m_TargetAssemblyTypeName: JCW.UI.ButtonEnter, Assembly-CSharp
         m_MethodName: LoadLatestStage
@@ -2583,6 +2737,28 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isShare: 1
+--- !u!114 &3473483821821152299
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3381914069105708776}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ObservedComponentsFoldoutOpen: 1
+  Group: 0
+  prefixField: -1
+  Synchronization: 3
+  OwnershipTransfer: 0
+  observableSearch: 2
+  ObservedComponents: []
+  sceneViewId: 0
+  InstantiationId: 0
+  isRuntimeInstantiated: 0
 --- !u!1 &3585833722864932029
 GameObject:
   m_ObjectHideFlags: 0
@@ -2703,7 +2879,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 7919157579689241620}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 0}
+        m_TargetAssemblyTypeName: JCW.AudioCtrl.SoundManager, Assembly-CSharp
+        m_MethodName: PlayUI
+        m_Mode: 5
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 2
+          m_FloatArgument: 0
+          m_StringArgument: ButtonClick
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &5663435451798092001
 GameObject:
   m_ObjectHideFlags: 0
@@ -2836,6 +3024,18 @@ MonoBehaviour:
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 0}
+        m_TargetAssemblyTypeName: JCW.AudioCtrl.SoundManager, Assembly-CSharp
+        m_MethodName: PlayUI
+        m_Mode: 5
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: ButtonClick
           m_BoolArgument: 0
         m_CallState: 2
 --- !u!114 &8748202354614526595
@@ -3221,7 +3421,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 864334536545229187}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 0}
+        m_TargetAssemblyTypeName: JCW.AudioCtrl.SoundManager, Assembly-CSharp
+        m_MethodName: PlayUI
+        m_Mode: 5
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 2
+          m_FloatArgument: 0
+          m_StringArgument: ButtonClick
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &7675202746293117180
 GameObject:
   m_ObjectHideFlags: 0

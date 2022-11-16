@@ -10,6 +10,8 @@ namespace JCW.Object.Stage1
         [Header("0 : 별 / 1 : 태양 / 2 : 달")] [SerializeField] [Range(0,2)] int buttonType = 0;
         [Header("활성화시킬 오브젝트 목록들")] [SerializeField] List<GameObject> activeObjects;
         [Header("비활성화시킬 오브젝트 목록들")] [SerializeField] List<GameObject> inactiveObjects;
+        [Header("눌리는 정도"), SerializeField] float pressedDistance = 0.6f;
+        [Header("영구적 눌림"), SerializeField] bool permanentPress = false;
 
         Vector3 pressedPos;
         Vector3 unpressedPos;
@@ -19,7 +21,7 @@ namespace JCW.Object.Stage1
             transform.GetChild(0).GetChild(buttonType).gameObject.SetActive(true);
             unpressedPos = transform.localPosition;
             pressedPos = unpressedPos;
-            pressedPos.y -= 0.6f;
+            pressedPos.y -= pressedDistance;
             for (int i = 0 ; i< activeObjects.Count ; ++i)
             {
                 activeObjects[i].SetActive(false);
@@ -73,6 +75,8 @@ namespace JCW.Object.Stage1
                 yield return null;
             }
             StopCoroutine("ButtonDown");
+            if (permanentPress)
+                yield break;
             while (transform.localPosition.y < unpressedPos.y)
             {
                 transform.localPosition = Vector3.MoveTowards(transform.localPosition, unpressedPos, Time.deltaTime * 5f);

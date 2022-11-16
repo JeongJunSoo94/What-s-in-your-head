@@ -148,7 +148,6 @@ namespace JCW.UI
                         string character = GameManager.Instance.characterOwner[ism] ? "³Ú¶ó" : "½ºÅ×µð";
                         Debug.Log(player + " : " + character);
                     }
-                    //LoadingScene.Instance.gameObject.SetActive(true);
                     loadingUI.SetActive(true);
                     GameManager.Instance.AddAliveState(GameManager.Instance.characterOwner[PhotonNetwork.IsMasterClient], true);
                     this.enabled = false;

@@ -42,6 +42,11 @@ namespace JCW.UI
             buttonList[(int)PauseMenu.Exit].onClick.AddListener(() =>  { exitUI.SetActive(true); childOnIndex = 3; });
         }
 
+        private void OnEnable()
+        {
+            Cursor.lockState = CursorLockMode.Confined;
+        }
+
         public void CloseUI()
         {
             switch(childOnIndex)

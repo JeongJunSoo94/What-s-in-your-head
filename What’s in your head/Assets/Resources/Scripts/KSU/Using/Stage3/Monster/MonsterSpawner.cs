@@ -118,8 +118,13 @@ namespace KSU
             {
                 GameObject monster = PhotonNetwork.Instantiate(spawnedObjectDirectory, this.transform.position, this.transform.rotation, 0);
                 monster.transform.parent = this.gameObject.transform;
-                monster.GetComponent<DefenseMonster>().Disappear();
-                monster.GetComponent<DefenseMonster>().SetTargetObject(alice.transform);
+                DefenseMonster monsterBehavior = monster.GetComponent<DefenseMonster>();
+                monsterBehavior.Disappear();
+                if (alice != null)
+                {
+                    monsterBehavior.SetTargetObject(alice.transform);
+                    monsterBehavior.SetTopViewMode();
+                }
                 monsterList.Add(monster);
                 DespawnedMonsterQueue.Enqueue(monster);
             }

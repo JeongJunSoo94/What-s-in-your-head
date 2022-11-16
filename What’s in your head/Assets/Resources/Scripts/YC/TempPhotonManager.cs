@@ -123,10 +123,10 @@ namespace YC.Photon
             //Debug.Log($"PlayerCount = {PhotonNetwork.CurrentRoom.PlayerCount}");
 
             // 룸에 접속한 사용자 정보 확인
-            foreach (var player in PhotonNetwork.CurrentRoom.Players)
-            {
-                Debug.Log($"{player.Value.NickName}, {player.Value.ActorNumber}");
-            }
+            //foreach (var player in PhotonNetwork.CurrentRoom.Players)
+            //{
+            //    Debug.Log($"{player.Value.NickName}, {player.Value.ActorNumber}");
+            //}
 
 
 
