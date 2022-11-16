@@ -47,6 +47,16 @@ namespace JJS.Weapon
         public Rigidbody rigid;
         AudioSource audioSource;
 
+        public Spawner effectSpawner;
+        public GameObject effect;
+        public GameObject effectSpawnerObj;
+        public int effectCurCount = 0;
+
+        public Spawner effectCircleSpawner;
+        public GameObject effectCircle;
+        public GameObject effectCircleSpawnerObj;
+        public int effectCircleCurCount = 0;
+
         private void Awake()
         {
             bezierCurveOrbit = gameObject.GetComponent<BezierCurve>();
@@ -60,12 +70,36 @@ namespace JJS.Weapon
 
         public void InitSpawner()
         {
+            if (effectSpawnerObj == null)
+            {
+                effectSpawnerObj = new GameObject("EffectSpawner");
+                effectSpawnerObj.AddComponent<Spawner>();
+            }
+            effectSpawner = effectSpawnerObj.GetComponent<Spawner>();
+            effect.GetComponent<EffectController>().effectSpawner = effectSpawner;
+            effectSpawner.obj = effect;
+            effectSpawner.count = effectCurCount;
+            effectSpawner.spawnCount = 0;
+
+            if (effectCircleSpawnerObj == null)
+            {
+                effectCircleSpawnerObj = new GameObject("EffectCircleSpawner");
+                effectCircleSpawnerObj.AddComponent<Spawner>();
+            }
+            effectCircleSpawner = effectCircleSpawnerObj.GetComponent<Spawner>();
+            effectCircle.GetComponent<EffectController>().effectSpawner = effectCircleSpawner;
+            effectCircleSpawner.obj = effectCircle;
+            effectCircleSpawner.count = effectCircleCurCount;
+            effectCircleSpawner.spawnCount = 0;
+
             if (bulletSpawner == null)
             { 
                 bulletSpawner = new GameObject("BulletSpawner");
                 bulletSpawner.AddComponent<Spawner>();
             }
             spawner = bulletSpawner.GetComponent<Spawner>();
+            bullet.GetComponent<Bullet>().effectWaterSpawner = effectSpawner;
+            bullet.GetComponent<Bullet>().effectWaterCircleSpawner = effectCircleSpawner;
             spawner.obj = bullet;
             spawner.count = bulletCount;
             spawner.spawnCount = 0;
