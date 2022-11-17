@@ -4,6 +4,7 @@ using System.Text.RegularExpressions;
 using System.IO;
 using System.Text;
 using UnityEngine.UI;
+using JCW.AudioCtrl;
 
 namespace JCW.Dialog
 {
@@ -63,9 +64,9 @@ namespace JCW.Dialog
     {
         [HideInInspector] public static DialogManager Instance = null;
         //해당 스테이지, 해당 섹션의 대사 전부
-        List<string> nellaDialogs = new();
-        List<string> steadyDialogs = new();
-        List<string> etcDialogs = new();
+        List<string> nellaDialogs = new();      List<string> nellaVoices = new();  
+        List<string> steadyDialogs = new();     List<string> steadyVoices = new();
+        List<string> etcDialogs = new();        List<string> etcVoices = new();
 
         // 파싱해서 가져온 데이터들. 위의 리스트들에 넣어줄 용도.
         List<Dictionary<string, object>> parsingString = null; 
@@ -74,8 +75,8 @@ namespace JCW.Dialog
         StringBuilder existCheck = null;
 
         // UI를 통해 한 줄 씩 띄워줄 문자열
-        StringBuilder etcDialog = null;
-        StringBuilder nellaDialog = null;
+        StringBuilder etcDialog = null;   
+        StringBuilder nellaDialog = null; 
         StringBuilder steadyDialog = null;
 
         public Text etcText1;           public Text etcText2;   
@@ -134,6 +135,7 @@ namespace JCW.Dialog
                 for (int i=0 ; i<parsingString.Count ; ++i)
                 {
                     nellaDialogs.Add(parsingString[i]["Script"].ToString());
+                    nellaVoices.Add(parsingString[i]["Voice"].ToString());
                 }
             }
             else if (fileName.Contains("_S"))
@@ -141,6 +143,7 @@ namespace JCW.Dialog
                 for (int i = 0 ; i < parsingString.Count ; ++i)
                 {
                     steadyDialogs.Add(parsingString[i]["Script"].ToString());
+                    steadyVoices.Add(parsingString[i]["Voice"].ToString());
                 }
             }
             else if (fileName.Contains("_E"))
@@ -148,6 +151,7 @@ namespace JCW.Dialog
                 for (int i = 0 ; i < parsingString.Count ; ++i)
                 {
                     etcDialogs.Add(parsingString[i]["Script"].ToString());
+                    etcVoices.Add(parsingString[i]["Voice"].ToString());
                 }
             }
             parsingString.Clear();
@@ -162,10 +166,16 @@ namespace JCW.Dialog
             switch (type)
             {
                 case (int)DialogType.NELLA :
+                    if(!nellaVoices[order-1].Equals("--"))
+                        SoundManager.Instance.PlayEffect_RPC(nellaVoices[order-1]);
                     return nellaDialogs[order - 1];
                 case (int)DialogType.STEADY :
+                    if (!steadyVoices[order-1].Equals("--"))
+                        SoundManager.Instance.PlayEffect_RPC(steadyVoices[order-1]);
                     return steadyDialogs[order - 1];
                 case (int)DialogType.ETC :
+                    if (!etcVoices[order-1].Equals("--"))
+                        SoundManager.Instance.PlayEffect_RPC(etcVoices[order-1]);
                     return etcDialogs[order - 1];
                 default:
                     break;
@@ -179,6 +189,9 @@ namespace JCW.Dialog
             nellaDialogs.Clear();
             steadyDialogs.Clear();
             etcDialogs.Clear();
+            nellaVoices.Clear();
+            steadyVoices.Clear();
+            etcVoices.Clear();
 
             if(parsingString != null && parsingString.Count > 0)
             {

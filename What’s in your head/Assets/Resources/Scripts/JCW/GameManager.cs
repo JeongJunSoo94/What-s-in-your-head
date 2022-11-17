@@ -62,7 +62,6 @@ public class GameManager : MonoBehaviour, IPunObservable
         {
             Instance = this;
             pauseUI = pauseUI == null ? Resources.Load<GameObject>("Prefabs/JCW/UI/InGame/PauseUI") : Instantiate(pauseUI);
-            DontDestroyOnLoad(pauseUI);
             DontDestroyOnLoad(this.gameObject);
         }
         else

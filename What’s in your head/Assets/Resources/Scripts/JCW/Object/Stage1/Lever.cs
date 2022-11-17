@@ -8,7 +8,8 @@ namespace JCW.Object.Stage1
 {
     public class Lever : InteractableObject
     {
-        [Header("회전속도")] [SerializeField] float rotSpeed = 80f;
+        [Header("레버 회전속도")] [SerializeField] float rotSpeed = 80f;
+        [Header("아이스크림 회전속도")] [SerializeField] float iceRotSpeed = 160f;
         [Header("상호작용 오브젝트들")] [SerializeField] List<Transform> objList;
 
         Transform leverStickTF;
@@ -66,12 +67,30 @@ namespace JCW.Object.Stage1
             isRed = 1 - isRed;
             for (int i = 0 ; i < objList.Count ; ++i)
             {
-                Vector3 targetRot = objList[i].localEulerAngles;
-                targetRot.x = targetRot.x == 0 ? 90f : 0f;
-                objList[i].localRotation = Quaternion.Euler(targetRot);
+                StartCoroutine(RotateIceCream(objList[i]));
+                //Vector3 targetRot = objList[i].localEulerAngles;
+                //targetRot.x = targetRot.x == 0 ? 90f : 0f;
+                //objList[i].localRotation = Quaternion.Euler(targetRot);
             }
             coroutine = null;
             canStart = true;
+            yield break;
+        }
+
+        IEnumerator RotateIceCream(Transform target)
+        {
+            Vector3 targetRot = target.localEulerAngles;
+            Vector3 curRot = targetRot;
+            targetRot.x = targetRot.x == 0 ? 90f : 0f;
+
+            while (curRot.x - targetRot.x > 0.1f
+                || curRot.x - targetRot.x < -0.1f)
+            {
+                curRot = target.localRotation.eulerAngles;
+                curRot.x = curRot.x >= 180f ? curRot.x - 360f : curRot.x <= -180f ? curRot.x + 360f : curRot.x;
+                target.localRotation = Quaternion.Euler(Vector3.MoveTowards(curRot, targetRot, Time.deltaTime * iceRotSpeed));
+                yield return null;
+            }
             yield break;
         }
     }

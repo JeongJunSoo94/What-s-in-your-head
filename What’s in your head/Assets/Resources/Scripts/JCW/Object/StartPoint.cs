@@ -28,11 +28,14 @@ public class StartPoint : MonoBehaviour
         dialogString = new(10, 10);
         dialogString.Append(currentStageSection);
         dialogString.Append("_N");
-        DialogManager.Instance.SetDialogs(dialogString.ToString());
-        dialogString.Replace("_N", "_E", 4, 2);
-        DialogManager.Instance.SetDialogs(dialogString.ToString());
-        dialogString.Replace("_E", "_S", 4, 2);
-        DialogManager.Instance.SetDialogs(dialogString.ToString());
+        if (DialogManager.Instance != null)
+        {
+            DialogManager.Instance.SetDialogs(dialogString.ToString());
+            dialogString.Replace("_N", "_E", 4, 2);
+            DialogManager.Instance.SetDialogs(dialogString.ToString());
+            dialogString.Replace("_E", "_S", 4, 2);
+            DialogManager.Instance.SetDialogs(dialogString.ToString());
+        }       
 
         StartCoroutine(nameof(WaitForPlayer));       
     }
