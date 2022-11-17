@@ -33,7 +33,8 @@ namespace JCW.Object
             meshRenderer = transform.GetChild(1).GetComponent<MeshRenderer>();
             meshRenderer.sharedMaterial = normalMat;
             TryGetComponent(out audioSource);
-            AudioCtrl.AudioSettings.SetAudio(audioSource, 1f, 50f);
+            if(SoundManager.Instance != null)
+                AudioCtrl.AudioSettings.SetAudio(audioSource, 1f, 50f);
             ws = new(releaseTime);
         }
         private void OnTriggerEnter(Collider other)

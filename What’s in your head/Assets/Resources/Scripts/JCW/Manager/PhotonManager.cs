@@ -123,11 +123,22 @@ namespace JCW.Network
         }
         public void MakeCharacter()
         {
-            PhotonNetwork.LoadLevel(GameManager.Instance.curStageIndex * 2 - 2 + GameManager.Instance.curStageType);
+            //PhotonNetwork.LoadLevel(GameManager.Instance.curStageIndex * 2 - 2 + GameManager.Instance.curStageType);
             myPhotonView.RPC(nameof(StartMakeChar), RpcTarget.AllViaServer);
             //if(PhotonNetwork.IsMasterClient)
             //myPhotonView.RPC(nameof(ChangeStageRPC), RpcTarget.AllViaServer);
         }   
+
+        public void DestroyCurrentRoom_RPC()
+        {
+            myPhotonView.RPC(nameof(DestroyCurrentRoom), RpcTarget.AllViaServer);
+        }
+        
+        [PunRPC]
+        void DestroyCurrentRoom()
+        {
+            PhotonNetwork.LeaveRoom();
+        }
 
         [PunRPC]
         void StartMakeChar()
