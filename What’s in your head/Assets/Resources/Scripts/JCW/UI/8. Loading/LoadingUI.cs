@@ -7,6 +7,7 @@ using System;
 using JCW.Network;
 using JCW.AudioCtrl;
 using UnityEngine.SceneManagement;
+using JCW.Dialog;
 
 namespace JCW.UI
 {
@@ -38,6 +39,8 @@ namespace JCW.UI
         
         private void OnEnable()
         {
+            GameManager.Instance.SetCharOnScene_RPC(false);
+            DialogManager.Instance.ResetDialogs();
             isLoading = false;
             isMainTitle = SceneManager.GetActiveScene().name == "MainTitle";
             Debug.Log("현재 씬 이름 : " + SceneManager.GetActiveScene().name);
@@ -53,7 +56,6 @@ namespace JCW.UI
 
         void Update()
         {
-            Debug.Log("로딩 UI 시작 시 진행율 : " +(float)PhotonNetwork.LevelLoadingProgress*100f);
             if (!isLoading)
                 return;
 
@@ -65,30 +67,32 @@ namespace JCW.UI
                 PhotonNetwork.LevelLoadingProgress = 0f;
                 isLoading = false;
                 Debug.Log("씬 불러오기 완료");
-                //if (isMainTitle && PhotonNetwork.IsMasterClient)
-                //{
-                //    Debug.Log("캐릭터 만들어주기");
-                //    PhotonManager.Instance.MakeCharacter();
-                //}
+                if (PhotonNetwork.IsMasterClient && (GameManager.Instance.curStageType == 1 || GameManager.Instance.curStageType == 2))
+                {
+                    Debug.Log("캐릭터 만들어주기");
+                    PhotonManager.Instance.MakeCharacter();
+                }
                 this.gameObject.SetActive(false);
             }
         }
         [PunRPC]
         void StartLoading()
         {
-            Debug.Log("로딩 시작 진입");
             isLoading = true;
             if (!isMainTitle)
             {
-                Debug.Log("메인 메뉴가 아니므로 더해주기");
                 GameManager.Instance.curStageType = GameManager.Instance.curStageType >= 3 ? 0 : GameManager.Instance.curStageType + 1;
                 GameManager.Instance.curStageIndex = GameManager.Instance.curStageType == 0 ? GameManager.Instance.curStageIndex + 1 : GameManager.Instance.curStageIndex;
-                Debug.Log("S" + GameManager.Instance.curStageIndex + "S" + GameManager.Instance.curStageType);
+                if (GameManager.Instance.curStageIndex == 4
+                    && PhotonNetwork.IsMasterClient)
+                {
+                    PhotonNetwork.LoadLevel(0);
+                    return;
+                }
             }
             if (PhotonNetwork.IsMasterClient)
             {
                 int sceneNum = 4 * (GameManager.Instance.curStageIndex - 1) + 1 + GameManager.Instance.curStageType;
-                Debug.Log("씬 넘버 : " + sceneNum + " 에 접근");
                 PhotonNetwork.LoadLevel(sceneNum);
                 //StartCoroutine(nameof(Delay));
             }

@@ -13,7 +13,7 @@ namespace JCW.Dialog
         static string LINE_SPLIT_RE = @"\r\n|\n\r|\n|\r";
         static char[] TRIM_CHARS = { '\"' };
 
-        static StringBuilder filePath = new(100, 200);
+        static StringBuilder filePath = new(240, 240);
 
         public static List<Dictionary<string, object>> Read(string file)
         {
@@ -114,7 +114,7 @@ namespace JCW.Dialog
         public void SetDialogs(string fileName)
         {
             if (existCheck == null)
-                existCheck = new(100,100);
+                existCheck = new(240,240);
             else
                 existCheck.Clear();
 
@@ -180,7 +180,7 @@ namespace JCW.Dialog
             steadyDialogs.Clear();
             etcDialogs.Clear();
 
-            if(parsingString.Count > 0)
+            if(parsingString != null && parsingString.Count > 0)
             {
                 parsingString.Clear();
                 parsingString = null;

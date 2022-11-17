@@ -22,9 +22,7 @@ namespace JCW.Object.Stage1
 
         IEnumerator WaitForPlayer()
         {
-            Debug.Log("레일 - 플레이어 2명 대기 시작");
             yield return new WaitUntil(() => PhotonNetwork.PlayerList.Length == 2);
-            Debug.Log("레일 - 플레이어 2명 대기 끝");
             pv.RPC(nameof(StartFunc), RpcTarget.AllViaServer);
 
             yield break;

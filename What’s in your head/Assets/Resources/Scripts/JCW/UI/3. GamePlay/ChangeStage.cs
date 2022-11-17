@@ -2,6 +2,7 @@ using Photon.Pun;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using System.Text;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -12,7 +13,7 @@ namespace JCW.UI
     public class ChangeStage : MonoBehaviour
     {
         [Header("Ready UI")] [SerializeField] ButtonEnter readyUI;
-        [Header("좌측 버튼")] [SerializeField] Button leftButton = null; 
+        [Header("좌측 버튼")] [SerializeField] Button leftButton = null;
         [Header("우측 버튼")] [SerializeField] Button rightButton = null;
         [Space(10f)]
         [Header("0번째는 스테이지 전체 제목")]
@@ -25,6 +26,12 @@ namespace JCW.UI
         [Space(10f)]
         [Header("가져올 스테이지 배경 리스트")] [SerializeField] List<Sprite> bgList;
 
+        Button buttonSection1;
+        bool isClickButton1 = false;
+        Button buttonSection2;
+        bool isClickButton2 = false;
+
+
         // 불러올 수 있는 스테이지 목록
         int stageCount = 0;
         int latestStageType = 0;
@@ -33,7 +40,7 @@ namespace JCW.UI
 
         Image backgroundImg;
 
-        string path;
+        StringBuilder saveFilePath;
 
         private void Awake()
         {
@@ -42,12 +49,15 @@ namespace JCW.UI
             stageDict.Add(2, stage2);
             stageDict.Add(3, stage3);
             backgroundImg = transform.GetChild(1).GetComponent<Image>();
+            buttonSection1 = sections.transform.GetChild(0).GetComponent<Button>();
+            buttonSection2 = sections.transform.GetChild(1).GetComponent<Button>();
 
-            if (!pv.IsMine)
-                return;
-            path = Application.dataPath + "/Resources/CheckPointInfo/";
-            if (Directory.Exists(path))
-                stageCount = Directory.GetDirectories(path, "*", SearchOption.TopDirectoryOnly).Length;
+            saveFilePath = new(300, 300);
+
+            saveFilePath.Append(Application.streamingAssetsPath);
+            saveFilePath.Append("/CheckPointInfo/");
+            if (Directory.Exists(saveFilePath.ToString()))
+                stageCount = Directory.GetDirectories(saveFilePath.ToString(), "*", SearchOption.TopDirectoryOnly).Length;
             else
             {
                 leftButton.interactable = false;
@@ -65,6 +75,17 @@ namespace JCW.UI
                 if (PhotonNetwork.IsMasterClient)
                     pv.RPC(nameof(ClickButton), RpcTarget.AllViaServer, false);
             });
+
+            buttonSection1.onClick.AddListener(() =>
+            {
+                if (PhotonNetwork.IsMasterClient)
+                    pv.RPC(nameof(PressSection), RpcTarget.AllViaServer, true);
+            });
+            buttonSection2.onClick.AddListener(() =>
+            {
+                if (PhotonNetwork.IsMasterClient)
+                    pv.RPC(nameof(PressSection), RpcTarget.AllViaServer, false);
+            });
         }
 
         private void OnEnable()
@@ -72,6 +93,26 @@ namespace JCW.UI
             readyUI.isNewGame = false;
             if (PhotonNetwork.IsMasterClient)
                 pv.RPC(nameof(InitSet), RpcTarget.AllViaServer);
+        }
+
+        [PunRPC]
+        void PressSection(bool isSection1)
+        {
+            if (isSection1)
+            {
+                buttonSection1.image.color = new Color(1f, 0.635f, 0.184f);
+                buttonSection2.image.color = new Color(1f, 1f, 1f);
+                isClickButton1 = true;
+                isClickButton2 = false;
+            }
+            else
+            {
+                buttonSection2.image.color = new Color(1f, 0.635f, 0.184f);
+                buttonSection1.image.color = new Color(1f, 1f, 1f);
+                isClickButton1 = false;
+                isClickButton2 = true;
+            }
+            
         }
 
         [PunRPC]
@@ -87,8 +128,7 @@ namespace JCW.UI
 
             leftButton.interactable = GameManager.Instance.curStageIndex != 1;
             rightButton.interactable = GameManager.Instance.curStageIndex != stageCount;
-            if(PhotonNetwork.IsMasterClient)
-                latestStageType = Directory.GetDirectories(path + "/Stage" + GameManager.Instance.curStageIndex, "*", SearchOption.TopDirectoryOnly).Length;
+            latestStageType = Directory.GetDirectories(saveFilePath.ToString() + "Stage" + GameManager.Instance.curStageIndex, "*", SearchOption.TopDirectoryOnly).Length;
             sections.transform.GetChild(1).GetComponent<Button>().interactable = latestStageType == 2;
         }
 
@@ -104,7 +144,7 @@ namespace JCW.UI
                     sections.transform.GetChild(0).GetChild(0).GetComponent<Text>().text = stageDict[GameManager.Instance.curStageIndex][1];
                     sections.transform.GetChild(1).GetChild(0).GetComponent<Text>().text = stageDict[GameManager.Instance.curStageIndex][2];
                     rightButton.interactable = true;
-                    latestStageType = Directory.GetDirectories(path + "/Stage" + GameManager.Instance.curStageIndex, "*", SearchOption.TopDirectoryOnly).Length;
+                    latestStageType = Directory.GetDirectories(saveFilePath.ToString() + "Stage" + GameManager.Instance.curStageIndex, "*", SearchOption.TopDirectoryOnly).Length;
                 }
                 leftButton.interactable = GameManager.Instance.curStageIndex != 1;
             }
@@ -117,10 +157,14 @@ namespace JCW.UI
                     sections.transform.GetChild(0).GetChild(0).GetComponent<Text>().text = stageDict[GameManager.Instance.curStageIndex][1];
                     sections.transform.GetChild(1).GetChild(0).GetComponent<Text>().text = stageDict[GameManager.Instance.curStageIndex][2];
                     leftButton.interactable = true;
-                    latestStageType = Directory.GetDirectories(path + "/Stage" + GameManager.Instance.curStageIndex, "*", SearchOption.TopDirectoryOnly).Length;
+                    latestStageType = Directory.GetDirectories(saveFilePath.ToString() + "Stage" + GameManager.Instance.curStageIndex, "*", SearchOption.TopDirectoryOnly).Length;
                 }
                 rightButton.interactable = GameManager.Instance.curStageIndex != stageCount;
             }
+            buttonSection1.image.color = new Color(1f, 1f, 1f);
+            buttonSection2.image.color = new Color(1f, 1f, 1f);
+            isClickButton1 = false;
+            isClickButton2 = false;
             sections.transform.GetChild(1).GetComponent<Button>().interactable = latestStageType == 2;
             GameManager.Instance.curStageType = -1;
         }

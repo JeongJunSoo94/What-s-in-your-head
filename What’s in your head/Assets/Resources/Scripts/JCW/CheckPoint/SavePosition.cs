@@ -3,6 +3,7 @@ using UnityEngine;
 using System.IO;
 using LitJson;
 using Photon.Pun;
+using System.Text;
 
 namespace JCW.Object
 {
@@ -11,6 +12,8 @@ namespace JCW.Object
     {
         private bool firstContact = false;
         PhotonView photonView;
+        StringBuilder filePath;
+        StringBuilder fileName;
 
         [Serializable]
         public class PlayerInfo
@@ -34,6 +37,8 @@ namespace JCW.Object
         private void Awake()
         {
             photonView = PhotonView.Get(this);
+            filePath = new(240, 240);
+            fileName = new(300, 300);
         }
 
         private void OnTriggerEnter(Collider other)
@@ -56,18 +61,31 @@ namespace JCW.Object
         [PunRPC]
         private void Check(Vector3 pos, Quaternion rot)
         {
+            filePath.Clear();
             firstContact = true;
             PlayerInfo playerTF = new(pos, rot);
             JsonData infoJson = JsonMapper.ToJson(playerTF);
 
             int curStage = GameManager.Instance.curStageIndex;
             int curStageType = GameManager.Instance.curStageType;
+
+            filePath.Append(Application.streamingAssetsPath);
+            filePath.Append("/CheckPointInfo/Stage");
+            filePath.Append(curStage);
+            filePath.Append("/");
+            filePath.Append(curStageType);
+            filePath.Append("/");
             ++GameManager.Instance.curSection;
 
-            string path = Application.dataPath + "/Resources/CheckPointInfo/Stage" + curStage + "/" + curStageType + "/";
-            if (!Directory.Exists(path))
-                Directory.CreateDirectory(path);
-            File.WriteAllText(path + "Section" + GameManager.Instance.curSection + ".json", infoJson.ToString());
+            if (!Directory.Exists(filePath.ToString()))
+                Directory.CreateDirectory(filePath.ToString());
+            fileName.Clear();
+
+            fileName.Append(filePath.ToString());
+            fileName.Append("Section");
+            fileName.Append(GameManager.Instance.curSection);
+            fileName.Append(".json");
+            File.WriteAllText(fileName.ToString(), infoJson.ToString());
             //Debug.Log("체크포인트 저장");
             Destroy(this);
         }

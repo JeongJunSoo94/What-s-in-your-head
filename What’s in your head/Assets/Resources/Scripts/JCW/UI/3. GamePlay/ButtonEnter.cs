@@ -51,6 +51,8 @@ namespace JCW.UI
 
             backButton.onClick.AddListener(() =>
             {
+                if (PhotonNetwork.NetworkClientState != ClientState.Joined)
+                    Leave();
                 photonView.RPC(nameof(CancleEnter), RpcTarget.AllViaServer);
                 photonView.RPC(nameof(Leave), RpcTarget.AllViaServer);
             });
@@ -126,8 +128,16 @@ namespace JCW.UI
         }
 
         IEnumerator WaitUntilCutSceneEnd()
-        {
-            yield return new WaitUntil(() => !cutSceneUI.gameObject.activeSelf);
+        {            
+            while (!cutSceneUI.gameObject.activeSelf)
+            {
+                cutSceneUI.gameObject.SetActive(true);
+                yield return null;
+            }            
+            while (cutSceneUI.gameObject.activeSelf)
+            {
+                yield return null;
+            }
             CancleEnter();
             charSelectUI.SetActive(true);
             moveOnButton.gameObject.SetActive(false);
@@ -147,7 +157,7 @@ namespace JCW.UI
         {
             while (PhotonNetwork.NetworkClientState.ToString() != ClientState.JoinedLobby.ToString())
             {
-                yield return new WaitForSeconds(0.05f);
+                yield return null;
             }
             RoomOptions lobbyOptions = new()
             {
@@ -160,11 +170,18 @@ namespace JCW.UI
             yield break;
         }
 
+        public void SetNewGame_RPC()
+        {
+            photonView.RPC(nameof(SetNewGame), RpcTarget.AllViaServer);
+        }
+
+        [PunRPC]
         public void SetNewGame()
         {
             isNewGame = true;
-            GameManager.Instance.curStageIndex = 1;
-            GameManager.Instance.curStageType = 0;
+            SetStage_RPC(1);
+            SetStageType_RPC(0);
+            SetSection_RPC(0);
         }
 
         public void LoadLatestStage()

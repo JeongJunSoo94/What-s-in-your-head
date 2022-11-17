@@ -25421,6 +25421,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   characterState: {fileID: 8750876866218855433}
   playerMouse: {fileID: 1441877394586250121}
+  playerInteraction: {fileID: 0}
   playerAnimator: {fileID: 0}
   mainCamera: {fileID: 0}
   playerRigidbody: {fileID: 0}
@@ -25458,6 +25459,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 79eaf00710311bd4abc8301ba037e744, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  photonView: {fileID: 0}
   layerWeight: 0
   point: {fileID: 0}
   cameraMain: {fileID: 0}
@@ -25475,9 +25477,12 @@ MonoBehaviour:
   ableToRight: 0
   clickLeft: 0
   clickRight: 0
-  mouseLayer:
+  mouseTopLayer:
     serializedVersion: 2
-    m_Bits: 8
+    m_Bits: 0
+  mouseSideLayer:
+    serializedVersion: 2
+    m_Bits: 0
   mouseRayDistance: 100
   canSwap: 0
   curCool: 0
@@ -25525,6 +25530,7 @@ MonoBehaviour:
   IsAirJumping: 0
   isCumstomJumping: 0
   IsDashing: 0
+  WasDashing: 0
   IsAirDashing: 0
   WasAirDashing: 0
   isMine: 0

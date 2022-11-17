@@ -49,6 +49,7 @@ namespace JCW.UI.InGame
         {
             if(isStart && !videoPlayer.isPlaying)
             {
+                Debug.Log("¹æÀåÀÓ? : " +PhotonNetwork.IsMasterClient);
                 if (loadingUI != null)
                     loadingUI.gameObject.SetActive(true);
                 this.gameObject.SetActive(false);
@@ -73,14 +74,14 @@ namespace JCW.UI.InGame
         IEnumerator WaitUntilCutSceneEnd()
         {
             yield return new WaitUntil(() => videoPlayer.isPlaying);
-            pv.RPC(nameof(SetStart), RpcTarget.AllViaServer);            
+            isStart = true;
             yield break;
         }
-        [PunRPC]
-        void SetStart()
-        {
-            isStart = true;            
-        }
+       //[PunRPC]
+       //void SetStart()
+       //{
+       //    isStart = true;            
+       //}
 
         [PunRPC]
         void SyncStart()
@@ -89,8 +90,7 @@ namespace JCW.UI.InGame
             player1_Img.gameObject.SetActive(true);
             player2_Img.gameObject.SetActive(true);
             videoPlayer.Play();
-            if (PhotonNetwork.IsMasterClient)
-                StartCoroutine(nameof(WaitUntilCutSceneEnd));
+            StartCoroutine(nameof(WaitUntilCutSceneEnd));
         }
 
         [PunRPC]
