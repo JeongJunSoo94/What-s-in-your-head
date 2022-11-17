@@ -246,6 +246,10 @@ namespace Photon.Pun
 
                 return _levelLoadingProgress;
             }
+            set
+            {
+                _levelLoadingProgress = value;
+            }
         }
 
         /// <summary>

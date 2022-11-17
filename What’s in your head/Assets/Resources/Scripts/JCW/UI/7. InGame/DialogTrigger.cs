@@ -28,9 +28,9 @@ namespace JCW.Dialog
 
 
         //WaitForSeconds ws = null;
-        WaitForSeconds etcDelayTime     = null;
-        WaitForSeconds nellaDelayTime   = null;
-        WaitForSeconds steadyDelayTime  = null;
+        //WaitForSeconds etcDelayTime     = null;
+        //WaitForSeconds nellaDelayTime   = null;
+        //WaitForSeconds steadyDelayTime  = null;
 
         bool isStart = false;
         private void Awake()
@@ -120,13 +120,12 @@ namespace JCW.Dialog
                 yield return new WaitUntil(() => DialogManager.Instance.needToNellaBreak == false);
             }
 
-            yield return nellaDelayTime;
+            yield return new WaitForSeconds(nellaStartTime[0]);
             DialogManager.Instance.isNellaStart = true;
 
             int i = 0;
             float curTime = 0f;
 
-            yield return new WaitForSeconds(nellaStartTime[0]);
             DialogManager.Instance.SetNellaDialog(nellaOrder);
             while (i < nellaRemainTime.Count)
             {                

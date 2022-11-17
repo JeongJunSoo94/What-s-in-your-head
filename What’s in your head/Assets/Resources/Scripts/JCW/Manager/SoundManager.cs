@@ -330,6 +330,17 @@ namespace JCW.AudioCtrl
             }
         }
 
+        public void StopBGM_RPC()
+        {
+            photonView.RPC(nameof(StopBGM), RpcTarget.AllViaServer);
+        }
+
+        [PunRPC]
+        public void StopBGM()
+        {
+            audioSources[(int)Sound.BGM].Stop();
+        }
+
         #endregion
 
 

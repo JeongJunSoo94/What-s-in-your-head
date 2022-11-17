@@ -26,9 +26,11 @@ namespace JCW.Object.Stage1
 
         IEnumerator WaitForPlayer()
         {
-            //yield return null;
+            Debug.Log("락스핀 - 플레이어 2명 대기 시작");
             yield return new WaitUntil(() => PhotonNetwork.PlayerList.Length == 2);
+            Debug.Log("락스핀 - 플레이어 2명 대기 끝");
             pv.RPC(nameof(StartFunc), RpcTarget.AllViaServer);
+
             yield break;
         }
 
@@ -44,6 +46,7 @@ namespace JCW.Object.Stage1
             {
                 myTF.Rotate(Vector3.right, -speed * Time.deltaTime, Space.World);
                 seatTF.Rotate(Vector3.right, speed * 2f * Time.deltaTime, Space.World);
+                yield return null;
             }
         }
     }

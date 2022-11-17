@@ -41,14 +41,14 @@ namespace JCW.UI
             isLoading = false;
             isMainTitle = SceneManager.GetActiveScene().name == "MainTitle";
             Debug.Log("현재 씬 이름 : " + SceneManager.GetActiveScene().name);
+            PhotonNetwork.LevelLoadingProgress = 0f;
             if (PhotonNetwork.IsMasterClient)
                 StartCoroutine(nameof(WaitForStable));
                        
             var random = new System.Random(Guid.NewGuid().GetHashCode());
             text.text = "TIP : " + tipList[random.Next(0, tipList.Count)];
             bgImg.sprite = bgList[GameManager.Instance.curStageIndex];
-            if(SceneManager.GetActiveScene().name != "MainTitle")
-                SoundManager.Instance.StopAllSound_RPC();
+            SoundManager.Instance.StopBGM();
         }
 
         void Update()
@@ -58,16 +58,18 @@ namespace JCW.UI
                 return;
 
             image.fillAmount = PhotonNetwork.LevelLoadingProgress;
-            if (image.fillAmount >= 0.95f)
+            if (image.fillAmount >= 0.9f)
             {
                 image.fillAmount = 0f;
+                // 임의로 만들어줌
+                PhotonNetwork.LevelLoadingProgress = 0f;
                 isLoading = false;
                 Debug.Log("씬 불러오기 완료");
-                if (isMainTitle && PhotonNetwork.IsMasterClient)
-                {
-                    Debug.Log("캐릭터 만들어주기");
-                    PhotonManager.Instance.MakeCharacter();
-                }
+                //if (isMainTitle && PhotonNetwork.IsMasterClient)
+                //{
+                //    Debug.Log("캐릭터 만들어주기");
+                //    PhotonManager.Instance.MakeCharacter();
+                //}
                 this.gameObject.SetActive(false);
             }
         }
@@ -76,7 +78,6 @@ namespace JCW.UI
         {
             Debug.Log("로딩 시작 진입");
             isLoading = true;
-            Debug.Log("현재 씬 이름 : " + SceneManager.GetActiveScene().name);
             if (!isMainTitle)
             {
                 Debug.Log("메인 메뉴가 아니므로 더해주기");
@@ -98,10 +99,12 @@ namespace JCW.UI
         {
             Debug.Log("대충 딜레이 1초 주기");
             yield return new WaitForSeconds(1f);
+            // 한번 실행된 이후로는 위의 Wait문을 안 탐 왜지?
             //PhotonNetwork.LoadLevel(GameManager.Instance.curStageIndex * 2 - 2 + GameManager.Instance.curStageType);            
             int sceneNum = 4 * (GameManager.Instance.curStageIndex - 1) + 1 + GameManager.Instance.curStageType;
             Debug.Log("씬 넘버 : " + sceneNum +  " 에 접근");
             PhotonNetwork.LoadLevel(sceneNum);
+            yield break;
         }
 
         IEnumerator WaitForStable()
