@@ -103,6 +103,7 @@ namespace JCW.AudioCtrl
                 case Sound.EFFECT:
                     return audioClips[name];
                 case Sound.DISTANCE:
+                    Debug.Log(threeDimesionClips[name]);
                     return threeDimesionClips[name];
                 case Sound.UI:
                     return UIClips[name];
