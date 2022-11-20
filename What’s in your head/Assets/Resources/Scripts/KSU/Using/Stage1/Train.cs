@@ -14,7 +14,6 @@ public class Train : MonoBehaviour
     Cinemachine.CinemachineSmoothPath track;
     Cinemachine.CinemachineDollyCart trainCart;
     PhotonView photonView;
-    // Start is called before the first frame update
 
     bool isFuncStart = false;
 
@@ -24,9 +23,9 @@ public class Train : MonoBehaviour
         trainCart = GetComponent<Cinemachine.CinemachineDollyCart>();
         trainCart.m_Path = track;
         photonView = PhotonView.Get(this);
+        StartCoroutine(nameof(WaitForPlayer));
     }
 
-    // Update is called once per frame
     void Update()
     {
         if (!isFuncStart)

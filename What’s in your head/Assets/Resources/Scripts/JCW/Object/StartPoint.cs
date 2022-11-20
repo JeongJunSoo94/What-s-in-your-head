@@ -43,7 +43,6 @@ public class StartPoint : MonoBehaviour
     IEnumerator WaitForPlayer()
     {
         yield return new WaitUntil(() => PhotonNetwork.PlayerList.Length == 2);
-        Debug.Log("2명 확인, 배경음악 시작");
         if(PhotonNetwork.IsMasterClient)
             SoundManager.Instance.PlayBGM_RPC(currentStageSection.ToString());
         yield break;

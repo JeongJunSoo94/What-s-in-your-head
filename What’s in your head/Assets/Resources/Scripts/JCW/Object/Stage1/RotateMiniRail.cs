@@ -7,16 +7,20 @@ using UnityEngine;
 namespace JCW.Object.Stage1
 {
     [RequireComponent(typeof(PhotonView))]
+    [RequireComponent(typeof(AudioSource))]
     public class RotateMiniRail : MonoBehaviour
     {
         [Header("회전 속도")] [SerializeField] float speed = 10f;
         Transform tf;
         PhotonView pv;
+        AudioSource audioSource;
 
         private void Awake()
         {
             tf = this.transform;
             pv = PhotonView.Get(this);
+            audioSource = GetComponent<AudioSource>();
+            JCW.AudioCtrl.AudioSettings.SetAudio(audioSource, 0.75f, 110f, true);                        
             StartCoroutine(nameof(WaitForPlayer));
         }
 
@@ -24,6 +28,7 @@ namespace JCW.Object.Stage1
         {
             yield return new WaitUntil(() => PhotonNetwork.PlayerList.Length == 2);
             pv.RPC(nameof(StartFunc), RpcTarget.AllViaServer);
+            audioSource.Play();
 
             yield break;
         }
