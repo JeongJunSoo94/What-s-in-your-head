@@ -366,6 +366,25 @@ namespace JCW.AudioCtrl
             otherSource.PlayOneShot(audioClip);
         }
 
+        public void PlayIndirect3D_RPC(string path, AudioSource source)
+        {
+            otherSource = source;
+            photonView.RPC(nameof(PlayIndirect3D), RpcTarget.AllViaServer, path);
+        }
+
+        [PunRPC]
+        public void PlayIndirect3D(string path)
+        {
+            otherSource.clip = GetAudioClips(path, Sound.DISTANCE);
+            if (otherSource.clip == null)
+            {
+                Debug.Log("NULL로 저장된 오디오 클립입니다");
+                return;
+            }
+            // 해당 음원 위치에서 클립 재생
+            otherSource.Play();
+        }
+
         public void Stop3D_RPC(AudioSource source)
         {
             otherSource = source;
@@ -374,6 +393,18 @@ namespace JCW.AudioCtrl
 
         [PunRPC]
         public void Stop3D()
+        {
+            otherSource.Stop();            
+        }
+
+        public void StopIndirect3D_RPC(AudioSource source)
+        {
+            otherSource = source;
+            photonView.RPC(nameof(StopIndirect3D), RpcTarget.AllViaServer);
+        }
+
+        [PunRPC]
+        public void StopIndirect3D()
         {
             otherSource.Stop();
         }

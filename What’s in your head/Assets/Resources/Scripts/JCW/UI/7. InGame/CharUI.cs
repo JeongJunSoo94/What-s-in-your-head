@@ -78,16 +78,19 @@ namespace JCW.UI.InGame
 
         protected IEnumerator WaitForPlayer()
         {
-            while (GameManager.Instance.characterOwner.Count <= 1)
-                yield return new WaitForSeconds(0.2f);
+            yield return new WaitUntil(() => GameManager.Instance.GetCharOnScene(true) && GameManager.Instance.GetCharOnScene(false));
 
 
             isNella = GameManager.Instance.characterOwner[PhotonNetwork.IsMasterClient];
 
-            if (photonView.IsMine)
-                GameManager.Instance.hpAllPairs.Add(isNella, this);
-            else
-                GameManager.Instance.hpAllPairs.Add(!isNella, this);
+            if (GameManager.Instance.hpAllPairs.Count < 2)
+            {
+                if (photonView.IsMine)
+                    GameManager.Instance.hpAllPairs.Add(isNella, this);
+                else
+                    GameManager.Instance.hpAllPairs.Add(!isNella, this);
+            }
+            
 
             isStart = true;
             yield break;

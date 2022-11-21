@@ -99,10 +99,7 @@ public class Train : MonoBehaviour
 
     IEnumerator WaitForPlayer()
     {
-        while (PhotonNetwork.PlayerList.Length < 2)
-        {
-            yield return null;
-        }
+        yield return new WaitUntil(() => GameManager.Instance.GetCharOnScene(true) && GameManager.Instance.GetCharOnScene(false));
 
         InitTrain();
         ActivateTrain();

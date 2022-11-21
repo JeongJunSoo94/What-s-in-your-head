@@ -162,7 +162,7 @@ namespace JCW.Object
 
         IEnumerator WaitForPlayer()
         {
-            yield return new WaitUntil(() => PhotonNetwork.PlayerList.Length == 2);
+            yield return new WaitUntil(() => GameManager.Instance.GetCharOnScene(true) && GameManager.Instance.GetCharOnScene(false));
 
             if (PhotonNetwork.IsMasterClient)
             {
@@ -171,7 +171,6 @@ namespace JCW.Object
                 randomIndex = random.Next(0, 4);
                 photonView.RPC(nameof(Init), RpcTarget.AllViaServer, randomIndex);
                 isStart = true;
-                SoundManager.Instance.PlayBGM_RPC("S3S2");
             }
         }
     }

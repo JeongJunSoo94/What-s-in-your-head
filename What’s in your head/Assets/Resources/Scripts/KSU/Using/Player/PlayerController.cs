@@ -271,6 +271,7 @@ namespace KSU
         public void Resurrect()
         {
             filePath.Clear();
+            transform.SetParent(null);
             InitInteraction();
             InitController();
             InitAnimatorParam();
