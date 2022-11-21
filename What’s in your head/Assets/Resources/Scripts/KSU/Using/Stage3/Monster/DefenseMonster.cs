@@ -289,7 +289,7 @@ namespace KSU.AutoAim.Object.Monster
                     return;
                 }
 
-                detectedColliders = Physics.OverlapSphere(transform.position, detectingRange);
+                detectedColliders = Physics.OverlapSphere(transform.position, detectingRange, LayerMask.NameToLayer("Player"));
                 bool foundPlayer = false;
                 if (detectedColliders.Length > 0)
                 {
