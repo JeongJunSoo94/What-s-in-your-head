@@ -26,12 +26,6 @@ namespace JCW.Dialog
 
         PhotonView pv;
 
-
-        //WaitForSeconds ws = null;
-        WaitForSeconds etcDelayTime     = null;
-        WaitForSeconds nellaDelayTime   = null;
-        WaitForSeconds steadyDelayTime  = null;
-
         bool isStart = false;
         private void Awake()
         {
@@ -74,8 +68,8 @@ namespace JCW.Dialog
                 DialogManager.Instance.needToEtcBreak = true;
                 yield return new WaitUntil(() => DialogManager.Instance.needToEtcBreak == false);
             }
-
-            yield return new WaitForSeconds(etcStartTime[0]);
+            if (etcStartTime != null && etcStartTime.Count != 0)
+                yield return new WaitForSeconds(etcStartTime[0]);
             DialogManager.Instance.isEtcStart = true;
 
             int i = 0;
@@ -92,7 +86,8 @@ namespace JCW.Dialog
                     if (i < etcRemainTime.Count)
                     {
                         DialogManager.Instance.SetEtcDialog(etcOrder + i);
-                        yield return new WaitForSeconds(etcStartTime[i]);
+                        if (etcStartTime != null && etcStartTime.Count > i)
+                            yield return new WaitForSeconds(etcStartTime[i]);
                     }
                 }
                 // 다른 곳에서 접근해서 브레이크 구문을 켰을 시, 현재 코루틴을 종료
@@ -120,13 +115,13 @@ namespace JCW.Dialog
                 yield return new WaitUntil(() => DialogManager.Instance.needToNellaBreak == false);
             }
 
-            yield return nellaDelayTime;
+            if(nellaStartTime != null && nellaStartTime.Count != 0)
+                yield return new WaitForSeconds(nellaStartTime[0]);
             DialogManager.Instance.isNellaStart = true;
 
             int i = 0;
             float curTime = 0f;
 
-            yield return new WaitForSeconds(nellaStartTime[0]);
             DialogManager.Instance.SetNellaDialog(nellaOrder);
             while (i < nellaRemainTime.Count)
             {                
@@ -138,7 +133,8 @@ namespace JCW.Dialog
                     if (i < nellaRemainTime.Count)
                     {
                         DialogManager.Instance.SetNellaDialog(nellaOrder + i);
-                        yield return new WaitForSeconds(nellaStartTime[i]);
+                        if (nellaStartTime != null && nellaStartTime.Count > i)
+                            yield return new WaitForSeconds(nellaStartTime[i]);
                     }
                 }
                 if (DialogManager.Instance.needToNellaBreak)
@@ -164,8 +160,8 @@ namespace JCW.Dialog
                 DialogManager.Instance.needToSteadyBreak = true;
                 yield return new WaitUntil(() => DialogManager.Instance.needToSteadyBreak == false);
             }
-
-            yield return new WaitForSeconds(steadyStartTime[0]);
+            if (steadyStartTime != null && steadyStartTime.Count != 0)
+                yield return new WaitForSeconds(steadyStartTime[0]);
             DialogManager.Instance.isSteadyStart = true;
 
             int i = 0;
@@ -182,7 +178,8 @@ namespace JCW.Dialog
                     if (i < steadyRemainTime.Count)
                     {
                         DialogManager.Instance.SetSteadyDialog(steadyOrder + i);
-                        yield return new WaitForSeconds(steadyStartTime[i]);
+                        if (steadyStartTime != null && steadyStartTime.Count > i)
+                            yield return new WaitForSeconds(steadyStartTime[i]);
                     }
                 }
                 if (DialogManager.Instance.needToSteadyBreak)

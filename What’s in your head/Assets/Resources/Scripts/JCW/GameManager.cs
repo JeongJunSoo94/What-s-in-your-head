@@ -5,6 +5,7 @@ using JCW.UI.InGame;
 using JCW.UI.Options.InputBindings;
 using Photon.Pun;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using YC.Photon;
 
 [RequireComponent(typeof(PhotonView))]
@@ -13,11 +14,11 @@ public class GameManager : MonoBehaviour, IPunObservable
     // 좌측 bool 값은 master client인지, 우측 bool 값은 Nella 캐릭터인지.    
     [HideInInspector] public Dictionary<bool, bool> characterOwner = new();   
 
-    // 현재 스테이지 , 섹션 인덱스
+    // 현재 스테이지 인덱스
     [HideInInspector] public int curStageIndex = 0; // 기본값 0
 
-    // 보통 1~4 => Intro / Section1 / Section2 / Outro
-    [HideInInspector] public int curStageType = 1; // 기본값 1
+    // 보통 0~3 => Intro / Section1 / Section2 / Outro
+    [HideInInspector] public int curStageType = 0; // 기본값 1
 
     // 체크포인트 순서
     [HideInInspector] public int curSection = 0;
@@ -34,6 +35,8 @@ public class GameManager : MonoBehaviour, IPunObservable
     // Owner인 내 캐릭터의 위치
     [HideInInspector] public Transform myPlayerTF;
 
+    [HideInInspector] List<bool> isCharOnScene = new();
+
     // PauseUI
     [Header("일시정지 UI 프리팹")] public GameObject pauseUI = null;
 
@@ -44,6 +47,8 @@ public class GameManager : MonoBehaviour, IPunObservable
 
     // 랜덤시드
     [HideInInspector] public int randomSeed { get; private set; }
+
+    readonly List<Object> stayingOnSceneList = new();
 
     public int curPlayerHP = 12;
     public int aliceHP = 30;
@@ -57,7 +62,6 @@ public class GameManager : MonoBehaviour, IPunObservable
         {
             Instance = this;
             pauseUI = pauseUI == null ? Resources.Load<GameObject>("Prefabs/JCW/UI/InGame/PauseUI") : Instantiate(pauseUI);
-            DontDestroyOnLoad(pauseUI);
             DontDestroyOnLoad(this.gameObject);
         }
         else
@@ -65,9 +69,9 @@ public class GameManager : MonoBehaviour, IPunObservable
 
         photonView = GetComponent<PhotonView>();
         curStageIndex = 0;
-        curStageType = 1;
-        //curStageIndex = 0;
-        //curSection = 0;
+        curStageType = 0;
+        isCharOnScene.Add(false);
+        isCharOnScene.Add(false);
     }
     private void Update()
     {
@@ -77,10 +81,13 @@ public class GameManager : MonoBehaviour, IPunObservable
             isSideView = !isSideView;
         if (KeyManager.Instance.GetKeyDown(PlayerAction.Pause))
         {
-            if (!pauseUI.activeSelf)
-                pauseUI.SetActive(true);
-            else
-                PauseManager.Instance.CloseUI();
+            if(SceneManager.GetActiveScene().name != "MainTitle")
+            {
+                if (!pauseUI.activeSelf)
+                    pauseUI.SetActive(true);
+                else
+                    PauseManager.Instance.CloseUI();
+            }            
         }
     }
 
@@ -176,4 +183,54 @@ public class GameManager : MonoBehaviour, IPunObservable
         }
     }
 
+    public void SetCharOnScene_RPC(bool isOn)
+    {
+        photonView.RPC(nameof(SetCharOnScene), RpcTarget.AllViaServer, PhotonNetwork.IsMasterClient, isOn);
+    }
+
+    [PunRPC]
+    void SetCharOnScene(bool isMaster, bool isOn)
+    {
+        int idx = isMaster ? 0 : 1;
+        isCharOnScene[idx] = isOn;
+    }
+
+    public bool GetCharOnScene(bool isMaster)
+    {
+        return isCharOnScene[isMaster ? 0 : 1];
+    }
+
+    public void GoMainMenu_RPC()
+    {
+        photonView.RPC(nameof(GoMainMenu), RpcTarget.AllViaServer);
+    }
+    [PunRPC]
+    void GoMainMenu()
+    {
+        pauseUI.SetActive(false);
+        curStageIndex = 0;
+        curStageType = 0;
+        LoadingUI.Instance.gameObject.SetActive(true);
+        DestroyStayingObj();
+    }
+
+    public void DonDestroy(Object obj)
+    {
+        DontDestroyOnLoad(obj);
+        stayingOnSceneList.Add(obj);
+    }
+
+    public void DestroyStayingObj_RPC()
+    {
+        photonView.RPC(nameof(DestroyStayingObj), RpcTarget.AllViaServer);
+    }
+    [PunRPC]
+    public void DestroyStayingObj()
+    {
+        for (int i=0 ; i<stayingOnSceneList.Count ; ++i)
+        {
+            Destroy(stayingOnSceneList[i]);
+        }
+        stayingOnSceneList.Clear();
+    }
 }
