@@ -15,10 +15,10 @@ public class GameManager : MonoBehaviour, IPunObservable
     [HideInInspector] public Dictionary<bool, bool> characterOwner = new();   
 
     // 현재 스테이지 인덱스
-    [HideInInspector] public int curStageIndex = 0; // 기본값 0
+    public int curStageIndex = 0; // 기본값 0
 
     // 보통 0~3 => Intro / Section1 / Section2 / Outro
-    [HideInInspector] public int curStageType = 0; // 기본값 1
+    public int curStageType = 0; // 기본값 1
 
     // 체크포인트 순서
     [HideInInspector] public int curSection = 0;
@@ -62,14 +62,15 @@ public class GameManager : MonoBehaviour, IPunObservable
         {
             Instance = this;
             pauseUI = pauseUI == null ? Resources.Load<GameObject>("Prefabs/JCW/UI/InGame/PauseUI") : Instantiate(pauseUI);
+            pauseUI.SetActive(false);
             DontDestroyOnLoad(this.gameObject);
         }
         else
             Destroy(this.gameObject);
 
         photonView = GetComponent<PhotonView>();
-        curStageIndex = 0;
-        curStageType = 0;
+        //curStageIndex = 0;
+        //curStageType = 0;
         isCharOnScene.Add(false);
         isCharOnScene.Add(false);
     }

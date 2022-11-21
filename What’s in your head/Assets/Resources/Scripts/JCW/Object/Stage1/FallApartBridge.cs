@@ -8,11 +8,11 @@ namespace JCW.Object.Stage1
     [RequireComponent(typeof(AudioSource))]
     public class FallApartBridge : MonoBehaviour
     {
-        [Header("위험 전조 신호 표시 시간")][SerializeField] float warnTime = 3f;
-        [Header("위험 전조 깜빡거릴 시간 간격")][SerializeField] float flickTime = 0.5f;
-        [Header("몇 초 후 붕괴되는 지")][SerializeField] float destroyTime = 5f;
-        [Header("붕괴 후 재생성되는 시간")][SerializeField] float resetTime = 7f;
-        [Header("경고 메테리얼")][SerializeField] Material warnMat;
+        [Header("위험 전조 신호 표시 시간")] [SerializeField] float warnTime = 3f;
+        [Header("위험 전조 깜빡거릴 시간 간격")] [SerializeField] float flickTime = 0.7f;
+        [Header("몇 초 후 붕괴되는 지")] [SerializeField] float destroyTime = 5f;
+        [Header("붕괴 후 재생성되는 시간")] [SerializeField] float resetTime = 7f;
+        [Header("경고 메테리얼")] [SerializeField] Material warnMat;
 
         MeshRenderer meshRenderer;
         Material normalMat;
@@ -40,7 +40,7 @@ namespace JCW.Object.Stage1
                 {
                     isStart = true;
                     StartCoroutine(nameof(BreakBridge));
-                }                
+                }
             }
         }
 
@@ -52,30 +52,30 @@ namespace JCW.Object.Stage1
             SoundManager.Instance.Play3D_RPC("S1S2_RainBowBridgeBroken2", audioSource);
 
             // 여기서 카메라 흔들림 넣으면 될듯
-            while (curTime < warnTime)
-            {
-                curTime += Time.deltaTime;
-                curFlickTime = curTime;
-                if (curFlickTime > flickTime)
-                {
-                    curFlickTime = 0f;
-                    meshRenderer.sharedMaterial = isNormal ? warnMat : normalMat;
-                    isNormal = !isNormal;
-                }
-                yield return null;
-            }
+
             while (curTime < destroyTime)
             {
                 curTime += Time.deltaTime;
+                if (curTime > destroyTime - warnTime)
+                {
+                    curFlickTime = curTime;
+                    if (curFlickTime > flickTime)
+                    {
+                        curFlickTime = 0f;
+                        meshRenderer.sharedMaterial = isNormal ? warnMat : normalMat;
+                        isNormal = !isNormal;
+                    }
+                }
                 yield return null;
             }
-            SoundManager.Instance.Play3D_RPC("S1S2_RainBowBridgeBroken1", audioSource);
+            SoundManager.Instance.Play3D_RPC("S1S2_RainBowBridgeBroken", audioSource);
             meshRenderer.enabled = false;
             boxCollider.enabled = false;
             triggerBox.SetActive(false);
             StartCoroutine(nameof(ResetBridge));
             yield break;
         }
+
 
         IEnumerator ResetBridge()
         {
