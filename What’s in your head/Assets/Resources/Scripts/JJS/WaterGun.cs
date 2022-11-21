@@ -107,7 +107,7 @@ namespace JJS.Weapon
 
         public void ShootStart()
         {
-            SoundManager.Instance.Play3D_RPC("Watergun", audioSource);
+            SoundManager.Instance.Play3D_RPC("S3_Watergun", audioSource);
             Shoot();
             bulletCurCount++;
         }

@@ -221,7 +221,6 @@ namespace KSU
 
         public float DeacvtivateRope(GameObject player)
         {
-            Debug.Log("로프");
             isRopeExisting = false;
             player.transform.parent = null;
             if(player.transform.parent != null)
@@ -230,7 +229,6 @@ namespace KSU
             }
             isntSwing = false;
             this.gameObject.SetActive(false);
-            Debug.Log("로프 해제");
             if (!isSwingForward)
             {
                 if (rotationX > 0)

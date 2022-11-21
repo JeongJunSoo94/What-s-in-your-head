@@ -15,14 +15,16 @@ namespace JCW.Object
         [Tooltip("0 : 메뉴, 1~3 : 실제 게임, 4 : 엔딩")]
         [Header("이동할 스테이지 (0~4)")] public int nextStageIndex;
         [Tooltip("0 : 인트로, 1~2 : 실제 게임, 3 : 아웃트로")]
-        [Header("이동할 섹션 (0~3)")] public int nextStageType;        
+        [Header("이동할 섹션 (0~3)")] public int nextStageType;
+        [Header("사용 키로 넘어갈 것인지")][SerializeField] bool doUseInteraction = true;
+        
 
         bool canStart = true;
         int touchCount = 0;
 
         private void FixedUpdate()
         {
-            if (isInteractable || !canStart)
+            if (isInteractable || !canStart || !doUseInteraction)
                 return;
 
             canStart = false;
@@ -35,7 +37,10 @@ namespace JCW.Object
             if ((other.CompareTag("Nella") || other.CompareTag("Steady"))
                 && other.GetComponent<PlayerState>().isMine)
             {
-                ++touchCount;
+                if (!doUseInteraction)
+                    photonView.RPC(nameof(Loading), RpcTarget.AllViaServer);
+                else
+                    ++touchCount;
             }
         }
 
@@ -44,9 +49,12 @@ namespace JCW.Object
             if ((other.CompareTag("Nella") || other.CompareTag("Steady"))
                 && other.GetComponent<PlayerState>().isMine)
             {
-                --touchCount;
-                if (touchCount < 0)
-                    touchCount = 0;
+                if (doUseInteraction)
+                {
+                    --touchCount;
+                    if (touchCount < 0)
+                        touchCount = 0;
+                }                
             }
         }
 

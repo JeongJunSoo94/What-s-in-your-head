@@ -2756,10 +2756,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 879252949658067695, guid: a7c21834620959f4c8723dba405769ba, type: 3}
-      propertyPath: m_Enabled
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 902064109405275026, guid: a7c21834620959f4c8723dba405769ba, type: 3}
       propertyPath: m_RootOrder
       value: 40
@@ -3593,7 +3589,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a21b4b195a8637045948eccc7e1f96dc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  roomName: JCW
+  roomName: JCW3
   nellaPrefabDirectory: Prefabs/Player/Nella
   steadyPrefabDirectory: Prefabs/Player/Steady
   isNella: 1
@@ -14947,7 +14943,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &1629694712
 Transform:
   m_ObjectHideFlags: 0
@@ -19600,6 +19596,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: StartPoint
       objectReference: {fileID: 0}
+    - target: {fileID: 6118006319719113892, guid: bd007b7e698adc545ad75ac7b72845d8, type: 3}
+      propertyPath: sceneViewId
+      value: 44
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: bd007b7e698adc545ad75ac7b72845d8, type: 3}
 --- !u!23 &1557709015043528039
@@ -21506,6 +21506,7 @@ MonoBehaviour:
   LoadingUI: {fileID: 3270834243563863913}
   nextStageIndex: 1
   nextStageType: 3
+  doUseInteraction: 1
 --- !u!114 &7595802015672392962
 MonoBehaviour:
   m_ObjectHideFlags: 0
