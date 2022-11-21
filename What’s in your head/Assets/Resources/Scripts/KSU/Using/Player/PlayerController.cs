@@ -424,9 +424,6 @@ namespace KSU
                 }
                 else
                 {
-
-                }
-                {
                     if (!characterState.WasAirDashing)
                     {
                         characterState.CheckAirDash();
