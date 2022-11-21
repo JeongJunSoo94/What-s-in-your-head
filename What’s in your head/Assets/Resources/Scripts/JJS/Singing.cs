@@ -22,11 +22,6 @@ namespace JJS
         private void Update()
         {
             Play(true);
-            if (GameManager.Instance.curPlayerHP <= 0)
-            {
-                Play(false);
-                MicDictionary.Clear();
-            }
         }
 
         private void OnDisable()
@@ -62,6 +57,12 @@ namespace JJS
                 return MicDictionary.Count;
             else
                 return indexQueue.Dequeue();
+        }
+
+        public void InitSinging()
+        {
+            Play(false);
+            MicDictionary.Clear();
         }
 
     }

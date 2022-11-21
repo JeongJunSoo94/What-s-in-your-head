@@ -64,6 +64,14 @@ namespace JJS
             gun.ShootLine(type);
         }
 
+        private void Update()
+        {
+            if (GameManager.Instance.curPlayerHP <= 0)
+            {
+                singing.InitSinging();
+            }
+        }
+
         private void FixedUpdate()
         {
             InputUpdate();

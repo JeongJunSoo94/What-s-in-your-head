@@ -52,7 +52,7 @@ namespace JCW.Object
         public void GroundCheck()
         {
             RaycastHit hit;
-            if (Physics.Raycast(transform.position, -transform.up,out hit, 100f, layer, QueryTriggerInteraction.Ignore))
+            if (Physics.Raycast(transform.position, -transform.up,out hit, 200f, layer, QueryTriggerInteraction.Ignore))
             {
                 groundPlatform = hit.transform;
                 sandSackShadow.SetGroundPlatform(groundPlatform);
