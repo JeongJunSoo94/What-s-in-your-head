@@ -25,11 +25,9 @@ namespace KSU.Object
             }
         }
 
-        private void OnTriggerExit(Collider other)
+        public void RecieveTriggerExit()
         {
-            if (other.CompareTag("Nella") || other.CompareTag("Steady"))
-                if (photonView.IsMine)
-                    photonView.RPC(nameof(SwitchTrampolin), RpcTarget.AllViaServer);
+            photonView.RPC(nameof(SwitchTrampolin), RpcTarget.AllViaServer);
         }
     }
 }

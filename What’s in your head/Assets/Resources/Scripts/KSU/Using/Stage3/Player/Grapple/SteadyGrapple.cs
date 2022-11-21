@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using JCW.AudioCtrl;
+using KSU.AutoAim.Object.Monster;
 using UnityEngine;
 
 namespace KSU.AutoAim.Player.Object
@@ -54,40 +55,6 @@ namespace KSU.AutoAim.Player.Object
             this.gameObject.SetActive(true);
         }
 
-        //public void InitGrapple(Vector3 startPos, Vector3 endPos, float grappleSpeed, float Offset)
-        //{
-        //    grappleRigidbody.velocity = Vector3.zero;
-        //    transform.position = startPos;
-        //    endPosistion = endPos;
-        //    isEndPosition = false;
-        //    isSucceeded = false;
-        //    moveSpeed = grappleSpeed;
-        //    departingOffset = Offset;
-        //    MakeRope();
-        //    this.gameObject.SetActive(true);
-        //}
-
-        //void MoveToEndPosition()
-        //{
-        //    //1.리지드바디 추가해서 벨로시티로움직이기
-        //    if (Vector3.Distance(endPosistion, transform.position) < departingOffset)
-        //    {
-        //        isEndPosition = true;
-        //        if (this.gameObject.activeSelf)
-        //        {
-        //            player.RecieveGrappleInfo(false, null, GrappleTargetType.Null);
-        //        }
-        //        this.gameObject.SetActive(false);
-        //    }
-        //    else
-        //    {
-        //        isEndPosition = false;
-        //    }
-        //    transform.LookAt(endPosistion);
-        //    Vector3 dir = (endPosistion - transform.position).normalized;
-        //    objectRigidbody.velocity = dir * moveSpeed;
-        //}
-
         void MakeRope()
         {
             grappleRope.SetPosition(0, spawner.transform.position);
@@ -115,6 +82,12 @@ namespace KSU.AutoAim.Player.Object
             objectRigidbody.velocity = dir * moveSpeed;
         }
 
+        IEnumerator DelayDeactivation(float delayTime)
+        {
+            yield return new WaitForSeconds(delayTime);
+            this.gameObject.SetActive(false);
+        }
+
         private void OnTriggerEnter(Collider other)
         {
             if((other.gameObject.layer != LayerMask.NameToLayer("UITriggers")) && (other.gameObject.layer != LayerMask.NameToLayer("Player")) && (other.gameObject.layer != LayerMask.NameToLayer("Bullet")))
@@ -134,6 +107,11 @@ namespace KSU.AutoAim.Player.Object
                             playerGrappleAction.RecieveAutoAimObjectInfo(true, other.gameObject, AutoAimTargetType.Monster);
                             isSucceeded = true;
                             objectRigidbody.velocity = Vector3.zero;
+                            PoisonSnake snake =  other.gameObject.GetComponent<PoisonSnake>();
+                            if (snake.GetStun())
+                            {
+                                StartCoroutine(nameof(DelayDeactivation), snake.stunTime);
+                            }
                         }
                         break;
                     case "TrippleHeadSnake":
@@ -141,6 +119,11 @@ namespace KSU.AutoAim.Player.Object
                             playerGrappleAction.RecieveAutoAimObjectInfo(true, other.gameObject, AutoAimTargetType.Monster);
                             isSucceeded = true;
                             objectRigidbody.velocity = Vector3.zero;
+                            TrippleHeadSnake snake = other.gameObject.GetComponent<TrippleHeadSnake>();
+                            if (snake.GetStun())
+                            {
+                                StartCoroutine(nameof(DelayDeactivation), snake.stunTime);
+                            }
                         }
                         break;
                     default:

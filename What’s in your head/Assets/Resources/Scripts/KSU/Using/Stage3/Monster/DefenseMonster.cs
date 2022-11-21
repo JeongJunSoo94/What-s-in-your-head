@@ -17,6 +17,7 @@ namespace KSU.AutoAim.Object.Monster
         public float attackRange = 1f;
         public int attackDamage;
         [SerializeField] LayerMask chaseLayerFiter;
+        [SerializeField] LayerMask chaseTargetLayer;
         [SerializeField] protected Transform targetObject;
         protected Transform detectedTarget;
         protected Transform currentTarget;
@@ -149,13 +150,14 @@ namespace KSU.AutoAim.Object.Monster
             }
         }
 
-
-        public void GetStun()
+        public bool GetStun()
         {
             if (pv.IsMine && !monsterAnimator.GetBool("isAttacked") && !monsterAnimator.GetBool("isDead"))
             {
                 pv.RPC(nameof(SetStun), RpcTarget.AllViaServer);
+                return true;
             }
+            return false;
         }
 
         [PunRPC]
@@ -169,12 +171,19 @@ namespace KSU.AutoAim.Object.Monster
         {
             monsterRope.enabled = true;
             // ½ºÅÏ ÀÌÆåÆ® ÄÑ±â
+            if (pv.IsMine)
+                StartCoroutine(nameof(DelayStun));
+        }
+
+        IEnumerator DelayStun()
+        {
+            yield return new WaitForSeconds(stunTime);
+            monsterAnimator.SetBool("isStunned", false);
         }
 
         public void EndStun()
         {
             monsterRope.enabled = false;
-            monsterAnimator.SetBool("isStunned", false);
             monsterAnimator.SetBool("WasStunned", false);
             // ½ºÅÏ ÀÌÆåÆ® ²ô±â
         }
@@ -289,7 +298,7 @@ namespace KSU.AutoAim.Object.Monster
                     return;
                 }
 
-                detectedColliders = Physics.OverlapSphere(transform.position, detectingRange, LayerMask.NameToLayer("Player"));
+                detectedColliders = Physics.OverlapSphere(transform.position, detectingRange, chaseTargetLayer);
                 bool foundPlayer = false;
                 if (detectedColliders.Length > 0)
                 {

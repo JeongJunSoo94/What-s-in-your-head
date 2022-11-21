@@ -10,6 +10,7 @@ namespace KSU.AutoAim.Player.Object
     {
         //public GameObject spawner; //스테디 손 위치에 있는 그래플, 그래플을 던지면 손에있는 그래플이 꺼지고 이 스크립트 달린 그래플이 켜지면서 날아감
         SteadyCymbalsAction playerCymbalsAction; // 스테디
+        [SerializeField] ParticleEffect particle;
         //float moveSpeed = 15f;
         //Vector3 endPosistion;
         //float departingOffset = 0.2f;
@@ -76,12 +77,22 @@ namespace KSU.AutoAim.Player.Object
             {
                 isEndPosition = false;
                 playerCymbalsAction.RecieveAutoAimObjectInfo(false, null, AutoAimTargetType.Null);
+                particle.gameObject.SetActive(false);
                 this.gameObject.SetActive(false);
             }
 
             transform.LookAt(spawner.transform.position);
             Vector3 dir = (spawner.transform.position - transform.position).normalized;
             objectRigidbody.velocity = dir * moveSpeed;
+        }
+
+        void MakeParticle()
+        {
+            if (!isEndPosition)
+                isEndPosition = true;
+            particle.particlePosition = transform.position;
+            particle.gameObject.SetActive(true);
+            // 사운드 추가 필요
         }
 
         private void OnTriggerEnter(Collider other)
@@ -92,8 +103,7 @@ namespace KSU.AutoAim.Player.Object
                 {
                     case "CymbalsTargetObject":
                         {
-                            if (!isEndPosition)
-                                isEndPosition = true;
+                            MakeParticle();
                             objectRigidbody.velocity = Vector3.zero;
                         }
                         break;
@@ -101,8 +111,7 @@ namespace KSU.AutoAim.Player.Object
                         break;
                     default:
                         {
-                            if (!isEndPosition)
-                                isEndPosition = true;
+                            MakeParticle();
                         }
                         break;
                 }
