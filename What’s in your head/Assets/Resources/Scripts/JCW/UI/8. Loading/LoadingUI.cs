@@ -99,23 +99,23 @@ namespace JCW.UI
         }
         
         // 로딩씬 보여주기 위한 딜레이        
-        IEnumerator Delay()
-        {
-            Debug.Log("대충 딜레이 1초 주기");
-            yield return new WaitForSeconds(1f);
-            // 한번 실행된 이후로는 위의 Wait문을 안 탐 왜지?
-            //PhotonNetwork.LoadLevel(GameManager.Instance.curStageIndex * 2 - 2 + GameManager.Instance.curStageType);            
-            int sceneNum = 4 * (GameManager.Instance.curStageIndex - 1) + 1 + GameManager.Instance.curStageType;
-            Debug.Log("씬 넘버 : " + sceneNum +  " 에 접근");
-            PhotonNetwork.LoadLevel(sceneNum);
-            yield break;
-        }
+       //IEnumerator Delay()
+       //{
+       //   //Debug.Log("대충 딜레이 1초 주기");
+       //    yield return new WaitForSeconds(1f);
+       //    // 한번 실행된 이후로는 위의 Wait문을 안 탐 왜지?
+       //    //PhotonNetwork.LoadLevel(GameManager.Instance.curStageIndex * 2 - 2 + GameManager.Instance.curStageType);            
+       //    int sceneNum = 4 * (GameManager.Instance.curStageIndex - 1) + 1 + GameManager.Instance.curStageType;
+       //    Debug.Log("씬 넘버 : " + sceneNum +  " 에 접근");
+       //    PhotonNetwork.LoadLevel(sceneNum);
+       //    yield break;
+       //}
 
         IEnumerator WaitForStable()
         {
             while(PhotonNetwork.LevelLoadingProgress > 0f)
             {
-                Debug.Log("포톤 씬이 현재 불러와져있는 상태라 대기 : " + PhotonNetwork.LevelLoadingProgress);
+                //Debug.Log("포톤 씬이 현재 불러와져있는 상태라 대기 : " + PhotonNetwork.LevelLoadingProgress);
                 yield return null;
             }
             photonView.RPC(nameof(StartLoading), RpcTarget.AllViaServer);
