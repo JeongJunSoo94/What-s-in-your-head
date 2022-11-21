@@ -366,6 +366,18 @@ namespace JCW.AudioCtrl
             otherSource.PlayOneShot(audioClip);
         }
 
+        public void Stop3D_RPC(AudioSource source)
+        {
+            otherSource = source;
+            photonView.RPC(nameof(Stop3D), RpcTarget.AllViaServer);
+        }
+
+        [PunRPC]
+        public void Stop3D()
+        {
+            otherSource.Stop();            
+        }
+
         #endregion
 
 
