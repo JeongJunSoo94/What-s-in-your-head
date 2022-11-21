@@ -1,28 +1,33 @@
+using Photon.Pun;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SwitchingTrampolin : MonoBehaviour
+namespace KSU.Object
 {
-    [SerializeField] List<GameObject> trampolins;
-
-    private void Start()
+    [RequireComponent(typeof(PhotonView))]
+    public class SwitchingTrampolin : MonoBehaviour
     {
-        trampolins[0].SetActive(true);
-        trampolins[1].SetActive(false);
-    }
-
-    void SwitchTrampolin()
-    {
-        for(int i = 0; i < trampolins.Count; ++i)
+        [SerializeField] List<GameObject> trampolins;
+        PhotonView photonView;
+        private void Start()
         {
-            trampolins[i].SetActive(!trampolins[i].activeSelf);
+            trampolins[0].SetActive(true);
+            trampolins[1].SetActive(false);
+            photonView = GetComponent<PhotonView>();        
         }
-    }
+        [PunRPC]
+        void SwitchTrampolin()
+        {
+            for (int i = 0; i < trampolins.Count; ++i)
+            {
+                trampolins[i].SetActive(!trampolins[i].activeSelf);
+            }
+        }
 
-    private void OnTriggerExit(Collider other)
-    {
-        if (other.CompareTag("Nella")|| other.CompareTag("Steady"))
-            SwitchTrampolin();
+        public void RecieveTriggerExit()
+        {
+            photonView.RPC(nameof(SwitchTrampolin), RpcTarget.AllViaServer);
+        }
     }
 }

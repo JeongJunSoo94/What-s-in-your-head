@@ -340,16 +340,20 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7713197008845528157, guid: 82a5417180838e44aa46d790008df36c, type: 3}
+      propertyPath: roomName
+      value: KSU
+      objectReference: {fileID: 0}
+    - target: {fileID: 7713197008845528157, guid: 82a5417180838e44aa46d790008df36c, type: 3}
       propertyPath: CreatePos
       value: 
       objectReference: {fileID: 429590046}
     - target: {fileID: 7713197008845528157, guid: 82a5417180838e44aa46d790008df36c, type: 3}
       propertyPath: nellaPrefabDirectory
-      value: Prefabs/JJS/KSU_Nella
+      value: Prefabs/Player/Nella
       objectReference: {fileID: 0}
     - target: {fileID: 7713197008845528157, guid: 82a5417180838e44aa46d790008df36c, type: 3}
       propertyPath: steadyPrefabDirectory
-      value: Prefabs/JJS/KSU_Steady
+      value: Prefabs/Player/Steady
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 82a5417180838e44aa46d790008df36c, type: 3}
@@ -2587,6 +2591,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 77206422}
     m_Modifications:
+    - target: {fileID: 1935059498, guid: 00fedab94ffcb7e4c8a428f5f9e20c59, type: 3}
+      propertyPath: sceneViewId
+      value: 68
+      objectReference: {fileID: 0}
     - target: {fileID: 8323742609160863961, guid: 00fedab94ffcb7e4c8a428f5f9e20c59, type: 3}
       propertyPath: m_RootOrder
       value: 1
@@ -2972,6 +2980,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   needToSetPos: 0
   needToClear: 0
+  isSet: 0
 --- !u!114 &200719840
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2987,8 +2996,9 @@ MonoBehaviour:
   recieveMovingSpeed: 5
   comebackMovingSpeed: 5
   isLethal: 0
-  positionList: []
+  canRide: 0
   isActive: 0
+  positionList: []
 --- !u!114 &200719841
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3595,6 +3605,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 77206422}
     m_Modifications:
+    - target: {fileID: 1935059498, guid: 00fedab94ffcb7e4c8a428f5f9e20c59, type: 3}
+      propertyPath: sceneViewId
+      value: 67
+      objectReference: {fileID: 0}
     - target: {fileID: 8323742609160863961, guid: 00fedab94ffcb7e4c8a428f5f9e20c59, type: 3}
       propertyPath: m_RootOrder
       value: 8
@@ -5285,6 +5299,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 77206422}
     m_Modifications:
+    - target: {fileID: 1935059498, guid: 00fedab94ffcb7e4c8a428f5f9e20c59, type: 3}
+      propertyPath: sceneViewId
+      value: 66
+      objectReference: {fileID: 0}
     - target: {fileID: 8323742609160863961, guid: 00fedab94ffcb7e4c8a428f5f9e20c59, type: 3}
       propertyPath: m_RootOrder
       value: 0
@@ -5391,6 +5409,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   needToSetPos: 0
   needToClear: 0
+  isSet: 0
 --- !u!114 &316209872
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5406,10 +5425,11 @@ MonoBehaviour:
   recieveMovingSpeed: 5
   comebackMovingSpeed: 5
   isLethal: 0
+  canRide: 0
+  isActive: 0
   positionList:
   - {x: -64.09, y: 17.80622, z: 119.98}
   - {x: -64.09, y: 28.8, z: 119.98}
-  isActive: 0
 --- !u!114 &316209873
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6041,6 +6061,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   needToSetPos: 0
   needToClear: 0
+  isSet: 0
 --- !u!114 &370849395
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6056,8 +6077,9 @@ MonoBehaviour:
   recieveMovingSpeed: 5
   comebackMovingSpeed: 5
   isLethal: 0
-  positionList: []
+  canRide: 0
   isActive: 0
+  positionList: []
 --- !u!114 &370849396
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6879,6 +6901,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 77206422}
     m_Modifications:
+    - target: {fileID: 1935059498, guid: 00fedab94ffcb7e4c8a428f5f9e20c59, type: 3}
+      propertyPath: sceneViewId
+      value: 65
+      objectReference: {fileID: 0}
     - target: {fileID: 8323742609160863961, guid: 00fedab94ffcb7e4c8a428f5f9e20c59, type: 3}
       propertyPath: m_RootOrder
       value: 3
@@ -8606,6 +8632,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 77206422}
     m_Modifications:
+    - target: {fileID: 1935059498, guid: 00fedab94ffcb7e4c8a428f5f9e20c59, type: 3}
+      propertyPath: sceneViewId
+      value: 64
+      objectReference: {fileID: 0}
     - target: {fileID: 8323742609160863961, guid: 00fedab94ffcb7e4c8a428f5f9e20c59, type: 3}
       propertyPath: m_RootOrder
       value: 18
@@ -10356,6 +10386,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 77206422}
     m_Modifications:
+    - target: {fileID: 1935059498, guid: 00fedab94ffcb7e4c8a428f5f9e20c59, type: 3}
+      propertyPath: sceneViewId
+      value: 63
+      objectReference: {fileID: 0}
     - target: {fileID: 8323742609160863961, guid: 00fedab94ffcb7e4c8a428f5f9e20c59, type: 3}
       propertyPath: m_RootOrder
       value: 15
@@ -10431,6 +10465,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 77206422}
     m_Modifications:
+    - target: {fileID: 1935059498, guid: 00fedab94ffcb7e4c8a428f5f9e20c59, type: 3}
+      propertyPath: sceneViewId
+      value: 62
+      objectReference: {fileID: 0}
     - target: {fileID: 8323742609160863961, guid: 00fedab94ffcb7e4c8a428f5f9e20c59, type: 3}
       propertyPath: m_RootOrder
       value: 13
@@ -11036,6 +11074,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   needToSetPos: 0
   needToClear: 0
+  isSet: 0
 --- !u!114 &672575057
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -11051,8 +11090,9 @@ MonoBehaviour:
   recieveMovingSpeed: 5
   comebackMovingSpeed: 5
   isLethal: 0
-  positionList: []
+  canRide: 0
   isActive: 0
+  positionList: []
 --- !u!114 &672575058
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -12224,6 +12264,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 77206422}
     m_Modifications:
+    - target: {fileID: 1935059498, guid: 00fedab94ffcb7e4c8a428f5f9e20c59, type: 3}
+      propertyPath: sceneViewId
+      value: 61
+      objectReference: {fileID: 0}
     - target: {fileID: 8323742609160863961, guid: 00fedab94ffcb7e4c8a428f5f9e20c59, type: 3}
       propertyPath: m_RootOrder
       value: 10
@@ -13937,6 +13981,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   needToSetPos: 0
   needToClear: 0
+  isSet: 0
 --- !u!114 &844366663
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -13952,8 +13997,9 @@ MonoBehaviour:
   recieveMovingSpeed: 5
   comebackMovingSpeed: 5
   isLethal: 0
-  positionList: []
+  canRide: 0
   isActive: 0
+  positionList: []
 --- !u!114 &844366664
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -15641,10 +15687,11 @@ MonoBehaviour:
   recieveMovingSpeed: 5
   comebackMovingSpeed: 5
   isLethal: 0
+  canRide: 0
+  isActive: 0
   positionList:
   - {x: -13.5, y: 17.82625, z: 124.8}
   - {x: -13.5, y: 28.58, z: 124.8}
-  isActive: 0
 --- !u!114 &964229651
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -15659,6 +15706,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   needToSetPos: 0
   needToClear: 0
+  isSet: 0
 --- !u!114 &964229652
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -18329,6 +18377,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   needToSetPos: 0
   needToClear: 0
+  isSet: 0
 --- !u!114 &1105271185
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -18344,10 +18393,11 @@ MonoBehaviour:
   recieveMovingSpeed: 5
   comebackMovingSpeed: 5
   isLethal: 0
+  canRide: 0
+  isActive: 0
   positionList:
   - {x: 219.26, y: 25.8865, z: 377.97}
   - {x: 219.26, y: 34.41298, z: 377.97}
-  isActive: 0
 --- !u!114 &1105271186
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -18632,6 +18682,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 77206422}
     m_Modifications:
+    - target: {fileID: 1935059498, guid: 00fedab94ffcb7e4c8a428f5f9e20c59, type: 3}
+      propertyPath: sceneViewId
+      value: 60
+      objectReference: {fileID: 0}
     - target: {fileID: 8323742609160863961, guid: 00fedab94ffcb7e4c8a428f5f9e20c59, type: 3}
       propertyPath: m_RootOrder
       value: 11
@@ -20091,6 +20145,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1935059498, guid: 00fedab94ffcb7e4c8a428f5f9e20c59, type: 3}
+      propertyPath: sceneViewId
+      value: 59
+      objectReference: {fileID: 0}
     - target: {fileID: 8323742609160863961, guid: 00fedab94ffcb7e4c8a428f5f9e20c59, type: 3}
       propertyPath: m_RootOrder
       value: 11
@@ -20197,6 +20255,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   needToSetPos: 0
   needToClear: 0
+  isSet: 0
 --- !u!114 &1196803076
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -20212,10 +20271,11 @@ MonoBehaviour:
   recieveMovingSpeed: 5
   comebackMovingSpeed: 5
   isLethal: 0
+  canRide: 0
+  isActive: 0
   positionList:
   - {x: 71.12796, y: 25.43901, z: 299.8148}
   - {x: 71.12796, y: 36.46753, z: 299.8148}
-  isActive: 0
 --- !u!114 &1196803077
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -20278,6 +20338,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 77206422}
     m_Modifications:
+    - target: {fileID: 1935059498, guid: 00fedab94ffcb7e4c8a428f5f9e20c59, type: 3}
+      propertyPath: sceneViewId
+      value: 58
+      objectReference: {fileID: 0}
     - target: {fileID: 8323742609160863961, guid: 00fedab94ffcb7e4c8a428f5f9e20c59, type: 3}
       propertyPath: m_RootOrder
       value: 6
@@ -21639,6 +21703,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 77206422}
     m_Modifications:
+    - target: {fileID: 1935059498, guid: 00fedab94ffcb7e4c8a428f5f9e20c59, type: 3}
+      propertyPath: sceneViewId
+      value: 57
+      objectReference: {fileID: 0}
     - target: {fileID: 8323742609160863961, guid: 00fedab94ffcb7e4c8a428f5f9e20c59, type: 3}
       propertyPath: m_RootOrder
       value: 12
@@ -21798,6 +21866,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 77206422}
     m_Modifications:
+    - target: {fileID: 1935059498, guid: 00fedab94ffcb7e4c8a428f5f9e20c59, type: 3}
+      propertyPath: sceneViewId
+      value: 56
+      objectReference: {fileID: 0}
     - target: {fileID: 8323742609160863961, guid: 00fedab94ffcb7e4c8a428f5f9e20c59, type: 3}
       propertyPath: m_RootOrder
       value: 5
@@ -25969,6 +26041,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 77206422}
     m_Modifications:
+    - target: {fileID: 1935059498, guid: 00fedab94ffcb7e4c8a428f5f9e20c59, type: 3}
+      propertyPath: sceneViewId
+      value: 55
+      objectReference: {fileID: 0}
     - target: {fileID: 8323742609160863961, guid: 00fedab94ffcb7e4c8a428f5f9e20c59, type: 3}
       propertyPath: m_RootOrder
       value: 17
@@ -27302,6 +27378,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 77206422}
     m_Modifications:
+    - target: {fileID: 1935059498, guid: 00fedab94ffcb7e4c8a428f5f9e20c59, type: 3}
+      propertyPath: sceneViewId
+      value: 54
+      objectReference: {fileID: 0}
     - target: {fileID: 8323742609160863961, guid: 00fedab94ffcb7e4c8a428f5f9e20c59, type: 3}
       propertyPath: m_RootOrder
       value: 4
@@ -31090,6 +31170,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   needToSetPos: 0
   needToClear: 0
+  isSet: 0
 --- !u!114 &1873014200
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -31105,10 +31186,11 @@ MonoBehaviour:
   recieveMovingSpeed: 5
   comebackMovingSpeed: 5
   isLethal: 0
+  canRide: 0
+  isActive: 0
   positionList:
   - {x: 178.94, y: 30.14, z: 254.58}
   - {x: 178.94, y: 40.88752, z: 254.58}
-  isActive: 0
 --- !u!114 &1873014201
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -31470,6 +31552,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 77206422}
     m_Modifications:
+    - target: {fileID: 1935059498, guid: 00fedab94ffcb7e4c8a428f5f9e20c59, type: 3}
+      propertyPath: sceneViewId
+      value: 53
+      objectReference: {fileID: 0}
     - target: {fileID: 8323742609160863961, guid: 00fedab94ffcb7e4c8a428f5f9e20c59, type: 3}
       propertyPath: m_RootOrder
       value: 2
@@ -32052,6 +32138,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1935059498, guid: 00fedab94ffcb7e4c8a428f5f9e20c59, type: 3}
+      propertyPath: sceneViewId
+      value: 52
+      objectReference: {fileID: 0}
     - target: {fileID: 8323742609160863961, guid: 00fedab94ffcb7e4c8a428f5f9e20c59, type: 3}
       propertyPath: m_RootOrder
       value: 1
@@ -32519,6 +32609,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   needToSetPos: 0
   needToClear: 0
+  isSet: 0
 --- !u!114 &1950796791
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -32534,10 +32625,11 @@ MonoBehaviour:
   recieveMovingSpeed: 5
   comebackMovingSpeed: 5
   isLethal: 0
+  canRide: 0
+  isActive: 0
   positionList:
   - {x: -29.77221, y: 21.72632, z: 74.49536}
   - {x: -29.87, y: 32.71, z: 74.49}
-  isActive: 0
 --- !u!114 &1950796792
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -32645,6 +32737,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 77206422}
     m_Modifications:
+    - target: {fileID: 1935059498, guid: 00fedab94ffcb7e4c8a428f5f9e20c59, type: 3}
+      propertyPath: sceneViewId
+      value: 51
+      objectReference: {fileID: 0}
     - target: {fileID: 8323742609160863961, guid: 00fedab94ffcb7e4c8a428f5f9e20c59, type: 3}
       propertyPath: m_RootOrder
       value: 9
@@ -33191,6 +33287,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   needToSetPos: 0
   needToClear: 0
+  isSet: 0
 --- !u!114 &2001697709
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -33206,10 +33303,11 @@ MonoBehaviour:
   recieveMovingSpeed: 5
   comebackMovingSpeed: 5
   isLethal: 0
+  canRide: 0
+  isActive: 0
   positionList:
   - {x: 145.4, y: 30.97837, z: 247.2}
   - {x: 145.4, y: 42.03753, z: 247.2}
-  isActive: 0
 --- !u!114 &2001697710
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -33661,6 +33759,14 @@ MonoBehaviour:
   point: {fileID: 0}
   finder: {fileID: 1070817577}
   finderSpot: {fileID: 1176849464}
+  sandSackUse: 0
+  spawner: {fileID: 0}
+  bullet: {fileID: 0}
+  bulletCount: 0
+  attackTime: 0
+  index: 0
+  posList: {fileID: 0}
+  canAttack: 0
 --- !u!1001 &2024047414
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -33755,6 +33861,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 77206422}
     m_Modifications:
+    - target: {fileID: 1935059498, guid: 00fedab94ffcb7e4c8a428f5f9e20c59, type: 3}
+      propertyPath: sceneViewId
+      value: 50
+      objectReference: {fileID: 0}
     - target: {fileID: 8323742609160863961, guid: 00fedab94ffcb7e4c8a428f5f9e20c59, type: 3}
       propertyPath: m_RootOrder
       value: 7
@@ -33817,6 +33927,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 77206422}
     m_Modifications:
+    - target: {fileID: 1935059498, guid: 00fedab94ffcb7e4c8a428f5f9e20c59, type: 3}
+      propertyPath: sceneViewId
+      value: 49
+      objectReference: {fileID: 0}
     - target: {fileID: 8323742609160863961, guid: 00fedab94ffcb7e4c8a428f5f9e20c59, type: 3}
       propertyPath: m_RootOrder
       value: 14
@@ -34130,6 +34244,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 77206422}
     m_Modifications:
+    - target: {fileID: 1935059498, guid: 00fedab94ffcb7e4c8a428f5f9e20c59, type: 3}
+      propertyPath: sceneViewId
+      value: 48
+      objectReference: {fileID: 0}
     - target: {fileID: 8323742609160863961, guid: 00fedab94ffcb7e4c8a428f5f9e20c59, type: 3}
       propertyPath: m_RootOrder
       value: 16
@@ -34269,6 +34387,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 77206422}
     m_Modifications:
+    - target: {fileID: 1935059498, guid: 00fedab94ffcb7e4c8a428f5f9e20c59, type: 3}
+      propertyPath: sceneViewId
+      value: 47
+      objectReference: {fileID: 0}
     - target: {fileID: 8323742609160863961, guid: 00fedab94ffcb7e4c8a428f5f9e20c59, type: 3}
       propertyPath: m_RootOrder
       value: 19
@@ -36812,10 +36934,11 @@ MonoBehaviour:
   recieveMovingSpeed: 5
   comebackMovingSpeed: 5
   isLethal: 0
+  canRide: 0
+  isActive: 0
   positionList:
   - {x: -13.4063, y: 18.84625, z: 34.48583}
   - {x: -13.41, y: 30.05, z: 34.49}
-  isActive: 0
 --- !u!114 &2191634198394345446
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -36830,6 +36953,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   needToSetPos: 0
   needToClear: 0
+  isSet: 0
 --- !u!1 &2191634198394345447
 GameObject:
   m_ObjectHideFlags: 0
@@ -37538,6 +37662,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   needToSetPos: 0
   needToClear: 0
+  isSet: 0
 --- !u!1 &3694301182575067429
 GameObject:
   m_ObjectHideFlags: 0
@@ -37590,10 +37715,11 @@ MonoBehaviour:
   recieveMovingSpeed: 5
   comebackMovingSpeed: 5
   isLethal: 0
+  canRide: 0
+  isActive: 0
   positionList:
   - {x: 0, y: 0, z: 0}
   - {x: 0, y: 0, z: 0}
-  isActive: 0
 --- !u!4 &3747670855765704620
 Transform:
   m_ObjectHideFlags: 0
@@ -40710,8 +40836,9 @@ MonoBehaviour:
   recieveMovingSpeed: 1
   comebackMovingSpeed: 5
   isLethal: 0
-  positionList: []
+  canRide: 0
   isActive: 0
+  positionList: []
 --- !u!114 &8945171877927178542
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -40726,6 +40853,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   needToSetPos: 0
   needToClear: 0
+  isSet: 0
 --- !u!1 &8945171877927178543
 GameObject:
   m_ObjectHideFlags: 0

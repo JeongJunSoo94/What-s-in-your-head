@@ -26,7 +26,7 @@ namespace KSU
 
         int curSpawnCount;
 
-        [Header("몬스터 스폰 위치 리스트(10개 이하)"), SerializeField] List<Vector3> spawnPosition;
+        [Header("몬스터 스폰 위치 리스트(10개 이하)"), SerializeField] List<Transform> spawnPosition;
         [Header("스폰 패턴 무작위의 최대 9자리(자릿 수: 한 번에 스폰하는 몬스터 수) 이하의 숫자 리스트"), SerializeField] List<int> spawnPattern; // 패턴 배열은 한 요소가 6자리 int형 숫자(0 ~ 3)고, 스폰할때 그 위치에 맞는 곳에서 스폰
         int patternCount;
 
@@ -160,10 +160,11 @@ namespace KSU
                     {
                         if (curSpawnCount == maxSpawnNum)
                             break;
-                        photonView.RPC(nameof(Spawn), RpcTarget.AllViaServer, spawnPosition[(spawnPatternNum % 10) % spawnPosition.Count]);
+                        photonView.RPC(nameof(Spawn), RpcTarget.AllViaServer, spawnPosition[(spawnPatternNum % 10) % spawnPosition.Count].position);
                         //Respawn(spawnPosition[(spawnPatternNum % 10) % spawnPosition.Count]);
                         spawnPatternNum /= 10;
                     }
+                    patternCount++;
                     yield return new WaitForSeconds(spawnDelayTime);
                 }
                 else

@@ -714,6 +714,14 @@ namespace KSU
                 case "Trampolin":
                     {
                         InputCustomJump(trampolinSpeed);
+                        if(characterState.isMine)
+                        {
+                            Object.SwitchingTrampolin trampolin;
+                            if (collision.gameObject.TryGetComponent<Object.SwitchingTrampolin>(out trampolin))
+                            {
+                                trampolin.RecieveTriggerExit();
+                            }
+                        }
                     }
                     break;
                 case "DeadZone":

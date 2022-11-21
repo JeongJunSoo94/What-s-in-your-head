@@ -25389,6 +25389,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   characterState: {fileID: 8750876866218855433}
   playerMouse: {fileID: 1441877394586250121}
+  playerInteraction: {fileID: 0}
   playerAnimator: {fileID: 0}
   mainCamera: {fileID: 0}
   playerRigidbody: {fileID: 0}
@@ -25406,6 +25407,7 @@ MonoBehaviour:
   gravityCofactor: 10
   terminalSpeed: -10
   knockBackVerticalSpeed: 8
+  trampolinSpeed: 20
   rotationSpeed: 720
   moveVec: {x: 0, y: 0, z: 0}
   moveDir: {x: 0, y: 0, z: 0}
@@ -25425,6 +25427,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 79eaf00710311bd4abc8301ba037e744, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  photonView: {fileID: 0}
   layerWeight: 0
   point: {fileID: 0}
   cameraMain: {fileID: 0}
@@ -25474,6 +25477,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 65544
   groundCheckDistance: 2
+  groundCheckAirDistance: 0.1
   groundCheckThresholdMin: 0.02
   groundCheckThresholdMax: 0.1
   forwardblockingMinHeight: 0.2
@@ -25494,6 +25498,7 @@ MonoBehaviour:
   IsAirJumping: 0
   isCumstomJumping: 0
   IsDashing: 0
+  WasDashing: 0
   IsAirDashing: 0
   WasAirDashing: 0
   isMine: 0

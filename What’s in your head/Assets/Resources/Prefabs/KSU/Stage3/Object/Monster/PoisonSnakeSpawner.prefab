@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4855811130566079575}
   - component: {fileID: -8861753594054480172}
+  - component: {fileID: 6796789806228282392}
   m_Layer: 0
   m_Name: PoisonSnakeSpawner
   m_TagString: Untagged
@@ -24,7 +25,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4855811130566079568}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 12.1195345, y: -4.4418254, z: -20.57878}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -44,15 +45,38 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5bfa69de849f3494095e0a5070bd4f36, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  spawnedObjectDirectory: Prefabs/KSU/Stage3/Object/Monster/PoisonSnake.prefab
+  spawnedObjectDirectory: Prefabs/KSU/Stage3/Object/Monster/PoisonSnake
   firstSpawnDelayTime: 5
   spawnDelayTime: 10
   onceSpawnNum: 1
-  maxSpawnNum: 0
+  maxSpawnNum: 20
   spawnPosition:
-  - {x: 0, y: 0, z: 0}
-  - {x: 0, y: 0, z: 0}
-  - {x: 0, y: 0, z: 0}
-  - {x: 0, y: 0, z: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
   spawnPattern: 511dd525ece4d63332cc1f1340067514c731181949d1171820088f1f76a6552ac0e9dc372d860839f015492cb725232dcf241a3363a1b2083b99fe2becf7e02d971314098c59d537624bfd0845dd8a17
   spawnSeed: 15345
+  alice: {fileID: 0}
+--- !u!114 &6796789806228282392
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4855811130566079568}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ObservedComponentsFoldoutOpen: 1
+  Group: 0
+  prefixField: -1
+  Synchronization: 3
+  OwnershipTransfer: 0
+  observableSearch: 2
+  ObservedComponents: []
+  sceneViewId: 0
+  InstantiationId: 0
+  isRuntimeInstantiated: 0
