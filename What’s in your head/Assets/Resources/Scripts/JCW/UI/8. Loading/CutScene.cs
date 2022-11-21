@@ -32,7 +32,7 @@ namespace JCW.UI.InGame
             player1_Img = transform.GetChild(1).GetChild(0).GetComponent<Image>();
             player2_Img = transform.GetChild(1).GetChild(1).GetComponent<Image>();
             videoPlayer = transform.GetChild(0).GetComponent<VideoPlayer>();
-            if (GameManager.Instance.characterOwner.Count == 0)
+            if (GameManager.Instance.characterOwner == null || GameManager.Instance.characterOwner.Count == 0)
                 isNewGame = true;
             else
                 isNella = GameManager.Instance.characterOwner[PhotonNetwork.IsMasterClient];
