@@ -238,4 +238,23 @@ public class GameManager : MonoBehaviour, IPunObservable
         }
         stayingOnSceneList.Clear();
     }
+
+    public void ResetDefault_RPC()
+    {
+        photonView.RPC(nameof(ResetDefault), RpcTarget.AllViaServer);
+    }
+
+    void ResetDefault()
+    {
+        characterOwner.Clear();
+        otherPlayerTF = null;
+        myPlayerTF = null;
+        isCharOnScene.Clear();
+        isTopView = false;
+        isSideView = false;
+        curPlayerHP = 12;
+        aliceHP = 30;
+        isAlive[true] = true;
+        isAlive[false] = true;    
+    }
 }

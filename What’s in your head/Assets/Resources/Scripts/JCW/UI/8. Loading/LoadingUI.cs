@@ -52,6 +52,8 @@ namespace JCW.UI
             text.text = "TIP : " + tipList[random.Next(0, tipList.Count)];
             bgImg.sprite = bgList[GameManager.Instance.curStageIndex];
             SoundManager.Instance.StopBGM();
+
+            GameManager.Instance.ResetDefault_RPC();
         }
 
         void Update()

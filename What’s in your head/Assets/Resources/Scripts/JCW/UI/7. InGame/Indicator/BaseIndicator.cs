@@ -116,7 +116,7 @@ namespace JCW.UI.InGame.Indicator
 
         protected IEnumerator WaitForPlayer()
         {
-            yield return new WaitUntil(() => GameManager.Instance.characterOwner.Count >= 2);
+            yield return new WaitUntil(() => GameManager.Instance.GetCharOnScene(true) && GameManager.Instance.GetCharOnScene(false));
             //while (GameManager.Instance.characterOwner.Count <= 1)
             //    yield return new WaitForSeconds(0.2f);
 

@@ -1,3 +1,4 @@
+using JCW.AudioCtrl;
 using Photon.Pun;
 using System.Collections;
 using System.Collections.Generic;
@@ -26,9 +27,9 @@ namespace JCW.Object.Stage1
 
         IEnumerator WaitForPlayer()
         {
-            yield return new WaitUntil(() => PhotonNetwork.PlayerList.Length == 2);
+            yield return new WaitUntil(() => GameManager.Instance.GetCharOnScene(true) && GameManager.Instance.GetCharOnScene(false));
             pv.RPC(nameof(StartFunc), RpcTarget.AllViaServer);
-            audioSource.Play();
+            SoundManager.Instance.PlayIndirect3D_RPC("S1S2_BGM_CarParade", audioSource);
 
             yield break;
         }
@@ -36,7 +37,7 @@ namespace JCW.Object.Stage1
         [PunRPC]
         void StartFunc()
         {
-            StartCoroutine(nameof(RotateObj));
+            StartCoroutine(nameof(RotateObj));            
         }
 
         IEnumerator RotateObj()

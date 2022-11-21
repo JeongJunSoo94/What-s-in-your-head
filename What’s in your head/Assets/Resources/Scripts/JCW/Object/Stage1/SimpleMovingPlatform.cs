@@ -73,8 +73,7 @@ namespace JCW.Object.Stage1
 
         IEnumerator WaitForPlayers()
         {
-            while (PhotonNetwork.PlayerList.Length < 2)
-                yield return null;
+            yield return new WaitUntil(() => GameManager.Instance.GetCharOnScene(true) && GameManager.Instance.GetCharOnScene(false));
             isStart = true;
             yield break;
         }
