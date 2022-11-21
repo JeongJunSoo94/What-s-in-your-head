@@ -76,10 +76,14 @@ public class GameManager : MonoBehaviour, IPunObservable
     }
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Keypad1))
-            isTopView = !isTopView;
-        if (Input.GetKeyDown(KeyCode.Keypad2))
-            isSideView = !isSideView;
+        if (!isTest)
+        {
+            if (Input.GetKeyDown(KeyCode.Keypad1))
+                isTopView = !isTopView;
+            if (Input.GetKeyDown(KeyCode.Keypad2))
+                isSideView = !isSideView;
+        }
+        
         if (KeyManager.Instance.GetKeyDown(PlayerAction.Pause))
         {
             if(SceneManager.GetActiveScene().name != "MainTitle")

@@ -52,9 +52,15 @@ namespace JCW.UI
             backButton.onClick.AddListener(() =>
             {
                 if (PhotonNetwork.NetworkClientState != ClientState.Joined)
-                    Leave();
-                photonView.RPC(nameof(CancleEnter), RpcTarget.AllViaServer);
-                photonView.RPC(nameof(Leave), RpcTarget.AllViaServer);
+                {
+                    this.gameObject.SetActive(false);
+                    PhotonNetwork.LeaveRoom();
+                }
+                else
+                {
+                    photonView.RPC(nameof(CancleEnter), RpcTarget.AllViaServer);
+                    photonView.RPC(nameof(Leave), RpcTarget.AllViaServer);
+                }                
             });
 
             player1_Button.onClick.AddListener(() =>
