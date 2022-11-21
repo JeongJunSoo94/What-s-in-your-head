@@ -9,6 +9,7 @@ namespace JJS
         [HideInInspector] public Dictionary<int, RecieverMic> MicDictionary = new Dictionary<int, RecieverMic>();
         [HideInInspector] public Queue<int> indexQueue = new();
 
+        public GameObject effect;
 
 
         private void Update()
@@ -32,6 +33,7 @@ namespace JJS
             {
                 mic.Value.Play(enable);
             }
+            effect?.SetActive(enable);
         }
 
         public int GetMicIndex()

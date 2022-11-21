@@ -43,20 +43,20 @@ namespace JCW.Object
             StartCoroutine(SandAttackCoroutine(time));
         }
 
-        public void Initialized(Vector3 pos)
+        public void Initialized()
         {
-            finalPos = pos;
-
+            transform.GetChild(2).gameObject.SetActive(false);
+            GetComponent<CapsuleCollider>().enabled = true;
         }
 
         public void GroundCheck()
         {
             RaycastHit hit;
-            if (Physics.Raycast(transform.position, -transform.up,out hit, 1000f, layer, QueryTriggerInteraction.Ignore))
+            if (Physics.Raycast(transform.position, -transform.up,out hit, 100f, layer, QueryTriggerInteraction.Ignore))
             {
                 groundPlatform = hit.transform;
                 sandSackShadow.SetGroundPlatform(groundPlatform);
-                finalPos = groundPlatform.position;
+                finalPos = hit.point;
             }
         }
 

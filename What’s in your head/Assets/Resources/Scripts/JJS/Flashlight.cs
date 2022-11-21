@@ -31,6 +31,7 @@ namespace JJS
         public List<Transform[]> targetList = new();
         public bool canAttack;
 
+
         private void Awake()
         {
             SetCharacterGameObject(gameObject, out lightObj, "Light");
@@ -79,6 +80,7 @@ namespace JJS
             for (int i = 1; i < targetList[index].Length; i++)
             {
                 GameObject bullet = spawner.Respawn(targetList[index][i].position);
+                bullet.GetComponent<FallJJS>().Initialized();
                 bullet.GetComponent<FallJJS>().StartCoroutineFall(attackTime);
             }
         }
