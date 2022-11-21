@@ -4,9 +4,10 @@ using UnityEngine;
 using Photon.Pun;
 using JCW.Spawner;
 using JCW.Object;
-
+using JCW.AudioCtrl;
 namespace JJS
 {
+    [RequireComponent(typeof(AudioSource))]
     [RequireComponent(typeof(PhotonView))]
     public class Flashlight : MonoBehaviour
     {
@@ -31,6 +32,7 @@ namespace JJS
         public List<Transform[]> targetList = new();
         public bool canAttack;
 
+        AudioSource audioSource;
 
         private void Awake()
         {
@@ -39,6 +41,7 @@ namespace JJS
             directional = lightObj.transform.GetChild(1).GetComponent<Light>();
             point = lightObj.transform.GetChild(2).GetComponent<Light>();
             photonView = GetComponent<PhotonView>();
+            audioSource = GetComponent<AudioSource>();
             if (sandSackUse)
                 InitializedSandSack();
         }
@@ -47,7 +50,7 @@ namespace JJS
         {
             if (finder.targetObj.Count == 2)
             {
-                if (GameManager.Instance.curPlayerHP == 0 && canAttack)
+                if (GameManager.Instance.curPlayerHP <= 0 && canAttack)
                 {
                     photonView.RPC(nameof(SandAttack), RpcTarget.AllViaServer);
                     canAttack = false;
@@ -72,6 +75,16 @@ namespace JJS
         public bool SpotTargetCheck()
         {
             return finderSpot.DiscoveryTargetBool() ? true : false;
+        }
+
+        public void PlaySound(string soundName)
+        {
+            SoundManager.Instance.PlayEffect_RPC(soundName);
+        }
+
+        public void StopSound()
+        {
+            SoundManager.Instance.StopEffect_RPC();
         }
 
         [PunRPC]

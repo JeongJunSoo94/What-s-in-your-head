@@ -195,7 +195,18 @@ namespace JJS
             if (hitObjs[index].gameObject.activeSelf)
                 hitObjs[index].gameObject.SetActive(false);
             hitObjs[index].gameObject.SetActive(true);
-            SoundManager.Instance.PlayEffect_RPC("GuitarAttack");
+            switch (index)
+            {
+                case 0:
+                    SoundManager.Instance.PlayEffect_RPC("S3_NellaGuitarAttack1");
+                    break;
+                case 1:
+                    SoundManager.Instance.PlayEffect_RPC("S3_NellaGuitarAttack2");
+                    break;
+                case 2:
+                    SoundManager.Instance.PlayEffect_RPC("S3_NellaGuitarAttack3");
+                    break;
+            }
         }
 
         public void OnDisableObject(int index)

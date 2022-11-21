@@ -1,5 +1,25 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!114 &-8516503950125436801
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5d7c3550117732c4c87803d9a426b1a2, type: 3}
+  m_Name: SoundControllerNode
+  m_EditorClassIdentifier: 
+  state: 0
+  started: 0
+  guid: 28ada469254f2ce4da3717131613d472
+  position: {x: 64, y: 977}
+  objectInfo: {fileID: 0}
+  description: 
+  soundName: S2_BossAttackReady
+  playSound: 1
 --- !u!114 &-7747551230092257199
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -15,7 +35,7 @@ MonoBehaviour:
   state: 0
   started: 0
   guid: f71c2082e61efe04583547e57349676e
-  position: {x: 1445, y: 1168.9886}
+  position: {x: 1196.36, y: 1189}
   objectInfo: {fileID: 0}
   description: 
   damage: 6
@@ -55,7 +75,7 @@ MonoBehaviour:
   state: 0
   started: 0
   guid: 9f2124f77669a7f499fcfa6d823f12a7
-  position: {x: 244.45421, y: 979.7569}
+  position: {x: 396.4354, y: 980.97864}
   objectInfo: {fileID: 0}
   description: 
   local: 1
@@ -155,7 +175,7 @@ MonoBehaviour:
   state: 0
   started: 0
   guid: 4711c5d2840a55c4382672e0e71ac9af
-  position: {x: 1090, y: 1159.9886}
+  position: {x: 841.36, y: 1180}
   objectInfo: {fileID: 0}
   description: 
   duration: 2
@@ -213,7 +233,7 @@ MonoBehaviour:
   state: 0
   started: 0
   guid: e423b8d55d30b2b41b12e9b794d11751
-  position: {x: 73.70003, y: 978.0399}
+  position: {x: 225.59366, y: 975.7014}
   objectInfo: {fileID: 0}
   description: 
   duration: 3
@@ -273,6 +293,26 @@ MonoBehaviour:
   position: {x: -1058.7479, y: 1195.2433}
   objectInfo: {fileID: 0}
   description: 
+--- !u!114 &-305993677568383412
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5d7c3550117732c4c87803d9a426b1a2, type: 3}
+  m_Name: SoundControllerNode
+  m_EditorClassIdentifier: 
+  state: 0
+  started: 0
+  guid: d14ec4a8f53f1bd4e8723dcbc6ebc9c0
+  position: {x: 1564, y: 1177}
+  objectInfo: {fileID: 0}
+  description: 
+  soundName: 
+  playSound: 0
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -317,6 +357,8 @@ MonoBehaviour:
   - {fileID: -5033349208095085664}
   - {fileID: -3915395166568865230}
   - {fileID: 5656329622001709332}
+  - {fileID: -8516503950125436801}
+  - {fileID: -305993677568383412}
 --- !u!114 &551616951806795186
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -340,6 +382,7 @@ MonoBehaviour:
   - {fileID: 7109248827998355691}
   - {fileID: -3915395166568865230}
   - {fileID: 6439698345680414388}
+  - {fileID: -8516503950125436801}
   - {fileID: -1531052568566415867}
   - {fileID: -5424888832114050761}
 --- !u!114 &4137130734011810586
@@ -357,7 +400,7 @@ MonoBehaviour:
   state: 0
   started: 0
   guid: 15743c387ed7cfc43a668e94fd478e45
-  position: {x: 1261.6282, y: 1156.6871}
+  position: {x: 1013.36, y: 1177}
   objectInfo: {fileID: 0}
   description: 
 --- !u!114 &4195154790172710339
@@ -441,7 +484,7 @@ MonoBehaviour:
   state: 0
   started: 0
   guid: 84eeefe2ba7fa8d40b5ca0f8e5bb14d9
-  position: {x: -660.43445, y: 979.2549}
+  position: {x: -636.74115, y: 975.485}
   objectInfo: {fileID: 0}
   description: 
   local: 0
@@ -545,7 +588,7 @@ MonoBehaviour:
   state: 0
   started: 0
   guid: 01af352e62f1f97448161499d21a517b
-  position: {x: 1619, y: 1163}
+  position: {x: 1370.36, y: 1183}
   objectInfo: {fileID: 0}
   description: 
 --- !u!114 &6439698345680414388
@@ -563,7 +606,7 @@ MonoBehaviour:
   state: 0
   started: 0
   guid: a27cbe784988a1844bb91f89c2d620aa
-  position: {x: -102.54577, y: 975.75684}
+  position: {x: -115, y: 963}
   objectInfo: {fileID: 0}
   description: 
 --- !u!114 &7006514720335615236
@@ -589,6 +632,7 @@ MonoBehaviour:
   - {fileID: 4137130734011810586}
   - {fileID: -7747551230092257199}
   - {fileID: 6172960423699839176}
+  - {fileID: -305993677568383412}
 --- !u!114 &7109248827998355691
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -604,7 +648,7 @@ MonoBehaviour:
   state: 0
   started: 0
   guid: 0a158bbb7d3b3f043b7f90230d87d9ef
-  position: {x: -474.43445, y: 980.2549}
+  position: {x: -469.2339, y: 976.4851}
   objectInfo: {fileID: 0}
   description: 
   fake: 0

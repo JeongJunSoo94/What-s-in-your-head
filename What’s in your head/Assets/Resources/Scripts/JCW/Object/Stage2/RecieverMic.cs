@@ -42,7 +42,6 @@ namespace JCW.Object
                     nellaSinging = other.GetComponent<Singing>();
 
                 scriptNum = nellaSinging.GetMicIndex();
-                Debug.Log("½ÌÀ× µñ¼Å³Ê¸®¿¡ Ãß°¡");
                 nellaSinging.MicDictionary.Add(scriptNum, this);
                 //for (int i =0 ; i< objectList.Count ; ++i)
                 //{                    

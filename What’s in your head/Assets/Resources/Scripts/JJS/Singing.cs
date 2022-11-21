@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using JCW.Object;
+using JCW.AudioCtrl;
 namespace JJS
 { 
     public class Singing : MonoBehaviour
@@ -10,12 +11,18 @@ namespace JJS
         [HideInInspector] public Queue<int> indexQueue = new();
 
         public GameObject effect;
-
+        AudioSource audioSource;
+        public bool playSound;
+        private void Awake()
+        {
+            audioSource = GetComponent<AudioSource>();
+            playSound = false;
+        }
 
         private void Update()
         {
             Play(true);
-            if (GameManager.Instance.curPlayerHP == 0)
+            if (GameManager.Instance.curPlayerHP <= 0)
             {
                 Play(false);
                 MicDictionary.Clear();
@@ -33,6 +40,19 @@ namespace JJS
             {
                 mic.Value.Play(enable);
             }
+
+            if (!playSound)
+            {
+                playSound = true;
+                SoundManager.Instance.Play3D_RPC("S2_NellaSing", audioSource);
+            }
+            if(!enable)
+            {
+                playSound = false;
+                SoundManager.Instance.Stop3D_RPC(audioSource);
+            }
+
+
             effect?.SetActive(enable);
         }
 
