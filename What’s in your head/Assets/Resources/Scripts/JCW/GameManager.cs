@@ -244,9 +244,9 @@ public class GameManager : MonoBehaviour, IPunObservable
         photonView.RPC(nameof(ResetDefault), RpcTarget.AllViaServer);
     }
 
-    void ResetDefault()
+    [PunRPC]
+    public void ResetDefault()
     {
-        characterOwner.Clear();
         otherPlayerTF = null;
         myPlayerTF = null;
         isCharOnScene.Clear();

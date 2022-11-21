@@ -83,10 +83,14 @@ namespace JCW.UI.InGame
 
             isNella = GameManager.Instance.characterOwner[PhotonNetwork.IsMasterClient];
 
-            if (photonView.IsMine)
-                GameManager.Instance.hpAllPairs.Add(isNella, this);
-            else
-                GameManager.Instance.hpAllPairs.Add(!isNella, this);
+            if (GameManager.Instance.hpAllPairs.Count < 2)
+            {
+                if (photonView.IsMine)
+                    GameManager.Instance.hpAllPairs.Add(isNella, this);
+                else
+                    GameManager.Instance.hpAllPairs.Add(!isNella, this);
+            }
+            
 
             isStart = true;
             yield break;
