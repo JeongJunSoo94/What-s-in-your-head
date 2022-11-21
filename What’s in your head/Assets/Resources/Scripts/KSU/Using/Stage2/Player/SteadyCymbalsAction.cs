@@ -12,6 +12,8 @@ using JCW.UI.InGame;
 using KSU.AutoAim.Player.Object;
 
 using JJS;
+using JCW.AudioCtrl;
+
 namespace KSU.AutoAim.Player
 {
     public class SteadyCymbalsAction : SteadyAutoAimAction
@@ -145,27 +147,13 @@ namespace KSU.AutoAim.Player
                     steadyInteractionState.isSucceededInHittingTaget = false;
                     autoAimObjectSpawner.SetActive(false);
                     cymbals.InitObject(autoAimObjectSpawner.transform.position, shootPosition, autoAimObjectSpeed, autoAimObjectDepartOffset);
-                    //if (steadyInteractionState.isAutoAimObjectFounded)
-                    //{
-                    //    // µµÂø À§Ä¡: autoAimPosition
-                    //    cymbals.InitObject(autoAimObjectSpawner.transform.position, autoAimPosition.position, autoAimObjectSpeed, autoAimObjectDepartOffset);
-                    //}
-                    //else
-                    //{
-                    //    // µµÂøÀ§Ä¡: È­¸é Áß¾Ó¿¡ ·¹ÀÌ ½÷¼­ µµÂøÇÏ´Â °÷
-                    //    RaycastHit hit;
-                    //    bool rayCheck = Physics.Raycast(playerCamera.transform.position, playerCamera.transform.forward, out hit, autoAimObjectRange, -1, QueryTriggerInteraction.Ignore);
-                    //    if (rayCheck && (hit.distance > Vector3.Distance(transform.position, playerCamera.transform.position)))
-                    //    {
-                    //        cymbals.InitObject(autoAimObjectSpawner.transform.position, hit.point, autoAimObjectSpeed, autoAimObjectDepartOffset);
-                    //    }
-                    //    else
-                    //    {
-                    //        cymbals.InitObject(autoAimObjectSpawner.transform.position, (playerCamera.transform.position + playerCamera.transform.forward * autoAimObjectRange), autoAimObjectSpeed, autoAimObjectDepartOffset);
-                    //    }
-                    //}
                 }
             }
+        }
+
+        protected void PlayThrowSound()
+        {
+            SoundManager.Instance.Play3D_RPC("S2_SteadyCymbalsThrow", audioSource);
         }
 
         private void OnTriggerEnter(Collider other)

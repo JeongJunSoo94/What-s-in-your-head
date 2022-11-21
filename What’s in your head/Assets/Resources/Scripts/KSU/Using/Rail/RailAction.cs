@@ -7,6 +7,7 @@ using Cinemachine.Utility;
 using YC.Camera_;
 using YC.Camera_Single;
 using JCW.UI.InGame.Indicator;
+using JCW.AudioCtrl;
 
 namespace KSU
 {
@@ -46,7 +47,7 @@ namespace KSU
         public float railJumpSpeed = 20f;
 
 
-
+        bool isPlayingRailSound = false;
         /// <summary> Gizmo
         Vector3 startCenter;
         Vector3 startUp;
@@ -120,8 +121,25 @@ namespace KSU
                 else
                 {
                     transform.localPosition = Vector3.zero;
+                    if (playerState.isMine)
+                        PlayRailSound();
                 }
             }
+        }
+        void PlayRailSound()
+        {
+            if (!isPlayingRailSound)
+            {
+                ResetRailSound();
+                isPlayingRailSound = true;
+                SoundManager.Instance.PlayEffect("All_RidingRail");
+            }
+        }
+        
+        public void ResetRailSound()
+        {
+            isPlayingRailSound = false;
+            SoundManager.Instance.StopEffect();
         }
 
         public void SearchWithSphereCast()

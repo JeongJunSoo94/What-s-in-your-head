@@ -14,6 +14,7 @@ namespace KSU.FSM
             isMovingToTarget = false;
             animator.SetBool("Aim", false);
             GetPlayerController(animator).characterState.aim = false;
+            GetGrappleAction(animator).PlayGrappleFlyingSound();
         }
 
         // OnStateUpdate is called on each Update frame between OnStateEnter and OnStateExit callbacks

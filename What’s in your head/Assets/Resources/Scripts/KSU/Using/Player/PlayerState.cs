@@ -296,18 +296,13 @@ public class PlayerState : MonoBehaviour
     public void CheckDash()
     {
         // 지면 위 상태일 때, 대시 중이 아닐 때만
-        if (IsGrounded)
-        {
-            StartCoroutine(nameof(StartDashTimer));
-            //StartCoroutine(nameof(DelayJump));
-            //IsDashing = true;
-        }
+        StartCoroutine(nameof(StartDashTimer));
     }
 
     public void CheckAirDash()
     {
         // 공중 상태일 때, 공중 대시 중이 아닐 때만
-        if (!IsGrounded && !IsAirDashing)
+        if (!IsAirDashing)
         {
             StartCoroutine(nameof(StartDashTimer));
             IsAirDashing = true;

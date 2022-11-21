@@ -14,6 +14,7 @@ using KSU.AutoAim.Object;
 namespace KSU.AutoAim.Player
 {
     public enum AutoAimTargetType { GrappledObject, Monster, CymbalsTargetObject, Null };
+    [RequireComponent(typeof(AudioSource))]
     abstract public class SteadyAutoAimAction : MonoBehaviour
     {
         protected SteadyInteractionState steadyInteractionState;
@@ -34,6 +35,7 @@ namespace KSU.AutoAim.Player
         protected Vector3 shootPosition;
         protected Transform autoAimPosition;
         protected AimUI aimUI;
+        protected AudioSource audioSource;
 
         [Header("_______변경 가능 값_______")]
         [Header("투사체 날아가는 속력")]
@@ -59,6 +61,8 @@ namespace KSU.AutoAim.Player
         virtual protected void Awake()
         {
             aimUI = GetComponent<CameraController>().aimUI.GetComponent<AimUI>();
+            audioSource = GetComponent<AudioSource>();
+            JCW.AudioCtrl.AudioSettings.SetAudio(audioSource, 1, 50f);
         }
 
         abstract protected void SearchAutoAimTargetdObject();

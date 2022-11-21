@@ -279,7 +279,8 @@ namespace KSU
 
         public void EscapeRail(GameObject player, bool isSwap)
         {
-            player.GetComponent<RailAction>().currentRail = null;
+            RailAction rail = player.GetComponent<RailAction>();
+            rail.currentRail = null;
             player.transform.parent = null;
             Camera camera;            
             camera = player.GetComponent<CameraController>().mainCam; // ¸ÖÆ¼¿ë
@@ -314,11 +315,12 @@ namespace KSU
             PlayerInteractionState interactionState = player.GetComponent<PlayerInteractionState>();
             if (!isSwap)
             {
-                player.GetComponent<RailAction>().SetBoolEscapeRail();
+                rail.SetBoolEscapeRail();
             }
             interactionState.isRidingRail = false;
             interactionState.isRailJumping = false;
             interactionState.isRailJumpingUp = false;
+            rail.ResetRailSound();
         }
     }
 }

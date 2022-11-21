@@ -26,7 +26,7 @@ namespace JCW.UI.InGame
 
         public void SetSwap(int index)
         {
-            SoundManager.Instance.PlayEffect("WeaponChange");
+            SoundManager.Instance.PlayEffect("All_WeaponChange");
             photonView.RPC(nameof(SetSwap_RPC), RpcTarget.AllViaServer, index);
         }
 

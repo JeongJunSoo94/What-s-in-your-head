@@ -5,7 +5,6 @@ using UnityEngine;
 
 namespace KSU.AutoAim.Player.Object
 {
-    [RequireComponent(typeof(AudioSource))]
     public class SteadyCymbals : AutoAimObject
     {
         //public GameObject spawner; //스테디 손 위치에 있는 그래플, 그래플을 던지면 손에있는 그래플이 꺼지고 이 스크립트 달린 그래플이 켜지면서 날아감
@@ -20,12 +19,9 @@ namespace KSU.AutoAim.Player.Object
         //Rigidbody grappleRigidbody;
         //AudioSource audioSource;
 
-        // Start is called before the first frame update
-        void Awake()
+        protected override void Awake()
         {
-            objectRigidbody = GetComponent<Rigidbody>();
-            audioSource = GetComponent<AudioSource>();
-            JCW.AudioCtrl.AudioSettings.SetAudio(audioSource, 1f, 50f);
+            base.Awake();
         }
 
         // Update is called once per frame
@@ -92,7 +88,12 @@ namespace KSU.AutoAim.Player.Object
                 isEndPosition = true;
             particle.particlePosition = transform.position;
             particle.gameObject.SetActive(true);
-            // 사운드 추가 필요
+            PlayCymbalsHitSound();
+        }
+
+        void PlayCymbalsHitSound()
+        {
+            SoundManager.Instance.Play3D_RPC("S2_Steady_Cymbals_Hit", audioSource);
         }
 
         private void OnTriggerEnter(Collider other)

@@ -5,6 +5,7 @@ using UnityEngine;
 
 namespace KSU.AutoAim.Player
 {
+    [RequireComponent(typeof(AudioSource))]
     public class AutoAimObject : MonoBehaviour
     {
         public GameObject player;
@@ -17,6 +18,13 @@ namespace KSU.AutoAim.Player
         protected float departingOffset = 0.2f;
         public bool isEndPosition = false;
         public bool isSucceeded = false;
+
+        protected virtual void Awake()
+        {
+            objectRigidbody = GetComponent<Rigidbody>();
+            audioSource = GetComponent<AudioSource>();
+            JCW.AudioCtrl.AudioSettings.SetAudio(audioSource, 1f, 50f);
+        }
 
         public virtual void InitObject(Vector3 startPos, Vector3 endPos, float objectSpeed, float offset)
         {

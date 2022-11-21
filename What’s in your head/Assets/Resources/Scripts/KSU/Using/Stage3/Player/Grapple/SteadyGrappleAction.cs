@@ -13,6 +13,7 @@ using JCW.UI.InGame;
 using KSU.AutoAim.Player.Object;
 using KSU.AutoAim.Object;
 using KSU.AutoAim.Object.Monster;
+using JCW.AudioCtrl;
 
 namespace KSU.AutoAim.Player
 {
@@ -126,7 +127,7 @@ namespace KSU.AutoAim.Player
                         isRayChecked = Physics.SphereCast(rayOrigin, 0.2f, direction, out _raycastHit, (rangeDistance + rangeRadius * 2f), layerFilterForAutoAim, QueryTriggerInteraction.Ignore);
                         if (isRayChecked)
                         {
-                            if (_raycastHit.collider.gameObject.layer == LayerMask.NameToLayer("AutoAimedObject"))
+                            if (_raycastHit.collider.gameObject.layer == LayerMask.NameToLayer("AutoAimedObject") || _raycastHit.collider.gameObject.layer == LayerMask.NameToLayer("Monster"))
                             {
                                 if (Vector3.Angle(playerCamera.transform.forward, (_raycastHit.collider.gameObject.transform.position - rayOrigin)) < rangeAngle)
                                 {
@@ -207,6 +208,7 @@ namespace KSU.AutoAim.Player
             {
                 if (!grapple.gameObject.activeSelf)
                 {
+                    PlayGrappleThrowSound();
                     steadyInteractionState.isSucceededInHittingTaget = false;
                     autoAimObjectSpawner.SetActive(false);
                     grapple.InitObject(autoAimObjectSpawner.transform.position, shootPosition, autoAimObjectSpeed, autoAimObjectDepartOffset);
@@ -403,6 +405,15 @@ namespace KSU.AutoAim.Player
         void SetGrappleOff()
         {
             grapple.gameObject.SetActive(false);
+        }
+
+        void PlayGrappleThrowSound()
+        {
+            SoundManager.Instance.PlayEffect("S3_SteadyHookFire");
+        }
+        public void PlayGrappleFlyingSound()
+        {
+            SoundManager.Instance.PlayEffect("S3_SteadyHookFly");
         }
 
         private void OnTriggerEnter(Collider other)

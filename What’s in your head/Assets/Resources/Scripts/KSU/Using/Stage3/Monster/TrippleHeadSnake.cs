@@ -18,13 +18,19 @@ namespace KSU.AutoAim.Object.Monster
         bool isRushDelayOn = false;
         public float rushDelayTime = 10f;
 
+        protected override void Awake()
+        {
+            base.Awake();
+        }
+
         void Update()
         {
             Detect();
         }
 
-        private void OnEnable()
+        protected override void OnEnable()
         {
+            base.Awake();
             InitMonster();
         }
 

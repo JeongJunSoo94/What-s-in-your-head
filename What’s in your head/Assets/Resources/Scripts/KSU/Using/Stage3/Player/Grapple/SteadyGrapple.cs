@@ -22,12 +22,10 @@ namespace KSU.AutoAim.Player.Object
         //AudioSource audioSource;
 
         // Start is called before the first frame update
-        void Awake()
+        protected override void Awake()
         {
-            objectRigidbody = GetComponent<Rigidbody>();
+            base.Awake();
             grappleRope = GetComponent<LineRenderer>();
-            audioSource = GetComponent<AudioSource>();
-            JCW.AudioCtrl.AudioSettings.SetAudio(audioSource, 1f, 50f);
         }
 
         // Update is called once per frame

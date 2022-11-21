@@ -1,13 +1,14 @@
 using System.Collections;
 using System.Collections.Generic;
 using JCW.AudioCtrl;
+using KSU.AutoAim.Object;
 using UnityEngine;
 
 
 namespace JCW.Object
 {
     [RequireComponent(typeof(AudioSource))]
-    public class CymbalsButton : MonoBehaviour
+    public class CymbalsButton : AutoAimTargetObject
     {
         [Header("버튼 들어가는 속도")] [SerializeField] float pressedSpeed = 5f;
         [Header("버튼 나오는 속도")] [SerializeField] float releaseSpeed = 5f;
@@ -27,8 +28,9 @@ namespace JCW.Object
 
         WaitForSeconds ws;
 
-        private void Awake()
+        protected override void Awake()
         {
+            base.Awake();
             anim = transform.parent.parent.GetComponent<Animator>();
             meshRenderer = transform.GetChild(1).GetComponent<MeshRenderer>();
             meshRenderer.sharedMaterial = normalMat;

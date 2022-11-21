@@ -36,43 +36,44 @@ namespace KSU
         PhotonView photonView;
 
         [SerializeField] GameObject alice;
+        [SerializeField] bool isDefense = true;
+        bool isStartCoroutine = false;
 
         // Start is called before the first frame update
         private void Awake()
         {
             photonView = PhotonView.Get(this);
+            spawnSeed = GameManager.Instance.randomSeed;
+            StartCoroutine(nameof(WaitForPlayer));
         }
 
         IEnumerator InitSpwanerCo()
         {
-            yield return new WaitUntil(() => GameManager.Instance != null);
-            yield return new WaitUntil(() => GameManager.Instance.characterOwner.Count >= 1);
-            if (PhotonNetwork.IsMasterClient)
-            {
-                InitSpawner();
-                StartSpawn();
-            }
-           //     while (true)
-           // {
-           //     yield return new WaitForSeconds(2f);
-           //     if(GameManager.Instance != null)
-           //     {
-           //         if (PhotonNetwork.IsMasterClient)
-           //         {
-           //             InitSpawner();
-           //             StartSpawn();
-           //             yield break;
-           //         }
-           //         else
-           //         {
-           //             yield break;
-           //         }
-           //     }
-           //     else
-           //     {
-           //         Debug.Log("계속 null");
-           //     }
-           // }
+            isStartCoroutine = true;
+            InitSpawner();
+            StartSpawn();
+            yield break;
+            //     while (true)
+            // {
+            //     yield return new WaitForSeconds(2f);
+            //     if(GameManager.Instance != null)
+            //     {
+            //         if (PhotonNetwork.IsMasterClient)
+            //         {
+            //             InitSpawner();
+            //             StartSpawn();
+            //             yield break;
+            //         }
+            //         else
+            //         {
+            //             yield break;
+            //         }
+            //     }
+            //     else
+            //     {
+            //         Debug.Log("계속 null");
+            //     }
+            // }
         }
 
         // Update is called once per frame
@@ -81,14 +82,6 @@ namespace KSU
             if(isGameEnd)
             {
                 this.gameObject.SetActive(false);
-            }
-
-            if (Input.GetKeyDown(KeyCode.F9))
-            {
-                if (PhotonNetwork.IsMasterClient)
-                {
-                    StartCoroutine(nameof(InitSpwanerCo));
-                }
             }
         }
 
@@ -165,7 +158,10 @@ namespace KSU
                         spawnPatternNum /= 10;
                     }
                     patternCount++;
-                    yield return new WaitForSeconds(spawnDelayTime);
+                    if (isDefense)
+                        yield return new WaitForSeconds(spawnDelayTime);
+                    else
+                        yield break;
                 }
                 else
                     yield return new WaitUntil(() => curSpawnCount < maxSpawnNum);
@@ -212,6 +208,18 @@ namespace KSU
                     }
                 }
             }
+        }
+
+        protected IEnumerator WaitForPlayer()
+        {
+            yield return new WaitUntil(() => GameManager.Instance.GetCharOnScene(true) && GameManager.Instance.GetCharOnScene(false));
+
+            if (PhotonNetwork.IsMasterClient)
+            {
+                StartCoroutine(nameof(InitSpwanerCo));
+            }
+
+            yield break;
         }
     }
 }

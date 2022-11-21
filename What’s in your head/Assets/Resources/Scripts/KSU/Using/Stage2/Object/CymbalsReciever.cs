@@ -17,8 +17,9 @@ namespace KSU.AutoAim.Object.Stage2
 
 
         // Start is called before the first frame update
-        protected virtual void Awake()
+        protected override void Awake()
         {
+            base.Awake();
             photonView = PhotonView.Get(this);
             animator = GetComponent<Animator>();
         }

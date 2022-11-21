@@ -5,9 +5,11 @@ using UnityEngine.AI;
 
 using JCW.Spawner;
 using Photon.Pun;
+using JCW.AudioCtrl;
 
 namespace KSU.AutoAim.Object.Monster
 {
+    [RequireComponent(typeof(AudioSource))]
     public class DefenseMonster : AutoAimTargetObject
     {
         protected PhotonView pv;
@@ -43,21 +45,20 @@ namespace KSU.AutoAim.Object.Monster
         [Header("공격하기 전 딜레이 시간")] public float attackDelayTimeBefore = 2f;
         [Header("공격한 후 딜레이 시간")] public float attackDelayTimeAfter = 2f;
         [SerializeField] protected GameObject attackTrigger;
-        [SerializeField] protected GameObject detectingUITrigger;
 
         public bool isTargetFounded = false;
 
+        protected AudioSource audioSource;
 
 
 
 
-
-        bool isTopView = true;
+        [SerializeField] bool isTopView = true;
         //bool isTopView = false;
 
 
         // Start is called before the first frame update
-        void Awake()
+        protected override void Awake()
         {
             pv = PhotonView.Get(this);
             monsterNavAgent = GetComponent<NavMeshAgent>();
@@ -65,7 +66,8 @@ namespace KSU.AutoAim.Object.Monster
             monsterAnimator = GetComponent<Animator>();
             monsterRope = GetComponent<LineRenderer>();
             monsterCollider = GetComponent<CapsuleCollider>();
-            detectingUITrigger.transform.localScale = Vector3.one * detectingUIRange * 2f;
+            audioSource = GetComponent<AudioSource>();
+            JCW.AudioCtrl.AudioSettings.SetAudio(audioSource, 1, 50f);
             InitRope();
         }
 
@@ -196,6 +198,7 @@ namespace KSU.AutoAim.Object.Monster
             monsterNavAgent.enabled = false;
             monsterRope.enabled = false;
             monsterCollider.enabled = false;
+            PlayDeadSound();
         }
 
         public void Disappear()
@@ -376,11 +379,40 @@ namespace KSU.AutoAim.Object.Monster
         public void StartBiting()
         {
             attackTrigger.SetActive(true);
+            PlayAttackSound();
         }
 
         public void EndBiting()
         {
             attackTrigger.SetActive(false);
+        }
+
+        protected virtual void OnEnable()
+        {
+            PlayAppearSound();
+        }
+
+        protected void PlayAppearSound()
+        {
+            SoundManager.Instance.Play3D_RPC("S3_Snake_Appear", audioSource);
+        }
+
+        protected void PlayAttackSound()
+        {
+            SoundManager.Instance.Play3D_RPC("S3_Snake_Attack", audioSource);
+        }
+
+        protected void PlayDeadSound()
+        {
+            SoundManager.Instance.Play3D_RPC("S3_Snake_Dead", audioSource);
+        }
+
+        protected virtual void OnTriggerEnter(Collider other)
+        {
+            if(other.CompareTag("SteadyBeam"))
+            {
+                GetDamage(30);
+            }
         }
     }
 }

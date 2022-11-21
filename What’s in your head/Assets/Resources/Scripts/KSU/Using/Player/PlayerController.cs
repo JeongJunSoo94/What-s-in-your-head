@@ -18,6 +18,7 @@ using System.Text;
 namespace KSU
 {
     public enum DamageType { Attacked, KnockBack, Dead };
+    [RequireComponent(typeof(AudioSource))]
     public class PlayerController : MonoBehaviour
     {
         //  Scripts Components
@@ -25,6 +26,7 @@ namespace KSU
         public PlayerState characterState;
         public PlayerMouseController playerMouse;
         public PlayerInteraction playerInteraction;
+        AudioSource audioSource;
         #endregion
 
         // 유니티 제공 Components
@@ -98,6 +100,9 @@ namespace KSU
 
         [HideInInspector] public bool isOn_HP_UI = false;
         StringBuilder filePath;
+        bool isPlayingWalkSound = false;
+        bool isPlayingRunSound = false;
+
         void Awake()
         {
             // >> : YC
@@ -112,7 +117,8 @@ namespace KSU
             playerRigidbody = GetComponent<Rigidbody>();
             playerMouse = GetComponent<PlayerMouseController>();
             playerInteraction = GetComponent<PlayerInteraction>();
-
+            audioSource = GetComponent<AudioSource>();
+            JCW.AudioCtrl.AudioSettings.SetAudio(audioSource, 1, 50f);
 
             //====================================================
 
@@ -359,6 +365,7 @@ namespace KSU
                         transform.LookAt(transform.position + horVel);
                         MakeinertiaVec(horVel.magnitude, horVel.normalized);
                         moveVec.y = jumpSpeed;
+                        PlayEffectSound("All_Jump");
                         return;
                     }
                 }
@@ -381,6 +388,7 @@ namespace KSU
                             MakeinertiaVec(walkSpeed, horVel.normalized);
                         }
                         moveVec.y = airJumpSpeed;
+                        PlayEffectSound("All_JumpAir");
                     }
                 }
             }
@@ -405,25 +413,35 @@ namespace KSU
                 return;
             if (KeyManager.Instance.GetKeyDown(PlayerAction.Dash))
             {
-                if (!characterState.IsDashing)
+                if (characterState.IsGrounded)
                 {
-                    characterState.CheckDash();
-                }
-
-                if (!characterState.WasAirDashing)
-                {
-                    characterState.CheckAirDash();
-                    Rotate();
-                    if (characterState.isMove)
+                    if (!characterState.IsDashing)
                     {
-                        MakeinertiaVec(walkSpeed, moveDir);
+                        characterState.CheckDash();
+                        PlayEffectSound("All_DashNormal");
                     }
-                    else
+                }
+                else
+                {
+
+                }
+                {
+                    if (!characterState.WasAirDashing)
                     {
-                        Vector3 forward = transform.forward;
-                        forward.y = 0f;
-                        forward = forward.normalized;
-                        MakeinertiaVec(walkSpeed, forward);
+                        characterState.CheckAirDash();
+                        Rotate();
+                        if (characterState.isMove)
+                        {
+                            MakeinertiaVec(walkSpeed, moveDir);
+                        }
+                        else
+                        {
+                            Vector3 forward = transform.forward;
+                            forward.y = 0f;
+                            forward = forward.normalized;
+                            MakeinertiaVec(walkSpeed, forward);
+                        }
+                        PlayEffectSound("All_DashAir");
                     }
                 }
             }
@@ -579,18 +597,21 @@ namespace KSU
                 {
                     if (characterState.isRun) // 달릴 때
                     {
+                        PlayRunSound();
                         moveSpeed += runSpeed * Time.fixedDeltaTime * 20f;
                         if (moveSpeed > runSpeed)
                             moveSpeed = runSpeed;
                     }
                     else if (characterState.isMove)// 달리기 중이 아닐 때
                     {
+                        PlayWalkSound();
                         moveSpeed += walkSpeed * Time.fixedDeltaTime * 20f;
                         if (moveSpeed > walkSpeed)
                             moveSpeed = walkSpeed;
                     }
                     else
                     {
+                        ResetMoveSound();
                         moveSpeed -= runSpeed * Time.fixedDeltaTime * 20f;
                         if (moveSpeed < 0)
                             moveSpeed = 0f;
@@ -675,6 +696,18 @@ namespace KSU
             playerCapsuleCollider.enabled = false;
             InitInteraction();
             EscapeInteraction();
+
+            if(characterState.isMine)
+            {
+                if (this.gameObject.CompareTag("Nella"))
+                {
+                    PlayEffectSound("nella_dead");
+                }
+                else if (this.gameObject.CompareTag("Steady"))
+                {
+                    PlayEffectSound("steady_dead");
+                }
+            }
         }
 
         public void EndDeath()
@@ -763,8 +796,18 @@ namespace KSU
                     MakeKnockBackVec(knockBackHorVec, knockBackSpeed);
                     StartCoroutine(nameof(DelayResetKnockBack));
                 }
-
                 playerAnimator.SetBool(damageTrigger, true);
+                if (characterState.isMine)
+                {
+                    if (this.gameObject.CompareTag("Nella"))
+                    {
+                        PlayEffectSound("nella_gethit_2");
+                    }
+                    else if (this.gameObject.CompareTag("Steady"))
+                    {
+                        PlayEffectSound("steady_gethit_1");
+                    }
+                }
             }
         }
         
@@ -792,13 +835,22 @@ namespace KSU
                 if (GameManager.Instance.curPlayerHP <= 0)
                 {
                     GameManager.Instance.curPlayerHP = 0;
-                    //playerAnimator.SetBool("DeadTrigger", true);
                     photonView.RPC(nameof(SetAnimatorBool), RpcTarget.AllViaServer, "DeadTrigger", true);
                 }
                 else
                 {
                     photonView.RPC(nameof(SetAnimatorBool), RpcTarget.AllViaServer, damageTrigger, true);
-                    //playerAnimator.SetBool(damageTirgger, true);
+                    if (characterState.isMine)
+                    {
+                        if (this.gameObject.CompareTag("Nella"))
+                        {
+                            PlayEffectSound("nella_gethit_1");
+                        }
+                        else if (this.gameObject.CompareTag("Steady"))
+                        {
+                            PlayEffectSound("steady_gethit_2");
+                        }
+                    }
                 }
             }
         }
@@ -807,6 +859,39 @@ namespace KSU
         public void SetAnimatorBool(string name, bool enable)
         {
             playerAnimator.SetBool(name, enable);
+        }
+
+        void PlayWalkSound()
+        {
+            if(!isPlayingWalkSound)
+            {
+                ResetMoveSound();
+                isPlayingWalkSound = true;
+                SoundManager.Instance.PlayEffect("All_Walk");
+            }
+        }
+
+        void PlayRunSound()
+        {
+            if(!isPlayingRunSound)
+            {
+                ResetMoveSound();
+                isPlayingRunSound = true;
+                SoundManager.Instance.PlayEffect("All_Sprint");
+            }
+        }
+
+        void ResetMoveSound()
+        {
+            SoundManager.Instance.StopEffect();
+            isPlayingWalkSound = false;
+            isPlayingRunSound = false;
+        }
+
+        void PlayEffectSound(string soundName)
+        {
+            ResetMoveSound();
+            SoundManager.Instance.PlayEffect(soundName);
         }
     }
 }
