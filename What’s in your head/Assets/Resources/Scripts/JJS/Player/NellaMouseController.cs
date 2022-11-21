@@ -115,9 +115,9 @@ namespace JJS
                     if (player.characterState.aim)
                     {
                         if (!player.characterState.IsJumping && !player.characterState.IsAirJumping
-                            && !player.characterState.IsDashing && !player.characterState.IsAirDashing)
+                            && !player.characterState.IsDashing && !player.characterState.IsAirDashing && !player.playerAnimator.GetBool("isDead"))
                         {
-                            if (KeyManager.Instance.GetKey(PlayerAction.Fire) && weaponInfo[GetUseWeapon()].canAim)
+                            if (KeyManager.Instance.GetKey(PlayerAction.Fire) && weaponInfo[GetUseWeapon()].canAim && GameManager.Instance.curPlayerHP > 0)
                             {
                                 if (gun.shootEnable && canAim)
                                 {
@@ -144,9 +144,10 @@ namespace JJS
                     else
                     {
                         if (!player.characterState.IsJumping && !player.characterState.IsAirJumping
-                              && !player.characterState.IsDashing && !player.characterState.IsAirDashing)
+                              && !player.characterState.IsDashing && !player.characterState.IsAirDashing
+                              && !player.playerAnimator.GetBool("isDead"))
                         {
-                            if (KeyManager.Instance.GetKey(PlayerAction.Fire) && !weaponInfo[GetUseWeapon()].canAim)
+                            if (KeyManager.Instance.GetKey(PlayerAction.Fire) && !weaponInfo[GetUseWeapon()].canAim && GameManager.Instance.curPlayerHP>0)
                             {
                                 photonView.RPC(nameof(SetWeaponEnable), RpcTarget.AllViaServer, true);
                             }
@@ -243,6 +244,11 @@ namespace JJS
                             if (hitObjs[i].HitColliders[j].gameObject.CompareTag("Bush"))
                             {
                                 hitObjs[i].HitColliders[j].gameObject.SendMessage("Attacked", 0.01f);
+                            }
+
+                            if (hitObjs[i].HitColliders[j].gameObject.CompareTag("PoisonSnake") || hitObjs[i].HitColliders[j].gameObject.CompareTag("TrippleHeadSnake"))
+                            {
+                                hitObjs[i].HitColliders[j].gameObject.SendMessage("GetDamage", 3);
                             }
                         }
                     }

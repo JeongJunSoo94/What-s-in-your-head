@@ -38,13 +38,14 @@ namespace JJS
 
             if (!playSound)
             {
+                audioSource.loop = true;
                 playSound = true;
-                SoundManager.Instance.Play3D_RPC("S2_NellaSing", audioSource);
+                SoundManager.Instance.PlayIndirect3D_RPC("S2_NellaSing", audioSource);
             }
             if(!enable)
             {
                 playSound = false;
-                SoundManager.Instance.Stop3D_RPC(audioSource);
+                SoundManager.Instance.StopIndirect3D_RPC(audioSource);
             }
 
 
