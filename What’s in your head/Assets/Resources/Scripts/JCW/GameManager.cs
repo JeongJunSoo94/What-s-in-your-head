@@ -35,7 +35,7 @@ public class GameManager : MonoBehaviour, IPunObservable
     // Owner인 내 캐릭터의 위치
     [HideInInspector] public Transform myPlayerTF;
 
-    [HideInInspector] List<bool> isCharOnScene = new();
+    [HideInInspector] public List<bool> isCharOnScene = new();
 
     // PauseUI
     [Header("일시정지 UI 프리팹")] public GameObject pauseUI = null;
@@ -163,7 +163,8 @@ public class GameManager : MonoBehaviour, IPunObservable
     [PunRPC]
     void AddAlive(bool _isNella, bool _value)
     {
-        isAlive.Add(_isNella, _value);
+        if(isAlive.Count < 2)
+            isAlive.Add(_isNella, _value);
     }
     //===========================================================================
 
@@ -249,7 +250,6 @@ public class GameManager : MonoBehaviour, IPunObservable
     {
         otherPlayerTF = null;
         myPlayerTF = null;
-        isCharOnScene.Clear();
         isTopView = false;
         isSideView = false;
         curPlayerHP = 12;
