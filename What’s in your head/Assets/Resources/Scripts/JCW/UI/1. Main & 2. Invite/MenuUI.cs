@@ -67,7 +67,7 @@ namespace JCW.UI
                     IsOpen = true,      // 룸의 오픈 여부
                     IsVisible = false,   // 로비에서 룸 목록에 노출시킬지 여부  
                 };
-                PhotonNetwork.JoinOrCreateRoom("Lobby", lobbyOptions, null);
+                PhotonNetwork.JoinOrCreateRoom("Lobby", lobbyOptions, null);                
                 StartCoroutine(nameof(OpenRoom));
             });
 

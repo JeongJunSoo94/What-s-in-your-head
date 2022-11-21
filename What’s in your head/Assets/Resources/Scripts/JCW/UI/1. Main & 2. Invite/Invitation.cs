@@ -26,7 +26,10 @@ namespace JCW.UI
                 PhotonNetwork.LeaveRoom();
                 StartCoroutine(nameof(WaitForRoom), masterID);
             });
-            declineButton.onClick.AddListener(() => {  this.gameObject.SetActive(false); });
+            declineButton.onClick.AddListener(() => {
+                StopAllCoroutines();
+                this.gameObject.SetActive(false); 
+            });
         }
 
         private void OnEnable()
@@ -42,13 +45,37 @@ namespace JCW.UI
 
         IEnumerator WaitForRoom(string masterName)
         {
-            yield return new WaitUntil(() => PhotonNetwork.NetworkClientState == ClientState.JoinedLobby);
-
-            while (PhotonNetwork.JoinRoom(masterName, null))
+            while (PhotonNetwork.NetworkClientState != ClientState.JoinedLobby)
             {
+                Debug.Log("기존 방에서 나가는 중");
                 yield return null;
-            }            
+            }
+            //bool isJoined = false;
 
+            PhotonNetwork.JoinLobby();
+            while (PhotonNetwork.NetworkClientState != ClientState.JoinedLobby)
+            {
+                Debug.Log("로비 접속 중");
+                yield return null;
+            }
+
+            //while (!isJoined)
+            //{
+            //    isJoined = PhotonNetwork.JoinRoom(masterName, null);
+            //    Debug.Log("방 접속 시도 중");
+            //    yield return null;
+            //}
+            //Debug.Log("방 접속 완료");
+            PhotonNetwork.JoinRoom(masterName, null);
+            while (PhotonNetwork.NetworkClientState != ClientState.Joined)
+            {
+                Debug.Log("현 상태 : " + PhotonNetwork.NetworkClientState);
+                if(PhotonNetwork.NetworkClientState == ClientState.ConnectedToMasterServer)
+                    PhotonNetwork.JoinLobby();
+                if (PhotonNetwork.NetworkClientState == ClientState.JoinedLobby)
+                    PhotonNetwork.JoinRoom(masterName, null);
+                yield return null;
+            }
             //PhotonNetwork.JoinRoom(masterName, null);
             readyObj.SetActive(true);
             this.gameObject.SetActive(false);

@@ -375,7 +375,7 @@ namespace JCW.AudioCtrl
         [PunRPC]
         public void Stop3D()
         {
-            otherSource.Stop();
+            otherSource.Stop();            
         }
 
         #endregion
