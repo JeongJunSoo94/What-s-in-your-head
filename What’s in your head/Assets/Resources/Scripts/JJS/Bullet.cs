@@ -13,6 +13,9 @@ namespace JJS
         public BezierCurve curve;
         public Spawner spawner;
         public TrailRenderer trail;
+        public Spawner effectWaterSpawner;
+        public Spawner effectWaterCircleSpawner;
+
         private void Awake()
         {
             spawner = this.transform.parent.gameObject.GetComponent<Spawner>();
@@ -56,8 +59,16 @@ namespace JJS
             //    other.gameObject.GetComponent<HostField>().GetDamaged();
 
             //Debug.Log(other.gameObject.name);
-            if(!(other.gameObject.layer == LayerMask.NameToLayer("UITriggers")))
+            if (other.gameObject.layer == LayerMask.NameToLayer("Water"))
             {
+                effectWaterCircleSpawner.Respawn(transform.position, Quaternion.LookRotation(other.transform.up));
+                spawner.Despawn(this.gameObject);
+                return;
+            }
+
+            if (!(other.gameObject.layer == LayerMask.NameToLayer("UITriggers")))
+            {
+                effectWaterSpawner.Respawn(transform.position,Quaternion.LookRotation(-transform.forward));
                 spawner.Despawn(this.gameObject);
             }
         }

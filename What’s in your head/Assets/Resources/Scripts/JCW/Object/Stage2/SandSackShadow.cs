@@ -11,6 +11,8 @@ namespace JCW.Object
 
         float initHeight;
         float groundHeight;
+
+        [HideInInspector] public float interpolationHeight=5f;
         override protected void Awake()
         {
             base.Awake();
@@ -30,7 +32,7 @@ namespace JCW.Object
             float value = transform.position.y * scaleOffset + defaultShadowValue;
             projector.size = new Vector3(value, value, maxShadowDepth);
 
-            projector.fadeFactor = ((initHeight + 5f - transform.position.y) / (initHeight - groundHeight)) * shadowTransparent;
+            projector.fadeFactor = ((initHeight + interpolationHeight - transform.position.y) / (initHeight - groundHeight)) * shadowTransparent;
         }        
 
         public void SetGroundPlatform(Transform tf)

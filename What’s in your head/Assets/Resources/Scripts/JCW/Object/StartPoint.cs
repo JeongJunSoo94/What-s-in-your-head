@@ -12,6 +12,11 @@ public class StartPoint : MonoBehaviour
     StringBuilder dialogString;
     private void Awake()
     {
+        if (GameManager.Instance == null)
+        {
+            Debug.Log("게임 매니저가 없으므로 중단");
+            return;
+        }
         // 현재 스테이지와 섹션 가져오기
         currentStageSection = new(10, 10);
         currentStageSection.Append("S");
@@ -23,15 +28,16 @@ public class StartPoint : MonoBehaviour
         dialogString = new(10, 10);
         dialogString.Append(currentStageSection);
         dialogString.Append("_N");
-        DialogManager.Instance.SetDialogs(dialogString.ToString());
-        dialogString.Replace("_N", "_E", 4, 2);
-        DialogManager.Instance.SetDialogs(dialogString.ToString());
-        dialogString.Replace("_E", "_S", 4, 2);
-        DialogManager.Instance.SetDialogs(dialogString.ToString());
+        if (DialogManager.Instance != null)
+        {
+            DialogManager.Instance.SetDialogs(dialogString.ToString());
+            dialogString.Replace("_N", "_E", 4, 2);
+            DialogManager.Instance.SetDialogs(dialogString.ToString());
+            dialogString.Replace("_E", "_S", 4, 2);
+            DialogManager.Instance.SetDialogs(dialogString.ToString());
+        }       
 
-        StartCoroutine(nameof(WaitForPlayer));
-
-        
+        StartCoroutine(nameof(WaitForPlayer));       
     }
 
     IEnumerator WaitForPlayer()

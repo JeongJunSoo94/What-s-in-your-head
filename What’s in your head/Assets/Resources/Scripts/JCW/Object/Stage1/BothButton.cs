@@ -34,7 +34,6 @@ namespace JCW.Object.Stage1
                     ++bothCount;
                     if(bothCount>= 2 && !isStart)
                     {
-                        Debug.Log("움직이라고 신호");
                         isStart = true;
                         StartCoroutine(nameof(moveObstacle));
                     }
@@ -57,7 +56,7 @@ namespace JCW.Object.Stage1
         public void SetBothCount(int count)
         {
             bothCount = count;
-            Debug.Log("실 카운트 : " + bothCount);
+            //Debug.Log("실 카운트 : " + bothCount);
             if (bothCount >= 2 && !isStart)
             {
                 isStart = true;
@@ -72,7 +71,7 @@ namespace JCW.Object.Stage1
         void SetCount(int count)
         {
             bothCount = count;
-            Debug.Log("실 카운트 : " + bothCount);
+            //Debug.Log("실 카운트 : " + bothCount);
             if (bothCount >= 2 && !isStart)
             {
                 isStart = true;

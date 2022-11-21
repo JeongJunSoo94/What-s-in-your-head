@@ -9,14 +9,10 @@ namespace JJS
         public Flashlight boss;
 
         public int index;
-        private void Awake()
-        {
-            
-        }
-
         private void OnTriggerEnter(Collider other)
         {
-            boss.index = index;
+            if(other.gameObject.layer == LayerMask.NameToLayer("Player"))
+                boss.index = index;
         }
     }
 }

@@ -16,6 +16,11 @@ namespace JCW.Object
 
         Vector3 finalPos;
         PhotonView pv;
+        public WaitForSeconds wait = new WaitForSeconds(0.01f);
+        public float delayTime = 2;
+        public float interpolationHeight=30f;
+        bool delayUse;
+        bool isDelayed;
         private void Awake()
         {
             if (!groundPlatform)
@@ -28,11 +33,22 @@ namespace JCW.Object
             transform.GetChild(0).GetComponent<SandSackShadow>().groundPlatform = this.groundPlatform;
             finalPos = transform.position;
             finalPos.y = groundPlatform.position.y;
+            isDelayed = false;
+            delayUse = true;
         }
 
         void Update()
         {
-            if (!isActivated)
+            if (!isActivated)//트루 통과
+                return;
+
+            if (delayUse)
+            {
+                transform.GetChild(0).GetComponent<SandSackShadow>().interpolationHeight = interpolationHeight;
+                StartCoroutine(SandAttackCoroutine(delayTime));
+            }
+
+            if(isDelayed)
                 return;
             transform.position = Vector3.MoveTowards(transform.position, finalPos, Time.deltaTime * fallSpeed);
             fallSpeed += Time.deltaTime * fallAccelerateSpeed;
@@ -73,6 +89,20 @@ namespace JCW.Object
             yield return new WaitUntil(() => transform.GetChild(2).gameObject.GetComponent<ParticleSystem>().isStopped);
             Debug.Log("모래주머니 삭제");
             Destroy(this.gameObject);
+        }
+
+        IEnumerator SandAttackCoroutine(float delayTime)
+        {
+            delayUse = false;
+            isDelayed = true;
+            float curCool = 0;
+            while (curCool < delayTime)
+            {
+                curCool += 0.01f;
+                yield return wait;
+            }
+            isDelayed = false;
+            yield break;
         }
     }
 

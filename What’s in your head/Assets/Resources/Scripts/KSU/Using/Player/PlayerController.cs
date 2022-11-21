@@ -13,6 +13,7 @@ using JCW.Object;
 using JJS;
 using KSU.AutoAim.Object.Monster;
 using JCW.Object.Stage1;
+using System.Text;
 
 namespace KSU
 {
@@ -96,13 +97,14 @@ namespace KSU
         #endregion
 
         [HideInInspector] public bool isOn_HP_UI = false;
-
+        StringBuilder filePath;
         void Awake()
         {
             // >> : YC
             Cursor.lockState = CursorLockMode.Locked;
-            Application.targetFrameRate = 120;
             // << :
+
+            filePath = new(320, 320);
 
             characterState = GetComponent<PlayerState>();
             playerAnimator = GetComponent<Animator>();
@@ -128,6 +130,8 @@ namespace KSU
             }
             else
                 GameManager.Instance.myPlayerTF = this.transform;
+
+            GameManager.Instance.SetCharOnScene_RPC(true);
             // << : 
 
             Application.targetFrameRate = 120;
@@ -260,6 +264,7 @@ namespace KSU
         }
         public void Resurrect()
         {
+            filePath.Clear();
             InitInteraction();
             InitController();
             InitAnimatorParam();
@@ -270,18 +275,25 @@ namespace KSU
 
             characterState.InitState(true, false);
 
-            string path = Application.dataPath + "/Resources/CheckPointInfo/Stage" + GameManager.Instance.curStageIndex
-                + "/" + GameManager.Instance.curStageType + "/Section" + GameManager.Instance.curSection + ".json";
-            if (!File.Exists(path))
+            filePath.Append(Application.streamingAssetsPath);
+            filePath.Append("/CheckPointInfo/Stage");
+            filePath.Append(GameManager.Instance.curStageIndex.ToString());
+            filePath.Append("/");
+            filePath.Append(GameManager.Instance.curStageType.ToString());
+            filePath.Append("/Section");
+            filePath.Append(GameManager.Instance.curSection.ToString());
+            filePath.Append(".json");
+            if (!File.Exists(filePath.ToString()))
             {
                 Debug.Log("체크포인트 불러오기 실패 / 불러오려 했던 섹션 : " + GameManager.Instance.curSection);
                 return;
             }
 
-            string jsonString = File.ReadAllText(path);
+            string jsonString = File.ReadAllText(filePath.ToString());
 
             SavePosition.PlayerInfo data = JsonUtility.FromJson<SavePosition.PlayerInfo>(jsonString);
-            transform.SetPositionAndRotation(new Vector3((float)data.position[0], (float)data.position[1], (float)data.position[2]), new Quaternion((float)data.rotation[0], (float)data.rotation[1], (float)data.rotation[2], (float)data.rotation[3]));
+            transform.SetPositionAndRotation(new Vector3((float)data.position[0], (float)data.position[1], (float)data.position[2]),
+                new Quaternion((float)data.rotation[0], (float)data.rotation[1], (float)data.rotation[2], (float)data.rotation[3]));
 
             if (photonView.IsMine && characterState.isInMaze)
             {

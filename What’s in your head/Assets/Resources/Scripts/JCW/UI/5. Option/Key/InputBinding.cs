@@ -169,7 +169,6 @@ namespace JCW.UI.Options.InputBindings
 
         public void SaveToFile()
         {
-            Debug.Log("새 키 설정 저장");
             SerializableInputBinding sib = new(this);
             JsonData infoJson = JsonMapper.ToJson(sib);
 
@@ -186,7 +185,6 @@ namespace JCW.UI.Options.InputBindings
             }    
 
             string jsonString = File.ReadAllText(Application.dataPath + "/Resources/Options/KeyInputBindings.json");
-            Debug.Log("키 값 불러오기 성공");
 
             SerializableInputBinding data = JsonUtility.FromJson<SerializableInputBinding>(jsonString);
             ApplyNewBindings(data);

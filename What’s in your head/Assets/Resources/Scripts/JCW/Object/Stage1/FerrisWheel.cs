@@ -24,7 +24,6 @@ namespace JCW.Object.Stage1
         IEnumerator WaitForPlayer()
         {
             yield return new WaitUntil(() => PhotonNetwork.PlayerList.Length == 2);
-
             pv.RPC(nameof(StartFunc), RpcTarget.AllViaServer);
 
             yield break;
@@ -45,6 +44,7 @@ namespace JCW.Object.Stage1
                 {
                     cabins[i].LookAt(cabins[i].position + Vector3.forward);
                 }
+                yield return null;
             }            
         }
     }

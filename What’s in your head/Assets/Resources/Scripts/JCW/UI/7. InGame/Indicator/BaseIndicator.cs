@@ -39,6 +39,8 @@ namespace JCW.UI.InGame.Indicator
 
         virtual protected void Start()
         {
+            if (GameManager.Instance == null)
+                return;
             if (GameManager.Instance.isTest)
                 StartCoroutine(nameof(WaitForPlayer));
             else

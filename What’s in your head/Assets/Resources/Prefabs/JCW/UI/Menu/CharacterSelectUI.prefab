@@ -126,7 +126,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 9103518227831485537}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 0}
+        m_TargetAssemblyTypeName: JCW.AudioCtrl.SoundManager, Assembly-CSharp
+        m_MethodName: PlayUI
+        m_Mode: 5
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: ButtonClick
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &9103518227831485596
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -165,6 +177,7 @@ MonoBehaviour:
   defaultSprite: {fileID: 21300000, guid: b5bf806857afdc2448f9e126320f63f6, type: 3}
   onButtonSprite: {fileID: 21300000, guid: 9876692882103514fabc52caf6b6f9ec, type: 3}
   selectSprite: {fileID: 21300000, guid: 5083d986e915a94459ac40e6cd7948d2, type: 3}
+  loadingUI: {fileID: 0}
 --- !u!1 &9103518227874794988
 GameObject:
   m_ObjectHideFlags: 0
@@ -201,8 +214,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: -50}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -167, y: -184}
-  m_SizeDelta: {x: 587, y: 880}
+  m_AnchoredPosition: {x: -183, y: -127}
+  m_SizeDelta: {x: 432, y: 690}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &9103518227874794987
 CanvasRenderer:
@@ -232,7 +245,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: a68eceac1404aaf40b113c4579aabb6c, type: 3}
+  m_Sprite: {fileID: 21300000, guid: b0993eb4f8fbfd5429d45b5790165cdc, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -357,7 +370,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 10, y: 10}
+  m_AnchoredPosition: {x: 10, y: -10}
   m_SizeDelta: {x: 500, y: 150}
   m_Pivot: {x: 0, y: 1}
 --- !u!222 &9103518228254576816
@@ -401,9 +414,8 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: "\uB12C\uB77C\uB294 \uBB34\uC2A8\uBB34\uC2A8 \uC0AC\uB78C\uC785\uB2C8\uB2E4
-    !\n\uC5B4\uB5A0\uC5B4\uB5A0\uD55C \uC5ED\uD560\uC744 \uD558\uBA70\n\uC5B4\uB5A0\uC5B4\uB5A0
-    \uD569\uB2C8\uB2E4 !"
+  m_Text: "\uC5B8\uC81C\uB098 \uC5F4\uC815 \uB118\uCE58\uAC8C \uD589\uB3D9\uD558\uB294\n\uC790\uC720\uB85C\uC6B4
+    \uC608\uC220\uAC00"
 --- !u!1 &9103518228391454105
 GameObject:
   m_ObjectHideFlags: 0
@@ -520,8 +532,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: -50}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 86.00003, y: -51.00003}
-  m_SizeDelta: {x: 346, y: 462}
+  m_AnchoredPosition: {x: 36, y: -46}
+  m_SizeDelta: {x: 163, y: 463}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &9103518228432175443
 CanvasRenderer:
@@ -551,7 +563,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 90c904afb8eb08e489dd548217f70e54, type: 3}
+  m_Sprite: {fileID: 21300000, guid: b0daa9456898bd947b1cdeafc804f81d, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -913,7 +925,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: -50}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 48, y: 82}
+  m_AnchoredPosition: {x: 11, y: 26}
   m_SizeDelta: {x: 150, y: 60}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &9103518228796398063
@@ -1084,7 +1096,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 9103518228809954112}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 0}
+        m_TargetAssemblyTypeName: JCW.AudioCtrl.SoundManager, Assembly-CSharp
+        m_MethodName: PlayUI
+        m_Mode: 5
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: ButtonClick
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &9103518228809954174
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1123,6 +1147,7 @@ MonoBehaviour:
   defaultSprite: {fileID: 21300000, guid: 75e853770d42e2b46af017139e40975a, type: 3}
   onButtonSprite: {fileID: 21300000, guid: a36cb8105ce4d974093a5bb1da7eb5f2, type: 3}
   selectSprite: {fileID: 21300000, guid: 1e925482b1fd8be4caea9aa60d9a8696, type: 3}
+  loadingUI: {fileID: 0}
 --- !u!1 &9103518228868387967
 GameObject:
   m_ObjectHideFlags: 0
@@ -1238,8 +1263,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: -50}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -88.000046, y: -148.00006}
-  m_SizeDelta: {x: 398, y: 493}
+  m_AnchoredPosition: {x: -157, y: -147}
+  m_SizeDelta: {x: 197, y: 454}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &9103518228902088552
 CanvasRenderer:
@@ -1269,7 +1294,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 90f3a308260b24c40b6e1db09ca9f5f2, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 09914837ce14ee748a0c0a7ad2d05649, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -1396,7 +1421,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: -50}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 240, y: 171}
+  m_AnchoredPosition: {x: 241, y: 128}
   m_SizeDelta: {x: 150, y: 60}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &9103518229199960906
@@ -1476,7 +1501,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0}
   m_AnchorMax: {x: 1, y: 0}
-  m_AnchoredPosition: {x: 0, y: 15}
+  m_AnchoredPosition: {x: 0, y: -10}
   m_SizeDelta: {x: 500, y: 150}
   m_Pivot: {x: 1, y: 1}
 --- !u!222 &9103518229344665446
@@ -1520,9 +1545,8 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: "\uC2A4\uD14C\uB514\uB294 \uBB34\uC2A8\uBB34\uC2A8 \uC0AC\uB78C\uC785\uB2C8\uB2E4
-    !\n\uC5B4\uB5A0\uC5B4\uB5A0\uD55C \uC5ED\uD560\uC744 \uD558\uBA70\n\uC5B4\uB5A0\uC5B4\uB5A0
-    \uD569\uB2C8\uB2E4 !"
+  m_Text: "\uCE68\uCC29\uD558\uACE0 \uC870\uC2EC\uC2A4\uB7FD\uAC8C \uD589\uB3D9\uD558\uB294\n\uCCA0\uB450\uCCA0\uBBF8\uD55C
+    \uC804\uB7B5\uAC00"
 --- !u!1 &9103518229488103482
 GameObject:
   m_ObjectHideFlags: 0
@@ -1586,7 +1610,7 @@ Canvas:
   m_SortingBucketNormalizedSize: 0
   m_AdditionalShaderChannelsFlag: 0
   m_SortingLayerID: 0
-  m_SortingOrder: 4
+  m_SortingOrder: 6
   m_TargetDisplay: 0
 --- !u!114 &9103518229488103480
 MonoBehaviour:
@@ -1706,7 +1730,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 57, y: 43}
-  m_SizeDelta: {x: 587, y: 704}
+  m_SizeDelta: {x: 571, y: 704}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &9103518229592753961
 CanvasRenderer:
@@ -1736,7 +1760,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 73e82119b1210eb4ab24d101f31fc239, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 78c3517c7eac9db4e8ea8e77ea698d50, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -1902,6 +1926,18 @@ MonoBehaviour:
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 0}
+        m_TargetAssemblyTypeName: JCW.AudioCtrl.SoundManager, Assembly-CSharp
+        m_MethodName: PlayUI
+        m_Mode: 5
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: BackButton
           m_BoolArgument: 0
         m_CallState: 2
 --- !u!114 &9103518229618667647

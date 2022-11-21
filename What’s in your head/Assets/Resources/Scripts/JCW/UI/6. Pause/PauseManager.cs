@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using Photon.Pun;
 using JCW.UI.Options;
+using UnityEngine.SceneManagement;
 
 namespace JCW.UI
 {
@@ -44,7 +45,10 @@ namespace JCW.UI
 
         private void OnEnable()
         {
-            Cursor.lockState = CursorLockMode.Confined;
+            if (SceneManager.GetActiveScene().name == "MainTitle")
+                gameObject.SetActive(false);
+            else
+                Cursor.lockState = CursorLockMode.Confined;
         }
 
         public void CloseUI()

@@ -42,15 +42,17 @@ namespace JCW.UI
 
         IEnumerator WaitForRoom(string masterName)
         {
-            while (PhotonNetwork.NetworkClientState != ClientState.JoinedLobby) 
+            yield return new WaitUntil(() => PhotonNetwork.NetworkClientState == ClientState.JoinedLobby);
+
+            while (PhotonNetwork.JoinRoom(masterName, null))
             {
-                yield return new WaitForSeconds(0.5f); 
+                yield return null;
             }            
-            
-            PhotonNetwork.JoinRoom(masterName, null);
+
+            //PhotonNetwork.JoinRoom(masterName, null);
             readyObj.SetActive(true);
             this.gameObject.SetActive(false);
-            yield return null;
+            yield break;
         }
     }
 }

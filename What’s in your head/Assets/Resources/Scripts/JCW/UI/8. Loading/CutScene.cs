@@ -15,6 +15,8 @@ namespace JCW.UI.InGame
         Image player1_Img;
         Image player2_Img;
         [Header("재생할 로딩씬")] [SerializeField] LoadingUI loadingUI;
+        [Header("넬라 On/Off 이미지")] [SerializeField] List<Sprite> spriteList_1;
+        [Header("스테디 On/Off 이미지")] [SerializeField] List<Sprite> spriteList_2;
 
         VideoPlayer videoPlayer;
 
@@ -22,12 +24,18 @@ namespace JCW.UI.InGame
         bool isOn2 = false;
 
         bool isStart = false;
+        bool isNella = false;
+        bool isNewGame = false;
         private void Awake()
         {
             pv = PhotonView.Get(this);
-            player1_Img = transform.GetChild(1).GetComponent<Image>();
-            player2_Img = transform.GetChild(2).GetComponent<Image>();
+            player1_Img = transform.GetChild(1).GetChild(0).GetComponent<Image>();
+            player2_Img = transform.GetChild(1).GetChild(1).GetComponent<Image>();
             videoPlayer = transform.GetChild(0).GetComponent<VideoPlayer>();
+            if (GameManager.Instance.characterOwner.Count == 0)
+                isNewGame = true;
+            else
+                isNella = GameManager.Instance.characterOwner[PhotonNetwork.IsMasterClient];
         }
 
         private void OnEnable()
@@ -40,55 +48,64 @@ namespace JCW.UI.InGame
         void Update()
         {
             if(isStart && !videoPlayer.isPlaying)
-                this.gameObject.SetActive(false);
-            /*
-            if(KeyManager.Instance.GetKeyDown(PlayerAction.))
             {
-                if(PhotonNetwork.IsMasterClient)
-                {
-                    isOn1 = !isOn1;
-                    SetSkipImage(isOn1);
-                }
+                Debug.Log("방장임? : " +PhotonNetwork.IsMasterClient);
+                if (loadingUI != null)
+                    loadingUI.gameObject.SetActive(true);
+                this.gameObject.SetActive(false);
+            }
+            
+            if(KeyManager.Instance.GetKeyDown(PlayerAction.Interaction))
+            {
+                if(isNewGame)
+                    pv.RPC(nameof(SetSkipImage), RpcTarget.AllViaServer, PhotonNetwork.IsMasterClient);
                 else
-                {
-                    isOn2 = !isOn2;
-                    SetSkipImage(isOn2);
-                }
-                isOn = !isOn;
-                SetSkipImage(isOn);                
+                    pv.RPC(nameof(SetSkipImage), RpcTarget.AllViaServer, isNella);
             }
             if(isOn1 && isOn2)
             {
-                if(loadingUI != null)
-                    loadingUI.SetActive(true);
-                this.gameObject.SetActive(false);
+               if(loadingUI != null)
+                   loadingUI.gameObject.SetActive(true);
+               this.gameObject.SetActive(false);
             }
-            */
+            
         }
+
+        IEnumerator WaitUntilCutSceneEnd()
+        {
+            yield return new WaitUntil(() => videoPlayer.isPlaying);
+            isStart = true;
+            yield break;
+        }
+       //[PunRPC]
+       //void SetStart()
+       //{
+       //    isStart = true;            
+       //}
+
         [PunRPC]
         void SyncStart()
         {
             videoPlayer.gameObject.SetActive(true);
             player1_Img.gameObject.SetActive(true);
             player2_Img.gameObject.SetActive(true);
-            StartCoroutine(nameof(WaitUntilEnd));
+            videoPlayer.Play();
+            StartCoroutine(nameof(WaitUntilCutSceneEnd));
         }
 
         [PunRPC]
-        void SetSkipImage(bool isOn)
+        void SetSkipImage(bool isMaster)
         {
-            if (PhotonNetwork.IsMasterClient)
-                player1_Img.enabled = isOn;
+            if (isMaster)
+            {
+                isOn1 = !isOn1;
+                player1_Img.sprite = spriteList_1[isOn1 ? 1 : 0];
+            }
             else
-                player2_Img.enabled = isOn;
-        }
-
-        IEnumerator WaitUntilEnd()
-        {
-            yield return new WaitUntil(() => videoPlayer.isPlaying);
-            isStart = true;
-            
-            yield break;
+            {
+                isOn2 = !isOn2;
+                player2_Img.sprite = spriteList_2[isOn2 ? 1 : 0];
+            }
         }
     }
 
