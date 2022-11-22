@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using JCW.AudioCtrl;
 using JCW.UI;
 using JCW.UI.InGame;
 using JCW.UI.Options.InputBindings;
@@ -257,6 +258,8 @@ public class GameManager : MonoBehaviour, IPunObservable
         curPlayerHP = 12;
         aliceHP = 30;
         isAlive[true] = true;
-        isAlive[false] = true;    
+        isAlive[false] = true;
+        SoundManager.Instance.dict3D.Clear();
+        curSection = 0;
     }
 }

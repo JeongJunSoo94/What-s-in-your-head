@@ -103,6 +103,8 @@ namespace KSU
         bool isPlayingWalkSound = false;
         bool isPlayingRunSound = false;
 
+        int audioID = 0;
+
         void Awake()
         {
             // >> : YC
@@ -118,7 +120,7 @@ namespace KSU
             playerMouse = GetComponent<PlayerMouseController>();
             playerInteraction = GetComponent<PlayerInteraction>();
             audioSource = GetComponent<AudioSource>();
-            JCW.AudioCtrl.AudioSettings.SetAudio(audioSource, 1, 50f);
+            audioID = JCW.AudioCtrl.AudioSettings.SetAudio(audioSource, 1, 50f);
 
             //====================================================
 

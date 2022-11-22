@@ -215,8 +215,6 @@ namespace JCW.UI
                 }
                 if (isTextCheck) break;
             }
-            Debug.Log("이어하기 - 현재 스테이지 : " + GameManager.Instance.curStageIndex);
-            Debug.Log("이어하기 - 현재 섹션 : " + GameManager.Instance.curStageType);
             if (!isTextCheck)
                 GameManager.Instance.curStageIndex = 1;            
                 

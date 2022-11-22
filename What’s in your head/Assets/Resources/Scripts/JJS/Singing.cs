@@ -13,9 +13,12 @@ namespace JJS
         public GameObject effect;
         AudioSource audioSource;
         public bool playSound;
+
+        int audioID = 0;
         private void Awake()
         {
             audioSource = GetComponent<AudioSource>();
+            audioID = JCW.AudioCtrl.AudioSettings.SetAudio(audioSource, 1f, 60f, true);
             playSound = false;
         }
 
@@ -40,12 +43,12 @@ namespace JJS
             {
                 audioSource.loop = true;
                 playSound = true;
-                SoundManager.Instance.PlayIndirect3D_RPC("S2_NellaSing", audioSource);
+                SoundManager.Instance.PlayIndirect3D_RPC("S2_NellaSing", audioID);
             }
             if(!enable)
             {
                 playSound = false;
-                SoundManager.Instance.StopIndirect3D_RPC(audioSource);
+                SoundManager.Instance.Stop3D_RPC(audioID);
             }
 
 

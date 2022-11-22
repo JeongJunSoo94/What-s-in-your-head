@@ -56,6 +56,7 @@ namespace JJS.Weapon
         public GameObject effectCircle;
         public GameObject effectCircleSpawnerObj;
         public int effectCircleCurCount = 0;
+        int audioID = 0;
 
         private void Awake()
         {
@@ -64,7 +65,7 @@ namespace JJS.Weapon
             InitSpawner();
             shootEnable = true;
             audioSource = GetComponent<AudioSource>();
-            JCW.AudioCtrl.AudioSettings.SetAudio(audioSource, 1f, 40f);
+            audioID = JCW.AudioCtrl.AudioSettings.SetAudio(audioSource, 1f, 40f);
             //rigid = transform.parent.gameObject.GetComponent<Rigidbody>();
         }
 
@@ -107,7 +108,7 @@ namespace JJS.Weapon
 
         public void ShootStart()
         {
-            SoundManager.Instance.Play3D_RPC("S3_Watergun", audioSource);
+            SoundManager.Instance.Play3D_RPC("S3_Watergun", audioID);
             Shoot();
             bulletCurCount++;
         }

@@ -526,10 +526,7 @@ namespace KSU
             {
                 foreach (var rail in detectedRail.Keys)
                 {
-                    if (rail != railStartObject.transform.parent.gameObject)
-                    {
-                        rail.GetComponentInChildren<OneIndicator>().SetUI(false, Vector3.zero);
-                    }
+                    rail.GetComponentInChildren<OneIndicator>().SetUI(false, Vector3.zero);
                 }
             }
         }

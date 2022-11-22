@@ -19,13 +19,16 @@ namespace KSU.AutoAim.Player.Object
         //public bool isSucceeded = false;
 
         //Rigidbody grappleRigidbody;
-        //AudioSource audioSource;
+        AudioSource audioSource;
+        int audioID = 0;
 
         // Start is called before the first frame update
         protected override void Awake()
         {
             base.Awake();
             grappleRope = GetComponent<LineRenderer>();
+            audioSource = GetComponent<AudioSource>();
+            audioID = JCW.AudioCtrl.AudioSettings.SetAudio(audioSource, 1f, 50f);
         }
 
         // Update is called once per frame
@@ -94,7 +97,7 @@ namespace KSU.AutoAim.Player.Object
                 {
                     case "GrappledObject":
                         {
-                            SoundManager.Instance.Play3D_RPC("GrappleSound", audioSource);
+                            SoundManager.Instance.Play3D_RPC("GrappleSound", audioID);
                             playerGrappleAction.RecieveAutoAimObjectInfo(true, other.gameObject, AutoAimTargetType.GrappledObject);
                             isSucceeded = true;
                             objectRigidbody.velocity = Vector3.zero;

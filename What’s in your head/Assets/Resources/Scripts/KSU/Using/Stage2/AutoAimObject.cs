@@ -22,8 +22,6 @@ namespace KSU.AutoAim.Player
         protected virtual void Awake()
         {
             objectRigidbody = GetComponent<Rigidbody>();
-            audioSource = GetComponent<AudioSource>();
-            JCW.AudioCtrl.AudioSettings.SetAudio(audioSource, 1f, 50f);
         }
 
         public virtual void InitObject(Vector3 startPos, Vector3 endPos, float objectSpeed, float offset)

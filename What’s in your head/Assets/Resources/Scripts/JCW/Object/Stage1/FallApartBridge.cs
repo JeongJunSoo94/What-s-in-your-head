@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using JCW.AudioCtrl;
+using Photon.Pun;
 using UnityEngine;
 
 namespace JCW.Object.Stage1
@@ -21,6 +22,9 @@ namespace JCW.Object.Stage1
         GameObject triggerBox;
 
         bool isStart = false;
+        PhotonView pv;
+
+        int audioID = 0;
 
         private void Awake()
         {
@@ -29,7 +33,7 @@ namespace JCW.Object.Stage1
             normalMat = meshRenderer.sharedMaterial;
             audioSource = GetComponent<AudioSource>();
             triggerBox = transform.GetChild(0).gameObject;
-            JCW.AudioCtrl.AudioSettings.SetAudio(audioSource, 1f, 50f);
+            audioID = JCW.AudioCtrl.AudioSettings.SetAudio(audioSource, 1f, 50f);
         }
 
         private void OnTriggerEnter(Collider other)
@@ -49,7 +53,8 @@ namespace JCW.Object.Stage1
             float curTime = 0f;
             float curFlickTime = 0f;
             bool isNormal = true;
-            SoundManager.Instance.Play3D_RPC("S1S2_RainBowBridgeBroken2", audioSource);
+            SoundManager.Instance.Play3D_RPC("S1S2_RainBowBridgeBroken2", audioID);
+            Debug.Log(gameObject.name);
 
             // 여기서 카메라 흔들림 넣으면 될듯
 
@@ -68,7 +73,8 @@ namespace JCW.Object.Stage1
                 }
                 yield return null;
             }
-            SoundManager.Instance.Play3D_RPC("S1S2_RainBowBridgeBroken", audioSource);
+            SoundManager.Instance.Play3D_RPC("S1S2_RainBowBridgeBroken", audioID);
+            Debug.Log(gameObject.name);
             meshRenderer.enabled = false;
             boxCollider.enabled = false;
             triggerBox.SetActive(false);

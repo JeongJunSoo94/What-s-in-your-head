@@ -16,12 +16,14 @@ namespace JCW.Object.Stage1
         PhotonView pv;
         AudioSource audioSource;
 
+        int audioID = 0;
+
         private void Awake()
         {
             tf = this.transform;
             pv = PhotonView.Get(this);
             audioSource = GetComponent<AudioSource>();
-            JCW.AudioCtrl.AudioSettings.SetAudio(audioSource, 0.75f, 110f, true);                        
+            audioID = JCW.AudioCtrl.AudioSettings.SetAudio(audioSource, 0.75f, 110f, true);                        
             StartCoroutine(nameof(WaitForPlayer));
         }
 
@@ -29,7 +31,8 @@ namespace JCW.Object.Stage1
         {
             yield return new WaitUntil(() => GameManager.Instance.GetCharOnScene(true) && GameManager.Instance.GetCharOnScene(false));
             pv.RPC(nameof(StartFunc), RpcTarget.AllViaServer);
-            SoundManager.Instance.PlayIndirect3D_RPC("S1S2_BGM_CarParade", audioSource);
+            Debug.Log(gameObject.name);
+            SoundManager.Instance.PlayIndirect3D_RPC("S1S2_BGM_CarParade", audioID);
 
             yield break;
         }

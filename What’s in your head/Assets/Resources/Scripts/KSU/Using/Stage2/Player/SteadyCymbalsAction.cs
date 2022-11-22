@@ -16,16 +16,23 @@ using JCW.AudioCtrl;
 
 namespace KSU.AutoAim.Player
 {
+    [RequireComponent(typeof(AudioSource))]
     public class SteadyCymbalsAction : SteadyAutoAimAction
     {
         SteadyCymbals cymbals;
         PlayerController playerController;
         SteadyMouseController mouse;
-        
+
+        AudioSource audioSource;
+        int audioID = 0;
+
+
 
         override protected void Awake()
         {
             base.Awake();
+            audioSource = GetComponent<AudioSource>();
+            audioID = JCW.AudioCtrl.AudioSettings.SetAudio(audioSource, 1f, 30f);
             playerAnimator = GetComponent<Animator>();
             photonView = GetComponent<PhotonView>();
 
@@ -153,7 +160,7 @@ namespace KSU.AutoAim.Player
 
         protected void PlayThrowSound()
         {
-            SoundManager.Instance.Play3D_RPC("S2_SteadyCymbalsThrow", audioSource);
+            SoundManager.Instance.Play3D_RPC("S2_SteadyCymbalsThrow", audioID);
         }
 
         private void OnTriggerEnter(Collider other)

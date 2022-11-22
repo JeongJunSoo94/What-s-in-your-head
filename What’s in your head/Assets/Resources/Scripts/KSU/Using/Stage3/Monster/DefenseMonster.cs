@@ -52,7 +52,7 @@ namespace KSU.AutoAim.Object.Monster
 
 
 
-
+        int audioID = 0;
         [SerializeField] bool isTopView = true;
         //bool isTopView = false;
 
@@ -67,7 +67,7 @@ namespace KSU.AutoAim.Object.Monster
             monsterRope = GetComponent<LineRenderer>();
             monsterCollider = GetComponent<CapsuleCollider>();
             audioSource = GetComponent<AudioSource>();
-            JCW.AudioCtrl.AudioSettings.SetAudio(audioSource, 1, 50f);
+            audioID = JCW.AudioCtrl.AudioSettings.SetAudio(audioSource, 1, 50f);
             InitRope();
         }
 
@@ -394,17 +394,17 @@ namespace KSU.AutoAim.Object.Monster
 
         protected void PlayAppearSound()
         {
-            SoundManager.Instance.Play3D_RPC("S3_Snake_Appear", audioSource);
+            SoundManager.Instance.Play3D_RPC("S3_Snake_Appear", audioID);
         }
 
         protected void PlayAttackSound()
         {
-            SoundManager.Instance.Play3D_RPC("S3_Snake_Attack", audioSource);
+            SoundManager.Instance.Play3D_RPC("S3_Snake_Attack", audioID);
         }
 
         protected void PlayDeadSound()
         {
-            SoundManager.Instance.Play3D_RPC("S3_Snake_Dead", audioSource);
+            SoundManager.Instance.Play3D_RPC("S3_Snake_Dead", audioID);
         }
 
         protected virtual void OnTriggerEnter(Collider other)

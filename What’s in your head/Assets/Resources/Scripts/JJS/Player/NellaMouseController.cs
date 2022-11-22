@@ -66,7 +66,8 @@ namespace JJS
 
         private void Update()
         {
-            if (GameManager.Instance.curPlayerHP <= 0)
+            if (GameManager.Instance.curPlayerHP <= 0
+                && GameManager.Instance.curStageIndex == 2)
             {
                 singing.InitSinging();
             }

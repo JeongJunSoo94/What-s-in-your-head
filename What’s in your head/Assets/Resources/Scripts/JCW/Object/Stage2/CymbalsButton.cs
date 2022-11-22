@@ -29,6 +29,8 @@ namespace JCW.Object
 
         WaitForSeconds ws;
 
+        int audioID = 0;
+
         protected override void Awake()
         {
             base.Awake();
@@ -37,7 +39,7 @@ namespace JCW.Object
             meshRenderer.sharedMaterial = normalMat;
             TryGetComponent(out audioSource);
             if(SoundManager.Instance != null)
-                AudioCtrl.AudioSettings.SetAudio(audioSource, 1f, 50f);
+                audioID = AudioCtrl.AudioSettings.SetAudio(audioSource, 1f, 50f);
             ws = new(releaseTime);
         }
         private void OnTriggerEnter(Collider other)

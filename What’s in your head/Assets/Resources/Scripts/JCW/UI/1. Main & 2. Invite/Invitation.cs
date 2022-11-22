@@ -47,7 +47,6 @@ namespace JCW.UI
         {
             while (PhotonNetwork.NetworkClientState != ClientState.JoinedLobby)
             {
-                Debug.Log("기존 방에서 나가는 중");
                 yield return null;
             }
             //bool isJoined = false;
@@ -55,21 +54,11 @@ namespace JCW.UI
             PhotonNetwork.JoinLobby();
             while (PhotonNetwork.NetworkClientState != ClientState.JoinedLobby)
             {
-                Debug.Log("로비 접속 중");
                 yield return null;
             }
-
-            //while (!isJoined)
-            //{
-            //    isJoined = PhotonNetwork.JoinRoom(masterName, null);
-            //    Debug.Log("방 접속 시도 중");
-            //    yield return null;
-            //}
-            //Debug.Log("방 접속 완료");
             PhotonNetwork.JoinRoom(masterName, null);
             while (PhotonNetwork.NetworkClientState != ClientState.Joined)
             {
-                Debug.Log("현 상태 : " + PhotonNetwork.NetworkClientState);
                 if(PhotonNetwork.NetworkClientState == ClientState.ConnectedToMasterServer)
                     PhotonNetwork.JoinLobby();
                 if (PhotonNetwork.NetworkClientState == ClientState.JoinedLobby)

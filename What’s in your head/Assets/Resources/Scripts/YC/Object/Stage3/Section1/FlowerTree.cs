@@ -35,7 +35,7 @@ namespace YC_OBJ
 
         AudioSource audioSource;
 
-
+        int audioID = 0;
         void Awake()
         {   
             indicator = transform.GetChild(4).GetComponent<JCW.UI.InGame.Indicator.OneIndicator>();  //인덱스 번호 확인!
@@ -47,7 +47,7 @@ namespace YC_OBJ
             FlowerObj = transform.GetChild(0).gameObject;
 
             audioSource = GetComponent<AudioSource>();
-            JCW.AudioCtrl.AudioSettings.SetAudio(audioSource, 1, 50f);
+            audioID = JCW.AudioCtrl.AudioSettings.SetAudio(audioSource, 1, 50f);
         }
 
         void Update()
@@ -121,7 +121,7 @@ namespace YC_OBJ
             indicator.gameObject.SetActive(false);
             FlowerObj.GetComponent<PotFlower>().SetBloom();
             FlowerObj.gameObject.GetComponent<CapsuleCollider>().enabled = false;
-            //SoundManager.Instance.Play3D_RPC("PlantGrow", audioSource);
+            SoundManager.Instance.Play3D_RPC("S3S1_PlantGrow", audioID);
 
         }
 

@@ -44,11 +44,13 @@ namespace JCW.Object
         AudioSource audioSource;
         Animator animator;
 
+        int audioID = 0;
+
         private void Awake()
         {
             curHP = maxHP;            
             audioSource = GetComponent<AudioSource>();
-            AudioCtrl.AudioSettings.SetAudio(audioSource, 0.05f, 30f);
+            audioID = AudioCtrl.AudioSettings.SetAudio(audioSource, 0.05f, 30f);
             if (!canInfect)
             {                
                 myIndex = transform.GetSiblingIndex();
@@ -70,7 +72,7 @@ namespace JCW.Object
             if (isPurified)
                 this.gameObject.SetActive(false);
             else
-                SoundManager.Instance.Play3D_RPC("S3_ContaminationFieldCreated", audioSource);
+                SoundManager.Instance.Play3D_RPC("S3_ContaminationFieldCreated", audioID);
         }
 
         private void OnDisable()
@@ -174,7 +176,7 @@ namespace JCW.Object
             {
                 isDead = true;
                 animator.Play("Destroy");
-                SoundManager.Instance.Play3D_RPC("S3_ContaminationFieldPurified", audioSource);
+                SoundManager.Instance.Play3D_RPC("S3_ContaminationFieldPurified", audioID);
             }
         }
         public void DestroyField()

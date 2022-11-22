@@ -31,6 +31,7 @@ namespace YC_OBJ
         Animator animator;
         AudioSource audioSource;
 
+        int audioID = 0;
         private void Awake()
         {
             animator = this.gameObject.GetComponent<Animator>();
@@ -38,12 +39,12 @@ namespace YC_OBJ
             animator.speed = animationSpeed;
 
             audioSource = GetComponent<AudioSource>();
-            JCW.AudioCtrl.AudioSettings.SetAudio(audioSource);
+            audioID = JCW.AudioCtrl.AudioSettings.SetAudio(audioSource);
         }
         public void SetOpen(bool _isOpen)
         {
             animator.SetBool("isOpen", _isOpen);
-            SoundManager.Instance.Play3D_RPC("DoorOpen", audioSource);
+            SoundManager.Instance.Play3D_RPC("DoorOpen", audioID);
         }     
     }
 }

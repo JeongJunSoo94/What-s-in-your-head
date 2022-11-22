@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
+using System.Collections;
 
 namespace JCW.AudioCtrl
 {
@@ -29,6 +30,9 @@ namespace JCW.AudioCtrl
         readonly Dictionary<string, AudioClip> UIClips = new();
         readonly Dictionary<string, AudioClip> threeDimesionClips = new();
 
+        // 왼쪽 포톤 뷰 ID / 우측 오디오 소스
+        [HideInInspector] public readonly Dictionary<int, AudioSource> dict3D = new();
+
         PhotonView photonView;
         AudioSource otherSource;
 
@@ -39,6 +43,7 @@ namespace JCW.AudioCtrl
         public static SoundManager Instance;
         private void Awake()
         {
+
             if (Instance == null)
             {
                 Instance = this;
@@ -53,7 +58,7 @@ namespace JCW.AudioCtrl
         private void OnEnable()
         {
             soundTypes = System.Enum.GetNames(typeof(JCW.AudioCtrl.Sound));
-            for (int i = 0; i < (int)Sound.End; ++i)
+            for (int i = 0 ; i < (int)Sound.End ; ++i)
             {
                 GameObject obj = new() { name = soundTypes[i] };
                 audioSources[i] = obj.AddComponent<AudioSource>();
@@ -67,7 +72,7 @@ namespace JCW.AudioCtrl
         // 비우기
         public void Clear()
         {
-            for (int i = 0; i < audioSources.Length; ++i)
+            for (int i = 0 ; i < audioSources.Length ; ++i)
             {
                 audioSources[i].clip = null;
                 audioSources[i].Stop();
@@ -175,17 +180,17 @@ namespace JCW.AudioCtrl
         }
         public void SetUp()
         {
-            for (int i = 0; i < prevAudioClips.Count; ++i)
+            for (int i = 0 ; i < prevAudioClips.Count ; ++i)
             {
                 //SetAudioClip("Sounds/EFFECT/" + prevAudioClips[i].name, Sound.EFFECT);
                 SetAudioClip(prevAudioClips[i], Sound.EFFECT);
             }
-            for (int i = 0; i < prevUIClips.Count; ++i)
+            for (int i = 0 ; i < prevUIClips.Count ; ++i)
             {
                 //SetAudioClip("Sounds/UI/" + prevUIClips[i].name, Sound.UI);
                 SetAudioClip(prevUIClips[i], Sound.UI);
             }
-            for (int i = 0; i < prev3DClips.Count; ++i)
+            for (int i = 0 ; i < prev3DClips.Count ; ++i)
             {
                 //SetAudioClip("Sounds/DISTANCE/" + prev3DClips[i].name, Sound.DISTANCE);
                 SetAudioClip(prev3DClips[i], Sound.DISTANCE);
@@ -347,66 +352,52 @@ namespace JCW.AudioCtrl
         // 3D Sound ==========================================================================
         #region
 
-        public void Play3D_RPC(string path, AudioSource source)
+        public void Play3D_RPC(string path, int id)
         {
-            otherSource = source;
-            photonView.RPC(nameof(Play3D), RpcTarget.AllViaServer, path);
+            photonView.RPC(nameof(Play3D), RpcTarget.AllViaServer, path, id);
         }
 
         [PunRPC]
-        public void Play3D(string path)
+        public void Play3D(string path, int id)
         {
-            AudioClip audioClip = GetAudioClips(path, Sound.DISTANCE);
-            if (audioClip == null)
+            dict3D[id].clip = GetAudioClips(path, Sound.DISTANCE);
+            if (dict3D[id].clip == null)
             {
                 Debug.Log("NULL로 저장된 오디오 클립입니다");
                 return;
             }
             // 해당 음원 위치에서 클립 재생
-            otherSource.PlayOneShot(audioClip);
-        }
-
-        public void PlayIndirect3D_RPC(string path, AudioSource source)
-        {
-            otherSource = source;
-            photonView.RPC(nameof(PlayIndirect3D), RpcTarget.AllViaServer, path);
+            dict3D[id].PlayOneShot(dict3D[id].clip);
         }
 
         [PunRPC]
-        public void PlayIndirect3D(string path)
+        public void PlayIndirect3D_RPC(string path, int id)
         {
-            otherSource.clip = GetAudioClips(path, Sound.DISTANCE);
-            if (otherSource.clip == null)
+            photonView.RPC(nameof(PlayIndirect3D), RpcTarget.AllViaServer, path, id);
+        }
+
+        [PunRPC]
+        public void PlayIndirect3D(string path, int id)
+        {
+            dict3D[id].clip = GetAudioClips(path, Sound.DISTANCE);
+            if (dict3D[id].clip == null)
             {
                 Debug.Log("NULL로 저장된 오디오 클립입니다");
                 return;
             }
             // 해당 음원 위치에서 클립 재생
-            otherSource.Play();
+            dict3D[id].Play();
         }
 
-        public void Stop3D_RPC(AudioSource source)
+        public void Stop3D_RPC(int id)
         {
-            otherSource = source;
-            photonView.RPC(nameof(Stop3D), RpcTarget.AllViaServer);
-        }
-
-        [PunRPC]
-        public void Stop3D()
-        {
-            otherSource.Stop();            
-        }
-
-        public void StopIndirect3D_RPC(AudioSource source)
-        {
-            otherSource = source;
-            photonView.RPC(nameof(StopIndirect3D), RpcTarget.AllViaServer);
+            photonView.RPC(nameof(Stop3D), RpcTarget.AllViaServer, id);
         }
 
         [PunRPC]
-        public void StopIndirect3D()
+        public void Stop3D(int id)
         {
-            otherSource.Stop();
+            dict3D[id].Stop();
         }
 
         #endregion
@@ -432,6 +423,49 @@ namespace JCW.AudioCtrl
             audioSources[(int)Sound.UI].PlayOneShot(audioClip);
         }
         #endregion
+
+
+        public static int SetAudio(AudioSource audioSource, float volume = 1f, float maxDist = 120f, bool isLoop = false)
+        {
+            audioSource.rolloffMode = AudioRolloffMode.Custom;
+            audioSource.spatialBlend = 1f;
+            audioSource.playOnAwake = false;
+            audioSource.maxDistance = maxDist;
+            audioSource.loop = isLoop;
+            audioSource.dopplerLevel = 0f;
+            audioSource.volume = volume * Instance.audioSources[(int)Sound.DISTANCE].volume;
+
+            if (Instance.photonView.IsMine)
+            {
+                Instance.photonView.RPC(nameof(AddDict3D), RpcTarget.AllBufferedViaServer);
+            }
+            //Instance.dict3D.Add(Instance.dict3D.Count, audioSource);
+
+            //if (pv == null)
+            //    pv = PhotonView.Get(Instance);
+            //if (audioSource_temp == null)
+            //{
+            //    audioSource_temp = audioSource;
+            //    if (pv.IsMine)
+            //        pv.RPC(nameof(AddDict3D), RpcTarget.AllViaServer);
+            //}
+
+            return Instance.dict3D.Count - 1;
+        }
+
+        [PunRPC]
+        public void AddDict3D()
+        {
+            StartCoroutine(nameof(WaitForPlayer));
+        }
+        IEnumerator WaitForPlayer()
+        {
+            yield return new WaitUntil(() => GameManager.Instance.GetCharOnScene(true) && GameManager.Instance.GetCharOnScene(false));
+
+            //Instance.dict3D.Add(SoundManager.Instance.dict3D.Count, audioSource_temp);
+            //audioSource_temp = null;
+            yield break;
+        }
 
     }
 }

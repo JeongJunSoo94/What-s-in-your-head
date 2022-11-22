@@ -47,6 +47,7 @@ namespace JCW.UI
             if(isFirst)
             {
                 isFirst = false;
+                gameObject.SetActive(false);
                 return;
             }
             GameManager.Instance.SetCharOnScene_RPC(false);
