@@ -25,12 +25,15 @@ namespace JCW.UI
 
         public static LoadingUI Instance = null;
         Image bgImg;
-        bool isMainTitle = false;
+        [HideInInspector] public bool isMainTitle = false;
 
         private void Awake()
         {
             if (Instance == null)
+            {
                 Instance = this;
+                DontDestroyOnLoad(this.gameObject);
+            }
             photonView = PhotonView.Get(this);
             bgImg = transform.GetChild(0).GetComponent<Image>();
             image = transform.GetChild(1).GetComponent<Image>();

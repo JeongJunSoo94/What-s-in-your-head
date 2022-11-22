@@ -865,18 +865,20 @@ namespace KSU
             {
                 ResetMoveSound();
                 isPlayingWalkSound = true;
-                SoundManager.Instance.PlayEffect("All_Walk");
+                //SoundManager.Instance.PlayEffect("All_Walk");
             }
+            SoundManager.Instance.PlayEffectNO("All_Walk");
         }
 
         void PlayRunSound()
         {
-            if(!isPlayingRunSound)
+            if (!isPlayingRunSound)
             {
                 ResetMoveSound();
                 isPlayingRunSound = true;
-                SoundManager.Instance.PlayEffect("All_Sprint");
+                //SoundManager.Instance.PlayEffect("All_Sprint");
             }
+            SoundManager.Instance.PlayEffectNO("All_Sprint");
         }
 
         void ResetMoveSound()

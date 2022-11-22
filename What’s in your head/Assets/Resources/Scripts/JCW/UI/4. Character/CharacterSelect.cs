@@ -76,7 +76,7 @@ namespace JCW.UI
 
         public void OnPointerExit(PointerEventData eventData)
         {
-            if(this.gameObject.activeSelf)
+            if (this.gameObject.activeSelf)
                 photonView.RPC(nameof(ChangeSprite), RpcTarget.AllViaServer, false, PhotonNetwork.IsMasterClient);
         }
 
@@ -90,14 +90,14 @@ namespace JCW.UI
                     thisImg.sprite = onButtonSprite;
                     SetVisible(charName);
                     SetVisible(charDesc);
-                    if(isMaster)
+                    if (isMaster)
                         ownPlayer[0].SetActive(true);
                     else
                         ownPlayer[1].SetActive(true);
                 }
                 else
                 {
-                    if(!ownPlayer[0].activeSelf || !ownPlayer[1].activeSelf)
+                    if (!ownPlayer[0].activeSelf || !ownPlayer[1].activeSelf)
                     {
                         thisImg.sprite = defaultSprite;
                         SetVisible(charName, false);
@@ -108,13 +108,13 @@ namespace JCW.UI
                     else
                         ownPlayer[1].SetActive(false);
                 }
-            }            
+            }
         }
 
 
         [PunRPC]
         public void SelectSprite(string playerName, bool isMaster)
-        {            
+        {
             // 선택되지 않은 현재 버튼을 선택했을 때
             if (curButtonOwner.text == "")
             {
@@ -174,7 +174,7 @@ namespace JCW.UI
 
         [PunRPC]
         public void DeSelectSpriteRPC(bool isDeactiveSelf)
-        {            
+        {
             curButtonOwner.text = "";
             thisImg.sprite = isDeactiveSelf ? onButtonSprite : defaultSprite;
             if (!isNella)
@@ -184,7 +184,7 @@ namespace JCW.UI
             }
         }
 
-        void SetVisible(Text _text ,bool isVisible = true)
+        void SetVisible(Text _text, bool isVisible = true)
         {
             Color setColor = _text.color;
             setColor.a = isVisible ? 1 : 0;

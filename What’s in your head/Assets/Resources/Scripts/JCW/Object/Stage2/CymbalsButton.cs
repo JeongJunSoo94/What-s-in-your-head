@@ -13,6 +13,7 @@ namespace JCW.Object
         [Header("버튼 들어가는 속도")] [SerializeField] float pressedSpeed = 5f;
         [Header("버튼 나오는 속도")] [SerializeField] float releaseSpeed = 5f;
         [Header("버튼 나오기 시작하는 시간")] [SerializeField] float releaseTime = 7f;
+        [Header("바꿀 메테리얼이 달린 버튼")] [SerializeField] MeshRenderer meshRenderer;
         [Header("평상 시 버튼 메테리얼")] [SerializeField] Material normalMat;
         [Header("작동 시 버튼 메테리얼")] [SerializeField] Material activeMat;
         [Header("영구적인 버튼 여부")] [SerializeField] bool isPermanent;
@@ -21,7 +22,7 @@ namespace JCW.Object
         //bool isPressed;
         float pressed_Ratio = 1f;
         Animator anim;
-        MeshRenderer meshRenderer;
+        //MeshRenderer meshRenderer;
         //bool isMatChanged = false;
 
         AudioSource audioSource;
@@ -31,8 +32,8 @@ namespace JCW.Object
         protected override void Awake()
         {
             base.Awake();
-            anim = transform.parent.parent.GetComponent<Animator>();
-            meshRenderer = transform.GetChild(1).GetComponent<MeshRenderer>();
+            anim = transform.parent.parent.parent.GetComponent<Animator>();
+            //meshRenderer = transform.GetChild(1).GetComponent<MeshRenderer>();
             meshRenderer.sharedMaterial = normalMat;
             TryGetComponent(out audioSource);
             if(SoundManager.Instance != null)

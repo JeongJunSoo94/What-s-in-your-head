@@ -213,9 +213,11 @@ public class GameManager : MonoBehaviour, IPunObservable
     [PunRPC]
     void GoMainMenu()
     {
+
         pauseUI.SetActive(false);
         curStageIndex = 0;
         curStageType = 0;
+        LoadingUI.Instance.isMainTitle = true;
         LoadingUI.Instance.gameObject.SetActive(true);
         DestroyStayingObj();
     }
