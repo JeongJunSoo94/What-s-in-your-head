@@ -322,5 +322,18 @@ namespace KSU
             interactionState.isRailJumpingUp = false;
             rail.ResetRailSound();
         }
+
+        public void EscapeAll()
+        {
+            if(NellaCart.activeSelf && Nella != null)
+            {
+                EscapeRail(Nella, false);
+            }
+
+            if (SteadyCart.activeSelf && Steady != null)
+            {
+                EscapeRail(Steady, false);
+            }
+        }
     }
 }

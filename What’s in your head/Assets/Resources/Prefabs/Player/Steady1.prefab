@@ -25084,7 +25084,6 @@ GameObject:
   - component: {fileID: 4466008002383961585}
   - component: {fileID: 1441877394586250120}
   - component: {fileID: 8734580271458543236}
-  - component: {fileID: 6988878118824629927}
   - component: {fileID: 4974980305662536616}
   - component: {fileID: 2982061266958903733}
   - component: {fileID: 1441877394586250121}
@@ -25100,9 +25099,9 @@ GameObject:
   - component: {fileID: 5821330284378002438}
   - component: {fileID: 2879575967534713463}
   - component: {fileID: 270095420285947098}
-  - component: {fileID: -1951892847804992921}
+  - component: {fileID: -8939355328347943431}
   m_Layer: 6
-  m_Name: Steady
+  m_Name: Steady1
   m_TagString: Steady
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -25201,9 +25200,9 @@ MonoBehaviour:
   observableSearch: 2
   ObservedComponents:
   - {fileID: 8734580271458543236}
-  - {fileID: 6988878118824629927}
   - {fileID: 4974980305662536616}
-  - {fileID: -1951892847804992921}
+  - {fileID: -8939355328347943431}
+  - {fileID: 0}
   sceneViewId: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0
@@ -25332,22 +25331,6 @@ MonoBehaviour:
     LayerIndex: 0
   - SynchronizeType: 2
     LayerIndex: 1
---- !u!114 &6988878118824629927
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4466008002383961549}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 627855c7f81362d41938ffe0b1475957, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_SynchronizePosition: 1
-  m_SynchronizeRotation: 1
-  m_SynchronizeScale: 0
-  m_UseLocal: 0
 --- !u!114 &4974980305662536616
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -25820,7 +25803,7 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
---- !u!114 &-1951892847804992921
+--- !u!114 &-8939355328347943431
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -25829,13 +25812,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 4466008002383961549}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 64179f3720bbfe947b7724caa67b7c1d, type: 3}
+  m_Script: {fileID: 11500000, guid: 6b67de563e9865b4ca544bef9eeb9327, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_SynchronizeVelocity: 1
-  m_SynchronizeAngularVelocity: 1
-  m_TeleportEnabled: 1
-  m_TeleportIfDistanceGreaterThan: 3
+  m_SynchronizePosition: 1
+  m_SynchronizeRotation: 1
+  m_SynchronizeScale: 0
+  m_UseLocal: 0
 --- !u!1 &4482534781309066923
 GameObject:
   m_ObjectHideFlags: 0
