@@ -52,6 +52,7 @@ namespace JCW.UI.Options
                 //sliderValueOnUI = slider.transform.GetChild(0).GetComponentInChildren<Text>();
                 sliderValueOnUI = slider.transform.GetChild(0).GetComponent<InputField>();
                 sliderValueText = sliderValueOnUI.GetComponentInChildren<Text>();
+                sliderValueOnUI.text = slider.value.ToString();
                 sliderValueOnUI.onEndEdit.AddListener((string _text) =>
                 {
                     int tempValue = int.Parse(_text);

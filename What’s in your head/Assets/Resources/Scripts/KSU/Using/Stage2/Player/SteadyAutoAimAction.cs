@@ -10,11 +10,13 @@ using YC.Camera_Single;
 using JCW.UI.InGame.Indicator;
 using JCW.UI.InGame;
 using KSU.AutoAim.Object;
+using JCW.AudioCtrl;
 
 namespace KSU.AutoAim.Player
 {
     public enum AutoAimTargetType { GrappledObject, Monster, CymbalsTargetObject, Null };
     [RequireComponent(typeof(AudioSource))]
+    [RequireComponent(typeof(PhotonView))]
     abstract public class SteadyAutoAimAction : MonoBehaviour
     {
         protected SteadyInteractionState steadyInteractionState;
@@ -62,7 +64,8 @@ namespace KSU.AutoAim.Player
         {
             aimUI = GetComponent<CameraController>().aimUI.GetComponent<AimUI>();
             audioSource = GetComponent<AudioSource>();
-            JCW.AudioCtrl.AudioSettings.SetAudio(audioSource, 1, 50f);
+            photonView = GetComponent<PhotonView>();
+            SoundManager.Set3DAudio(photonView.ViewID, audioSource, 1, 50f);
         }
 
         abstract protected void SearchAutoAimTargetdObject();

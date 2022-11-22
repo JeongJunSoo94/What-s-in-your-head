@@ -36,7 +36,7 @@ namespace JCW.Object
 
         private void Awake()
         {
-            photonView = PhotonView.Get(this);
+            photonView = GetComponent<PhotonView>();
             filePath = new(240, 240);
             fileName = new(300, 300);
         }
@@ -47,7 +47,8 @@ namespace JCW.Object
             {
                 if (!firstContact)
                 {
-                    if (GameManager.Instance.isCharOnScene.Count < 2 || !GameManager.Instance.GetCharOnScene(true) || !GameManager.Instance.GetCharOnScene(false))
+                    if (GameManager.Instance.isCharOnScene.Count < 2 || 
+                        !GameManager.Instance.GetCharOnScene(true) || !GameManager.Instance.GetCharOnScene(false))
                         return;
                     if (!other.GetComponent<PlayerState>().isMine)
                         return;
@@ -59,7 +60,7 @@ namespace JCW.Object
             }
         }
         [PunRPC]
-        private void Check(Vector3 pos, Quaternion rot)
+        public void Check(Vector3 pos, Quaternion rot)
         {
             filePath.Clear();
             firstContact = true;

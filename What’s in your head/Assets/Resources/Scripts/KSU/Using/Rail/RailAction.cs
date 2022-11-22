@@ -132,14 +132,14 @@ namespace KSU
             {
                 ResetRailSound();
                 isPlayingRailSound = true;
-                SoundManager.Instance.PlayEffect("All_RidingRail");
+                SoundManager.Instance.PlayMoveEffect("All_RidingRail");
             }
         }
         
         public void ResetRailSound()
         {
             isPlayingRailSound = false;
-            SoundManager.Instance.StopEffect();
+            SoundManager.Instance.StopMoveEffect();
         }
 
         public void SearchWithSphereCast()

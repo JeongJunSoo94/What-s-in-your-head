@@ -90,6 +90,9 @@ namespace JCW.Object
                         sb_temp.Append(i.ToString());
                         sb_temp.Append(".json");
                         File.Delete(sb_temp.ToString());
+                        sb_temp.Append(".meta");
+                        if(File.Exists(sb_temp.ToString()))
+                            File.Delete(sb_temp.ToString());
                         sb_temp.Clear();
                     }
                 }

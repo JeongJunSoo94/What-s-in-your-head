@@ -16,7 +16,7 @@ using System.Collections;
 //            pv = PhotonView.Get(this);
 //        }
 //
-//        public int SetAudio(AudioSource audioSource, float volume = 1f, float maxDist = 120f, bool isLoop = false)
+//        public int Set3DAudio(AudioSource audioSource, float volume = 1f, float maxDist = 120f, bool isLoop = false)
 //        {
 //            audioSource.rolloffMode = AudioRolloffMode.Custom;
 //            audioSource.spatialBlend = 1f;

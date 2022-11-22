@@ -260,6 +260,7 @@ public class GameManager : MonoBehaviour, IPunObservable
         isAlive[true] = true;
         isAlive[false] = true;
         SoundManager.Instance.dict3D.Clear();
+        SoundManager.Instance.StopAllSound();
         curSection = 0;
     }
 }

@@ -10,6 +10,7 @@ using JCW.AudioCtrl;
 namespace JCW.Object
 {
     [RequireComponent(typeof(AudioSource))]
+    [RequireComponent(typeof(PhotonView))]
     public class HostField : MonoBehaviour
     {
         [Header("다음 감염시킬 필드 찾는 시간")] [SerializeField] [Range(0, 13)] float infectTime = 5f;
@@ -43,14 +44,16 @@ namespace JCW.Object
         float curHP;
         AudioSource audioSource;
         Animator animator;
+        PhotonView pv;
 
-        int audioID = 0;
 
         private void Awake()
         {
             curHP = maxHP;            
             audioSource = GetComponent<AudioSource>();
-            audioID = AudioCtrl.AudioSettings.SetAudio(audioSource, 0.05f, 30f);
+            pv = GetComponent<PhotonView>();
+            SoundManager.Set3DAudio(pv.ViewID, audioSource, 0.05f, 30f);
+
             if (!canInfect)
             {                
                 myIndex = transform.GetSiblingIndex();
@@ -72,7 +75,7 @@ namespace JCW.Object
             if (isPurified)
                 this.gameObject.SetActive(false);
             else
-                SoundManager.Instance.Play3D_RPC("S3_ContaminationFieldCreated", audioID);
+                SoundManager.Instance.Play3D_RPC("S3_ContaminationFieldCreated", pv.ViewID);
         }
 
         private void OnDisable()
@@ -176,7 +179,7 @@ namespace JCW.Object
             {
                 isDead = true;
                 animator.Play("Destroy");
-                SoundManager.Instance.Play3D_RPC("S3_ContaminationFieldPurified", audioID);
+                SoundManager.Instance.Play3D_RPC("S3_ContaminationFieldPurified", pv.ViewID);
             }
         }
         public void DestroyField()

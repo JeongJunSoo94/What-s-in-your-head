@@ -11,6 +11,7 @@ namespace JCW.AudioCtrl
         BGM,
         EFFECT,
         DISTANCE,
+        MOVE,
         UI,
         End,
     }
@@ -21,6 +22,7 @@ namespace JCW.AudioCtrl
         [Header("거리 무관 효과음 목록")] [SerializeField] List<AudioClip> prevAudioClips = new();
         [Header("거리에 따른 효과음 목록")] [SerializeField] List<AudioClip> prev3DClips = new();
         [Header("UI 효과음 목록")] [SerializeField] List<AudioClip> prevUIClips = new();
+        [Header("반복재생되는 움직임 효과음 목록")] [SerializeField] List<AudioClip> prevMoveClips = new();
 
         // 오디오 재생기
         public readonly AudioSource[] audioSources = new AudioSource[(int)Sound.End];
@@ -28,6 +30,7 @@ namespace JCW.AudioCtrl
         // 오디오 클립
         readonly Dictionary<string, AudioClip> audioClips = new();
         readonly Dictionary<string, AudioClip> UIClips = new();
+        readonly Dictionary<string, AudioClip> moveClips = new();
         readonly Dictionary<string, AudioClip> threeDimesionClips = new();
 
         // 왼쪽 포톤 뷰 ID / 우측 오디오 소스
@@ -66,6 +69,7 @@ namespace JCW.AudioCtrl
                 obj.transform.parent = this.transform;
             }
             audioSources[(int)Sound.BGM].loop = true;
+            audioSources[(int)Sound.MOVE].loop = true;
             SetUp();
         }
 
@@ -79,6 +83,7 @@ namespace JCW.AudioCtrl
             }
             audioClips.Clear();
             UIClips.Clear();
+            moveClips.Clear();
             threeDimesionClips.Clear();
         }
         /*
@@ -109,13 +114,16 @@ namespace JCW.AudioCtrl
                     return audioClips[name];
                 case Sound.DISTANCE:
                     return threeDimesionClips[name];
+                case Sound.MOVE:
+                    return moveClips[name];
                 case Sound.UI:
                     return UIClips[name];
                 default:
                     return audioClips[name];
             }
         }
-        void SetAudioClip(string path, JCW.AudioCtrl.Sound soundType)
+        /*
+        void Set3DAudioClip(string path, JCW.AudioCtrl.Sound soundType)
         {
             if (!path.Contains($"Sounds/{soundTypes[(int)soundType]}"))
                 path = $"Sounds/{soundTypes[(int)soundType]}/{path}";
@@ -147,8 +155,8 @@ namespace JCW.AudioCtrl
                     break;
             }
         }
-
-        void SetAudioClip(AudioClip clip, JCW.AudioCtrl.Sound soundType)
+        */
+        void Set3DAudioClip(AudioClip clip, JCW.AudioCtrl.Sound soundType)
         {
             switch (soundType)
             {
@@ -161,6 +169,13 @@ namespace JCW.AudioCtrl
                         Debug.Log("이미 저장된 오디오 클립입니다");
                     else
                         threeDimesionClips.Add(clip.name, clip);
+                    break;
+
+                case Sound.MOVE:
+                    if (moveClips.ContainsKey(clip.name))
+                        Debug.Log("이미 저장된 오디오 클립입니다");
+                    else
+                        moveClips.Add(clip.name, clip);
                     break;
 
                 case Sound.UI:
@@ -182,18 +197,19 @@ namespace JCW.AudioCtrl
         {
             for (int i = 0 ; i < prevAudioClips.Count ; ++i)
             {
-                //SetAudioClip("Sounds/EFFECT/" + prevAudioClips[i].name, Sound.EFFECT);
-                SetAudioClip(prevAudioClips[i], Sound.EFFECT);
+                Set3DAudioClip(prevAudioClips[i], Sound.EFFECT);
             }
             for (int i = 0 ; i < prevUIClips.Count ; ++i)
             {
-                //SetAudioClip("Sounds/UI/" + prevUIClips[i].name, Sound.UI);
-                SetAudioClip(prevUIClips[i], Sound.UI);
+                Set3DAudioClip(prevUIClips[i], Sound.UI);
             }
             for (int i = 0 ; i < prev3DClips.Count ; ++i)
             {
-                //SetAudioClip("Sounds/DISTANCE/" + prev3DClips[i].name, Sound.DISTANCE);
-                SetAudioClip(prev3DClips[i], Sound.DISTANCE);
+                Set3DAudioClip(prev3DClips[i], Sound.DISTANCE);
+            }
+            for (int i = 0 ; i < prevMoveClips.Count ; ++i)
+            {
+                Set3DAudioClip(prevMoveClips[i], Sound.MOVE);
             }
         }
         public void StopAllSound_RPC()
@@ -212,6 +228,8 @@ namespace JCW.AudioCtrl
                 audioSources[(int)Sound.DISTANCE].Stop();
             if (audioSources[(int)Sound.UI].isPlaying)
                 audioSources[(int)Sound.UI].Stop();
+            if (audioSources[(int)Sound.MOVE].isPlaying)
+                audioSources[(int)Sound.MOVE].Stop();
         }
 
         // EFFECT ==========================================================================
@@ -232,13 +250,17 @@ namespace JCW.AudioCtrl
                 Debug.Log("NULL로 저장된 오디오 클립입니다");
                 return;
             }
-            //Debug.Log("효과음을 재생합니다");
             audioSources[(int)Sound.EFFECT].PlayOneShot(audioClip);
         }
 
         public void StopEffect_RPC()
         {
             photonView.RPC(nameof(StopEffect), RpcTarget.AllViaServer);
+        }
+
+        public void StopEffect_RPC(string path)
+        {
+            photonView.RPC(nameof(StopEffectName), RpcTarget.AllViaServer);
         }
 
         [PunRPC]
@@ -248,6 +270,15 @@ namespace JCW.AudioCtrl
                 audioSources[(int)Sound.EFFECT].Stop();
         }
 
+
+        [PunRPC]
+        public void StopEffectName(string path)
+        {
+
+            if (audioSources[(int)Sound.EFFECT].isPlaying
+                && audioSources[(int)Sound.EFFECT].clip.name.Equals(path))
+                audioSources[(int)Sound.EFFECT].Stop();
+        }
 
 
         public void PlayEffectNoOverlap_RPC(string path)
@@ -270,12 +301,28 @@ namespace JCW.AudioCtrl
                 audioSources[(int)Sound.EFFECT].PlayOneShot(audioClip);
         }
 
+        public void PlayMoveEffect(string path)
+        {
+            AudioClip audioClip = GetAudioClips(path, Sound.MOVE);
+            if (audioClip == null)
+            {
+                Debug.Log("NULL로 저장된 오디오 클립입니다");
+                return;
+            }
+
+            if (!audioSources[(int)Sound.MOVE].isPlaying)
+                audioSources[(int)Sound.MOVE].PlayOneShot(audioClip);
+        }
+
+        public void StopMoveEffect()
+        {
+            if (audioSources[(int)Sound.MOVE].isPlaying)
+                audioSources[(int)Sound.MOVE].Stop();
+        }
+
         // 효과음 제거
         public void DeleteEffectClip(string name)
         {
-            //string clipName = name;
-            //if (!name.Contains("Sounds/EFFECT"))
-            //    clipName = $"Sounds/EFFECT/{name}";
             if (audioClips.ContainsKey(name))
                 audioClips.Remove(name);
             else
@@ -379,6 +426,11 @@ namespace JCW.AudioCtrl
         [PunRPC]
         public void PlayIndirect3D(string path, int id)
         {
+            if (!dict3D.ContainsKey(id))
+            {
+                Debug.Log(id + " 의 키값이 없습니다");
+                return;
+            }
             dict3D[id].clip = GetAudioClips(path, Sound.DISTANCE);
             if (dict3D[id].clip == null)
             {
@@ -425,7 +477,7 @@ namespace JCW.AudioCtrl
         #endregion
 
 
-        public static int SetAudio(AudioSource audioSource, float volume = 1f, float maxDist = 120f, bool isLoop = false)
+        public static void Set3DAudio(int pvID, AudioSource audioSource, float volume = 1f, float maxDist = 120f, bool isLoop = false)
         {
             audioSource.rolloffMode = AudioRolloffMode.Custom;
             audioSource.spatialBlend = 1f;
@@ -433,38 +485,9 @@ namespace JCW.AudioCtrl
             audioSource.maxDistance = maxDist;
             audioSource.loop = isLoop;
             audioSource.dopplerLevel = 0f;
-            audioSource.volume = volume * Instance.audioSources[(int)Sound.DISTANCE].volume;
-
-            if (Instance.photonView.IsMine)
-            {
-                Instance.photonView.RPC(nameof(AddDict3D), RpcTarget.AllBufferedViaServer);
-            }
-            //Instance.dict3D.Add(Instance.dict3D.Count, audioSource);
-
-            //if (pv == null)
-            //    pv = PhotonView.Get(Instance);
-            //if (audioSource_temp == null)
-            //{
-            //    audioSource_temp = audioSource;
-            //    if (pv.IsMine)
-            //        pv.RPC(nameof(AddDict3D), RpcTarget.AllViaServer);
-            //}
-
-            return Instance.dict3D.Count - 1;
-        }
-
-        [PunRPC]
-        public void AddDict3D()
-        {
-            StartCoroutine(nameof(WaitForPlayer));
-        }
-        IEnumerator WaitForPlayer()
-        {
-            yield return new WaitUntil(() => GameManager.Instance.GetCharOnScene(true) && GameManager.Instance.GetCharOnScene(false));
-
-            //Instance.dict3D.Add(SoundManager.Instance.dict3D.Count, audioSource_temp);
-            //audioSource_temp = null;
-            yield break;
+            audioSource.volume = volume * Instance.audioSources[(int)Sound.DISTANCE].volume;          
+            if(!Instance.dict3D.ContainsKey(pvID))
+                Instance.dict3D.Add(pvID, audioSource);
         }
 
     }

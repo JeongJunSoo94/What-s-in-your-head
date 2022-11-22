@@ -19,6 +19,7 @@ namespace KSU
 {
     public enum DamageType { Attacked, KnockBack, Dead };
     [RequireComponent(typeof(AudioSource))]
+    [RequireComponent(typeof(PhotonView))]
     public class PlayerController : MonoBehaviour
     {
         //  Scripts Components
@@ -103,7 +104,7 @@ namespace KSU
         bool isPlayingWalkSound = false;
         bool isPlayingRunSound = false;
 
-        int audioID = 0;
+        
 
         void Awake()
         {
@@ -119,13 +120,13 @@ namespace KSU
             playerRigidbody = GetComponent<Rigidbody>();
             playerMouse = GetComponent<PlayerMouseController>();
             playerInteraction = GetComponent<PlayerInteraction>();
-            audioSource = GetComponent<AudioSource>();
-            audioID = JCW.AudioCtrl.AudioSettings.SetAudio(audioSource, 1, 50f);
 
             //====================================================
 
             photonView = GetComponent<PhotonView>();
 
+            audioSource = GetComponent<AudioSource>();
+            SoundManager.Set3DAudio(photonView.ViewID, audioSource, 1, 50f);
             mainCamera = this.gameObject.GetComponent<CameraController>().FindCamera(); // 멀티용
             if (mainCamera == null)
                 Debug.Log("카메라 NULL");
@@ -869,7 +870,7 @@ namespace KSU
                 isPlayingWalkSound = true;
                 //SoundManager.Instance.PlayEffect("All_Walk");
             }
-            SoundManager.Instance.PlayEffectNO("All_Walk");
+            SoundManager.Instance.PlayMoveEffect("All_Walk");
         }
 
         void PlayRunSound()
@@ -880,12 +881,12 @@ namespace KSU
                 isPlayingRunSound = true;
                 //SoundManager.Instance.PlayEffect("All_Sprint");
             }
-            SoundManager.Instance.PlayEffectNO("All_Sprint");
+            SoundManager.Instance.PlayMoveEffect("All_Sprint");
         }
 
         void ResetMoveSound()
         {
-            SoundManager.Instance.StopEffect();
+            SoundManager.Instance.StopMoveEffect();
             isPlayingWalkSound = false;
             isPlayingRunSound = false;
         }
