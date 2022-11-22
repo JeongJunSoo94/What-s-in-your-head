@@ -70,7 +70,7 @@ namespace JCW.Object
             if (isPurified)
                 this.gameObject.SetActive(false);
             else
-                SoundManager.Instance.Play3D_RPC("ContaminationFieldCreated", audioSource);
+                SoundManager.Instance.Play3D_RPC("S3_ContaminationFieldCreated", audioSource);
         }
 
         private void OnDisable()
@@ -174,7 +174,7 @@ namespace JCW.Object
             {
                 isDead = true;
                 animator.Play("Destroy");
-                SoundManager.Instance.Play3D_RPC("ContaminationFieldPurified", audioSource);
+                SoundManager.Instance.Play3D_RPC("S3_ContaminationFieldPurified", audioSource);
             }
         }
         public void DestroyField()

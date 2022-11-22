@@ -14,9 +14,9 @@ namespace JCW.UI.InGame
         PhotonView pv;
         Image player1_Img;
         Image player2_Img;
-        [Header("재생할 로딩씬")] [SerializeField] LoadingUI loadingUI;
         [Header("넬라 On/Off 이미지")] [SerializeField] List<Sprite> spriteList_1;
         [Header("스테디 On/Off 이미지")] [SerializeField] List<Sprite> spriteList_2;
+        [Header("로딩 UI를 바로 켤 지")] [SerializeField] bool needToLoad = true;
 
         VideoPlayer videoPlayer;
 
@@ -50,8 +50,8 @@ namespace JCW.UI.InGame
             if(isStart && !videoPlayer.isPlaying)
             {
                 Debug.Log("방장임? : " +PhotonNetwork.IsMasterClient);
-                if (loadingUI != null)
-                    loadingUI.gameObject.SetActive(true);
+                if (needToLoad)
+                    LoadingUI.Instance.gameObject.SetActive(true);
                 this.gameObject.SetActive(false);
             }
             
@@ -64,9 +64,9 @@ namespace JCW.UI.InGame
             }
             if(isOn1 && isOn2)
             {
-               if(loadingUI != null)
-                   loadingUI.gameObject.SetActive(true);
-               this.gameObject.SetActive(false);
+               if(needToLoad)
+                    LoadingUI.Instance.gameObject.SetActive(true);
+                this.gameObject.SetActive(false);
             }
             
         }

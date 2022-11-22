@@ -27,6 +27,8 @@ namespace JCW.UI
         Image bgImg;
         [HideInInspector] public bool isMainTitle = false;
 
+        bool isFirst = true;
+
         private void Awake()
         {
             if (Instance == null)
@@ -42,6 +44,11 @@ namespace JCW.UI
         
         private void OnEnable()
         {
+            if(isFirst)
+            {
+                isFirst = false;
+                return;
+            }
             GameManager.Instance.SetCharOnScene_RPC(false);
             DialogManager.Instance.ResetDialogs();
             isLoading = false;
@@ -88,7 +95,7 @@ namespace JCW.UI
             {
                 GameManager.Instance.curStageType = GameManager.Instance.curStageType >= 3 ? 0 : GameManager.Instance.curStageType + 1;
                 GameManager.Instance.curStageIndex = GameManager.Instance.curStageType == 0 ? GameManager.Instance.curStageIndex + 1 : GameManager.Instance.curStageIndex;
-                if (GameManager.Instance.curStageIndex == 4
+                if (GameManager.Instance.curStageIndex == 4 && GameManager.Instance.curStageType == 1
                     && PhotonNetwork.IsMasterClient)
                 {
                     PhotonNetwork.LoadLevel(0);

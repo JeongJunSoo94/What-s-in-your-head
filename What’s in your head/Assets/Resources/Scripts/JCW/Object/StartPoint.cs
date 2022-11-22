@@ -3,6 +3,7 @@ using JCW.Dialog;
 using Photon.Pun;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using System.Text;
 using UnityEngine;
 
@@ -26,6 +27,7 @@ namespace JCW.Object
             }
 
             pv = PhotonView.Get(this);
+            pv.RPC(nameof(InitSaveFile), RpcTarget.AllViaServer);
 
             // 현재 스테이지와 섹션 가져오기
             currentStageSection = new(10, 10);
@@ -63,6 +65,35 @@ namespace JCW.Object
 
 
             yield break;
+        }
+        [PunRPC]
+        void InitSaveFile()
+        {
+            StringBuilder sb = new();
+            sb.Append(Application.streamingAssetsPath);
+            sb.Append("/CheckPointInfo/Stage");
+            sb.Append(GameManager.Instance.curStageIndex.ToString());
+            sb.Append("/");
+            sb.Append(GameManager.Instance.curStageType.ToString());
+            sb.Append("/");
+            if (Directory.Exists(sb.ToString()))
+            {
+                DirectoryInfo directoryInfo = new(sb.ToString());
+                int count = directoryInfo.GetFiles("*.json", SearchOption.AllDirectories).Length;
+                StringBuilder sb_temp = new();
+                if(count >= 2)
+                {
+                    for (int i = 2 ; i<=count ; ++i)
+                    {
+                        sb_temp.Append(sb.ToString());
+                        sb_temp.Append("Section");
+                        sb_temp.Append(i.ToString());
+                        sb_temp.Append(".json");
+                        File.Delete(sb_temp.ToString());
+                        sb_temp.Clear();
+                    }
+                }
+            }
         }
 
         [PunRPC]
