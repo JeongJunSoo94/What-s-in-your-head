@@ -431,6 +431,12 @@ namespace JCW.AudioCtrl
                 Debug.Log(id + " 의 키값이 없습니다");
                 return;
             }
+            Debug.Log(path + " 파일 실행 시도");
+            if (dict3D[id].isPlaying)
+            {
+                Debug.Log(path + " 파일 실행 시도");
+                return;
+            }
             dict3D[id].clip = GetAudioClips(path, Sound.DISTANCE);
             if (dict3D[id].clip == null)
             {
@@ -438,6 +444,7 @@ namespace JCW.AudioCtrl
                 return;
             }
             // 해당 음원 위치에서 클립 재생
+            
             dict3D[id].Play();
         }
 

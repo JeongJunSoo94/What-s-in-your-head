@@ -80,11 +80,11 @@ namespace JCW.UI
                 PhotonNetwork.LevelLoadingProgress = 0f;
                 isLoading = false;
                 Debug.Log("씬 불러오기 완료");
-                if (PhotonNetwork.IsMasterClient && (GameManager.Instance.curStageType == 1 || GameManager.Instance.curStageType == 2))
-                {
-                    Debug.Log("캐릭터 만들어주기");
-                    PhotonManager.Instance.MakeCharacter();
-                }
+                //if (PhotonNetwork.IsMasterClient && (GameManager.Instance.curStageType == 1 || GameManager.Instance.curStageType == 2))
+                //{
+                //    Debug.Log("캐릭터 만들어주기");
+                //    PhotonManager.Instance.MakeCharacter();
+                //}
                 this.gameObject.SetActive(false);
             }
         }

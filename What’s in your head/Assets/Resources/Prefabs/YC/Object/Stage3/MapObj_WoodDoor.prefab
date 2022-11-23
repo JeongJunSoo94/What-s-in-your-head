@@ -144,6 +144,7 @@ GameObject:
   - component: {fileID: 3026977621473863721}
   - component: {fileID: 3026977621473863722}
   - component: {fileID: 784023803740564271}
+  - component: {fileID: 6498170118500901008}
   m_Layer: 3
   m_Name: MapObj_WoodDoor
   m_TagString: OBJ_3_1_WoodDoor
@@ -180,7 +181,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f52ad863fd06d424590ed9180872bc35, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  animationSpeed: 0.2
+  animationSpeed: 0.05
 --- !u!95 &3026977621473863722
 Animator:
   serializedVersion: 4
@@ -297,6 +298,28 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &6498170118500901008
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3026977621485125465}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ObservedComponentsFoldoutOpen: 1
+  Group: 0
+  prefixField: -1
+  Synchronization: 3
+  OwnershipTransfer: 0
+  observableSearch: 2
+  ObservedComponents: []
+  sceneViewId: 0
+  InstantiationId: 0
+  isRuntimeInstantiated: 0
 --- !u!1 &3026977621485142375
 GameObject:
   m_ObjectHideFlags: 0

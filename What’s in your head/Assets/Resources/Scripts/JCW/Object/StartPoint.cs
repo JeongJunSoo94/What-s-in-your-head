@@ -27,7 +27,6 @@ namespace JCW.Object
             }
 
             pv = PhotonView.Get(this);
-            pv.RPC(nameof(InitSaveFile), RpcTarget.AllViaServer);
 
             // 현재 스테이지와 섹션 가져오기
             currentStageSection = new(10, 10);
@@ -60,6 +59,7 @@ namespace JCW.Object
             if (PhotonNetwork.IsMasterClient)
             {
                 SoundManager.Instance.PlayBGM_RPC(currentStageSection.ToString());
+                pv.RPC(nameof(InitSaveFile), RpcTarget.AllViaServer);
                 pv.RPC(nameof(SetView), RpcTarget.AllViaServer);
             }
 

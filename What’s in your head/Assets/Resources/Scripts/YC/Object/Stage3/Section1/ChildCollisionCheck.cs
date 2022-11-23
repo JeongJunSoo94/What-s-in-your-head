@@ -50,10 +50,11 @@ namespace YC_OBJ
 
         IEnumerator EffectShader(float delayTime)
         {
-           
             yield return new WaitForSeconds(delayTime);
+
             float curSplitValue = ren.material.GetFloat("_SplitValue");
             float minSplitValur = -0.1f;
+
             while (curSplitValue > minSplitValur)
             {
                 curSplitValue = ren.material.GetFloat("_SplitValue");
@@ -66,8 +67,8 @@ namespace YC_OBJ
 
                 yield return null;
 
-                bushObj.SendMessage(nameof(bushObj.Destroy_Cor));
             }
+            bushObj.SendMessage(nameof(bushObj.Destroy_Cor));
         }
     }
 }

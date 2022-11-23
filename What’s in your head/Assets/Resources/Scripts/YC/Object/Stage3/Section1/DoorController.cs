@@ -41,12 +41,19 @@ namespace YC_OBJ
             pv = GetComponent<PhotonView>();
 
             audioSource = GetComponent<AudioSource>();
-            SoundManager.Set3DAudio(pv.ViewID, audioSource);
+            SoundManager.Set3DAudio(pv.ViewID, audioSource, 3f, 50f);
         }
+
         public void SetOpen(bool _isOpen)
         {
             animator.SetBool("isOpen", _isOpen);
-            SoundManager.Instance.Play3D_RPC("DoorOpen", pv.ViewID);
+            StartCoroutine(nameof(SoundEffect));
         }     
+
+        IEnumerator SoundEffect()
+        {
+            yield return new WaitForSeconds(1.1f);
+            SoundManager.Instance.Play3D_RPC("S3S1_DoorOpen2", pv.ViewID);
+        }
     }
 }
