@@ -43,7 +43,6 @@ namespace KSU.Object
                         StartCoroutine(nameof(StopAwhile));
                         return;
                     }
-
                     transform.position = Vector3.MoveTowards(transform.position, endPosition, moveSpeed * Time.fixedDeltaTime);
                 }
                 else
@@ -65,6 +64,7 @@ namespace KSU.Object
             yield return new WaitForSeconds(stayingTime);
             isStop = false;
         }
+
         private void OnCollisionEnter(Collision collision)
         {
             if(collision.collider.gameObject.layer == LayerMask.NameToLayer("Player"))

@@ -22,19 +22,14 @@ public class CustomPhotonTransformView : MonoBehaviourPun, IPunObservable
     public bool m_UseLocal;
 
     bool m_firstTake = false;
+    bool ownerHasParent = false;
+    bool remoteHasParent = false;
 
     public void Awake()
     {
         m_StoredPosition = transform.localPosition;
         m_NetworkPosition = Vector3.zero;
-
         m_NetworkRotation = Quaternion.identity;
-    }
-
-    private void Reset()
-    {
-        // Only default to true with new instances. useLocal will remain false for old projects that are updating PUN.
-        m_UseLocal = true;
     }
 
     void OnEnable()
@@ -59,9 +54,59 @@ public class CustomPhotonTransformView : MonoBehaviourPun, IPunObservable
                 tr.position = Vector3.MoveTowards(tr.position, this.m_NetworkPosition, this.m_Distance * Time.fixedDeltaTime * PhotonNetwork.SerializationRate);
                 tr.rotation = Quaternion.RotateTowards(tr.rotation, this.m_NetworkRotation, this.m_Angle * Time.fixedDeltaTime * PhotonNetwork.SerializationRate);
             }
+
+            if (remoteHasParent)
+            {
+                if (transform.parent == null)
+                {
+                    remoteHasParent = false;
+                    this.photonView.RPC(nameof(SendHasParent), RpcTarget.AllViaServer, remoteHasParent, photonView.IsMine);
+                }
+            }
+            else
+            {
+                if (transform.parent != null)
+                {
+                    remoteHasParent = true;
+                    this.photonView.RPC(nameof(SendHasParent), RpcTarget.AllViaServer, remoteHasParent, photonView.IsMine);
+                }
+            }
+        }
+        else
+        {
+            if (ownerHasParent)
+            {
+                if (transform.parent == null)
+                {
+                    ownerHasParent = false;
+                    this.photonView.RPC(nameof(SendHasParent), RpcTarget.AllViaServer, ownerHasParent, photonView.IsMine);
+                }
+            }
+            else
+            {
+                if (transform.parent != null)
+                {
+                    ownerHasParent = true;
+                    this.photonView.RPC(nameof(SendHasParent), RpcTarget.AllViaServer, ownerHasParent, photonView.IsMine);
+                }
+            }
         }
     }
 
+    [PunRPC]
+    void SendHasParent(bool hasP, bool isMine)
+    {
+        if (isMine)
+            ownerHasParent = hasP;
+        else
+            remoteHasParent = hasP;
+
+        if (ownerHasParent && remoteHasParent)
+            m_UseLocal = true;
+        else
+            m_UseLocal = false;
+    }
+    
     public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
     {
         var tr = transform;

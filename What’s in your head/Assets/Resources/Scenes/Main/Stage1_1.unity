@@ -3616,7 +3616,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a21b4b195a8637045948eccc7e1f96dc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  roomName: KSU
+  roomName: KSUTest
   nellaPrefabDirectory: Prefabs/Player/Nella1
   steadyPrefabDirectory: Prefabs/Player/Steady1
   isNella: 1
@@ -16167,7 +16167,7 @@ GameObject:
   - component: {fileID: 64161958310622548}
   - component: {fileID: 780125290}
   - component: {fileID: 64161958310622550}
-  - component: {fileID: 64161958310622553}
+  - component: {fileID: 64161958310622551}
   m_Layer: 3
   m_Name: SM_Buildings_FloorCurved_1x1_01 (1)
   m_TagString: Untagged
@@ -16189,7 +16189,7 @@ GameObject:
   - component: {fileID: 64161958268305389}
   - component: {fileID: 1034166625}
   - component: {fileID: 64161958268305391}
-  - component: {fileID: 64161958268305394}
+  - component: {fileID: 64161958268305392}
   m_Layer: 3
   m_Name: SM_Buildings_FloorCurved_1x1_01
   m_TagString: Untagged
@@ -21230,12 +21230,11 @@ MonoBehaviour:
   OwnershipTransfer: 0
   observableSearch: 2
   ObservedComponents:
-  - {fileID: 64161958268305394}
   - {fileID: 0}
   sceneViewId: 12
   InstantiationId: 0
   isRuntimeInstantiated: 0
---- !u!114 &64161958268305394
+--- !u!114 &64161958268305392
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -21244,13 +21243,15 @@ MonoBehaviour:
   m_GameObject: {fileID: 1385000731411443}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6b67de563e9865b4ca544bef9eeb9327, type: 3}
+  m_Script: {fileID: 11500000, guid: 96eeb08c005956a4c8d86644791bee05, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_SynchronizePosition: 1
   m_SynchronizeRotation: 1
   m_SynchronizeScale: 0
-  m_UseLocal: 0
+  m_SynchronizeRigidbody: 0
+  lerpPosition: 30
+  lerpRotation: 30
 --- !u!64 &64161958310622548
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -21284,11 +21285,11 @@ MonoBehaviour:
   OwnershipTransfer: 0
   observableSearch: 2
   ObservedComponents:
-  - {fileID: 64161958310622553}
+  - {fileID: 64161958310622551}
   sceneViewId: 13
   InstantiationId: 0
   isRuntimeInstantiated: 0
---- !u!114 &64161958310622553
+--- !u!114 &64161958310622551
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -21297,13 +21298,15 @@ MonoBehaviour:
   m_GameObject: {fileID: 1385000704559434}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6b67de563e9865b4ca544bef9eeb9327, type: 3}
+  m_Script: {fileID: 11500000, guid: 96eeb08c005956a4c8d86644791bee05, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_SynchronizePosition: 1
   m_SynchronizeRotation: 1
   m_SynchronizeScale: 0
-  m_UseLocal: 0
+  m_SynchronizeRigidbody: 0
+  lerpPosition: 30
+  lerpRotation: 30
 --- !u!64 &64293212939777295
 MeshCollider:
   m_ObjectHideFlags: 0
