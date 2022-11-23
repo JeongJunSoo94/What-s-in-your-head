@@ -1,10 +1,14 @@
+using JCW.AudioCtrl;
 using KSU;
+using Photon.Pun;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 namespace JCW.Object
 {
+    [RequireComponent(typeof(AudioSource))]
+    [RequireComponent(typeof(PhotonView))]
     public class PlayObject : MonoBehaviour
     {
         [Header("신호 수신 시 이동 속도")] [SerializeField] float recieveMovingSpeed;
@@ -13,11 +17,15 @@ namespace JCW.Object
         [Header("플레이어가 탈 수 있는 지 여부")] [SerializeField] bool canRide;
         public bool isActive = false;
         [Header("이동 경로")] [SerializeField] List<Vector3> positionList;
+        [Header("소리 On/Off")] [SerializeField] bool isSoundOn = false;
 
         int curIndex = 0;
         int maxIndex = 0;
 
         bool isStart = false;
+
+        AudioSource audioSource;
+        PhotonView pv;
 
         private void Awake()
         {
@@ -25,6 +33,9 @@ namespace JCW.Object
                 positionList.Add(transform.position);
             transform.position = positionList[0];
             maxIndex = positionList.Count - 1;
+            audioSource = GetComponent<AudioSource>();
+            pv = GetComponent<PhotonView>();
+            SoundManager.Set3DAudio(pv.ViewID, audioSource, 0.7f, 60f, true);
         }
 
         void Update()
@@ -60,8 +71,10 @@ namespace JCW.Object
         {
             if (positionList.Count <= 1 || curIndex >= maxIndex)
                 yield break;
+            if(isSoundOn)
+                SoundManager.Instance.PlayIndirect3D_RPC("S2_PlayObject_Move", pv.ViewID);
 
-            while(curIndex < maxIndex)
+            while (curIndex < maxIndex)
             {
                 transform.position = Vector3.MoveTowards(transform.position, positionList[curIndex+1], Time.deltaTime * recieveMovingSpeed);
                 if (Vector3.SqrMagnitude(transform.position - positionList[curIndex+1]) <= 0.05f)
@@ -72,6 +85,9 @@ namespace JCW.Object
             if (curIndex > maxIndex)
                 curIndex = maxIndex;
 
+            if(isSoundOn)
+                SoundManager.Instance.Stop3D_RPC(pv.ViewID);
+
             yield break;
         }
 
@@ -79,8 +95,10 @@ namespace JCW.Object
         {
             if (positionList.Count <= 1)
                 yield break;
+            if (isSoundOn)
+                SoundManager.Instance.PlayIndirect3D_RPC("S2_PlayObject_Move", pv.ViewID);
 
-            if(curIndex == maxIndex)
+            if (curIndex == maxIndex)
                 --curIndex;
 
             while (curIndex >= 0)
@@ -94,6 +112,8 @@ namespace JCW.Object
             if (curIndex < 0)
                 curIndex = 0;
 
+            if (isSoundOn)
+                SoundManager.Instance.Stop3D_RPC(pv.ViewID);
             this.enabled = false;
 
             yield break;
@@ -103,7 +123,6 @@ namespace JCW.Object
         {
             if(collision.gameObject.CompareTag("Nella") || collision.gameObject.CompareTag("Steady"))
             {
-                Debug.Log("오브젝트 접근");
                 Transform playerTF = collision.gameObject.transform;
                 if (isLethal)
                     playerTF.GetComponent<PlayerController>().Resurrect();

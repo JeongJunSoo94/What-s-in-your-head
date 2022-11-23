@@ -1,9 +1,7 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+using JJS.Weapon;
 using KSU;
 using KSU.AutoAim.Player;
-using JJS.Weapon;
+using UnityEngine;
 using YC.Camera_;
 namespace JJS
 {
@@ -32,6 +30,11 @@ namespace JJS
                     NellaScriptSetActive(nella);
                     SteadyScriptSetActive(steady);
                     SetStartPos();
+                    if (stage == 3)
+                    {
+                        SetUION(nella);
+                        SetUION(steady);
+                    }
                     gameObject.SetActive(false);
                 }
             }
@@ -52,6 +55,11 @@ namespace JJS
                     {
                         GameManager.Instance.isSideView = true;
                     }
+                    else if (stage == 3)
+                    {
+                        SetUION(nella);
+                        SetUION(steady);
+                    }
                     gameObject.SetActive(false);
                 }
             }
@@ -66,7 +74,7 @@ namespace JJS
         public void SetStartPos()
         {
             Vector3 pos = start.position;
-            if(nella!=null)
+            if (nella != null)
                 nella.transform.position = pos - intervalPos;
             if (steady != null)
                 steady.transform.position = pos + intervalPos;
@@ -94,7 +102,7 @@ namespace JJS
                     SetCharacterGameObject(player, out weaponStorage, findWeaponPath);
 
                     playerMouse.weaponInfo = new PlayerMouseController.WeaponInfo[weaponCount];
-                    for (int i = 0; i < playerMouse.weaponInfo.Length; i++)
+                    for (int i = 0 ; i < playerMouse.weaponInfo.Length ; i++)
                     {
                         GameObject cloneObj;
                         SetWeaponGameObject(weaponStorage, out cloneObj, data.weaponInfo[i].weapon.name);
@@ -193,6 +201,16 @@ namespace JJS
                     SteadyMouseController steadyMouse = playerMouse as SteadyMouseController;
                     steadyMouse.SetAimWeapon();
                 }
+            }
+        }
+
+        public void SetUION(GameObject player)
+        {
+            GameObject UIObject;
+            if (player != null)
+            {
+                SetWeaponGameObject(player,out UIObject, "CurrentStageItem");
+                UIObject.SetActive(true);
             }
         }
     }

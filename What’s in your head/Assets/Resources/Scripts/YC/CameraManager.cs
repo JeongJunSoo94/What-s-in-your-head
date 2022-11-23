@@ -538,13 +538,7 @@ namespace YC.CameraManager_
     
         public void BlockCinemachineInput(bool block) // Pause시 카메라 인풋을 막는다
         {
-            string tagNella = "Nella";
-            string tagSteady = "Steady";
-
-            if (GameManager.Instance.characterOwner[PhotonNetwork.IsMasterClient])
-                GameObject.FindGameObjectWithTag(tagNella).GetComponent<CameraController>().BlockCinemachineInput(block);
-            else
-                GameObject.FindGameObjectWithTag(tagSteady).GetComponent<CameraController>().BlockCinemachineInput(block);
+            GameManager.Instance.myPlayerTF.GetComponent<CameraController>().BlockCinemachineInput(block);
         }
     }
 }

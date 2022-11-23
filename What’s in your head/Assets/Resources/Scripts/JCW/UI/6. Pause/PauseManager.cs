@@ -5,6 +5,7 @@ using UnityEngine.UI;
 using Photon.Pun;
 using JCW.UI.Options;
 using UnityEngine.SceneManagement;
+using YC.CameraManager_;
 
 namespace JCW.UI
 {
@@ -48,7 +49,20 @@ namespace JCW.UI
             if (SceneManager.GetActiveScene().name == "MainTitle")
                 gameObject.SetActive(false);
             else
+            {
                 Cursor.lockState = CursorLockMode.Confined;
+                GameManager.Instance.myPlayerTF.GetComponent<PlayerState>().isOutOfControl = true;
+                CameraManager.Instance.BlockCinemachineInput(true);
+            }
+        }
+
+        private void OnDisable()
+        {
+            if (SceneManager.GetActiveScene().name != "MainTitle")
+            {
+                GameManager.Instance.myPlayerTF.GetComponent<PlayerState>().isOutOfControl = false;
+                CameraManager.Instance.BlockCinemachineInput(false);
+            }
         }
 
         public void CloseUI()

@@ -438,7 +438,8 @@ namespace JCW.AudioCtrl
                 return;
             }
             // 해당 음원 위치에서 클립 재생
-            dict3D[id].Play();
+            if(!dict3D[id].isPlaying)
+                dict3D[id].Play();
         }
 
         public void Stop3D_RPC(int id)

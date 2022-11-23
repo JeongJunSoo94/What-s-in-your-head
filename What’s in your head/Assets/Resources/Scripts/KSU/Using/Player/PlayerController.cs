@@ -755,6 +755,7 @@ namespace KSU
                                 trampolin.RecieveTriggerExit();
                             }
                         }
+                        SoundManager.Instance.PlayEffect("All_Trampolin");
                     }
                     break;
                 case "DeadZone":
