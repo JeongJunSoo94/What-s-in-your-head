@@ -1,11 +1,15 @@
+using JCW.AudioCtrl;
 using KSU;
 using KSU.Object.Stage2;
+using Photon.Pun;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 namespace JCW.Object
 {
+    [RequireComponent(typeof(AudioSource))]
+    [RequireComponent(typeof(PhotonView))]
     public class PlayObjectKSU : LinkedObjectWithReciever
     {
         [Header("신호 수신 시 이동 속도")] [SerializeField] float recieveMovingSpeed;
@@ -13,12 +17,16 @@ namespace JCW.Object
         [Header("접촉 시 사망 여부")] [SerializeField] bool isLethal;
         [Header("플레이어가 탈 수 있는 지 여부")] [SerializeField] bool canRide;
         [Header("이동 경로")] [SerializeField] List<Vector3> positionList;
-
+        [Header("소리 On/Off")] [SerializeField] bool isSoundOn = false;
+        [Space(20f)]
         public bool isActive = false;
         int curIndex = 0;
         int maxIndex = 0;
 
-        bool isStart = false;   
+        bool isStart = false;
+
+        AudioSource audioSource;
+        PhotonView pv;
 
         private void Awake()
         {
@@ -26,6 +34,12 @@ namespace JCW.Object
                 positionList.Add(transform.position);
             transform.position = positionList[0];
             maxIndex = positionList.Count - 1;
+            if(isSoundOn)
+            {
+                audioSource = GetComponent<AudioSource>();
+                pv = GetComponent<PhotonView>();
+                SoundManager.Set3DAudio(pv.ViewID, audioSource, 0.7f, 25f, true);
+            }            
         }
 
         void Update()
@@ -47,31 +61,12 @@ namespace JCW.Object
             }
         }
 
-        public void SetPositionToList(Vector3 pos)
-        {
-            positionList.Add(pos);
-        }
-
-        public void ClearList()
-        {
-            positionList.Clear();
-        }
-
         IEnumerator MoveToEnd()
         {
-            if (positionList.Count <= 1)
+            if (positionList.Count <= 1 || curIndex >= maxIndex)
                 yield break;
-
-            // 현재 인덱스와 인덱스 사이라면, 미리 이동시켜놓음.
-            while (true)
-            {
-                if (transform.position == positionList[curIndex])
-                    break;
-                transform.position = Vector3.MoveTowards(transform.position, positionList[curIndex], Time.deltaTime * recieveMovingSpeed);
-                if (Vector3.SqrMagnitude(transform.position - positionList[curIndex]) <= 0.05f)
-                    transform.position = positionList[curIndex];
-                yield return null;
-            }
+            if (isSoundOn)
+                SoundManager.Instance.PlayIndirect3D_RPC("S2_PlayObject_Move", pv.ViewID);
 
             while (curIndex < maxIndex)
             {
@@ -81,6 +76,12 @@ namespace JCW.Object
                 yield return null;
             }
 
+            if (curIndex > maxIndex)
+                curIndex = maxIndex;
+
+            if (isSoundOn)
+                SoundManager.Instance.Stop3D_RPC(pv.ViewID);
+
             yield break;
         }
 
@@ -88,26 +89,25 @@ namespace JCW.Object
         {
             if (positionList.Count <= 1)
                 yield break;
+            if (isSoundOn)
+                SoundManager.Instance.PlayIndirect3D_RPC("S2_PlayObject_Move", pv.ViewID);
 
-            // 현재 인덱스와 인덱스 사이라면, 미리 이동시켜놓음.
-            while (true)
+            if (curIndex == maxIndex)
+                --curIndex;
+
+            while (curIndex >= 0)
             {
-                if (transform.position == positionList[curIndex])
-                    break;
                 transform.position = Vector3.MoveTowards(transform.position, positionList[curIndex], Time.deltaTime * comebackMovingSpeed);
                 if (Vector3.SqrMagnitude(transform.position - positionList[curIndex]) <= 0.05f)
-                    transform.position = positionList[curIndex];
+                    transform.position = positionList[curIndex--];
                 yield return null;
             }
 
-            while (curIndex > 0)
-            {
-                transform.position = Vector3.MoveTowards(transform.position, positionList[curIndex - 1], Time.deltaTime * comebackMovingSpeed);
-                if (Vector3.SqrMagnitude(transform.position - positionList[curIndex - 1]) <= 0.05f)
-                    transform.position = positionList[--curIndex];
-                yield return null;
-            }
+            if (curIndex < 0)
+                curIndex = 0;
 
+            if (isSoundOn)
+                SoundManager.Instance.Stop3D_RPC(pv.ViewID);
             this.enabled = false;
 
             yield break;

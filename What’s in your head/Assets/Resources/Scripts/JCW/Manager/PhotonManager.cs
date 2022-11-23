@@ -13,12 +13,12 @@ namespace JCW.Network
     [RequireComponent(typeof(PhotonView))]
     public class PhotonManager : MonoBehaviourPunCallbacks
     {
-        [Header("ID 길이")] [SerializeField] [Range(1,8)] private uint LengthID = 6;
-        [Header("친구와 만났을 때 열릴 UI")] [SerializeField] private GameObject readyUI = null;      
-        [Header("초대장")]   [SerializeField] private Invitation InvitationUI;
-        [Header("해상도")]   [SerializeField] private int width = 1920;
-                            [SerializeField] private int height = 1080;
-                            [SerializeField] private bool isFullScreen = true;
+        [Header("ID 길이")] [SerializeField] [Range(1, 8)] private uint LengthID = 6;
+        [Header("친구와 만났을 때 열릴 UI")] [SerializeField] private GameObject readyUI = null;
+        [Header("초대장")] [SerializeField] private Invitation InvitationUI;
+        [Header("해상도")] [SerializeField] private int width = 1920;
+        [SerializeField] private int height = 1080;
+        [SerializeField] private bool isFullScreen = true;
         [Header("넬라를 만들지")] [SerializeField] bool isNella = true;
 
         bool isSingle = false;
@@ -80,13 +80,13 @@ namespace JCW.Network
             Debug.Log("서버와의 초당 통신 횟수 : " + PhotonNetwork.SendRate);
 
             // 무작위 완전 난수로 아이디 설정
-            int minID = (int)Mathf.Pow(10, LengthID-1);
+            int minID = (int)Mathf.Pow(10, LengthID - 1);
             int maxID = (int)Mathf.Pow(10, LengthID);
             var random = new System.Random(Guid.NewGuid().GetHashCode()).Next(minID, maxID);
 
             // 유저 아이디 할당
             userID = random.ToString();
-            for (int i = 0 ; i< PhotonNetwork.PlayerListOthers.Length ; ++i)
+            for (int i = 0 ; i < PhotonNetwork.PlayerListOthers.Length ; ++i)
             {
                 if (PhotonNetwork.PlayerListOthers[i].NickName == userID)
                 {
@@ -94,7 +94,7 @@ namespace JCW.Network
                     break;
                 }
             }
-            
+
             PhotonNetwork.LocalPlayer.NickName = userID;
 
             // 서버 접속
@@ -113,7 +113,7 @@ namespace JCW.Network
         public override void OnJoinedLobby()
         {
             Debug.Log($"로비 접속 성공");
-            if(isSingle)
+            if (isSingle)
                 PhotonNetwork.JoinOrCreateRoom(tempTitle, myRoomOptions, null);
         }
 
@@ -142,13 +142,13 @@ namespace JCW.Network
             myPhotonView.RPC(nameof(StartMakeChar), RpcTarget.AllViaServer);
             //if(PhotonNetwork.IsMasterClient)
             //myPhotonView.RPC(nameof(ChangeStageRPC), RpcTarget.AllViaServer);
-        }   
+        }
 
         public void DestroyCurrentRoom_RPC()
         {
             myPhotonView.RPC(nameof(DestroyCurrentRoom), RpcTarget.AllViaServer);
         }
-        
+
         [PunRPC]
         void DestroyCurrentRoom()
         {
@@ -188,7 +188,7 @@ namespace JCW.Network
         void MakeRoom(string masterName)
         {
             if (masterName == PhotonNetwork.LocalPlayer.NickName)
-            {                
+            {
                 PhotonNetwork.LeaveRoom();
                 StartCoroutine(nameof(WaitForRoom), masterName);
             }
@@ -207,7 +207,7 @@ namespace JCW.Network
 
         IEnumerator MakeChar()
         {
-            if(!isSingle)
+            if (!isSingle)
                 yield return new WaitUntil(() => GameManager.Instance.characterOwner.Count == 2);
 
             // 넬라인 지 아닌지 판단해서 캐릭터 생성해주면 됨
@@ -215,7 +215,7 @@ namespace JCW.Network
             GameManager.Instance.SetRandomSeed();
             if (PhotonNetwork.CurrentRoom.PlayerCount == 1)
             {
-                if(isNella)
+                if (isNella)
                 {
                     PhotonNetwork.Instantiate("Prefabs/YC/MainCamera_Nella", new Vector3(0, 0, 0), Quaternion.identity, 0);
                     PhotonNetwork.Instantiate("Prefabs/JJS/NellaMousePoint", new Vector3(-10, 0, -5), Quaternion.identity);
@@ -235,12 +235,12 @@ namespace JCW.Network
                     GameManager.Instance.isAlive.Add(false, true);
                     PhotonNetwork.Instantiate(steadyPrefabDirectory, startPos - intervalPos, Quaternion.identity);
                 }
-                
+
             }
-            else if(PhotonNetwork.CurrentRoom.PlayerCount == 2)
+            else if (PhotonNetwork.CurrentRoom.PlayerCount == 2)
             {
                 if (isNella)
-                {                    
+                {
                     PhotonNetwork.Instantiate("Prefabs/YC/MainCamera_Steady", new Vector3(0, 0, 0), Quaternion.identity, 0);
                     PhotonNetwork.Instantiate("Prefabs/JJS/SteadyMousePoint", new Vector3(10, 0, -5), Quaternion.identity);
                     GameManager.Instance.characterOwner.Add(false, false);

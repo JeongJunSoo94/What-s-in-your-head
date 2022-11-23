@@ -3,10 +3,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using KSU.Object.Stage2;
+using JCW.AudioCtrl;
 
 namespace JCW.Object
 {
     [RequireComponent(typeof(PhotonView))]
+    [RequireComponent(typeof(AudioSource))]
     public class Fall : LinkedObjectWithReciever
     {
         [Header("추락 초기 속도")] [SerializeField] float fallSpeed;
@@ -16,6 +18,7 @@ namespace JCW.Object
 
         Vector3 finalPos;
         PhotonView pv;
+        AudioSource audioSource;
         public WaitForSeconds wait = new WaitForSeconds(0.01f);
         public float delayTime = 2;
         public float interpolationHeight=30f;
@@ -29,12 +32,14 @@ namespace JCW.Object
                 Destroy(this.gameObject);
                 return;
             }
-            pv = PhotonView.Get(this);
+            pv = GetComponent<PhotonView>();
             transform.GetChild(0).GetComponent<SandSackShadow>().groundPlatform = this.groundPlatform;
             finalPos = transform.position;
             finalPos.y = groundPlatform.position.y;
             isDelayed = false;
             delayUse = true;
+            audioSource = GetComponent<AudioSource>();
+            SoundManager.Set3DAudio(pv.ViewID, audioSource, 1f, 60f);
         }
 
         void Update()
@@ -81,6 +86,7 @@ namespace JCW.Object
             isActivated = false;
             GetComponent<CapsuleCollider>().enabled = false;
             transform.GetChild(2).gameObject.SetActive(true);
+            SoundManager.Instance.Play3D("S2_SandSack_Fall", pv.ViewID);
             StartCoroutine(nameof(StopEffect));
         }
 
