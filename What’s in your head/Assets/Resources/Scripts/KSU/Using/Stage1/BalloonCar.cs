@@ -38,8 +38,7 @@ namespace KSU.Object.Interaction.Stage1
 
         IEnumerator DestroyBalloon()
         {
-            objRigidbody.velocity = Vector3.zero;            
-            Debug.Log(objRigidbody.velocity);
+            objRigidbody.velocity = Vector3.zero;        
             Destroy(balloon);
             //WaitForEndOfFrame temp = new WaitForEndOfFrame();
 

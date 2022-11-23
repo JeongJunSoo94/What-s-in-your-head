@@ -1,9 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
+using JCW.AudioCtrl;
+using Photon.Pun;
 using UnityEngine;
 
 namespace KSU
-{
+{    
+    [RequireComponent(typeof(AudioSource))]
+    [RequireComponent(typeof(PhotonView))]
     public class Rope : MonoBehaviour
     {
         //public enum Direction { F, FR, R, BR, B, BL, L, FL, Default }
@@ -36,7 +40,14 @@ namespace KSU
 
         public float moveToRopeSpeed = 4f;
 
-
+        AudioSource audioSource;
+        PhotonView pv;
+        private void Awake()
+        {
+            pv = GetComponent<PhotonView>();
+            audioSource = GetComponent<AudioSource>();
+            SoundManager.Set3DAudio(pv.ViewID, audioSource, 1f, 15f);
+        }
 
         void Start()
         {
@@ -54,20 +65,6 @@ namespace KSU
 
         private void FixedUpdate()
         {
-            //if (isRopeExisting)
-            //{
-            //    SetRotation();
-            //    Swing();
-            //    CalculateDistance();
-            //}
-            //else
-            //{
-            //    if (isReadyToRide)
-            //    {
-            //        MovePlayerToRope();
-            //    }
-            //}
-
             if (isRopeExisting)
             {
                 if (isRotatingToDefault)
@@ -184,6 +181,8 @@ namespace KSU
 
             isntSwing = false;
             isReadyToRide = true;
+
+            SoundManager.Instance.PlayEffect("All_Rope");
         }
 
         void MovePlayerToRope()
@@ -228,6 +227,7 @@ namespace KSU
                 Debug.Log("player.transform.parent: " + player.transform.parent.name);
             }
             isntSwing = false;
+            SoundManager.Instance.Stop3D(pv.ViewID);
             this.gameObject.SetActive(false);
             if (!isSwingForward)
             {
@@ -264,7 +264,8 @@ namespace KSU
                 if (rotationX < -spawner.swingAngle)
                 {
                     isSwingForward = false;
-                    StartCoroutine(nameof(StopSwingInMoment));
+                    
+                    StartCoroutine(nameof(StopSwingInMoment),true);
                 }
             }
             else
@@ -273,7 +274,7 @@ namespace KSU
                 if (rotationX > spawner.swingAngle)
                 {
                     isSwingForward = true;
-                    StartCoroutine(nameof(StopSwingInMoment));
+                    StartCoroutine(nameof(StopSwingInMoment), false);
                 }
             }
 
@@ -281,10 +282,14 @@ namespace KSU
             ropeAnchor.transform.localRotation = Quaternion.Euler(Vector3.right * rotationX);
         }
 
-        IEnumerator StopSwingInMoment()
+        IEnumerator StopSwingInMoment(bool isHeading)
         {
             isntSwing = true;
             yield return new WaitForSeconds(spawner.waitTime);
+            if(isHeading)
+                SoundManager.Instance.Play3D("All_RopeTighten1", pv.ViewID);
+            else
+                SoundManager.Instance.Play3D("All_RopeTighten2", pv.ViewID);
             isntSwing = false;
         }
 
