@@ -69,7 +69,8 @@ namespace KSU.Object
         {
             if(collision.collider.gameObject.layer == LayerMask.NameToLayer("Player"))
             {
-                collision.gameObject.transform.parent = this.gameObject.transform;
+                if(collision.transform.position.y >= transform.position.y)
+                    collision.gameObject.transform.parent = this.gameObject.transform;
             }
         }
 
