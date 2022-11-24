@@ -755,6 +755,7 @@ namespace KSU
                                 trampolin.RecieveTriggerExit();
                             }
                         }
+                        ResetMoveSound();
                         SoundManager.Instance.PlayEffect("All_Trampolin");
                     }
                     break;
@@ -865,7 +866,7 @@ namespace KSU
 
         void PlayWalkSound()
         {
-            if(!isPlayingWalkSound)
+            if (!isPlayingWalkSound)
             {
                 ResetMoveSound();
                 isPlayingWalkSound = true;
