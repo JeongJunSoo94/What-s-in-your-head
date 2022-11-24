@@ -67,7 +67,7 @@ namespace KSU.Object
 
         private void OnCollisionEnter(Collision collision)
         {
-            if(collision.collider.gameObject.layer == LayerMask.NameToLayer("Player"))
+            if(collision.gameObject.layer == LayerMask.NameToLayer("Player"))
             {
                 if(collision.transform.position.y >= transform.position.y)
                     collision.gameObject.transform.parent = this.gameObject.transform;
@@ -76,9 +76,11 @@ namespace KSU.Object
 
         private void OnCollisionExit(Collision collision)
         {
-            if (collision.collider.gameObject.layer == LayerMask.NameToLayer("Player"))
+            if (collision.gameObject.layer == LayerMask.NameToLayer("Player"))
             {
-                collision.gameObject.transform.parent = null;
+                PlayerController player = collision.gameObject.GetComponent<PlayerController>();
+                if (player.characterState.isMine)
+                    player.EscapeFromParent();
             }
         }
     }

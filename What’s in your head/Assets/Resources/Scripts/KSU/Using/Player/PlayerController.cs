@@ -715,6 +715,17 @@ namespace KSU
             Resurrect();
         }
 
+        public void EscapeFromParent()
+        {
+            photonView.RPC(nameof(EscapeParent), RpcTarget.AllViaServer);
+        }
+
+        [PunRPC]
+        void EscapeParent()
+        {
+            transform.parent = null;
+        }
+
         private void OnTriggerEnter(Collider other)
         {
             switch (other.tag)
