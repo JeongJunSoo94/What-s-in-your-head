@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using YC.Camera_;
 using YC.Camera_Single;
+using JCW.AudioCtrl;
 using Photon.Pun;
 
 namespace JJS.Weapon
@@ -40,8 +41,13 @@ namespace JJS.Weapon
 
         CameraController cameraController; // << : 찬 수정 
 
+        AudioSource audioSource;
+        PhotonView pv;
+
         private void Awake()
         {
+            audioSource = this.gameObject.GetComponentInParent<AudioSource>();
+            pv = this.gameObject.GetComponentInParent<PhotonView>();
         }
 
         void Start()
@@ -49,6 +55,7 @@ namespace JJS.Weapon
             mainCamera = this.gameObject.transform.parent.GetComponent<CameraController>().FindCamera(); // 멀티용
             cameraController = this.gameObject.transform.parent.GetComponent<CameraController>(); // << : 찬 수정 
 
+            SoundManager.Set3DAudio(pv.ViewID, audioSource, 1.0f, 10f, false);
         }
 
 
@@ -70,10 +77,15 @@ namespace JJS.Weapon
 
         public void BeamEnable(bool enable)
         {
+            if(enable)
+                SoundManager.Instance.PlayIndirect3D("S3_SteadyMagnifying", pv.ViewID);          
+            else
+                SoundManager.Instance.Stop3D(pv.ViewID);
+            
             particleBeam.SetActive(enable);
 
             if(this.gameObject.transform.parent.GetComponent<PhotonView>().IsMine)
-                cameraController.SendMessage(nameof(CameraController.ShakeCamera), enable); // << : 찬 수정 (빔 종료시, 준수 : 이펙트 페이드아웃 고려)
+                cameraController.SendMessage(nameof(CameraController.ShakeCamera), enable); 
         }
 
         public void EffectEnable(bool enable)

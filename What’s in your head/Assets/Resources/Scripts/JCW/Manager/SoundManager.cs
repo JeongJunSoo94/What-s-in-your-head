@@ -431,7 +431,6 @@ namespace JCW.AudioCtrl
                 Debug.Log(id + " 의 키값이 없습니다");
                 return;
             }
-            Debug.Log(path + " 파일 실행 시도");
             if (dict3D[id].isPlaying)
             {
                 Debug.Log(path + " 파일 실행 시도");
