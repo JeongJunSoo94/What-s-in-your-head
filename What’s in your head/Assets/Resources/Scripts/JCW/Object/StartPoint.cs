@@ -47,13 +47,11 @@ namespace JCW.Object
                 dialogString.Replace("_E", "_S", 4, 2);
                 DialogManager.Instance.SetDialogs(dialogString.ToString());
             }
-
             StartCoroutine(nameof(WaitForPlayer));
         }
 
         IEnumerator WaitForPlayer()
-        {
-            //yield return new WaitUntil(() => GameManager.Instance.GetCharOnScene(true) && GameManager.Instance.GetCharOnScene(false));
+        {          
             yield return new WaitUntil(() => GameManager.Instance.isCharOnScene.Count == 2);
             yield return new WaitUntil(() => GameManager.Instance.GetCharOnScene(true) && GameManager.Instance.GetCharOnScene(false));
             if (PhotonNetwork.IsMasterClient)
@@ -62,8 +60,6 @@ namespace JCW.Object
                 pv.RPC(nameof(InitSaveFile), RpcTarget.AllViaServer);
                 pv.RPC(nameof(SetView), RpcTarget.AllViaServer);
             }
-
-
             yield break;
         }
         [PunRPC]
