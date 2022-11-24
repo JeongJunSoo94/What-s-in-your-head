@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using JCW.AudioCtrl;
 using UnityEngine;
-
+using Photon.Pun;
 /// <summary> 
 /// 
 /// Current Issue       : 에셋 제작중 (애니메이션까지) / 플레이어 컨트롤러 관련 이슈
@@ -38,6 +38,16 @@ namespace YC_OBJ
         [SerializeField] GameObject MazeDoor;
         MazeDoorController mazeDoorController;
 
+        PhotonView pv;
+        AudioSource audioSource;
+
+
+        private void Awake()
+        {
+            pv = this.gameObject.GetComponent<PhotonView>();
+            audioSource = this.gameObject.GetComponent<AudioSource>();
+
+        }
         void Start()
         {
             if(!isInMaze)
@@ -46,6 +56,8 @@ namespace YC_OBJ
                 mazeDoorController = MazeDoor.GetComponent<MazeDoorController>();
 
             animator = this.gameObject.GetComponent<Animator>();
+
+            SoundManager.Set3DAudio(pv.ViewID, audioSource, 2f, 10f, false);
         }
 
         public void SetAnimation(int _count)
@@ -56,6 +68,8 @@ namespace YC_OBJ
             {
                 if (Count > 0)
                 {
+                    StartCoroutine(nameof(PlayEffectSound), 0.3f);
+
                     mazeDoorController.SendMessage(nameof(mazeDoorController.ControlDoor), true);
                     animator.SetBool("isUp", false);
                     animator.SetBool("isDown", true);
@@ -74,6 +88,8 @@ namespace YC_OBJ
 
                 if (Count > 0)
                 {
+                    StartCoroutine(nameof(PlayEffectSound), 0.3f);
+
                     doorController.SendMessage(nameof(doorController.SetOpen), true);
 
                     animator.SetBool("isUp", false);
@@ -89,6 +105,11 @@ namespace YC_OBJ
             }          
         }
 
+        IEnumerator PlayEffectSound(float delayTime)
+        {
+            yield return new WaitForSeconds(delayTime);
+            SoundManager.Instance.Play3D_RPC("All_ButtonTurnOn", pv.ViewID);
+        }
 
 
     }

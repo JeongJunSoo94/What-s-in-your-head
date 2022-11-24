@@ -10,17 +10,27 @@ namespace YC_OBJ
     {
         AudioSource audioSource;
         PhotonView pv;
+        string interactionTag1 = "Nella";
+        string interactionTag2 = "Steady";
 
-        void Start()
+        private void Awake()
         {
-            //if (!TryGetComponent<AudioSource>(out audioSource))
-            //    audioSource = transform.GetChild(4).gameObject.AddComponent<AudioSource>();
-            //SoundManager.Set3DAudio(pv.ViewID, audioSource, 0.5f, 10f, true);
+            audioSource = this.gameObject.GetComponent<AudioSource>();
+            pv = this.gameObject.GetComponent<PhotonView>();
         }
 
-        void Update()
+        private void Start()
         {
-        
+            SoundManager.Set3DAudio(pv.ViewID, audioSource, 1f, 10f, false);
+        }
+
+        private void OnCollisionEnter(Collision collision)
+        {
+            if(collision.gameObject.CompareTag(interactionTag1) 
+                || collision.gameObject.CompareTag(interactionTag2))
+            {
+                SoundManager.Instance.Play3D_RPC("S3S1_Lillypad", pv.ViewID);
+            }
         }
     }
 
