@@ -134,11 +134,17 @@ namespace KSU
             characterState.isMine = photonView.IsMine;
             if (!photonView.IsMine)
             {
-                GameManager.Instance.otherPlayerTF = this.transform;
+                Debug.Log("내 캐릭터가 아니므로 otherPlayerTF에 추가");
+                GameManager.Instance.otherPlayerTF = transform;
                 GetComponent<AudioListener>().enabled = false;
+                Debug.Log("otherPlayerTF : " + GameManager.Instance.otherPlayerTF.name);
             }
             else
-                GameManager.Instance.myPlayerTF = this.transform;
+            {
+                Debug.Log("내 캐릭터이므로 myPlayerTF에 추가");
+                GameManager.Instance.myPlayerTF = transform;
+                Debug.Log("myPlayerTF : " + GameManager.Instance.myPlayerTF.name);
+            }
 
             GameManager.Instance.SetCharOnScene_RPC(true);
             // << : 

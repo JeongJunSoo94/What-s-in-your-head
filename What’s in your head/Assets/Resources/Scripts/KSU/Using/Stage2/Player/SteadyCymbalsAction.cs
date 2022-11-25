@@ -169,8 +169,6 @@ namespace KSU.AutoAim.Player
 
             if ((other.gameObject.layer == LayerMask.NameToLayer("UITriggers")) && other.CompareTag("CymbalsTarget"))
             {
-                if (autoAimTargetObjects.Contains(other.gameObject))
-                    return;
                 autoAimTargetObjects.Add(other.gameObject);
             }
         }

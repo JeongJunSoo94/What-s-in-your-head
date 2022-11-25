@@ -6,13 +6,15 @@ using Photon.Pun;
 using System.Collections;
 using UnityEngine;
 using YC.Camera_;
+using YC.CameraManager_;
+
 namespace JJS
 {
     public class CharacterBuilder : MonoBehaviour
     {
         public int stage;
-        [HideInInspector] public GameObject nella;
-        [HideInInspector] public GameObject steady;
+        [HideInInspector] public GameObject nella = null;
+        [HideInInspector] public GameObject steady = null;
         public MouseControllerWeaponData nellaMouseControllerData;
         public MouseControllerWeaponData steadyMouseControllerData;
         public Transform start;
@@ -33,7 +35,6 @@ namespace JJS
             {
                 if(!funcStart && PhotonNetwork.InRoom)
                 {
-                    Debug.Log("캐릭터 만들어주기");
                     funcStart = true;
                     PhotonManager.Instance.MakeCharacter(start.position, intervalPos);
                     StartCoroutine(nameof(WaitForPlayers));
@@ -43,18 +44,34 @@ namespace JJS
 
         IEnumerator WaitForPlayers()
         {
-            if(single)
+            Debug.Log("single : " + single);
+            if (single)
                 yield return new WaitUntil(() => GameManager.Instance.GetCharOnScene(true) || GameManager.Instance.GetCharOnScene(false));
             else
-                yield return new WaitUntil(() => GameManager.Instance.GetCharOnScene(true) && GameManager.Instance.GetCharOnScene(false));
-            GameObject nella = null;
-            GameObject steady = null;
+            //yield return new WaitUntil(() => GameManager.Instance.GetCharOnScene());
+            {
+                while(true)
+                {
+                    if(GameManager.Instance.myPlayerTF != null)
+                    {
+                        if (GameManager.Instance.otherPlayerTF != null)
+                            break;
+                        else
+                            Debug.Log("otherPlayerTF가 Null입니다");
+                    }
+                    else
+                        Debug.Log("myPlayerTF Null입니다");
+
+                    yield return null;
+                }
+            }
+
             if (GameManager.Instance.characterOwner[PhotonNetwork.IsMasterClient])
             {
-                if(GameManager.Instance.myPlayerTF)
+                if (GameManager.Instance.myPlayerTF)
                     nella = GameManager.Instance.myPlayerTF.gameObject;
-                if(GameManager.Instance.otherPlayerTF)
-                    steady = GameManager.Instance.otherPlayerTF.gameObject;                
+                if (GameManager.Instance.otherPlayerTF)
+                    steady = GameManager.Instance.otherPlayerTF.gameObject;
             }
             else
             {
@@ -64,11 +81,13 @@ namespace JJS
                     nella = GameManager.Instance.otherPlayerTF.gameObject;
             }
 
+            Debug.Log("steady : " + steady.name + " / nella : " + nella.name);
+
             SetCharacterComponent(nella, nellaMouseControllerData, "Hand_R");
             SetCharacterComponent(steady, steadyMouseControllerData, "Hand_R");
             NellaScriptSetActive(nella);
             SteadyScriptSetActive(steady);
-            SetStartPos();
+            //SetStartPos();
             if (stage == 2)
             {
                 GameManager.Instance.isSideView = true;
@@ -77,16 +96,13 @@ namespace JJS
             {
                 SetUION(nella);
                 SetUION(steady);
+
+                CameraManager.Instance.cameras[0].rect = new Rect(0f, 0f, 0.5f, 1f);
+                CameraManager.Instance.cameras[1].rect = new Rect(0.5f, 0f, 0.5f, 1f);
             }
             gameObject.SetActive(false);
 
             yield break;
-        }
-
-        public void FindCharacter()
-        {
-            nella = GameObject.FindWithTag("Nella");
-            steady = GameObject.FindWithTag("Steady");
         }
 
         public void SetStartPos()

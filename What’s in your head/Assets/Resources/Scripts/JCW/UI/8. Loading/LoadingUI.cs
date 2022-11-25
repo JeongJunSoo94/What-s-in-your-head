@@ -56,15 +56,15 @@ namespace JCW.UI
             isMainTitle = SceneManager.GetActiveScene().name == "MainTitle";
             Debug.Log("ÇöÀç ¾À ÀÌ¸§ : " + SceneManager.GetActiveScene().name);
             PhotonNetwork.LevelLoadingProgress = 0f;
-            if (PhotonNetwork.IsMasterClient)
-                StartCoroutine(nameof(WaitForStable));
                        
             var random = new System.Random(Guid.NewGuid().GetHashCode());
             text.text = "TIP : " + tipList[random.Next(0, tipList.Count)];
             bgImg.sprite = bgList[GameManager.Instance.curStageIndex];
             SoundManager.Instance.StopBGM();
 
-            GameManager.Instance.ResetDefault_RPC();
+            GameManager.Instance.ResetDefault();
+            if (PhotonNetwork.IsMasterClient)
+                StartCoroutine(nameof(WaitForStable));
         }
 
         void Update()

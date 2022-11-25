@@ -73,9 +73,9 @@ namespace JCW.Object
             }
             pressed_Ratio = 0f;
             anim.SetFloat("pressed_ratio", pressed_Ratio);
-            
+
             if (isPermanent)
-                Destroy(this);
+                this.enabled = false;
             else
                 StartCoroutine("DeactiveObj");
             yield break;
