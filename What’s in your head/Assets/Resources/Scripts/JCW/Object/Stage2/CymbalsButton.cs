@@ -14,7 +14,7 @@ namespace JCW.Object
     {
         [Header("버튼 들어가는 속도")] [SerializeField] float pressedSpeed = 5f;
         [Header("버튼 나오는 속도")] [SerializeField] float releaseSpeed = 5f;
-        [Header("버튼 나오기 시작하는 시간")] [SerializeField] float releaseTime = 7f;
+        [Header("버튼 나오기 시작하는 시간")] [SerializeField] float releaseTime = 1f;
         [Header("바꿀 메테리얼이 달린 버튼")] [SerializeField] MeshRenderer meshRenderer;
         [Header("평상 시 버튼 메테리얼")] [SerializeField] Material normalMat;
         [Header("작동 시 버튼 메테리얼")] [SerializeField] Material activeMat;
@@ -73,9 +73,9 @@ namespace JCW.Object
             }
             pressed_Ratio = 0f;
             anim.SetFloat("pressed_ratio", pressed_Ratio);
-            
+
             if (isPermanent)
-                Destroy(this);
+                this.enabled = false;
             else
                 StartCoroutine("DeactiveObj");
             yield break;
@@ -83,7 +83,6 @@ namespace JCW.Object
 
         IEnumerator DeactiveObj()
         {
-            yield return ws;
             while (pressed_Ratio <= 0.95f)
             {
                 pressed_Ratio = Mathf.Lerp(pressed_Ratio, 1, releaseSpeed * Time.deltaTime);

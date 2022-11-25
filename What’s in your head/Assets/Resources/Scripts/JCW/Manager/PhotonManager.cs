@@ -86,7 +86,7 @@ namespace JCW.Network
 
             // 유저 아이디 할당
             userID = random.ToString();
-            for (int i = 0; i < PhotonNetwork.PlayerListOthers.Length; ++i)
+            for (int i = 0 ; i < PhotonNetwork.PlayerListOthers.Length ; ++i)
             {
                 if (PhotonNetwork.PlayerListOthers[i].NickName == userID)
                 {
@@ -209,7 +209,7 @@ namespace JCW.Network
             // 넬라인 지 아닌지 판단해서 캐릭터 생성해주면 됨
             // 현재 자신이 마스터인지 아닌지와 어떤 캐릭터를 선택했는지가 담겨있음.
             GameManager.Instance.SetRandomSeed();
-            if (isSingle)
+            if(isSingle)
             {
                 Debug.Log("싱글임");
                 if (PhotonNetwork.CurrentRoom.PlayerCount == 1)
@@ -218,12 +218,12 @@ namespace JCW.Network
                     {
                         PhotonNetwork.Instantiate("Prefabs/YC/MainCamera_Nella", new Vector3(0, 0, 0), Quaternion.identity, 0);
                         PhotonNetwork.Instantiate("Prefabs/JJS/NellaMousePoint", new Vector3(-10, 0, -5), Quaternion.identity);
-
+                        
                         GameManager.Instance.characterOwner.Add(true, true);
                         GameManager.Instance.characterOwner.Add(false, false);
                         GameManager.Instance.isAlive.Add(true, true);
                         GameManager.Instance.isAlive.Add(false, true);
-
+                        
 
 
                         PhotonNetwork.Instantiate(nellaPrefabDirectory, startPos + intervalPos, Quaternion.identity);
@@ -232,13 +232,13 @@ namespace JCW.Network
                     {
                         PhotonNetwork.Instantiate("Prefabs/YC/MainCamera_Steady", new Vector3(0, 0, 0), Quaternion.identity, 0);
                         PhotonNetwork.Instantiate("Prefabs/JJS/SteadyMousePoint", new Vector3(10, 0, -5), Quaternion.identity);
-
-
+                        
+                        
                         GameManager.Instance.characterOwner.Add(true, false);
                         GameManager.Instance.characterOwner.Add(false, true);
                         GameManager.Instance.isAlive.Add(true, true);
                         GameManager.Instance.isAlive.Add(false, true);
-
+                        
 
                         PhotonNetwork.Instantiate(steadyPrefabDirectory, startPos - intervalPos, Quaternion.identity);
                     }
@@ -249,23 +249,23 @@ namespace JCW.Network
                     if (isNella)
                     {
                         PhotonNetwork.Instantiate("Prefabs/YC/MainCamera_Steady", new Vector3(0, 0, 0), Quaternion.identity, 0);
-                        PhotonNetwork.Instantiate("Prefabs/JJS/SteadyMousePoint", new Vector3(10, 0, -5), Quaternion.identity);
-
+                        PhotonNetwork.Instantiate("Prefabs/JJS/SteadyMousePoint", new Vector3(10, 0, -5), Quaternion.identity);                      
+                        
                         GameManager.Instance.characterOwner.Add(false, false);
                         GameManager.Instance.characterOwner.Add(true, true);
                         GameManager.Instance.isAlive.Add(true, true);
-                        GameManager.Instance.isAlive.Add(false, true);
+                        GameManager.Instance.isAlive.Add(false, true);                        
 
                         PhotonNetwork.Instantiate(steadyPrefabDirectory, startPos - intervalPos, Quaternion.identity);
                     }
                     else
                     {
                         PhotonNetwork.Instantiate("Prefabs/YC/MainCamera_Nella", new Vector3(0, 0, 0), Quaternion.identity, 0);
-                        PhotonNetwork.Instantiate("Prefabs/JJS/NellaMousePoint", new Vector3(-10, 0, -5), Quaternion.identity);
+                        PhotonNetwork.Instantiate("Prefabs/JJS/NellaMousePoint", new Vector3(-10, 0, -5), Quaternion.identity);                        
                         GameManager.Instance.characterOwner.Add(false, true);
                         GameManager.Instance.characterOwner.Add(true, false);
                         GameManager.Instance.isAlive.Add(true, true);
-                        GameManager.Instance.isAlive.Add(false, true);
+                        GameManager.Instance.isAlive.Add(false, true);                        
 
                         PhotonNetwork.Instantiate(nellaPrefabDirectory, startPos + intervalPos, Quaternion.identity);
                     }
@@ -273,7 +273,7 @@ namespace JCW.Network
             }
             else
             {
-                if (GameManager.Instance.characterOwner[PhotonNetwork.IsMasterClient])
+                if(GameManager.Instance.characterOwner[PhotonNetwork.IsMasterClient])
                 {
                     PhotonNetwork.Instantiate("Prefabs/YC/MainCamera_Nella", new Vector3(0, 0, 0), Quaternion.identity, 0);
                     PhotonNetwork.Instantiate("Prefabs/JJS/NellaMousePoint", new Vector3(-10, 0, -5), Quaternion.identity);
@@ -290,7 +290,7 @@ namespace JCW.Network
                     Debug.Log("스테디 생성");
                 }
             }
-
+            
             //StopAllCoroutines();
             yield break;
         }

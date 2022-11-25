@@ -90,10 +90,10 @@ namespace KSU.AutoAim.Player
             {
                 foreach (var cymbalsObject in autoAimTargetObjects)
                 {
-                    Vector3 directoin = (cymbalsObject.transform.parent.position - playerCamera.transform.position).normalized;
+                    Vector3 direction = (cymbalsObject.transform.parent.position - playerCamera.transform.position).normalized;
                     bool rayCheck = false;
                     RaycastHit hit;
-                    rayCheck = Physics.Raycast(playerCamera.transform.position, directoin, out hit, cymbalsObject.GetComponentInParent<AutoAimTargetObject>().detectingUIRange * 1.5f, layerFilterForAutoAim, QueryTriggerInteraction.Ignore);
+                    rayCheck = Physics.Raycast(playerCamera.transform.position, direction, out hit, cymbalsObject.GetComponentInParent<AutoAimTargetObject>().detectingUIRange * 1.5f, layerFilterForAutoAim, QueryTriggerInteraction.Ignore);
                     
                     if (rayCheck)
                     {

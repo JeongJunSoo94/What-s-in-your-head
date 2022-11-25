@@ -86,26 +86,7 @@ namespace JCW.AudioCtrl
             moveClips.Clear();
             threeDimesionClips.Clear();
         }
-        /*
-        public AudioClip GetAudioClips(string name, JCW.AudioCtrl.Sound soundType)
-        {
-            string clipName = name;
-            if (!name.Contains($"Sounds/{soundTypes[(int)soundType]}"))
-                clipName = $"Sounds/{soundTypes[(int)soundType]}/{name}";
 
-            switch (soundType)
-            {
-                case Sound.EFFECT:
-                    return audioClips[clipName];
-                case Sound.DISTANCE:
-                    return threeDimesionClips[clipName];
-                case Sound.UI:
-                    return UIClips[clipName];
-                default:
-                    return audioClips[clipName];
-            }
-        }
-        */
         public AudioClip GetAudioClips(string name, JCW.AudioCtrl.Sound soundType)
         {
             switch (soundType)
@@ -122,40 +103,6 @@ namespace JCW.AudioCtrl
                     return audioClips[name];
             }
         }
-        /*
-        void Set3DAudioClip(string path, JCW.AudioCtrl.Sound soundType)
-        {
-            if (!path.Contains($"Sounds/{soundTypes[(int)soundType]}"))
-                path = $"Sounds/{soundTypes[(int)soundType]}/{path}";
-            switch (soundType)
-            {
-                case Sound.BGM:
-                default:
-                    break;
-
-                case Sound.DISTANCE:
-                    if (threeDimesionClips.ContainsKey(path))
-                        Debug.Log("이미 저장된 오디오 클립입니다");
-                    else
-                        threeDimesionClips.Add(path, Resources.Load<AudioClip>(path));
-                    break;
-
-                case Sound.UI:
-                    if (UIClips.ContainsKey(path))
-                        Debug.Log("이미 저장된 오디오 클립입니다");
-                    else
-                        UIClips.Add(path, Resources.Load<AudioClip>(path));
-                    break;
-
-                case Sound.EFFECT:
-                    if (audioClips.ContainsKey(path))
-                        Debug.Log("이미 저장된 오디오 클립입니다");
-                    else
-                        audioClips.Add(path, Resources.Load<AudioClip>(path));
-                    break;
-            }
-        }
-        */
         void Set3DAudioClip(AudioClip clip, JCW.AudioCtrl.Sound soundType)
         {
             switch (soundType)
@@ -407,6 +354,11 @@ namespace JCW.AudioCtrl
         [PunRPC]
         public void Play3D(string path, int id)
         {
+            if (!dict3D.ContainsKey(id))
+            {
+                Debug.Log(id + " 의 키값이 없습니다");
+                return;
+            }
             dict3D[id].clip = GetAudioClips(path, Sound.DISTANCE);
             if (dict3D[id].clip == null)
             {
@@ -450,6 +402,8 @@ namespace JCW.AudioCtrl
         [PunRPC]
         public void Stop3D(int id)
         {
+            if (!dict3D.ContainsKey(id))
+                return;
             dict3D[id].Stop();
         }
 

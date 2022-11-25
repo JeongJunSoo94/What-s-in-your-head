@@ -207,6 +207,11 @@ public class GameManager : MonoBehaviour, IPunObservable
         return isCharOnScene[isMaster ? 0 : 1];
     }
 
+    public bool GetCharOnScene()
+    {
+        return myPlayerTF != null && otherPlayerTF != null;
+    }
+
     public void GoMainMenu_RPC()
     {
         photonView.RPC(nameof(GoMainMenu), RpcTarget.AllViaServer);
