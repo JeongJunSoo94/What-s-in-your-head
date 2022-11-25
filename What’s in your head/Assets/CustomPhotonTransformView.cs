@@ -81,11 +81,11 @@ public class CustomPhotonTransformView : MonoBehaviourPun, IPunObservable
         {
             if (m_UseLocal)
             {
-                if (m_Direction.magnitude < Mathf.Epsilon)
-                {
-                    transform.localPosition = this.m_NetworkPosition;
-                }
-                else
+                //if (m_Direction.magnitude < Mathf.Epsilon)
+                //{
+                //    transform.localPosition = this.m_NetworkPosition;
+                //}
+                //else
                 {
                     transform.localPosition = Vector3.MoveTowards(transform.localPosition, this.m_NetworkPosition, this.m_Distance * Time.fixedDeltaTime * PhotonNetwork.SerializationRate);
                 }
@@ -93,11 +93,11 @@ public class CustomPhotonTransformView : MonoBehaviourPun, IPunObservable
             }
             else
             {
-                if (m_Direction.magnitude < Mathf.Epsilon)
-                {
-                    transform.position = this.m_NetworkPosition;
-                }
-                else
+                //if (m_Direction.magnitude < Mathf.Epsilon)
+                //{
+                //    transform.position = this.m_NetworkPosition;
+                //}
+                //else
                 {
                     transform.position = Vector3.MoveTowards(transform.position, this.m_NetworkPosition, this.m_Distance * Time.fixedDeltaTime * PhotonNetwork.SerializationRate);
                 }
@@ -224,26 +224,10 @@ public class CustomPhotonTransformView : MonoBehaviourPun, IPunObservable
             {
                 this.m_Angle = 0f;
 
-                //if (m_UseLocal)
-                //{
-                //    transform.localRotation = this.m_NetworkRotation;
-                //}
-                //else
-                //{
-                //    transform.rotation = this.m_NetworkRotation;
-                //}
                 transform.rotation = this.m_NetworkRotation;
             }
             else
             {
-                //if (m_UseLocal)
-                //{
-                //    this.m_Angle = Quaternion.Angle(transform.localRotation, this.m_NetworkRotation);
-                //}
-                //else
-                //{
-                //    this.m_Angle = Quaternion.Angle(transform.rotation, this.m_NetworkRotation);
-                //}
                 this.m_Angle = Quaternion.Angle(transform.rotation, this.m_NetworkRotation);
             }
 

@@ -184,7 +184,6 @@ namespace KSU
             {
                 //if (detectedInteractableObjects.ContainsKey(other.gameObject.transform.parent.gameObject))
                 //    return;
-                Debug.Log("트리거 통과");
                 detectedInteractableObjects.Add(other.gameObject.transform.parent.gameObject, new Obj_Info(false, false, 100f));
             }
         }

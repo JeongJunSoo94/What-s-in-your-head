@@ -6,10 +6,6 @@ using UnityEngine;
 public class ObjectPhotonTransformView : MonoBehaviourPun, IPunObservable
 {
     private bool m_firstTake = true;
-    private bool valuesReceived = false;
-
-    private float m_Distance;
-    private float m_Angle;
 
     private Vector3 m_Direction;
     private Vector3 m_NetworkPosition;
@@ -24,8 +20,8 @@ public class ObjectPhotonTransformView : MonoBehaviourPun, IPunObservable
     public bool m_SynchronizeScale = false;
     public bool m_SynchronizeRigidbody = false;
 
-    public float lerpPosition = 5f;
-    public float lerpRotation = 5f;
+    public float lerpPosition = 30f;
+    public float lerpRotation = 30f;
 
     Rigidbody m_Rigidbody;
 
@@ -83,11 +79,6 @@ public class ObjectPhotonTransformView : MonoBehaviourPun, IPunObservable
                 stream.SendNext(tr.rotation);
             }
 
-            if (this.m_SynchronizeScale)
-            {
-                stream.SendNext(tr.localScale);
-            }
-
             if(this.m_SynchronizeRigidbody)
             {
                 stream.SendNext(m_Rigidbody.velocity);
@@ -105,14 +96,11 @@ public class ObjectPhotonTransformView : MonoBehaviourPun, IPunObservable
                 if (m_firstTake)
                 {
                     tr.position = this.m_NetworkPosition;
-
-                    this.m_Distance = 0f;
                 }
                 else
                 {
                     float lag = Mathf.Abs((float)(PhotonNetwork.Time - info.SentServerTime));
                     this.m_NetworkPosition += this.m_Direction * lag;
-                    this.m_Distance = Vector3.Distance(tr.position, this.m_NetworkPosition);
                 }
 
             }
@@ -120,22 +108,6 @@ public class ObjectPhotonTransformView : MonoBehaviourPun, IPunObservable
             if (this.m_SynchronizeRotation)
             {
                 this.m_NetworkRotation = (Quaternion)stream.ReceiveNext();
-
-                if (m_firstTake)
-                {
-                    this.m_Angle = 0f;
-
-                    tr.rotation = this.m_NetworkRotation;
-                }
-                else
-                {
-                    this.m_Angle = Quaternion.Angle(tr.rotation, this.m_NetworkRotation);
-                }
-            }
-
-            if (this.m_SynchronizeScale)
-            {
-                tr.localScale = (Vector3)stream.ReceiveNext();
             }
 
             if (this.m_SynchronizeRigidbody)
