@@ -49,13 +49,13 @@ namespace JCW.Object
         private void OnTriggerEnter(Collider other)
         {
             if (other.CompareTag("Cymbals"))
-                StartCoroutine("ActiveObj");
+                StartCoroutine("ActivateObj");
         }
 
-        IEnumerator ActiveObj()
+        IEnumerator ActivateObj()
         {
             // 닿는 순간 메테리얼 변경
-            StopCoroutine("DeactiveObj");
+            StopCoroutine("DeactivateObj");
             meshRenderer.sharedMaterial = activeMat;
 
             for (int i = 0 ; i<objectList.Count ; ++i)
@@ -77,11 +77,11 @@ namespace JCW.Object
             if (isPermanent)
                 this.enabled = false;
             else
-                StartCoroutine("DeactiveObj");
+                StartCoroutine("DeactivateObj");
             yield break;
         }
 
-        IEnumerator DeactiveObj()
+        IEnumerator DeactivateObj()
         {
             while (pressed_Ratio <= 0.95f)
             {
