@@ -51,8 +51,10 @@ namespace JCW.UI
             else
             {
                 Cursor.lockState = CursorLockMode.Confined;
-                GameManager.Instance.myPlayerTF.GetComponent<PlayerState>().isOutOfControl = true;
-                CameraManager.Instance.BlockCinemachineInput(true);
+                if (GameManager.Instance.myPlayerTF)
+                    GameManager.Instance.myPlayerTF.GetComponent<PlayerState>().isOutOfControl = true;
+                if (CameraManager.Instance)
+                    CameraManager.Instance.BlockCinemachineInput(true);
             }
         }
 
@@ -60,8 +62,10 @@ namespace JCW.UI
         {
             if (SceneManager.GetActiveScene().name != "MainTitle")
             {
-                GameManager.Instance.myPlayerTF.GetComponent<PlayerState>().isOutOfControl = false;
-                CameraManager.Instance.BlockCinemachineInput(false);
+                if(GameManager.Instance.myPlayerTF)
+                    GameManager.Instance.myPlayerTF.GetComponent<PlayerState>().isOutOfControl = false;
+                if(CameraManager.Instance)
+                    CameraManager.Instance.BlockCinemachineInput(false);
             }
         }
 

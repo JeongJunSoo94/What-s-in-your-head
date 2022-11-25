@@ -95,7 +95,7 @@ namespace YC_OBJ
             if(GameManager.Instance.isTest)
                 yield return new WaitUntil(() => GameManager.Instance.GetCharOnScene(true) || GameManager.Instance.GetCharOnScene(false));
             else
-                yield return new WaitUntil(() => GameManager.Instance.GetCharOnScene(true) && GameManager.Instance.GetCharOnScene(false));
+                yield return new WaitUntil(() => GameManager.Instance.GetCharOnScene());
 
             SoundManager.Instance.PlayIndirect3D_RPC("S3S1_CorruptionPlant_2", pv.ViewID);
             yield break;

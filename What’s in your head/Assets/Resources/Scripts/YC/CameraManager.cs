@@ -69,7 +69,7 @@ namespace YC.CameraManager_
         }
         IEnumerator WaitForPlayers()
         {
-            yield return new WaitUntil(() => GameManager.Instance.GetCharOnScene(true) && GameManager.Instance.GetCharOnScene(false));
+            yield return new WaitUntil(() => GameManager.Instance.GetCharOnScene());
 
             cameras[0] = GameObject.FindGameObjectWithTag("NellaCamera").GetComponent<Camera>();
             cameras[1] = GameObject.FindGameObjectWithTag("SteadyCamera").GetComponent<Camera>();
@@ -564,7 +564,8 @@ namespace YC.CameraManager_
     
         public void BlockCinemachineInput(bool block) // Pause시 카메라 인풋을 막는다
         {
-            GameManager.Instance.myPlayerTF.GetComponent<CameraController>().BlockCinemachineInput(block);
+            if(GameManager.Instance.myPlayerTF)
+                GameManager.Instance.myPlayerTF.GetComponent<CameraController>().BlockCinemachineInput(block);
         }
 
         public void SetHalfScreenCor2(bool isNella)

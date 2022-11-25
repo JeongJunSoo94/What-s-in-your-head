@@ -26,7 +26,7 @@ namespace JCW.Object.Stage1
 
         IEnumerator WaitForPlayer()
         {
-            yield return new WaitUntil(() => GameManager.Instance.GetCharOnScene(true) && GameManager.Instance.GetCharOnScene(false));
+            yield return new WaitUntil(() => GameManager.Instance.GetCharOnScene());
             pv.RPC(nameof(StartFunc), RpcTarget.AllViaServer);
 
             yield break;

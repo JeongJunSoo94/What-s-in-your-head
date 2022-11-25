@@ -20,14 +20,16 @@ namespace YC.Camera_
 
         [Space] [Space]
         [SerializeField] List <CinemachineVirtualCamera> CM_VCAMs;
+        [Header("카메라 전환 후 켜줄 오브젝트 목록")] [SerializeField] List <GameObject> objList;
 
         CinemachineBrain CB;
         float originBlendTime;
         PhotonView pv;
 
+
         void Start()
         {           
-            pv = this.gameObject.GetComponent<PhotonView>();
+            pv = GetComponent<PhotonView>();
 
             // >> : 테스트시에만 기다렸다가 시작
             StartCoroutine(nameof(WaitForPlayers));
@@ -38,10 +40,10 @@ namespace YC.Camera_
 
         IEnumerator WaitForPlayers()
         {
-            yield return new WaitUntil(() => GameManager.Instance.GetCharOnScene(true) && GameManager.Instance.GetCharOnScene(false));
+            yield return new WaitUntil(() => GameManager.Instance.GetCharOnScene());
 
             yield return new WaitForSeconds(0.2f);
-
+            objList[0].SetActive(true);
             if (pv.IsMine)
                 pv.RPC(nameof(InitCamera), RpcTarget.AllViaServer, true);
             
@@ -136,6 +138,10 @@ namespace YC.Camera_
             // << : 게임 시작
             CameraManager.Instance.BlockCinemachineInput(false);
             GameManager.Instance.myPlayerTF.GetComponent<PlayerState>().isOutOfControl = false;
+            for (int i = 1 ; i<objList.Count ; ++i)
+            {
+                objList[i].SetActive(true);
+            }
         }
     }
 }

@@ -73,7 +73,7 @@ namespace JCW.Object.Stage1
 
         IEnumerator WaitForPlayers()
         {
-            yield return new WaitUntil(() => GameManager.Instance.GetCharOnScene(true) && GameManager.Instance.GetCharOnScene(false));
+            yield return new WaitUntil(() => GameManager.Instance.GetCharOnScene());
             isStart = true;
             yield break;
         }

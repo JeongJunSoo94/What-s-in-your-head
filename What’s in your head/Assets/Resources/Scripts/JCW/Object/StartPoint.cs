@@ -53,7 +53,7 @@ namespace JCW.Object
         IEnumerator WaitForPlayer()
         {          
             yield return new WaitUntil(() => GameManager.Instance.isCharOnScene.Count == 2);
-            yield return new WaitUntil(() => GameManager.Instance.GetCharOnScene(true) && GameManager.Instance.GetCharOnScene(false));
+            yield return new WaitUntil(() => GameManager.Instance.GetCharOnScene());
             if (PhotonNetwork.IsMasterClient)
             {
                 SoundManager.Instance.PlayBGM_RPC(currentStageSection.ToString());

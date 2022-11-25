@@ -88,7 +88,11 @@ namespace JCW.Dialog
                     if (i < etcRemainTime.Count)
                     {
                         if (etcStartTime != null && etcStartTime.Count > i)
+                        {
+                            DialogManager.Instance.etcText1.gameObject.SetActive(false);
+                            DialogManager.Instance.etcText2.gameObject.SetActive(false);
                             yield return new WaitForSeconds(etcStartTime[i]);
+                        }
                         DialogManager.Instance.SetEtcDialog(etcOrder + i);
                     }
                 }
@@ -135,7 +139,11 @@ namespace JCW.Dialog
                     if (i < nellaRemainTime.Count)
                     {
                         if (nellaStartTime != null && nellaStartTime.Count > i)
+                        {
+                            DialogManager.Instance.nellaText1.gameObject.SetActive(false);
+                            DialogManager.Instance.nellaText2.gameObject.SetActive(false);
                             yield return new WaitForSeconds(nellaStartTime[i]);
+                        }
                         DialogManager.Instance.SetNellaDialog(nellaOrder + i);
                     }
                 }
@@ -181,7 +189,11 @@ namespace JCW.Dialog
                     if (i < steadyRemainTime.Count)
                     {
                         if (steadyStartTime != null && steadyStartTime.Count > i)
+                        {
+                            DialogManager.Instance.steadyText1.gameObject.SetActive(false);
+                            DialogManager.Instance.steadyText2.gameObject.SetActive(false);
                             yield return new WaitForSeconds(steadyStartTime[i]);
+                        }
                         DialogManager.Instance.SetSteadyDialog(steadyOrder + i);
                     }
                 }

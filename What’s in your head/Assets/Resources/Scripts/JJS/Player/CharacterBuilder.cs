@@ -37,57 +37,34 @@ namespace JJS
                 {
                     funcStart = true;
                     PhotonManager.Instance.MakeCharacter(start.position, intervalPos);
-                    StartCoroutine(nameof(WaitForPlayers));
+                    if(single)
+                        StartCoroutine(nameof(WaitForPlayers_Single));
+                    else
+                        StartCoroutine(nameof(WaitForPlayers));
                 }                
             }
         }
 
         IEnumerator WaitForPlayers()
         {
-            Debug.Log("single : " + single);
-            if (single)
-                yield return new WaitUntil(() => GameManager.Instance.GetCharOnScene(true) || GameManager.Instance.GetCharOnScene(false));
-            else
-            //yield return new WaitUntil(() => GameManager.Instance.GetCharOnScene());
-            {
-                while(true)
-                {
-                    if(GameManager.Instance.myPlayerTF != null)
-                    {
-                        if (GameManager.Instance.otherPlayerTF != null)
-                            break;
-                        else
-                            Debug.Log("otherPlayerTF가 Null입니다");
-                    }
-                    else
-                        Debug.Log("myPlayerTF Null입니다");
-
-                    yield return null;
-                }
-            }
+            yield return new WaitUntil(() => GameManager.Instance.GetCharOnScene());
 
             if (GameManager.Instance.characterOwner[PhotonNetwork.IsMasterClient])
             {
-                if (GameManager.Instance.myPlayerTF)
-                    nella = GameManager.Instance.myPlayerTF.gameObject;
-                if (GameManager.Instance.otherPlayerTF)
-                    steady = GameManager.Instance.otherPlayerTF.gameObject;
+                nella = GameManager.Instance.myPlayerTF.gameObject;
+                steady = GameManager.Instance.otherPlayerTF.gameObject;
             }
             else
             {
-                if (GameManager.Instance.myPlayerTF)
-                    steady = GameManager.Instance.myPlayerTF.gameObject;
-                if (GameManager.Instance.otherPlayerTF)
-                    nella = GameManager.Instance.otherPlayerTF.gameObject;
+                steady = GameManager.Instance.myPlayerTF.gameObject;
+                nella = GameManager.Instance.otherPlayerTF.gameObject;
             }
 
-            Debug.Log("steady : " + steady.name + " / nella : " + nella.name);
 
             SetCharacterComponent(nella, nellaMouseControllerData, "Hand_R");
             SetCharacterComponent(steady, steadyMouseControllerData, "Hand_R");
             NellaScriptSetActive(nella);
             SteadyScriptSetActive(steady);
-            //SetStartPos();
             if (stage == 2)
             {
                 GameManager.Instance.isSideView = true;
@@ -101,6 +78,55 @@ namespace JJS
                 CameraManager.Instance.cameras[1].rect = new Rect(0.5f, 0f, 0.5f, 1f);
             }
             gameObject.SetActive(false);
+
+            yield break;
+        }
+
+        IEnumerator WaitForPlayers_Single()
+        {
+            if (PhotonNetwork.CurrentRoom.PlayerCount == 1)
+            {
+                yield return new WaitUntil(() => GameManager.Instance.myPlayerTF != null);
+                if (GameManager.Instance.characterOwner[PhotonNetwork.IsMasterClient])
+                    nella = GameManager.Instance.myPlayerTF.gameObject;
+                else
+                    steady = GameManager.Instance.myPlayerTF.gameObject;
+            }
+            else
+            {
+                yield return new WaitUntil(() => GameManager.Instance.GetCharOnScene());
+                if (GameManager.Instance.characterOwner[PhotonNetwork.IsMasterClient])
+                {
+                    nella = GameManager.Instance.myPlayerTF.gameObject;
+                    steady = GameManager.Instance.otherPlayerTF.gameObject;
+                }
+                else
+                {
+                    steady = GameManager.Instance.myPlayerTF.gameObject;
+                    nella = GameManager.Instance.otherPlayerTF.gameObject;
+                }
+            }
+
+            SetCharacterComponent(nella, nellaMouseControllerData, "Hand_R");
+            SetCharacterComponent(steady, steadyMouseControllerData, "Hand_R");
+            NellaScriptSetActive(nella);
+            SteadyScriptSetActive(steady);
+            SetStartPos();
+            if (stage == 2)
+            {
+                GameManager.Instance.isSideView = true;
+            }
+            else if (stage == 3)
+            {
+                SetUION(nella);
+                SetUION(steady);
+
+                CameraManager.Instance.cameras[0].rect = new Rect(0f, 0f, 0.5f, 1f);
+                CameraManager.Instance.cameras[1].rect = new Rect(0.5f, 0f, 0.5f, 1f);
+            }
+
+            if (PhotonNetwork.CurrentRoom.PlayerCount == 2)
+                gameObject.SetActive(false);
 
             yield break;
         }
