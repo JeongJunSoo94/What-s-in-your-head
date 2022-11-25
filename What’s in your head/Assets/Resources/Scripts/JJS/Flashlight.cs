@@ -18,8 +18,6 @@ namespace JJS
         public ConeFindTarget finder;
         public ConeFindTarget finderSpot;
 
-        PhotonView photonView;
-
         public bool sandSackUse;
 
         GameObject sandSpawner;
@@ -34,13 +32,18 @@ namespace JJS
 
         AudioSource audioSource;
 
+        PhotonView photonView;
+
+        Animator nellaAnimator;
+        Animator steadyAnimator;
+
         private void Awake()
         {
             SetCharacterGameObject(gameObject, out lightObj, "Light");
             spot = lightObj.transform.GetChild(0).GetComponent<Light>();
             directional = lightObj.transform.GetChild(1).GetComponent<Light>();
             point = lightObj.transform.GetChild(2).GetComponent<Light>();
-            photonView = GetComponent<PhotonView>();
+            photonView = photonView = GetComponent<PhotonView>();
             audioSource = GetComponent<AudioSource>();
             if (sandSackUse)
                 InitializedSandSack();
@@ -48,16 +51,35 @@ namespace JJS
 
         void Update()
         {
-            if (finder.targetObj.Count == 2)
+            if (nellaAnimator == null || steadyAnimator == null)
             {
-                if (GameManager.Instance.curPlayerHP <= 0 && canAttack)
+                //if (GameManager.Instance.curPlayerHP <= 0 && canAttack)
+                foreach (var obj in finder.targetObj)
                 {
-                    photonView.RPC(nameof(SandAttack), RpcTarget.AllViaServer);
-                    canAttack = false;
+                    if (obj.CompareTag("Nella"))
+                    {
+                        nellaAnimator = obj.GetComponent<Animator>();
+                    }
+                    else if (obj.CompareTag("Steady"))
+                    {
+                        steadyAnimator = obj.GetComponent<Animator>();
+                    }
                 }
-                else if (GameManager.Instance.curPlayerHP == 12)
+            }
+            else
+            {
+
+                if (sandSackUse)
                 {
-                    canAttack = true;
+                    if ((nellaAnimator.GetCurrentAnimatorStateInfo(0).IsName("Death") || steadyAnimator.GetCurrentAnimatorStateInfo(0).IsName("Death")) && canAttack)
+                    {
+                        photonView.RPC(nameof(SandAttack), RpcTarget.AllViaServer);
+                        canAttack = false;
+                    }
+                    else if (!nellaAnimator.GetCurrentAnimatorStateInfo(0).IsName("Death") && !steadyAnimator.GetCurrentAnimatorStateInfo(0).IsName("Death"))
+                    {
+                        canAttack = true;
+                    }
                 }
             }
         }
