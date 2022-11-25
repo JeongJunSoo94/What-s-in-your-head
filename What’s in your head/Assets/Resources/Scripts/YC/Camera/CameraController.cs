@@ -63,7 +63,7 @@ namespace YC.Camera_
         [SerializeField] [Range(0, 1)] float sholderAxisY_MaxUp = 0.25f;
 
         [Header("[Sholder View Y궤도 Down 제한 값]")]
-        [SerializeField] [Range(0, 1)] float sholderAxisY_MaxDown = 0.5f;
+        [SerializeField] [Range(0, 1)] float sholderAxisY_MaxDown = 0.7f;
 
         float sholderViewMaxY;
         [Space]
@@ -143,7 +143,9 @@ namespace YC.Camera_
         float groundFollowY;
         float groundLookY;
 
-
+        // ============  OutOfControl시 사용  ============ //
+        float XSpeed;
+        float YSpeed;
 
         // ============  인스펙터 프리팹  ============ //
 
@@ -463,10 +465,32 @@ namespace YC.Camera_
 
         public void BlockCinemachineInput(bool block)  // pause시 카메라 인풋을 막는다 (카메라 매니저 통해서 호출)
         {
+            //if (block)
+            //{
+            //    cinemachineBrain.enabled = false;
+            //}
+            //else
+            //{
+            //    cinemachineBrain.enabled = true;
+            //}
+
+            if (isSideView || GameManager.Instance.isTopView) return;
+
+            CinemachineFreeLook CF = camList[(int)curCam].GetComponent<CinemachineFreeLook>();
+
             if (block)
-                cinemachineBrain.enabled = false;
+            {
+                XSpeed = CF.m_XAxis.m_MaxSpeed;
+                YSpeed = CF.m_YAxis.m_MaxSpeed;
+
+                CF.m_XAxis.m_MaxSpeed = 0;
+                CF.m_YAxis.m_MaxSpeed = 0;
+            }
             else
-                cinemachineBrain.enabled = true;
+            {
+                CF.m_XAxis.m_MaxSpeed = XSpeed;
+                CF.m_YAxis.m_MaxSpeed = YSpeed;
+            }
         }
 
 
@@ -579,7 +603,7 @@ namespace YC.Camera_
             }
         }
 
-        void OnOffCamera(CinemachineVirtualCameraBase curCam) // 매개변수로 받은 카메라 외에 다른 카메라는 Off (인자가 null이라면 모든 가상카메라를 끈다)  
+        public void OnOffCamera(CinemachineVirtualCameraBase curCam) // 매개변수로 받은 카메라 외에 다른 카메라는 Off (인자가 null이라면 모든 가상카메라를 끈다)  
         {
             foreach (CinemachineVirtualCameraBase cam in camList)
             {

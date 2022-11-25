@@ -86,7 +86,7 @@ namespace JCW.Network
 
             // 유저 아이디 할당
             userID = random.ToString();
-            for (int i = 0 ; i < PhotonNetwork.PlayerListOthers.Length ; ++i)
+            for (int i = 0; i < PhotonNetwork.PlayerListOthers.Length; ++i)
             {
                 if (PhotonNetwork.PlayerListOthers[i].NickName == userID)
                 {
@@ -138,8 +138,10 @@ namespace JCW.Network
         {
             startPos = startPosition;
             intervalPos = intervalPosition;
+            StartCoroutine(nameof(MakeChar));
             //PhotonNetwork.LoadLevel(GameManager.Instance.curStageIndex * 2 - 2 + GameManager.Instance.curStageType);
-            myPhotonView.RPC(nameof(StartMakeChar), RpcTarget.AllViaServer);
+            //myPhotonView.RPC(nameof(StartMakeChar), RpcTarget.AllViaServer, PhotonNetwork.IsMasterClient);
+
             //if(PhotonNetwork.IsMasterClient)
             //myPhotonView.RPC(nameof(ChangeStageRPC), RpcTarget.AllViaServer);
         }
@@ -153,12 +155,6 @@ namespace JCW.Network
         void DestroyCurrentRoom()
         {
             PhotonNetwork.LeaveRoom();
-        }
-
-        [PunRPC]
-        void StartMakeChar()
-        {
-            StartCoroutine(nameof(MakeChar));
         }
 
         // 친구 검색창에서 돋보기 버튼 누르면 작동
@@ -213,54 +209,90 @@ namespace JCW.Network
             // 넬라인 지 아닌지 판단해서 캐릭터 생성해주면 됨
             // 현재 자신이 마스터인지 아닌지와 어떤 캐릭터를 선택했는지가 담겨있음.
             GameManager.Instance.SetRandomSeed();
-            if (PhotonNetwork.CurrentRoom.PlayerCount == 1)
+            if (isSingle)
             {
-                if (isNella)
+                Debug.Log("싱글임");
+                if (PhotonNetwork.CurrentRoom.PlayerCount == 1)
                 {
-                    PhotonNetwork.Instantiate("Prefabs/YC/MainCamera_Nella", new Vector3(0, 0, 0), Quaternion.identity, 0);
-                    PhotonNetwork.Instantiate("Prefabs/JJS/NellaMousePoint", new Vector3(-10, 0, -5), Quaternion.identity);
-                    GameManager.Instance.characterOwner.Add(true, true);
-                    GameManager.Instance.characterOwner.Add(false, false);
-                    GameManager.Instance.isAlive.Add(true, true);
-                    GameManager.Instance.isAlive.Add(false, true);
-                    PhotonNetwork.Instantiate(nellaPrefabDirectory, startPos + intervalPos, Quaternion.identity);
-                }
-                else
-                {
-                    PhotonNetwork.Instantiate("Prefabs/YC/MainCamera_Steady", new Vector3(0, 0, 0), Quaternion.identity, 0);
-                    PhotonNetwork.Instantiate("Prefabs/JJS/SteadyMousePoint", new Vector3(10, 0, -5), Quaternion.identity);
-                    GameManager.Instance.characterOwner.Add(true, false);
-                    GameManager.Instance.characterOwner.Add(false, true);
-                    GameManager.Instance.isAlive.Add(true, true);
-                    GameManager.Instance.isAlive.Add(false, true);
-                    PhotonNetwork.Instantiate(steadyPrefabDirectory, startPos - intervalPos, Quaternion.identity);
-                }
+                    if (isNella)
+                    {
+                        PhotonNetwork.Instantiate("Prefabs/YC/MainCamera_Nella", new Vector3(0, 0, 0), Quaternion.identity, 0);
+                        PhotonNetwork.Instantiate("Prefabs/JJS/NellaMousePoint", new Vector3(-10, 0, -5), Quaternion.identity);
 
-            }
-            else if (PhotonNetwork.CurrentRoom.PlayerCount == 2)
-            {
-                if (isNella)
-                {
-                    PhotonNetwork.Instantiate("Prefabs/YC/MainCamera_Steady", new Vector3(0, 0, 0), Quaternion.identity, 0);
-                    PhotonNetwork.Instantiate("Prefabs/JJS/SteadyMousePoint", new Vector3(10, 0, -5), Quaternion.identity);
-                    GameManager.Instance.characterOwner.Add(false, false);
-                    GameManager.Instance.characterOwner.Add(true, true);
-                    GameManager.Instance.isAlive.Add(true, true);
-                    GameManager.Instance.isAlive.Add(false, true);
-                    PhotonNetwork.Instantiate(steadyPrefabDirectory, startPos - intervalPos, Quaternion.identity);
+                        GameManager.Instance.characterOwner.Add(true, true);
+                        GameManager.Instance.characterOwner.Add(false, false);
+                        GameManager.Instance.isAlive.Add(true, true);
+                        GameManager.Instance.isAlive.Add(false, true);
+
+
+
+                        PhotonNetwork.Instantiate(nellaPrefabDirectory, startPos + intervalPos, Quaternion.identity);
+                    }
+                    else
+                    {
+                        PhotonNetwork.Instantiate("Prefabs/YC/MainCamera_Steady", new Vector3(0, 0, 0), Quaternion.identity, 0);
+                        PhotonNetwork.Instantiate("Prefabs/JJS/SteadyMousePoint", new Vector3(10, 0, -5), Quaternion.identity);
+
+
+                        GameManager.Instance.characterOwner.Add(true, false);
+                        GameManager.Instance.characterOwner.Add(false, true);
+                        GameManager.Instance.isAlive.Add(true, true);
+                        GameManager.Instance.isAlive.Add(false, true);
+
+
+                        PhotonNetwork.Instantiate(steadyPrefabDirectory, startPos - intervalPos, Quaternion.identity);
+                    }
+
                 }
-                else
+                else if (PhotonNetwork.CurrentRoom.PlayerCount == 2)
+                {
+                    if (isNella)
+                    {
+                        PhotonNetwork.Instantiate("Prefabs/YC/MainCamera_Steady", new Vector3(0, 0, 0), Quaternion.identity, 0);
+                        PhotonNetwork.Instantiate("Prefabs/JJS/SteadyMousePoint", new Vector3(10, 0, -5), Quaternion.identity);
+
+                        GameManager.Instance.characterOwner.Add(false, false);
+                        GameManager.Instance.characterOwner.Add(true, true);
+                        GameManager.Instance.isAlive.Add(true, true);
+                        GameManager.Instance.isAlive.Add(false, true);
+
+                        PhotonNetwork.Instantiate(steadyPrefabDirectory, startPos - intervalPos, Quaternion.identity);
+                    }
+                    else
+                    {
+                        PhotonNetwork.Instantiate("Prefabs/YC/MainCamera_Nella", new Vector3(0, 0, 0), Quaternion.identity, 0);
+                        PhotonNetwork.Instantiate("Prefabs/JJS/NellaMousePoint", new Vector3(-10, 0, -5), Quaternion.identity);
+                        GameManager.Instance.characterOwner.Add(false, true);
+                        GameManager.Instance.characterOwner.Add(true, false);
+                        GameManager.Instance.isAlive.Add(true, true);
+                        GameManager.Instance.isAlive.Add(false, true);
+
+                        PhotonNetwork.Instantiate(nellaPrefabDirectory, startPos + intervalPos, Quaternion.identity);
+                    }
+                }
+            }
+            else
+            {
+                if (GameManager.Instance.characterOwner[PhotonNetwork.IsMasterClient])
                 {
                     PhotonNetwork.Instantiate("Prefabs/YC/MainCamera_Nella", new Vector3(0, 0, 0), Quaternion.identity, 0);
                     PhotonNetwork.Instantiate("Prefabs/JJS/NellaMousePoint", new Vector3(-10, 0, -5), Quaternion.identity);
-                    GameManager.Instance.characterOwner.Add(true, false);
-                    GameManager.Instance.characterOwner.Add(false, true);
-                    GameManager.Instance.isAlive.Add(true, true);
-                    GameManager.Instance.isAlive.Add(false, true);
+
                     PhotonNetwork.Instantiate(nellaPrefabDirectory, startPos + intervalPos, Quaternion.identity);
+                    Debug.Log("넬라 생성");
+                }
+                else
+                {
+                    PhotonNetwork.Instantiate("Prefabs/YC/MainCamera_Steady", new Vector3(0, 0, 0), Quaternion.identity, 0);
+                    PhotonNetwork.Instantiate("Prefabs/JJS/SteadyMousePoint", new Vector3(10, 0, -5), Quaternion.identity);
+
+                    PhotonNetwork.Instantiate(steadyPrefabDirectory, startPos - intervalPos, Quaternion.identity);
+                    Debug.Log("스테디 생성");
                 }
             }
-            StopAllCoroutines();
+
+            //StopAllCoroutines();
+            yield break;
         }
     }
 
