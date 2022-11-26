@@ -20,10 +20,7 @@ namespace JJS
 
         public bool sandSackUse;
 
-        GameObject sandSpawner;
         public Spawner_Photon spawner;
-        public GameObject bullet;
-        public int bulletCount = 0;
         public float attackTime;
         public int index;
         public GameObject posList;
@@ -37,49 +34,62 @@ namespace JJS
         Animator nellaAnimator;
         Animator steadyAnimator;
 
+        string death = "Death";
         private void Awake()
         {
             SetCharacterGameObject(gameObject, out lightObj, "Light");
             spot = lightObj.transform.GetChild(0).GetComponent<Light>();
             directional = lightObj.transform.GetChild(1).GetComponent<Light>();
             point = lightObj.transform.GetChild(2).GetComponent<Light>();
-            photonView = photonView = GetComponent<PhotonView>();
+            photonView = GetComponent<PhotonView>();
             audioSource = GetComponent<AudioSource>();
+
             if (sandSackUse)
                 InitializedSandSack();
         }
 
         void Update()
         {
-            if (nellaAnimator == null || steadyAnimator == null)
+            if (photonView.IsMine)
             {
-                //if (GameManager.Instance.curPlayerHP <= 0 && canAttack)
-                foreach (var obj in finder.targetObj)
+                if (nellaAnimator == null || steadyAnimator == null)
                 {
-                    if (obj.CompareTag("Nella"))
-                    {
-                        nellaAnimator = obj.GetComponent<Animator>();
-                    }
-                    else if (obj.CompareTag("Steady"))
-                    {
-                        steadyAnimator = obj.GetComponent<Animator>();
-                    }
+                    TargetAdd();
+                }
+                else
+                {
+                    SandAttackJudgment();
                 }
             }
-            else
-            {
+        }
 
-                if (sandSackUse)
+        public void TargetAdd()
+        {
+            for (int i = 0; i < finder.targetObj.Count; i++)
+            {
+                if (finder.targetObj[i].CompareTag("Nella"))
                 {
-                    if ((nellaAnimator.GetCurrentAnimatorStateInfo(0).IsName("Death") || steadyAnimator.GetCurrentAnimatorStateInfo(0).IsName("Death")) && canAttack)
-                    {
-                        photonView.RPC(nameof(SandAttack), RpcTarget.AllViaServer);
-                        canAttack = false;
-                    }
-                    else if (!nellaAnimator.GetCurrentAnimatorStateInfo(0).IsName("Death") && !steadyAnimator.GetCurrentAnimatorStateInfo(0).IsName("Death"))
-                    {
-                        canAttack = true;
-                    }
+                    nellaAnimator = finder.targetObj[i].GetComponent<Animator>();
+                }
+                else if (finder.targetObj[i].CompareTag("Steady"))
+                {
+                    steadyAnimator = finder.targetObj[i].GetComponent<Animator>();
+                }
+            }
+        }
+
+        public void SandAttackJudgment()
+        {
+            if (sandSackUse)
+            {
+                if ((nellaAnimator.GetCurrentAnimatorStateInfo(0).IsName(death) || steadyAnimator.GetCurrentAnimatorStateInfo(0).IsName(death)) && canAttack)
+                {
+                    photonView.RPC(nameof(SandAttack), RpcTarget.AllViaServer);
+                    canAttack = false;
+                }
+                else if (!nellaAnimator.GetCurrentAnimatorStateInfo(0).IsName(death) && !steadyAnimator.GetCurrentAnimatorStateInfo(0).IsName(death))
+                {
+                    canAttack = true;
                 }
             }
         }
@@ -123,7 +133,6 @@ namespace JJS
 
         public void InitializedSandSack()
         {
-            InitSpawner();
             SetList(posList);
             canAttack = true;
         }
@@ -135,25 +144,6 @@ namespace JJS
                 Transform[] allChildren = objectList.transform.GetChild(i).GetComponentsInChildren<Transform>();
                 targetList.Add(allChildren);
             }
-        }
-
-        public void InitSpawner()
-        {
-            if (sandSpawner == null)
-            {
-                sandSpawner = new GameObject("SandSpawner");
-                sandSpawner.AddComponent<Spawner_Photon>();
-            }
-            spawner = sandSpawner.GetComponent<Spawner_Photon>();
-            InitSand();
-            spawner.obj = bullet;
-            spawner.count = bulletCount;
-            spawner.spawnCount = 0;
-        }
-
-        public void InitSand()
-        {
-            bullet.GetComponent<FallJJS>().spawner = spawner;
         }
 
         public void SetLightColor(Color color)
