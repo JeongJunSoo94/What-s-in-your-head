@@ -98,8 +98,6 @@ namespace JCW.UI.InGame
                 // 사망 시
                 if (curHP <= 0)
                 {
-                    GameManager.Instance.curPlayerHP = maxHP;
-
                     // 현재 캐릭터가 넬라라면 넬라의 살아있음을 false로, 스테디라면 스테디의 살아있음을 false로 바꿈.
                     GameManager.Instance.SetAliveState(isNella, false);
                     if(!GameManager.Instance.isTopView)

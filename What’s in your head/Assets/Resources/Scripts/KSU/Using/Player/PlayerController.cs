@@ -772,7 +772,7 @@ namespace KSU
                     break;
             }
         }
-        [PunRPC]
+
         public void GetDamage(int damage, DamageType type, Vector3 colliderPos, float knockBackSpeed)
         {
             string damageTrigger = "DeadTrigger";
@@ -789,38 +789,40 @@ namespace KSU
                     break;
             }
 
-            GameManager.Instance.curPlayerHP -= damage;
-            if (GameManager.Instance.curPlayerHP < 0)
+            if(!playerAnimator.GetBool("isAttacked") && !playerAnimator.GetBool("isKnockBack") && !playerAnimator.GetBool("isDead"))
             {
-                GameManager.Instance.curPlayerHP = 0;
-                playerAnimator.SetBool("DeadTrigger", true);
-            }
-            else
-            {
-                if(damageTrigger == "KnockBackTrigger")
+                GameManager.Instance.curPlayerHP -= damage;
+                if (GameManager.Instance.curPlayerHP <= 0)
                 {
-                    Vector3 knockBackHorVec = (transform.position - colliderPos);
-                    knockBackHorVec.y = 0;
-                    transform.LookAt(transform.position - knockBackHorVec);
-                    MakeKnockBackVec(knockBackHorVec, knockBackSpeed);
-                    StartCoroutine(nameof(DelayResetKnockBack));
+                    GameManager.Instance.curPlayerHP = 0;
+                    photonView.RPC(nameof(SetAnimatorBool), RpcTarget.AllViaServer, "DeadTrigger", true);
                 }
-                playerAnimator.SetBool(damageTrigger, true);
-                if (characterState.isMine)
+                else
                 {
-                    if (this.gameObject.CompareTag("Nella"))
+                    if (damageTrigger == "KnockBackTrigger")
                     {
-                        PlayEffectSound("nella_gethit_2");
+                        Vector3 knockBackHorVec = (transform.position - colliderPos);
+                        knockBackHorVec.y = 0;
+                        transform.LookAt(transform.position - knockBackHorVec);
+                        MakeKnockBackVec(knockBackHorVec, knockBackSpeed);
+                        StartCoroutine(nameof(DelayResetKnockBack));
                     }
-                    else if (this.gameObject.CompareTag("Steady"))
+                    photonView.RPC(nameof(SetAnimatorBool), RpcTarget.AllViaServer, damageTrigger, true);
+                    if (characterState.isMine)
                     {
-                        PlayEffectSound("steady_gethit_1");
+                        if (this.gameObject.CompareTag("Nella"))
+                        {
+                            PlayEffectSound("nella_gethit_2");
+                        }
+                        else if (this.gameObject.CompareTag("Steady"))
+                        {
+                            PlayEffectSound("steady_gethit_1");
+                        }
                     }
                 }
             }
         }
         
-        [PunRPC]
         public void GetDamage(int damage, DamageType type)
         {
             if (!photonView.IsMine)

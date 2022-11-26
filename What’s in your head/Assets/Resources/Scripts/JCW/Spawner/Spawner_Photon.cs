@@ -8,11 +8,13 @@ namespace JCW.Spawner
     public class Spawner_Photon : Spawner
     {
         [Header("포톤 인스턴스화 할 프리팹 경로")] [SerializeField] string prefabDirectory = "Prefabs/JCW/Object/Stage2/SandSackBullet";
-
+        GameObject spawned = null;
+        WaitUntil wu;
         private void Awake()
         {
             if(prefabDirectory == null)
                 prefabDirectory = "Prefabs/JCW/Object/Stage2/SandSackBullet";
+            wu = new(()=> spawned != null);
         }
         override public void SpawnInit()
         {

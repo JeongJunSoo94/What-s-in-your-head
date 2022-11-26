@@ -74,8 +74,17 @@ namespace JJS
                 SetUION(nella);
                 SetUION(steady);
 
-                CameraManager.Instance.cameras[0].rect = new Rect(0f, 0f, 0.5f, 1f);
-                CameraManager.Instance.cameras[1].rect = new Rect(0.5f, 0f, 0.5f, 1f);
+                if(GameManager.Instance.curStageType == 1)
+                {
+                    CameraManager.Instance.cameras[0].rect = new Rect(0f, 0f, 0.5f, 1f);
+                    CameraManager.Instance.cameras[1].rect = new Rect(0.5f, 0f, 0.5f, 1f);
+                }
+                else if (GameManager.Instance.curStageType == 2)
+                {
+                    GameManager.Instance.isTopView = true;
+                    GameManager.Instance.MediateHP(true);
+                }
+
             }
             gameObject.SetActive(false);
 
@@ -120,13 +129,22 @@ namespace JJS
             {
                 SetUION(nella);
                 SetUION(steady);
-
-                CameraManager.Instance.cameras[0].rect = new Rect(0f, 0f, 0.5f, 1f);
-                CameraManager.Instance.cameras[1].rect = new Rect(0.5f, 0f, 0.5f, 1f);
+                if(GameManager.Instance.curStageType==1)
+                {
+                    CameraManager.Instance.cameras[0].rect = new Rect(0f, 0f, 0.5f, 1f);
+                    CameraManager.Instance.cameras[1].rect = new Rect(0.5f, 0f, 0.5f, 1f);
+                }
             }
 
-            if (PhotonNetwork.CurrentRoom.PlayerCount == 2)
+            if (GameManager.Instance.GetCharOnScene())
+            {
+                if (stage == 3 && GameManager.Instance.curStageType == 2)
+                {
+                    GameManager.Instance.isTopView = true;
+                    GameManager.Instance.MediateHP(true);
+                }
                 gameObject.SetActive(false);
+            }
 
             yield break;
         }

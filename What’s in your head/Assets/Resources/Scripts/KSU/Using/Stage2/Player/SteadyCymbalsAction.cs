@@ -24,18 +24,12 @@ namespace KSU.AutoAim.Player
         PlayerController playerController;
         SteadyMouseController mouse;
 
-
-        PhotonView pv;
-
-
         override protected void Awake()
         {
             base.Awake();
-            audioSource = GetComponent<AudioSource>();
-            pv = GetComponent<PhotonView>();
-            SoundManager.Set3DAudio(pv.ViewID, audioSource, 1f, 30f);
+            Debug.Log("심벌즈 활성화");
             playerAnimator = GetComponent<Animator>();
-            photonView = GetComponent<PhotonView>();
+            //photonView = GetComponent<PhotonView>();
 
             playerController = GetComponent<PlayerController>();
             playerState = GetComponent<PlayerState>();
@@ -144,7 +138,7 @@ namespace KSU.AutoAim.Player
         }
 
         protected override void InputFire()
-        {
+        {            
             if (playerState.isOutOfControl || playerState.isStopped)
                 return;
 
@@ -159,9 +153,26 @@ namespace KSU.AutoAim.Player
             }
         }
 
+        public override void ShootAtSameTime()
+        {
+            photonView.RPC(nameof(ShootCymbals), RpcTarget.AllViaServer);
+        }
+
+        [PunRPC]
+        void ShootCymbals()
+        {
+            playerAnimator.SetBool("isShootingCymbals", true);
+        }
+
+        public override void ResetAutoAimWeapon()
+        {
+            cymbals.gameObject.SetActive(false);
+            steadyInteractionState.ResetState();
+        }
+
         protected void PlayThrowSound()
         {
-            SoundManager.Instance.Play3D_RPC("S2_SteadyCymbalsThrow", pv.ViewID);
+            SoundManager.Instance.Play3D_RPC("S2_SteadyCymbalsThrow", photonView.ViewID);
         }
 
         private void OnTriggerEnter(Collider other)

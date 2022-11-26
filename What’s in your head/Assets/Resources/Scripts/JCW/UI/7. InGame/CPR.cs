@@ -113,24 +113,6 @@ namespace JCW.UI.InGame
                 curPlayer.GetComponent<Animator>().SetBool("isDead", false);
             }
         }
-
-        public void Resurrect()
-        {
-            GameManager.Instance.curPlayerHP = 12;
-            if (!File.Exists(Application.dataPath + "/Resources/CheckPointInfo/Stage" +
-                GameManager.Instance.curStageIndex + "/Section" + GameManager.Instance.curSection + ".json"))
-            {
-                Debug.Log(GameManager.Instance.curSection);
-                Debug.Log("체크포인트 불러오기 실패");
-                return;
-            }
-
-            string jsonString = File.ReadAllText(Application.dataPath + "/Resources/CheckPointInfo/Stage" +
-                GameManager.Instance.curStageIndex + "/Section" + GameManager.Instance.curSection + ".json");
-
-            SavePosition.PlayerInfo data = JsonUtility.FromJson<SavePosition.PlayerInfo>(jsonString);
-            curPlayer.transform.SetPositionAndRotation(new Vector3((float)data.position[0], (float)data.position[1], (float)data.position[2]), new Quaternion((float)data.rotation[0], (float)data.rotation[1], (float)data.rotation[2], (float)data.rotation[3]));
-        }
     }
 }
 

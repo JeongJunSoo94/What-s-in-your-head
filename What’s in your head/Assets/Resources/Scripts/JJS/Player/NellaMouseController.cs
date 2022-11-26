@@ -249,7 +249,7 @@ namespace JJS
 
                             if (hitObjs[i].HitColliders[j].gameObject.CompareTag("PoisonSnake") || hitObjs[i].HitColliders[j].gameObject.CompareTag("TrippleHeadSnake"))
                             {
-                                hitObjs[i].HitColliders[j].gameObject.SendMessage("GetDamage", 3);
+                                hitObjs[i].HitColliders[j].gameObject.SendMessage("GetDamage", 10);
                             }
                         }
                     }

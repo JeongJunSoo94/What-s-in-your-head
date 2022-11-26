@@ -46,32 +46,41 @@ namespace JCW.Object
         Animator animator;
         PhotonView pv;
 
+        WaitUntil wu;
+
+        bool isFirst = true;
 
         private void Awake()
         {
+            wu = new WaitUntil(() => GameManager.Instance.GetCharOnScene());
             curHP = maxHP;            
             audioSource = GetComponent<AudioSource>();
             pv = GetComponent<PhotonView>();
             SoundManager.Set3DAudio(pv.ViewID, audioSource, 0.05f, 30f);
 
+            
+            animator = GetComponent<Animator>();
+
             if (!canInfect)
-            {                
+            {
                 myIndex = transform.GetSiblingIndex();
             }
             else
             {
                 parentObj = transform.parent.gameObject.transform;
                 mediator = transform.parent.gameObject.GetComponent<MakeHostField>();
-                //convertIndex = transform.parent.gameObject.GetComponent<ContaminationFieldSetting>().count;
                 convertWidthIndex = transform.parent.gameObject.GetComponent<ContaminationFieldSetting>().widthCount;
-                //convertHeightIndex = transform.parent.gameObject.GetComponent<ContaminationFieldSetting>().heightCount;
                 nextTargetOffset = new() { 2, -2, 2 * convertWidthIndex, -2 * convertWidthIndex };
             }
-            animator = GetComponent<Animator>();
         }
 
         private void OnEnable()
         {
+            if (isFirst)
+            {
+                this.gameObject.SetActive(false);
+                return;
+            }
             if (isPurified)
                 this.gameObject.SetActive(false);
             else
@@ -80,6 +89,11 @@ namespace JCW.Object
 
         private void OnDisable()
         {
+            if(isFirst)
+            {
+                isFirst = false;
+                return;
+            }
             isPurified = true;
         }
 
@@ -186,6 +200,22 @@ namespace JCW.Object
         {
             this.enabled = false;
             this.gameObject.SetActive(false);
+        }
+
+        IEnumerator WaitForPlayers()
+        {
+            yield return new WaitUntil(() => GameManager.Instance.GetCharOnScene());
+            if (!canInfect)
+            {
+                myIndex = transform.GetSiblingIndex();
+            }
+            else
+            {
+                parentObj = transform.parent.gameObject.transform;
+                mediator = transform.parent.gameObject.GetComponent<MakeHostField>();
+                convertWidthIndex = transform.parent.gameObject.GetComponent<ContaminationFieldSetting>().widthCount;
+                nextTargetOffset = new() { 2, -2, 2 * convertWidthIndex, -2 * convertWidthIndex };
+            }
         }
     }
 }

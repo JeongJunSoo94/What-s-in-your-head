@@ -5,11 +5,15 @@ using JCW.UI.Options.InputBindings;
 using JJS.CharacterSMB;
 using KSU.AutoAim.Player;
 using JJS;
+using Photon.Pun;
 
 namespace KSU
 {
     public class SteadyAimSMB : CharacterBaseSMB
     {
+        SteadyCymbalsAction cymbals;
+        SteadyGrappleAction grapple;
+
         override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
         {
             animator.SetLayerWeight(1, 1);
@@ -83,13 +87,17 @@ namespace KSU
                 {
                     if(((GetPlayerController(animator).playerMouse as SteadyMouseController).autoAimWeapon is SteadyCymbalsAction) && !animator.GetBool("isShootingCymbals"))
                     {
-                        ((GetPlayerController(animator).playerMouse as SteadyMouseController).autoAimWeapon as SteadyCymbalsAction).MakeShootPosition();
-                        animator.SetBool("isShootingCymbals", true);
+                        if(cymbals == null)
+                            cymbals = ((GetPlayerController(animator).playerMouse as SteadyMouseController).autoAimWeapon as SteadyCymbalsAction);
+                        cymbals.MakeShootPosition();
+                        cymbals.ShootAtSameTime();
                     }
                     else if(((GetPlayerController(animator).playerMouse as SteadyMouseController).autoAimWeapon is SteadyGrappleAction) && !animator.GetBool("isShootingGrapple"))
                     {
-                        ((GetPlayerController(animator).playerMouse as SteadyMouseController).autoAimWeapon as SteadyGrappleAction).MakeShootPosition();
-                        animator.SetBool("isShootingGrapple", true);
+                        if(grapple==null)
+                            grapple = ((GetPlayerController(animator).playerMouse as SteadyMouseController).autoAimWeapon as SteadyGrappleAction);
+                        grapple.MakeShootPosition();
+                        grapple.ShootAtSameTime();
                     }
 
                 }
@@ -113,6 +121,7 @@ namespace KSU
             }
 
         }
+        
 
         // OnStateMove is called right after Animator.OnAnimatorMove()
         //override public void OnStateMove(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
