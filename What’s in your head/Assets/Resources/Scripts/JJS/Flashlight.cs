@@ -23,7 +23,7 @@ namespace JJS
         public bool sandSackUse;
 
         GameObject sandSpawner;
-        public Spawner spawner;
+        public Spawner_Photon spawner;
         public GameObject bullet;
         public int bulletCount = 0;
         public float attackTime;
@@ -120,9 +120,9 @@ namespace JJS
             if (sandSpawner == null)
             {
                 sandSpawner = new GameObject("SandSpawner");
-                sandSpawner.AddComponent<Spawner>();
+                sandSpawner.AddComponent<Spawner_Photon>();
             }
-            spawner = sandSpawner.GetComponent<Spawner>();
+            spawner = sandSpawner.GetComponent<Spawner_Photon>();
             InitSand();
             spawner.obj = bullet;
             spawner.count = bulletCount;

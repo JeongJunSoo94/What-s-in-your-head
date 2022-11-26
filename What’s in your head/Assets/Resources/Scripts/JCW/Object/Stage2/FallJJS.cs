@@ -23,7 +23,7 @@ namespace JCW.Object
         AudioSource audioSource;
 
         public LayerMask layer;
-        public JCW.Spawner.Spawner spawner;
+        public JCW.Spawner.Spawner_Photon spawner;
         public WaitForSeconds wait = new WaitForSeconds(0.01f);
 
         private void Awake()
