@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+[RequireComponent(typeof(PhotonView))]
 public class ObjectPhotonTransformView : MonoBehaviourPun, IPunObservable
 {
     private bool m_firstTake = true;

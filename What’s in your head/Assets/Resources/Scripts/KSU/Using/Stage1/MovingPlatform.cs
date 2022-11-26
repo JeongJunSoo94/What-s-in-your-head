@@ -19,6 +19,8 @@ namespace KSU.Object
         public float stayingTime = 0.2f;
         bool isStop = false;
 
+        public bool isMove = true;
+
         private void Start()
         {
             photonView = GetComponent<PhotonView>();
@@ -27,8 +29,11 @@ namespace KSU.Object
         // Update is called once per frame
         void FixedUpdate()
         {
-            if(photonView.IsMine)
-                MoveRepeatly();
+            if(isMove)
+            {
+                if (photonView.IsMine)
+                    MoveRepeatly();
+            }
         }
 
         void MoveRepeatly()

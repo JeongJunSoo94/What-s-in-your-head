@@ -29,16 +29,4 @@ public class RotatingPlatform : MonoBehaviour
             curRot.y -= 360f;
         transform.rotation = Quaternion.Euler(curRot);
     }
-
-    private void OnCollisionEnter(Collision collision)
-    {
-        if (collision.gameObject.CompareTag("Nella") || collision.gameObject.CompareTag("Steady"))
-            collision.gameObject.transform.parent = this.gameObject.transform;
-    }
-
-    private void OnCollisionExit(Collision collision)
-    {
-        if (collision.gameObject.CompareTag("Nella") || collision.gameObject.CompareTag("Steady"))
-            collision.gameObject.transform.parent = null;
-    }
 }
