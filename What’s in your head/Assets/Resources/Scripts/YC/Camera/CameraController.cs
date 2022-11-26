@@ -272,11 +272,18 @@ namespace YC.Camera_
                 sholderCamCol.m_IgnoreTag = ignoreTag;
             }
 
+            // << : Set CinemachineCollider
+            backCamCol.m_SmoothingTime = 0.001f;
             backCamCol.m_Damping = 0.1f;
             backCamCol.m_DampingWhenOccluded = 0.1f;
+            backCamCol.m_Strategy = CinemachineCollider.ResolutionStrategy.PullCameraForward;
+
+            sholderCamCol.m_SmoothingTime = 0.001f;
             sholderCamCol.m_Damping = 0.1f;
             sholderCamCol.m_DampingWhenOccluded = 0.1f;
+            sholderCamCol.m_Strategy = CinemachineCollider.ResolutionStrategy.PullCameraForward;
 
+            
             followObj = Instantiate(CineFollowObj_Back, player.transform.position + CineFollowObj_Back.transform.position, player.transform.rotation).GetComponent<Transform>();
             lookatBackObj = Instantiate(CineLookObj_Back, player.transform.position + CineLookObj_Back.transform.position, player.transform.rotation).GetComponent<Transform>();
             lookatObjOriginY = CineLookObj_Back.transform.position.y;
@@ -463,7 +470,7 @@ namespace YC.Camera_
             curSholderMaxSpeedY = sholderCam.GetComponent<CinemachineFreeLook>().m_YAxis.m_MaxSpeed;
         }
 
-        public void BlockCinemachineInput(bool block)  // pause시 카메라 인풋을 막는다 (카메라 매니저 통해서 호출)
+        public void BlockCinemachineInput(bool block)  // pause시 카메라 인풋을 막는다 (카메라 매니저 통해서 호출)  
         {
             //if (block)
             //{
