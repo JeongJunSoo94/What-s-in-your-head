@@ -32,7 +32,7 @@ namespace JCW.Object
         WaitForSeconds ws;
 
         PhotonView pv;
-        
+
 
         protected override void Awake()
         {
@@ -42,7 +42,7 @@ namespace JCW.Object
             //meshRenderer = transform.GetChild(1).GetComponent<MeshRenderer>();
             meshRenderer.sharedMaterial = normalMat;
             TryGetComponent(out audioSource);
-            if(SoundManager.Instance != null)
+            if (SoundManager.Instance != null)
                 SoundManager.Set3DAudio(pv.ViewID, audioSource, 1f, 50f);
             ws = new(releaseTime);
         }
@@ -58,7 +58,7 @@ namespace JCW.Object
             StopCoroutine("DeactivateObj");
             meshRenderer.sharedMaterial = activeMat;
 
-            for (int i = 0 ; i<objectList.Count ; ++i)
+            for (int i = 0; i < objectList.Count; ++i)
             {
                 objectList[i].GetComponent<PlayObject>().enabled = true;
                 objectList[i].isActive = true;
@@ -83,6 +83,7 @@ namespace JCW.Object
 
         IEnumerator DeactivateObj()
         {
+            yield return ws;
             while (pressed_Ratio <= 0.95f)
             {
                 pressed_Ratio = Mathf.Lerp(pressed_Ratio, 1, releaseSpeed * Time.deltaTime);
@@ -94,7 +95,7 @@ namespace JCW.Object
             pressed_Ratio = 1f;
             anim.SetFloat("pressed_ratio", pressed_Ratio);
             meshRenderer.sharedMaterial = normalMat;
-            for (int i = 0 ; i<objectList.Count ; ++i)
+            for (int i = 0; i < objectList.Count; ++i)
             {
                 objectList[i].isActive = false;
             }
@@ -102,4 +103,3 @@ namespace JCW.Object
         }
     }
 }
-
