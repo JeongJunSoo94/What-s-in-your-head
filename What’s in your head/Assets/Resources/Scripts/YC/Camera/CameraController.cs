@@ -273,14 +273,14 @@ namespace YC.Camera_
             }
 
             // << : Set CinemachineCollider
-            backCamCol.m_SmoothingTime = 0f;
-            backCamCol.m_Damping = 0f;
-            backCamCol.m_DampingWhenOccluded = 0f;
+            backCamCol.m_SmoothingTime = 0.01f;
+            backCamCol.m_Damping = 0.1f;
+            backCamCol.m_DampingWhenOccluded = 0.1f;
             backCamCol.m_Strategy = CinemachineCollider.ResolutionStrategy.PullCameraForward;
 
-            sholderCamCol.m_SmoothingTime = 0f;
-            sholderCamCol.m_Damping = 0f;
-            sholderCamCol.m_DampingWhenOccluded = 0f;
+            sholderCamCol.m_SmoothingTime = 0.01f;
+            sholderCamCol.m_Damping = 0.1f;
+            sholderCamCol.m_DampingWhenOccluded = 0.1f;
             sholderCamCol.m_Strategy = CinemachineCollider.ResolutionStrategy.PullCameraForward;
 
             
@@ -369,7 +369,7 @@ namespace YC.Camera_
                 }
             }
 
-            backCine.GetRig(1).GetCinemachineComponent<CinemachineComposer>().m_TrackedObjectOffset.y = offSetYInitValue; // Back View Middle에서 포지션 내려 잡기
+            //backCine.GetRig(1).GetCinemachineComponent<CinemachineComposer>().m_TrackedObjectOffset.y = offSetYInitValue; // Back View Middle에서 포지션 내려 잡기
         }
 
         void InitDefault()  // 기타 초기화  
