@@ -6,7 +6,7 @@ using JCW.AudioCtrl;
 using Photon.Pun;
 
 namespace JJS
-{ 
+{
     [RequireComponent(typeof(PhotonView))]
     public class Singing : MonoBehaviour
     {
@@ -49,7 +49,7 @@ namespace JJS
                 playSound = true;
                 SoundManager.Instance.PlayIndirect3D_RPC("S2_NellaSing", pv.ViewID);
             }
-            if(!enable)
+            if (!enable)
             {
                 playSound = false;
                 SoundManager.Instance.Stop3D_RPC(pv.ViewID);
