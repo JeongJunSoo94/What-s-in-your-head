@@ -6,17 +6,17 @@ namespace JCW.Spawner
 {
     public class Spawner : MonoBehaviour
     {
-        [SerializeField] [Header("스폰 시간")] [Range(0.0f, 10.0f)] private float spawnTime = 2.5f;
+        [SerializeField] [Header("스폰 시간")] [Range(0.0f, 10.0f)] protected float spawnTime = 2.5f;
         [SerializeField] [Header("스폰할 오브젝트")] public GameObject obj = null;
         [Header("최대 오브젝트 수")] [Range(0, 50)] public int count = 20;
 
-        Queue<GameObject> objQueue;
+        protected Queue<GameObject> objQueue;
         /*[HideInInspector]*/
         public int spawnCount = 0;
 
         public bool spawnType;
 
-        void Start()
+        protected void Start()
         {
             SpawnInit();
             if (spawnType)
@@ -59,7 +59,7 @@ namespace JCW.Spawner
         }
 
         // 미리 오브젝트를 생성해서 자식으로 담아둠.
-        public void SpawnInit()
+        virtual public void SpawnInit()
         {
             if (objQueue != null)
                 return;
@@ -78,7 +78,7 @@ namespace JCW.Spawner
             spawnObj.SetActive(false);
             objQueue.Enqueue(spawnObj);
         }
-        IEnumerator Spawn()
+        protected IEnumerator Spawn()
         {
             while (true)
             {
