@@ -83,6 +83,7 @@ namespace JCW.Object
 
         IEnumerator DeactivateObj()
         {
+            yield return ws;
             while (pressed_Ratio <= 0.95f)
             {
                 pressed_Ratio = Mathf.Lerp(pressed_Ratio, 1, releaseSpeed * Time.deltaTime);

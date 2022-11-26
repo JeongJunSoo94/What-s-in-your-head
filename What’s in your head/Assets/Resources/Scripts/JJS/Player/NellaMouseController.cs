@@ -69,7 +69,8 @@ namespace JJS
             if (GameManager.Instance.curPlayerHP <= 0
                 && GameManager.Instance.curStageIndex == 2)
             {
-                singing.InitSinging();
+                if(photonView.IsMine)
+                    photonView.RPC(nameof(RPCInitSinging), RpcTarget.AllViaServer);
             }
         }
 
@@ -230,6 +231,10 @@ namespace JJS
             OnDisableObject(index);
         }
 
+        public void RPCInitSinging()
+        {
+            singing.InitSinging();
+        }
 
         public void TargetUpdate()
         {
