@@ -135,9 +135,9 @@ namespace JCW.Object
         {
             if (collision.gameObject.CompareTag("Nella") || collision.gameObject.CompareTag("Steady"))
             {
-                Transform playerTF = collision.gameObject.transform;
-                if (playerTF.IsChildOf(transform))
-                    playerTF.parent = null;
+                PlayerController player = collision.gameObject.GetComponent<PlayerController>();
+                if (player.characterState.isMine)
+                    player.EscapeFromParent();
             }
         }
     }
