@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using KSU;
 using Photon.Pun;
 using UnityEngine;
 
@@ -65,8 +66,10 @@ namespace JCW.Object.Stage1
         {
             if (other.CompareTag("Nella") || other.CompareTag("Steady"))
             {
-                Transform playerTF = other.transform;
-                playerTF.parent = null;
+                PlayerController player = other.gameObject.GetComponent<PlayerController>();
+                if (player.characterState.isMine)
+                    player.EscapeFromParent();
+
             }
         }
         
