@@ -93,27 +93,37 @@ namespace JJS
 
         IEnumerator WaitForPlayers_Single()
         {
+
+            //먼저 들어온 캐릭터 세팅
             if (PhotonNetwork.CurrentRoom.PlayerCount == 1)
             {
                 yield return new WaitUntil(() => GameManager.Instance.myPlayerTF != null);
                 if (GameManager.Instance.characterOwner[PhotonNetwork.IsMasterClient])
+                {
+
                     nella = GameManager.Instance.myPlayerTF.gameObject;
+                    SetCharacterComponent(nella, nellaMouseControllerData, "Hand_R");
+                    NellaScriptSetActive(nella);
+                }
                 else
+                {
                     steady = GameManager.Instance.myPlayerTF.gameObject;
+                    SetCharacterComponent(steady, steadyMouseControllerData, "Hand_R");
+                    SteadyScriptSetActive(steady);
+                }
+            }
+
+            // 둘 다 들어올때까지 대기
+            yield return new WaitUntil(() => GameManager.Instance.GetCharOnScene());
+            if (GameManager.Instance.characterOwner[PhotonNetwork.IsMasterClient])
+            {
+                nella = GameManager.Instance.myPlayerTF.gameObject;
+                steady = GameManager.Instance.otherPlayerTF.gameObject;
             }
             else
             {
-                yield return new WaitUntil(() => GameManager.Instance.GetCharOnScene());
-                if (GameManager.Instance.characterOwner[PhotonNetwork.IsMasterClient])
-                {
-                    nella = GameManager.Instance.myPlayerTF.gameObject;
-                    steady = GameManager.Instance.otherPlayerTF.gameObject;
-                }
-                else
-                {
-                    steady = GameManager.Instance.myPlayerTF.gameObject;
-                    nella = GameManager.Instance.otherPlayerTF.gameObject;
-                }
+                steady = GameManager.Instance.myPlayerTF.gameObject;
+                nella = GameManager.Instance.otherPlayerTF.gameObject;
             }
 
             SetCharacterComponent(nella, nellaMouseControllerData, "Hand_R");
@@ -131,21 +141,19 @@ namespace JJS
                 SetUION(steady);
                 if(GameManager.Instance.curStageType==1)
                 {
-                    CameraManager.Instance.cameras[0].rect = new Rect(0f, 0f, 0.5f, 1f);
-                    CameraManager.Instance.cameras[1].rect = new Rect(0.5f, 0f, 0.5f, 1f);
+                    if(CameraManager.Instance.cameras[0])
+                        CameraManager.Instance.cameras[0].rect = new Rect(0f, 0f, 0.5f, 1f);
+                    if (CameraManager.Instance.cameras[1])
+                        CameraManager.Instance.cameras[1].rect = new Rect(0.5f, 0f, 0.5f, 1f);
                 }
-            }
-
-            if (GameManager.Instance.GetCharOnScene())
-            {
-                if (stage == 3 && GameManager.Instance.curStageType == 2)
+                else if (GameManager.Instance.curStageType == 2)
                 {
                     GameManager.Instance.isTopView = true;
                     GameManager.Instance.MediateHP(true);
                 }
-                gameObject.SetActive(false);
             }
-
+            
+            gameObject.SetActive(false);
             yield break;
         }
 

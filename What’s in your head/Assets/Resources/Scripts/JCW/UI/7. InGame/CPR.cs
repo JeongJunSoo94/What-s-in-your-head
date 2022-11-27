@@ -20,7 +20,7 @@ namespace JCW.UI.InGame
 
         PhotonView photonView;
         bool isNella;
-        GameObject curPlayer;
+        Transform curPlayer;
         Camera mainCam;
 
         Vector3 originalPos;
@@ -31,7 +31,7 @@ namespace JCW.UI.InGame
         {
             photonView = GetComponent<PhotonView>();
             isNella = GameManager.Instance.characterOwner[PhotonNetwork.IsMasterClient];
-            curPlayer = transform.parent.parent.parent.parent.gameObject;
+            curPlayer = GameManager.Instance.myPlayerTF;
             if(photonView.IsMine)
                 mainCam = isNella ? CameraManager.Instance.cameras[0] : CameraManager.Instance.cameras[1];
             originalPos = transform.GetChild(2).gameObject.GetComponent<RectTransform>().position;
@@ -105,11 +105,11 @@ namespace JCW.UI.InGame
                 heartBeat.Play();
             if (heartGauge.fillAmount >= 1f)
             {
-                GameManager.Instance.SetAliveState(isNella, true);
+                //GameManager.Instance.SetAliveState(isNella, true);
                 heartGauge.fillAmount = 0f;
                 GameManager.Instance.MediateRevive(false);
-                if(!GameManager.Instance.isTopView && photonView.IsMine)
-                    CameraManager.Instance.ReviveCam(isNella);
+                //if(!GameManager.Instance.isTopView && photonView.IsMine)
+                //    CameraManager.Instance.ReviveCam(isNella);
                 curPlayer.GetComponent<Animator>().SetBool("isDead", false);
             }
         }

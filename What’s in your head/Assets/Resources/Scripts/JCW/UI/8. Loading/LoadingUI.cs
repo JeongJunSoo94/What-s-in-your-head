@@ -28,6 +28,7 @@ namespace JCW.UI
         [HideInInspector] public bool isMainTitle = false;
 
         bool isFirst = true;
+        WaitForSeconds ws;
 
         private void Awake()
         {
@@ -36,7 +37,8 @@ namespace JCW.UI
                 Instance = this;
                 DontDestroyOnLoad(this.gameObject);
             }
-            photonView = PhotonView.Get(this);
+            photonView = GetComponent<PhotonView>();
+            ws = new(1.5f);
             bgImg = transform.GetChild(0).GetComponent<Image>();
             image = transform.GetChild(1).GetComponent<Image>();
             text = transform.GetChild(2).GetComponent<Text>();
@@ -79,7 +81,6 @@ namespace JCW.UI
                 // 임의로 만들어줌
                 PhotonNetwork.LevelLoadingProgress = 0f;
                 isLoading = false;
-                Debug.Log("씬 불러오기 완료");
                 this.gameObject.SetActive(false);
             }
         }
@@ -101,9 +102,21 @@ namespace JCW.UI
             if (PhotonNetwork.IsMasterClient)
             {
                 int sceneNum = 4 * (GameManager.Instance.curStageIndex - 1) + 1 + GameManager.Instance.curStageType;
-                PhotonNetwork.LoadLevel(sceneNum);
+                if (GameManager.Instance.curStageIndex <=3 &&
+                    (GameManager.Instance.curStageType == 1 || GameManager.Instance.curStageType == 2))
+                {
+                    StartCoroutine(nameof(DelayStage), sceneNum);
+                }
+                else
+                    PhotonNetwork.LoadLevel(sceneNum);
                 //StartCoroutine(nameof(Delay));
             }
+        }
+
+        IEnumerator DelayStage(int sceneNum)
+        {
+            yield return ws;
+            PhotonNetwork.LoadLevel(sceneNum);
         }
         
         // 로딩씬 보여주기 위한 딜레이        
@@ -123,7 +136,6 @@ namespace JCW.UI
         {
             while(PhotonNetwork.LevelLoadingProgress > 0f)
             {
-                //Debug.Log("포톤 씬이 현재 불러와져있는 상태라 대기 : " + PhotonNetwork.LevelLoadingProgress);
                 yield return null;
             }
             photonView.RPC(nameof(StartLoading), RpcTarget.AllViaServer);

@@ -55,7 +55,7 @@ namespace JJS.Weapon
             mainCamera = this.gameObject.transform.parent.GetComponent<CameraController>().FindCamera(); // 멀티용
             cameraController = this.gameObject.transform.parent.GetComponent<CameraController>(); // << : 찬 수정 
 
-            SoundManager.Set3DAudio(pv.ViewID, audioSource, 1.0f, 10f, false);
+            SoundManager.Set3DAudio(pv.ViewID, audioSource, 1.0f, 10f, true);
         }
 
 

@@ -27,7 +27,6 @@ namespace KSU.AutoAim.Player
         override protected void Awake()
         {
             base.Awake();
-            Debug.Log("심벌즈 활성화");
             playerAnimator = GetComponent<Animator>();
             //photonView = GetComponent<PhotonView>();
 
