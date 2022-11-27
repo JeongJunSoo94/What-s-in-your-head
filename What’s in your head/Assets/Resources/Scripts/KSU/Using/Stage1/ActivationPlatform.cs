@@ -12,6 +12,7 @@ namespace KSU.Object.Interaction
         private void Awake()
         {
             photonView = GetComponent<PhotonView>();
+            StartCoroutine(nameof(WaitForPlayer));
         }
 
         public override void RecieveActivation(InteractableObject sender, bool isActive)
@@ -22,7 +23,14 @@ namespace KSU.Object.Interaction
             }
         }
 
-        [PunRPC]
+        IEnumerator WaitForPlayer()
+        {
+            yield return new WaitUntil(() => GameManager.Instance.GetCharOnScene());
+            this.gameObject.SetActive(false);
+            yield break;
+        }
+
+    [PunRPC]
         void SetActiveSelf()
         {
             this.gameObject.SetActive(true);
