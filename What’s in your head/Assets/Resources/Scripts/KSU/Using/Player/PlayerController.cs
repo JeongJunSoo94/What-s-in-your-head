@@ -895,7 +895,7 @@ namespace KSU
             SoundManager.Instance.PlayMoveEffect("All_Sprint");
         }
 
-        void ResetMoveSound()
+        public void ResetMoveSound()
         {
             SoundManager.Instance.StopMoveEffect();
             isPlayingWalkSound = false;

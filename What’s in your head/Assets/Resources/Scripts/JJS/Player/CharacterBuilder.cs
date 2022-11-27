@@ -104,12 +104,16 @@ namespace JJS
                     nella = GameManager.Instance.myPlayerTF.gameObject;
                     SetCharacterComponent(nella, nellaMouseControllerData, "Hand_R");
                     NellaScriptSetActive(nella);
+                    if(stage == 3)
+                        SetUION(nella);
                 }
                 else
                 {
                     steady = GameManager.Instance.myPlayerTF.gameObject;
                     SetCharacterComponent(steady, steadyMouseControllerData, "Hand_R");
                     SteadyScriptSetActive(steady);
+                    if(stage == 3)
+                        SetUION(steady);
                 }
             }
 

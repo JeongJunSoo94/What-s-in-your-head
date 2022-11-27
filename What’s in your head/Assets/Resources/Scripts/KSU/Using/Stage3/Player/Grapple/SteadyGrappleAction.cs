@@ -290,10 +290,12 @@ namespace KSU.AutoAim.Player
 
         void PlayGrappleThrowSound()
         {
+            playerController.ResetMoveSound();
             SoundManager.Instance.PlayEffect("S3_SteadyHookFire");
         }
         public void PlayGrappleFlyingSound()
         {
+            playerController.ResetMoveSound();
             SoundManager.Instance.PlayEffect("S3_SteadyHookFly");
         }
 

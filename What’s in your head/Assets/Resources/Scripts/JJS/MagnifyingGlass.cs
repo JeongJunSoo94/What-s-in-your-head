@@ -5,6 +5,7 @@ using YC.Camera_;
 using YC.Camera_Single;
 using JCW.AudioCtrl;
 using Photon.Pun;
+using KSU;
 
 namespace JJS.Weapon
 {
@@ -40,20 +41,22 @@ namespace JJS.Weapon
         public int lineCountCheck=0;
 
         CameraController cameraController; // << : 찬 수정 
+        PlayerController pc;
 
         AudioSource audioSource;
         PhotonView pv;
 
         private void Awake()
         {
+            pc = transform.parent.GetComponent<PlayerController>();
             audioSource = this.gameObject.GetComponentInParent<AudioSource>();
             pv = this.gameObject.GetComponentInParent<PhotonView>();
         }
 
         void Start()
         {
-            mainCamera = this.gameObject.transform.parent.GetComponent<CameraController>().FindCamera(); // 멀티용
-            cameraController = this.gameObject.transform.parent.GetComponent<CameraController>(); // << : 찬 수정 
+            mainCamera = transform.parent.GetComponent<CameraController>().FindCamera(); // 멀티용
+            cameraController = transform.parent.GetComponent<CameraController>(); // << : 찬 수정 
 
             SoundManager.Set3DAudio(pv.ViewID, audioSource, 1.0f, 10f, true);
         }
@@ -77,14 +80,17 @@ namespace JJS.Weapon
 
         public void BeamEnable(bool enable)
         {
-            if(enable)
+            if (enable)
+            {
+                pc.ResetMoveSound();
                 SoundManager.Instance.PlayIndirect3D("S3_SteadyMagnifying", pv.ViewID);          
+            }
             else
                 SoundManager.Instance.Stop3D(pv.ViewID);
             
             particleBeam.SetActive(enable);
 
-            if(this.gameObject.transform.parent.GetComponent<PhotonView>().IsMine)
+            if(pv.IsMine)
                 cameraController.SendMessage(nameof(CameraController.ShakeCamera), enable); 
         }
 
