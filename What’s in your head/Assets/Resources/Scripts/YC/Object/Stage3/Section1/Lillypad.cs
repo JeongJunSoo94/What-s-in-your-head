@@ -25,13 +25,12 @@ namespace YC_OBJ
         {
             SoundManager.Set3DAudio(pv.ViewID, audioSource, 1f, 10f, false);
         }
-
-        private void OnCollisionEnter(Collision collision)
+        private void OnTriggerEnter(Collider other)
         {
-            if(collision.gameObject.CompareTag(interactionTag1) 
-                || collision.gameObject.CompareTag(interactionTag2))
+            if (other.CompareTag(interactionTag1)
+                || other.CompareTag(interactionTag2))
             {
-                SoundManager.Instance.Play3D_RPC("S3S1_Lillypad", pv.ViewID);
+                SoundManager.Instance.PlayIndirect3D_RPC("S3S1_Lillypad", pv.ViewID);
             }
         }
     }
