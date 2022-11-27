@@ -148,7 +148,7 @@ namespace KSU.AutoAim.Object.Monster
             monsterAnimator.SetBool("isAttacked", true);
             if (currentHP <= 0)
             {
-                monsterAnimator.SetBool("isDeadTirgger", true);
+                monsterAnimator.SetBool("isDeadTrigger", true);
             }
         }
 

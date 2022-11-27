@@ -167,15 +167,15 @@ namespace JCW.Dialog
             {
                 case (int)DialogType.NELLA :
                     if(!nellaVoices[order-1].Equals("--"))
-                        SoundManager.Instance.PlayEffect_RPC(nellaVoices[order-1]);
+                        SoundManager.Instance.PlayEffect(nellaVoices[order-1]);
                     return nellaDialogs[order - 1];
                 case (int)DialogType.STEADY :
                     if (!steadyVoices[order-1].Equals("--"))
-                        SoundManager.Instance.PlayEffect_RPC(steadyVoices[order-1]);
+                        SoundManager.Instance.PlayEffect(steadyVoices[order-1]);
                     return steadyDialogs[order - 1];
                 case (int)DialogType.ETC :
                     if (!etcVoices[order-1].Equals("--"))
-                        SoundManager.Instance.PlayEffect_RPC(etcVoices[order-1]);
+                        SoundManager.Instance.PlayEffect(etcVoices[order-1]);
                     return etcDialogs[order - 1];
                 default:
                     break;

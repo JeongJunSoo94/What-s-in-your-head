@@ -8,24 +8,24 @@ using YC.CameraManager_;
 
 namespace JCW.UI.InGame.Indicator
 {
-    [RequireComponent(typeof(PhotonView))]
     public class DetectPlayer : MonoBehaviour
     {
         [Header("콜라이더 범위")] [SerializeField] [Range(0, 100)] float range;
-        PhotonView photonView;
         [Header("OneIndicator UI")] [SerializeField] OneIndicator targetIndicator;
         Camera mainCam;
+        PlayerState nellaState;
 
         private void Awake()
         {
             this.transform.localScale = new Vector3(range, range, range);
-            photonView = GetComponent<PhotonView>();
         }
         private void OnTriggerEnter(Collider other)
         {
-            if (other.gameObject.CompareTag("Nella"))
+            if (other.CompareTag("Nella"))
             {
-                if (photonView.IsMine)
+                if(nellaState == null)
+                    nellaState = other.GetComponent<PlayerState>();
+                if (nellaState.isMine)
                 {
                     if (mainCam == null)
                         mainCam = CameraManager.Instance.cameras[0];
@@ -36,9 +36,9 @@ namespace JCW.UI.InGame.Indicator
 
         private void OnTriggerExit(Collider other)
         {
-            if (other.gameObject.CompareTag("Nella"))
+            if (other.CompareTag("Nella"))
             {
-                if (photonView.IsMine)
+                if (nellaState.isMine)
                     targetIndicator.SetUI(false);
             }
         }

@@ -119,7 +119,7 @@ namespace YC_OBJ
             indicator.gameObject.SetActive(false);
             FlowerObj.GetComponent<PotFlower>().SetBloom();
             FlowerObj.gameObject.GetComponent<CapsuleCollider>().enabled = false;
-            SoundManager.Instance.Play3D_RPC("S3S1_PlantGrow", pv.ViewID);
+            SoundManager.Instance.Play3D("S3S1_PlantGrow", pv.ViewID);
 
         }
 

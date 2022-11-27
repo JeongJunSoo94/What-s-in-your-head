@@ -33,7 +33,7 @@ namespace JCW.UI.InGame
         {     
 
             photonView = GetComponent<PhotonView>();
-            itemUI_RT = transform.GetChild(0).gameObject.GetComponent<RectTransform>();
+            itemUI_RT = transform.GetChild(0).GetComponent<RectTransform>();
 
             hpUI = transform.GetChild(1).gameObject;
 
