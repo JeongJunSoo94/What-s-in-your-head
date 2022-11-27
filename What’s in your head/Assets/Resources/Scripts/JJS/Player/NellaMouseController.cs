@@ -209,12 +209,15 @@ namespace JJS
             switch (index)
             {
                 case 0:
+                    player.ResetMoveSound();
                     SoundManager.Instance.PlayEffect_RPC("S3_NellaGuitarAttack1");
                     break;
                 case 1:
+                    player.ResetMoveSound();
                     SoundManager.Instance.PlayEffect_RPC("S3_NellaGuitarAttack2");
                     break;
                 case 2:
+                    player.ResetMoveSound();
                     SoundManager.Instance.PlayEffect_RPC("S3_NellaGuitarAttack3");
                     break;
             }

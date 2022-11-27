@@ -102,7 +102,6 @@ namespace KSU.AutoAim.Player.Object
                 {
                     case "GrappledObject":
                         {
-                            SoundManager.Instance.PlayEffect("S3_SteadyHookFly");
                             playerGrappleAction.RecieveAutoAimObjectInfo(true, other.gameObject, AutoAimTargetType.GrappledObject);
                             isSucceeded = true;
                             objectRigidbody.velocity = Vector3.zero;
