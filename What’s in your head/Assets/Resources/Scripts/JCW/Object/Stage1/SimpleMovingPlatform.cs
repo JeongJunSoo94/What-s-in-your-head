@@ -56,21 +56,23 @@ namespace JCW.Object.Stage1
 
         private void OnTriggerEnter(Collider other)
         {
-            if (other.gameObject.layer == LayerMask.NameToLayer("Player"))
+            if (other.CompareTag("Nella") || other.CompareTag("Steady"))
             {
-                if (other.transform.position.y >= transform.position.y)
-                    other.transform.parent = this.gameObject.transform;
+                Transform playerTF = other.transform;
+                playerTF.parent = this.transform;
             }
         }
         private void OnTriggerExit(Collider other)
         {
-            if (other.gameObject.layer == LayerMask.NameToLayer("Player"))
+            if (other.CompareTag("Nella") || other.CompareTag("Steady"))
             {
-                PlayerController player = other.GetComponent<PlayerController>();
+                PlayerController player = other.gameObject.GetComponent<PlayerController>();
                 if (player.characterState.isMine)
                     player.EscapeFromParent();
+
             }
         }
+        
 
         IEnumerator WaitForPlayers()
         {
