@@ -10,6 +10,7 @@ using JCW.AudioCtrl;
 namespace JCW.Object
 {
     [RequireComponent(typeof(AudioSource))]
+    [RequireComponent(typeof(PhotonView))]
     public class HostField : MonoBehaviour
     {
         [Header("다음 감염시킬 필드 찾는 시간")] [SerializeField] [Range(0, 13)] float infectTime = 5f;
@@ -43,45 +44,57 @@ namespace JCW.Object
         float curHP;
         AudioSource audioSource;
         Animator animator;
+        PhotonView pv;
+
+        WaitUntil wu;
+
+        bool isFirst = true;
+        BoxCollider boxCollider;
 
         private void Awake()
         {
+            wu = new WaitUntil(() => GameManager.Instance.GetCharOnScene());
             curHP = maxHP;            
             audioSource = GetComponent<AudioSource>();
-            AudioCtrl.AudioSettings.SetAudio(audioSource, 0.05f, 30f);
+            pv = GetComponent<PhotonView>();
+            SoundManager.Set3DAudio(pv.ViewID, audioSource, 0.6f, 40f);
+            boxCollider = GetComponent<BoxCollider>();
+
+            animator = GetComponent<Animator>();
+
             if (!canInfect)
-            {                
+            {
                 myIndex = transform.GetSiblingIndex();
             }
             else
             {
                 parentObj = transform.parent.gameObject.transform;
                 mediator = transform.parent.gameObject.GetComponent<MakeHostField>();
-                //convertIndex = transform.parent.gameObject.GetComponent<ContaminationFieldSetting>().count;
                 convertWidthIndex = transform.parent.gameObject.GetComponent<ContaminationFieldSetting>().widthCount;
-                //convertHeightIndex = transform.parent.gameObject.GetComponent<ContaminationFieldSetting>().heightCount;
                 nextTargetOffset = new() { 2, -2, 2 * convertWidthIndex, -2 * convertWidthIndex };
             }
-            animator = GetComponent<Animator>();
         }
 
         private void OnEnable()
         {
-            if (isPurified)
+            if ((isFirst && canInfect) || isPurified)
                 this.gameObject.SetActive(false);
-            else
-                SoundManager.Instance.Play3D_RPC("ContaminationFieldCreated", audioSource);
+            else if(canInfect)
+                SoundManager.Instance.Play3D("S3_ContaminationFieldCreated", pv.ViewID);
         }
 
         private void OnDisable()
         {
-            isPurified = true;
+            if(isFirst && canInfect)
+                isFirst = false;
+            else
+                isPurified = true;
         }
 
 
         void Update()
         {
-            if (!isStart)
+            if (!isStart || isFirst)
                 return;
             if (isPurified)
             {
@@ -145,8 +158,7 @@ namespace JCW.Object
             {
                 gameObject.SetActive(true);
                 SetIndex(index);
-                isStart = true;
-                //audioSource.Play();                
+                isStart = true;     
             }
             
         }
@@ -174,13 +186,16 @@ namespace JCW.Object
             {
                 isDead = true;
                 animator.Play("Destroy");
-                SoundManager.Instance.Play3D_RPC("ContaminationFieldPurified", audioSource);
+                boxCollider.enabled = false;
+                SoundManager.Instance.Play3D("S3_ContaminationFieldPurified", pv.ViewID);
             }
         }
+        // 애니메이션 클립에서 실행.
         public void DestroyField()
         {
-            this.enabled = false;
             this.gameObject.SetActive(false);
+            this.enabled = false;
         }
+
     }
 }

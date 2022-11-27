@@ -20,7 +20,7 @@ namespace JCW.UI.InGame
 
         PhotonView photonView;
         bool isNella;
-        GameObject curPlayer;
+        Transform curPlayer;
         Camera mainCam;
 
         Vector3 originalPos;
@@ -31,7 +31,7 @@ namespace JCW.UI.InGame
         {
             photonView = GetComponent<PhotonView>();
             isNella = GameManager.Instance.characterOwner[PhotonNetwork.IsMasterClient];
-            curPlayer = transform.parent.parent.parent.parent.gameObject;
+            curPlayer = GameManager.Instance.myPlayerTF;
             if(photonView.IsMine)
                 mainCam = isNella ? CameraManager.Instance.cameras[0] : CameraManager.Instance.cameras[1];
             originalPos = transform.GetChild(2).gameObject.GetComponent<RectTransform>().position;
@@ -105,31 +105,13 @@ namespace JCW.UI.InGame
                 heartBeat.Play();
             if (heartGauge.fillAmount >= 1f)
             {
-                GameManager.Instance.SetAliveState(isNella, true);
+                //GameManager.Instance.SetAliveState(isNella, true);
                 heartGauge.fillAmount = 0f;
                 GameManager.Instance.MediateRevive(false);
-                if(!GameManager.Instance.isTopView && photonView.IsMine)
-                    CameraManager.Instance.ReviveCam(isNella);
+                //if(!GameManager.Instance.isTopView && photonView.IsMine)
+                //    CameraManager.Instance.ReviveCam(isNella);
                 curPlayer.GetComponent<Animator>().SetBool("isDead", false);
             }
-        }
-
-        public void Resurrect()
-        {
-            GameManager.Instance.curPlayerHP = 12;
-            if (!File.Exists(Application.dataPath + "/Resources/CheckPointInfo/Stage" +
-                GameManager.Instance.curStageIndex + "/Section" + GameManager.Instance.curSection + ".json"))
-            {
-                Debug.Log(GameManager.Instance.curSection);
-                Debug.Log("체크포인트 불러오기 실패");
-                return;
-            }
-
-            string jsonString = File.ReadAllText(Application.dataPath + "/Resources/CheckPointInfo/Stage" +
-                GameManager.Instance.curStageIndex + "/Section" + GameManager.Instance.curSection + ".json");
-
-            SavePosition.PlayerInfo data = JsonUtility.FromJson<SavePosition.PlayerInfo>(jsonString);
-            curPlayer.transform.SetPositionAndRotation(new Vector3((float)data.position[0], (float)data.position[1], (float)data.position[2]), new Quaternion((float)data.rotation[0], (float)data.rotation[1], (float)data.rotation[2], (float)data.rotation[3]));
         }
     }
 }

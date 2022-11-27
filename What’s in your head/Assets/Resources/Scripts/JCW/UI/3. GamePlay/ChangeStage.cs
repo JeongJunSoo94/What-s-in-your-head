@@ -128,7 +128,8 @@ namespace JCW.UI
 
             leftButton.interactable = GameManager.Instance.curStageIndex != 1;
             rightButton.interactable = GameManager.Instance.curStageIndex != stageCount;
-            latestStageType = Directory.GetDirectories(saveFilePath.ToString() + "Stage" + GameManager.Instance.curStageIndex, "*", SearchOption.TopDirectoryOnly).Length;
+            if(Directory.Exists(saveFilePath.ToString() + "Stage" + GameManager.Instance.curStageIndex))
+                latestStageType = Directory.GetDirectories(saveFilePath.ToString() + "Stage" + GameManager.Instance.curStageIndex, "*", SearchOption.TopDirectoryOnly).Length;
             sections.transform.GetChild(1).GetComponent<Button>().interactable = latestStageType == 2;
         }
 
@@ -144,7 +145,8 @@ namespace JCW.UI
                     sections.transform.GetChild(0).GetChild(0).GetComponent<Text>().text = stageDict[GameManager.Instance.curStageIndex][1];
                     sections.transform.GetChild(1).GetChild(0).GetComponent<Text>().text = stageDict[GameManager.Instance.curStageIndex][2];
                     rightButton.interactable = true;
-                    latestStageType = Directory.GetDirectories(saveFilePath.ToString() + "Stage" + GameManager.Instance.curStageIndex, "*", SearchOption.TopDirectoryOnly).Length;
+                    if (Directory.Exists(saveFilePath.ToString() + "Stage" + GameManager.Instance.curStageIndex))
+                        latestStageType = Directory.GetDirectories(saveFilePath.ToString() + "Stage" + GameManager.Instance.curStageIndex, "*", SearchOption.TopDirectoryOnly).Length;
                 }
                 leftButton.interactable = GameManager.Instance.curStageIndex != 1;
             }
@@ -157,7 +159,8 @@ namespace JCW.UI
                     sections.transform.GetChild(0).GetChild(0).GetComponent<Text>().text = stageDict[GameManager.Instance.curStageIndex][1];
                     sections.transform.GetChild(1).GetChild(0).GetComponent<Text>().text = stageDict[GameManager.Instance.curStageIndex][2];
                     leftButton.interactable = true;
-                    latestStageType = Directory.GetDirectories(saveFilePath.ToString() + "Stage" + GameManager.Instance.curStageIndex, "*", SearchOption.TopDirectoryOnly).Length;
+                    if (Directory.Exists(saveFilePath.ToString() + "Stage" + GameManager.Instance.curStageIndex))
+                        latestStageType = Directory.GetDirectories(saveFilePath.ToString() + "Stage" + GameManager.Instance.curStageIndex, "*", SearchOption.TopDirectoryOnly).Length;
                 }
                 rightButton.interactable = GameManager.Instance.curStageIndex != stageCount;
             }

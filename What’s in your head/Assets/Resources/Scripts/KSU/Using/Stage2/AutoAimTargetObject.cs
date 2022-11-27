@@ -10,7 +10,9 @@ namespace KSU.AutoAim.Object
         [SerializeField] protected GameObject detectingUITrigger;
         protected virtual void Awake()
         {
-            detectingUITrigger.transform.localScale = Vector3.one * detectingUIRange * 2f;
+            //detectingUITrigger.transform.localScale = Vector3.one * detectingUIRange * 2f;
+            if(detectingUITrigger != null)
+                detectingUITrigger.transform.localScale = Vector3.one * detectingUIRange * 2f;
         }
     }
 }

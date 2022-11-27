@@ -20,7 +20,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &4135133275554872494
 RectTransform:
   m_ObjectHideFlags: 0
@@ -86,7 +86,7 @@ MonoBehaviour:
   m_FallbackScreenDPI: 96
   m_DefaultSpriteDPI: 96
   m_DynamicPixelsPerUnit: 1
-  m_PresetInfoIsWorld: 0
+  m_PresetInfoIsWorld: 1
 --- !u!114 &842095299853986887
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -393,8 +393,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 53bb38cab958cb0469fd01795418113f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Weapon2: []
-  Weapon3:
+  Weapon:
   - {fileID: 21300000, guid: bf1dc56f4107afc4488350877e151079, type: 3}
   - {fileID: 21300000, guid: 83f6784a4a62b474facf6d2821908be0, type: 3}
 --- !u!1 &7396004162059671754
@@ -531,12 +530,12 @@ Canvas:
   m_PlaneDistance: 100
   m_PixelPerfect: 0
   m_ReceivesEvents: 1
-  m_OverrideSorting: 0
+  m_OverrideSorting: 1
   m_OverridePixelPerfect: 0
   m_SortingBucketNormalizedSize: 0
   m_AdditionalShaderChannelsFlag: 0
   m_SortingLayerID: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 6
   m_TargetDisplay: 0
 --- !u!114 &7396004162571028203
 MonoBehaviour:
@@ -1178,15 +1177,19 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5198926978043930258, guid: 1dd92b00e0d648d499f29f725d094d0f, type: 3}
       propertyPath: m_Pivot.x
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5198926978043930258, guid: 1dd92b00e0d648d499f29f725d094d0f, type: 3}
       propertyPath: m_AnchorMax.x
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5198926978043930258, guid: 1dd92b00e0d648d499f29f725d094d0f, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 5198926978043930258, guid: 1dd92b00e0d648d499f29f725d094d0f, type: 3}
+      propertyPath: m_AnchorMin.x
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5198926978043930258, guid: 1dd92b00e0d648d499f29f725d094d0f, type: 3}
       propertyPath: m_AnchorMin.y
@@ -1307,6 +1310,10 @@ PrefabInstance:
     - target: {fileID: 8079658715394303151, guid: 1dd92b00e0d648d499f29f725d094d0f, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8079658715394303152, guid: 1dd92b00e0d648d499f29f725d094d0f, type: 3}
+      propertyPath: m_SortingOrder
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 8079658715394303152, guid: 1dd92b00e0d648d499f29f725d094d0f, type: 3}
       propertyPath: m_OverrideSorting

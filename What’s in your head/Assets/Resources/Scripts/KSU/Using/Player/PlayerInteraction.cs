@@ -182,9 +182,8 @@ namespace KSU
         {
             if (other.CompareTag("InteractableObject"))
             {
-                //if (detectedInteractableObjects.ContainsKey(other.gameObject.transform.parent.gameObject))
-                //    return;
-                detectedInteractableObjects.Add(other.gameObject.transform.parent.gameObject, new Obj_Info(false, false, 100f));
+                if (!detectedInteractableObjects.ContainsKey(other.gameObject.transform.parent.gameObject))
+                    detectedInteractableObjects.Add(other.gameObject.transform.parent.gameObject, new Obj_Info(false, false, 100f));
             }
         }
 

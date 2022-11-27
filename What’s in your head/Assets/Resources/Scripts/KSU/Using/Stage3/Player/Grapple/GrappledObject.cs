@@ -26,7 +26,7 @@ namespace KSU.AutoAim.Object
 
         protected IEnumerator WaitForPlayer()
         {
-            yield return new WaitUntil(() => GameManager.Instance.GetCharOnScene(true) && GameManager.Instance.GetCharOnScene(false));
+            yield return new WaitUntil(() => GameManager.Instance.GetCharOnScene());
 
             if (GameManager.Instance.characterOwner[PhotonNetwork.IsMasterClient])
                 transform.GetChild(2).gameObject.SetActive(false);

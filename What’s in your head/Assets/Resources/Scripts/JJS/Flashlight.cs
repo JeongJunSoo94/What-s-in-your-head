@@ -18,14 +18,9 @@ namespace JJS
         public ConeFindTarget finder;
         public ConeFindTarget finderSpot;
 
-        PhotonView photonView;
-
         public bool sandSackUse;
 
-        GameObject sandSpawner;
-        public Spawner spawner;
-        public GameObject bullet;
-        public int bulletCount = 0;
+        public Spawner_Photon spawner;
         public float attackTime;
         public int index;
         public GameObject posList;
@@ -34,6 +29,12 @@ namespace JJS
 
         AudioSource audioSource;
 
+        PhotonView photonView;
+
+        Animator nellaAnimator;
+        Animator steadyAnimator;
+
+        string death = "Death";
         private void Awake()
         {
             SetCharacterGameObject(gameObject, out lightObj, "Light");
@@ -42,20 +43,51 @@ namespace JJS
             point = lightObj.transform.GetChild(2).GetComponent<Light>();
             photonView = GetComponent<PhotonView>();
             audioSource = GetComponent<AudioSource>();
+
             if (sandSackUse)
                 InitializedSandSack();
         }
 
         void Update()
         {
-            if (finder.targetObj.Count == 2)
+            if (photonView.IsMine)
             {
-                if (GameManager.Instance.curPlayerHP <= 0 && canAttack)
+                if (nellaAnimator == null || steadyAnimator == null)
+                {
+                    TargetAdd();
+                }
+                else
+                {
+                    SandAttackJudgment();
+                }
+            }
+        }
+
+        public void TargetAdd()
+        {
+            for (int i = 0; i < finder.targetObj.Count; i++)
+            {
+                if (finder.targetObj[i].CompareTag("Nella"))
+                {
+                    nellaAnimator = finder.targetObj[i].GetComponent<Animator>();
+                }
+                else if (finder.targetObj[i].CompareTag("Steady"))
+                {
+                    steadyAnimator = finder.targetObj[i].GetComponent<Animator>();
+                }
+            }
+        }
+
+        public void SandAttackJudgment()
+        {
+            if (sandSackUse)
+            {
+                if ((nellaAnimator.GetCurrentAnimatorStateInfo(0).IsName(death) || steadyAnimator.GetCurrentAnimatorStateInfo(0).IsName(death)) && canAttack)
                 {
                     photonView.RPC(nameof(SandAttack), RpcTarget.AllViaServer);
                     canAttack = false;
                 }
-                else if (GameManager.Instance.curPlayerHP == 12)
+                else if (!nellaAnimator.GetCurrentAnimatorStateInfo(0).IsName(death) && !steadyAnimator.GetCurrentAnimatorStateInfo(0).IsName(death))
                 {
                     canAttack = true;
                 }
@@ -101,7 +133,6 @@ namespace JJS
 
         public void InitializedSandSack()
         {
-            InitSpawner();
             SetList(posList);
             canAttack = true;
         }
@@ -113,25 +144,6 @@ namespace JJS
                 Transform[] allChildren = objectList.transform.GetChild(i).GetComponentsInChildren<Transform>();
                 targetList.Add(allChildren);
             }
-        }
-
-        public void InitSpawner()
-        {
-            if (sandSpawner == null)
-            {
-                sandSpawner = new GameObject("SandSpawner");
-                sandSpawner.AddComponent<Spawner>();
-            }
-            spawner = sandSpawner.GetComponent<Spawner>();
-            InitSand();
-            spawner.obj = bullet;
-            spawner.count = bulletCount;
-            spawner.spawnCount = 0;
-        }
-
-        public void InitSand()
-        {
-            bullet.GetComponent<FallJJS>().spawner = spawner;
         }
 
         public void SetLightColor(Color color)

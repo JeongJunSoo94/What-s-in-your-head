@@ -26,7 +26,7 @@ namespace YC.CameraManager_
 
         [Header("<기획 편집 사항>")]
         [Header("보간 시간(디펜스 모드 카메라가 늘어나고 줄어드는 속도)")]
-        [SerializeField] float _LerpTime = 2.5f;
+        public float _LerpTime = 1.5f;
 
         CharacterCamera curFullCamera;
 
@@ -63,18 +63,32 @@ namespace YC.CameraManager_
 
         }
 
+        private void Start()
+        {
+            StartCoroutine(nameof(WaitForPlayers));
+        }
+        IEnumerator WaitForPlayers()
+        {
+            yield return new WaitUntil(() => GameManager.Instance.GetCharOnScene());
+
+            cameras[0] = GameObject.FindGameObjectWithTag("NellaCamera").GetComponent<Camera>();
+            cameras[1] = GameObject.FindGameObjectWithTag("SteadyCamera").GetComponent<Camera>();
+
+            yield break;
+        }
+
+
         void Update()
         {
             if (!IsExistCameras()) return;
 
             if (pv.IsMine)
             {
-
                 if (GameManager.Instance.isTopView)
                 {                    
                     if(!wasTopView)
                     {
-                        pv.RPC(nameof(SetDefenceModeCamera), RpcTarget.AllBuffered);
+                        pv.RPC(nameof(SetDefenceModeCamera), RpcTarget.AllViaServer);
                         wasTopView = true;
                     }                    
                 }
@@ -87,7 +101,7 @@ namespace YC.CameraManager_
                 {                 
                     if (!wasSideView)
                     {
-                        pv.RPC(nameof(SetSideModeCamera), RpcTarget.AllBuffered);
+                        pv.RPC(nameof(SetSideModeCamera), RpcTarget.AllViaServer);
                         wasSideView = true;
                     }
                 }
@@ -215,7 +229,12 @@ namespace YC.CameraManager_
         }
 
         
-
+        public void SetHalfScreenCor(bool isNella)
+        {
+            if (curCoroutine != null)
+                StopCoroutine(curCoroutine);
+            curCoroutine = StartCoroutine(SetHalfScreen(_LerpTime, isNella));
+        }
         public IEnumerator SetHalfScreen(float LerpTime, bool isNella)
         {
             Rect camRect1 = cameras[(int)CharacterCamera.NELLA].rect;
@@ -274,6 +293,12 @@ namespace YC.CameraManager_
         }
 
 
+
+        public void InitCameraRPC(int targetCamera)
+        {
+            pv.RPC(nameof(InitCamera), RpcTarget.AllViaServer, targetCamera);
+        }
+ 
         // Stage 3 Defence Mode - Sizing 호출 전 초기화 함수 (한프레임 동안 카메라를 Full로 세팅)
         [PunRPC]
         public void InitCamera(int targetCamera)
@@ -297,6 +322,7 @@ namespace YC.CameraManager_
                 curFullCamera = CharacterCamera.STEADY;
             }
         }
+
 
         public IEnumerator SetFullScreen(float LerpTime)
         {
@@ -538,13 +564,72 @@ namespace YC.CameraManager_
     
         public void BlockCinemachineInput(bool block) // Pause시 카메라 인풋을 막는다
         {
-            string tagNella = "Nella";
-            string tagSteady = "Steady";
-
-            if (GameManager.Instance.characterOwner[PhotonNetwork.IsMasterClient])
-                GameObject.FindGameObjectWithTag(tagNella).GetComponent<CameraController>().BlockCinemachineInput(block);
-            else
-                GameObject.FindGameObjectWithTag(tagSteady).GetComponent<CameraController>().BlockCinemachineInput(block);
+            if(GameManager.Instance.myPlayerTF)
+                GameManager.Instance.myPlayerTF.GetComponent<CameraController>().BlockCinemachineInput(block);
         }
+
+        public void SetHalfScreenCor2(bool isNella)
+        {
+            if (curCoroutine != null)
+                StopCoroutine(curCoroutine);
+            curCoroutine = StartCoroutine(SetHalfScreen2(_LerpTime, isNella));
+        }
+        public IEnumerator SetHalfScreen2(float LerpTime, bool isNella)
+        {
+            Rect camRect1 = cameras[(int)CharacterCamera.NELLA].rect;
+            Rect camRect2 = cameras[(int)CharacterCamera.STEADY].rect;
+            float currentTime = 0;
+
+            isBlending = true;
+
+            if (isNella) 
+            {
+                while (0.5f < camRect1.width)
+                {
+                    camRect1 = cameras[(int)CharacterCamera.NELLA].rect;
+                    camRect2 = cameras[(int)CharacterCamera.STEADY].rect;
+
+                    currentTime += Time.fixedDeltaTime;
+                    if (currentTime >= LerpTime) currentTime = LerpTime;
+
+                    float width = Mathf.Lerp(camRect1.width, 0.5f, currentTime / LerpTime);
+                    if (width < 0.5f) width = 0.5f;
+
+                    Rect rc1 = new Rect(0, camRect1.y, width, camRect1.height);
+                    cameras[(int)CharacterCamera.NELLA].rect = rc1;
+                    Rect rc2 = new Rect(width, camRect2.y, 1 - width, camRect2.height);
+                    cameras[(int)CharacterCamera.STEADY].rect = rc2;
+
+                    if (width == 0.5f) yield break;
+                    yield return null;
+                }
+            }
+            else 
+            {
+                while (0.5f < camRect2.width)
+                {
+                    camRect1 = cameras[(int)CharacterCamera.NELLA].rect;
+                    camRect2 = cameras[(int)CharacterCamera.STEADY].rect;
+
+                    currentTime += Time.deltaTime;
+                    if (currentTime >= LerpTime) currentTime = LerpTime;
+
+                    float width = Mathf.Lerp(camRect2.width, 0.5f, currentTime / LerpTime);
+                    if (width < 0.5f) width = 0.5f;
+
+                    Rect rc1 = new Rect(0, camRect1.y, 1 - width, camRect1.height);
+                    cameras[(int)CharacterCamera.NELLA].rect = rc1;
+                    Rect rc2 = new Rect(1 - width, camRect2.y, width, camRect2.height);
+                    cameras[(int)CharacterCamera.STEADY].rect = rc2;
+
+                    if (width == 0.5f) yield break;
+
+                    yield return null;
+                }
+            }
+
+            isBlending = false;
+        }
+
     }
 }

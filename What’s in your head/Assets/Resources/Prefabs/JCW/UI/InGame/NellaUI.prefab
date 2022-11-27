@@ -20,7 +20,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &4135133275554872494
 RectTransform:
   m_ObjectHideFlags: 0
@@ -393,7 +393,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 53bb38cab958cb0469fd01795418113f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Weapon: []
+  Weapon:
+  - {fileID: 21300000, guid: 63f1ded520ea049499f212f0b643954a, type: 3}
+  - {fileID: 21300000, guid: 0e90ec505c8c70d4a987e65238837cf1, type: 3}
 --- !u!1 &7396004162059671754
 GameObject:
   m_ObjectHideFlags: 0
@@ -1175,7 +1177,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5198926978043930258, guid: 1dd92b00e0d648d499f29f725d094d0f, type: 3}
       propertyPath: m_Pivot.x
-      value: 1
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5198926978043930258, guid: 1dd92b00e0d648d499f29f725d094d0f, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5198926978043930258, guid: 1dd92b00e0d648d499f29f725d094d0f, type: 3}
       propertyPath: m_AnchorMax.y
@@ -1183,7 +1189,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5198926978043930258, guid: 1dd92b00e0d648d499f29f725d094d0f, type: 3}
       propertyPath: m_AnchorMin.x
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5198926978043930258, guid: 1dd92b00e0d648d499f29f725d094d0f, type: 3}
       propertyPath: m_AnchorMin.y

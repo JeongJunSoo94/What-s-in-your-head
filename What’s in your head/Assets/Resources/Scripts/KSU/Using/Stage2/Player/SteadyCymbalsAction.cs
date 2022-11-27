@@ -16,18 +16,19 @@ using JCW.AudioCtrl;
 
 namespace KSU.AutoAim.Player
 {
+    [RequireComponent(typeof(AudioSource))]
+    [RequireComponent(typeof(PhotonView))]
     public class SteadyCymbalsAction : SteadyAutoAimAction
     {
         SteadyCymbals cymbals;
         PlayerController playerController;
         SteadyMouseController mouse;
-        
 
         override protected void Awake()
         {
             base.Awake();
             playerAnimator = GetComponent<Animator>();
-            photonView = GetComponent<PhotonView>();
+            //photonView = GetComponent<PhotonView>();
 
             playerController = GetComponent<PlayerController>();
             playerState = GetComponent<PlayerState>();
@@ -136,7 +137,7 @@ namespace KSU.AutoAim.Player
         }
 
         protected override void InputFire()
-        {
+        {            
             if (playerState.isOutOfControl || playerState.isStopped)
                 return;
 
@@ -151,9 +152,26 @@ namespace KSU.AutoAim.Player
             }
         }
 
+        public override void ShootAtSameTime()
+        {
+            photonView.RPC(nameof(ShootCymbals), RpcTarget.AllViaServer);
+        }
+
+        [PunRPC]
+        void ShootCymbals()
+        {
+            playerAnimator.SetBool("isShootingCymbals", true);
+        }
+
+        public override void ResetAutoAimWeapon()
+        {
+            cymbals.gameObject.SetActive(false);
+            steadyInteractionState.ResetState();
+        }
+
         protected void PlayThrowSound()
         {
-            SoundManager.Instance.Play3D_RPC("S2_SteadyCymbalsThrow", audioSource);
+            SoundManager.Instance.Play3D_RPC("S2_SteadyCymbalsThrow", photonView.ViewID);
         }
 
         private void OnTriggerEnter(Collider other)
@@ -161,8 +179,6 @@ namespace KSU.AutoAim.Player
 
             if ((other.gameObject.layer == LayerMask.NameToLayer("UITriggers")) && other.CompareTag("CymbalsTarget"))
             {
-                if (autoAimTargetObjects.Contains(other.gameObject))
-                    return;
                 autoAimTargetObjects.Add(other.gameObject);
             }
         }

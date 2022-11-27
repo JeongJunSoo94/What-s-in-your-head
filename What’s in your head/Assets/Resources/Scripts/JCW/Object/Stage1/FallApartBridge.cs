@@ -1,11 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
 using JCW.AudioCtrl;
+using Photon.Pun;
 using UnityEngine;
 
 namespace JCW.Object.Stage1
 {
     [RequireComponent(typeof(AudioSource))]
+    [RequireComponent(typeof(PhotonView))]
     public class FallApartBridge : MonoBehaviour
     {
         [Header("위험 전조 신호 표시 시간")] [SerializeField] float warnTime = 3f;
@@ -21,6 +23,9 @@ namespace JCW.Object.Stage1
         GameObject triggerBox;
 
         bool isStart = false;
+        PhotonView pv;
+
+        
 
         private void Awake()
         {
@@ -28,8 +33,9 @@ namespace JCW.Object.Stage1
             boxCollider = GetComponent<BoxCollider>();
             normalMat = meshRenderer.sharedMaterial;
             audioSource = GetComponent<AudioSource>();
+            pv = GetComponent<PhotonView>();
             triggerBox = transform.GetChild(0).gameObject;
-            JCW.AudioCtrl.AudioSettings.SetAudio(audioSource, 1f, 50f);
+            SoundManager.Set3DAudio(pv.ViewID, audioSource, 1f, 50f);
         }
 
         private void OnTriggerEnter(Collider other)
@@ -49,7 +55,8 @@ namespace JCW.Object.Stage1
             float curTime = 0f;
             float curFlickTime = 0f;
             bool isNormal = true;
-            SoundManager.Instance.Play3D_RPC("S1S2_RainBowBridgeBroken2", audioSource);
+            SoundManager.Instance.Play3D_RPC("S1S2_RainBowBridgeBroken2", pv.ViewID);
+            Debug.Log(gameObject.name);
 
             // 여기서 카메라 흔들림 넣으면 될듯
 
@@ -68,7 +75,8 @@ namespace JCW.Object.Stage1
                 }
                 yield return null;
             }
-            SoundManager.Instance.Play3D_RPC("S1S2_RainBowBridgeBroken", audioSource);
+            SoundManager.Instance.Play3D_RPC("S1S2_RainBowBridgeBroken", pv.ViewID);
+            Debug.Log(gameObject.name);
             meshRenderer.enabled = false;
             boxCollider.enabled = false;
             triggerBox.SetActive(false);

@@ -35,7 +35,9 @@ namespace JCW.UI
         }
         private void Start()
         {
+            optionObj.SetActive(true);
             StartCoroutine(nameof(Appear));
+            optionObj.SetActive(false);
             SoundManager.Instance.PlayBGM("Menu_BGM");
         }        
 

@@ -1,10 +1,13 @@
 using JCW.AudioCtrl;
+using Photon.Pun;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 namespace KSU.AutoAim.Player.Object
 {
+    [RequireComponent(typeof(AudioSource))]
+    [RequireComponent(typeof(PhotonView))]
     public class SteadyCymbals : AutoAimObject
     {
         //public GameObject spawner; //스테디 손 위치에 있는 그래플, 그래플을 던지면 손에있는 그래플이 꺼지고 이 스크립트 달린 그래플이 켜지면서 날아감
@@ -17,11 +20,15 @@ namespace KSU.AutoAim.Player.Object
         //public bool isSucceeded = false;
 
         //Rigidbody grappleRigidbody;
-        //AudioSource audioSource;
+        PhotonView pv;
+        
 
         protected override void Awake()
         {
             base.Awake();
+            audioSource = GetComponent<AudioSource>();
+            pv = GetComponent<PhotonView>();
+            SoundManager.Set3DAudio(pv.ViewID, audioSource, 1f, 60f);
         }
 
         // Update is called once per frame
@@ -93,7 +100,7 @@ namespace KSU.AutoAim.Player.Object
 
         void PlayCymbalsHitSound()
         {
-            SoundManager.Instance.Play3D_RPC("S2_Steady_Cymbals_Hit", audioSource);
+            SoundManager.Instance.Play3D_RPC("S2_Steady_Cymbals_Hit", pv.ViewID);
         }
 
         private void OnTriggerEnter(Collider other)

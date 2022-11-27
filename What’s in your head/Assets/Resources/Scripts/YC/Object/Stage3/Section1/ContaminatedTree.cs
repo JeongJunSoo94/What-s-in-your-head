@@ -2,6 +2,8 @@ using Photon.Pun;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using JCW.AudioCtrl;
+
 
 /// <summary> 
 /// 
@@ -26,6 +28,7 @@ using UnityEngine;
 
 namespace YC_OBJ
 {
+    [RequireComponent(typeof(PhotonView))]
     public class ContaminatedTree : MonoBehaviour
     {     
         [Header("<기획 편집 사항>")]
@@ -61,6 +64,8 @@ namespace YC_OBJ
         Animator animator;
         Animator animator2; // 하단 오염물질 애니메이터
 
+        AudioSource audioSource;
+
         void Awake()
         {
             isPure = false;
@@ -77,10 +82,24 @@ namespace YC_OBJ
 
             pv = GetComponent<PhotonView>();
 
-            this.gameObject.tag = notPureTag;
+            this.gameObject.tag = notPureTag;            
+            if(!TryGetComponent<AudioSource>(out audioSource))
+                audioSource = transform.GetChild(4).gameObject.AddComponent<AudioSource>();
+            SoundManager.Set3DAudio(pv.ViewID, audioSource, 1.5f, 30f, true);
         }
 
-        void Start() { } // 컴포넌트 상에서 스크립트 활성화 위해서
+        void Start() { StartCoroutine(nameof(WaitForPlayers)); } 
+
+        IEnumerator WaitForPlayers()
+        {
+            if(GameManager.Instance.isTest)
+                yield return new WaitUntil(() => GameManager.Instance.GetCharOnScene(true) || GameManager.Instance.GetCharOnScene(false));
+            else
+                yield return new WaitUntil(() => GameManager.Instance.GetCharOnScene());
+
+            SoundManager.Instance.PlayIndirect3D_RPC("S3S1_CorruptionPlant_2", pv.ViewID);
+            yield break;
+        }
 
         void Update()
         {
@@ -116,6 +135,7 @@ namespace YC_OBJ
                 animator2.SetBool("isCreate", false);
                 curTime = 0;
                 this.gameObject.tag = pureTag;
+                SoundManager.Instance.Stop3D(pv.ViewID);
             }
             else // 정화 -> 오염
             {
@@ -125,6 +145,7 @@ namespace YC_OBJ
                 animator2.SetBool("isDestroy", false);
                 curPureTime = 0;
                 this.gameObject.tag = notPureTag;
+                SoundManager.Instance.PlayIndirect3D("S3S1_CorruptionPlant_2", pv.ViewID);
             }
         }
    

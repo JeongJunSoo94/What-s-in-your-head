@@ -9,8 +9,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7337233605928469967}
-  - component: {fileID: 8460225325241575813}
   - component: {fileID: 1474322838136486201}
+  - component: {fileID: 8460225325241575813}
   m_Layer: 0
   m_Name: SoundManager
   m_TagString: Untagged
@@ -33,6 +33,28 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1474322838136486201
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 638621468548218732}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ObservedComponentsFoldoutOpen: 1
+  Group: 0
+  prefixField: -1
+  Synchronization: 3
+  OwnershipTransfer: 0
+  observableSearch: 2
+  ObservedComponents: []
+  sceneViewId: 0
+  InstantiationId: 0
+  isRuntimeInstantiated: 0
 --- !u!114 &8460225325241575813
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -52,10 +74,8 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 453a8d1ed6ed8984fb1c9890cfcd7dc7, type: 3}
   - {fileID: 8300000, guid: d7b24718d9754b8478069056b4045222, type: 3}
   - {fileID: 8300000, guid: d52c8fa9526bab64099699537652d553, type: 3}
-  - {fileID: 8300000, guid: 1a17f5fd7d7035e42bfa47b2723a16e8, type: 3}
   - {fileID: 8300000, guid: 50e5466f903504a43b4dc7d8a993c5b2, type: 3}
-  - {fileID: 8300000, guid: 95984fcbd66e66f468f3aee5944bf24c, type: 3}
-  - {fileID: 8300000, guid: 2d8a9f2f1f6b8e84f876f30479e9af61, type: 3}
+  - {fileID: 8300000, guid: cf556d4be4f782a41b8917aaf480c68d, type: 3}
   - {fileID: 8300000, guid: 5d4eb75bd2ffed343a3c0a50be3c7d99, type: 3}
   - {fileID: 8300000, guid: 4165f5cfb2936c549b9ea5611085168c, type: 3}
   - {fileID: 8300000, guid: e496df5b5e448c845b957c143e245d5f, type: 3}
@@ -100,6 +120,7 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 3b60c16c997f27e41aafb40e262cf87c, type: 3}
   - {fileID: 8300000, guid: ccf958a925300c14f947f299d2a70151, type: 3}
   - {fileID: 8300000, guid: 5aaad6b418e2cf240970cc7d2e8dea8b, type: 3}
+  - {fileID: 8300000, guid: cd81b715c97790d49bfc7a31de1c0149, type: 3}
   - {fileID: 8300000, guid: feef246a926d05c44a4f77792d41934c, type: 3}
   - {fileID: 8300000, guid: 3a7ab99ca3d24ab4e84c578691b5876b, type: 3}
   - {fileID: 8300000, guid: cbe8ab9bce1cc8c48a845365b32e8d69, type: 3}
@@ -128,7 +149,11 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 50e08896b38db234ba0a3322a90fa5a1, type: 3}
   - {fileID: 8300000, guid: e73a3fc7544ee15468ae62b753c08b9a, type: 3}
   - {fileID: 8300000, guid: b37928fc2869d0b4d9753672fcac5836, type: 3}
+  - {fileID: 8300000, guid: 8aee03e5c763be84ead7e7f8b8f1d08c, type: 3}
   - {fileID: 8300000, guid: 7789da14fb1393948954d5bfc78e8cee, type: 3}
+  - {fileID: 8300000, guid: caaf99b6a93000048b14649fb624a3d0, type: 3}
+  - {fileID: 8300000, guid: 2d21763b1bc84c74e95e66ab9308ef15, type: 3}
+  - {fileID: 8300000, guid: 5956b9dfa7da0e041a456c981331f3cd, type: 3}
   - {fileID: 8300000, guid: 5b2ff0d57ece595409a8639feaaf5656, type: 3}
   - {fileID: 8300000, guid: 2dd990577190a224fb4c67baf5c15ee8, type: 3}
   prevUIClips:
@@ -138,25 +163,7 @@ MonoBehaviour:
   - {fileID: 8300000, guid: ef2e9f35d1e554c45aa273fc4047b5cd, type: 3}
   - {fileID: 8300000, guid: a7e388198dbf01849826971271e8a2c2, type: 3}
   - {fileID: 8300000, guid: 857d51001b5fce545b9cc23c22a4401b, type: 3}
---- !u!114 &1474322838136486201
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 638621468548218732}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  ObservedComponentsFoldoutOpen: 1
-  Group: 0
-  prefixField: -1
-  Synchronization: 3
-  OwnershipTransfer: 0
-  observableSearch: 2
-  ObservedComponents: []
-  sceneViewId: 0
-  InstantiationId: 0
-  isRuntimeInstantiated: 0
+  prevMoveClips:
+  - {fileID: 8300000, guid: 1a17f5fd7d7035e42bfa47b2723a16e8, type: 3}
+  - {fileID: 8300000, guid: 95984fcbd66e66f468f3aee5944bf24c, type: 3}
+  - {fileID: 8300000, guid: 2d8a9f2f1f6b8e84f876f30479e9af61, type: 3}

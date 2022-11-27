@@ -1,23 +1,39 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using JCW.AudioCtrl;
+using Photon.Pun;
 
 public class MazeDoorController : MonoBehaviour
 {
     [SerializeField] float openLerpTime;
     [SerializeField] float closeLerpTime;
-    [SerializeField] float delayTime;
 
+    [SerializeField] float openDelayTime;
+    [SerializeField] float closeDelayTime;
     float originPosY;
  
     bool isCor;
 
+    AudioSource audioSource;
+    PhotonView pv;
+
+
     private void Awake()
     {
         originPosY = this.gameObject.transform.position.y;
+        audioSource = this.gameObject.GetComponent<AudioSource>();
+        pv = this.gameObject.GetComponent<PhotonView>();
     }
+
+    private void Start()
+    {
+        SoundManager.Set3DAudio(pv.ViewID, audioSource, 1.5f, 30f, false);
+    }
+
     public void ControlDoor(bool open)
     {
+
         if (isCor)
             StopAllCoroutines();
 
@@ -29,7 +45,17 @@ public class MazeDoorController : MonoBehaviour
     {
         isCor = true;
 
-        yield return new WaitForSeconds(delayTime);
+        if (open)
+        {
+            SoundManager.Instance.Play3D_RPC("S3S1_MazeDoor", pv.ViewID);
+            yield return new WaitForSeconds(openDelayTime);
+        }
+        else
+        {
+            SoundManager.Instance.Play3D_RPC("S3S1_MazeDoor", pv.ViewID);
+            yield return new WaitForSeconds(closeDelayTime);
+        }
+
 
         float currentTime = 0;
         float lerpYpos;

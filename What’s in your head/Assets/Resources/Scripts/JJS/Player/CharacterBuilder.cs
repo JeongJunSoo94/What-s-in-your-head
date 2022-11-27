@@ -1,72 +1,166 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+using JCW.Network;
+using JJS.Weapon;
 using KSU;
 using KSU.AutoAim.Player;
-using JJS.Weapon;
+using Photon.Pun;
+using System.Collections;
+using UnityEngine;
 using YC.Camera_;
+using YC.CameraManager_;
+
 namespace JJS
 {
     public class CharacterBuilder : MonoBehaviour
     {
-        public bool single;
         public int stage;
-        [HideInInspector] public GameObject nella;
-        [HideInInspector] public GameObject steady;
+        [HideInInspector] public GameObject nella = null;
+        [HideInInspector] public GameObject steady = null;
         public MouseControllerWeaponData nellaMouseControllerData;
         public MouseControllerWeaponData steadyMouseControllerData;
         public Transform start;
         public Vector3 intervalPos;
+
+        bool funcStart = false;
+        bool single;
+
+        private void Awake()
+        {
+            single = GameManager.Instance.isTest;
+        }
+
+
         private void Update()
         {
-            if (single)
+            if (GameManager.Instance.curStageType == 1 || GameManager.Instance.curStageType == 2)
             {
-                if (nella == null && steady == null)
+                if (!funcStart && PhotonNetwork.InRoom)
                 {
-                    FindCharacter();
-                }
-                if (nella != null || steady != null)
-                {
-                    SetCharacterComponent(nella, nellaMouseControllerData, "Hand_R");
-                    SetCharacterComponent(steady, steadyMouseControllerData, "Hand_R");
-                    NellaScriptSetActive(nella);
-                    SteadyScriptSetActive(steady);
-                    SetStartPos();
-                    gameObject.SetActive(false);
-                }
-            }
-            else
-            {
-                if (nella == null || steady == null)
-                {
-                    FindCharacter();
-                }
-                if (nella != null && steady != null)
-                {
-                    SetCharacterComponent(nella, nellaMouseControllerData, "Hand_R");
-                    SetCharacterComponent(steady, steadyMouseControllerData, "Hand_R");
-                    NellaScriptSetActive(nella);
-                    SteadyScriptSetActive(steady);
-                    SetStartPos();
-                    if (stage == 2)
-                    {
-                        GameManager.Instance.isSideView = true;
-                    }
-                    gameObject.SetActive(false);
+                    funcStart = true;
+                    PhotonManager.Instance.MakeCharacter(start.position, intervalPos);
+                    if (single)
+                        StartCoroutine(nameof(WaitForPlayers_Single));
+                    else
+                        StartCoroutine(nameof(WaitForPlayers));
                 }
             }
         }
 
-        public void FindCharacter()
+        IEnumerator WaitForPlayers()
         {
-            nella = GameObject.FindWithTag("Nella");
-            steady = GameObject.FindWithTag("Steady");
+            yield return new WaitUntil(() => GameManager.Instance.GetCharOnScene());
+
+            if (GameManager.Instance.characterOwner[PhotonNetwork.IsMasterClient])
+            {
+                nella = GameManager.Instance.myPlayerTF.gameObject;
+                steady = GameManager.Instance.otherPlayerTF.gameObject;
+            }
+            else
+            {
+                steady = GameManager.Instance.myPlayerTF.gameObject;
+                nella = GameManager.Instance.otherPlayerTF.gameObject;
+            }
+
+
+            SetCharacterComponent(nella, nellaMouseControllerData, "Hand_R");
+            SetCharacterComponent(steady, steadyMouseControllerData, "Hand_R");
+            NellaScriptSetActive(nella);
+            SteadyScriptSetActive(steady);
+            if (stage == 2)
+            {
+                GameManager.Instance.isSideView = true;
+            }
+            else if (stage == 3)
+            {
+                SetUION(nella);
+                SetUION(steady);
+
+                if (GameManager.Instance.curStageType == 1)
+                {
+                    CameraManager.Instance.cameras[0].rect = new Rect(0f, 0f, 0.5f, 1f);
+                    CameraManager.Instance.cameras[1].rect = new Rect(0.5f, 0f, 0.5f, 1f);
+                }
+                else if (GameManager.Instance.curStageType == 2)
+                {
+                    GameManager.Instance.isTopView = true;
+                    GameManager.Instance.MediateHP(true);
+                }
+
+            }
+            gameObject.SetActive(false);
+
+            yield break;
+        }
+
+        IEnumerator WaitForPlayers_Single()
+        {
+
+            //먼저 들어온 캐릭터 세팅
+            if (PhotonNetwork.CurrentRoom.PlayerCount == 1)
+            {
+                yield return new WaitUntil(() => GameManager.Instance.myPlayerTF != null);
+                if (GameManager.Instance.characterOwner[PhotonNetwork.IsMasterClient])
+                {
+
+                    nella = GameManager.Instance.myPlayerTF.gameObject;
+                    SetCharacterComponent(nella, nellaMouseControllerData, "Hand_R");
+                    NellaScriptSetActive(nella);
+                }
+                else
+                {
+                    steady = GameManager.Instance.myPlayerTF.gameObject;
+                    SetCharacterComponent(steady, steadyMouseControllerData, "Hand_R");
+                    SteadyScriptSetActive(steady);
+                }
+            }
+
+            // 둘 다 들어올때까지 대기
+            yield return new WaitUntil(() => GameManager.Instance.GetCharOnScene());
+            if (GameManager.Instance.characterOwner[PhotonNetwork.IsMasterClient])
+            {
+                nella = GameManager.Instance.myPlayerTF.gameObject;
+                steady = GameManager.Instance.otherPlayerTF.gameObject;
+            }
+            else
+            {
+                steady = GameManager.Instance.myPlayerTF.gameObject;
+                nella = GameManager.Instance.otherPlayerTF.gameObject;
+            }
+
+            SetCharacterComponent(nella, nellaMouseControllerData, "Hand_R");
+            SetCharacterComponent(steady, steadyMouseControllerData, "Hand_R");
+            NellaScriptSetActive(nella);
+            SteadyScriptSetActive(steady);
+            SetStartPos();
+            if (stage == 2)
+            {
+                GameManager.Instance.isSideView = true;
+            }
+            else if (stage == 3)
+            {
+                SetUION(nella);
+                SetUION(steady);
+                if (GameManager.Instance.curStageType == 1)
+                {
+                    if (CameraManager.Instance.cameras[0])
+                        CameraManager.Instance.cameras[0].rect = new Rect(0f, 0f, 0.5f, 1f);
+                    if (CameraManager.Instance.cameras[1])
+                        CameraManager.Instance.cameras[1].rect = new Rect(0.5f, 0f, 0.5f, 1f);
+                }
+                else if (GameManager.Instance.curStageType == 2)
+                {
+                    GameManager.Instance.isTopView = true;
+                    GameManager.Instance.MediateHP(true);
+                }
+            }
+
+            gameObject.SetActive(false);
+            yield break;
         }
 
         public void SetStartPos()
         {
             Vector3 pos = start.position;
-            if(nella!=null)
+            if (nella != null)
                 nella.transform.position = pos - intervalPos;
             if (steady != null)
                 steady.transform.position = pos + intervalPos;
@@ -120,16 +214,25 @@ namespace JJS
         public void SetCharacterGameObject(GameObject findObject, out GameObject discoverObject, string findName)
         {
             discoverObject = null;
-            Transform[] allChildren = findObject.GetComponentsInChildren<Transform>();
-            foreach (Transform child in allChildren)
+            Transform[] allChildrens = findObject.GetComponentsInChildren<Transform>();
+            foreach (Transform childs in allChildrens)
             {
-                if (child.name == findName)
+                if (childs.name == findName)
                 {
-                    discoverObject = child.gameObject;
+                    discoverObject = childs.gameObject;
                     return;
+                }
+                else
+                {
+                    Transform findObj = childs.transform.Find(findName);
+                    if (findObj != null)
+                    {
+                        discoverObject = findObj.gameObject;
+                    }
                 }
             }
         }
+
 
         public void SetWeaponGameObject(GameObject findObject, out GameObject discoverObject, string findName)
         {
@@ -193,6 +296,16 @@ namespace JJS
                     SteadyMouseController steadyMouse = playerMouse as SteadyMouseController;
                     steadyMouse.SetAimWeapon();
                 }
+            }
+        }
+
+        public void SetUION(GameObject player)
+        {
+            GameObject UIObject;
+            if (player != null)
+            {
+                SetCharacterGameObject(player, out UIObject, "CurrentStageItem");
+                UIObject.SetActive(true);
             }
         }
     }

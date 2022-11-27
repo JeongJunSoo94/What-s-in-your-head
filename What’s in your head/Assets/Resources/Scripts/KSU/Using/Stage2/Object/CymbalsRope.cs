@@ -1,3 +1,4 @@
+using JCW.AudioCtrl;
 using Photon.Pun;
 using System.Collections;
 using System.Collections.Generic;
@@ -5,28 +6,20 @@ using UnityEngine;
 
 namespace KSU.AutoAim.Object.Stage2
 {
+    [RequireComponent(typeof(AudioSource))]
+    [RequireComponent(typeof(PhotonView))]
     public class CymbalsRope : CymbalsReciever
     {
+        PhotonView pv;
+        AudioSource audioSource;
         // Start is called before the first frame update
         protected override void Awake()
         {
             base.Awake();
+            pv = GetComponent<PhotonView>();
+            audioSource = GetComponent<AudioSource>();
+            SoundManager.Set3DAudio(pv.ViewID, audioSource, 1f, 25f);
         }
-
-        // Update is called once per frame
-        //void FixedUpdate()
-        //{
-        //    if(isActivated)
-        //    {
-        //        CutOff();
-        //    }
-        //}
-        //void CutOff()
-        //{
-        //    ropeSpeed += gravity * Time.fixedDeltaTime;
-        //    upperRope.transform.position = upperRope.transform.position - Vector3.up * ropeSpeed;
-        //    underRope.transform.position = underRope.transform.position - Vector3.up * ropeSpeed;
-        //}
 
         [PunRPC]
         protected override void SetActive()
@@ -34,6 +27,7 @@ namespace KSU.AutoAim.Object.Stage2
             isActivated = true;
             SendInfo();
             animator.SetBool("isCut", true);
+            SoundManager.Instance.Play3D("S2_Steady_RopeCut", pv.ViewID);
             StartCoroutine(nameof(DelayActivation));
         }
 

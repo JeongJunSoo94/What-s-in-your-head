@@ -16,20 +16,22 @@ namespace JCW.Object.Stage1
         PhotonView pv;
         AudioSource audioSource;
 
+        
+
         private void Awake()
         {
             tf = this.transform;
-            pv = PhotonView.Get(this);
+            pv = GetComponent<PhotonView>();
             audioSource = GetComponent<AudioSource>();
-            JCW.AudioCtrl.AudioSettings.SetAudio(audioSource, 0.75f, 110f, true);                        
+            SoundManager.Set3DAudio(pv.ViewID, audioSource, 0.75f, 110f, true);                        
             StartCoroutine(nameof(WaitForPlayer));
         }
 
         IEnumerator WaitForPlayer()
         {
-            yield return new WaitUntil(() => GameManager.Instance.GetCharOnScene(true) && GameManager.Instance.GetCharOnScene(false));
+            yield return new WaitUntil(() => GameManager.Instance.GetCharOnScene());
             pv.RPC(nameof(StartFunc), RpcTarget.AllViaServer);
-            SoundManager.Instance.PlayIndirect3D_RPC("S1S2_BGM_CarParade", audioSource);
+            
 
             yield break;
         }
@@ -37,7 +39,8 @@ namespace JCW.Object.Stage1
         [PunRPC]
         void StartFunc()
         {
-            StartCoroutine(nameof(RotateObj));            
+            StartCoroutine(nameof(RotateObj));
+            SoundManager.Instance.PlayIndirect3D("S1S2_BGM_CarParade", pv.ViewID);
         }
 
         IEnumerator RotateObj()

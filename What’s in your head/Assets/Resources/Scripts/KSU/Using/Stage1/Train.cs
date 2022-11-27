@@ -99,7 +99,7 @@ public class Train : MonoBehaviour
 
     IEnumerator WaitForPlayer()
     {
-        yield return new WaitUntil(() => GameManager.Instance.GetCharOnScene(true) && GameManager.Instance.GetCharOnScene(false));
+        yield return new WaitUntil(() => GameManager.Instance.GetCharOnScene());
 
         InitTrain();
         ActivateTrain();

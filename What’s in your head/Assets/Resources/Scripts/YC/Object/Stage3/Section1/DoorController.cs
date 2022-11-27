@@ -21,6 +21,7 @@ using JCW.AudioCtrl;
 namespace YC_OBJ
 {
     [RequireComponent(typeof(AudioSource))]
+    [RequireComponent(typeof(PhotonView))]
     public class DoorController : MonoBehaviour
     {
         [Header("<기획 편집 사항>")]
@@ -30,20 +31,29 @@ namespace YC_OBJ
 
         Animator animator;
         AudioSource audioSource;
-
+        PhotonView pv;
+        
         private void Awake()
         {
             animator = this.gameObject.GetComponent<Animator>();
 
             animator.speed = animationSpeed;
+            pv = GetComponent<PhotonView>();
 
             audioSource = GetComponent<AudioSource>();
-            JCW.AudioCtrl.AudioSettings.SetAudio(audioSource);
+            SoundManager.Set3DAudio(pv.ViewID, audioSource, 3f, 50f);
         }
+
         public void SetOpen(bool _isOpen)
         {
             animator.SetBool("isOpen", _isOpen);
-            SoundManager.Instance.Play3D_RPC("DoorOpen", audioSource);
+            StartCoroutine(nameof(SoundEffect));
         }     
+
+        IEnumerator SoundEffect()
+        {
+            yield return new WaitForSeconds(1.1f);
+            SoundManager.Instance.Play3D_RPC("S3S1_DoorOpen2", pv.ViewID);
+        }
     }
 }

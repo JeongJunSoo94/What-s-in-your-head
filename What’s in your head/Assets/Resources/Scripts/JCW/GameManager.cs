@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using JCW.AudioCtrl;
 using JCW.UI;
 using JCW.UI.InGame;
 using JCW.UI.Options.InputBindings;
@@ -75,15 +76,7 @@ public class GameManager : MonoBehaviour, IPunObservable
         isCharOnScene.Add(false);
     }
     private void Update()
-    {
-        if (!isTest)
-        {
-            if (Input.GetKeyDown(KeyCode.Keypad1))
-                isTopView = !isTopView;
-            if (Input.GetKeyDown(KeyCode.Keypad2))
-                isSideView = !isSideView;
-        }
-        
+    {        
         if (KeyManager.Instance.GetKeyDown(PlayerAction.Pause))
         {
             if(SceneManager.GetActiveScene().name != "MainTitle")
@@ -129,7 +122,14 @@ public class GameManager : MonoBehaviour, IPunObservable
 
     public void MediateHP(bool value)
     {
+        StartCoroutine(WaitForHP(value));        
+    }
+
+    IEnumerator WaitForHP(bool value)
+    {
+        yield return new WaitUntil(() => hpAllPairs.Count == 2);
         photonView.RPC(nameof(MediateHP_RPC), RpcTarget.AllViaServer, value);
+        yield break;
     }
 
     [PunRPC]
@@ -206,6 +206,11 @@ public class GameManager : MonoBehaviour, IPunObservable
         return isCharOnScene[isMaster ? 0 : 1];
     }
 
+    public bool GetCharOnScene()
+    {
+        return myPlayerTF != null && otherPlayerTF != null;
+    }
+
     public void GoMainMenu_RPC()
     {
         photonView.RPC(nameof(GoMainMenu), RpcTarget.AllViaServer);
@@ -213,9 +218,11 @@ public class GameManager : MonoBehaviour, IPunObservable
     [PunRPC]
     void GoMainMenu()
     {
+
         pauseUI.SetActive(false);
         curStageIndex = 0;
         curStageType = 0;
+        LoadingUI.Instance.isMainTitle = true;
         LoadingUI.Instance.gameObject.SetActive(true);
         DestroyStayingObj();
     }
@@ -255,6 +262,9 @@ public class GameManager : MonoBehaviour, IPunObservable
         curPlayerHP = 12;
         aliceHP = 30;
         isAlive[true] = true;
-        isAlive[false] = true;    
+        isAlive[false] = true;
+        SoundManager.Instance.dict3D.Clear();
+        SoundManager.Instance.StopAllSound();
+        curSection = 0;
     }
 }

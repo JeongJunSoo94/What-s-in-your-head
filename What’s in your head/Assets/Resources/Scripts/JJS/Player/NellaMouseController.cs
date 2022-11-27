@@ -66,9 +66,11 @@ namespace JJS
 
         private void Update()
         {
-            if (GameManager.Instance.curPlayerHP <= 0)
+            if (GameManager.Instance.curPlayerHP <= 0
+                && GameManager.Instance.curStageIndex == 2)
             {
-                singing.InitSinging();
+                if(photonView.IsMine)
+                    photonView.RPC(nameof(RPCInitSinging), RpcTarget.AllViaServer);
             }
         }
 
@@ -229,6 +231,10 @@ namespace JJS
             OnDisableObject(index);
         }
 
+        public void RPCInitSinging()
+        {
+            singing.InitSinging();
+        }
 
         public void TargetUpdate()
         {
@@ -248,7 +254,7 @@ namespace JJS
 
                             if (hitObjs[i].HitColliders[j].gameObject.CompareTag("PoisonSnake") || hitObjs[i].HitColliders[j].gameObject.CompareTag("TrippleHeadSnake"))
                             {
-                                hitObjs[i].HitColliders[j].gameObject.SendMessage("GetDamage", 3);
+                                hitObjs[i].HitColliders[j].gameObject.SendMessage("GetDamage", 10);
                             }
                         }
                     }

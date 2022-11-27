@@ -60,7 +60,7 @@ namespace JCW.Object
                         {
                             Instantiate(carrierField, curTransform, this.transform.rotation, this.transform).SetActive(true);
                             curTransform.y += 1f;
-                            Instantiate(hostField, curTransform, this.transform.rotation, this.transform).SetActive(false);
+                            Instantiate(hostField, curTransform, this.transform.rotation, this.transform).SetActive(true);
                         }
                         else
                         {

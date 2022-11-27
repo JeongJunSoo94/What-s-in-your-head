@@ -2,17 +2,20 @@ using System.Collections;
 using System.Collections.Generic;
 using JCW.AudioCtrl;
 using KSU.AutoAim.Object;
+using Photon.Pun;
 using UnityEngine;
 
 
 namespace JCW.Object
 {
     [RequireComponent(typeof(AudioSource))]
+    [RequireComponent(typeof(PhotonView))]
     public class CymbalsButton : AutoAimTargetObject
     {
         [Header("버튼 들어가는 속도")] [SerializeField] float pressedSpeed = 5f;
         [Header("버튼 나오는 속도")] [SerializeField] float releaseSpeed = 5f;
-        [Header("버튼 나오기 시작하는 시간")] [SerializeField] float releaseTime = 7f;
+        [Header("버튼 나오기 시작하는 시간")] [SerializeField] float releaseTime = 1f;
+        [Header("바꿀 메테리얼이 달린 버튼")] [SerializeField] MeshRenderer meshRenderer;
         [Header("평상 시 버튼 메테리얼")] [SerializeField] Material normalMat;
         [Header("작동 시 버튼 메테리얼")] [SerializeField] Material activeMat;
         [Header("영구적인 버튼 여부")] [SerializeField] bool isPermanent;
@@ -21,37 +24,41 @@ namespace JCW.Object
         //bool isPressed;
         float pressed_Ratio = 1f;
         Animator anim;
-        MeshRenderer meshRenderer;
+        //MeshRenderer meshRenderer;
         //bool isMatChanged = false;
 
         AudioSource audioSource;
 
         WaitForSeconds ws;
 
+        PhotonView pv;
+
+
         protected override void Awake()
         {
             base.Awake();
-            anim = transform.parent.parent.GetComponent<Animator>();
-            meshRenderer = transform.GetChild(1).GetComponent<MeshRenderer>();
+            pv = GetComponent<PhotonView>();
+            anim = transform.parent.parent.parent.GetComponent<Animator>();
+            //meshRenderer = transform.GetChild(1).GetComponent<MeshRenderer>();
             meshRenderer.sharedMaterial = normalMat;
             TryGetComponent(out audioSource);
-            if(SoundManager.Instance != null)
-                AudioCtrl.AudioSettings.SetAudio(audioSource, 1f, 50f);
+            if (SoundManager.Instance != null)
+                SoundManager.Set3DAudio(pv.ViewID, audioSource, 1f, 50f);
             ws = new(releaseTime);
         }
         private void OnTriggerEnter(Collider other)
         {
             if (other.CompareTag("Cymbals"))
-                StartCoroutine("ActiveObj");
+                StartCoroutine("ActivateObj");
         }
 
-        IEnumerator ActiveObj()
+        IEnumerator ActivateObj()
         {
             // 닿는 순간 메테리얼 변경
-            StopCoroutine("DeactiveObj");
+            StopCoroutine("DeactivateObj");
             meshRenderer.sharedMaterial = activeMat;
 
-            for (int i = 0 ; i<objectList.Count ; ++i)
+            for (int i = 0; i < objectList.Count; ++i)
             {
                 objectList[i].GetComponent<PlayObject>().enabled = true;
                 objectList[i].isActive = true;
@@ -66,15 +73,15 @@ namespace JCW.Object
             }
             pressed_Ratio = 0f;
             anim.SetFloat("pressed_ratio", pressed_Ratio);
-            
+
             if (isPermanent)
-                Destroy(this);
+                this.enabled = false;
             else
-                StartCoroutine("DeactiveObj");
+                StartCoroutine("DeactivateObj");
             yield break;
         }
 
-        IEnumerator DeactiveObj()
+        IEnumerator DeactivateObj()
         {
             yield return ws;
             while (pressed_Ratio <= 0.95f)
@@ -88,7 +95,7 @@ namespace JCW.Object
             pressed_Ratio = 1f;
             anim.SetFloat("pressed_ratio", pressed_Ratio);
             meshRenderer.sharedMaterial = normalMat;
-            for (int i = 0 ; i<objectList.Count ; ++i)
+            for (int i = 0; i < objectList.Count; ++i)
             {
                 objectList[i].isActive = false;
             }
@@ -96,4 +103,3 @@ namespace JCW.Object
         }
     }
 }
-

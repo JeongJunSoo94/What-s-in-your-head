@@ -3,8 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 using JCW.Object;
 using JCW.AudioCtrl;
+using Photon.Pun;
+
 namespace JJS
-{ 
+{
+    [RequireComponent(typeof(PhotonView))]
     public class Singing : MonoBehaviour
     {
         [HideInInspector] public Dictionary<int, RecieverMic> MicDictionary = new Dictionary<int, RecieverMic>();
@@ -13,9 +16,13 @@ namespace JJS
         public GameObject effect;
         AudioSource audioSource;
         public bool playSound;
+        PhotonView pv;
+
         private void Awake()
         {
             audioSource = GetComponent<AudioSource>();
+            pv = GetComponent<PhotonView>();
+            SoundManager.Set3DAudio(pv.ViewID, audioSource, 1f, 60f, true);
             playSound = false;
         }
 
@@ -40,12 +47,12 @@ namespace JJS
             {
                 audioSource.loop = true;
                 playSound = true;
-                SoundManager.Instance.PlayIndirect3D_RPC("S2_NellaSing", audioSource);
+                SoundManager.Instance.PlayIndirect3D_RPC("S2_NellaSing", pv.ViewID);
             }
-            if(!enable)
+            if (!enable)
             {
                 playSound = false;
-                SoundManager.Instance.StopIndirect3D_RPC(audioSource);
+                SoundManager.Instance.Stop3D_RPC(pv.ViewID);
             }
 
 

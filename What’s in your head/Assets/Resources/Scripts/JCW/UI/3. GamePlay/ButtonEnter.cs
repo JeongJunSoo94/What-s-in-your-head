@@ -190,10 +190,16 @@ namespace JCW.UI
             SetSection_RPC(0);
         }
 
+        public void LoadLatestStage_RPC()
+        {
+            photonView.RPC(nameof(LoadLatestStage), RpcTarget.AllViaServer);
+        }
+
+        [PunRPC]
         public void LoadLatestStage()
         {
             isNewGame = false;
-            string path = Application.dataPath + "/Resources/CheckPointInfo/Stage";
+            string path = Application.streamingAssetsPath + "/CheckPointInfo/Stage";
             bool isTextCheck = false;
             for (int i = 3 ; i >= 1 ; --i)
             {

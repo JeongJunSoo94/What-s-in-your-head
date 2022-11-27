@@ -19,6 +19,7 @@ namespace KSU
 {
     public enum DamageType { Attacked, KnockBack, Dead };
     [RequireComponent(typeof(AudioSource))]
+    [RequireComponent(typeof(PhotonView))]
     public class PlayerController : MonoBehaviour
     {
         //  Scripts Components
@@ -103,6 +104,8 @@ namespace KSU
         bool isPlayingWalkSound = false;
         bool isPlayingRunSound = false;
 
+        bool isNella;
+
         void Awake()
         {
             // >> : YC
@@ -117,13 +120,14 @@ namespace KSU
             playerRigidbody = GetComponent<Rigidbody>();
             playerMouse = GetComponent<PlayerMouseController>();
             playerInteraction = GetComponent<PlayerInteraction>();
-            audioSource = GetComponent<AudioSource>();
-            JCW.AudioCtrl.AudioSettings.SetAudio(audioSource, 1, 50f);
 
+            isNella = gameObject.CompareTag("Nella");
             //====================================================
 
             photonView = GetComponent<PhotonView>();
 
+            audioSource = GetComponent<AudioSource>();
+            SoundManager.Set3DAudio(photonView.ViewID, audioSource, 1, 50f);
             mainCamera = this.gameObject.GetComponent<CameraController>().FindCamera(); // 멀티용
             if (mainCamera == null)
                 Debug.Log("카메라 NULL");
@@ -131,11 +135,11 @@ namespace KSU
             characterState.isMine = photonView.IsMine;
             if (!photonView.IsMine)
             {
-                GameManager.Instance.otherPlayerTF = this.transform;
+                GameManager.Instance.otherPlayerTF = transform;
                 GetComponent<AudioListener>().enabled = false;
             }
             else
-                GameManager.Instance.myPlayerTF = this.transform;
+                GameManager.Instance.myPlayerTF = transform;
 
             GameManager.Instance.SetCharOnScene_RPC(true);
             // << : 
@@ -275,10 +279,8 @@ namespace KSU
             InitInteraction();
             InitController();
             InitAnimatorParam();
-            if (photonView.IsMine)
-            { 
-                GameManager.Instance.curPlayerHP = 12;
-            }
+           
+
 
             characterState.InitState(true, false);
 
@@ -302,6 +304,12 @@ namespace KSU
             transform.SetPositionAndRotation(new Vector3((float)data.position[0], (float)data.position[1], (float)data.position[2]),
                 new Quaternion((float)data.rotation[0], (float)data.rotation[1], (float)data.rotation[2], (float)data.rotation[3]));
 
+            if (photonView.IsMine)
+            {
+                GameManager.Instance.curPlayerHP = 12;
+                Debug.Log("부활 직후 현재 HP : " + GameManager.Instance.curPlayerHP);
+                GameManager.Instance.SetAliveState(isNella, true);
+            }
             if (photonView.IsMine && characterState.isInMaze)
             {
                 this.gameObject.GetComponent<CameraController>().InitSceneChange();
@@ -697,11 +705,11 @@ namespace KSU
 
             if(characterState.isMine)
             {
-                if (this.gameObject.CompareTag("Nella"))
+                if (isNella)
                 {
                     PlayEffectSound("nella_dead");
                 }
-                else if (this.gameObject.CompareTag("Steady"))
+                else if (!isNella)
                 {
                     PlayEffectSound("steady_dead");
                 }
@@ -763,6 +771,8 @@ namespace KSU
                                 trampolin.RecieveTriggerExit();
                             }
                         }
+                        ResetMoveSound();
+                        SoundManager.Instance.PlayEffect("All_Trampolin");
                     }
                     break;
                 case "DeadZone":
@@ -772,7 +782,7 @@ namespace KSU
                     break;
             }
         }
-        [PunRPC]
+
         public void GetDamage(int damage, DamageType type, Vector3 colliderPos, float knockBackSpeed)
         {
             string damageTrigger = "DeadTrigger";
@@ -789,38 +799,42 @@ namespace KSU
                     break;
             }
 
-            GameManager.Instance.curPlayerHP -= damage;
-            if (GameManager.Instance.curPlayerHP < 0)
+            if(!playerAnimator.GetBool("isAttacked") && !playerAnimator.GetBool("isKnockBack") && !playerAnimator.GetBool("isDead"))
             {
-                GameManager.Instance.curPlayerHP = 0;
-                playerAnimator.SetBool("DeadTrigger", true);
-            }
-            else
-            {
-                if(damageTrigger == "KnockBackTrigger")
+                GameManager.Instance.curPlayerHP -= damage;
+                if (GameManager.Instance.curPlayerHP <= 0)
                 {
-                    Vector3 knockBackHorVec = (transform.position - colliderPos);
-                    knockBackHorVec.y = 0;
-                    transform.LookAt(transform.position - knockBackHorVec);
-                    MakeKnockBackVec(knockBackHorVec, knockBackSpeed);
-                    StartCoroutine(nameof(DelayResetKnockBack));
+                    GameManager.Instance.curPlayerHP = 0;
+                    photonView.RPC(nameof(SetAnimatorBool), RpcTarget.AllViaServer, "DeadTrigger", true);
                 }
-                playerAnimator.SetBool(damageTrigger, true);
-                if (characterState.isMine)
+                else
                 {
-                    if (this.gameObject.CompareTag("Nella"))
+                    if (damageTrigger == "KnockBackTrigger")
                     {
-                        PlayEffectSound("nella_gethit_2");
+                        Vector3 knockBackHorVec = (transform.position - colliderPos);
+                        knockBackHorVec.y = 0;
+                        transform.LookAt(transform.position - knockBackHorVec);
+                        MakeKnockBackVec(knockBackHorVec, knockBackSpeed);
+                        StartCoroutine(nameof(DelayResetKnockBack));
                     }
-                    else if (this.gameObject.CompareTag("Steady"))
+                    photonView.RPC(nameof(SetAnimatorBool), RpcTarget.AllViaServer, damageTrigger, true);
+                    if (characterState.isMine)
                     {
-                        PlayEffectSound("steady_gethit_1");
+                        if (isNella)
+                        {
+                            GameManager.Instance.SetAliveState(isNella, false);
+                            PlayEffectSound("nella_gethit_2");
+                        }
+                        else
+                        {
+                            GameManager.Instance.SetAliveState(isNella, false);
+                            PlayEffectSound("steady_gethit_1");
+                        }
                     }
                 }
             }
         }
         
-        [PunRPC]
         public void GetDamage(int damage, DamageType type)
         {
             if (!photonView.IsMine)
@@ -872,27 +886,29 @@ namespace KSU
 
         void PlayWalkSound()
         {
-            if(!isPlayingWalkSound)
+            if (!isPlayingWalkSound)
             {
                 ResetMoveSound();
                 isPlayingWalkSound = true;
-                SoundManager.Instance.PlayEffect("All_Walk");
+                //SoundManager.Instance.PlayEffect("All_Walk");
             }
+            SoundManager.Instance.PlayMoveEffect("All_Walk");
         }
 
         void PlayRunSound()
         {
-            if(!isPlayingRunSound)
+            if (!isPlayingRunSound)
             {
                 ResetMoveSound();
                 isPlayingRunSound = true;
-                SoundManager.Instance.PlayEffect("All_Sprint");
+                //SoundManager.Instance.PlayEffect("All_Sprint");
             }
+            SoundManager.Instance.PlayMoveEffect("All_Sprint");
         }
 
         void ResetMoveSound()
         {
-            SoundManager.Instance.StopEffect();
+            SoundManager.Instance.StopMoveEffect();
             isPlayingWalkSound = false;
             isPlayingRunSound = false;
         }

@@ -63,7 +63,7 @@ namespace YC.Camera_
         [SerializeField] [Range(0, 1)] float sholderAxisY_MaxUp = 0.25f;
 
         [Header("[Sholder View Y궤도 Down 제한 값]")]
-        [SerializeField] [Range(0, 1)] float sholderAxisY_MaxDown = 0.5f;
+        [SerializeField] [Range(0, 1)] float sholderAxisY_MaxDown = 0.7f;
 
         float sholderViewMaxY;
         [Space]
@@ -143,7 +143,9 @@ namespace YC.Camera_
         float groundFollowY;
         float groundLookY;
 
-
+        // ============  OutOfControl시 사용  ============ //
+        float XSpeed;
+        float YSpeed;
 
         // ============  인스펙터 프리팹  ============ //
 
@@ -270,11 +272,18 @@ namespace YC.Camera_
                 sholderCamCol.m_IgnoreTag = ignoreTag;
             }
 
+            // << : Set CinemachineCollider
+            backCamCol.m_SmoothingTime = 0.01f;
             backCamCol.m_Damping = 0.1f;
             backCamCol.m_DampingWhenOccluded = 0.1f;
+            backCamCol.m_Strategy = CinemachineCollider.ResolutionStrategy.PullCameraForward;
+
+            sholderCamCol.m_SmoothingTime = 0.01f;
             sholderCamCol.m_Damping = 0.1f;
             sholderCamCol.m_DampingWhenOccluded = 0.1f;
+            sholderCamCol.m_Strategy = CinemachineCollider.ResolutionStrategy.PullCameraForward;
 
+            
             followObj = Instantiate(CineFollowObj_Back, player.transform.position + CineFollowObj_Back.transform.position, player.transform.rotation).GetComponent<Transform>();
             lookatBackObj = Instantiate(CineLookObj_Back, player.transform.position + CineLookObj_Back.transform.position, player.transform.rotation).GetComponent<Transform>();
             lookatObjOriginY = CineLookObj_Back.transform.position.y;
@@ -360,7 +369,7 @@ namespace YC.Camera_
                 }
             }
 
-            backCine.GetRig(1).GetCinemachineComponent<CinemachineComposer>().m_TrackedObjectOffset.y = offSetYInitValue; // Back View Middle에서 포지션 내려 잡기
+            //backCine.GetRig(1).GetCinemachineComponent<CinemachineComposer>().m_TrackedObjectOffset.y = offSetYInitValue; // Back View Middle에서 포지션 내려 잡기
         }
 
         void InitDefault()  // 기타 초기화  
@@ -461,12 +470,34 @@ namespace YC.Camera_
             curSholderMaxSpeedY = sholderCam.GetComponent<CinemachineFreeLook>().m_YAxis.m_MaxSpeed;
         }
 
-        public void BlockCinemachineInput(bool block)  // pause시 카메라 인풋을 막는다 (카메라 매니저 통해서 호출)
+        public void BlockCinemachineInput(bool block)  // pause시 카메라 인풋을 막는다 (카메라 매니저 통해서 호출)  
         {
+            //if (block)
+            //{
+            //    cinemachineBrain.enabled = false;
+            //}
+            //else
+            //{
+            //    cinemachineBrain.enabled = true;
+            //}
+
+            if (isSideView || GameManager.Instance.isTopView) return;
+
+            CinemachineFreeLook CF = camList[(int)curCam].GetComponent<CinemachineFreeLook>();
+
             if (block)
-                cinemachineBrain.enabled = false;
+            {
+                XSpeed = CF.m_XAxis.m_MaxSpeed;
+                YSpeed = CF.m_YAxis.m_MaxSpeed;
+
+                CF.m_XAxis.m_MaxSpeed = 0;
+                CF.m_YAxis.m_MaxSpeed = 0;
+            }
             else
-                cinemachineBrain.enabled = true;
+            {
+                CF.m_XAxis.m_MaxSpeed = XSpeed;
+                CF.m_YAxis.m_MaxSpeed = YSpeed;
+            }
         }
 
 
@@ -480,43 +511,40 @@ namespace YC.Camera_
             {
                 if (playerController.characterState.aim)
                 {
-                    //AxisState preCamAxisX = backCam.GetComponent<CinemachineFreeLook>().m_XAxis;
-
                     preCam = curCam;
                     curCam = CamState.sholder;
 
-                    if (camList[(int)preCam].GetComponent<CinemachineFreeLook>().m_YAxis.Value <= sholderAxisY_MaxUp ||
-                        camList[(int)curCam].GetComponent<CinemachineFreeLook>().m_YAxis.Value <= sholderAxisY_MaxUp)
+                    CinemachineFreeLook preBackCF = camList[(int)preCam].GetComponent<CinemachineFreeLook>();
+                    CinemachineFreeLook curBackCF = camList[(int)curCam].GetComponent<CinemachineFreeLook>();
+
+                    CinemachineFreeLook sholderCF = sholderCam.GetComponent<CinemachineFreeLook>();
+
+                    // << Y Value를 제어한다.
+
+                    if (preBackCF.m_YAxis.Value <= sholderAxisY_MaxUp ||
+                        curBackCF.m_YAxis.Value <= sholderAxisY_MaxUp)
                     {
-                        sholderCam.GetComponent<CinemachineFreeLook>().m_YAxis.Value
-                            = sholderAxisY_MaxUp;
+                        sholderCF.m_YAxis.Value = sholderAxisY_MaxUp;
                     }
-                    else if (camList[(int)preCam].GetComponent<CinemachineFreeLook>().m_YAxis.Value >= sholderAxisY_MaxDown
-                        || camList[(int)curCam].GetComponent<CinemachineFreeLook>().m_YAxis.Value >= sholderAxisY_MaxDown)
+                    else if (preBackCF.m_YAxis.Value >= sholderAxisY_MaxDown
+                        || curBackCF.m_YAxis.Value >= sholderAxisY_MaxDown)
                     {
-                        sholderCam.GetComponent<CinemachineFreeLook>().m_YAxis.Value
-                            = sholderAxisY_MaxDown;
-                    }
+                        sholderCF.m_YAxis.Value = sholderAxisY_MaxDown;
+                    }                   
                     else
                     {
-                        camList[(int)curCam].GetComponent<CinemachineFreeLook>().m_YAxis.Value
-                                        = camList[(int)preCam].GetComponent<CinemachineFreeLook>().m_YAxis.Value;
+                        curBackCF.m_YAxis.Value = preBackCF.m_YAxis.Value;
                     }
-
-                    camList[(int)curCam].GetComponent<CinemachineFreeLook>().m_XAxis.Value
-                                    = camList[(int)preCam].GetComponent<CinemachineFreeLook>().m_XAxis.Value;
+                            
+                    curBackCF.m_XAxis.Value = preBackCF.m_XAxis.Value;
 
                     OnOffCamera(camList[(int)curCam]);
-
-                    //sholderCam.GetComponent<CinemachineFreeLook>().m_XAxis = preCamAxisX;                   
                 }
             }
             else if (curCam == CamState.sholder) // Sholder View -> Back View
             {
                 if (!playerController.characterState.aim)
                 {
-                    //AxisState preCamAxisX = sholderCam.GetComponent<CinemachineFreeLook>().m_XAxis;
-
                     preCam = curCam;
                     curCam = CamState.back;
 
@@ -532,8 +560,6 @@ namespace YC.Camera_
                     }
 
                     OnOffCamera(camList[(int)curCam]);
-
-                    //backCam.GetComponent<CinemachineFreeLook>().m_XAxis = preCamAxisX;
                 }
             }
         }
@@ -543,11 +569,18 @@ namespace YC.Camera_
             if (curCam == CamState.sholder)
             {
                 AxisState axisY = camList[(int)curCam].GetComponent<CinemachineFreeLook>().m_YAxis;
+             
+                if(axisY.Value == 0)
+                    axisY.Value = sholderAxisY_MaxUp;
+                else if(axisY.Value == 1)
+                    axisY.Value = sholderAxisY_MaxDown;               
 
                 if (axisY.Value <= sholderAxisY_MaxUp) // 커서가 Max 위로 넘어감
                 {
                     // axisY.m_InputAxisValue : 커서 위(1) ~ 아래(0)
                     // axisY.Value : 커서 위(-) ~ 아래 (+)
+
+                    axisY.Value = sholderAxisY_MaxUp;
 
                     if (axisY.m_InputAxisValue > 0)
                     {
@@ -561,9 +594,11 @@ namespace YC.Camera_
                 }
                 else if (axisY.Value >= sholderAxisY_MaxDown) // 커서가 Min 밑으로 내려감.
                 {
+                    axisY.Value = sholderAxisY_MaxDown;
+
                     if (axisY.m_InputAxisValue > 0)
                     {
-                        axisY.m_MaxSpeed = sholderAxisY_MaxDown;
+                        axisY.m_MaxSpeed = sholderViewMaxY;
 
                     }
                     else if (axisY.m_InputAxisValue < 0)
@@ -579,7 +614,7 @@ namespace YC.Camera_
             }
         }
 
-        void OnOffCamera(CinemachineVirtualCameraBase curCam) // 매개변수로 받은 카메라 외에 다른 카메라는 Off (인자가 null이라면 모든 가상카메라를 끈다)  
+        public void OnOffCamera(CinemachineVirtualCameraBase curCam) // 매개변수로 받은 카메라 외에 다른 카메라는 Off (인자가 null이라면 모든 가상카메라를 끈다)  
         {
             foreach (CinemachineVirtualCameraBase cam in camList)
             {

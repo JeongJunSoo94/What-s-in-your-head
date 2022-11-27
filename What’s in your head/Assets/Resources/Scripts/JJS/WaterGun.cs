@@ -6,10 +6,12 @@ using JCW.UI.Options.InputBindings;
 using YC.Camera_;
 using YC.Camera_Single;
 using JCW.AudioCtrl;
+using Photon.Pun;
 
 namespace JJS.Weapon
 {
     [RequireComponent(typeof(AudioSource))]
+    [RequireComponent(typeof(PhotonView))]
     public class WaterGun : MonoBehaviour
     {
 
@@ -57,14 +59,16 @@ namespace JJS.Weapon
         public GameObject effectCircleSpawnerObj;
         public int effectCircleCurCount = 0;
 
+        PhotonView pv;
         private void Awake()
         {
+            pv = GetComponent<PhotonView>();
             bezierCurveOrbit = gameObject.GetComponent<BezierCurve>();
             bezierCurveOrbit.targetObj = startPos;
             InitSpawner();
             shootEnable = true;
             audioSource = GetComponent<AudioSource>();
-            JCW.AudioCtrl.AudioSettings.SetAudio(audioSource, 1f, 40f);
+            SoundManager.Set3DAudio(pv.ViewID, audioSource, 1f, 40f);
             //rigid = transform.parent.gameObject.GetComponent<Rigidbody>();
         }
 
@@ -107,7 +111,7 @@ namespace JJS.Weapon
 
         public void ShootStart()
         {
-            SoundManager.Instance.Play3D_RPC("S3_Watergun", audioSource);
+            SoundManager.Instance.Play3D_RPC("S3_Watergun", pv.ViewID);
             Shoot();
             bulletCurCount++;
         }

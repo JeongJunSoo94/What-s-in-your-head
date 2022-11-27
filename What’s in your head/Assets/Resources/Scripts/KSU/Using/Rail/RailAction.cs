@@ -132,14 +132,14 @@ namespace KSU
             {
                 ResetRailSound();
                 isPlayingRailSound = true;
-                SoundManager.Instance.PlayEffect("All_RidingRail");
+                SoundManager.Instance.PlayMoveEffect("All_RidingRail");
             }
         }
         
         public void ResetRailSound()
         {
             isPlayingRailSound = false;
-            SoundManager.Instance.StopEffect();
+            SoundManager.Instance.StopMoveEffect();
         }
 
         public void SearchWithSphereCast()
@@ -526,10 +526,7 @@ namespace KSU
             {
                 foreach (var rail in detectedRail.Keys)
                 {
-                    if (rail != railStartObject.transform.parent.gameObject)
-                    {
-                        rail.GetComponentInChildren<OneIndicator>().SetUI(false, Vector3.zero);
-                    }
+                    rail.GetComponentInChildren<OneIndicator>().SetUI(false, Vector3.zero);
                 }
             }
         }
