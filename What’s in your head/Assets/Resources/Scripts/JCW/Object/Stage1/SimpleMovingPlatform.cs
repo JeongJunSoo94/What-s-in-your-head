@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using KSU;
 using Photon.Pun;
 using UnityEngine;
 
@@ -55,21 +56,21 @@ namespace JCW.Object.Stage1
 
         private void OnTriggerEnter(Collider other)
         {
-            if (other.CompareTag("Nella") || other.CompareTag("Steady"))
+            if (other.gameObject.layer == LayerMask.NameToLayer("Player"))
             {
-                Transform playerTF = other.transform;
-                playerTF.parent = this.transform;
+                if (other.transform.position.y >= transform.position.y)
+                    other.transform.parent = this.gameObject.transform;
             }
         }
         private void OnTriggerExit(Collider other)
         {
-            if (other.CompareTag("Nella") || other.CompareTag("Steady"))
+            if (other.gameObject.layer == LayerMask.NameToLayer("Player"))
             {
-                Transform playerTF = other.transform;
-                playerTF.parent = null;
+                PlayerController player = other.GetComponent<PlayerController>();
+                if (player.characterState.isMine)
+                    player.EscapeFromParent();
             }
         }
-        
 
         IEnumerator WaitForPlayers()
         {
