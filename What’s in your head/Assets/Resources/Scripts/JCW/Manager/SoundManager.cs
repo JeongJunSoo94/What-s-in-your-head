@@ -182,16 +182,16 @@ namespace JCW.AudioCtrl
         // EFFECT ==========================================================================
         #region 
 
-        public void PlayEffect_RPC(string path)
+        public void PlayEffect_RPC(string name)
         {
-            photonView.RPC(nameof(PlayEffect), RpcTarget.AllViaServer, path);
+            photonView.RPC(nameof(PlayEffect), RpcTarget.AllViaServer, name);
         }
 
         // 효과음 재생
         [PunRPC]
-        public void PlayEffect(string path)
+        public void PlayEffect(string name)
         {
-            AudioClip audioClip = GetAudioClips(path, Sound.EFFECT);
+            AudioClip audioClip = GetAudioClips(name, Sound.EFFECT);
             if (audioClip == null)
             {
                 Debug.Log("NULL로 저장된 오디오 클립입니다");
@@ -205,7 +205,7 @@ namespace JCW.AudioCtrl
             photonView.RPC(nameof(StopEffect), RpcTarget.AllViaServer);
         }
 
-        public void StopEffect_RPC(string path)
+        public void StopEffect_RPC(string name)
         {
             photonView.RPC(nameof(StopEffectName), RpcTarget.AllViaServer);
         }
@@ -219,25 +219,25 @@ namespace JCW.AudioCtrl
 
 
         [PunRPC]
-        public void StopEffectName(string path)
+        public void StopEffectName(string name)
         {
 
             if (audioSources[(int)Sound.EFFECT].isPlaying
-                && audioSources[(int)Sound.EFFECT].clip.name.Equals(path))
+                && audioSources[(int)Sound.EFFECT].clip.name.Equals(name))
                 audioSources[(int)Sound.EFFECT].Stop();
         }
 
 
-        public void PlayEffectNoOverlap_RPC(string path)
+        public void PlayEffectNoOverlap_RPC(string name)
         {
-            photonView.RPC(nameof(PlayEffectNO), RpcTarget.AllViaServer, path);
+            photonView.RPC(nameof(PlayEffectNO), RpcTarget.AllViaServer, name);
         }
 
         // 효과음 재생
         [PunRPC]
-        public void PlayEffectNO(string path)
+        public void PlayEffectNO(string name)
         {
-            AudioClip audioClip = GetAudioClips(path, Sound.EFFECT);
+            AudioClip audioClip = GetAudioClips(name, Sound.EFFECT);
             if (audioClip == null)
             {
                 Debug.Log("NULL로 저장된 오디오 클립입니다");
@@ -248,9 +248,9 @@ namespace JCW.AudioCtrl
                 audioSources[(int)Sound.EFFECT].PlayOneShot(audioClip);
         }
 
-        public void PlayMoveEffect(string path)
+        public void PlayMoveEffect(string name)
         {
-            AudioClip audioClip = GetAudioClips(path, Sound.MOVE);
+            AudioClip audioClip = GetAudioClips(name, Sound.MOVE);
             if (audioClip == null)
             {
                 Debug.Log("NULL로 저장된 오디오 클립입니다");
@@ -281,25 +281,25 @@ namespace JCW.AudioCtrl
 
         // BGM ==========================================================================
         #region
-        public void PlayBGM_RPC(string path)
+        public void PlayBGM_RPC(string name)
         {
-            photonView.RPC(nameof(PlayBGM), RpcTarget.AllViaServer, path);
+            photonView.RPC(nameof(PlayBGM), RpcTarget.AllViaServer, name);
         }
         // 배경음 재생
         [PunRPC]
-        public void PlayBGM(string path)
+        public void PlayBGM(string name)
         {
-            if (!path.Contains("Sounds/BGM"))
-                path = $"Sounds/BGM/{path}";
+            if (!name.Contains("Sounds/BGM"))
+                name = $"Sounds/BGM/{name}";
 
-            AudioClip audioClip = Resources.Load<AudioClip>(path);
+            AudioClip audioClip = Resources.Load<AudioClip>(name);
             if (audioClip == null)
             {
                 Debug.Log("BGM :: 해당 파일을 찾지 못했습니다.");
                 return;
             }
             else
-                Debug.Log(path + "를 실행합니다");
+                Debug.Log(name + "를 실행합니다");
 
             AudioSource curAudio = audioSources[(int)Sound.BGM];
             if (curAudio.isPlaying)
@@ -346,20 +346,20 @@ namespace JCW.AudioCtrl
         // 3D Sound ==========================================================================
         #region
 
-        public void Play3D_RPC(string path, int id)
+        public void Play3D_RPC(string name, int id)
         {
-            photonView.RPC(nameof(Play3D), RpcTarget.AllViaServer, path, id);
+            photonView.RPC(nameof(Play3D), RpcTarget.AllViaServer, name, id);
         }
 
         [PunRPC]
-        public void Play3D(string path, int id)
+        public void Play3D(string name, int id)
         {
             if (!dict3D.ContainsKey(id))
             {
                 Debug.Log(id + " 의 키값이 없습니다");
                 return;
             }
-            dict3D[id].clip = GetAudioClips(path, Sound.DISTANCE);
+            dict3D[id].clip = GetAudioClips(name, Sound.DISTANCE);
             if (dict3D[id].clip == null)
             {
                 Debug.Log("NULL로 저장된 오디오 클립입니다");
@@ -369,21 +369,20 @@ namespace JCW.AudioCtrl
             dict3D[id].PlayOneShot(dict3D[id].clip);
         }
 
-        [PunRPC]
-        public void PlayIndirect3D_RPC(string path, int id)
+        public void PlayIndirect3D_RPC(string name, int id)
         {
-            photonView.RPC(nameof(PlayIndirect3D), RpcTarget.AllViaServer, path, id);
+            photonView.RPC(nameof(PlayIndirect3D), RpcTarget.AllViaServer, name, id);
         }
 
         [PunRPC]
-        public void PlayIndirect3D(string path, int id)
+        public void PlayIndirect3D(string name, int id)
         {
             if (!dict3D.ContainsKey(id))
             {
                 Debug.Log(id + " 의 키값이 없습니다");
                 return;
             }
-            dict3D[id].clip = GetAudioClips(path, Sound.DISTANCE);
+            dict3D[id].clip = GetAudioClips(name, Sound.DISTANCE);
             if (dict3D[id].clip == null)
             {
                 Debug.Log("NULL로 저장된 오디오 클립입니다");
@@ -412,15 +411,15 @@ namespace JCW.AudioCtrl
 
         // UI ==========================================================================
         #region
-        public void PlayUI_RPC(string path)
+        public void PlayUI_RPC(string name)
         {
-            photonView.RPC(nameof(PlayUI), RpcTarget.AllViaServer, path);
+            photonView.RPC(nameof(PlayUI), RpcTarget.AllViaServer, name);
         }
 
         [PunRPC]
-        public void PlayUI(string path)
+        public void PlayUI(string name)
         {
-            AudioClip audioClip = GetAudioClips(path, Sound.UI);
+            AudioClip audioClip = GetAudioClips(name, Sound.UI);
             if (audioClip == null)
             {
                 Debug.Log("NULL로 저장된 오디오 클립입니다");
