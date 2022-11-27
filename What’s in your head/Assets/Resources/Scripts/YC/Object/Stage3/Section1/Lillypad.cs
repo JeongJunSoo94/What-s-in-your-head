@@ -6,6 +6,8 @@ using Photon.Pun;
 
 namespace YC_OBJ
 {
+    [RequireComponent(typeof(AudioSource))]
+    [RequireComponent(typeof(PhotonView))]
     public class Lillypad : MonoBehaviour
     {
         AudioSource audioSource;
