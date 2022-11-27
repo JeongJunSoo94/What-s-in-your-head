@@ -27,12 +27,10 @@ namespace JCW.UI.InGame
         // 메인 캠
         Camera mainCamera;
 
-        bool isStart = false;
 
 
         private void Awake()
-        {
-            mainCamera = transform.parent.GetComponent<CameraController>().FindCamera(); // 멀티용       
+        {     
 
             photonView = GetComponent<PhotonView>();
             itemUI_RT = transform.GetChild(0).gameObject.GetComponent<RectTransform>();
@@ -41,26 +39,26 @@ namespace JCW.UI.InGame
 
             StartCoroutine(nameof(WaitForPlayer));
         }
-        private void Update()
-        {
-            if (!photonView.IsMine || !isStart)
-                return;
-
-            // 체크용
-            if (Input.GetKeyDown(KeyCode.KeypadDivide) && !hpUI.activeSelf)
-                GameManager.Instance.MediateHP(true);
-            if (Input.GetKeyDown(KeyCode.KeypadMultiply) && hpUI.activeSelf)
-                GameManager.Instance.MediateHP(false);
-        }
-
-        public void SetHP(bool isOn)
+        //private void Update()
+        //{
+        //    if (!photonView.IsMine || !isStart)
+        //        return;
+        //
+        //    // 체크용
+        //    if (Input.GetKeyDown(KeyCode.KeypadDivide) && !hpUI.activeSelf)
+        //        GameManager.Instance.MediateHP(true);
+        //    if (Input.GetKeyDown(KeyCode.KeypadMultiply) && hpUI.activeSelf)
+        //        GameManager.Instance.MediateHP(false);
+        //}
+        
+        public void SetHP_RPC(bool isOn)
         {
             if(photonView.IsMine)
-                photonView.RPC(nameof(SetHP_RPC), RpcTarget.AllViaServer, isOn);
+                photonView.RPC(nameof(SetHP), RpcTarget.AllViaServer, isOn);
         }
 
         [PunRPC]
-        void SetHP_RPC(bool isOn)
+        public void SetHP(bool isOn)
         {
             if(itemUI_RT.gameObject.activeSelf)
             {
@@ -82,7 +80,6 @@ namespace JCW.UI.InGame
 
 
             isNella = GameManager.Instance.characterOwner[PhotonNetwork.IsMasterClient];
-
             if (GameManager.Instance.hpAllPairs.Count < 2)
             {
                 if (photonView.IsMine)
@@ -90,9 +87,8 @@ namespace JCW.UI.InGame
                 else
                     GameManager.Instance.hpAllPairs.Add(!isNella, this);
             }
-            
+            mainCamera = transform.parent.GetComponent<CameraController>().FindCamera(); // 멀티용  
 
-            isStart = true;
             yield break;
         }
 

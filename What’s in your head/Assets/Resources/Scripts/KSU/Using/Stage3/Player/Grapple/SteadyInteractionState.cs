@@ -12,16 +12,15 @@ namespace KSU
         public bool isGrappling = false;
         public bool isGrabMonster = false;
 
-        // Start is called before the first frame update
-        void Start()
+        public void ResetState()
         {
+            isAutoAimObjectFounded = false;
+            isSucceededInHittingTaget = false;
 
-        }
-
-        // Update is called once per frame
-        void Update()
-        {
+            isGrappling = false;
+            isGrabMonster = false;
 
         }
     }
+
 }

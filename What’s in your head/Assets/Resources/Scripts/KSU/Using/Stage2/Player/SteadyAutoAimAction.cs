@@ -64,7 +64,7 @@ namespace KSU.AutoAim.Player
         {
             aimUI = GetComponent<CameraController>().aimUI.GetComponent<AimUI>();
             audioSource = GetComponent<AudioSource>();
-            photonView = GetComponent<PhotonView>();
+            photonView = GetComponent<PhotonView>();            
             SoundManager.Set3DAudio(photonView.ViewID, audioSource, 1, 50f);
         }
 
@@ -117,6 +117,15 @@ namespace KSU.AutoAim.Player
                     }
                 }
             }
+        }
+
+        public virtual void ResetAutoAimWeapon()
+        {
+            Debug.Log("오토에임으로 들어옴");
+        }
+
+        public virtual void ShootAtSameTime()
+        {
         }
 
         public void RecieveAutoAimObjectInfo(bool isSuceeded, GameObject targetObj, AutoAimTargetType autoAimTargetType)

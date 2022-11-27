@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using JCW.Network;
 using KSU;
 using Photon.Pun;
 using UnityEngine;
@@ -42,10 +43,14 @@ namespace JCW.UI.InGame
         PhotonView photonView;
         readonly List<HPandTime<int, float>> damageList = new();
 
+        WaitForSeconds ws_healBlink;
+        bool isTopView;
+        bool isSideView;
+
         void Awake()
         {
             photonView = GetComponent<PhotonView>();
-
+            ws_healBlink = new(0.1f);
             isNella = GameManager.Instance.characterOwner[PhotonNetwork.IsMasterClient];
 
             if (photonView.IsMine)
@@ -66,6 +71,8 @@ namespace JCW.UI.InGame
             }
             curHP = GameManager.Instance.curPlayerHP;
             previousHP = curHP;
+            isTopView = GameManager.Instance.isTopView;
+            isSideView = GameManager.Instance.isSideView;
         }
 
         private void OnEnable()
@@ -90,6 +97,7 @@ namespace JCW.UI.InGame
             // 기존 HP와 현재 HP 값이 달라졌을 때
             if (curHP != GameManager.Instance.curPlayerHP)
             {
+                Debug.Log("기존 HP : " + curHP + " / 현재 HP : " + GameManager.Instance.curPlayerHP);
                 // 실행 중일수도 있는 회복 코루틴 중지.
                 healTime = 0f;
                 StopCoroutine(nameof(Cure));
@@ -98,29 +106,38 @@ namespace JCW.UI.InGame
                 // 사망 시
                 if (curHP <= 0)
                 {
-                    GameManager.Instance.curPlayerHP = maxHP;
-
+                    Debug.Log("사망");
                     // 현재 캐릭터가 넬라라면 넬라의 살아있음을 false로, 스테디라면 스테디의 살아있음을 false로 바꿈.
-                    GameManager.Instance.SetAliveState(isNella, false);
-                    if(!GameManager.Instance.isTopView)
-                        CameraManager.Instance.DeadCam(isNella);
-                    
+                    if(!isSideView)
+                        GameManager.Instance.SetAliveState(isNella, false);
+                    //if(!isTopView)
+                        //CameraManager.Instance.DeadCam(isNella);
+
                     curHP = maxHP;
                     damageList.Clear();
                     Dead();
+
+                    if (isSideView)
+                        return;
+
                     photonView.RPC(nameof(TurnOffUI), RpcTarget.AllViaServer);
 
                     // 넬라 & 스테디 둘 다 죽었으면
                     if (!(bool)GameManager.Instance.isAlive[true] && !(bool)GameManager.Instance.isAlive[false])
                     {
+                        if (PhotonNetwork.IsMasterClient)
+                        {
+                            PhotonNetwork.LoadLevel(4 * (GameManager.Instance.curStageIndex - 1) + 1 + GameManager.Instance.curStageType);
+                            return;
+                        }
                         GameManager.Instance.MediateRevive(false);
                         GameManager.Instance.SetAliveState(isNella, true);
                         GameManager.Instance.SetAliveState(!isNella, true);
-                        if (!GameManager.Instance.isTopView && !GameManager.Instance.isSideView)
-                        {
-                            CameraManager.Instance.ReviveCam(isNella);
-                            CameraManager.Instance.ReviveCam(!isNella);
-                        }                            
+                        //if (!GameManager.Instance.isTopView && !GameManager.Instance.isSideView)
+                        //{
+                        //    CameraManager.Instance.ReviveCam(isNella);
+                        //    CameraManager.Instance.ReviveCam(!isNella);
+                        //}                            
                     }                        
                     else
                         GameManager.Instance.MediateRevive(true);
@@ -177,20 +194,16 @@ namespace JCW.UI.InGame
             SetBgImage((int)BgState.DAMAGED, false);
         }
 
-        public void SetRevive(bool value)
+        public void SetRevive_RPC(bool value)
         {
-            photonView.RPC(nameof(SetRevive_RPC), RpcTarget.AllViaServer, value);
+            photonView.RPC(nameof(SetRevive), RpcTarget.AllViaServer, value);
         }
 
         [PunRPC]
-        void SetRevive_RPC(bool value)
+        public void SetRevive(bool value)
         {
             if (!value)
-            {
-                //Debug.Log("HP 만땅 채우기");
                 charHpUI.SetActive(true);
-                //GameManager.Instance.curPlayerHP = maxHP;
-            }
             if(GameManager.Instance.isTopView)
                 reviveUI.SetActive(value);
         }
@@ -212,7 +225,7 @@ namespace JCW.UI.InGame
             // 깜빡 2번하기
             while (count < 3)
             {
-                yield return new WaitForSeconds(0.1f);
+                yield return ws_healBlink;
                 ++count;
                 hpImages[(int)HpState.HEAL].enabled = !hpImages[(int)HpState.HEAL].enabled;
             }

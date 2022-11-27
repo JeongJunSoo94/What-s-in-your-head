@@ -1,15 +1,34 @@
+using JCW.AudioCtrl;
+using Photon.Pun;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 namespace KSU.Object.Interaction.Stage1
 {
+    [RequireComponent(typeof(PhotonView))]
+    [RequireComponent(typeof(AudioSource))]
     public class BalloonCar : InteractingTargetObject
     {
         Rigidbody objRigidbody;
         [SerializeField] GameObject balloon;
         [SerializeField] float delayTime = 3f;
         [SerializeField] float floatingSpeed = 3f;
+
+        AudioSource audioSource;
+        PhotonView pv;
+
+        WaitForSeconds ws;
+
+        private void Awake()
+        {
+            pv = GetComponent<PhotonView>();
+            audioSource = GetComponent<AudioSource>();
+            ws = new(delayTime);
+
+            SoundManager.Set3DAudio(pv.ViewID, audioSource, 1f, 50f);
+        }
+
         // Start is called before the first frame update
         void Start()
         {
@@ -31,7 +50,7 @@ namespace KSU.Object.Interaction.Stage1
         {
             objRigidbody.isKinematic = false;
             objRigidbody.velocity = Vector3.up * floatingSpeed;
-            yield return new WaitForSeconds(delayTime);
+            yield return ws;
             objRigidbody.useGravity = true;
             StartCoroutine(nameof(DestroyBalloon));
         }
@@ -40,6 +59,7 @@ namespace KSU.Object.Interaction.Stage1
         {
             objRigidbody.velocity = Vector3.zero;        
             Destroy(balloon);
+            SoundManager.Instance.Play3D_RPC("S1S1_BalloonPop", pv.ViewID);
             //WaitForEndOfFrame temp = new WaitForEndOfFrame();
 
             yield return new WaitUntil(() => transform.position.y < 13.2f);
@@ -55,6 +75,14 @@ namespace KSU.Object.Interaction.Stage1
             //    }
             //    yield return temp;
             //}
+        }
+
+        private void OnCollisionEnter(Collision collision)
+        {
+            if(collision.gameObject.CompareTag("Platform"))
+            {
+                SoundManager.Instance.Play3D_RPC("S1S1_CarDrop", pv.ViewID);
+            }
         }
     }
 }

@@ -88,7 +88,7 @@ namespace YC.CameraManager_
                 {                    
                     if(!wasTopView)
                     {
-                        pv.RPC(nameof(SetDefenceModeCamera), RpcTarget.AllBuffered);
+                        pv.RPC(nameof(SetDefenceModeCamera), RpcTarget.AllViaServer);
                         wasTopView = true;
                     }                    
                 }
@@ -101,7 +101,7 @@ namespace YC.CameraManager_
                 {                 
                     if (!wasSideView)
                     {
-                        pv.RPC(nameof(SetSideModeCamera), RpcTarget.AllBuffered);
+                        pv.RPC(nameof(SetSideModeCamera), RpcTarget.AllViaServer);
                         wasSideView = true;
                     }
                 }

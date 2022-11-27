@@ -76,15 +76,7 @@ public class GameManager : MonoBehaviour, IPunObservable
         isCharOnScene.Add(false);
     }
     private void Update()
-    {
-        if (!isTest)
-        {
-            if (Input.GetKeyDown(KeyCode.Keypad1))
-                isTopView = !isTopView;
-            if (Input.GetKeyDown(KeyCode.Keypad2))
-                isSideView = !isSideView;
-        }
-        
+    {        
         if (KeyManager.Instance.GetKeyDown(PlayerAction.Pause))
         {
             if(SceneManager.GetActiveScene().name != "MainTitle")
@@ -130,7 +122,14 @@ public class GameManager : MonoBehaviour, IPunObservable
 
     public void MediateHP(bool value)
     {
+        StartCoroutine(WaitForHP(value));        
+    }
+
+    IEnumerator WaitForHP(bool value)
+    {
+        yield return new WaitUntil(() => hpAllPairs.Count == 2);
         photonView.RPC(nameof(MediateHP_RPC), RpcTarget.AllViaServer, value);
+        yield break;
     }
 
     [PunRPC]

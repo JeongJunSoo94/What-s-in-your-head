@@ -211,7 +211,6 @@ namespace JCW.Network
             GameManager.Instance.SetRandomSeed();
             if(isSingle)
             {
-                Debug.Log("ΩÃ±€¿”");
                 if (PhotonNetwork.CurrentRoom.PlayerCount == 1)
                 {
                     if (isNella)

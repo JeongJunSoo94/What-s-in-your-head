@@ -106,6 +106,19 @@ namespace JJS
 
         }
 
+
+        public void ResetWeapon_RPC()
+        {
+            photonView.RPC(nameof(ResetWeapon),RpcTarget.AllViaServer);
+        }
+
+        [PunRPC]
+
+        private void ResetWeapon()
+        {
+            autoAimWeapon.ResetAutoAimWeapon();            
+        }
+
         public void SetAimWeapon()
         {
             SteadyCymbalsAction steadyCymbalsWeapon = GetComponent<SteadyCymbalsAction>();

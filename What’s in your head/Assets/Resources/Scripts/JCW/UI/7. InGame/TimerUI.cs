@@ -23,12 +23,13 @@ namespace JCW.UI.InGame
 
         PhotonView pv;
         bool isEnd = false;
+        bool isStart = false;
 
         private void Awake()
         {
             pv = GetComponent<PhotonView>();
             textUI = transform.GetChild(0).GetComponent<Text>();
-            stringBuilder = new();
+            stringBuilder = new(15,15);
             convertTime = (int)(time * 60f);
             second = (int)(convertTime % 60f);
             minute = (int)(convertTime / 60f);
@@ -41,12 +42,13 @@ namespace JCW.UI.InGame
                 stringBuilder.Append("0");
             stringBuilder.Append(second.ToString());
             textUI.text = stringBuilder.ToString();
+            StartCoroutine(nameof(WaitForPlayers));
         }
 
 
         void Update()
         {
-            if (isEnd)
+            if (!isStart || isEnd)
                 return;
 
             if(pv.IsMine)
@@ -81,6 +83,7 @@ namespace JCW.UI.InGame
             }
             else
             {
+                stringBuilder.Clear();
                 if (minute < 10)
                     stringBuilder.Append("0");
                 stringBuilder.Append(minute.ToString());
@@ -112,6 +115,13 @@ namespace JCW.UI.InGame
         {
             isEnd = true;
             portal.SetActive(true);
+        }
+
+        IEnumerator WaitForPlayers()
+        {
+            yield return new WaitUntil(() => GameManager.Instance.GetCharOnScene());
+            isStart = true;
+            yield break;
         }
 
 

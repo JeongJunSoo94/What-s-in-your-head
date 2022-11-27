@@ -18,6 +18,8 @@ using JCW.AudioCtrl;
 namespace KSU.AutoAim.Player
 {
     //public enum GrappleTargetType { GrappledObject, Monster, Null};
+    [RequireComponent(typeof(AudioSource))]
+    [RequireComponent(typeof(PhotonView))]
     public class SteadyGrappleAction : SteadyAutoAimAction
     {
         PlayerController playerController;
@@ -72,8 +74,9 @@ namespace KSU.AutoAim.Player
         override protected void Awake()
         {
             base.Awake();
+            
             playerAnimator = GetComponent<Animator>();
-            photonView = GetComponent<PhotonView>();
+            //photonView = GetComponent<PhotonView>();
 
             playerController = GetComponent<PlayerController>();
             playerState = GetComponent<PlayerState>();
@@ -143,18 +146,6 @@ namespace KSU.AutoAim.Player
             }
         }
 
-        //public void SendInfoAImUI()
-        //{
-        //    if(steadyInteractionState.isAutoAimObjectFounded)
-        //    {
-        //        aimUI.SetTarget(autoAimPosition, rangeAngle);
-        //    }
-        //    else
-        //    {
-        //        aimUI.SetTarget(null, rangeAngle);
-        //    }
-        //}
-
         public void MakeShootPosition()
         {
             if (playerState.isOutOfControl || playerState.isStopped)
@@ -211,70 +202,34 @@ namespace KSU.AutoAim.Player
                     PlayGrappleThrowSound();
                     steadyInteractionState.isSucceededInHittingTaget = false;
                     autoAimObjectSpawner.SetActive(false);
-                    grapple.InitObject(autoAimObjectSpawner.transform.position, shootPosition, autoAimObjectSpeed, autoAimObjectDepartOffset);
-
-                    //if(GameManager.Instance.isTopView)
-                    //{
-                    //    ///////////////// 선택지 2: 여기에 마우스 거리 만큼의 위치까지 쏘는 갈고리 발사
-                    //    Vector3 forward = (playerController.playerMouse.point.transform.position - autoAimObjectSpawner.transform.position);
-                    //    forward.y = 0;
-                    //    if (forward.magnitude > autoAimObjectRange)
-                    //        forward = forward.normalized * autoAimObjectRange;
-                    //    grapple.InitObject(autoAimObjectSpawner.transform.position, (autoAimObjectSpawner.transform.position + forward), autoAimObjectSpeed, autoAimObjectDepartOffset);
-                    //}
-                    //else if (steadyInteractionState.isAutoAimObjectFounded)
-                    //{
-                    //    // 도착 위치: autoAimPosition
-                    //    grapple.InitObject(autoAimObjectSpawner.transform.position, autoAimPosition.position, autoAimObjectSpeed, autoAimObjectDepartOffset);
-                    //}
-                    //else
-                    //{
-                    //    // 도착위치: 화면 중앙에 레이 쏴서 도착하는 곳
-                    //    RaycastHit hit;
-                    //    bool rayCheck = Physics.Raycast(playerCamera.transform.position, playerCamera.transform.forward, out hit, autoAimObjectRange, -1,QueryTriggerInteraction.Ignore);
-                    //    if(rayCheck && (hit.distance > Vector3.Distance(transform.position, playerCamera.transform.position)))
-                    //    {
-                    //        grapple.InitObject(autoAimObjectSpawner.transform.position, hit.point, autoAimObjectSpeed, autoAimObjectDepartOffset);
-                    //    }
-                    //    else
-                    //    {
-                    //        grapple.InitObject  (autoAimObjectSpawner.transform.position, (playerCamera.transform.position + playerCamera.transform.forward * autoAimObjectRange), autoAimObjectSpeed, autoAimObjectDepartOffset);
-                    //    }
-                    //}
+                    grapple.InitObject(autoAimObjectSpawner.transform.position, shootPosition, autoAimObjectSpeed, autoAimObjectDepartOffset);                                       
                 }
             }
         }
 
-        //public void RecieveGrappleInfo(bool isSuceeded, GameObject targetObj, AutoAimTargetType grappleTargetType)
-        //{
-        //    curTargetType = grappleTargetType;
-        //    steadyInteractionState.isSucceededInHittingTaget = isSuceeded;
+        public override void ShootAtSameTime()
+        {
+            photonView.RPC(nameof(ShootGrapple), RpcTarget.AllViaServer);
+        }
 
-        //    if (isSuceeded)
-        //    {
-        //        grappledTarget = targetObj;
-        //    }
-        //    else
-        //    {
-        //        autoAimObjectSpawner.SetActive(true);
-        //    }
-        //}
+        [PunRPC]
+        void ShootGrapple()
+        {
+            playerAnimator.SetBool("isShootingGrapple", true);
+        }
 
-        //public bool GetWhetherHit(AutoAimTargetType grappleTargetType)
-        //{
-        //    if((grappleTargetType == curTargetType))
-        //    {
-        //        return steadyInteractionState.isSucceededInHittingTaget;
-        //    }
-        //    return false;
-        //}
+        public override void ResetAutoAimWeapon()
+        {
+            EndGrab();
+            steadyInteractionState.ResetState();
+        }
 
         public void StartGrab()
         {
             steadyInteractionState.isGrabMonster = true;
             playerState.isRiding = true;
             playerController.MoveStop();
-            Vector3 lookVec = (autoAimPosition.position - transform.position);
+            Vector3 lookVec = (shootPosition - transform.position);
             lookVec.y = 0;
             transform.LookAt(transform.position + lookVec);
         }
@@ -311,80 +266,6 @@ namespace KSU.AutoAim.Player
                 playerRigidbody.velocity = grappleVec;
             }
         }
-
-        //void SendInfoUI()
-        //{
-        //    if (autoAimTargetObjects.Count > 0)
-        //    {
-        //        foreach (var grappledObject in autoAimTargetObjects)
-        //        {
-        //            Vector3 directoin = (grappledObject.transform.parent.position - playerCamera.transform.position).normalized;
-        //            bool rayCheck = false;
-        //            RaycastHit hit;
-        //            switch (grappledObject.tag)
-        //            {
-        //                case "GrappledObject":
-        //                    {
-        //                        rayCheck = Physics.Raycast(playerCamera.transform.position, directoin, out hit, grappledObject.GetComponentInParent<GrappledObject>().detectingUIRange * 1.5f, layerFilterForAutoAim, QueryTriggerInteraction.Ignore);
-        //                        if (rayCheck)
-        //                        {
-        //                            if (hit.collider.CompareTag("GrappledObject"))
-        //                            {
-        //                                rayCheck = true;
-        //                            }
-        //                            else
-        //                            {
-        //                                rayCheck = false;
-        //                            }
-        //                        }
-        //                    }
-        //                    break;
-        //                case "PoisonSnake":
-        //                    {
-        //                        rayCheck = Physics.Raycast(playerCamera.transform.position, directoin, out hit, grappledObject.GetComponentInParent<DefenseMonster>().detectingUIRange * 1.5f, layerFilterForAutoAim, QueryTriggerInteraction.Ignore);
-        //                        if (rayCheck)
-        //                        {
-        //                            if (hit.collider.CompareTag("PoisonSnake"))
-        //                            {
-        //                                rayCheck = true;
-        //                            }
-        //                            else
-        //                            {
-        //                                rayCheck = false;
-        //                            }
-        //                        }
-        //                    }
-        //                    break;
-        //                case "TrippleHeadSnake":
-        //                    {
-        //                        rayCheck = Physics.Raycast(playerCamera.transform.position, directoin, out hit, grappledObject.GetComponentInParent<DefenseMonster>().detectingUIRange * 1.5f, layerFilterForAutoAim, QueryTriggerInteraction.Ignore);
-        //                        if (rayCheck)
-        //                        {
-        //                            if (hit.collider.CompareTag("TrippleHeadSnake"))
-        //                            {
-        //                                rayCheck = true;
-        //                            }
-        //                            else
-        //                            {
-        //                                rayCheck = false;
-        //                            }
-        //                        }
-        //                    }
-        //                    break;
-        //            }
-
-        //            if (rayCheck)
-        //            {
-        //                grappledObject.transform.parent.gameObject.GetComponentInChildren<OneIndicator>().SetUI(true);
-        //            }
-        //            else
-        //            {
-        //                grappledObject.transform.parent.gameObject.GetComponentInChildren<OneIndicator>().SetUI(false);
-        //            }
-        //        }
-        //    }
-        //}
-
         public void EscapeMoving()
         {
             hitTarget = null;
