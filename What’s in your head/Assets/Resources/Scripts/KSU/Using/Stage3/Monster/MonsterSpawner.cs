@@ -9,6 +9,7 @@ using JCW.Network;
 using YC.Photon;
 using JCW.UI.Options.InputBindings;
 using KSU.AutoAim.Object.Monster;
+using KSU.Object.Interaction;
 
 namespace KSU
 {
@@ -53,27 +54,6 @@ namespace KSU
             InitSpawner();
             StartSpawn();
             yield break;
-            //     while (true)
-            // {
-            //     yield return new WaitForSeconds(2f);
-            //     if(GameManager.Instance != null)
-            //     {
-            //         if (PhotonNetwork.IsMasterClient)
-            //         {
-            //             InitSpawner();
-            //             StartSpawn();
-            //             yield break;
-            //         }
-            //         else
-            //         {
-            //             yield break;
-            //         }
-            //     }
-            //     else
-            //     {
-            //         Debug.Log("°è¼Ó null");
-            //     }
-            // }
         }
 
         // Update is called once per frame
@@ -111,6 +91,9 @@ namespace KSU
             {
                 GameObject monster = PhotonNetwork.Instantiate(spawnedObjectDirectory, this.transform.position, this.transform.rotation, 0);
                 monster.transform.parent = this.gameObject.transform;
+                ActivationChecker checker;
+                if (monster.TryGetComponent<ActivationChecker>(out checker))
+                    checker.AddInteractingTargetObjects();
                 DefenseMonster monsterBehavior = monster.GetComponent<DefenseMonster>();
                 monsterBehavior.Disappear();
                 if (alice != null)

@@ -19,6 +19,17 @@ namespace KSU.Object.Interaction
             }
         }
 
+        public void AddSender(InteractableObject sender)
+        {
+            interactionSenders.Add(sender);
+            senderPair.Add(sender, false);
+        }
+
+        public void AddReciever(InteractingTargetObject reciever)
+        {
+            interactionRecievers.Add(reciever);
+        }
+
         public override void RecieveActivation(InteractableObject sender, bool isActive)
         {
             isActivated = true;

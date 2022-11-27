@@ -16,7 +16,7 @@ namespace KSU.Object.Interaction
         protected bool isActivated = false;
         protected PhotonView photonView;
 
-        [SerializeField] List<InteractingTargetObject> interactingTargetObjects;
+        [SerializeField] protected List<InteractingTargetObject> interactingTargetObjects;
 
         // Start is called before the first frame update
         virtual protected void Awake()

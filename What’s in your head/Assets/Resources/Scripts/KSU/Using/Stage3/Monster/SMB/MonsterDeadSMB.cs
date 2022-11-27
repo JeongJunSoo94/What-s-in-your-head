@@ -9,7 +9,7 @@ namespace KSU.AutoAim.Object.Monster.FSM
         // OnStateEnter is called when a transition starts and the state machine starts to evaluate this state
         override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
         {
-            animator.SetBool("isDead", false);
+            animator.SetBool("isDeadTrigger", false);
             GetMonsterController(animator).Dead();
         }
 

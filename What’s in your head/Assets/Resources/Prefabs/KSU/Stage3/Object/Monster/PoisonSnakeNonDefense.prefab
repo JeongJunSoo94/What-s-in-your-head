@@ -18,6 +18,7 @@ GameObject:
   - component: {fileID: 2437992015118756067}
   - component: {fileID: -1302292075034880201}
   - component: {fileID: 8468799325060863729}
+  - component: {fileID: -6645857481719854314}
   m_Layer: 15
   m_Name: PoisonSnakeNonDefense
   m_TagString: PoisonSnake
@@ -310,6 +311,9 @@ MonoBehaviour:
   - Type: 4
     SynchronizeType: 2
     Name: isChasing
+  - Type: 4
+    SynchronizeType: 0
+    Name: isDeadTrigger
   m_SynchronizeLayers:
   - SynchronizeType: 0
     LayerIndex: 0
@@ -409,6 +413,22 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &-6645857481719854314
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1954949541875803146}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3eb1f14e348706d43a1abb535926d781, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  detectingTrigger: {fileID: 0}
+  detectingRange: 0
+  interactableRange: 0
+  interactingTargetObjects: []
 --- !u!1 &1954949542032847492
 GameObject:
   m_ObjectHideFlags: 0

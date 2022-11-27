@@ -12,7 +12,6 @@ namespace JCW.Object
     public class Portal : InteractableObject
     {
         [Header("사용 키로 넘어갈 것인지")][SerializeField] bool doUseInteraction = true;
-        
 
         bool canStart = true;
         int touchCount = 0;

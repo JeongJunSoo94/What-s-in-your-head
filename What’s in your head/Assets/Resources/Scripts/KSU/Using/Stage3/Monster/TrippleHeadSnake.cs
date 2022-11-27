@@ -13,7 +13,6 @@ namespace KSU.AutoAim.Object.Monster
         [SerializeField] float rotationSpeed;
         Transform rushTarget;
         [SerializeField] GameObject rushTrigger;
-        [SerializeField] GameObject portal;
         public int rushDamage;
 
         bool isRushDelayOn = false;
@@ -33,12 +32,6 @@ namespace KSU.AutoAim.Object.Monster
         {
             base.Awake();
             InitMonster();
-        }
-
-        private void OnDisable()
-        {
-            if (portal != null)
-                portal.SetActive(true);
         }
 
         protected override void InitMonster()
