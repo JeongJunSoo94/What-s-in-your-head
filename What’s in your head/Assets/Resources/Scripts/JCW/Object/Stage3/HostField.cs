@@ -49,7 +49,7 @@ namespace JCW.Object
         WaitUntil wu;
 
         bool isFirst = true;
-        BoxCollider collider;
+        BoxCollider boxCollider;
 
         private void Awake()
         {
@@ -58,7 +58,7 @@ namespace JCW.Object
             audioSource = GetComponent<AudioSource>();
             pv = GetComponent<PhotonView>();
             SoundManager.Set3DAudio(pv.ViewID, audioSource, 0.6f, 40f);
-            collider = GetComponent<BoxCollider>();
+            boxCollider = GetComponent<BoxCollider>();
 
             animator = GetComponent<Animator>();
 
@@ -186,7 +186,7 @@ namespace JCW.Object
             {
                 isDead = true;
                 animator.Play("Destroy");
-                collider.enabled = false;
+                boxCollider.enabled = false;
                 SoundManager.Instance.Play3D("S3_ContaminationFieldPurified", pv.ViewID);
             }
         }
