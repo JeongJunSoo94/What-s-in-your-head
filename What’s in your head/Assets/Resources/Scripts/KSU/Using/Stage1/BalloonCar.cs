@@ -81,6 +81,7 @@ namespace KSU.Object.Interaction.Stage1
         {
             if(collision.gameObject.CompareTag("Platform"))
             {
+                SoundManager.Set3DAudio(pv.ViewID, audioSource, 0.2f, 50f);
                 SoundManager.Instance.Play3D_RPC("S1S1_CarDrop", pv.ViewID);
             }
         }

@@ -18,10 +18,15 @@ namespace JCW.Effect
         int curSpawnIndex = 0;
         Mesh curMesh;
 
+        WaitForSeconds remainWs;
+        WaitForSeconds spawnWs;
+
         
 
         private void Awake()
         {
+            remainWs = new(trailRemainTime);
+            spawnWs = new(trailSpawnTime);
             TrailContainer = new("TrailContainer");
             for (int i= 0 ; i<trailCount ; ++i)
             {
@@ -68,7 +73,7 @@ namespace JCW.Effect
                     skinnedMeshRenderer.BakeMesh(curMesh);
                     go.GetComponent<MeshFilter>().mesh = curMesh;
                     StartCoroutine(DeleteTrail(go));
-                    yield return new WaitForSeconds(trailSpawnTime);
+                    yield return spawnWs;
                     if (++curSpawnIndex >= trailCount)
                         curSpawnIndex = 0;
                 }
@@ -80,7 +85,7 @@ namespace JCW.Effect
         // ¿‹ªÛ ¡¶∞≈
         IEnumerator DeleteTrail(GameObject trail)
         {
-            yield return new WaitForSeconds(trailRemainTime);
+            yield return remainWs;
             trail.SetActive(false);
             objQueue.Enqueue(trail);
             yield break;
