@@ -89,15 +89,10 @@ namespace JCW.UI.InGame
         {
             if (!photonView.IsMine || !(bool)GameManager.Instance.isAlive[isNella])
                 return;
-            // 테스트용 >>============================================================
-            if (Input.GetKeyDown(KeyCode.KeypadMinus))
-                GameManager.Instance.curPlayerHP -= 4;
-            // 테스트용 <<============================================================
 
             // 기존 HP와 현재 HP 값이 달라졌을 때
             if (curHP != GameManager.Instance.curPlayerHP)
             {
-                Debug.Log("기존 HP : " + curHP + " / 현재 HP : " + GameManager.Instance.curPlayerHP);
                 // 실행 중일수도 있는 회복 코루틴 중지.
                 healTime = 0f;
                 StopCoroutine(nameof(Cure));
@@ -106,9 +101,15 @@ namespace JCW.UI.InGame
                 // 사망 시
                 if (curHP <= 0)
                 {
-                    Debug.Log("사망");
+                    if (GameManager.Instance.curSection == 1)
+                    {
+                        GetComponent<Animator>().SetBool("isDead", false);
+                        curHP = maxHP;
+                        damageList.Clear();
+                        return;
+                    }
                     // 현재 캐릭터가 넬라라면 넬라의 살아있음을 false로, 스테디라면 스테디의 살아있음을 false로 바꿈.
-                    if(!isSideView)
+                    if (!isSideView)
                         GameManager.Instance.SetAliveState(isNella, false);
                     //if(!isTopView)
                         //CameraManager.Instance.DeadCam(isNella);
@@ -261,9 +262,6 @@ namespace JCW.UI.InGame
                 stream.SendNext(bgImages[(int)BgState.DAMAGED].enabled);
                 stream.SendNext(bgImages[(int)BgState.DANGEROUS].enabled);
 
-                //stream.SendNext(charHpUI.activeSelf);
-                //stream.SendNext(reviveUI.activeSelf);
-
             }
             // 받는 사람
             else
@@ -278,9 +276,6 @@ namespace JCW.UI.InGame
                 bgImages[(int)BgState.NORMAL].enabled       = (bool)stream.ReceiveNext();
                 bgImages[(int)BgState.DAMAGED].enabled      = (bool)stream.ReceiveNext();
                 bgImages[(int)BgState.DANGEROUS].enabled    = (bool)stream.ReceiveNext();
-
-                //charHpUI.SetActive((bool)stream.ReceiveNext());
-                //reviveUI.SetActive((bool)stream.ReceiveNext());
             }
         }
     }

@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &924785504044807883
+--- !u!1 &5392910266068206934
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,39 +8,39 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 7198806806905857042}
-  - component: {fileID: 4875867158049522627}
+  - component: {fileID: 7107575650977306154}
+  - component: {fileID: 2177476147391602948}
   m_Layer: 3
-  m_Name: BridgePlatform
+  m_Name: BoxCollider
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 2147483647
   m_IsActive: 1
---- !u!4 &7198806806905857042
+--- !u!4 &7107575650977306154
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 924785504044807883}
+  m_GameObject: {fileID: 5392910266068206934}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.369, z: -0}
-  m_LocalScale: {x: 0.98, y: 0.2, z: 0.98}
+  m_LocalPosition: {x: 0, y: 0, z: -0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 5174602117386210707}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!65 &4875867158049522627
+--- !u!65 &2177476147391602948
 BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 924785504044807883}
+  m_GameObject: {fileID: 5392910266068206934}
   m_Material: {fileID: 13400000, guid: e95ff48113628b14f9cf06b2cc75d36e, type: 2}
-  m_IsTrigger: 1
+  m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
   m_Size: {x: 3.0000026, y: 0.37500224, z: 3.0000029}
@@ -56,10 +56,10 @@ GameObject:
   - component: {fileID: 5174602117386210707}
   - component: {fileID: 8097536592685892150}
   - component: {fileID: 6306391778984851196}
-  - component: {fileID: 6240657293998993982}
   - component: {fileID: 7881629468405580281}
   - component: {fileID: 7952591013630536019}
   - component: {fileID: 3687564054568136519}
+  - component: {fileID: 6704562151555743915}
   m_Layer: 3
   m_Name: BridgePlatform
   m_TagString: Untagged
@@ -79,7 +79,7 @@ Transform:
   m_LocalScale: {x: 3.8, y: 15, z: 5.5}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 7198806806905857042}
+  - {fileID: 7107575650977306154}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -133,22 +133,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!54 &6240657293998993982
-Rigidbody:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5513586378056292137}
-  serializedVersion: 2
-  m_Mass: 1
-  m_Drag: 0
-  m_AngularDrag: 0
-  m_UseGravity: 0
-  m_IsKinematic: 0
-  m_Interpolate: 0
-  m_Constraints: 126
-  m_CollisionDetection: 0
 --- !u!65 &7881629468405580281
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -157,11 +141,11 @@ BoxCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5513586378056292137}
   m_Material: {fileID: 13400000, guid: e95ff48113628b14f9cf06b2cc75d36e, type: 2}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 3.0000026, y: 0.37500224, z: 3.0000029}
-  m_Center: {x: 0, y: 0.18749632, z: 0.00000011920929}
+  m_Size: {x: 2.9, y: 0.1, z: 2.9}
+  m_Center: {x: 0, y: 0.4, z: 0.000000101042694}
 --- !u!82 &7952591013630536019
 AudioSource:
   m_ObjectHideFlags: 0
@@ -275,3 +259,25 @@ MonoBehaviour:
   destroyTime: 5
   resetTime: 7
   warnMat: {fileID: 2100000, guid: e4149755fc1d98a498388cedff353ea8, type: 2}
+--- !u!114 &6704562151555743915
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5513586378056292137}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ObservedComponentsFoldoutOpen: 1
+  Group: 0
+  prefixField: -1
+  Synchronization: 3
+  OwnershipTransfer: 0
+  observableSearch: 2
+  ObservedComponents: []
+  sceneViewId: 0
+  InstantiationId: 0
+  isRuntimeInstantiated: 0

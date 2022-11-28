@@ -40,7 +40,7 @@ namespace JCW.Dialog
             if((isNellaTrigger && other.CompareTag("Nella"))
                 || (isSteadyTrigger && other.CompareTag("Steady")))
             {
-                if(!GameManager.Instance.GetCharOnScene(true) || !GameManager.Instance.GetCharOnScene(false))
+                if(!GameManager.Instance.GetCharOnScene())
                     return;
                 if (other.GetComponent<PlayerState>().isMine && !isStart)
                 {

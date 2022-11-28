@@ -80,10 +80,8 @@ namespace JJS
                     CameraManager.Instance.cameras[1].rect = new Rect(0.5f, 0f, 0.5f, 1f);
                 }
                 else if (GameManager.Instance.curStageType == 2)
-                {
                     GameManager.Instance.isTopView = true;
-                    GameManager.Instance.MediateHP(true);
-                }
+                GameManager.Instance.MediateHP(true);
 
             }
             gameObject.SetActive(false);
@@ -151,10 +149,8 @@ namespace JJS
                         CameraManager.Instance.cameras[1].rect = new Rect(0.5f, 0f, 0.5f, 1f);
                 }
                 else if (GameManager.Instance.curStageType == 2)
-                {
                     GameManager.Instance.isTopView = true;
-                    GameManager.Instance.MediateHP(true);
-                }
+                GameManager.Instance.MediateHP(true);
             }
 
             gameObject.SetActive(false);

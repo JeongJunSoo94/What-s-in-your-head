@@ -19,6 +19,7 @@ namespace KSU.Object.Interaction.Stage1
         PhotonView pv;
 
         WaitForSeconds ws;
+        bool isFirst = false;
 
         private void Awake()
         {
@@ -79,8 +80,9 @@ namespace KSU.Object.Interaction.Stage1
 
         private void OnCollisionEnter(Collision collision)
         {
-            if(collision.gameObject.CompareTag("Platform"))
+            if(collision.gameObject.CompareTag("Platform") && !isFirst)
             {
+                isFirst = true;
                 SoundManager.Set3DAudio(pv.ViewID, audioSource, 0.2f, 50f);
                 SoundManager.Instance.Play3D_RPC("S1S1_CarDrop", pv.ViewID);
             }

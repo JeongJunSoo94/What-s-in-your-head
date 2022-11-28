@@ -14,8 +14,8 @@ namespace JCW.UI.InGame
     public class CPR : MonoBehaviour
     {
         [Header("부활 게이지 이미지")] [SerializeField] Image heartGauge;
-        [Header("부활 게이지 증가량")] [SerializeField] [Range(0f,0.05f)] float increaseValue = 0.005f;
-        [Header("버튼 입력 시 증가량")] [SerializeField] [Range(0f,0.05f)] float addIncreaseValue = 0.02f;
+        [Header("부활 게이지 증가량")] [SerializeField] [Range(0f, 0.05f)] float increaseValue = 0.005f;
+        [Header("버튼 입력 시 증가량")] [SerializeField] [Range(0f, 0.05f)] float addIncreaseValue = 0.02f;
         [Header("버튼 입력 시 재생될 비디오")] [SerializeField] VideoPlayer heartBeat;
 
         PhotonView photonView;
@@ -32,7 +32,7 @@ namespace JCW.UI.InGame
             photonView = GetComponent<PhotonView>();
             isNella = GameManager.Instance.characterOwner[PhotonNetwork.IsMasterClient];
             curPlayer = GameManager.Instance.myPlayerTF;
-            if(photonView.IsMine)
+            if (photonView.IsMine)
                 mainCam = isNella ? CameraManager.Instance.cameras[0] : CameraManager.Instance.cameras[1];
             originalPos = transform.GetChild(2).gameObject.GetComponent<RectTransform>().position;
             heartRect = transform.GetChild(2).gameObject.GetComponent<RectTransform>();
@@ -40,11 +40,14 @@ namespace JCW.UI.InGame
 
         private void OnEnable()
         {
-            // 여기서 카메라나 플레이어 움직임 막아야함
-            if(photonView.IsMine)
-            {                
+            if (!(bool)GameManager.Instance.isAlive[true] && !(bool)GameManager.Instance.isAlive[false])
+            {
+                photonView.RPC(nameof(ReloadScene), RpcTarget.AllViaServer);
+            }
+            if (photonView.IsMine)
+            {
                 mainCam.GetComponent<CinemachineBrain>().enabled = false;
-                curPlayer.GetComponent<PlayerState>().isOutOfControl = true;                
+                curPlayer.GetComponent<PlayerState>().isOutOfControl = true;
             }
             if (GameManager.Instance.isTopView)
             {
@@ -85,6 +88,16 @@ namespace JCW.UI.InGame
 
             // 아이템 UI
             transform.parent.parent.parent.GetChild(0).gameObject.SetActive(true);
+        }
+
+        [PunRPC]
+        public void ReloadScene()
+        {
+            if (PhotonNetwork.IsMasterClient)
+            {
+                PhotonNetwork.LoadLevel(4 * (GameManager.Instance.curStageIndex - 1) + 1 + GameManager.Instance.curStageType);
+                return;
+            }
         }
 
 

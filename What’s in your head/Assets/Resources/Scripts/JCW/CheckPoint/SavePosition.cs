@@ -47,8 +47,7 @@ namespace JCW.Object
             {
                 if (!firstContact)
                 {
-                    if (GameManager.Instance.isCharOnScene.Count < 2 || 
-                        !GameManager.Instance.GetCharOnScene(true) || !GameManager.Instance.GetCharOnScene(false))
+                    if (!GameManager.Instance.GetCharOnScene())
                         return;
                     if (!other.GetComponent<PlayerState>().isMine)
                         return;
