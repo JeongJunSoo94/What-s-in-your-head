@@ -41,13 +41,8 @@ namespace JCW.UI.InGame.Indicator
         {
             if (GameManager.Instance == null)
                 return;
-            if (GameManager.Instance.isTest)
-                StartCoroutine(nameof(WaitForPlayer));
-            else
-            {
-                isStart = true;
-                isNella = GameManager.Instance.characterOwner[PhotonNetwork.IsMasterClient];
-            }
+            
+            StartCoroutine(nameof(WaitForPlayer));
         }
 
         // 카메라 범위를 벗어났을 때를 위한 설정
@@ -120,8 +115,6 @@ namespace JCW.UI.InGame.Indicator
                 yield return new WaitUntil(() => GameManager.Instance.characterOwner.Count >= 1);
             else
                 yield return new WaitUntil(() => GameManager.Instance.GetCharOnScene());
-            //while (GameManager.Instance.characterOwner.Count <= 1)
-            //    yield return new WaitForSeconds(0.2f);
 
             isNella = GameManager.Instance.characterOwner[PhotonNetwork.IsMasterClient];
             isStart = true;

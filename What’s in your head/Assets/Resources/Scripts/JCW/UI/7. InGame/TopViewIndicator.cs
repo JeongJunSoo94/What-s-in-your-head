@@ -1,3 +1,4 @@
+using System.Collections;
 using Photon.Pun;
 using UnityEngine;
 using UnityEngine.UI;
@@ -23,44 +24,27 @@ namespace JCW.UI.InGame
         // 플레이어 위치
         Transform myPlayerTF;
         Transform otherPlayerTF = null;
+        WaitUntil wu;
+
+        bool isStart = false;
+        bool isNella;
 
         private void Awake()
         {
-            if(!transform.parent.GetComponent<PhotonView>().IsMine)
-            {
-                Destroy(this);
-                return;
-            }
+            wu = new(() => GameManager.Instance.GetCharOnScene());
 
             myImgTransform = transform.GetChild(0).GetChild(0).GetComponent<RectTransform>();
             otherImgTransform = transform.GetChild(0).GetChild(1).GetComponent<RectTransform>();
 
-            if (GameManager.Instance.characterOwner[PhotonNetwork.IsMasterClient])
-            {
-                myImgTransform.gameObject.GetComponent<Image>().sprite = nellaIndicator;
-                otherImgTransform.gameObject.GetComponent<Image>().sprite = steadyIndicator;
-            }
-            else
-            {
-                myImgTransform.gameObject.GetComponent<Image>().sprite = steadyIndicator;
-                otherImgTransform.gameObject.GetComponent<Image>().sprite = nellaIndicator;
-            }
-
-            myPlayerTF = transform.parent;
-            mainCamera = transform.parent.GetComponent<CameraController>().FindCamera();
-            //otherPlayerTF = GameManager.Instance.otherPlayerTF;
+            StartCoroutine(nameof(WaitForPlayer));
         }
 
         void Update()
         {
-            if(otherPlayerTF == null)
-            {
-                if (GameManager.Instance.otherPlayerTF == null)
-                    return;
-                otherPlayerTF = GameManager.Instance.otherPlayerTF;
-            }
+            if (!isStart)
+                return;
+
             // 포지션 설정
-            Debug.Log("탑 뷰 내 위치 : " + myPlayerTF.position);
             Vector3 myIndicatorPosition = mainCamera.WorldToScreenPoint(myPlayerTF.position);
             Vector3 otherIndicatorPosition = mainCamera.WorldToScreenPoint(otherPlayerTF.position);
 
@@ -75,10 +59,27 @@ namespace JCW.UI.InGame
             float otherEulerY = otherPlayerTF.rotation.eulerAngles.y > 180 ? otherPlayerTF.rotation.eulerAngles.y - 360 :
                 (otherPlayerTF.rotation.eulerAngles.y < -180 ? otherPlayerTF.rotation.eulerAngles.y + 360 : otherPlayerTF.rotation.eulerAngles.y);
 
-            // 그냥 쿼터니언으로 넣으면 왜 안되는지 알아내야함.
             myImgTransform.rotation = Quaternion.Euler(0, 0, -curEulerY);
             otherImgTransform.rotation = Quaternion.Euler(0, 0, -otherEulerY);
 
+        }
+
+        IEnumerator WaitForPlayer()
+        {
+            yield return wu;
+
+            myPlayerTF = GameManager.Instance.myPlayerTF;
+            otherPlayerTF = GameManager.Instance.otherPlayerTF;
+
+            isNella = GameManager.Instance.characterOwner[PhotonNetwork.IsMasterClient];
+
+            myImgTransform.GetComponent<Image>().sprite = isNella ? nellaIndicator : steadyIndicator;
+            otherImgTransform.GetComponent<Image>().sprite = isNella ? steadyIndicator : nellaIndicator;
+
+            mainCamera = myPlayerTF.GetComponent<CameraController>().FindCamera();
+
+            isStart = true;
+            yield break;
         }
     }
 }

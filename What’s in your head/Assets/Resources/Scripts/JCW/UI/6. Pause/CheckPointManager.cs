@@ -18,6 +18,8 @@ namespace JCW.UI
         [SerializeField] Button backMenu;
         PhotonView photonView;
 
+        bool isFirst = false;
+
         private void Awake()
         {
             photonView = PhotonView.Get(this);
@@ -38,11 +40,18 @@ namespace JCW.UI
         }
         private void OnEnable()
         {
+            if (!isFirst)
+                return;
             titleObj.SetActive(false);
             menuObj.SetActive(false);
         }
         private void OnDisable()
         {
+            if (!isFirst)
+            {
+                isFirst = true;
+                return;
+            }
             titleObj.SetActive(true);
             menuObj.SetActive(true);
         }

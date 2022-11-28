@@ -20,13 +20,14 @@ namespace JCW.UI.InGame
             photonView = GetComponent<PhotonView>();
             deadUI_Rect = transform.GetChild(0).GetComponent<RectTransform>();
             aliveUI_Rect = transform.GetChild(1).GetComponent<RectTransform>();
+            isStop = GameManager.Instance.isTopView;
         }
 
         private void OnEnable()
         {
             if(photonView.IsMine)
                 photonView.RPC(nameof(TurnOnUI_RPC), RpcTarget.AllViaServer, (bool)GameManager.Instance.isAlive[isNella]);
-            isStop = false;
+            isStop = GameManager.Instance.isTopView;
         }
 
         private void Update()

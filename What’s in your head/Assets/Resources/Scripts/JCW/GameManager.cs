@@ -113,7 +113,7 @@ public class GameManager : MonoBehaviour, IPunObservable
     }
 
     [PunRPC]
-    void MediateRevive_RPC(bool value)
+    public void MediateRevive_RPC(bool value)
     {
         reviveAllPairs[true].SetRevive(value);
         reviveAllPairs[false].SetRevive(value);
@@ -154,7 +154,7 @@ public class GameManager : MonoBehaviour, IPunObservable
     }
 
     [PunRPC]
-    void SetAlive(bool _isNella, bool _value)
+    public void SetAlive(bool _isNella, bool _value)
     {
         isAlive[_isNella] = _value;
     }

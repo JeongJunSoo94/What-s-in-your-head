@@ -114,7 +114,8 @@ namespace JCW.UI.InGame
                     }
                     // 현재 캐릭터가 넬라라면 넬라의 살아있음을 false로, 스테디라면 스테디의 살아있음을 false로 바꿈.
                     if (!isSideView)
-                        GameManager.Instance.SetAliveState(isNella, false);
+                        photonView.RPC(nameof(CheckDeadEnd), RpcTarget.AllViaServer, isNella, false);
+                        //GameManager.Instance.SetAliveState(isNella, false);
                     //if(!isTopView)
                         //CameraManager.Instance.DeadCam(isNella);
 
@@ -122,26 +123,9 @@ namespace JCW.UI.InGame
                     damageList.Clear();
                     Dead();
 
-                    if (isSideView)
-                        return;
+                    if (!isSideView)
+                        photonView.RPC(nameof(TurnOffUI), RpcTarget.AllViaServer);
 
-                    photonView.RPC(nameof(TurnOffUI), RpcTarget.AllViaServer);
-
-                    // 넬라 & 스테디 둘 다 죽었으면
-                    if (!(bool)GameManager.Instance.isAlive[true] && !(bool)GameManager.Instance.isAlive[false])
-                    {
-                        photonView.RPC(nameof(ReloadCurrentScene), RpcTarget.AllViaServer);
-                        //GameManager.Instance.MediateRevive(false);
-                        //GameManager.Instance.SetAliveState(isNella, true);
-                        //GameManager.Instance.SetAliveState(!isNella, true);
-                        //if (!GameManager.Instance.isTopView && !GameManager.Instance.isSideView)
-                        //{
-                        //    CameraManager.Instance.ReviveCam(isNella);
-                        //    CameraManager.Instance.ReviveCam(!isNella);
-                        //}                            
-                    }                        
-                    else
-                        GameManager.Instance.MediateRevive(true);
                 }
                 else
                 {
@@ -183,15 +167,35 @@ namespace JCW.UI.InGame
         }
 
         [PunRPC]
+        void CheckDeadEnd(bool isNella, bool value)
+        {
+            GameManager.Instance.SetAlive(isNella, value);
+            if (!(bool)GameManager.Instance.isAlive[true] && !(bool)GameManager.Instance.isAlive[false])
+            {                
+                ReloadCurrentScene();
+                //GameManager.Instance.MediateRevive(false);
+                //GameManager.Instance.SetAliveState(isNella, true);
+                //GameManager.Instance.SetAliveState(!isNella, true);
+                //if (!GameManager.Instance.isTopView && !GameManager.Instance.isSideView)
+                //{
+                //    CameraManager.Instance.ReviveCam(isNella);
+                //    CameraManager.Instance.ReviveCam(!isNella);
+                //}                            
+            }
+            else
+            {
+                GameManager.Instance.MediateRevive_RPC(true);
+                //GameManager.Instance.MediateRevive(true);
+            }
+        }
+
+        [PunRPC]
         void ReloadCurrentScene()
         {
             Debug.Log("둘 다 죽어있는 상태이므로 맵 부활");
             GameManager.Instance.ResetDefault();
-            if (PhotonNetwork.IsMasterClient)
-            {
-                PhotonNetwork.LoadLevel(4 * (GameManager.Instance.curStageIndex - 1) + 1 + GameManager.Instance.curStageType);
-                return;
-            }
+            --GameManager.Instance.curStageType;
+            LoadingUI.Instance.gameObject.SetActive(true);
         }
 
         [PunRPC]
@@ -259,7 +263,7 @@ namespace JCW.UI.InGame
 
         public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
         {
-            if (!GameManager.Instance.GetCharOnScene() || hpImages.Count != 2)
+            if (!GameManager.Instance.GetCharOnScene() || hpImages.Count <= 2)
                 return;
             // 보내는 사람
             if (stream.IsWriting)
@@ -280,8 +284,8 @@ namespace JCW.UI.InGame
             {
                 curHP                                       = (int)stream.ReceiveNext();
                 previousHP                                  = (int)stream.ReceiveNext();
-                hpImages[(int)HpState.NORMAL].fillAmount    = (float)stream.ReceiveNext();
 
+                hpImages[(int)HpState.NORMAL].fillAmount    = (float)stream.ReceiveNext();
                 hpImages[(int)HpState.DAMAGED].fillAmount   = (float)stream.ReceiveNext();
                 hpImages[(int)HpState.HEAL].enabled         = (bool)stream.ReceiveNext();
 

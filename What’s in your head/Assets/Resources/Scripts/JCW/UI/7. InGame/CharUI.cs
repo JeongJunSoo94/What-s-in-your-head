@@ -76,8 +76,6 @@ namespace JCW.UI.InGame
         {
             yield return new WaitUntil(() => GameManager.Instance.GetCharOnScene());
 
-            Debug.Log("ItemUI NULL¿Œ¡ˆ : " + (itemUI_RT == null));
-
             isNella = GameManager.Instance.characterOwner[PhotonNetwork.IsMasterClient];
             if (GameManager.Instance.hpAllPairs.Count < 2)
             {
