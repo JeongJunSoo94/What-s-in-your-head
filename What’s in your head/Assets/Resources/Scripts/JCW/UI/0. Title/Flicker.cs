@@ -11,39 +11,34 @@ namespace JCW.UI
         [Header("깜빡이는 속도")] [Range(0.0f,2.0f)] [SerializeField] float flickSecond = 0.5f;
         [Header("메인메뉴 오브젝트")] [SerializeField] GameObject mainMenu;
 
-        //깜빡거릴 오브젝트
-        GameObject flickObj;
-
         Image flickImg;
+
         private void Awake()
         {
-            flickObj = transform.GetChild(2).gameObject;
+            flickImg = transform.GetChild(2).GetComponent<Image>();
+            Cursor.lockState = CursorLockMode.None;
         }
 
         void Start()
         {
-            flickImg = flickObj.GetComponent<Image>();
             StartCoroutine(nameof(Flick));
         }
-
-        private void Update()
-        {
-            if (Input.anyKeyDown)
-            {
-                mainMenu.SetActive(true);
-                PhotonManager.Instance.Connect();
-                Destroy(this.gameObject);
-            }
-
-        }
-
         IEnumerator Flick()
         {
-            while (true)
+            float curTime = 0f;
+            while (!Input.anyKeyDown)
             {
-                yield return new WaitForSeconds(flickSecond);
-                flickImg.enabled = !flickImg.enabled;
+                curTime += Time.deltaTime;
+                if (curTime >= flickSecond)
+                {
+                    curTime = 0f;
+                    flickImg.enabled = !flickImg.enabled;
+                }
+                yield return null;
             }
+            mainMenu.SetActive(true);
+            PhotonManager.Instance.Connect();
+            Destroy(this.gameObject);
         }
     }
 }

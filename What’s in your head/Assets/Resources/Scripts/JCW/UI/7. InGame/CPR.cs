@@ -40,10 +40,6 @@ namespace JCW.UI.InGame
 
         private void OnEnable()
         {
-            if (!(bool)GameManager.Instance.isAlive[true] && !(bool)GameManager.Instance.isAlive[false])
-            {
-                photonView.RPC(nameof(ReloadScene), RpcTarget.AllViaServer);
-            }
             if (photonView.IsMine)
             {
                 mainCam.GetComponent<CinemachineBrain>().enabled = false;
@@ -88,16 +84,6 @@ namespace JCW.UI.InGame
 
             // æ∆¿Ã≈€ UI
             transform.parent.parent.parent.GetChild(0).gameObject.SetActive(true);
-        }
-
-        [PunRPC]
-        public void ReloadScene()
-        {
-            if (PhotonNetwork.IsMasterClient)
-            {
-                PhotonNetwork.LoadLevel(4 * (GameManager.Instance.curStageIndex - 1) + 1 + GameManager.Instance.curStageType);
-                return;
-            }
         }
 
 

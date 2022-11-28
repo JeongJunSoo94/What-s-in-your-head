@@ -226,13 +226,13 @@ namespace JJS
 
         public void TargetUpdate()
         {
-            for (int i = 0; i < hitObjs.Count; i++)
+            for (int i = 0 ; i < hitObjs.Count ; i++)
             {
                 if (hitObjs[i].gameObject.activeSelf)
                 {
                     if (hitObjs[i].targetObj.Count != 0)
                     {
-                        for (int j = 0; j < hitObjs[i].HitColliders.Length; j++)
+                        for (int j = 0 ; j < hitObjs[i].HitColliders.Length ; j++)
                         {
                             // << : 찬 수정, 부쉬 오브젝트 관련
                             if (hitObjs[i].HitColliders[j].gameObject.CompareTag("Bush"))

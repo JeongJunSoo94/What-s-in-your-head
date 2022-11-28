@@ -1,12 +1,15 @@
 using System.Collections;
 using System.Collections.Generic;
 using JCW.AudioCtrl;
+using JCW.Dialog;
+using JCW.Network;
 using JCW.UI;
 using JCW.UI.InGame;
 using JCW.UI.Options.InputBindings;
 using Photon.Pun;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using YC.CameraManager_;
 using YC.Photon;
 
 [RequireComponent(typeof(PhotonView))]
@@ -110,7 +113,7 @@ public class GameManager : MonoBehaviour, IPunObservable
     }
 
     [PunRPC]
-    void MediateRevive_RPC(bool value)
+    public void MediateRevive_RPC(bool value)
     {
         reviveAllPairs[true].SetRevive(value);
         reviveAllPairs[false].SetRevive(value);
@@ -129,6 +132,8 @@ public class GameManager : MonoBehaviour, IPunObservable
     {
         yield return new WaitUntil(() => GetCharOnScene());
         yield return new WaitUntil(() => hpAllPairs.Count == 2);
+        Debug.Log("hpAllPairs : " + (hpAllPairs.ContainsKey(true) ? hpAllPairs[true] : "hpAllPairs[true]값이 없어요 - isMasterClient : " + PhotonNetwork.IsMasterClient));
+        Debug.Log("hpAllPairs : " + (hpAllPairs.ContainsKey(false) ? hpAllPairs[false] : "hpAllPairs[false]값이 없어요- isMasterClient : " + PhotonNetwork.IsMasterClient));
         photonView.RPC(nameof(MediateHP_RPC), RpcTarget.AllViaServer, value);
         yield break;
     }
@@ -149,7 +154,7 @@ public class GameManager : MonoBehaviour, IPunObservable
     }
 
     [PunRPC]
-    void SetAlive(bool _isNella, bool _value)
+    public void SetAlive(bool _isNella, bool _value)
     {
         isAlive[_isNella] = _value;
     }
@@ -207,33 +212,15 @@ public class GameManager : MonoBehaviour, IPunObservable
     [PunRPC]
     void GoMainMenu()
     {
-
-        pauseUI.SetActive(false);
-        curStageIndex = 0;
-        curStageType = 0;
-        LoadingUI.Instance.isMainTitle = true;
-        LoadingUI.Instance.gameObject.SetActive(true);
-        DestroyStayingObj();
-    }
-
-    public void DonDestroy(Object obj)
-    {
-        DontDestroyOnLoad(obj);
-        stayingOnSceneList.Add(obj);
-    }
-
-    public void DestroyStayingObj_RPC()
-    {
-        photonView.RPC(nameof(DestroyStayingObj), RpcTarget.AllViaServer);
-    }
-    [PunRPC]
-    public void DestroyStayingObj()
-    {
-        for (int i=0 ; i<stayingOnSceneList.Count ; ++i)
-        {
-            Destroy(stayingOnSceneList[i]);
-        }
-        stayingOnSceneList.Clear();
+        Destroy(PhotonManager.Instance.gameObject);
+        Destroy(CameraManager.Instance.gameObject);
+        Destroy(DialogManager.Instance.gameObject);
+        Destroy(SoundManager.Instance.gameObject);
+        Destroy(pauseUI);
+        Destroy(LoadingUI.Instance.gameObject);
+        if (PhotonNetwork.IsMasterClient)
+            PhotonNetwork.LoadLevel(0);
+        Destroy(GameManager.Instance.gameObject);
     }
 
     public void ResetDefault_RPC()

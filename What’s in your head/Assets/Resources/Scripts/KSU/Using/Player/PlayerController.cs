@@ -158,6 +158,7 @@ namespace KSU
             if (!photonView.IsMine || characterState.isStopped)
             {
                 playerRigidbody.velocity = Vector3.zero;
+                //ResetMoveSound();
                 return;
             }
             if (characterState.isRiding)
@@ -165,7 +166,7 @@ namespace KSU
                 return;
             }
             TakeRotation();
-            Move();
+            Move();            
         }
 
         public void InitController()
@@ -532,6 +533,7 @@ namespace KSU
         {
             if (characterState.isOutOfControl)
             {
+                //ResetMoveSound();
                 moveVec.y += gravity * Time.fixedDeltaTime;
                 if (moveVec.y < terminalSpeed)
                 {
@@ -907,7 +909,8 @@ namespace KSU
 
         public void ResetMoveSound()
         {
-            SoundManager.Instance.StopMoveEffect();
+            if(SoundManager.Instance != null)
+                SoundManager.Instance.StopMoveEffect();
             isPlayingWalkSound = false;
             isPlayingRunSound = false;
         }

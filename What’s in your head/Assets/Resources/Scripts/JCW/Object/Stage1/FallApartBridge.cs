@@ -12,13 +12,12 @@ namespace JCW.Object.Stage1
     public class FallApartBridge : MonoBehaviour
     {
         [Header("위험 전조 신호 표시 시간")] [SerializeField] float warnTime = 3f;
-        [Header("위험 전조 깜빡거릴 시간 간격")] [SerializeField] float flickTime = 0.5f;
+        [Header("위험 전조 깜빡거릴 시간 간격")] [SerializeField] float flickTime = 0.1f;
         [Header("몇 초 후 붕괴되는 지")] [SerializeField] float destroyTime = 5f;
         [Header("붕괴 후 재생성되는 시간")] [SerializeField] float resetTime = 7f;
-        [Header("경고 메테리얼")] [SerializeField] Material warnMat;
 
         MeshRenderer meshRenderer;
-        Material normalMat;
+        MeshRenderer meshRenderer_Blink;
         AudioSource audioSource;
         BoxCollider boxCollider;
 
@@ -29,8 +28,8 @@ namespace JCW.Object.Stage1
         private void Awake()
         {
             meshRenderer = GetComponent<MeshRenderer>();
+            meshRenderer_Blink = transform.GetChild(1).GetComponent<MeshRenderer>();
             boxCollider = transform.GetChild(0).GetComponent<BoxCollider>();
-            normalMat = meshRenderer.sharedMaterial;
             audioSource = GetComponent<AudioSource>();
             pv = GetComponent<PhotonView>();
             SoundManager.Set3DAudio(pv.ViewID, audioSource, 1f, 50f);
@@ -40,6 +39,7 @@ namespace JCW.Object.Stage1
         {
             if (other.CompareTag("Nella") || other.CompareTag("Steady"))
             {
+                other.GetComponent<CameraController>().ShakeCamera(true);
                 if (!isStart)
                 {
                     isStart = true;
@@ -65,7 +65,6 @@ namespace JCW.Object.Stage1
             SoundManager.Instance.Play3D_RPC("S1S2_RainBowBridgeBroken2", pv.ViewID);
 
             // 여기서 카메라 흔들림 넣으면 될듯
-            other.GetComponent<CameraController>().ShakeCamera(true);
 
             while (curTime < destroyTime)
             {
@@ -76,7 +75,8 @@ namespace JCW.Object.Stage1
                     if (curFlickTime > flickTime)
                     {
                         curFlickTime = 0f;
-                        meshRenderer.sharedMaterial = isNormal ? warnMat : normalMat;
+                        meshRenderer.enabled = !isNormal;
+                        meshRenderer_Blink.enabled = isNormal;
                         isNormal = !isNormal;
                     }
                 }
@@ -84,6 +84,7 @@ namespace JCW.Object.Stage1
             }
             SoundManager.Instance.Play3D_RPC("S1S2_RainBowBridgeBroken", pv.ViewID);
             meshRenderer.enabled = false;
+            meshRenderer_Blink.enabled = false;
             boxCollider.enabled = false;
             StartCoroutine(nameof(ResetBridge));
             yield break;
@@ -98,8 +99,8 @@ namespace JCW.Object.Stage1
                 curTime += Time.deltaTime;
                 yield return null;
             }
-            meshRenderer.sharedMaterial = normalMat;
             meshRenderer.enabled = true;
+            meshRenderer_Blink.enabled = false;
             boxCollider.enabled = true;
             isStart = false;
             yield break;

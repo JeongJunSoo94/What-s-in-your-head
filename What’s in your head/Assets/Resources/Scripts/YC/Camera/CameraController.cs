@@ -276,13 +276,11 @@ namespace YC.Camera_
             }
 
             // << : Set CinemachineCollider
-            backCamCol.m_DistanceLimit = 1f;
             backCamCol.m_SmoothingTime = 0.01f;
             backCamCol.m_Damping = 0.1f;
             backCamCol.m_DampingWhenOccluded = 0.1f;
             backCamCol.m_Strategy = CinemachineCollider.ResolutionStrategy.PullCameraForward;
 
-            sholderCamCol.m_DistanceLimit = 1f;
             sholderCamCol.m_SmoothingTime = 0.01f;
             sholderCamCol.m_Damping = 0.1f;
             sholderCamCol.m_DampingWhenOccluded = 0.1f;
@@ -325,7 +323,7 @@ namespace YC.Camera_
 
             if (mainCam.transform.childCount != 0) // << : Rig 삭제 (MainCam)
             {
-                for (int i = 0; i < mainCam.transform.childCount; ++i)
+                for (int i = 0 ; i < mainCam.transform.childCount ; ++i)
                 {
                     Destroy(mainCam.transform.GetChild(i).gameObject);
                 }
@@ -348,7 +346,7 @@ namespace YC.Camera_
             //}
 
 
-            for (int i = 0; i < 3; ++i)
+            for (int i = 0 ; i < 3 ; ++i)
             {
                 if (backCine.GetRig(i))
                 {
@@ -391,9 +389,9 @@ namespace YC.Camera_
             if (sholderAxisY_MaxUp == 0) sholderAxisY_MaxUp = 0.2f;
             if (sholderAxisY_MaxDown == 0) sholderAxisY_MaxDown = 0.5f;
 
-            
+
             InitNoiseSet();
-            
+
 
             // << : 카메라 State 세팅
             curCam = new CamState();
@@ -420,7 +418,7 @@ namespace YC.Camera_
             // Back Cam
             if (backCam.GetComponent<CinemachineFreeLook>().GetRig(0).GetCinemachineComponent<CinemachineBasicMultiChannelPerlin>() == null)
             {
-                for (int i = 0; i < 3; ++i)
+                for (int i = 0 ; i < 3 ; ++i)
                 {
                     backCam.GetComponent<CinemachineFreeLook>().GetRig(i).AddCinemachineComponent<CinemachineBasicMultiChannelPerlin>();
                     backCam.GetComponent<CinemachineFreeLook>().GetRig(i).GetCinemachineComponent<CinemachineBasicMultiChannelPerlin>().m_NoiseProfile
@@ -428,12 +426,12 @@ namespace YC.Camera_
                 }
             }
 
-            for (int i = 0; i < 3; ++i)
+            for (int i = 0 ; i < 3 ; ++i)
             {
                 listBackCBMCP.Add(backCam.GetComponent<CinemachineFreeLook>().GetRig(i).GetCinemachineComponent<CinemachineBasicMultiChannelPerlin>());
             }
 
-            for (int i = 0; i < 3; ++i)
+            for (int i = 0 ; i < 3 ; ++i)
             {
                 backCam.GetComponent<CinemachineFreeLook>().GetRig(i).GetCinemachineComponent<CinemachineBasicMultiChannelPerlin>().m_FrequencyGain = 0;
                 backCam.GetComponent<CinemachineFreeLook>().GetRig(i).GetCinemachineComponent<CinemachineBasicMultiChannelPerlin>().m_AmplitudeGain = 0;
@@ -442,7 +440,7 @@ namespace YC.Camera_
             // Sholder Cam
             if (sholderCam.GetComponent<CinemachineFreeLook>().GetRig(0).GetCinemachineComponent<CinemachineBasicMultiChannelPerlin>() == null)
             {
-                for (int i = 0; i < 3; ++i)
+                for (int i = 0 ; i < 3 ; ++i)
                 {
                     sholderCam.GetComponent<CinemachineFreeLook>().GetRig(i).AddCinemachineComponent<CinemachineBasicMultiChannelPerlin>();
                     sholderCam.GetComponent<CinemachineFreeLook>().GetRig(i).GetCinemachineComponent<CinemachineBasicMultiChannelPerlin>().m_NoiseProfile
@@ -450,12 +448,12 @@ namespace YC.Camera_
                 }
             }
 
-            for (int i = 0; i < 3; ++i)
+            for (int i = 0 ; i < 3 ; ++i)
             {
                 listSholderCBMCP.Add(sholderCam.GetComponent<CinemachineFreeLook>().GetRig(i).GetCinemachineComponent<CinemachineBasicMultiChannelPerlin>());
             }
 
-            for (int i = 0; i < 3; ++i)
+            for (int i = 0 ; i < 3 ; ++i)
             {
                 sholderCam.GetComponent<CinemachineFreeLook>().GetRig(i).GetCinemachineComponent<CinemachineBasicMultiChannelPerlin>().m_FrequencyGain = 0;
                 sholderCam.GetComponent<CinemachineFreeLook>().GetRig(i).GetCinemachineComponent<CinemachineBasicMultiChannelPerlin>().m_AmplitudeGain = 0;
@@ -717,14 +715,6 @@ namespace YC.Camera_
             camList[(int)curCam].GetComponent<CinemachineFreeLook>().m_Lens.FieldOfView = backViewFOV;
 
             OnOffCamera(backCam);
-        }
-
-        public void SetCinemachineColliderDis(float dis)  
-        {
-            if (!pv.IsMine) return;
-
-            backCam.GetComponent<CinemachineCollider>().m_DistanceLimit = dis;
-            sholderCam.GetComponent<CinemachineCollider>().m_DistanceLimit = dis;
         }
 
         // ====================  [Top View 함수]  ==================== //
@@ -1314,7 +1304,7 @@ namespace YC.Camera_
                         CBMCP.m_FrequencyGain = FrequebctGain;
                     }
                 }
-                else if(curCam == CamState.sholder)
+                else if (curCam == CamState.sholder)
                 {
 
                     foreach (CinemachineBasicMultiChannelPerlin CBMCP in listSholderCBMCP)
@@ -1345,7 +1335,7 @@ namespace YC.Camera_
             float initialVlaue = 0;
 
             if (curCam == CamState.back)
-                 initialVlaue = listBackCBMCP[0].m_AmplitudeGain;
+                initialVlaue = listBackCBMCP[0].m_AmplitudeGain;
             else if (curCam == CamState.sholder)
                 initialVlaue = listSholderCBMCP[0].m_AmplitudeGain;
 
@@ -1363,7 +1353,7 @@ namespace YC.Camera_
                 if (curValue < 0)
                     curValue = 0;
 
-                if(curCam == CamState.back)
+                if (curCam == CamState.back)
                 {
                     foreach (CinemachineBasicMultiChannelPerlin CBMCP in listBackCBMCP)
                     {
