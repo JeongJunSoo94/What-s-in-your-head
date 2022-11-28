@@ -18,12 +18,14 @@ public class MazeDoorController : MonoBehaviour
     AudioSource audioSource;
     PhotonView pv;
 
+    BoxCollider topCol;
 
     private void Awake()
     {
         originPosY = this.gameObject.transform.position.y;
         audioSource = this.gameObject.GetComponent<AudioSource>();
         pv = this.gameObject.GetComponent<PhotonView>();
+        topCol = this.gameObject.transform.GetChild(2).GetComponent<BoxCollider>();
     }
 
     private void Start()
@@ -65,6 +67,8 @@ public class MazeDoorController : MonoBehaviour
 
         if (open)
         {
+            topCol.enabled = false;
+
             float curPosY = this.gameObject.transform.position.y;
             float targetPosY = originPosY - height;
 
@@ -86,6 +90,7 @@ public class MazeDoorController : MonoBehaviour
         else
         {
             float curPosY = this.gameObject.transform.position.y;
+            topCol.enabled = true;
 
             while (curPosY < originPosY)
             {

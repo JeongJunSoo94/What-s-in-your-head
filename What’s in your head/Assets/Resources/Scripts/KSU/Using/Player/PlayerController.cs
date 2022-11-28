@@ -155,7 +155,7 @@ namespace KSU
 
         private void FixedUpdate()
         {
-            if (!photonView.IsMine || characterState.isStopped )
+            if (!photonView.IsMine || characterState.isStopped)
             {
                 playerRigidbody.velocity = Vector3.zero;
                 return;
@@ -203,7 +203,7 @@ namespace KSU
             playerAnimator.SetFloat("HorizonVelocity", 0f);
             playerAnimator.SetFloat("DistY", 0f);
             playerAnimator.SetFloat("moveToRailSpeed", 0f);
-            
+
             switch (this.gameObject.tag)
             {
                 case "Nella":
@@ -246,7 +246,7 @@ namespace KSU
             }
             characterState.CheckMove(playerRigidbody.velocity);
         }
-        
+
 
         public void ResetLocalPosition()
         {
@@ -278,7 +278,7 @@ namespace KSU
             InitInteraction();
             InitController();
             InitAnimatorParam();
-           
+
 
 
             characterState.InitState(true, false);
@@ -459,12 +459,12 @@ namespace KSU
                 return;
             }
 
-            if (characterState.top||GameManager.Instance.isSideView)
+            if (characterState.top || GameManager.Instance.isSideView)
             {
-                if(!playerMouse.notRotatoin)
+                if (!playerMouse.notRotatoin)
                     RotateTop();
             }
-            else if(characterState.isInMaze)
+            else if (characterState.isInMaze)
             {
                 RotateInMaze();
             }
@@ -639,7 +639,7 @@ namespace KSU
                     moveVec.y = playerRigidbody.velocity.y + gravity * Time.fixedDeltaTime;
             }
 
-            if(characterState.IsGrounded)
+            if (characterState.IsGrounded)
             {
                 playerRigidbody.velocity = moveVec;
             }
@@ -701,8 +701,8 @@ namespace KSU
             playerCapsuleCollider.enabled = false;
             InitInteraction();
             EscapeInteraction();
-
-            if(characterState.isMine)
+            playerMouse.InitMouseController();
+            if (characterState.isMine)
             {
                 if (isNella)
                 {
@@ -762,7 +762,7 @@ namespace KSU
                 case "Trampolin":
                     {
                         InputCustomJump(trampolinSpeed);
-                        if(characterState.isMine)
+                        if (characterState.isMine)
                         {
                             Object.SwitchingTrampolin trampolin;
                             if (collision.gameObject.TryGetComponent<Object.SwitchingTrampolin>(out trampolin))
@@ -785,7 +785,7 @@ namespace KSU
         public void GetDamage(int damage, DamageType type, Vector3 colliderPos, float knockBackSpeed)
         {
             string damageTrigger = "DeadTrigger";
-            switch(type)
+            switch (type)
             {
                 case DamageType.Attacked:
                     damageTrigger = "AttackedTrigger";
@@ -798,7 +798,7 @@ namespace KSU
                     break;
             }
 
-            if(!playerAnimator.GetBool("isAttacked") && !playerAnimator.GetBool("isKnockBack") && !playerAnimator.GetBool("isDead"))
+            if (!playerAnimator.GetBool("isAttacked") && !playerAnimator.GetBool("isKnockBack") && !playerAnimator.GetBool("isDead"))
             {
                 GameManager.Instance.curPlayerHP -= damage;
                 if (GameManager.Instance.curPlayerHP <= 0)
@@ -833,7 +833,7 @@ namespace KSU
                 }
             }
         }
-        
+
         public void GetDamage(int damage, DamageType type)
         {
             if (!photonView.IsMine)
