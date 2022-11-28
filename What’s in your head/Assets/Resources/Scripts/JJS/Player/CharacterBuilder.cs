@@ -68,6 +68,7 @@ namespace JJS
             if (stage == 2)
             {
                 GameManager.Instance.isSideView = true;
+                GameManager.Instance.myPlayerTF.GetComponent<CameraController>().SetCinemachineColliderDis(0);
             }
             else if (stage == 3)
             {
@@ -78,10 +79,13 @@ namespace JJS
                 {
                     CameraManager.Instance.cameras[0].rect = new Rect(0f, 0f, 0.5f, 1f);
                     CameraManager.Instance.cameras[1].rect = new Rect(0.5f, 0f, 0.5f, 1f);
+
+                    GameManager.Instance.myPlayerTF.GetComponent<CameraController>().SetCinemachineColliderDis(1);
                 }
                 else if (GameManager.Instance.curStageType == 2)
                     GameManager.Instance.isTopView = true;
                 GameManager.Instance.MediateHP(true);
+
 
             }
             gameObject.SetActive(false);
