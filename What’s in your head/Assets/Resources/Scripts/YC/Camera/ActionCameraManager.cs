@@ -42,7 +42,7 @@ namespace YC.Camera_
         {
             yield return new WaitUntil(() => GameManager.Instance.GetCharOnScene());
 
-            yield return new WaitForSeconds(0.2f);
+            //yield return new WaitForSeconds(0.2f);
             objList[0].SetActive(true);
             if (pv.IsMine)
                 pv.RPC(nameof(InitCamera), RpcTarget.AllViaServer, true);

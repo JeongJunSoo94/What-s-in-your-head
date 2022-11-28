@@ -18,9 +18,12 @@ namespace JJS
         //public SteadyGrappleAction grapple;
         [HideInInspector] public SteadyAutoAimAction autoAimWeapon;
 
+        CameraController cameraController;
+
         private void Awake()
         {
-            cameraMain = this.gameObject.transform.GetComponent<CameraController>().FindCamera(); // 멀티용
+            cameraController = gameObject.transform.GetComponent<CameraController>();
+            cameraMain = cameraController.FindCamera(); // 멀티용
 
             SetAimWeapon();
 
@@ -109,14 +112,14 @@ namespace JJS
 
         public void ResetWeapon_RPC()
         {
-            photonView.RPC(nameof(ResetWeapon),RpcTarget.AllViaServer);
+            photonView.RPC(nameof(ResetWeapon), RpcTarget.AllViaServer);
         }
 
         [PunRPC]
 
         private void ResetWeapon()
         {
-            autoAimWeapon.ResetAutoAimWeapon();            
+            autoAimWeapon.ResetAutoAimWeapon();
         }
 
         public void SetAimWeapon()
@@ -138,11 +141,23 @@ namespace JJS
             notRotatoin = false;
             glass.StopBeam();
         }
+
         public void Shoot()
+        {
+            if (photonView.IsMine)
+            {
+                photonView.RPC(nameof(StartBeam), RpcTarget.AllViaServer);
+            }
+        }
+
+        [PunRPC]
+        public void StartBeam()
         {
             notRotatoin = true;
             glass.Shoot();
         }
+
+
         public override void AimUpdate(int type = 0)
         {
             glass.HitLine(type);
@@ -150,6 +165,12 @@ namespace JJS
         public override bool GetCustomInfo(AutoAimTargetType autoAimTargetType)
         {
             return autoAimWeapon.GetWhetherHit(autoAimTargetType);
+        }
+
+        public override void InitMouseController()
+        {
+            StopBeam();
+            cameraController.SetSteadyBeam(false);
         }
     }
 
