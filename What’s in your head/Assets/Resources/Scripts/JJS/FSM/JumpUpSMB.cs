@@ -46,6 +46,8 @@ namespace JJS
                 animator.SetBool("isAir", false);
                 animator.SetBool("isJump", false);
             }
+            if (animator.GetBool("isDash"))
+                animator.SetBool("isDash", false);
             if (GetPlayerController(animator).characterState.IsAirJumping)
             {
                 animator.SetBool("isAirJump", true);
