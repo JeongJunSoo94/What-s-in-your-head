@@ -7,77 +7,76 @@ namespace KSU.Object.Interaction.Stage1
 {
     public class CatWheel : InteractingTargetObject
     {
-        //[SerializeField] List<InteractableObject> forwardInteractionSenders;
-        //[SerializeField] List<InteractableObject> backwardInteractionSenders;
+        [SerializeField] List<InteractableObject> forwardInteractionSenders;
+        [SerializeField] List<InteractableObject> backwardInteractionSenders;
         [SerializeField] Transform cylinder;
         public float rotatingSpeed = 20f;
-
-        //Dictionary<InteractableObject, bool> forwardSenderPair = new();
-        //Dictionary<InteractableObject, bool> backwardSenderPair = new();
+        public float pushPower = 80f;
+        Dictionary<InteractableObject, bool> forwardSenderPair = new();
+        Dictionary<InteractableObject, bool> backwardSenderPair = new();
 
         Rigidbody objRigidbody;
 
         Vector3 curRot;
-        //bool isMoving = false;
-        //int power = 0;
+
+        public int power = 0;
+
+        PhotonView photonView;
 
         // Start is called before the first frame update
         protected virtual void Start()
         {
             objRigidbody = GetComponent<Rigidbody>();
             curRot = cylinder.rotation.eulerAngles;
-            //foreach (var sender in forwardInteractionSenders)
-            //{
-            //    forwardSenderPair.Add(sender, false);
-            //}
+            photonView = GetComponent<PhotonView>();
+            foreach (var sender in forwardInteractionSenders)
+            {
+                (sender as PushablePlate).standardVector = transform.forward;
+                forwardSenderPair.Add(sender, false);
+            }
 
-            //foreach (var sender in backwardInteractionSenders)
-            //{
-            //    backwardSenderPair.Add(sender, false);
-            //}
+            foreach (var sender in backwardInteractionSenders)
+            {
+                (sender as PushablePlate).standardVector = -transform.forward;
+                backwardSenderPair.Add(sender, false);
+            }
         }
 
         private void Update()
         {
-            Roll();
+            if (photonView.IsMine)
+            {
+                power = 0;
+                foreach (var interactionSender in forwardInteractionSenders)
+                {
+                    power += (interactionSender as PushablePlate).pushingNum;
+                }
+
+                foreach (var interactionSender in backwardInteractionSenders)
+                {
+                    power -= (interactionSender as PushablePlate).pushingNum;
+                }
+                objRigidbody.AddForce(transform.forward * power * pushPower);
+                Roll();
+            }
         }
 
-        //public override void RecieveActivation(InteractableObject sender, bool isActive)
-        //{
-        //    if(forwardInteractionSenders.Contains(sender))
-        //    {
-        //        forwardSenderPair[sender] = isActive;
-        //    }
-        //    else if(backwardInteractionSenders.Contains(sender))
-        //    {
-        //        backwardSenderPair[sender] = isActive;
-        //    }
-
-        //    foreach (var interactionSender in forwardInteractionSenders)
-        //    {
-        //        if (forwardSenderPair[interactionSender])
-        //        {
-        //            power++;
-        //        }
-        //    }
-
-        //    foreach (var interactionSender in backwardInteractionSenders)
-        //    {
-        //        if (backwardSenderPair[interactionSender])
-        //        {
-        //            power--;
-        //        }
-        //    }
-
-        //    if (power == 0)
-        //        isMoving = false;
-        //    else
-        //        isMoving = true;
-        //}
+        public override void RecieveActivation(InteractableObject sender, bool isActive)
+        {
+            power = 0;
+            if (forwardInteractionSenders.Contains(sender))
+            {
+                forwardSenderPair[sender] = isActive;
+            }
+            else if (backwardInteractionSenders.Contains(sender))
+            {
+                backwardSenderPair[sender] = isActive;
+            }
+        }
 
         void Roll()
         {
-            if(objRigidbody.velocity.magnitude > 0.2f)
+            if (objRigidbody.velocity.magnitude > 0.05f)
             {
                 if (Vector3.Angle(objRigidbody.velocity, transform.forward) < 90f)
                 {
