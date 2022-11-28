@@ -44,7 +44,7 @@ namespace JJS
             player = GetComponent<PlayerController>();
             canSwap = true;
             canAim = true;
-            if (weaponInfo.Length!=0)
+            if (weaponInfo.Length != 0)
                 weaponInfo[0].weapon.SetActive(true);
 
         }
@@ -53,7 +53,7 @@ namespace JJS
         {
             gun = GetComponent<WaterGun>();
             if (gun != null)
-            { 
+            {
                 gun.mainCamera = cameraMain;
                 gun.mousePoint = point;
             }
@@ -62,16 +62,6 @@ namespace JJS
         public override void AimUpdate(int type = 0)
         {
             gun.ShootLine(type);
-        }
-
-        private void Update()
-        {
-            if (GameManager.Instance.curPlayerHP <= 0
-                && GameManager.Instance.curStageIndex == 2)
-            {
-                if(photonView.IsMine)
-                    photonView.RPC(nameof(RPCInitSinging), RpcTarget.AllViaServer);
-            }
         }
 
         private void FixedUpdate()
@@ -124,14 +114,14 @@ namespace JJS
                                 if (gun.shootEnable && canAim)
                                 {
                                     gun.ShootCoroutineEnable();
-                                    photonView.RPC(nameof(SetWeaponEnable), RpcTarget.AllViaServer,true);
+                                    photonView.RPC(nameof(SetWeaponEnable), RpcTarget.AllViaServer, true);
                                 }
                             }
                             else
                             {
                                 if (clickLeft)
                                 {
-                                    photonView.RPC(nameof(SetWeaponEnable), RpcTarget.AllViaServer,false);
+                                    photonView.RPC(nameof(SetWeaponEnable), RpcTarget.AllViaServer, false);
                                 }
                             }
                         }
@@ -149,7 +139,7 @@ namespace JJS
                               && !player.characterState.IsDashing && !player.characterState.IsAirDashing
                               && !player.playerAnimator.GetBool("isDead"))
                         {
-                            if (KeyManager.Instance.GetKey(PlayerAction.Fire) && !weaponInfo[GetUseWeapon()].canAim && GameManager.Instance.curPlayerHP>0)
+                            if (KeyManager.Instance.GetKey(PlayerAction.Fire) && !weaponInfo[GetUseWeapon()].canAim && GameManager.Instance.curPlayerHP > 0)
                             {
                                 photonView.RPC(nameof(SetWeaponEnable), RpcTarget.AllViaServer, true);
                             }
@@ -234,20 +224,15 @@ namespace JJS
             OnDisableObject(index);
         }
 
-        public void RPCInitSinging()
-        {
-            singing.InitSinging();
-        }
-
         public void TargetUpdate()
         {
-            for (int i = 0; i < hitObjs.Count; i++)
+            for (int i = 0 ; i < hitObjs.Count ; i++)
             {
                 if (hitObjs[i].gameObject.activeSelf)
                 {
                     if (hitObjs[i].targetObj.Count != 0)
                     {
-                        for (int j = 0; j < hitObjs[i].HitColliders.Length; j++)
+                        for (int j = 0 ; j < hitObjs[i].HitColliders.Length ; j++)
                         {
                             // << : 찬 수정, 부쉬 오브젝트 관련
                             if (hitObjs[i].HitColliders[j].gameObject.CompareTag("Bush"))
@@ -263,6 +248,11 @@ namespace JJS
                     }
                 }
             }
+        }
+
+        public override void InitMouseController()
+        {
+            singing.InitSinging();
         }
     }
 

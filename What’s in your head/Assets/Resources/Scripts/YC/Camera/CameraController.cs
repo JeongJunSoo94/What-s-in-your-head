@@ -76,11 +76,14 @@ namespace YC.Camera_
         [Header("[스테디 빔, 카메라 흔들림 빈도]")]
         [SerializeField] [Range(0, 5)] float FrequebctGain = 1.5f;
 
-        List<CinemachineBasicMultiChannelPerlin> listSteadyCBMCP;
+        List<CinemachineBasicMultiChannelPerlin> listSholderCBMCP;
+        List<CinemachineBasicMultiChannelPerlin> listBackCBMCP;
 
         [HideInInspector] public bool canShake = true; // 옵션 스테디 흔들림 여부
         bool wasShaked = false;
         bool isShakedFade = false;
+
+        Coroutine ShakeCoroutine;
         [Space]
         [Space]
 
@@ -157,7 +160,7 @@ namespace YC.Camera_
         [Header("[Aim UI]")]
         public GameObject aimUI;
 
-        void Awake()  
+        void Awake()
         {
             pv = GetComponent<PhotonView>();
             if (pv) pv.ObservedComponents.Add(this);
@@ -175,7 +178,7 @@ namespace YC.Camera_
         }
 
 
-        void FixedUpdate()   
+        void FixedUpdate()
         {
             if (!pv.IsMine) return;
 
@@ -220,7 +223,7 @@ namespace YC.Camera_
                 if (wasEndSet && playerState.IsAirDashing)
                     AirDashFollow();
 
-                if (isLower) 
+                if (isLower)
                     LowerPlayerFollow();
             }
             else if (!isJumping && !isJumpLerp)
@@ -283,7 +286,7 @@ namespace YC.Camera_
             sholderCamCol.m_DampingWhenOccluded = 0.1f;
             sholderCamCol.m_Strategy = CinemachineCollider.ResolutionStrategy.PullCameraForward;
 
-            
+
             followObj = Instantiate(CineFollowObj_Back, player.transform.position + CineFollowObj_Back.transform.position, player.transform.rotation).GetComponent<Transform>();
             lookatBackObj = Instantiate(CineLookObj_Back, player.transform.position + CineLookObj_Back.transform.position, player.transform.rotation).GetComponent<Transform>();
             lookatObjOriginY = CineLookObj_Back.transform.position.y;
@@ -313,14 +316,14 @@ namespace YC.Camera_
             if (!pv.IsMine) return;
 
             float zero = 0;
-            float offSetYInitValue = 2.5f;
+            //float offSetYInitValue = 2.5f;
 
             CinemachineFreeLook backCine = backCam.GetComponent<CinemachineFreeLook>();
             CinemachineFreeLook sholderCine = sholderCam.GetComponent<CinemachineFreeLook>();
 
             if (mainCam.transform.childCount != 0) // << : Rig 삭제 (MainCam)
             {
-                for (int i = 0; i < mainCam.transform.childCount; ++i)
+                for (int i = 0 ; i < mainCam.transform.childCount ; ++i)
                 {
                     Destroy(mainCam.transform.GetChild(i).gameObject);
                 }
@@ -343,7 +346,7 @@ namespace YC.Camera_
             //}
 
 
-            for (int i = 0; i < 3; ++i)
+            for (int i = 0 ; i < 3 ; ++i)
             {
                 if (backCine.GetRig(i))
                 {
@@ -386,36 +389,9 @@ namespace YC.Camera_
             if (sholderAxisY_MaxUp == 0) sholderAxisY_MaxUp = 0.2f;
             if (sholderAxisY_MaxDown == 0) sholderAxisY_MaxDown = 0.5f;
 
-            // << : 스테디 빔 흔들림 설정
-            if (this.gameObject.CompareTag("Steady"))
-            {
-                listSteadyCBMCP = new List<CinemachineBasicMultiChannelPerlin>();
 
-                if (AmplitudeGain == 0) AmplitudeGain = 1;
-                if (FrequebctGain == 0) FrequebctGain = 2;
+            InitNoiseSet();
 
-                // << : 동적으로 노이즈 프로파일 추가
-                if (sholderCam.GetComponent<CinemachineFreeLook>().GetRig(0).GetCinemachineComponent<CinemachineBasicMultiChannelPerlin>() == null)
-                {
-                    for (int i = 0; i < 3; ++i)
-                    {
-                        sholderCam.GetComponent<CinemachineFreeLook>().GetRig(i).AddCinemachineComponent<CinemachineBasicMultiChannelPerlin>();
-                        sholderCam.GetComponent<CinemachineFreeLook>().GetRig(i).GetCinemachineComponent<CinemachineBasicMultiChannelPerlin>().m_NoiseProfile
-                            = NoiseProfile;
-                    }
-                }
-
-                for (int i = 0; i < 3; ++i)
-                {
-                    listSteadyCBMCP.Add(sholderCam.GetComponent<CinemachineFreeLook>().GetRig(i).GetCinemachineComponent<CinemachineBasicMultiChannelPerlin>());
-                }
-
-                for (int i = 0; i < 3; ++i)
-                {
-                    sholderCam.GetComponent<CinemachineFreeLook>().GetRig(i).GetCinemachineComponent<CinemachineBasicMultiChannelPerlin>().m_FrequencyGain = 0;
-                    sholderCam.GetComponent<CinemachineFreeLook>().GetRig(i).GetCinemachineComponent<CinemachineBasicMultiChannelPerlin>().m_AmplitudeGain = 0;
-                }
-            }
 
             // << : 카메라 State 세팅
             curCam = new CamState();
@@ -427,6 +403,61 @@ namespace YC.Camera_
             curCam = CamState.back;
             preCam = curCam;
             OnOffCamera(camList[(int)curCam]);
+        }
+
+        void InitNoiseSet()
+        {
+            listSholderCBMCP = new List<CinemachineBasicMultiChannelPerlin>();
+            listBackCBMCP = new List<CinemachineBasicMultiChannelPerlin>();
+
+            if (AmplitudeGain == 0) AmplitudeGain = 1;
+            if (FrequebctGain == 0) FrequebctGain = 2;
+
+            // << : 동적으로 노이즈 프로파일 추가
+
+            // Back Cam
+            if (backCam.GetComponent<CinemachineFreeLook>().GetRig(0).GetCinemachineComponent<CinemachineBasicMultiChannelPerlin>() == null)
+            {
+                for (int i = 0 ; i < 3 ; ++i)
+                {
+                    backCam.GetComponent<CinemachineFreeLook>().GetRig(i).AddCinemachineComponent<CinemachineBasicMultiChannelPerlin>();
+                    backCam.GetComponent<CinemachineFreeLook>().GetRig(i).GetCinemachineComponent<CinemachineBasicMultiChannelPerlin>().m_NoiseProfile
+                        = NoiseProfile;
+                }
+            }
+
+            for (int i = 0 ; i < 3 ; ++i)
+            {
+                listBackCBMCP.Add(backCam.GetComponent<CinemachineFreeLook>().GetRig(i).GetCinemachineComponent<CinemachineBasicMultiChannelPerlin>());
+            }
+
+            for (int i = 0 ; i < 3 ; ++i)
+            {
+                backCam.GetComponent<CinemachineFreeLook>().GetRig(i).GetCinemachineComponent<CinemachineBasicMultiChannelPerlin>().m_FrequencyGain = 0;
+                backCam.GetComponent<CinemachineFreeLook>().GetRig(i).GetCinemachineComponent<CinemachineBasicMultiChannelPerlin>().m_AmplitudeGain = 0;
+            }
+
+            // Sholder Cam
+            if (sholderCam.GetComponent<CinemachineFreeLook>().GetRig(0).GetCinemachineComponent<CinemachineBasicMultiChannelPerlin>() == null)
+            {
+                for (int i = 0 ; i < 3 ; ++i)
+                {
+                    sholderCam.GetComponent<CinemachineFreeLook>().GetRig(i).AddCinemachineComponent<CinemachineBasicMultiChannelPerlin>();
+                    sholderCam.GetComponent<CinemachineFreeLook>().GetRig(i).GetCinemachineComponent<CinemachineBasicMultiChannelPerlin>().m_NoiseProfile
+                        = NoiseProfile;
+                }
+            }
+
+            for (int i = 0 ; i < 3 ; ++i)
+            {
+                listSholderCBMCP.Add(sholderCam.GetComponent<CinemachineFreeLook>().GetRig(i).GetCinemachineComponent<CinemachineBasicMultiChannelPerlin>());
+            }
+
+            for (int i = 0 ; i < 3 ; ++i)
+            {
+                sholderCam.GetComponent<CinemachineFreeLook>().GetRig(i).GetCinemachineComponent<CinemachineBasicMultiChannelPerlin>().m_FrequencyGain = 0;
+                sholderCam.GetComponent<CinemachineFreeLook>().GetRig(i).GetCinemachineComponent<CinemachineBasicMultiChannelPerlin>().m_AmplitudeGain = 0;
+            }
         }
 
         // ====================  [Option 관련 함수 (찬우형)]  ==================== //
@@ -530,12 +561,12 @@ namespace YC.Camera_
                         || curBackCF.m_YAxis.Value >= sholderAxisY_MaxDown)
                     {
                         sholderCF.m_YAxis.Value = sholderAxisY_MaxDown;
-                    }                   
+                    }
                     else
                     {
                         curBackCF.m_YAxis.Value = preBackCF.m_YAxis.Value;
                     }
-                            
+
                     curBackCF.m_XAxis.Value = preBackCF.m_XAxis.Value;
 
                     OnOffCamera(camList[(int)curCam]);
@@ -555,7 +586,6 @@ namespace YC.Camera_
 
                     if (isShakedFade)
                     {
-                        StopCoroutine("ShakeFadeOut");
                         InitShakeFade();
                     }
 
@@ -569,11 +599,11 @@ namespace YC.Camera_
             if (curCam == CamState.sholder)
             {
                 AxisState axisY = camList[(int)curCam].GetComponent<CinemachineFreeLook>().m_YAxis;
-             
-                if(axisY.Value == 0)
+
+                if (axisY.Value == 0)
                     axisY.Value = sholderAxisY_MaxUp;
-                else if(axisY.Value == 1)
-                    axisY.Value = sholderAxisY_MaxDown;               
+                else if (axisY.Value == 1)
+                    axisY.Value = sholderAxisY_MaxDown;
 
                 if (axisY.Value <= sholderAxisY_MaxUp) // 커서가 Max 위로 넘어감
                 {
@@ -667,7 +697,7 @@ namespace YC.Camera_
 
             //if (GameManager.Instance.isTopView || GameManager.Instance.isSideView || playerState.isInMaze) return;
 
-            if(playerState.isInMaze)
+            if (playerState.isInMaze)
             {
                 mazeCineCam.enabled = false;
                 mazeCineCamCol.enabled = false;
@@ -847,7 +877,7 @@ namespace YC.Camera_
         void ZoomInSideView() // 사이드 뷰 카메라 줌  
         {
             float newZoom = Mathf.Lerp(minDis, maxDis, (GetDistance() / 2000));
-            curPosZ = newZoom;        
+            curPosZ = newZoom;
         }
 
         float GetDistance() // 두 플레이어 간 거리를 구한다  
@@ -1203,7 +1233,7 @@ namespace YC.Camera_
 
         public void RidingInit() // 라이딩(로프, 레일)진행시 각각의 SMB에서 해당 함수를 호출한다 (갈고리 제외)  
         {
-            if(playerState.IsJumping && !playerState.IsAirJumping)
+            if (playerState.IsJumping && !playerState.IsAirJumping)
             {
                 float lerpTime = 120;
                 jumpCoroutine = StartCoroutine(AirJumpLerp(lerpTime));
@@ -1225,7 +1255,7 @@ namespace YC.Camera_
                                     player.transform.position.z);
         }
 
-        // ====================  [스테디 전용 함수]  ==================== //
+        // ====================  [Shake 함수]  ==================== //
 
         public void SetSteadyBeam(bool isLock) // 스테디 빔 사용시, 카메라 Lock (Aim Attack State에서 호출)  
         {
@@ -1249,39 +1279,66 @@ namespace YC.Camera_
             }
         }
 
-        public void ShakeCamera(bool isShake) // 스테디 빔 사용시, 카메라 흔들림 (MagnifyingGlass에서 센드메시지로 호출)  
+        public void ShakeCamera(bool isShake) // 카메라 흔들림 시작
         {
             if (!canShake) return;
 
             if (isShake)
             {
-                if (wasShaked) return;
+                //if (wasShaked)
+                //{
+                //    return;
+                //}
 
-                foreach (CinemachineBasicMultiChannelPerlin CBMCP in listSteadyCBMCP)
+                if (isShakedFade)
                 {
-                    CBMCP.m_AmplitudeGain = AmplitudeGain;
-                    CBMCP.m_FrequencyGain = FrequebctGain;
+                    InitShakeFade();
                 }
-                wasShaked = true;
+
+
+                if (curCam == CamState.back)
+                {
+                    foreach (CinemachineBasicMultiChannelPerlin CBMCP in listBackCBMCP)
+                    {
+                        CBMCP.m_AmplitudeGain = AmplitudeGain;
+                        CBMCP.m_FrequencyGain = FrequebctGain;
+                    }
+                }
+                else if (curCam == CamState.sholder)
+                {
+
+                    foreach (CinemachineBasicMultiChannelPerlin CBMCP in listSholderCBMCP)
+                    {
+                        CBMCP.m_AmplitudeGain = AmplitudeGain;
+                        CBMCP.m_FrequencyGain = FrequebctGain;
+                    }
+                }
+                //wasShaked = true;
 
             }
             else
             {
-                if (!wasShaked) return;
+                //if (!wasShaked) return;
 
-                wasShaked = false;
+                //wasShaked = false;
 
                 isShakedFade = true;
 
                 float fadeLerpTime = 0.3f;
 
-                StartCoroutine(ShakeFadeOut(fadeLerpTime));
+                ShakeCoroutine = StartCoroutine(ShakeFadeOut(fadeLerpTime));
             }
         }
 
-        IEnumerator ShakeFadeOut(float LerpTime) // 스테디 빔 종료시, 흔들림 페이드 아웃  
+        IEnumerator ShakeFadeOut(float LerpTime) // 흔들림 종료시, 흔들림 페이드 아웃  
         {
-            float initialVlaue = listSteadyCBMCP[0].m_AmplitudeGain;
+            float initialVlaue = 0;
+
+            if (curCam == CamState.back)
+                initialVlaue = listBackCBMCP[0].m_AmplitudeGain;
+            else if (curCam == CamState.sholder)
+                initialVlaue = listSholderCBMCP[0].m_AmplitudeGain;
+
             float currentTime = 0;
 
             while (initialVlaue > 0)
@@ -1296,10 +1353,21 @@ namespace YC.Camera_
                 if (curValue < 0)
                     curValue = 0;
 
-                foreach (CinemachineBasicMultiChannelPerlin CBMCP in listSteadyCBMCP)
+                if (curCam == CamState.back)
                 {
-                    CBMCP.m_AmplitudeGain = curValue;
-                    CBMCP.m_FrequencyGain = curValue;
+                    foreach (CinemachineBasicMultiChannelPerlin CBMCP in listBackCBMCP)
+                    {
+                        CBMCP.m_AmplitudeGain = curValue;
+                        CBMCP.m_FrequencyGain = curValue;
+                    }
+                }
+                else if (curCam == CamState.sholder)
+                {
+                    foreach (CinemachineBasicMultiChannelPerlin CBMCP in listSholderCBMCP)
+                    {
+                        CBMCP.m_AmplitudeGain = curValue;
+                        CBMCP.m_FrequencyGain = curValue;
+                    }
                 }
 
                 yield return null;
@@ -1307,11 +1375,21 @@ namespace YC.Camera_
             isShakedFade = false;
         }
 
-        void InitShakeFade() // 스테디 빔 사용중 카메라 변경시, 바로 흔들림 0으로 초기화  
+        public void InitShakeFade() // 바로 흔들림 0으로 초기화  
         {
+            if (!isShakedFade) return;
+
+            StopCoroutine(ShakeCoroutine);
+
             float initialVlaue = 0;
 
-            foreach (CinemachineBasicMultiChannelPerlin CBMCP in listSteadyCBMCP)
+            foreach (CinemachineBasicMultiChannelPerlin CBMCP in listBackCBMCP)
+            {
+                CBMCP.m_AmplitudeGain = initialVlaue;
+                CBMCP.m_FrequencyGain = initialVlaue;
+            }
+
+            foreach (CinemachineBasicMultiChannelPerlin CBMCP in listSholderCBMCP)
             {
                 CBMCP.m_AmplitudeGain = initialVlaue;
                 CBMCP.m_FrequencyGain = initialVlaue;

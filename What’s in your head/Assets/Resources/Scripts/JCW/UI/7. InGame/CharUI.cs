@@ -42,17 +42,6 @@ namespace JCW.UI.InGame
 
             StartCoroutine(nameof(WaitForPlayer));
         }
-        //private void Update()
-        //{
-        //    if (!photonView.IsMine || !isStart)
-        //        return;
-        //
-        //    // 체크용
-        //    if (Input.GetKeyDown(KeyCode.KeypadDivide) && !hpUI.activeSelf)
-        //        GameManager.Instance.MediateHP(true);
-        //    if (Input.GetKeyDown(KeyCode.KeypadMultiply) && hpUI.activeSelf)
-        //        GameManager.Instance.MediateHP(false);
-        //}
         
         public void SetHP_RPC(bool isOn)
         {
@@ -87,6 +76,7 @@ namespace JCW.UI.InGame
         {
             yield return new WaitUntil(() => GameManager.Instance.GetCharOnScene());
 
+            Debug.Log("ItemUI NULL인지 : " + (itemUI_RT == null));
 
             isNella = GameManager.Instance.characterOwner[PhotonNetwork.IsMasterClient];
             if (GameManager.Instance.hpAllPairs.Count < 2)

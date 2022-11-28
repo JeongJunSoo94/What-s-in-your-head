@@ -193,7 +193,14 @@ namespace JCW.Dialog
             steadyVoices.Clear();
             etcVoices.Clear();
 
-            if(parsingString != null && parsingString.Count > 0)
+            etcText1.gameObject.SetActive(false);
+            etcText2.gameObject.SetActive(false);
+            nellaText1.gameObject.SetActive(false);
+            nellaText2.gameObject.SetActive(false);
+            steadyText1.gameObject.SetActive(false);
+            steadyText2.gameObject.SetActive(false);
+
+            if (parsingString != null && parsingString.Count > 0)
             {
                 parsingString.Clear();
                 parsingString = null;

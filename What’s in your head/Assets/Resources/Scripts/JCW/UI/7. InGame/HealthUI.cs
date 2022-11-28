@@ -47,6 +47,8 @@ namespace JCW.UI.InGame
         bool isTopView;
         bool isSideView;
 
+        Animator myPlayerAnim;
+
         void Awake()
         {
             photonView = GetComponent<PhotonView>();
@@ -73,6 +75,7 @@ namespace JCW.UI.InGame
             previousHP = curHP;
             isTopView = GameManager.Instance.isTopView;
             isSideView = GameManager.Instance.isSideView;
+            myPlayerAnim = GameManager.Instance.myPlayerTF.GetComponent<Animator>();
         }
 
         private void OnEnable()
@@ -101,11 +104,12 @@ namespace JCW.UI.InGame
                 // 사망 시
                 if (curHP <= 0)
                 {
-                    if (GameManager.Instance.curSection == 1)
+                    if (GameManager.Instance.curStageType == 1)
                     {
-                        GetComponent<Animator>().SetBool("isDead", false);
+                        myPlayerAnim.SetBool("isDead", false);
                         curHP = maxHP;
                         damageList.Clear();
+                        Dead();
                         return;
                     }
                     // 현재 캐릭터가 넬라라면 넬라의 살아있음을 false로, 스테디라면 스테디의 살아있음을 false로 바꿈.
@@ -126,14 +130,10 @@ namespace JCW.UI.InGame
                     // 넬라 & 스테디 둘 다 죽었으면
                     if (!(bool)GameManager.Instance.isAlive[true] && !(bool)GameManager.Instance.isAlive[false])
                     {
-                        if (PhotonNetwork.IsMasterClient)
-                        {
-                            PhotonNetwork.LoadLevel(4 * (GameManager.Instance.curStageIndex - 1) + 1 + GameManager.Instance.curStageType);
-                            return;
-                        }
-                        GameManager.Instance.MediateRevive(false);
-                        GameManager.Instance.SetAliveState(isNella, true);
-                        GameManager.Instance.SetAliveState(!isNella, true);
+                        photonView.RPC(nameof(ReloadCurrentScene), RpcTarget.AllViaServer);
+                        //GameManager.Instance.MediateRevive(false);
+                        //GameManager.Instance.SetAliveState(isNella, true);
+                        //GameManager.Instance.SetAliveState(!isNella, true);
                         //if (!GameManager.Instance.isTopView && !GameManager.Instance.isSideView)
                         //{
                         //    CameraManager.Instance.ReviveCam(isNella);
@@ -179,6 +179,18 @@ namespace JCW.UI.InGame
                     SetHpAmount((int)HpState.DAMAGED, hpImages[(int)HpState.DAMAGED].fillAmount - damageList[i].hp / (float)maxHP);
                     damageList.RemoveAt(i);
                 }
+            }
+        }
+
+        [PunRPC]
+        void ReloadCurrentScene()
+        {
+            Debug.Log("둘 다 죽어있는 상태이므로 맵 부활");
+            GameManager.Instance.ResetDefault();
+            if (PhotonNetwork.IsMasterClient)
+            {
+                PhotonNetwork.LoadLevel(4 * (GameManager.Instance.curStageIndex - 1) + 1 + GameManager.Instance.curStageType);
+                return;
             }
         }
 
