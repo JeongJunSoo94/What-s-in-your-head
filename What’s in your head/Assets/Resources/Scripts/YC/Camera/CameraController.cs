@@ -719,6 +719,14 @@ namespace YC.Camera_
             OnOffCamera(backCam);
         }
 
+        public void SetCinemachineColliderDis(float dis)  
+        {
+            if (!pv.IsMine) return;
+
+            backCam.GetComponent<CinemachineCollider>().m_DistanceLimit = dis;
+            sholderCam.GetComponent<CinemachineCollider>().m_DistanceLimit = dis;
+        }
+
         // ====================  [Top View 함수]  ==================== //
 
         public void SetDefenseMode() // 디펜스 모드 설정  
