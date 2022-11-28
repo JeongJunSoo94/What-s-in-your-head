@@ -27,7 +27,10 @@ namespace JCW.UI.InGame
         // ¸ÞÀÎ Ä·
         Camera mainCamera;
 
+        float defaultVal = 0f;
 
+        Vector2 nellaOffset = new(0,0);
+        Vector2 steadyOffset = new(0,0);
 
         private void Awake()
         {     
@@ -65,10 +68,16 @@ namespace JCW.UI.InGame
                 Vector2 ogPos = itemUI_RT.anchoredPosition;
                 float tempOffset = isOn ? offset : -offset;
                 Vector2 movePos;
+
+                if (nellaOffset.x == 0)
+                    nellaOffset = new Vector2(ogPos.x + tempOffset, ogPos.y);
+                if (steadyOffset.x == 0)
+                    steadyOffset = new Vector2(ogPos.x - tempOffset, ogPos.y);
+
                 if (photonView.IsMine)
-                    movePos = isNella ? new Vector2(ogPos.x + tempOffset, ogPos.y) : new Vector2(ogPos.x - tempOffset, ogPos.y);
+                    movePos = isNella ? nellaOffset : steadyOffset;
                 else
-                    movePos = isNella ? new Vector2(ogPos.x - tempOffset, ogPos.y) : new Vector2(ogPos.x + tempOffset, ogPos.y);
+                    movePos = isNella ? steadyOffset : nellaOffset;
                 itemUI_RT.anchoredPosition = movePos;
             }            
             hpUI.SetActive(isOn);

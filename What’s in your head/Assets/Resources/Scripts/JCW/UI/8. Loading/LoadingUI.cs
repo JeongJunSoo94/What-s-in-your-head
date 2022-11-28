@@ -52,7 +52,6 @@ namespace JCW.UI
                 gameObject.SetActive(false);
                 return;
             }
-            GameManager.Instance.SetCharOnScene_RPC(false);
             DialogManager.Instance.ResetDialogs();
             isLoading = false;
             isMainTitle = SceneManager.GetActiveScene().name == "MainTitle";

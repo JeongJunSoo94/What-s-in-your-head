@@ -127,6 +127,7 @@ public class GameManager : MonoBehaviour, IPunObservable
 
     IEnumerator WaitForHP(bool value)
     {
+        yield return new WaitUntil(() => GetCharOnScene());
         yield return new WaitUntil(() => hpAllPairs.Count == 2);
         photonView.RPC(nameof(MediateHP_RPC), RpcTarget.AllViaServer, value);
         yield break;
@@ -187,18 +188,6 @@ public class GameManager : MonoBehaviour, IPunObservable
             curStageType  = (int)stream.ReceiveNext();
             curSection    = (int)stream.ReceiveNext();
         }
-    }
-
-    public void SetCharOnScene_RPC(bool isOn)
-    {
-        photonView.RPC(nameof(SetCharOnScene), RpcTarget.AllViaServer, PhotonNetwork.IsMasterClient, isOn);
-    }
-
-    [PunRPC]
-    void SetCharOnScene(bool isMaster, bool isOn)
-    {
-        int idx = isMaster ? 0 : 1;
-        isCharOnScene[idx] = isOn;
     }
 
     public bool GetCharOnScene(bool isMaster)

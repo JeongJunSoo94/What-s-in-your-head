@@ -246,6 +246,8 @@ namespace JCW.UI.InGame
 
         public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
         {
+            if (!GameManager.Instance.GetCharOnScene() || hpImages.Count != 2)
+                return;
             // 보내는 사람
             if (stream.IsWriting)
             {

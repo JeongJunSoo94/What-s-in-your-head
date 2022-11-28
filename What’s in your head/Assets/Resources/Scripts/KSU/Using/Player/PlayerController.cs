@@ -141,7 +141,6 @@ namespace KSU
             else
                 GameManager.Instance.myPlayerTF = transform;
 
-            GameManager.Instance.SetCharOnScene_RPC(true);
             // << : 
 
             Application.targetFrameRate = 120;

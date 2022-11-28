@@ -140,7 +140,7 @@ namespace JCW.UI.InGame.Indicator
 
         IEnumerator Wait()
         {
-            yield return new WaitUntil(() => isStart == true);
+            yield return new WaitUntil(() => GameManager.Instance.GetCharOnScene());
 
             myTF = GameManager.Instance.myPlayerTF;
 
