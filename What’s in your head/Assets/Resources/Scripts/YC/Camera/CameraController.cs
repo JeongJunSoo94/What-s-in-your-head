@@ -157,14 +157,14 @@ namespace YC.Camera_
         [SerializeField] GameObject CineLookObj_Back;
         [SerializeField] GameObject CineFollowObj_Back;
         [SerializeField] NoiseSettings NoiseProfile;
-        [SerializeField] GameObject CameraColliderPrefab;
+        //[SerializeField] GameObject CameraColliderPrefab;
 
         [Header("[Aim UI]")]
         public GameObject aimUI;
 
         // ============  콜라이더 관련  ============ //
-        CinemachineCollider cinemachineCollider;
-        GameObject cameraCollider;
+        //CinemachineCollider cinemachineCollider;
+        //GameObject cameraCollider;
 
         void Awake()
         {
@@ -328,11 +328,11 @@ namespace YC.Camera_
             SetCinemachineColliderDis(1);
 
             // << :
-            backCamCol.m_AvoidObstacles = false;
-            cameraCollider = Instantiate(CameraColliderPrefab, Vector3.zero, Quaternion.identity);
-            cameraCollider.GetComponent<CameraCollider>().SetVariables(this);
+            //backCamCol.m_AvoidObstacles = false;
+            //cameraCollider = Instantiate(CameraColliderPrefab, Vector3.zero, Quaternion.identity);
+            //cameraCollider.GetComponent<CameraCollider>().SetVariables(this);
+            //cinemachineCollider = backCam.GetComponent<CinemachineCollider>();
 
-            cinemachineCollider = backCam.GetComponent<CinemachineCollider>();
             // 가상 카메라 리스트에 넣어준다.
             camList.Add(backCam);
             camList.Add(sholderCam);
@@ -748,10 +748,10 @@ namespace YC.Camera_
 
         public void SetCinemachineColliderDis(float dis)   
         {
-            //if(!pv.IsMine) return;
+            if (!pv.IsMine) return;
 
-            //backCam.GetComponent<CinemachineCollider>().m_DistanceLimit = dis;
-            //sholderCam.GetComponent<CinemachineCollider>().m_DistanceLimit = dis;
+            backCam.GetComponent<CinemachineCollider>().m_DistanceLimit = dis;
+            sholderCam.GetComponent<CinemachineCollider>().m_DistanceLimit = dis;
 
         }
 
@@ -1440,14 +1440,14 @@ namespace YC.Camera_
 
         public void SetCinemachineCollider(bool enable)
         {
-            if(enable)
-            {
-                cinemachineCollider.m_AvoidObstacles = true;
-            }
-            else
-            {
-                cinemachineCollider.m_AvoidObstacles = false;
-            }
+            //if(enable)
+            //{
+            //    cinemachineCollider.m_AvoidObstacles = true;
+            //}
+            //else
+            //{
+            //    cinemachineCollider.m_AvoidObstacles = false;
+            //}
         }
     }
 }
