@@ -49,7 +49,6 @@ namespace JCW.UI.InGame
         {
             if(isStart && !videoPlayer.isPlaying)
             {
-                Debug.Log("πÊ¿Â¿”? : " +PhotonNetwork.IsMasterClient);
                 if (needToLoad)
                     LoadingUI.Instance.gameObject.SetActive(true);
                 this.gameObject.SetActive(false);

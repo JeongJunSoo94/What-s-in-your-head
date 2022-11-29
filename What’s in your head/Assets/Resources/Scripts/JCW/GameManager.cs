@@ -189,6 +189,7 @@ public class GameManager : MonoBehaviour, IPunObservable
             stream.SendNext(curStageIndex);            
             stream.SendNext(curStageType);            
             stream.SendNext(curSection);
+            stream.SendNext(aliceHP);
         }
 
         // 받는 사람
@@ -198,6 +199,7 @@ public class GameManager : MonoBehaviour, IPunObservable
             curStageIndex = (int)stream.ReceiveNext();
             curStageType  = (int)stream.ReceiveNext();
             curSection    = (int)stream.ReceiveNext();
+            aliceHP       = (int)stream.ReceiveNext();
         }
     }
 

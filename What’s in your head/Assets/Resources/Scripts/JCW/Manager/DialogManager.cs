@@ -83,9 +83,9 @@ namespace JCW.Dialog
         public Text nellaText1;         public Text nellaText2; 
         public Text steadyText1;        public Text steadyText2;
 
-        Text etcRealText1;       Text etcRealText2;
-        Text nellaRealText1;     Text nellaRealText2;
-        Text steadyRealText1;    Text steadyRealText2;
+        [HideInInspector] public Text etcRealText1;       [HideInInspector] public Text etcRealText2;
+        [HideInInspector] public Text nellaRealText1;     [HideInInspector] public Text nellaRealText2;
+        [HideInInspector] public Text steadyRealText1;      [HideInInspector] public Text steadyRealText2;
 
 
         [HideInInspector] public bool isEtcStart = false;
