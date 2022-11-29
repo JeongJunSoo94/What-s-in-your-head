@@ -78,6 +78,8 @@ namespace JCW.UI.InGame
 
             mainCamera = myPlayerTF.GetComponent<CameraController>().FindCamera();
 
+            transform.GetChild(0).gameObject.SetActive(true);
+
             isStart = true;
             yield break;
         }

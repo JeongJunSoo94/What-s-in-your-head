@@ -125,7 +125,14 @@ public class GameManager : MonoBehaviour, IPunObservable
 
     public void MediateHP(bool value)
     {
-        StartCoroutine(WaitForHP(value));        
+        photonView.RPC(nameof(MediateHP_RPC),RpcTarget.AllViaServer, value);
+        //StartCoroutine(WaitForHP(value));        
+    }
+
+    [PunRPC]
+    void MediateHP_RPC(bool value)
+    {
+        StartCoroutine(WaitForHP(value));
     }
 
     IEnumerator WaitForHP(bool value)
@@ -134,16 +141,17 @@ public class GameManager : MonoBehaviour, IPunObservable
         yield return new WaitUntil(() => hpAllPairs.Count == 2);
         Debug.Log("hpAllPairs : " + (hpAllPairs.ContainsKey(true) ? hpAllPairs[true] : "hpAllPairs[true]값이 없어요 - isMasterClient : " + PhotonNetwork.IsMasterClient));
         Debug.Log("hpAllPairs : " + (hpAllPairs.ContainsKey(false) ? hpAllPairs[false] : "hpAllPairs[false]값이 없어요- isMasterClient : " + PhotonNetwork.IsMasterClient));
-        photonView.RPC(nameof(MediateHP_RPC), RpcTarget.AllViaServer, value);
+        hpAllPairs[true].SetHP(value);
+        hpAllPairs[false].SetHP(value);
         yield break;
     }
 
-    [PunRPC]
-    void MediateHP_RPC(bool value)
-    {
-        hpAllPairs[true].SetHP(value);
-        hpAllPairs[false].SetHP(value);
-    }
+    //[PunRPC]
+    //void MediateHP_RPC(bool value)
+    //{
+    //    hpAllPairs[true].SetHP(value);
+    //    hpAllPairs[false].SetHP(value);
+    //}
     //=======================================================================
 
     // 각 캐릭터가 살아있는 지 죽어있는지, 양 컴퓨터의 게임매니저를 통해 값 변경
@@ -219,8 +227,9 @@ public class GameManager : MonoBehaviour, IPunObservable
         Destroy(pauseUI);
         Destroy(LoadingUI.Instance.gameObject);
         if (PhotonNetwork.IsMasterClient)
-            PhotonNetwork.LoadLevel(0);
+            PhotonNetwork.LoadLevel(0);        
         Destroy(GameManager.Instance.gameObject);
+
     }
 
     public void ResetDefault_RPC()
@@ -239,6 +248,7 @@ public class GameManager : MonoBehaviour, IPunObservable
         aliceHP = 30;
         isAlive[true] = true;
         isAlive[false] = true;
+        hpAllPairs.Clear();
         SoundManager.Instance.dict3D.Clear();
         SoundManager.Instance.StopAllSound();
         curSection = 0;

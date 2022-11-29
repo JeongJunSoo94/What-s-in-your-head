@@ -38,7 +38,7 @@ namespace JCW.UI
                 DontDestroyOnLoad(this.gameObject);
             }
             photonView = GetComponent<PhotonView>();
-            ws = new(1.5f);
+            ws = new(0.8f);
             bgImg = transform.GetChild(0).GetComponent<Image>();
             image = transform.GetChild(1).GetComponent<Image>();
             text = transform.GetChild(2).GetComponent<Text>();

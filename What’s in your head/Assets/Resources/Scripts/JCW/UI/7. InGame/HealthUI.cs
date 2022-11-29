@@ -192,10 +192,9 @@ namespace JCW.UI.InGame
         [PunRPC]
         void ReloadCurrentScene()
         {
-            Debug.Log("둘 다 죽어있는 상태이므로 맵 부활");
             GameManager.Instance.ResetDefault();
-            --GameManager.Instance.curStageType;
-            LoadingUI.Instance.gameObject.SetActive(true);
+            if (PhotonNetwork.IsMasterClient)
+                PhotonNetwork.LoadLevel(15);
         }
 
         [PunRPC]

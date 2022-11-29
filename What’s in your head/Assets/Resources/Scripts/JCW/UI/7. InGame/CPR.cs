@@ -71,8 +71,10 @@ namespace JCW.UI.InGame
             //여기서 카메라나 플레이어 움직임 켜야함.
             if (photonView.IsMine)
             {
-                mainCam.GetComponent<CinemachineBrain>().enabled = true;
-                curPlayer.GetComponent<PlayerState>().isOutOfControl = false;
+                if(mainCam)
+                    mainCam.GetComponent<CinemachineBrain>().enabled = true;
+                if(curPlayer)
+                    curPlayer.GetComponent<PlayerState>().isOutOfControl = false;
             }
 
             transform.GetChild(0).gameObject.SetActive(true);

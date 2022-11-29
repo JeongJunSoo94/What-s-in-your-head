@@ -52,7 +52,7 @@ namespace JCW.UI.InGame
         [PunRPC]
         public void SetHP(bool isOn)
         {
-            if(itemUI_RT.gameObject.activeSelf)
+            if(itemUI_RT != null && itemUI_RT.gameObject.activeSelf)
             {
                 Vector2 ogPos = itemUI_RT.anchoredPosition;
                 float tempOffset = isOn ? offset : -offset;
