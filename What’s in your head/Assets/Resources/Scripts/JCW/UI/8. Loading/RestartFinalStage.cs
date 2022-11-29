@@ -35,7 +35,6 @@ namespace JCW.UI.InGame
         {
             while(PhotonNetwork.LevelLoadingProgress != 1)
             {
-                Debug.Log("현재 진행율 : " + PhotonNetwork.LevelLoadingProgress);
                 yield return null;
             }
             //yield return wu;

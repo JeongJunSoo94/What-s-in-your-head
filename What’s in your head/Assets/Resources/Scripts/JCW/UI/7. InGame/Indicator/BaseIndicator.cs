@@ -106,6 +106,7 @@ namespace JCW.UI.InGame.Indicator
         {
             if (GameManager.Instance.characterOwner.Count < 2)
                 return;
+           isNella = GameManager.Instance.characterOwner[PhotonNetwork.IsMasterClient];
             mainCamera = isNella ? CameraManager.Instance.cameras[0] : CameraManager.Instance.cameras[1];
         }
 
@@ -115,8 +116,6 @@ namespace JCW.UI.InGame.Indicator
                 yield return new WaitUntil(() => GameManager.Instance.characterOwner.Count >= 1);
             else
                 yield return new WaitUntil(() => GameManager.Instance.GetCharOnScene());
-
-            isNella = GameManager.Instance.characterOwner[PhotonNetwork.IsMasterClient];
             isStart = true;
             yield break;
         }

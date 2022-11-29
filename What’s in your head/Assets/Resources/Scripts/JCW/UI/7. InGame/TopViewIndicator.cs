@@ -41,7 +41,7 @@ namespace JCW.UI.InGame
 
         void Update()
         {
-            if (!isStart)
+            if (!isStart || myPlayerTF == null || myPlayerTF == null)
                 return;
 
             // 포지션 설정

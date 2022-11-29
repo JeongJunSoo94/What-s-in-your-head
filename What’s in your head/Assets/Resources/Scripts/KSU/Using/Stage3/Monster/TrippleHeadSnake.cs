@@ -167,7 +167,8 @@ namespace KSU.AutoAim.Object.Monster
             attackTrigger.SetActive(false);// 위 아래 둘다 필요 없을지도 그렇다면 가상함수도 필요 ㄴㄴ
             rushTrigger.SetActive(false); //
             detectingUITrigger.SetActive(false);
-            monsterNavAgent.enabled = false;
+            if(pv.IsMine)
+                monsterNavAgent.enabled = false;
             monsterRope.enabled = false;
             monsterCollider.enabled = false;
         }

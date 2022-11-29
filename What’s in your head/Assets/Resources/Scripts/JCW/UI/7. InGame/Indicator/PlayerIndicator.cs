@@ -28,7 +28,7 @@ namespace JCW.UI.InGame.Indicator
         // 내 플레이어 위치
         Transform myTF;
 
-        PhotonView photonView;
+        //PhotonView photonView;
 
         Image myImg;
         Image otherImg;
@@ -36,15 +36,15 @@ namespace JCW.UI.InGame.Indicator
         bool wasTopView;
         bool isStart_Player = false;
 
-        protected void Awake()
-        {            
-            photonView = GetComponent<PhotonView>();
-            if (!photonView.IsMine)
-            {
-                Destroy(this.gameObject);
-                return;
-            }
-        }
+        //protected void Awake()
+        //{            
+        //    //photonView = GetComponent<PhotonView>();
+        //    //if (!photonView.IsMine)
+        //    //{
+        //    //    Destroy(this.gameObject);
+        //    //    return;
+        //    //}
+        //}
 
         protected override void Start()
         {
@@ -143,7 +143,7 @@ namespace JCW.UI.InGame.Indicator
             yield return new WaitUntil(() => GameManager.Instance.GetCharOnScene());
 
             myTF = GameManager.Instance.myPlayerTF;
-
+            isNella = GameManager.Instance.characterOwner[PhotonNetwork.IsMasterClient];
             if (isNella)
             {
                 myIndicatorTop = nellaTopView;

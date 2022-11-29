@@ -46,19 +46,23 @@ namespace JCW.UI.InGame
         WaitForSeconds ws_healBlink;
         bool isTopView;
         bool isSideView;
+        bool enterDead = false;
 
         Animator myPlayerAnim;
+
+        PlayerController pc;
 
         void Awake()
         {
             photonView = GetComponent<PhotonView>();
             ws_healBlink = new(0.1f);
             isNella = GameManager.Instance.characterOwner[PhotonNetwork.IsMasterClient];
+            pc = transform.parent.parent.GetComponent<PlayerController>();
 
             if (photonView.IsMine)
-                GameManager.Instance.reviveAllPairs.Add(isNella, this);
+                GameManager.Instance.healthUIPairs.Add(isNella, this);
             else
-                GameManager.Instance.reviveAllPairs.Add(!isNella, this);
+                GameManager.Instance.healthUIPairs.Add(!isNella, this);
   
 
             charHpUI = transform.GetChild(0).gameObject;
@@ -80,47 +84,47 @@ namespace JCW.UI.InGame
 
         private void OnEnable()
         {
-            transform.parent.parent.GetComponent<PlayerController>().isOn_HP_UI = true;
+            pc.isOn_HP_UI = true;
         }
 
         private void OnDisable()
         {
-            transform.parent.parent.GetComponent<PlayerController>().isOn_HP_UI = false;
+            pc.isOn_HP_UI = false;
         }
 
         void Update()
         {
-            if (!photonView.IsMine || !(bool)GameManager.Instance.isAlive[isNella])
+            if (!photonView.IsMine)
                 return;
+
+            if (Input.GetKeyDown(KeyCode.KeypadMinus))
+                GameManager.Instance.curPlayerHP -= 4;
 
             // 기존 HP와 현재 HP 값이 달라졌을 때
             if (curHP != GameManager.Instance.curPlayerHP)
             {
                 // 실행 중일수도 있는 회복 코루틴 중지.
                 healTime = 0f;
-                StopCoroutine(nameof(Cure));
+                StopCoroutine("Cure");
 
                 curHP = GameManager.Instance.curPlayerHP;
                 // 사망 시
                 if (curHP <= 0)
                 {
+                    // 3-1 스테이지 일때
                     if (GameManager.Instance.curStageType == 1)
                     {
                         myPlayerAnim.SetBool("isDead", false);
-                        curHP = maxHP;
-                        damageList.Clear();
                         Dead();
                         return;
                     }
                     // 현재 캐릭터가 넬라라면 넬라의 살아있음을 false로, 스테디라면 스테디의 살아있음을 false로 바꿈.
-                    if (!isSideView)
-                        photonView.RPC(nameof(CheckDeadEnd), RpcTarget.AllViaServer, isNella, false);
-                        //GameManager.Instance.SetAliveState(isNella, false);
-                    //if(!isTopView)
-                        //CameraManager.Instance.DeadCam(isNella);
+                    if (!isSideView && (bool)GameManager.Instance.isAlive[isNella])
+                    {
+                        CheckDeadEnd(isNella);
+                        photonView.RPC(nameof(CheckDeadEnd), RpcTarget.Others, isNella);
+                    }
 
-                    curHP = maxHP;
-                    damageList.Clear();
                     Dead();
 
                     if (!isSideView)
@@ -143,14 +147,15 @@ namespace JCW.UI.InGame
             }
 
             else if (curHP != maxHP && curHP > 0
-                    && (hpImages[(int)HpState.DAMAGED].fillAmount == hpImages[(int)HpState.NORMAL].fillAmount))
-            {
+                    && ((int)hpImages[(int)HpState.DAMAGED].fillAmount == (int)hpImages[(int)HpState.NORMAL].fillAmount))
+            {                
                 SetBgImage((int)BgState.DAMAGED, false);
                 healTime += Time.deltaTime;
                 if (healTime >= healSecond)
                 {
+                    Debug.Log("회복 시작");
                     healTime = 0;
-                    StartCoroutine(nameof(Cure));
+                    StartCoroutine("Cure");
                 }
             }
             for (int i = damageList.Count - 1 ; i >= 0 ; --i)
@@ -167,26 +172,14 @@ namespace JCW.UI.InGame
         }
 
         [PunRPC]
-        void CheckDeadEnd(bool isNella, bool value)
+        void CheckDeadEnd(bool isNella)
         {
-            GameManager.Instance.SetAlive(isNella, value);
+            Debug.Log("둘 다 죽어서 맵 로딩해야하는지 체크");
+            GameManager.Instance.SetAlive(isNella, false);
             if (!(bool)GameManager.Instance.isAlive[true] && !(bool)GameManager.Instance.isAlive[false])
-            {                
                 ReloadCurrentScene();
-                //GameManager.Instance.MediateRevive(false);
-                //GameManager.Instance.SetAliveState(isNella, true);
-                //GameManager.Instance.SetAliveState(!isNella, true);
-                //if (!GameManager.Instance.isTopView && !GameManager.Instance.isSideView)
-                //{
-                //    CameraManager.Instance.ReviveCam(isNella);
-                //    CameraManager.Instance.ReviveCam(!isNella);
-                //}                            
-            }
             else
-            {
                 GameManager.Instance.MediateRevive_RPC(true);
-                //GameManager.Instance.MediateRevive(true);
-            }
         }
 
         [PunRPC]
@@ -204,6 +197,8 @@ namespace JCW.UI.InGame
         }
         void Dead()
         {
+            curHP = maxHP;
+            damageList.Clear();
             SetHpAmount((int)HpState.DAMAGED, 1f);
             SetHpAmount((int)HpState.NORMAL, 1f);
             SetBgImage((int)BgState.DANGEROUS, false);
@@ -251,6 +246,8 @@ namespace JCW.UI.InGame
             SetHpAmount((int)HpState.DAMAGED, 1f);
             hpImages[(int)HpState.HEAL].enabled = false;
             SetBgImage((int)BgState.DANGEROUS, false);
+            SetBgImage((int)BgState.DAMAGED, false);
+
 
             GameManager.Instance.curPlayerHP = maxHP;
             curHP = maxHP;

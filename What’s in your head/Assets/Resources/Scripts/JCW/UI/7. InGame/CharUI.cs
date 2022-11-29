@@ -77,12 +77,12 @@ namespace JCW.UI.InGame
             yield return new WaitUntil(() => GameManager.Instance.GetCharOnScene());
 
             isNella = GameManager.Instance.characterOwner[PhotonNetwork.IsMasterClient];
-            if (GameManager.Instance.hpAllPairs.Count < 2)
+            if (GameManager.Instance.charUIPairs.Count < 2)
             {
                 if (photonView.IsMine)
-                    GameManager.Instance.hpAllPairs.Add(isNella, this);
+                    GameManager.Instance.charUIPairs.Add(isNella, this);
                 else
-                    GameManager.Instance.hpAllPairs.Add(!isNella, this);
+                    GameManager.Instance.charUIPairs.Add(!isNella, this);
             }
             mainCamera = transform.parent.GetComponent<CameraController>().FindCamera(); // ¸ÖÆ¼¿ë  
 

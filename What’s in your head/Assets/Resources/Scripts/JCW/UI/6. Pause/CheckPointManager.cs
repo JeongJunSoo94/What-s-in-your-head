@@ -41,7 +41,10 @@ namespace JCW.UI
         private void OnEnable()
         {
             if (!isFirst)
+            {
+                this.gameObject.SetActive(false);
                 return;
+            }
             titleObj.SetActive(false);
             menuObj.SetActive(false);
         }

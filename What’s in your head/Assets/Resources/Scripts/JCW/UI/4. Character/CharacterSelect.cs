@@ -149,7 +149,7 @@ namespace JCW.UI
                         Debug.Log(player + " : " + character);
                     }
                     loadingUI.SetActive(true);
-                    GameManager.Instance.AddAliveState(GameManager.Instance.characterOwner[PhotonNetwork.IsMasterClient], true);
+                    //GameManager.Instance.AddAliveState(GameManager.Instance.characterOwner[PhotonNetwork.IsMasterClient], true);
                     this.enabled = false;
                 }
             }

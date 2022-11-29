@@ -75,7 +75,10 @@ namespace JCW.Object
             anim.SetFloat("pressed_ratio", pressed_Ratio);
 
             if (isPermanent)
+            {
+                transform.GetChild(1).gameObject.SetActive(false);
                 this.enabled = false;
+            }
             else
                 StartCoroutine("DeactivateObj");
             yield break;

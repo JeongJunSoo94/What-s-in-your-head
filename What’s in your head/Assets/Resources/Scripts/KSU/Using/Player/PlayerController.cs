@@ -121,7 +121,7 @@ namespace KSU
             playerMouse = GetComponent<PlayerMouseController>();
             playerInteraction = GetComponent<PlayerInteraction>();
 
-            isNella = gameObject.CompareTag("Nella");
+            isNella = gameObject.CompareTag("Nella");            
             //====================================================
 
             photonView = GetComponent<PhotonView>();
@@ -137,9 +137,13 @@ namespace KSU
             {
                 GameManager.Instance.otherPlayerTF = transform;
                 GetComponent<AudioListener>().enabled = false;
+                GameManager.Instance.AddAliveState(!isNella, true);
             }
             else
+            {
                 GameManager.Instance.myPlayerTF = transform;
+                GameManager.Instance.AddAliveState(isNella, true);
+            }
 
             // << : 
 
@@ -786,6 +790,8 @@ namespace KSU
 
         public void GetDamage(int damage, DamageType type, Vector3 colliderPos, float knockBackSpeed)
         {
+            if (!photonView.IsMine)
+                return;
             string damageTrigger = "DeadTrigger";
             switch (type)
             {
@@ -806,6 +812,7 @@ namespace KSU
                 if (GameManager.Instance.curPlayerHP <= 0)
                 {
                     GameManager.Instance.curPlayerHP = 0;
+                    //GameManager.Instance.SetAliveState(isNella, false);
                     photonView.RPC(nameof(SetAnimatorBool), RpcTarget.AllViaServer, "DeadTrigger", true);
                 }
                 else
@@ -823,12 +830,12 @@ namespace KSU
                     {
                         if (isNella)
                         {
-                            GameManager.Instance.SetAliveState(isNella, false);
+                            //GameManager.Instance.SetAliveState(isNella, false);
                             PlayEffectSound("nella_gethit_2");
                         }
                         else
                         {
-                            GameManager.Instance.SetAliveState(isNella, false);
+                            //GameManager.Instance.SetAliveState(isNella, false);
                             PlayEffectSound("steady_gethit_1");
                         }
                     }
@@ -859,6 +866,7 @@ namespace KSU
                 if (GameManager.Instance.curPlayerHP <= 0)
                 {
                     GameManager.Instance.curPlayerHP = 0;
+                    //GameManager.Instance.SetAliveState(isNella, false);
                     photonView.RPC(nameof(SetAnimatorBool), RpcTarget.AllViaServer, "DeadTrigger", true);
                 }
                 else

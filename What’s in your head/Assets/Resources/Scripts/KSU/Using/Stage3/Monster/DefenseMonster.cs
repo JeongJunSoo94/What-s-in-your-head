@@ -93,6 +93,10 @@ namespace KSU.AutoAim.Object.Monster
                 monsterNavAgent.speed = moveSpeed;
                 monsterNavAgent.enabled = true;
             }
+            else
+            {
+                Destroy(monsterNavAgent);
+            }
             monsterCollider.enabled = true;
             attackTrigger.SetActive(false);
             detectingUITrigger.SetActive(true);
@@ -195,7 +199,8 @@ namespace KSU.AutoAim.Object.Monster
             StopAllCoroutines();
             attackTrigger.SetActive(false);
             detectingUITrigger.SetActive(false);
-            monsterNavAgent.enabled = false;
+            if(pv.IsMine)
+                monsterNavAgent.enabled = false;
             monsterRope.enabled = false;
             monsterCollider.enabled = false;
             PlayDeadSound();
@@ -279,7 +284,8 @@ namespace KSU.AutoAim.Object.Monster
         [PunRPC]
         protected void SetChasing(bool isChasing)
         {
-            monsterNavAgent.enabled = isChasing;
+            if(pv.IsMine)
+                monsterNavAgent.enabled = isChasing;
         }
 
         protected void Detect()

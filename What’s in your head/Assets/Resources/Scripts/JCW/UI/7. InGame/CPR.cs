@@ -106,7 +106,6 @@ namespace JCW.UI.InGame
                 heartBeat.Play();
             if (heartGauge.fillAmount >= 1f)
             {
-                //GameManager.Instance.SetAliveState(isNella, true);
                 heartGauge.fillAmount = 0f;
                 GameManager.Instance.MediateRevive(false);
                 //if(!GameManager.Instance.isTopView && photonView.IsMine)

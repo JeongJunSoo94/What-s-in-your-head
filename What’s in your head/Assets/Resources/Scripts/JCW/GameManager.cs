@@ -31,8 +31,8 @@ public class GameManager : MonoBehaviour, IPunObservable
     [HideInInspector] public Hashtable isAlive = new();
 
     // 좌측 bool 값은 Nella 캐릭터인지, 우측은 해당 캐릭터가 가지고 있는 스크립트
-    [HideInInspector] public Dictionary<bool, HealthUI> reviveAllPairs= new();
-    [HideInInspector] public Dictionary<bool, CharUI> hpAllPairs= new();
+    [HideInInspector] public Dictionary<bool, HealthUI> healthUIPairs= new();
+    [HideInInspector] public Dictionary<bool, CharUI> charUIPairs= new();
 
     // Remote인 다른 캐릭터의 위치
     [HideInInspector] public Transform otherPlayerTF;
@@ -115,8 +115,8 @@ public class GameManager : MonoBehaviour, IPunObservable
     [PunRPC]
     public void MediateRevive_RPC(bool value)
     {
-        reviveAllPairs[true].SetRevive(value);
-        reviveAllPairs[false].SetRevive(value);
+        healthUIPairs[true].SetRevive(value);
+        healthUIPairs[false].SetRevive(value);
     }
     // ====================================================================
 
@@ -138,19 +138,17 @@ public class GameManager : MonoBehaviour, IPunObservable
     IEnumerator WaitForHP(bool value)
     {
         yield return new WaitUntil(() => GetCharOnScene());
-        yield return new WaitUntil(() => hpAllPairs.Count == 2);
-        Debug.Log("hpAllPairs : " + (hpAllPairs.ContainsKey(true) ? hpAllPairs[true] : "hpAllPairs[true]값이 없어요 - isMasterClient : " + PhotonNetwork.IsMasterClient));
-        Debug.Log("hpAllPairs : " + (hpAllPairs.ContainsKey(false) ? hpAllPairs[false] : "hpAllPairs[false]값이 없어요- isMasterClient : " + PhotonNetwork.IsMasterClient));
-        hpAllPairs[true].SetHP(value);
-        hpAllPairs[false].SetHP(value);
+        yield return new WaitUntil(() => charUIPairs.Count == 2);
+        charUIPairs[true].SetHP(value);
+        charUIPairs[false].SetHP(value);
         yield break;
     }
 
     //[PunRPC]
     //void MediateHP_RPC(bool value)
     //{
-    //    hpAllPairs[true].SetHP(value);
-    //    hpAllPairs[false].SetHP(value);
+    //    charUIPairs[true].SetHP(value);
+    //    charUIPairs[false].SetHP(value);
     //}
     //=======================================================================
 
@@ -246,9 +244,9 @@ public class GameManager : MonoBehaviour, IPunObservable
         isSideView = false;
         curPlayerHP = 12;
         aliceHP = 30;
-        isAlive[true] = true;
-        isAlive[false] = true;
-        hpAllPairs.Clear();
+        isAlive.Clear();
+        charUIPairs.Clear();
+        healthUIPairs.Clear();
         SoundManager.Instance.dict3D.Clear();
         SoundManager.Instance.StopAllSound();
         curSection = 0;

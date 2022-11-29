@@ -44,7 +44,7 @@ namespace YC.Camera_
         // ============  최적화 관련 설정  ============ //
         //[Header("[Clipping Planes Far]")]
         //[SerializeField] [Range(0, 1000)] 
-        float farValue = 450;
+        float farValue = 500;
 
         // ============  카메라 감도 설정  ============ //
         [Header("[Back View 카메라 마우스 감도]")]
@@ -304,6 +304,7 @@ namespace YC.Camera_
             Cine_sholderCam.m_XAxis.Value = 0.3f;
             Cine_sholderCam.m_YAxis.Value = 0.3f;
 
+            SetCinemachineColliderDis(1);
             // 가상 카메라 리스트에 넣어준다.
             camList.Add(backCam);
             camList.Add(sholderCam);
@@ -719,7 +720,7 @@ namespace YC.Camera_
 
         public void SetCinemachineColliderDis(float dis)
         {
-            if(!pv.IsMine) return;
+            if (!pv.IsMine) return;
 
             backCam.GetComponent<CinemachineCollider>().m_DistanceLimit = dis;
             sholderCam.GetComponent<CinemachineCollider>().m_DistanceLimit = dis;

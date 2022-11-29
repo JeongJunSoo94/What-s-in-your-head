@@ -41,6 +41,10 @@ namespace JCW.UI.InGame
         [PunRPC]
         private void TurnOnUI_RPC(bool _isAlive)
         {
+            if(deadUI_Rect == null)
+                deadUI_Rect = transform.GetChild(0).GetComponent<RectTransform>();
+            if (aliveUI_Rect == null)
+                aliveUI_Rect = transform.GetChild(1).GetComponent<RectTransform>();
             if (_isAlive)
             {
                 if(!GameManager.Instance.isTopView)
