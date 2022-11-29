@@ -146,7 +146,6 @@ namespace YC.Camera_
         float groundFollowY;
         float groundLookY;
 
-        bool isCustomJumpSet = false;
         // ============  OutOfControl시 사용  ============ //
         float XSpeed;
         float YSpeed;
@@ -158,8 +157,14 @@ namespace YC.Camera_
         [SerializeField] GameObject CineLookObj_Back;
         [SerializeField] GameObject CineFollowObj_Back;
         [SerializeField] NoiseSettings NoiseProfile;
+        [SerializeField] GameObject CameraColliderPrefab;
+
         [Header("[Aim UI]")]
         public GameObject aimUI;
+
+        // ============  콜라이더 관련  ============ //
+        CinemachineCollider cinemachineCollider;
+        GameObject cameraCollider;
 
         void Awake()
         {
@@ -245,15 +250,7 @@ namespace YC.Camera_
                 SetCineObjPos();
             }
 
-            //// << :
-            //if(Input.GetKeyDown(KeyCode.Keypad5))
-            //{
-            //    SetCinemachineColliderDis(0);
-            //}
-            //else if (Input.GetKeyDown(KeyCode.Keypad6))
-            //{
-            //    SetCinemachineColliderDis(1);
-            //}
+            
         }
 
 
@@ -329,6 +326,13 @@ namespace YC.Camera_
             Cine_sholderCam.m_YAxis.Value = 0.3f;
 
             SetCinemachineColliderDis(1);
+
+            // << :
+            backCamCol.m_AvoidObstacles = false;
+            cameraCollider = Instantiate(CameraColliderPrefab, Vector3.zero, Quaternion.identity);
+            cameraCollider.GetComponent<CameraCollider>().SetVariables(this);
+
+            cinemachineCollider = backCam.GetComponent<CinemachineCollider>();
             // 가상 카메라 리스트에 넣어준다.
             camList.Add(backCam);
             camList.Add(sholderCam);
@@ -430,7 +434,7 @@ namespace YC.Camera_
             OnOffCamera(camList[(int)curCam]);
         }
 
-        void InitNoiseSet()
+        void InitNoiseSet()  
         {
             listSholderCBMCP = new List<CinemachineBasicMultiChannelPerlin>();
             listBackCBMCP = new List<CinemachineBasicMultiChannelPerlin>();
@@ -744,10 +748,10 @@ namespace YC.Camera_
 
         public void SetCinemachineColliderDis(float dis)   
         {
-            if(!pv.IsMine) return;
+            //if(!pv.IsMine) return;
 
-            backCam.GetComponent<CinemachineCollider>().m_DistanceLimit = dis;
-            sholderCam.GetComponent<CinemachineCollider>().m_DistanceLimit = dis;
+            //backCam.GetComponent<CinemachineCollider>().m_DistanceLimit = dis;
+            //sholderCam.GetComponent<CinemachineCollider>().m_DistanceLimit = dis;
 
         }
 
@@ -1430,6 +1434,20 @@ namespace YC.Camera_
                 CBMCP.m_FrequencyGain = initialVlaue;
             }
             isShakedFade = false;
+        }
+
+        // ====================  [Collision 함수]  ==================== //
+
+        public void SetCinemachineCollider(bool enable)
+        {
+            if(enable)
+            {
+                cinemachineCollider.m_AvoidObstacles = true;
+            }
+            else
+            {
+                cinemachineCollider.m_AvoidObstacles = false;
+            }
         }
     }
 }
