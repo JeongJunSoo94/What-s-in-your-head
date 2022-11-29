@@ -146,6 +146,7 @@ namespace YC.Camera_
         float groundFollowY;
         float groundLookY;
 
+        bool isCustomJumpSet = false;
         // ============  OutOfControl시 사용  ============ //
         float XSpeed;
         float YSpeed;
@@ -195,15 +196,17 @@ namespace YC.Camera_
             SetCamera();
             SetAimYAxis();
 
+
             if (isRiding)
             {
                 RidingCamera();
+
                 return;
             }
 
             if (playerState.isCumstomJumping)
-            {
-                if (isJumpLerp) return;
+            {            
+                //if (isJumpLerp) return; // << : Test 중
 
                 FollowPlayer();
                 return;
@@ -212,19 +215,30 @@ namespace YC.Camera_
             if (isJumping && !isJumpLerp)
             {
                 if (!wasEndSet)
+                {
                     NormalJump_FixY();
+                }
 
                 if (!playerState.IsAirJumping && !isLower)
+                {
                     CheckLowerPlayer();
+                }
+
 
                 if ((playerState.IsAirJumping || wasAirJump) && isAirJumpLerpEnd && !playerState.IsAirDashing)
+                {
                     AirJumpPlayerFollow();
+                }
 
                 if (wasEndSet && playerState.IsAirDashing)
+                {
                     AirDashFollow();
+                }
 
                 if (isLower)
+                {
                     LowerPlayerFollow();
+                }
             }
             else if (!isJumping && !isJumpLerp)
             {
@@ -847,7 +861,7 @@ namespace YC.Camera_
                 jumpCoroutine = StartCoroutine(LerpPlatformHeight(LerpTime, height));
         }
 
-        IEnumerator LerpPlatformHeight(float LerpTime, float height)
+        IEnumerator LerpPlatformHeight(float LerpTime, float height)   
         {
             float initYpos = lookAndFollow.transform.position.y;
             float lerpYpos = initYpos;
@@ -1264,7 +1278,7 @@ namespace YC.Camera_
                                     player.transform.position.y,
                                     player.transform.position.z);
         }
-
+      
         // ====================  [Shake 함수]  ==================== //
 
         public void SetSteadyBeam(bool isLock) // 스테디 빔 사용시, 카메라 Lock (Aim Attack State에서 호출)  
