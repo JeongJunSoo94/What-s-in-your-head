@@ -157,8 +157,14 @@ namespace YC.Camera_
         [SerializeField] GameObject CineLookObj_Back;
         [SerializeField] GameObject CineFollowObj_Back;
         [SerializeField] NoiseSettings NoiseProfile;
+        //[SerializeField] GameObject CameraColliderPrefab;
+
         [Header("[Aim UI]")]
         public GameObject aimUI;
+
+        // ============  콜라이더 관련  ============ //
+        //CinemachineCollider cinemachineCollider;
+        //GameObject cameraCollider;
 
         void Awake()
         {
@@ -195,15 +201,17 @@ namespace YC.Camera_
             SetCamera();
             SetAimYAxis();
 
+
             if (isRiding)
             {
                 RidingCamera();
+
                 return;
             }
 
             if (playerState.isCumstomJumping)
-            {
-                if (isJumpLerp) return;
+            {            
+                //if (isJumpLerp) return; // << : Test 중
 
                 FollowPlayer();
                 return;
@@ -212,24 +220,37 @@ namespace YC.Camera_
             if (isJumping && !isJumpLerp)
             {
                 if (!wasEndSet)
+                {
                     NormalJump_FixY();
+                }
 
                 if (!playerState.IsAirJumping && !isLower)
+                {
                     CheckLowerPlayer();
+                }
+
 
                 if ((playerState.IsAirJumping || wasAirJump) && isAirJumpLerpEnd && !playerState.IsAirDashing)
+                {
                     AirJumpPlayerFollow();
+                }
 
                 if (wasEndSet && playerState.IsAirDashing)
+                {
                     AirDashFollow();
+                }
 
                 if (isLower)
+                {
                     LowerPlayerFollow();
+                }
             }
             else if (!isJumping && !isJumpLerp)
             {
                 SetCineObjPos();
             }
+
+            
         }
 
 
@@ -305,6 +326,13 @@ namespace YC.Camera_
             Cine_sholderCam.m_YAxis.Value = 0.3f;
 
             SetCinemachineColliderDis(1);
+
+            // << :
+            //backCamCol.m_AvoidObstacles = false;
+            //cameraCollider = Instantiate(CameraColliderPrefab, Vector3.zero, Quaternion.identity);
+            //cameraCollider.GetComponent<CameraCollider>().SetVariables(this);
+            //cinemachineCollider = backCam.GetComponent<CinemachineCollider>();
+
             // 가상 카메라 리스트에 넣어준다.
             camList.Add(backCam);
             camList.Add(sholderCam);
@@ -406,7 +434,7 @@ namespace YC.Camera_
             OnOffCamera(camList[(int)curCam]);
         }
 
-        void InitNoiseSet()
+        void InitNoiseSet()  
         {
             listSholderCBMCP = new List<CinemachineBasicMultiChannelPerlin>();
             listBackCBMCP = new List<CinemachineBasicMultiChannelPerlin>();
@@ -718,7 +746,7 @@ namespace YC.Camera_
             OnOffCamera(backCam);
         }
 
-        public void SetCinemachineColliderDis(float dis)
+        public void SetCinemachineColliderDis(float dis)   
         {
             if (!pv.IsMine) return;
 
@@ -847,7 +875,7 @@ namespace YC.Camera_
                 jumpCoroutine = StartCoroutine(LerpPlatformHeight(LerpTime, height));
         }
 
-        IEnumerator LerpPlatformHeight(float LerpTime, float height)
+        IEnumerator LerpPlatformHeight(float LerpTime, float height)   
         {
             float initYpos = lookAndFollow.transform.position.y;
             float lerpYpos = initYpos;
@@ -1264,7 +1292,7 @@ namespace YC.Camera_
                                     player.transform.position.y,
                                     player.transform.position.z);
         }
-
+      
         // ====================  [Shake 함수]  ==================== //
 
         public void SetSteadyBeam(bool isLock) // 스테디 빔 사용시, 카메라 Lock (Aim Attack State에서 호출)  
@@ -1382,6 +1410,7 @@ namespace YC.Camera_
 
                 yield return null;
             }
+
             isShakedFade = false;
         }
 
@@ -1405,6 +1434,20 @@ namespace YC.Camera_
                 CBMCP.m_FrequencyGain = initialVlaue;
             }
             isShakedFade = false;
+        }
+
+        // ====================  [Collision 함수]  ==================== //
+
+        public void SetCinemachineCollider(bool enable)
+        {
+            //if(enable)
+            //{
+            //    cinemachineCollider.m_AvoidObstacles = true;
+            //}
+            //else
+            //{
+            //    cinemachineCollider.m_AvoidObstacles = false;
+            //}
         }
     }
 }

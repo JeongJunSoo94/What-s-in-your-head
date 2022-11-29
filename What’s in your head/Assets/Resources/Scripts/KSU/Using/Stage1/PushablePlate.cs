@@ -86,7 +86,7 @@ namespace KSU.Object.Interaction
                         //if (SteadyRigidbody == null)
                         //    SteadyRigidbody = collision.gameObject.GetComponent<Rigidbody>();
 
-                        if (Vector3.Angle(NellaState.transform.forward, standardVector) < standardAngle)
+                        if (Vector3.Angle(SteadyState.transform.forward, standardVector) < standardAngle)
                         {
                             if (!isActivated)
                             {
