@@ -13,12 +13,13 @@ public class SpiritOfAlice : MonoBehaviour
             case "MonsterAttack":
                 {
                     GameManager.Instance.aliceHP -= other.GetComponentInParent<DefenseMonster>().attackDamage;
+                    Debug.Log("举府胶 HP : " + GameManager.Instance.aliceHP);
                     if (GameManager.Instance.aliceHP <= 0)
                     {
                         GameManager.Instance.aliceHP = 0;
                         if (PhotonNetwork.IsMasterClient)
                         {
-                            PhotonNetwork.LoadLevel(4 * (GameManager.Instance.curStageIndex - 1) + 1 + GameManager.Instance.curStageType);
+                            PhotonNetwork.LoadLevel(15);
                             return;
                         }
                     }
@@ -31,12 +32,13 @@ public class SpiritOfAlice : MonoBehaviour
             case "MonsterRush":
                 {
                     GameManager.Instance.aliceHP -= other.GetComponentInParent<TrippleHeadSnake>().rushDamage;
+                    Debug.Log("举府胶 HP : " + GameManager.Instance.aliceHP);
                     if (GameManager.Instance.aliceHP <= 0)
                     {
                         GameManager.Instance.aliceHP = 0;
                         if (PhotonNetwork.IsMasterClient)
                         {
-                            PhotonNetwork.LoadLevel(4 * (GameManager.Instance.curStageIndex - 1) + 1 + GameManager.Instance.curStageType);
+                            PhotonNetwork.LoadLevel(15);
                             return;
                         }
                     }

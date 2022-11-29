@@ -123,12 +123,10 @@ namespace JCW.UI.InGame
                     {
                         CheckDeadEnd(isNella);
                         photonView.RPC(nameof(CheckDeadEnd), RpcTarget.Others, isNella);
+                        photonView.RPC(nameof(TurnOffUI), RpcTarget.AllViaServer);
                     }
 
                     Dead();
-
-                    if (!isSideView)
-                        photonView.RPC(nameof(TurnOffUI), RpcTarget.AllViaServer);
 
                 }
                 else
@@ -153,7 +151,6 @@ namespace JCW.UI.InGame
                 healTime += Time.deltaTime;
                 if (healTime >= healSecond)
                 {
-                    Debug.Log("회복 시작");
                     healTime = 0;
                     StartCoroutine("Cure");
                 }
@@ -174,7 +171,6 @@ namespace JCW.UI.InGame
         [PunRPC]
         void CheckDeadEnd(bool isNella)
         {
-            Debug.Log("둘 다 죽어서 맵 로딩해야하는지 체크");
             GameManager.Instance.SetAlive(isNella, false);
             if (!(bool)GameManager.Instance.isAlive[true] && !(bool)GameManager.Instance.isAlive[false])
                 ReloadCurrentScene();
@@ -213,6 +209,7 @@ namespace JCW.UI.InGame
         [PunRPC]
         public void SetRevive(bool value)
         {
+            // 여기서 HP UI를 다시 켜줌.
             if (!value)
                 charHpUI.SetActive(true);
             if(GameManager.Instance.isTopView)

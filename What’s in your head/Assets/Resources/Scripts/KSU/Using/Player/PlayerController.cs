@@ -311,8 +311,8 @@ namespace KSU
             if (photonView.IsMine)
             {
                 GameManager.Instance.curPlayerHP = 12;
-                Debug.Log("부활 직후 현재 HP : " + GameManager.Instance.curPlayerHP);
                 GameManager.Instance.SetAliveState(isNella, true);
+                
             }
             if (photonView.IsMine && characterState.isInMaze)
             {

@@ -26,7 +26,10 @@ namespace UnityStandardAssets.Characters.ThirdPerson
         private void Update()
         {
             if (target != null)
-                agent.SetDestination(target.position);
+            {
+                if(agent.enabled)
+                    agent.SetDestination(target.position);
+            }
 
             if (agent.remainingDistance > agent.stoppingDistance)
                 character.Move(agent.desiredVelocity, false, false);

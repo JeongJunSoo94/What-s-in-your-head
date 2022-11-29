@@ -125,7 +125,7 @@ namespace JCW.Object
             {
                 Transform playerTF = collision.gameObject.transform;
                 if (isLethal)
-                    playerTF.GetComponent<PlayerController>().Resurrect();
+                    playerTF.GetComponent<PlayerController>().GetDamage(12, DamageType.Dead);
                 else if (canRide && playerTF.position.y >= this.transform.position.y)
                     playerTF.parent = this.transform;
             }

@@ -139,6 +139,7 @@ public class PlayerState : MonoBehaviour
             WasAirDashing = false;
             IsGrounded = false;
             isRiding = false;
+            isOutOfControl = false;
         }
         if (initTop)
         {

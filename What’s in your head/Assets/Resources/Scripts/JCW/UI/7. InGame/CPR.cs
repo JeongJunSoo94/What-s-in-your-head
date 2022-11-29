@@ -21,7 +21,10 @@ namespace JCW.UI.InGame
         PhotonView photonView;
         bool isNella;
         Transform curPlayer;
+        PlayerState curPlayerState;
+
         Camera mainCam;
+        CinemachineBrain mainCamCine;
 
         Vector3 originalPos;
 
@@ -32,8 +35,12 @@ namespace JCW.UI.InGame
             photonView = GetComponent<PhotonView>();
             isNella = GameManager.Instance.characterOwner[PhotonNetwork.IsMasterClient];
             curPlayer = GameManager.Instance.myPlayerTF;
+            curPlayerState = curPlayer.GetComponent<PlayerState>();
             if (photonView.IsMine)
+            {
                 mainCam = isNella ? CameraManager.Instance.cameras[0] : CameraManager.Instance.cameras[1];
+                mainCamCine = mainCam.GetComponent<CinemachineBrain>();
+            }
             originalPos = transform.GetChild(2).gameObject.GetComponent<RectTransform>().position;
             heartRect = transform.GetChild(2).gameObject.GetComponent<RectTransform>();
         }
@@ -42,8 +49,9 @@ namespace JCW.UI.InGame
         {
             if (photonView.IsMine)
             {
-                mainCam.GetComponent<CinemachineBrain>().enabled = false;
-                curPlayer.GetComponent<PlayerState>().isOutOfControl = true;
+                // 카메라 움직임과 플레이어 움직임 막기
+                mainCamCine.enabled = false;
+                curPlayerState.isOutOfControl = true;
             }
             if (GameManager.Instance.isTopView)
             {
@@ -71,12 +79,12 @@ namespace JCW.UI.InGame
             //여기서 카메라나 플레이어 움직임 켜야함.
             if (photonView.IsMine)
             {
-                if(mainCam)
-                    mainCam.GetComponent<CinemachineBrain>().enabled = true;
-                if(curPlayer)
-                    curPlayer.GetComponent<PlayerState>().isOutOfControl = false;
+                // 카메라 움직임과 플레이어 움직임 정상화
+                mainCamCine.enabled = false;
+                curPlayerState.isOutOfControl = true;
             }
 
+            // 블러와 검은 화면 켜기
             transform.GetChild(0).gameObject.SetActive(true);
             transform.GetChild(1).gameObject.SetActive(true);
 
@@ -93,13 +101,13 @@ namespace JCW.UI.InGame
         {
             if (!photonView.IsMine)
                 return;
-            photonView.RPC(nameof(IncreaseValue), RpcTarget.AllViaServer, increaseValue * Time.deltaTime, isNella, false);
+            photonView.RPC(nameof(IncreaseValue), RpcTarget.AllViaServer, increaseValue * Time.deltaTime, false);
             if (KeyManager.Instance.GetKeyDown(PlayerAction.Interaction))
-                photonView.RPC(nameof(IncreaseValue), RpcTarget.AllViaServer, (float)addIncreaseValue, isNella, true);
+                photonView.RPC(nameof(IncreaseValue), RpcTarget.AllViaServer, (float)addIncreaseValue, true);
         }
 
         [PunRPC]
-        void IncreaseValue(float value, bool isNella, bool isPress)
+        void IncreaseValue(float value, bool isPress)
         {
             heartGauge.fillAmount += value;
             if (isPress && !heartBeat.isPlaying)
