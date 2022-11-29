@@ -244,6 +244,16 @@ namespace YC.Camera_
             {
                 SetCineObjPos();
             }
+
+            //// << :
+            //if(Input.GetKeyDown(KeyCode.Keypad5))
+            //{
+            //    SetCinemachineColliderDis(0);
+            //}
+            //else if (Input.GetKeyDown(KeyCode.Keypad6))
+            //{
+            //    SetCinemachineColliderDis(1);
+            //}
         }
 
 
@@ -732,7 +742,7 @@ namespace YC.Camera_
             OnOffCamera(backCam);
         }
 
-        public void SetCinemachineColliderDis(float dis)
+        public void SetCinemachineColliderDis(float dis)   
         {
             if(!pv.IsMine) return;
 
