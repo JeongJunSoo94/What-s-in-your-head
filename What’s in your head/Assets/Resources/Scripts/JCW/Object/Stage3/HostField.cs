@@ -185,6 +185,7 @@ namespace JCW.Object
             if (curHP <= 0 && !isDead)
             {
                 isDead = true;
+                isPurified = true;
                 animator.Play("Destroy");
                 boxCollider.enabled = false;
                 SoundManager.Instance.Play3D("S3_ContaminationFieldPurified", pv.ViewID);
