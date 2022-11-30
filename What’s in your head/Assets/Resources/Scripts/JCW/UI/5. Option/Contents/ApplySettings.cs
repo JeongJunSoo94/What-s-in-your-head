@@ -8,6 +8,7 @@ using System.IO;
 using LitJson;
 using JCW.AudioCtrl;
 using YC.CameraManager_;
+using JCW.Dialog;
 
 namespace JCW.UI.Options
 {
@@ -87,6 +88,13 @@ namespace JCW.UI.Options
                 if (funcObj.name == "Function")
                 {
                     string value = funcObj.GetComponent<Text>().text == "끄기" ? "0" : "1";
+                    if(type == "Game")
+                    {
+                        if(index == 0)
+                            DialogManager.Instance.isSubOn = funcObj.GetComponent<Text>().text == "켜기";
+                        else if(index == 1)
+                            DialogManager.Instance.isSubBGOn = funcObj.GetComponent<Text>().text == "켜기";
+                    }
                     if(type == "Camera" && index == 0)
                         CameraManager.Instance.Option_SetShake(value == "1");
                     setValue.data.Add(new OptionData(_contents[tabObj], value, false));

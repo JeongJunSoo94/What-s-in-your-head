@@ -91,7 +91,7 @@ namespace JCW.UI
             {
                 GameManager.Instance.curStageType = GameManager.Instance.curStageType >= 3 ? 0 : GameManager.Instance.curStageType + 1;
                 GameManager.Instance.curStageIndex = GameManager.Instance.curStageType == 0 ? GameManager.Instance.curStageIndex + 1 : GameManager.Instance.curStageIndex;
-                if (GameManager.Instance.curStageIndex == 4 && GameManager.Instance.curStageType == 1
+                if (GameManager.Instance.curStageIndex == 4 && GameManager.Instance.curStageType == 2
                     && PhotonNetwork.IsMasterClient)
                 {
                     GameManager.Instance.GoMainMenu_RPC();

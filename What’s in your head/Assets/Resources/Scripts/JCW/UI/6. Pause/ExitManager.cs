@@ -6,7 +6,7 @@ using JCW.Network;
 using Photon.Pun;
 
 namespace JCW.UI
-{
+{    
     public class ExitManager : MonoBehaviour
     {
         [Header("일시정지 타이틀")] [SerializeField] GameObject titleObj;
@@ -27,11 +27,6 @@ namespace JCW.UI
             exitMenu.onClick.AddListener(() =>
             {
                 PhotonManager.Instance.DestroyCurrentRoom_RPC();
-                #if UNITY_EDITOR
-                    UnityEditor.EditorApplication.isPlaying = false;
-                #else
-                    Application.Quit();
-                #endif
             });
             backMenu.onClick.AddListener(() =>
             {

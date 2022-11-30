@@ -229,7 +229,17 @@ public class GameManager : MonoBehaviour, IPunObservable
         if (PhotonNetwork.IsMasterClient)
             PhotonNetwork.LoadLevel(0);        
         Destroy(GameManager.Instance.gameObject);
+    }
 
+    public void LoadCheckPoint()
+    {
+        photonView.RPC(nameof(LoadCP), RpcTarget.AllViaServer);
+    }
+
+    [PunRPC]
+    void LoadCP()
+    {
+        myPlayerTF.GetComponent<KSU.PlayerController>().Resurrect();
     }
 
     public void ResetDefault_RPC()

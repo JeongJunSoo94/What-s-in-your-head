@@ -95,6 +95,11 @@ namespace JCW.Dialog
         [HideInInspector] public bool needToNellaBreak = false;
         [HideInInspector] public bool needToSteadyBreak = false;
 
+        [HideInInspector] public bool isSubOn = true;
+        [HideInInspector] public bool isSubBGOn = true;
+
+        List<Image> subBackGround = new();
+
         private void Awake()
         {
             if (Instance == null)
@@ -107,6 +112,14 @@ namespace JCW.Dialog
                 nellaRealText2  = nellaText2.transform.GetChild(1).GetComponent<Text>();
                 steadyRealText1 = steadyText1.transform.GetChild(1).GetComponent<Text>();
                 steadyRealText2 = steadyText2.transform.GetChild(1).GetComponent<Text>();
+
+                subBackGround.Add(etcText1.transform.GetChild(0).GetComponent<Image>());
+                subBackGround.Add(nellaText1.transform.GetChild(0).GetComponent<Image>());
+                subBackGround.Add(steadyText1.transform.GetChild(0).GetComponent<Image>());
+                subBackGround.Add(etcText2.transform.GetChild(0).GetComponent<Image>());
+                subBackGround.Add(nellaText2.transform.GetChild(0).GetComponent<Image>());
+                subBackGround.Add(steadyText2.transform.GetChild(0).GetComponent<Image>());
+
             }
             else
                 Destroy(this.gameObject);
@@ -215,8 +228,19 @@ namespace JCW.Dialog
             return steadyDialogs.Count != 0;
         }
 
+        void SetSubtitleBG(bool isSubBGOn)
+        {
+            for (int i = 0 ; i < subBackGround.Count ; ++i)
+            {
+                subBackGround[i].enabled = isSubBGOn;
+            }
+        }
+
         public void SetEtcDialog(int order)
         {
+            if (!isSubOn)
+                return;
+            SetSubtitleBG(isSubBGOn);
             if (etcDialog == null)
             {
                 etcDialog = new(ReadDialogs((int)DialogType.ETC, order), 120);
@@ -238,6 +262,9 @@ namespace JCW.Dialog
 
         public void SetNellaDialog(int order)
         {
+            if (!isSubOn)
+                return;
+            SetSubtitleBG(isSubBGOn);
             if (nellaDialog == null)
             {
                 nellaDialog = new(ReadDialogs((int)DialogType.NELLA, order), 120);
@@ -259,6 +286,9 @@ namespace JCW.Dialog
 
         public void SetSteadyDialog(int order)
         {
+            if (!isSubOn)
+                return;
+            SetSubtitleBG(isSubBGOn);
             if (steadyDialog == null)
             {
                 steadyDialog = new(ReadDialogs((int)DialogType.STEADY, order), 120);
@@ -286,6 +316,14 @@ namespace JCW.Dialog
             nellaText2.gameObject.SetActive(false);
             steadyText1.gameObject.SetActive(false);
             steadyText2.gameObject.SetActive(false);
+        }
+
+        public void GoUp()
+        {
+            nellaText1.rectTransform.anchoredPosition = new Vector2(nellaText1.rectTransform.anchoredPosition.x, nellaText1.rectTransform.anchoredPosition.y + 100f);
+            nellaText2.rectTransform.anchoredPosition = new Vector2(nellaText2.rectTransform.anchoredPosition.x, nellaText2.rectTransform.anchoredPosition.y + 100f);
+            steadyText1.rectTransform.anchoredPosition = new Vector2(steadyText1.rectTransform.anchoredPosition.x, steadyText1.rectTransform.anchoredPosition.y + 100f);
+            steadyText2.rectTransform.anchoredPosition = new Vector2(steadyText2.rectTransform.anchoredPosition.x, steadyText2.rectTransform.anchoredPosition.y + 100f);
         }
 
     }

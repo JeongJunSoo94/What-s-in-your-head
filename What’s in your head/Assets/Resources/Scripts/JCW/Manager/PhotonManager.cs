@@ -155,6 +155,11 @@ namespace JCW.Network
         void DestroyCurrentRoom()
         {
             PhotonNetwork.LeaveRoom();
+            #if UNITY_EDITOR
+                UnityEditor.EditorApplication.isPlaying = false;
+            #else
+                    Application.Quit();
+            #endif
         }
 
         // 친구 검색창에서 돋보기 버튼 누르면 작동
