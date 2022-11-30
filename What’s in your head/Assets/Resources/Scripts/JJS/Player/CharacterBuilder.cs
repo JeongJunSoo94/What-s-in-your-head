@@ -75,10 +75,9 @@ namespace JJS
             {
                 SetUION(nella);
                 SetUION(steady);
-
+                DialogManager.Instance.GoUp();
                 if (GameManager.Instance.curStageType == 1)
-                {
-                    DialogManager.Instance.GoUp();
+                {                    
                     CameraManager.Instance.cameras[0].rect = new Rect(0f, 0f, 0.5f, 1f);
                     CameraManager.Instance.cameras[1].rect = new Rect(0.5f, 0f, 0.5f, 1f);
 
@@ -147,6 +146,7 @@ namespace JJS
             {
                 SetUION(nella);
                 SetUION(steady);
+                DialogManager.Instance.GoUp();
                 if (GameManager.Instance.curStageType == 1)
                 {
                     if (CameraManager.Instance.cameras[0])

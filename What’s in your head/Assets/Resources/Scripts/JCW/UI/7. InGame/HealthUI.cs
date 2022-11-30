@@ -23,7 +23,7 @@ namespace JCW.UI.InGame
     public class HealthUI : MonoBehaviour, IPunObservable
     {
         [Header("최대 체력 (기본값 : 12)")] [SerializeField] int maxHP = 12;
-        [Header("N초 후 회복")] [SerializeField] float healSecond;
+        [Header("N초 후 회복")] [SerializeField] float healSecond = 3f;
         [Header("N초 후 게이지 깎임")] [SerializeField] float damageSecond;
 
 
@@ -105,7 +105,7 @@ namespace JCW.UI.InGame
             {
                 // 실행 중일수도 있는 회복 코루틴 중지.
                 healTime = 0f;
-                StopCoroutine("Cure");
+                StopAllCoroutines();
 
                 curHP = GameManager.Instance.curPlayerHP;
                 // 사망 시
@@ -152,7 +152,7 @@ namespace JCW.UI.InGame
                 if (healTime >= healSecond)
                 {
                     healTime = 0;
-                    StartCoroutine("Cure");
+                    StartCoroutine(nameof(Cure));
                 }
             }
             for (int i = damageList.Count - 1 ; i >= 0 ; --i)

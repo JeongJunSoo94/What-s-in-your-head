@@ -24,12 +24,12 @@ public class SpiritOfAlice : MonoBehaviour
                     if (!isStart20 && GameManager.Instance.aliceHP <= 20)
                     {
                         isStart20 = true;
-                        StartCoroutine(nameof(Warn20));                        
+                        StartCoroutine(nameof(WarnFist));                        
                     }
                     if (!isStart10 && GameManager.Instance.aliceHP <= 10)
                     {
                         isStart10 = true;
-                        StartCoroutine(nameof(Warn10));
+                        StartCoroutine(nameof(WarnSecond));
                     }
                     if (!isGameOver && GameManager.Instance.aliceHP <= 0)
                     {
@@ -51,12 +51,12 @@ public class SpiritOfAlice : MonoBehaviour
                     if (!isStart20 && GameManager.Instance.aliceHP <= 20)
                     {
                         isStart20 = true;
-                        StartCoroutine(nameof(Warn20));
+                        StartCoroutine(nameof(WarnFist));
                     }
                     if (!isStart10 && GameManager.Instance.aliceHP <= 10)
                     {
                         isStart10 = true;
-                        StartCoroutine(nameof(Warn10));
+                        StartCoroutine(nameof(WarnSecond));
                     }
                     if (!isGameOver && GameManager.Instance.aliceHP <= 0)
                     {
@@ -69,7 +69,7 @@ public class SpiritOfAlice : MonoBehaviour
                 break;
         }
 
-        IEnumerator Warn20()
+        IEnumerator WarnFist()
         {
             DialogManager.Instance.steadyText2.text = "앨리스가 공격받고 있어!";
             DialogManager.Instance.steadyRealText2.text = DialogManager.Instance.steadyText2.text;
@@ -80,7 +80,7 @@ public class SpiritOfAlice : MonoBehaviour
             yield break;
         }
 
-        IEnumerator Warn10()
+        IEnumerator WarnSecond()
         {
             DialogManager.Instance.nellaText1.text = "스테디! 앨리스가 위태로워!";
             DialogManager.Instance.nellaRealText1.text = DialogManager.Instance.nellaText1.text;

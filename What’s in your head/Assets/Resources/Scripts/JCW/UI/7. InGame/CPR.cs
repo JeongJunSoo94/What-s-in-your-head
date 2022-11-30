@@ -116,8 +116,6 @@ namespace JCW.UI.InGame
             {
                 heartGauge.fillAmount = 0f;
                 GameManager.Instance.MediateRevive(false);
-                //if(!GameManager.Instance.isTopView && photonView.IsMine)
-                //    CameraManager.Instance.ReviveCam(isNella);
                 curPlayer.GetComponent<Animator>().SetBool("isDead", false);
             }
         }

@@ -158,7 +158,7 @@ namespace KSU.AutoAim.Object.Monster
 
         public bool GetStun()
         {
-            if (pv.IsMine && !monsterAnimator.GetBool("isAttacked") && !monsterAnimator.GetBool("isDead"))
+            if (pv.IsMine && !monsterAnimator.GetBool("isDead"))
             {
                 pv.RPC(nameof(SetStun), RpcTarget.AllViaServer);
                 return true;

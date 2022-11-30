@@ -1,6 +1,4 @@
 using Photon.Pun;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class CustomPhotonTransformView : MonoBehaviourPun, IPunObservable
@@ -14,7 +12,6 @@ public class CustomPhotonTransformView : MonoBehaviourPun, IPunObservable
 
     private Quaternion m_NetworkRotation;
 
-    [Tooltip("Indicates if localPosition and localRotation should be used. Scale ignores this setting, and always uses localScale to avoid issues with lossyScale.")]
     public bool m_UseLocal = false;
 
     bool m_firstTake = false;
@@ -37,72 +34,17 @@ public class CustomPhotonTransformView : MonoBehaviourPun, IPunObservable
         m_ownerLocalFirstTake = true;
     }
 
-    public void Update()
-    {
-        if(photonView.IsMine)
-        {
-            if (ownerHasParent)
-            {
-                if (transform.parent == null)
-                {
-                    this.photonView.RPC(nameof(SendHasParent), RpcTarget.AllViaServer, false, true);
-                }
-            }
-            else
-            {
-                if (transform.parent != null)
-                {
-                    this.photonView.RPC(nameof(SendHasParent), RpcTarget.AllViaServer, true, true);
-                }
-            }
-        }
-        else
-        {
-            if (remoteHasParent)
-            {
-                if (transform.parent == null)
-                {
-                    this.photonView.RPC(nameof(SendHasParent), RpcTarget.AllViaServer, false, false);
-                }
-            }
-            else
-            {
-                if (transform.parent != null)
-                {
-                    this.photonView.RPC(nameof(SendHasParent), RpcTarget.AllViaServer, true, false);
-                }
-            }
-        }
-    }
-
     public void FixedUpdate()
     {
         if (!this.photonView.IsMine)
         {
             if (m_UseLocal)
             {
-                //if (m_Direction.magnitude < Mathf.Epsilon)
-                //{
-                //    transform.localPosition = this.m_NetworkPosition;
-                //}
-                //else
-                {
-                    transform.localPosition = Vector3.MoveTowards(transform.localPosition, this.m_NetworkPosition, this.m_Distance * Time.fixedDeltaTime * PhotonNetwork.SerializationRate);
-                }
-                //transform.localRotation = Quaternion.RotateTowards(transform.localRotation, this.m_NetworkRotation, this.m_Angle * Time.fixedDeltaTime * PhotonNetwork.SerializationRate);
+                transform.localPosition = Vector3.MoveTowards(transform.localPosition, this.m_NetworkPosition, this.m_Distance * Time.fixedDeltaTime * PhotonNetwork.SerializationRate);
             }
             else
             {
-                //if (m_Direction.magnitude < Mathf.Epsilon)
-                //{
-                //    transform.position = this.m_NetworkPosition;
-                //}
-                //else
-                {
-                    transform.position = Vector3.MoveTowards(transform.position, this.m_NetworkPosition, this.m_Distance * Time.fixedDeltaTime * PhotonNetwork.SerializationRate);
-                }
-                
-                //transform.rotation = Quaternion.RotateTowards(transform.rotation, this.m_NetworkRotation, this.m_Angle * Time.fixedDeltaTime * PhotonNetwork.SerializationRate);
+                transform.position = Vector3.MoveTowards(transform.position, this.m_NetworkPosition, this.m_Distance * Time.fixedDeltaTime * PhotonNetwork.SerializationRate);
             }
             transform.rotation = Quaternion.RotateTowards(transform.rotation, this.m_NetworkRotation, this.m_Angle * Time.fixedDeltaTime * PhotonNetwork.SerializationRate);
         }
@@ -117,33 +59,43 @@ public class CustomPhotonTransformView : MonoBehaviourPun, IPunObservable
             remoteHasParent = hasP;
     }
 
-    [PunRPC]
-    void SendUseLocal(bool useL)
-    {
-        m_UseLocal = useL;
-    }
-
     public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
     {
         if (stream.IsWriting)
         {
             if (!photonView.IsMine)
                 return;
+
+            if (ownerHasParent)
+            {
+                if (transform.parent == null)
+                {
+                    this.photonView.RPC(nameof(SendHasParent), RpcTarget.AllViaServer, false, true);
+                }
+            }
+            else
+            {
+                if (transform.parent != null)
+                {
+                    this.photonView.RPC(nameof(SendHasParent), RpcTarget.AllViaServer, true, true);
+                }
+            }
+
             if (m_UseLocal)
             {
                 if (!ownerHasParent || !remoteHasParent)
-                    photonView.RPC(nameof(SendUseLocal), RpcTarget.AllViaServer, false);
+                    m_UseLocal = false;
             }
             else
             {
                 if (ownerHasParent && remoteHasParent)
-                    photonView.RPC(nameof(SendUseLocal), RpcTarget.AllViaServer, true);
+                    m_UseLocal = true;
             }
-
+            stream.SendNext(this.m_UseLocal);
 
             if (m_UseLocal)
             {
-                if(m_ownerLocalFirstTake)
+                if (m_ownerLocalFirstTake)
                 {
                     m_ownerWorldFirstTake = true;
                     m_ownerLocalFirstTake = false;
@@ -179,44 +131,41 @@ public class CustomPhotonTransformView : MonoBehaviourPun, IPunObservable
                     stream.SendNext(this.m_Direction);
                 }
             }
-
-            //if (m_UseLocal)
-            //{
-            //    stream.SendNext(transform.localRotation);
-            //}
-            //else
-            //{
-            //    stream.SendNext(transform.rotation);
-            //}
             stream.SendNext(transform.rotation);
         }
         else
         {
+            this.m_UseLocal = (bool)stream.ReceiveNext();
             this.m_NetworkPosition = (Vector3)stream.ReceiveNext();
             this.m_Direction = (Vector3)stream.ReceiveNext();
 
-            if (m_firstTake)
+            if (!(m_UseLocal && transform.parent == null))
             {
-                if (m_UseLocal)
-                    transform.localPosition = this.m_NetworkPosition;
-                else
-                    transform.position = this.m_NetworkPosition;
+                if (m_firstTake)
+                {
+                    if (m_UseLocal)
+                        transform.localPosition = this.m_NetworkPosition;
+                    else
+                        transform.position = this.m_NetworkPosition;
 
-                this.m_Distance = 0f;
-            }
-            else
-            {
-                float lag = Mathf.Abs((float)(PhotonNetwork.Time - info.SentServerTime));
-                this.m_NetworkPosition += this.m_Direction * lag;
-                if (m_UseLocal)
-                {
-                    this.m_Distance = Vector3.Distance(transform.localPosition, this.m_NetworkPosition);
+                    this.m_Distance = 0f;
                 }
                 else
                 {
-                    this.m_Distance = Vector3.Distance(transform.position, this.m_NetworkPosition);
+                    float lag = Mathf.Abs((float)(PhotonNetwork.Time - info.SentServerTime));
+                    this.m_NetworkPosition += this.m_Direction * lag;
+                    if (m_UseLocal)
+                    {
+                        this.m_Distance = Vector3.Distance(transform.localPosition, this.m_NetworkPosition);
+                    }
+                    else
+                    {
+                        this.m_Distance = Vector3.Distance(transform.position, this.m_NetworkPosition);
+                    }
                 }
             }
+
+
 
             this.m_NetworkRotation = (Quaternion)stream.ReceiveNext();
 
@@ -229,6 +178,21 @@ public class CustomPhotonTransformView : MonoBehaviourPun, IPunObservable
             else
             {
                 this.m_Angle = Quaternion.Angle(transform.rotation, this.m_NetworkRotation);
+            }
+
+            if (remoteHasParent)
+            {
+                if (transform.parent == null)
+                {
+                    this.photonView.RPC(nameof(SendHasParent), RpcTarget.AllViaServer, false, false);
+                }
+            }
+            else
+            {
+                if (transform.parent != null)
+                {
+                    this.photonView.RPC(nameof(SendHasParent), RpcTarget.AllViaServer, true, false);
+                }
             }
 
             if (m_firstTake)

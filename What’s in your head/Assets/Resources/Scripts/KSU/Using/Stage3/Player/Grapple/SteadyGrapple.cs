@@ -25,7 +25,7 @@ namespace KSU.AutoAim.Player.Object
         // Start is called before the first frame update
         protected override void Awake()
         {
-            base.Awake();            
+            base.Awake();
             grappleRope = GetComponent<LineRenderer>();
             audioSource = GetComponent<AudioSource>();
             pv = GetComponent<PhotonView>();
@@ -96,9 +96,11 @@ namespace KSU.AutoAim.Player.Object
 
         private void OnTriggerEnter(Collider other)
         {
-            if((other.gameObject.layer != LayerMask.NameToLayer("UITriggers")) && (other.gameObject.layer != LayerMask.NameToLayer("Player")) && (other.gameObject.layer != LayerMask.NameToLayer("Bullet")))
+            if ((other.gameObject.layer != LayerMask.NameToLayer("UITriggers"))
+                && (other.gameObject.layer != LayerMask.NameToLayer("Player"))
+                && (other.gameObject.layer != LayerMask.NameToLayer("Bullet")))
             {
-                    switch (other.tag)
+                switch (other.tag)
                 {
                     case "GrappledObject":
                         {
@@ -111,12 +113,19 @@ namespace KSU.AutoAim.Player.Object
                         {
                             if (!isGrab)
                             {
-                                playerGrappleAction.RecieveAutoAimObjectInfo(true, other.gameObject, AutoAimTargetType.Monster);
-                                isSucceeded = true;
-                                objectRigidbody.velocity = Vector3.zero;
                                 PoisonSnake snake = other.gameObject.GetComponent<PoisonSnake>();
-                                snake.GetStun();
-                                StartCoroutine(nameof(DelayDeactivation), snake.stunTime);
+                                if (snake.GetStun())
+                                {
+                                    playerGrappleAction.RecieveAutoAimObjectInfo(true, other.gameObject, AutoAimTargetType.Monster);
+                                    isSucceeded = true;
+                                    objectRigidbody.velocity = Vector3.zero;
+                                    StartCoroutine(nameof(DelayDeactivation), snake.stunTime);
+                                }
+                                else
+                                {
+                                    playerGrappleAction.RecieveAutoAimObjectInfo(false, null, AutoAimTargetType.Null);
+                                    this.gameObject.SetActive(false);
+                                }
                             }
                         }
                         break;
@@ -125,17 +134,25 @@ namespace KSU.AutoAim.Player.Object
                             if (!isGrab)
                             {
                                 TrippleHeadSnake snake = other.gameObject.GetComponent<TrippleHeadSnake>();
-                                playerGrappleAction.RecieveAutoAimObjectInfo(true, other.gameObject, AutoAimTargetType.Monster);
-                                isSucceeded = true;
-                                objectRigidbody.velocity = Vector3.zero;
-                                snake.GetStun();
-                                StartCoroutine(nameof(DelayDeactivation), snake.stunTime);
+                                if (snake.GetStun())
+                                {
+                                    playerGrappleAction.RecieveAutoAimObjectInfo(true, other.gameObject, AutoAimTargetType.Monster);
+                                    isSucceeded = true;
+                                    objectRigidbody.velocity = Vector3.zero;
+                                    snake.GetStun();
+                                    StartCoroutine(nameof(DelayDeactivation), snake.stunTime);
+                                }
+                                else
+                                {
+                                    playerGrappleAction.RecieveAutoAimObjectInfo(false, null, AutoAimTargetType.Null);
+                                    this.gameObject.SetActive(false);
+                                }
                             }
                         }
                         break;
                     default:
                         {
-                            if(!isGrab)
+                            if (!isGrab)
                             {
                                 playerGrappleAction.RecieveAutoAimObjectInfo(false, null, AutoAimTargetType.Null);
                                 this.gameObject.SetActive(false);

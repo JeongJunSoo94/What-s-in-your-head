@@ -320,10 +320,10 @@ namespace JCW.Dialog
 
         public void GoUp()
         {
-            nellaText1.rectTransform.anchoredPosition = new Vector2(nellaText1.rectTransform.anchoredPosition.x, nellaText1.rectTransform.anchoredPosition.y + 100f);
-            nellaText2.rectTransform.anchoredPosition = new Vector2(nellaText2.rectTransform.anchoredPosition.x, nellaText2.rectTransform.anchoredPosition.y + 100f);
-            steadyText1.rectTransform.anchoredPosition = new Vector2(steadyText1.rectTransform.anchoredPosition.x, steadyText1.rectTransform.anchoredPosition.y + 100f);
-            steadyText2.rectTransform.anchoredPosition = new Vector2(steadyText2.rectTransform.anchoredPosition.x, steadyText2.rectTransform.anchoredPosition.y + 100f);
+            nellaText1.rectTransform.anchoredPosition = new Vector2(nellaText1.rectTransform.anchoredPosition.x, 100f);
+            nellaText2.rectTransform.anchoredPosition = new Vector2(nellaText2.rectTransform.anchoredPosition.x, 100f);
+            steadyText1.rectTransform.anchoredPosition = new Vector2(steadyText1.rectTransform.anchoredPosition.x, 100f);
+            steadyText2.rectTransform.anchoredPosition = new Vector2(steadyText2.rectTransform.anchoredPosition.x, 100f);
         }
 
     }

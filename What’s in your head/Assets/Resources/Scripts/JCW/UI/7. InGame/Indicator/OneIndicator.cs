@@ -104,6 +104,7 @@ namespace JCW.UI.InGame.Indicator
         IEnumerator Wait()
         {
             yield return new WaitUntil(() => isStart == true);
+            isNella = GameManager.Instance.characterOwner[PhotonNetwork.IsMasterClient];
             interactiveImg.sprite = isNella ? nella_DetectSprite : steady_DetectSprite;
             yield break;
         }

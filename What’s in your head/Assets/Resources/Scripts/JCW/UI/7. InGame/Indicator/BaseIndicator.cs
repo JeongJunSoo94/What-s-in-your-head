@@ -91,7 +91,7 @@ namespace JCW.UI.InGame.Indicator
         // 스크린 사이즈 Rect값에 맞게끔 설정
         protected void SetSreenInfo()
         {
-            if (mainCamera==null)
+            if(mainCamera == null)
                 SetCam();
             if (mainCamera == null)
                 return;
@@ -106,7 +106,8 @@ namespace JCW.UI.InGame.Indicator
         {
             if (GameManager.Instance.characterOwner.Count < 2)
                 return;
-           isNella = GameManager.Instance.characterOwner[PhotonNetwork.IsMasterClient];
+
+            isNella = GameManager.Instance.characterOwner[PhotonNetwork.IsMasterClient];
             mainCamera = isNella ? CameraManager.Instance.cameras[0] : CameraManager.Instance.cameras[1];
         }
 
@@ -116,6 +117,7 @@ namespace JCW.UI.InGame.Indicator
                 yield return new WaitUntil(() => GameManager.Instance.characterOwner.Count >= 1);
             else
                 yield return new WaitUntil(() => GameManager.Instance.GetCharOnScene());
+
             isStart = true;
             yield break;
         }
