@@ -298,13 +298,13 @@ namespace YC.Camera_
 
             // << : Set CinemachineCollider
             backCamCol.m_SmoothingTime = 0.01f;
-            backCamCol.m_Damping = 0.1f;
-            backCamCol.m_DampingWhenOccluded = 0.1f;
+            backCamCol.m_Damping = 0.5f;
+            backCamCol.m_DampingWhenOccluded = 0.5f;
             backCamCol.m_Strategy = CinemachineCollider.ResolutionStrategy.PullCameraForward;
 
             sholderCamCol.m_SmoothingTime = 0.01f;
-            sholderCamCol.m_Damping = 0.1f;
-            sholderCamCol.m_DampingWhenOccluded = 0.1f;
+            sholderCamCol.m_Damping = 0.5f;
+            sholderCamCol.m_DampingWhenOccluded = 0.5f;
             sholderCamCol.m_Strategy = CinemachineCollider.ResolutionStrategy.PullCameraForward;
 
 
@@ -748,10 +748,10 @@ namespace YC.Camera_
 
         public void SetCinemachineColliderDis(float dis)   
         {
-            if (!pv.IsMine) return;
+            //if (!pv.IsMine) return;
 
-            backCam.GetComponent<CinemachineCollider>().m_DistanceLimit = dis;
-            sholderCam.GetComponent<CinemachineCollider>().m_DistanceLimit = dis;
+            //backCam.GetComponent<CinemachineCollider>().m_DistanceLimit = dis;
+            //sholderCam.GetComponent<CinemachineCollider>().m_DistanceLimit = dis;
 
         }
 
