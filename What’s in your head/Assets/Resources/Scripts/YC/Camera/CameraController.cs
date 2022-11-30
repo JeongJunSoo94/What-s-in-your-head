@@ -210,7 +210,7 @@ namespace YC.Camera_
             }
 
             if (playerState.isCumstomJumping)
-            {            
+            {
                 //if (isJumpLerp) return; // << : Test 중
 
                 FollowPlayer();
@@ -250,7 +250,7 @@ namespace YC.Camera_
                 SetCineObjPos();
             }
 
-            
+
         }
 
 
@@ -298,13 +298,13 @@ namespace YC.Camera_
 
             // << : Set CinemachineCollider
             backCamCol.m_SmoothingTime = 0.01f;
-            backCamCol.m_Damping = 0.1f;
-            backCamCol.m_DampingWhenOccluded = 0.1f;
+            backCamCol.m_Damping = 0.5f;
+            backCamCol.m_DampingWhenOccluded = 0.5f;
             backCamCol.m_Strategy = CinemachineCollider.ResolutionStrategy.PullCameraForward;
 
             sholderCamCol.m_SmoothingTime = 0.01f;
-            sholderCamCol.m_Damping = 0.1f;
-            sholderCamCol.m_DampingWhenOccluded = 0.1f;
+            sholderCamCol.m_Damping = 0.5f;
+            sholderCamCol.m_DampingWhenOccluded = 0.5f;
             sholderCamCol.m_Strategy = CinemachineCollider.ResolutionStrategy.PullCameraForward;
 
 
@@ -434,7 +434,7 @@ namespace YC.Camera_
             OnOffCamera(camList[(int)curCam]);
         }
 
-        void InitNoiseSet()  
+        void InitNoiseSet()
         {
             listSholderCBMCP = new List<CinemachineBasicMultiChannelPerlin>();
             listBackCBMCP = new List<CinemachineBasicMultiChannelPerlin>();
@@ -746,12 +746,12 @@ namespace YC.Camera_
             OnOffCamera(backCam);
         }
 
-        public void SetCinemachineColliderDis(float dis)   
+        public void SetCinemachineColliderDis(float dis)
         {
-            if (!pv.IsMine) return;
+            //if (!pv.IsMine) return;
 
-            backCam.GetComponent<CinemachineCollider>().m_DistanceLimit = dis;
-            sholderCam.GetComponent<CinemachineCollider>().m_DistanceLimit = dis;
+            //backCam.GetComponent<CinemachineCollider>().m_DistanceLimit = dis;
+            //sholderCam.GetComponent<CinemachineCollider>().m_DistanceLimit = dis;
 
         }
 
@@ -875,7 +875,7 @@ namespace YC.Camera_
                 jumpCoroutine = StartCoroutine(LerpPlatformHeight(LerpTime, height));
         }
 
-        IEnumerator LerpPlatformHeight(float LerpTime, float height)   
+        IEnumerator LerpPlatformHeight(float LerpTime, float height)
         {
             float initYpos = lookAndFollow.transform.position.y;
             float lerpYpos = initYpos;
@@ -1292,7 +1292,7 @@ namespace YC.Camera_
                                     player.transform.position.y,
                                     player.transform.position.z);
         }
-      
+
         // ====================  [Shake 함수]  ==================== //
 
         public void SetSteadyBeam(bool isLock) // 스테디 빔 사용시, 카메라 Lock (Aim Attack State에서 호출)  
