@@ -29,9 +29,11 @@ namespace JCW.Dialog
         PhotonView pv;
 
         bool isStart = false;
+        WaitUntil wu;
         private void Awake()
         {
             pv = PhotonView.Get(this);
+            wu = new(() => GameManager.Instance.GetCharOnScene());
 
         }
 
@@ -40,14 +42,19 @@ namespace JCW.Dialog
             if((isNellaTrigger && other.CompareTag("Nella"))
                 || (isSteadyTrigger && other.CompareTag("Steady")))
             {
-                if(!GameManager.Instance.GetCharOnScene())
-                    return;
                 if (other.GetComponent<PlayerState>().isMine && !isStart)
                 {
                     isStart = true;
-                    pv.RPC(nameof(StartDialog), RpcTarget.AllViaServer);
+                    StartCoroutine(nameof(WaitForPlayer));
                 }
             }
+        }
+
+        IEnumerator WaitForPlayer()
+        {
+            yield return wu;
+            pv.RPC(nameof(StartDialog), RpcTarget.AllViaServer);
+            yield break;
         }
 
         [PunRPC]
