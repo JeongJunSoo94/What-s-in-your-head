@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using JCW.UI.Options.InputBindings;
 using JJS.CharacterSMB;
-using YC.Camera_;
+using YC.YC_Camera;
 namespace JJS
 {
     public class AimAttackSMB : CharacterBaseSMB

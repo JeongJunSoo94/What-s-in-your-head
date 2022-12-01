@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using JCW.AudioCtrl;
 using Photon.Pun;
 using UnityEngine;
-using YC.Camera_;
+using YC.YC_Camera;
 
 namespace JCW.Object.Stage1
 {

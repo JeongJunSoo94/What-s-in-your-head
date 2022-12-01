@@ -13938,7 +13938,7 @@ MonoBehaviour:
   OwnershipTransfer: 0
   observableSearch: 2
   ObservedComponents:
-  - {fileID: 2050228278625015733}
+  - {fileID: 2050228278625015737}
   sceneViewId: 12
   InstantiationId: 0
   isRuntimeInstantiated: 0
@@ -13963,22 +13963,6 @@ MonoBehaviour:
   - {x: 54.42, y: 49.4, z: 0.6}
   - {x: 54.42, y: 60.15, z: 0.6}
   isSoundOn: 0
---- !u!114 &2050228278625015733
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2050228278625015734}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 627855c7f81362d41938ffe0b1475957, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_SynchronizePosition: 1
-  m_SynchronizeRotation: 1
-  m_SynchronizeScale: 0
-  m_UseLocal: 1
 --- !u!1 &2050228278625015734
 GameObject:
   m_ObjectHideFlags: 0
@@ -13990,7 +13974,7 @@ GameObject:
   - component: {fileID: 2050228278625015688}
   - component: {fileID: 1357878247354347583}
   - component: {fileID: 2050228278625015690}
-  - component: {fileID: 2050228278625015733}
+  - component: {fileID: 2050228278625015737}
   - component: {fileID: 2050228278625015732}
   - component: {fileID: 2050228278625015735}
   - component: {fileID: 2050228278625015736}
@@ -14112,6 +14096,24 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &2050228278625015737
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2050228278625015734}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 96eeb08c005956a4c8d86644791bee05, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_SynchronizePosition: 1
+  m_SynchronizeRotation: 0
+  m_SynchronizeScale: 0
+  m_SynchronizeRigidbody: 0
+  lerpPosition: 30
+  lerpRotation: 30
 --- !u!23 &2310005328281188281
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -15141,22 +15143,6 @@ MonoBehaviour:
   - {x: -11.49, y: 53.14, z: 0.55}
   - {x: -11.49, y: 62.85, z: 0.55}
   isSoundOn: 0
---- !u!114 &4147910894197922245
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4147910894197922246}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 627855c7f81362d41938ffe0b1475957, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_SynchronizePosition: 1
-  m_SynchronizeRotation: 1
-  m_SynchronizeScale: 0
-  m_UseLocal: 1
 --- !u!1 &4147910894197922246
 GameObject:
   m_ObjectHideFlags: 0
@@ -15168,7 +15154,7 @@ GameObject:
   - component: {fileID: 4147910894197922296}
   - component: {fileID: 3979966185663725135}
   - component: {fileID: 4147910894197922298}
-  - component: {fileID: 4147910894197922245}
+  - component: {fileID: 4147910894197922300}
   - component: {fileID: 4147910894197922244}
   - component: {fileID: 4147910894197922247}
   - component: {fileID: 4147910894197922299}
@@ -15229,7 +15215,7 @@ MonoBehaviour:
   OwnershipTransfer: 0
   observableSearch: 2
   ObservedComponents:
-  - {fileID: 4147910894197922245}
+  - {fileID: 4147910894197922300}
   sceneViewId: 11
   InstantiationId: 0
   isRuntimeInstantiated: 0
@@ -15329,6 +15315,24 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &4147910894197922300
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4147910894197922246}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 96eeb08c005956a4c8d86644791bee05, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_SynchronizePosition: 1
+  m_SynchronizeRotation: 0
+  m_SynchronizeScale: 0
+  m_SynchronizeRigidbody: 0
+  lerpPosition: 30
+  lerpRotation: 30
 --- !u!33 &4306142439843095466
 MeshFilter:
   m_ObjectHideFlags: 0

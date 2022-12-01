@@ -6,7 +6,7 @@ using System.IO;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Video;
-using YC.CameraManager_;
+using YC.YC_CameraManager;
 
 namespace JCW.UI.InGame
 {

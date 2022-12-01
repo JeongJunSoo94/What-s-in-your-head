@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using JCW.UI.Options.InputBindings;
-using YC.Camera_; // << : 찬 추가
+using YC.YC_Camera; // << : 찬 추가
 
 namespace KSU.FSM
 {

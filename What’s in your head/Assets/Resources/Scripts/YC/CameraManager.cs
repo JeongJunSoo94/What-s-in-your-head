@@ -2,10 +2,10 @@ using Photon.Pun;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using YC.Camera_;
+using YC.YC_Camera;
 
 
-namespace YC.CameraManager_
+namespace YC.YC_CameraManager
 {
     public enum CharacterCamera { NELLA, STEADY };
 

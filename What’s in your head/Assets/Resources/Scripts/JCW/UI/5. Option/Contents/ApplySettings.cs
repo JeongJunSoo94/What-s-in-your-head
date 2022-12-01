@@ -7,7 +7,7 @@ using System;
 using System.IO;
 using LitJson;
 using JCW.AudioCtrl;
-using YC.CameraManager_;
+using YC.YC_CameraManager;
 using JCW.Dialog;
 
 namespace JCW.UI.Options

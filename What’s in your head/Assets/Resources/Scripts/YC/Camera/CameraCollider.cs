@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Cinemachine;
 
-namespace YC.Camera_
+namespace YC.YC_Camera
 {
     public class CameraCollider : MonoBehaviour
     {

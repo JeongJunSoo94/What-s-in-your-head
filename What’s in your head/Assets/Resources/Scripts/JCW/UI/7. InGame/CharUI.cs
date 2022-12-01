@@ -3,8 +3,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using YC.Camera_;
-using YC.Camera_Single;
+using YC.YC_Camera;
+using YC.YC_CameraSingle;
 
 namespace JCW.UI.InGame
 {

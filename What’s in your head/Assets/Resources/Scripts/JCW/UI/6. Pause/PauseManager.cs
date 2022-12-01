@@ -5,7 +5,7 @@ using UnityEngine.UI;
 using Photon.Pun;
 using JCW.UI.Options;
 using UnityEngine.SceneManagement;
-using YC.CameraManager_;
+using YC.YC_CameraManager;
 
 namespace JCW.UI
 {

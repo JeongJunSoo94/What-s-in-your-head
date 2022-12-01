@@ -2,7 +2,7 @@ using JJS;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using YC.Camera_;
+using YC.YC_Camera;
 
 public class CameraTrigger : MonoBehaviour
 {

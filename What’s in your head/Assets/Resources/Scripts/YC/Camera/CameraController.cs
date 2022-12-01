@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
 using Cinemachine;
-using YC.CameraManager_;
+using YC.YC_CameraManager;
 using UnityEngine.Rendering.Universal;
 using KSU;
 using System;
 
-namespace YC.Camera_
+namespace YC.YC_Camera
 {
     public class CameraController : MonoBehaviour, IPunObservable
     {

@@ -6,8 +6,8 @@ using KSU.AutoAim.Player;
 using Photon.Pun;
 using System.Collections;
 using UnityEngine;
-using YC.Camera_;
-using YC.CameraManager_;
+using YC.YC_Camera;
+using YC.YC_CameraManager;
 
 namespace JJS
 {

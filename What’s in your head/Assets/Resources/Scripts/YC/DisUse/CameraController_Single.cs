@@ -14,11 +14,11 @@ using System.Linq;
 using Cinemachine;
 
 using JCW.UI.Options.InputBindings;
-using YC.CameraManager_;
+using YC.YC_CameraManager;
 
 using KSU;
 
-namespace YC.Camera_Single
+namespace YC.YC_CameraSingle
 {
     public class CameraController_Single : MonoBehaviour, IPunObservable
     {

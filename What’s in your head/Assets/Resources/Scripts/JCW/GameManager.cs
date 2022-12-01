@@ -9,7 +9,7 @@ using JCW.UI.Options.InputBindings;
 using Photon.Pun;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using YC.CameraManager_;
+using YC.YC_CameraManager;
 using YC.Photon;
 
 [RequireComponent(typeof(PhotonView))]

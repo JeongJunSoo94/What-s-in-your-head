@@ -7,8 +7,8 @@ using Photon.Pun;
 using JCW.AudioCtrl;
 using Cinemachine;
 
-using YC.Camera_;
-using YC.Camera_Single;
+using YC.YC_Camera;
+using YC.YC_CameraSingle;
 using JCW.Object;
 using JJS;
 using KSU.AutoAim.Object.Monster;
@@ -858,7 +858,9 @@ namespace KSU
                     break;
                 case DamageType.Dead:
                     damageTrigger = "DeadTrigger";
-                    break;
+                    GameManager.Instance.curPlayerHP = 0;
+                    photonView.RPC(nameof(SetAnimatorBool), RpcTarget.AllViaServer, "DeadTrigger", true);
+                    return;
             }
             if (!playerAnimator.GetBool("isAttacked") && !playerAnimator.GetBool("isKnockBack") && !playerAnimator.GetBool("isDead"))
             {

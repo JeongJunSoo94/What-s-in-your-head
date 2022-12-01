@@ -1,6 +1,6 @@
 using Photon.Pun;
 using UnityEngine;
-using YC.CameraManager_;
+using YC.YC_CameraManager;
 
 namespace JCW.UI.InGame
 {

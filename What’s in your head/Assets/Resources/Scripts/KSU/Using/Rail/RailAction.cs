@@ -4,8 +4,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using Cinemachine.Utility;
 
-using YC.Camera_;
-using YC.Camera_Single;
+using YC.YC_Camera;
+using YC.YC_CameraSingle;
 using JCW.UI.InGame.Indicator;
 using JCW.AudioCtrl;
 

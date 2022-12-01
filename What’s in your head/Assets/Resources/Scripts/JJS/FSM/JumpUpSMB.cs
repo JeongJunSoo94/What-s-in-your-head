@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using JJS.CharacterSMB;
-using YC.Camera_; // << : 찬 추가
+using YC.YC_Camera; // << : 찬 추가
 namespace JJS
 {
     public class JumpUpSMB : CharacterBaseSMB

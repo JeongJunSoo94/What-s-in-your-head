@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using JCW.UI.Options.InputBindings;
 using JCW.Effect;
-using YC.Camera_; // << : 찬 추가
+using YC.YC_Camera; // << : 찬 추가
 namespace KSU.FSM
 {
     public class StayRailSMB : RailSMB

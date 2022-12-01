@@ -10,8 +10,8 @@ using Photon.Pun;
 using Photon.Realtime;
 using System.Linq;
 
-using YC.CameraManager_;
-using YC.Camera_;
+using YC.YC_CameraManager;
+using YC.YC_Camera;
 using Cinemachine;
 
 

@@ -3,7 +3,7 @@ using Photon.Pun;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using YC.CameraManager_;
+using YC.YC_CameraManager;
 
 
 namespace JCW.UI.InGame.Indicator

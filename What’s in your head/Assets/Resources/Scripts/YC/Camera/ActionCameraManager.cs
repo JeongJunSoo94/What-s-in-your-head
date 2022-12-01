@@ -2,10 +2,10 @@ using Photon.Pun;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using YC.CameraManager_;
+using YC.YC_CameraManager;
 using Cinemachine;
 
-namespace YC.Camera_
+namespace YC.YC_Camera
 {
     public class ActionCameraManager : MonoBehaviour
     {

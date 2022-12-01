@@ -2,7 +2,7 @@ using System.Collections;
 using Photon.Pun;
 using UnityEngine;
 using UnityEngine.UI;
-using YC.Camera_;
+using YC.YC_Camera;
 
 namespace JCW.UI.InGame
 {
