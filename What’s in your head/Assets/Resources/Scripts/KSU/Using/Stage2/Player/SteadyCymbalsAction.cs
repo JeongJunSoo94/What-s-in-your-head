@@ -186,7 +186,8 @@ namespace KSU.AutoAim.Player
         {
             if ((other.gameObject.layer == LayerMask.NameToLayer("UITriggers")) && other.CompareTag("CymbalsTarget"))
             {
-                other.gameObject.transform.parent.gameObject.GetComponentInChildren<OneIndicator>().SetUI(false);
+                if(other.gameObject.transform.parent.GetComponentInChildren<OneIndicator>() != null)
+                    other.gameObject.transform.parent.GetComponentInChildren<OneIndicator>().SetUI(false);
                 autoAimTargetObjects.Remove(other.gameObject);
             }
         }

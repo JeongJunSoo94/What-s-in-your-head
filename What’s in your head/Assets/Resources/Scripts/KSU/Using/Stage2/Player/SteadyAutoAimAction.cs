@@ -96,25 +96,12 @@ namespace KSU.AutoAim.Player
                     rayCheck = Physics.Raycast(playerCamera.transform.position, direction, out hit, cymbalsObject.GetComponentInParent<AutoAimTargetObject>().detectingUIRange * 1.5f, layerFilterForAutoAim, QueryTriggerInteraction.Ignore);
                     
                     if (rayCheck)
-                    {
-                        if (hit.collider.CompareTag(cymbalsObject.tag))
-                        {
-                            rayCheck = true;
-                        }
-                        else
-                        {
-                            rayCheck = false;
-                        }
-                    }
+                        rayCheck = hit.collider.CompareTag(cymbalsObject.tag);
+                    OneIndicator indicator = cymbalsObject.transform.parent.GetComponentInChildren<OneIndicator>();
+                    if (indicator != null)
+                        indicator.SetUI(rayCheck);
 
-                    if (rayCheck)
-                    {
-                        cymbalsObject.transform.parent.gameObject.GetComponentInChildren<OneIndicator>().SetUI(true);
-                    }
-                    else
-                    {
-                        cymbalsObject.transform.parent.gameObject.GetComponentInChildren<OneIndicator>().SetUI(false);
-                    }
+
                 }
             }
         }
